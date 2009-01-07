@@ -1,0 +1,31 @@
+=====================================
+django-uni-form (Django Uni-Form)
+=====================================
+
+[http://djangoproject.com Django] forms are easily rendered as tables,
+paragraphs, and unordered lists. However, elegantly rendered div based forms
+is something you have to do by hand. The purpose of this application is to
+provide a simple tag and/or filter that lets you quickly render forms in a div
+format.
+
+[http://sprawsm.com/uni-form Uni-form]  has been selected as the base model
+for the design of the forms.
+
+
+
+Using django-uni-form
+========================
+1. Install as uni_form in your Django apps directory.
+2. Add 'uni_form' to INSTALLED_APPS in settings.py
+3. Add '{% load uni_form %}' to the template that calls your form.
+4. Append your form call with the as_uni_form filter:
+
+    {{ my_form|as_uni_form }}
+    
+
+TODO
+====
+1. Add a site_media section to help the end user get the necessary css.
+2. Use django templates to render the text.
+3. Add an argument to escape text in the fields.
+
