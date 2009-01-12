@@ -1,0 +1,13 @@
+{% for field in form %}
+    <div class="ctrlHolder {% if field.errors %}error{% endif %}">
+        {% for error in field.errors %}
+            <p class="errorField">
+                <strong>{{ error }}</strong>
+            </p>       
+        {% endfor %} 
+        {{ field.label_tag }} {{ field }}
+    </div>
+{% endfor %}
+
+
+
