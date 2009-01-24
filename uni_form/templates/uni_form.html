@@ -5,9 +5,13 @@
                 <strong>{{ error }}</strong>
             </p>       
         {% endfor %} 
-        {{ field.label_tag }} {{ field }}
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}
+        <p class="formHint">
+            {{ field.help_text }}
+        </p>
+        {% endif %}
+        
     </div>
 {% endfor %}
-
-
-
