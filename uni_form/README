@@ -21,11 +21,13 @@ Using django-uni-form
 4. Append your form call with the as_uni_form filter:
 
     {{ my_form|as_uni_form }}
-    
+
+5. Add the class of 'uniForm' to your form. Example:
+
+    <form action="" method="post" class="uniForm"
 
 TODO
 ====
 1. Add a site_media section to help the end user get the necessary css.
-2. Use django templates to render the text.
-3. Add an argument to escape text in the fields.
+2. Add an argument to escape text in the fields.
 

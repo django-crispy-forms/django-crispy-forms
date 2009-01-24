@@ -1,6 +1,5 @@
 from django.template import Context, Template
 from django.template.loader import get_template
-from django.utils.safestring import mark_safe
 from django import template
 
 
