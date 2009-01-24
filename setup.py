@@ -1,3 +1,8 @@
+from setuptools import setup, find_packages
+ 
+version = '0.2'
+ 
+LONG_DESCRIPTION = """
 =====================================
 django-uni-form (Django Uni-Form)
 =====================================
@@ -30,8 +35,30 @@ Using django-uni-form
     <form action="" method="post" class="uniForm"
     
 
-
 TODO
 ====
 1. Add an argument to escape text in the fields.
 
+"""
+ 
+setup(
+    name='django-uni-form',
+    version=version,
+    description="django-uni-form",
+    long_description=LONG_DESCRIPTION,
+    classifiers=[
+        "Programming Language :: Python",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Framework :: Django",
+        "Environment :: Web Environment",
+    ],
+    keywords='forms,django',
+    author='Daniel Greenfeld',
+    author_email='pydanny@gmail.com',
+    url='http://django-uni-form.googlecode.com/',
+    license='MIT',
+    packages=find_packages(),
+    include_package_data=True,
+    zip_safe=False,
+    install_requires=['setuptools'],
+)

@@ -1,0 +1,12 @@
+###############
+django-uni-form
+###############
+ 
+Django-uni-form lets you easily display Django forms as divs.
+ 
+Contents:
+ 
+.. toctree::
+ 
+   install.txt
+   usage.txt
