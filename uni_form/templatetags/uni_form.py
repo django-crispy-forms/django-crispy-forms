@@ -7,7 +7,7 @@ register = template.Library()
 
 @register.filter
 def as_uni_form(form):
-    template = get_template('uni_form.html')
+    template = get_template('uni_form/uni_form.html')
     c = Context({'form':form})
 
     return template.render(c)
