@@ -5,13 +5,12 @@
                 <strong>{{ error }}</strong>
             </p>       
         {% endfor %} 
-        {{ field.label_tag }}
-        {{ field }}
-        {% if field.help_text %}
-        <p class="formHint">
-            {{ field.help_text }}
-        </p>
+        {% if field.label %}
+            <label for="{{ field.auto_id }}">
+                {% if field.field.required %}<em>*</em>{% endif %} 
+                {{ field.label }}
+            </label>
         {% endif %}
-        
+        {{ field }}
     </div>
 {% endfor %}
