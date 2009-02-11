@@ -12,5 +12,8 @@
             </label>
         {% endif %}
         {{ field }}
+        {% if field.help_text %}
+            <p class="formHint">{{ field.help_text }}</p>
+        {% endif %}
     </div>
 {% endfor %}
