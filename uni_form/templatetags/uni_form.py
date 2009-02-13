@@ -27,6 +27,23 @@ def do_uni_form(parser, token):
         
     return UniFormNode(form)
         
+class Button(object):
+    
+    def __init__(self,name,button_type=None,value=None,button_id=None,button_class=None):
+        self.name = name
+        if button_type:
+            self.type = button_type
+        else:
+            self.type = 'button'
+        if value:
+            self.value = value
+        else:
+            self.value = name
+        if button_id:
+            self.button_id = button_id
+        if button_class:
+            self.button_class = button_class
+
 
 class UniFormNode(template.Node):
     def __init__(self,form,buttons=[]):
@@ -42,3 +59,10 @@ class UniFormNode(template.Node):
         c = Context({'form':actual_form,'buttons':self.buttons})
         return template.render(c)
     
+    def do_buttons(self):
+        buttons = []
+        for button in self.buttons:
+            if button.lower() in ('submit','reset'):
+                buttons.append(button)
+        return buttons
+        
