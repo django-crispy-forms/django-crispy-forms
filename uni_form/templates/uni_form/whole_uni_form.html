@@ -1,0 +1,14 @@
+{% load uni_form %}
+
+<form action="" class="uniForm" method="post">
+    <fieldset class="inlineLabels">  
+    <legend>* Required fields</legend> 
+    {{ form|as_uni_form }}
+    </fieldset>  
+    <div class="buttonHolder">
+            {% for button in buttons %}
+                <input type="{{ button }}" class="resetButton" name={{ button }} value="{{ button }}" />
+            {% endfor %}
+    </div>
+    
+</form>
