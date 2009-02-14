@@ -1,5 +1,6 @@
 {% for field in form %}
     {% if field.is_hidden %}
+        {{ field }}
     {% else %}
         <div class="ctrlHolder {% if field.errors %}error{% endif %}">
             {% for error in field.errors %}
