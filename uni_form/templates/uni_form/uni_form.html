@@ -1,3 +1,10 @@
+{% if form.non_field_errors %}
+<div id="errorMsg">
+      <ul>
+        {{ form.non_field_errors|unordered_list }}
+     </ul>
+</div>
+{% endif %}
 {% for field in form %}
     {% if field.is_hidden %}
         {{ field }}
