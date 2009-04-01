@@ -28,10 +28,3 @@ Using django-uni-form
 6. Add the class of 'uniForm' to your form. Example::
 
     <form action="" method="post" class="uniForm"
-    
-
-
-TODO
-====
-1. Add an argument to escape text in the fields.
-
