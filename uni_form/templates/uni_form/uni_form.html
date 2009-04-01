@@ -9,9 +9,9 @@
     {% if field.is_hidden %}
         {{ field }}
     {% else %}
-        <div class="ctrlHolder {% if field.errors %}error{% endif %}">
+        <div id="div_{{ field.auto_id }}" class="ctrlHolder {% if field.errors %}error{% endif %}">
             {% for error in field.errors %}
-                <p class="errorField">
+                <p id="error_{{ field.auto_id }}" class="errorField">
                     <strong>{{ error }}</strong>
                 </p>       
             {% endfor %} 
@@ -23,7 +23,7 @@
             {% endif %}
             {{ field }}
             {% if field.help_text %}
-                <p class="formHint">{{ field.help_text }}</p>
+                <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text }}</p>
             {% endif %}
         </div>
     {% endif %}
