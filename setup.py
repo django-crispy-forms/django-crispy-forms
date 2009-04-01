@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
  
-version = '0.2'
+version = '0.3'
  
 LONG_DESCRIPTION = """
 =====================================
@@ -33,11 +33,6 @@ Using django-uni-form
 6. Add the class of 'uniForm' to your form. Example:
 
     <form action="" method="post" class="uniForm"
-    
-
-TODO
-====
-1. Add an argument to escape text in the fields.
 
 """
  
@@ -55,10 +50,11 @@ setup(
     keywords='forms,django',
     author='Daniel Greenfeld',
     author_email='pydanny@gmail.com',
-    url='http://django-uni-form.googlecode.com/',
+    url='http://github.com/pydanny/django-uni-form/tree/master',
     license='MIT',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
     install_requires=['setuptools'],
+    setup_requires=['setuptools_git'],
 )
