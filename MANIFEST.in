@@ -1,0 +1,6 @@
+include CONTRIBUTORS.txt
+include LICENSE.txt
+include MANIFEST.in
+recursive-include docs *
+recursive-include uni_form/media *
+recursive-include uni_form/templates *
