@@ -1,0 +1,118 @@
+@import "uni-form-generic.css";
+/* Keep in mind that wherever you see 'Required property' it means that the property must exist */
+
+/* ------------------------------------------------------------------------------ */
+
+  /* Generals */
+  .uniForm fieldset{}
+    .uniForm fieldset legend{ color: #333; font-weight: bold; font-size: 100%; margin: 0; padding: 1.5em 0; }
+    
+    /* This is the main unit that contains our form elements */
+    .uniForm .ctrlHolder{ padding: 7px; border-bottom: 1px solid #dfdfdf; }
+    
+    .uniForm .buttonHolder{ text-align: right; }
+      .uniForm .resetButton{ float: left; }
+      .uniForm .primaryAction{ font-weight: bold; }
+    
+    /* This class gets added to div.ctrlHolder to highlight the row */
+    .uniForm .focused{ background: #fffcdf; }
+      
+      /* .inlineLabel is used for inputs within labels - checkboxes and radio buttons */
+      .uniForm .inlineLabel input,
+      .uniForm .inlineLabels .inlineLabel input,
+      .uniForm .blockLabels .inlineLabel input{ float: left; margin: 0 .4em 0 0; }
+        .uniForm .inlineLabel span{ float: left; width: 90%; }
+        
+/* ------------------------------------------------------------------------------ */
+
+    /* .blockLabels (default style, will be applied even if you don't class the parent element) */
+    .uniForm .blockLabels .ctrlHolder{}
+      
+      .uniForm label,
+      .uniForm .blockLabels label,
+      .uniForm .blockLabels .label{ margin: 0 0 .5em 0; }
+      
+      .uniForm .textInput,
+      .uniForm .blockLabels .textInput,
+      .uniForm .blockLabels .fileUpload{ width: 53%; /* <- Required property */ }
+    
+      .uniForm .selectInput,
+      .uniForm select,
+      .uniForm .blockLabels .selectInput,
+      .uniForm .blockLabels select{ width: 53.5%; /* <- Required property */ }
+      .uniForm textarea,
+      .uniForm .blockLabels textarea{ width: 53%; /* <- Required property */ height: 12em; }
+
+      .uniForm .formHint,
+      .uniForm .blockLabels .formHint{ width: 45%; /* <- Required property */ font-size: .9em; color: #777; position: relative; top: -.5em; }
+      
+      .uniForm .multiField,
+      .uniForm .blockLabels .multiField{ width: 53%; }
+        .uniForm .multiField .inlineLabel,
+        .uniForm .blockLabels .multiField .inlineLabel{ display: block; margin: 0 0 .5em 0; }
+        .uniForm .multiField .blockLabel,
+        .uniForm .blockLabels .multiField .blockLabel{ width: 30%; margin: 0 10px 0 0; }
+        .uniForm .multiField .blockLabel .textInput,
+        .uniForm .multiField .blockLabel .selectInput,
+        .uniForm .multiField .blockLabel select,
+        .uniForm .blockLabels .multiField .blockLabel .textInput,
+        .uniForm .blockLabels .multiField .blockLabel .selectInput,
+        .uniForm .blockLabels .multiField .blockLabel select{ width: 100%; margin: .3em 0 0 0; }
+
+/* ------------------------------------------------------------------------------ */
+
+    /* .inlineLabels */
+    .uniForm .inlineLabels .ctrlHolder{}
+    
+    .uniForm .inlineLabels label,
+    .uniForm .inlineLabels .label{ width: 45%; /* <- Required property */ margin: .3em 2% 0 0; /* <- Required property */ }
+    
+    .uniForm .inlineLabels .textInput,
+    .uniForm .inlineLabels .fileUpload{ width: 45%; /* <- Required property */ }
+    
+    .uniForm .inlineLabels .selectInput,
+    .uniForm .inlineLabels select{ width: 45%; /* <- Required property */ }
+    
+    .uniForm .inlineLabels textarea{  width: 45%; /* <- Required property */ height: 12em; }
+
+    .uniForm .inlineLabels .formHint{ margin-top: 0; margin-left: 47%; font-size: .9em; color: #777; position: static; }
+    
+    .uniForm .inlineLabels .multiField{ width: 45%; /* <- Required property */ margin: 0 0 .3em 0; }
+      .uniForm .inlineLabels .multiField .inlineLabel{ display: block; margin: 0 0 .5em 0; }
+      .uniForm .inlineLabels .multiField .blockLabel{ float: left; width: 26%; margin: 0 3% 0 0; }
+      .uniForm .inlineLabels .multiField .blockLabel .textInput,
+      .uniForm .inlineLabels .multiField .blockLabel .selectInput,
+      .uniForm .inlineLabels .multiField .blockLabel select{ width: 100%; margin: .3em 0 0 0; }
+
+/* Focus pseudoclasses */
+.uniForm .ctrlHolder .textInput:focus{ outline: none; /* Get rid of the 'glow' effect in WebKit, optional */ }
+.uniForm .ctrlHolder textarea:focus{ outline: none; /* Get rid of the 'glow' effect in WebKit, optional */ }
+.uniForm div.focused .formHint{ color: #333; }
+
+/* Columns (they are floated left by default) */
+.uniForm .col{ width: 47.9%; /* <- Required property */ margin: 0 2% 20px 0; }
+/* Use .first and .last classes to control the layout/spacing of your columns */
+.uniForm .col.first{ width: 49%; /* <- Required property */ float: left; clear: none; }
+.uniForm .col.last{ width: 49%; /* <- Required property */ float: right; clear: none; margin-right: 0; }
+
+/* Messages */
+.uniForm #errorMsg{ background: #ffdfdf; border: 1px solid #df7d7d; border-width: 1px 0; margin: 0 0 1.5em 0; padding: 7px; }
+.uniForm .error{ background: #ffdfdf; border: 1px solid #df7d7d; border-width: 1px 0; }
+
+  .uniForm #errorMsg dt, .uniForm #errorMsg h3{ margin: 0 0 .5em 0; font-size: 100%; line-height: 100%; font-weight: bold; }
+  .uniForm #errorMsg dd{ margin: 0; padding: 0; }
+    .uniForm #errorMsg ol{ margin: 0; padding: 0; }
+      .uniForm #errorMsg ol li{ margin: 0; padding: 2px; list-style-position: inside; border-bottom: 1px dotted #df7d7d; position: relative; }
+    .uniForm .errorField{ color: #af4c4c; margin: 0 0 6px 0; padding: 4px; background: #ffbfbf; }
+
+.uniForm #OKMsg{ background: #C8FFBF; border: 1px solid #A2EF95; border-width: 1px 0; margin: 0 0 1.5em 0; padding: 7px; }
+  .uniForm #OKMsg p{ margin: 0; }
+
+/*
+IT IS STRONGLY ADVISED TO MAKE YOUR CHANGES AFTER THIS COMMENT BY REPEATING (COPYING) THE SELECTOR FROM ABOVE, 
+AND MODIFYING IT WITH YOUR OWN PROPERTIES/VALUES. THIS IS RECOMMENDED BECAUSE IF YOU HAPPEN TO RUN INTO TROUBLE, 
+YOU CAN VERY EASILY REVERT TO A GENERIC STYLE OF UNI-FORM. BEST OF LUCK... 
+*/
+
+/* ------------------------------------------------------------------------------ */
+
