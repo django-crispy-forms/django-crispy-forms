@@ -12,7 +12,7 @@ def as_uni_form(form):
     return template.render(c)
     
 ####################################
-# Everything below is experiamental
+# Everything below is experimental
 ####################################
     
     
