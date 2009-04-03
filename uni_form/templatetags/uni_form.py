@@ -2,7 +2,6 @@ from django.template import Context, Template
 from django.template.loader import get_template
 from django import template
 
-
 register = template.Library()
 
 @register.filter
@@ -14,60 +13,93 @@ def as_uni_form(form):
 ####################################
 # Everything below is experimental
 ####################################
+"""
+token has up to two objects in it:
     
+form: The forms object to be rendered by the tag
+
+attrs: A string of semi-colon seperated attributes that can be applied to the 
+form in string format. They are used as follows:
+
+id: applied to the form as a whole. Defaults to empty::
+
+    id=<my-form-id>
+
+class: add space seperated classes to the class list. Always starts with uniform::
     
-@register.tag(name="uni_form")    
-def do_uni_form(parser, token):
+    class=<my-first-custom-form-class> <my-custom-form-class>
+    
+button: for adding of generic buttons. The name also becomes the slugified id::
+
+    button=<my-custom-button-name>|<my-custom-button-value>
+    
+submit: For adding of submt buttons. The name also becomes the slugified id::
+
+    submit=<my-custom-submit-name>|<my-custom-submit-value>
+
+hidden: For adding of hidden buttons::
+
+    hidden=<my-custom-hidden-name>|<my-custom-hidden-value>
+    
+Example::
+
+    {% uni_form my-form id=my-form-id;button=button-one|button-two;submit=submit|go! %}
+
+"""
+
+
+@register.tag(name="uni_form")  
+def do_uni_form(parser, token): 
+    
     token = token.split_contents()
-    tag_name = token.pop(0)
+
+    form = token.pop(1)
     try:
-        form = token.pop(0)
+        attrs = token.pop(1)
     except IndexError:
-        msg = '%r tag requires a form to process' % token.contents[0] 
-        raise template.TemplateSyntaxError(msg) 
-        
-    if token:
-        # we have token elements left, and these must be buttons
-        return UniFormNode(form,token)
-        
-    return UniFormNode(form)
-        
-class Button(object):
+        attrs = None
+                
+
+    return UniFormNode(form,attrs)    
     
-    def __init__(self,name,button_type=None,value=None,button_id=None,button_class=None):
-        self.name = name
-        if button_type:
-            self.type = button_type
-        else:
-            self.type = 'button'
-        if value:
-            self.value = value
-        else:
-            self.value = name
-        if button_id:
-            self.button_id = button_id
-        if button_class:
-            self.button_class = button_class
+class UniFormNode(template.Node):    
 
-
-class UniFormNode(template.Node):
-    def __init__(self,form,buttons=[]):
+    def __init__(self,form,attrs):
         self.form = template.Variable(form)
-        if buttons:
-            self.buttons = buttons
-        else:
-            self.buttons = ['submit','reset']
+        self.attrs = template.Variable(attrs)        
             
     def render(self,context):
-        template = get_template('uni_form/whole_uni_form.html')
         actual_form = self.form.resolve(context)
-        c = Context({'form':actual_form,'buttons':self.buttons})
-        return template.render(c)
-    
-    def do_buttons(self):
-        buttons = []
-        for button in self.buttons:
-            if button.lower() in ('submit','reset'):
-                buttons.append(button)
-        return buttons
-        
+        attrs = self.attrs.resolve(context).split(';')
+        form_class = ''
+        form_id = ''        
+        inputs = []
+        if attrs:
+            for element in attrs:
+                key, value = element.split('=')
+                key = key.strip()
+                value = value.strip()
+                
+                # we hard code these because these should be hard to change.
+                if key == 'id':
+                    form_id = value
+                    
+                if key == 'class':
+                    form_class = ' '+ value
+                    
+                if key in ['button','submit','hidden']:
+                    # TODO: Raise description error if 2 values not provided
+                    name, value = value.split('|')
+                    inputs.append({'name':name,'value':value,'type':key})
+
+
+        response_dict = {
+                        'form':actual_form,
+                        'attrs':attrs,
+                        'form_class' : form_class,
+                        'form_id' : form_id,
+                        'inputs' : inputs,
+                        }
+        c = Context(response_dict)
+        template = get_template('uni_form/whole_uni_form.html')        
+        return template.render(c)    

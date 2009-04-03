@@ -1,14 +1,26 @@
 {% load uni_form %}
 
-<form action="" class="uniForm" method="post">
+<form action="" class="uniForm {{ form_class }}" method="post" id="{{ form_id|slugify }}">
+
     <fieldset class="inlineLabels">  
     <legend>* Required fields</legend> 
     {{ form|as_uni_form }}
-    </fieldset>  
-    <div class="buttonHolder">
-            {% for button in buttons %}
-                <input type="{{ button }}" class="resetButton" name="{{ button }}" value="{{ button }}" id="id_{{ button }}" />
+    </fieldset>
+
+    {% if inputs %}
+        <div class="buttonHolder">
+            {% for input in inputs %}
+                <input type="{{ input.type }}"
+                        name="{{ input.name|slugify }}"
+                        value="{{ input.value }}"
+                        {% ifnotequal input.type "hidden" %}
+                            class="{{ input.type }}"
+                            id="{{ input.type }}-id-{{ input.name|slugify }}"
+                        {% endifnotequal %}
+                        />
             {% endfor %}
-    </div>
-    
+        </div>    
+    {% endif %}
+
+
 </form>
