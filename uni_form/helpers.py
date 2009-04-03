@@ -70,8 +70,8 @@ class FormHelper(object):
         
             {% load uni_form %}
         
-            {% with form.form_help as form_help %}
-                {% uni_form form form_help %}
+            {% with form.helper as helper %}
+                {% uni_form form helper %}
             {% endwith %}
         
     """
