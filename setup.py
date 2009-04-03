@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
  
-version = '0.3'
+version = '0.4b1'
  
 LONG_DESCRIPTION = """
 =====================================
@@ -15,24 +15,6 @@ format.
 
 [http://sprawsm.com/uni-form Uni-form]  has been selected as the base model
 for the design of the forms.
-
-
-Using django-uni-form
-========================
-1. Install as uni_form in your Django apps directory.
-2. Copy the site_media files in uni_form to your project site_media directory.
-    uni-form-generic.css
-    uni-form.css
-    uni-form.jquery.js
-3. Add 'uni_form' to INSTALLED_APPS in settings.py.
-4. Add '{% load uni_form %}' to the template that calls your form.
-5. Append your form call with the as_uni_form filter:
-
-    {{ my_form|as_uni_form }}
-
-6. Add the class of 'uniForm' to your form. Example:
-
-    <form action="" method="post" class="uniForm"
 
 """
  
