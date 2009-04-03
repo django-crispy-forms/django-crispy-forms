@@ -21,7 +21,11 @@ class Button(BaseInput):
 
 class Hidden(BaseInput):
 
-    input_type = 'hidden'    
+    input_type = 'hidden'  
+    
+class Reset(BaseInput):
+
+    input_type = 'reset'      
 
 
 class FormHelper(object):

@@ -41,6 +41,10 @@ hidden: For adding of hidden buttons::
 
     hidden=<my-custom-hidden-name>|<my-custom-hidden-value>
     
+reset: For adding of reset buttons::
+
+    reset=<my-custom-reset-name>|<my-custom-reset-value>    
+    
 Example::
 
     {% uni_form my-form id=my-form-id;button=button-one|button-two;submit=submit|go! %}
