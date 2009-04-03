@@ -1,22 +1,3 @@
-"""
-class: add space seperated classes to the class list. Always starts with uniform::
-
-    class=<my-first-custom-form-class> <my-custom-form-class>
-
-button: for adding of generic buttons. The name also becomes the slugified id::
-
-    button=<my-custom-button-name>|<my-custom-button-value>
-
-submit: For adding of submt buttons. The name also becomes the slugified id::
-
-    submit=<my-custom-submit-name>|<my-custom-submit-value>
-
-hidden: For adding of hidden buttons::
-
-    hidden=<my-custom-hidden-name>|<my-custom-hidden-value>
-"""
-
-
 class BaseInput(object):
 
     def __init__(self,name,value):
@@ -43,21 +24,27 @@ class Hidden(BaseInput):
     input_type = 'hidden'    
 
 
-class UniForm(object):
+class FormHelper(object):
     """
         By setting attributes to me you can easily create the text that goes 
         into the uni_form template tag.
         
-        >>> from uni_form.util import UniForm
-        >>> uniform = UniForm()
-        >>> uniform.form_id = 'my-uni-form-id'
-        >>> uniform.form_class = 'form1'
+        >>> from uni_form.util import FormHelper
+        >>> helper = FormHelper()
+        >>> helper.form_id = 'my-uni-form-id'
+        >>> helper.form_class = 'form1'
         >>> submit = Submit('submit-name','Submit me!')
-        >>> uniform.set_input(submit)
+        >>> helper.add_input(submit)
         >>> button = Button('button-thingee','a button')                
-        >>> uniform.set_input(button)        
-        >>> response_dict ={'form_attrs':uniform()}
-        >>> render_to_response()
+        >>> helper.add_input(button)        
+        >>> response_dict ={'helper':helper()}
+        >>> render_to_response('my-template.html',response_dict)
+        
+        {% with form.form_help as form_help %}
+            {{ form_help }}
+            {% uni_form form form_help %}
+
+        {% endwith %}        
     """
     
     def __init__(self):
@@ -66,10 +53,9 @@ class UniForm(object):
         self.form_class = ''
         self.inputs = []
         
-    def set_input(self,input_object):
+    def add_input(self,input_object):
         
-        self.inputs.append(input_object)
-        
+        self.inputs.append(input_object)        
         
     def __call__(self):
         items = []
@@ -80,6 +66,7 @@ class UniForm(object):
             items.append('class='+self.form_class.strip())
             
         if self.inputs:
+            print 'blah'
             for inp in self.inputs:
                 items.append(inp())
                 
