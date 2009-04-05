@@ -1,3 +1,4 @@
+from django.template.defaultfilters import slugify
 from django.template import Context, Template
 from django.template.loader import get_template
 from django import template
@@ -65,6 +66,12 @@ def do_uni_form(parser, token):
 
     return UniFormNode(form,attrs)    
     
+def namify(text):
+    """ Some of our values need to be rendered safe as python variable names.
+        So we just replaces hyphens with underscores.
+    """
+    return slugify(text).replace('-','_')
+    
 class UniFormNode(template.Node):    
 
     def __init__(self,form,attrs):
@@ -90,10 +97,10 @@ class UniFormNode(template.Node):
                 if key == 'class':
                     form_class = ' '+ value
                     
-                if key in ['button','submit','hidden']:
+                if key in ['button','submit','hidden','reset']:
                     # TODO: Raise description error if 2 values not provided
                     name, value = value.split('|')
-                    inputs.append({'name':name,'value':value,'type':key})
+                    inputs.append({'name':namify(name),'value':value,'type':key})
 
 
         response_dict = {
