@@ -1,0 +1,106 @@
+=====================================
+django-uni-form (Django Uni-Form)
+=====================================
+
+[http://djangoproject.com Django] forms are easily rendered as tables,
+paragraphs, and unordered lists. However, elegantly rendered div based forms
+is something you have to do by hand. The purpose of this application is to
+provide a simple tag and/or filter that lets you quickly render forms in a div
+format.
+
+[http://sprawsm.com/uni-form Uni-form]  has been selected as the base model
+for the design of the forms.
+
+Installing django-uni-form
+============================
+1. Install as uni_form in your Django apps directory.
+2. Copy the site_media files in uni_form to your project site_media directory.
+    uni-form-generic.css
+    uni-form.css
+    uni-form.jquery.js
+3. Add 'uni_form' to INSTALLED_APPS in settings.py.
+
+
+Using the django-uni-form filter (Easy and fun!)
+=================================================
+1. Add ``{% load uni_form %}`` to the template that calls your form.
+2. Append your form call with the as_uni_form filter::
+
+    {{ my_form|as_uni_form }}
+
+3. Add the class of 'uniForm' to your form. Example::
+
+    <form action="" method="post" class="uniForm">
+
+4. Refresh and enjoy!
+
+Using the django-uni-form templatetag in your view (Intermediate)
+====================================================================
+1. In your form class add the following after field definitions::
+
+    from django.shortcuts import render_to_response
+    
+    from uni_form.helpers import FormHelper, Submit, Reset
+    from my_project.forms.MyForm
+    
+    def my_view(request):
+    
+        # Create the form
+        form = MyForm() 
+    
+        # create a formHelper
+        helper = FormHelper()
+        
+        # Add in a class and id
+        helper.form_id = 'this-form-rocks'
+        helper.form_class = 'search'
+        
+        # add in a submit and reset button
+        submit = Submit('search','search this site')
+        helper.add_input(submit)
+        reset = Reset('reset','reset button')                
+        helper.add_input(reset)
+        
+        # create the response dictionary
+        response_dictionary = {'form':form, 'helper': helper}
+        
+        return render_to_response('my_template.html', response_dictionary)
+        
+2. In your template do the following::
+
+    {% load uni_form %}
+    
+    {% uni_form form helper %}
+
+
+
+Using the django-uni-form templatetag in your form class (Intermediate)
+========================================================================
+1. In your form class add the following after field definitions::
+
+    from uni_form.helpers import FormHelper, Submit, Reset
+
+    class MyForm(forms.Form):
+        title = forms.CharField(label=_("Title"), max_length=30, widget=forms.TextInput())
+
+        # Attach a formHelper to your forms class.
+        helper = FormHelper()
+        
+        # Add in a class and id
+        helper.form_id = 'this-form-rocks'
+        helper.form_class = 'search'
+        
+        # add in a submit and reset button
+        submit = Submit('search','search this site')
+        helper.add_input(submit)
+        reset = Reset('reset','reset button')                
+        helper.add_input(reset)
+        
+2. In your template do the following::
+
+    {% load uni_form %}
+    {% with form.helper as helper %}
+        {% uni_form form helper %}
+    {% endwith %}
+
+
