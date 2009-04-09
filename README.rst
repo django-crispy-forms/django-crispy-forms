@@ -2,14 +2,13 @@
 django-uni-form (Django Uni-Form)
 =====================================
 
-[http://djangoproject.com Django] forms are easily rendered as tables,
+Django_ forms are easily rendered as tables,
 paragraphs, and unordered lists. However, elegantly rendered div based forms
 is something you have to do by hand. The purpose of this application is to
 provide a simple tag and/or filter that lets you quickly render forms in a div
 format.
 
-[http://sprawsm.com/uni-form Uni-form]  has been selected as the base model
-for the design of the forms.
+`Uni-form`_ has been selected as the base model for the design of the forms.
 
 Installing django-uni-form
 ============================
@@ -104,3 +103,5 @@ Using the django-uni-form templatetag in your form class (Intermediate)
     {% endwith %}
 
 
+.. _Django: http://djangoproject.com
+.. _`Uni-form`: http://sprawsm.com/uni-form
