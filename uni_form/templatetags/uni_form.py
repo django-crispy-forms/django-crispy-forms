@@ -6,17 +6,104 @@ from django.template.defaultfilters import slugify
 
 register = template.Library()
 
+
+###################################################
+# Core as_uni_form filter. 
+# You will likely use this simple filter 
+# most of the time.
+# This is easy to get working and very simple in
+# concept and execution.
+###################################################
+@register.filter
+def as_uni_form(form):
+    template = get_template('uni_form/uni_form.html')
+    c = Context({'form':form})
+    return template.render(c)
+    
+
+############################################################################
+#
+# Everything from now on gets more fancy
+# It can be argued that having django-uni-form construct your forms is overkill
+# and that I am playing architecture astronaut games with form building.
+# 
+# However, all the bits that follow are designed to be section 508 compliant, 
+# so all the fancy JS bits are garanteed to degrade gracefully. 
+#
+############################################################################
+
 def namify(text):
     """ Some of our values need to be rendered safe as python variable names.
         So we just replaces hyphens with underscores.
     """
     return slugify(text).replace('-','_')
 
-@register.filter
-def as_uni_form(form):
-    template = get_template('uni_form/uni_form.html')
-    c = Context({'form':form})
-    return template.render(c)
+    
+class BasicNode(template.Node):
+    """ Basic Node object that we can rely on for Node objects in normal
+        template tags. I created this because most of the tags we'll be using
+        will need both the form object and the helper string. This handles
+        both the form object and parses out the helper string into attributes
+        that templates can easily handle. """
+
+    def __init__(self,form,attrs):
+        self.form = template.Variable(form)
+        self.attrs = template.Variable(attrs)        
+
+    def get_render(self,context):
+        actual_form = self.form.resolve(context)
+        attrs = self.attrs.resolve(context).split(';')
+        form_class = ''
+        form_id = ''        
+        inputs = []
+        toggle_fields = set(())
+        if attrs:
+            for element in attrs:
+                key, value = element.split('=')
+                key = key.strip()
+                value = value.strip()
+
+                # we hard code these because these should be hard to change.
+                if key == 'id':
+                    form_id = value
+
+                if key == 'class':
+                    form_class = ' '+ value
+
+                if key in ['button','submit','hidden','reset']:
+                    # TODO: Raise description error if 2 values not provided
+                    name, value = value.split('|')
+                    inputs.append({'name':namify(name),'value':value,'type':key})
+
+                if key == 'toggle_fields':
+                    # make sure we don't have any duplicated toggle fields
+                    toggle_fields = toggle_fields.union(set(value.split(',')))
+
+        final_toggle_fields = []
+        if toggle_fields:
+            final_toggle_fields = []
+            for field in actual_form:
+                if field.auto_id in toggle_fields:
+                    final_toggle_fields.append(field)
+
+
+        response_dict = {
+                        'form':actual_form,
+                        'attrs':attrs,
+                        'form_class' : form_class,
+                        'form_id' : form_id,
+                        'inputs' : inputs,
+                        'toggle_fields': final_toggle_fields
+                        }
+        c = Context(response_dict)
+        return c    
+        
+        
+##################################################################
+#
+# Actual tags start here
+#
+##################################################################
 
 
 @register.tag(name="uni_form")  
@@ -73,61 +160,6 @@ def do_uni_form(parser, token):
                 
 
     return UniFormNode(form,attrs)    
-
-
-class BasicNode(template.Node):
-    
-    def __init__(self,form,attrs):
-        self.form = template.Variable(form)
-        self.attrs = template.Variable(attrs)        
-            
-    def get_render(self,context):
-        actual_form = self.form.resolve(context)
-        attrs = self.attrs.resolve(context).split(';')
-        form_class = ''
-        form_id = ''        
-        inputs = []
-        toggle_fields = set(())
-        if attrs:
-            for element in attrs:
-                key, value = element.split('=')
-                key = key.strip()
-                value = value.strip()
-                
-                # we hard code these because these should be hard to change.
-                if key == 'id':
-                    form_id = value
-                    
-                if key == 'class':
-                    form_class = ' '+ value
-                    
-                if key in ['button','submit','hidden','reset']:
-                    # TODO: Raise description error if 2 values not provided
-                    name, value = value.split('|')
-                    inputs.append({'name':namify(name),'value':value,'type':key})
-                
-                if key == 'toggle_fields':
-                    # make sure we don't have any duplicated toggle fields
-                    toggle_fields = toggle_fields.union(set(value.split(',')))
-                 
-        final_toggle_fields = []
-        if toggle_fields:
-            final_toggle_fields = []
-            for field in actual_form:
-                if field.auto_id in toggle_fields:
-                    final_toggle_fields.append(field)
-
-
-        response_dict = {
-                        'form':actual_form,
-                        'attrs':attrs,
-                        'form_class' : form_class,
-                        'form_id' : form_id,
-                        'inputs' : inputs,
-                        'toggle_fields': final_toggle_fields
-                        }
-        c = Context(response_dict)
-        return c
     
     
 class UniFormNode(BasicNode): 

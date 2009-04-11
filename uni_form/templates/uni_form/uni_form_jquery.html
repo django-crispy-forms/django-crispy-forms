@@ -10,8 +10,11 @@
 $(document).ready(function() {
 
 {% if toggle_fields %}    
+    // TODO: replace with better toggle feature
+
     {% for field in toggle_fields %}
         $('#{{ field.auto_id }}').addClass("hideme");
+        //$('#{{ field.auto_id }}').hide;
 
         var str_{{ field.auto_id }} = $('#div_{{ field.auto_id }} label').text();             
         $('#div_{{ field.auto_id }} label').text(str_{{ field.auto_id }} + ' (click to edit)');             
