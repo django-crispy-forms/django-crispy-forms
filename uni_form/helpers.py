@@ -3,7 +3,7 @@
     elements, and UI elements to forms generated via the uni_form template tag.
 
 """
-from uni_form.util import BaseInput
+from uni_form.util import BaseInput, Toggle
     
 class Submit(BaseInput):
     """
@@ -81,6 +81,7 @@ class FormHelper(object):
         self.form_id = ''
         self.form_class = ''
         self.inputs = []
+        self.toggle = Toggle()
         
     def add_input(self,input_object):
         
@@ -95,9 +96,11 @@ class FormHelper(object):
             items.append('class='+self.form_class.strip())
             
         if self.inputs:
-            print 'blah'
             for inp in self.inputs:
                 items.append(inp())
+                
+        if self.toggle.fields:
+            items.append('toggle_fields=id_' + ',id_'.join(self.toggle.fields))
                 
         return ';'.join(items)
         

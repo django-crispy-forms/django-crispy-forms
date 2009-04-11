@@ -1,9 +1,16 @@
-from django.template.defaultfilters import slugify
 from django.template import Context, Template
 from django.template.loader import get_template
 from django import template
 
+from django.template.defaultfilters import slugify
+
 register = template.Library()
+
+def namify(text):
+    """ Some of our values need to be rendered safe as python variable names.
+        So we just replaces hyphens with underscores.
+    """
+    return slugify(text).replace('-','_')
 
 @register.filter
 def as_uni_form(form):
@@ -48,10 +55,11 @@ def do_uni_form(parser, token):
     reset: For adding of reset buttons::
 
         reset=<my-custom-reset-name>|<my-custom-reset-value>    
+        
 
     Example::
 
-        {% uni_form my-form id=my-form-id;button=button-one|button-two;submit=submit|go! %}
+        {% uni_form my-form id=my-form-id;button=button-one|button-two;submit=submit|go!;toggle_field=field1 field2 %}
 
     """    
     
@@ -65,25 +73,21 @@ def do_uni_form(parser, token):
                 
 
     return UniFormNode(form,attrs)    
-    
-def namify(text):
-    """ Some of our values need to be rendered safe as python variable names.
-        So we just replaces hyphens with underscores.
-    """
-    return slugify(text).replace('-','_')
-    
-class UniFormNode(template.Node):    
 
+
+class BasicNode(template.Node):
+    
     def __init__(self,form,attrs):
         self.form = template.Variable(form)
         self.attrs = template.Variable(attrs)        
             
-    def render(self,context):
+    def get_render(self,context):
         actual_form = self.form.resolve(context)
         attrs = self.attrs.resolve(context).split(';')
         form_class = ''
         form_id = ''        
         inputs = []
+        toggle_fields = set(())
         if attrs:
             for element in attrs:
                 key, value = element.split('=')
@@ -101,6 +105,17 @@ class UniFormNode(template.Node):
                     # TODO: Raise description error if 2 values not provided
                     name, value = value.split('|')
                     inputs.append({'name':namify(name),'value':value,'type':key})
+                
+                if key == 'toggle_fields':
+                    # make sure we don't have any duplicated toggle fields
+                    toggle_fields = toggle_fields.union(set(value.split(',')))
+                 
+        final_toggle_fields = []
+        if toggle_fields:
+            final_toggle_fields = []
+            for field in actual_form:
+                if field.auto_id in toggle_fields:
+                    final_toggle_fields.append(field)
 
 
         response_dict = {
@@ -109,7 +124,52 @@ class UniFormNode(template.Node):
                         'form_class' : form_class,
                         'form_id' : form_id,
                         'inputs' : inputs,
+                        'toggle_fields': final_toggle_fields
                         }
         c = Context(response_dict)
+        return c
+    
+    
+class UniFormNode(BasicNode): 
+    
+    def render(self,context):
+        
+        c = self.get_render(context)
+
         template = get_template('uni_form/whole_uni_form.html')        
         return template.render(c)    
+        
+        
+#################################
+# uni_form scripts
+#################################
+
+@register.tag(name="uni_form_jquery")  
+def uni_form_jquery(parser, token):     
+    """
+    toggle_field: For making fields designed to be toggled for editing add them
+    by spaces. You must specify by field id (field.auto_id)::
+
+        toggle_fields=<first_field>,<second_field>
+
+    """
+
+    token = token.split_contents()
+
+    form = token.pop(1)
+    try:
+        attrs = token.pop(1)
+    except IndexError:
+        attrs = None
+            
+
+    return UniFormJqueryNode(form,attrs)
+    
+class UniFormJqueryNode(BasicNode):    
+
+    def render(self,context):
+
+        c = self.get_render(context)
+
+        template = get_template('uni_form/uni_form_jquery.html')        
+        return template.render(c)   
