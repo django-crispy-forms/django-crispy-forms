@@ -9,16 +9,11 @@ jQuery.fn.uniform = function(settings) {
   
   return this.each(function() {
     var form = jQuery(this);
-    
-    // Focus specific control holder
-    var focusControlHolder = function(element) {
-      element.parents("." + settings.holder_class).addClass(settings.focused_class)
-    };
-    
+ 
     // Select form fields and attach them higlighter functionality
     form.find(settings.field_selector).focus(function() {
       form.find('.' + settings.focused_class).removeClass(settings.focused_class);
-      focusControlHolder(jQuery(this));
+      jQuery(this).parents("." + settings.holder_class).addClass(settings.focused_class)
     }).blur(function() {
       form.find('.' + settings.focused_class).removeClass(settings.focused_class);
     });
