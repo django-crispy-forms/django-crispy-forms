@@ -7,7 +7,7 @@
 .uniForm{ margin: 0; padding: 0; position: relative; z-index: 1; } /* reset stuff */
 
   /* Some generals and more resets */
-  .uniForm fieldset{ border: none; margin: 0; padding: 0; }
+  .uniForm fieldset{ border: none; margin: 0; padding: 0; position: relative; }
     .uniForm fieldset legend{ margin: 0; padding: 0; }
 
     /* This is the main unit that contains our form elements */
