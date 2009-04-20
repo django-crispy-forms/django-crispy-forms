@@ -13,18 +13,20 @@ $(document).ready(function() {
     // TODO: replace with better toggle feature
 
     {% for field in toggle_fields %}
-        $('#{{ field.auto_id }}').addClass("hideme");
-        //$('#{{ field.auto_id }}').hide;
+        $('#{{ field.auto_id }}').hide();
 
         var str_{{ field.auto_id }} = $('#div_{{ field.auto_id }} label').text();             
         $('#div_{{ field.auto_id }} label').text(str_{{ field.auto_id }} + ' (click to edit)');             
 
+        var div_{{ field.auto_id }}_flip = 0;
         $("#div_{{ field.auto_id }}").click(function() {
           $('#div_{{ field.auto_id }} label').text(str_{{ field.auto_id }});                    
-          $("#{{ field.auto_id }}").removeClass("hideme");
-          $("#{{ field.auto_id }}").focus();                  
+          $("#{{ field.auto_id }}").toggle(div_{{ field.auto_id }}_flip++ % 2 == 0);
+          $("#{{ field.auto_id }}").focus();    
         });        
     {% endfor %}
 {% endif %}
 });
 </script>
+
+          
