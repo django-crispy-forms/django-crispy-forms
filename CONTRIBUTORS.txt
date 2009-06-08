@@ -1,1 +1,8 @@
+Project Lead
+============
 Daniel Greenfeld <pydanny@gmail.com>
+
+Contributors
+============
+mvaerle
+
