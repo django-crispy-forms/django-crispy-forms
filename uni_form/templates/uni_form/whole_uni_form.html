@@ -1,12 +1,12 @@
 {% load uni_form %}
 
 <form action="" class="uniForm {{ form_class }}" method="post" id="{{ form_id|slugify }}">
-
+	{% if form_html %}{{ form_html }}{% else %}
     <fieldset class="inlineLabels">  
     <legend>* Required fields</legend> 
     {{ form|as_uni_form }}
     </fieldset>
-
+	{% endif %}
     {% if inputs %}
         <div class="buttonHolder">
             {% for input in inputs %}

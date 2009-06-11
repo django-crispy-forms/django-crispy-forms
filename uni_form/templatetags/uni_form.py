@@ -46,39 +46,25 @@ class BasicNode(template.Node):
         both the form object and parses out the helper string into attributes
         that templates can easily handle. """
 
-    def __init__(self,form,attrs):
+    def __init__(self, form, helper):
         self.form = template.Variable(form)
-        self.attrs = template.Variable(attrs)        
+        self.helper = template.Variable(helper)        
 
-    def get_render(self,context):
+    def get_render(self, context):
         actual_form = self.form.resolve(context)
-        attrs = self.attrs.resolve(context).split(';')
+        helper = self.helper.resolve(context)
+        attrs = None
+        if helper:
+            attrs = helper.get_attr()
         form_class = ''
         form_id = ''        
         inputs = []
         toggle_fields = set(())
         if attrs:
-            for element in attrs:
-                key, value = element.split('=')
-                key = key.strip()
-                value = value.strip()
-
-                # we hard code these because these should be hard to change.
-                if key == 'id':
-                    form_id = value
-
-                if key == 'class':
-                    form_class = ' '+ value
-
-                if key in ['button','submit','hidden','reset']:
-                    # TODO: Raise description error if 2 values not provided
-                    name, value = value.split('|')
-                    inputs.append({'name':namify(name),'value':value,'type':key})
-
-                if key == 'toggle_fields':
-                    # make sure we don't have any duplicated toggle fields
-                    toggle_fields = toggle_fields.union(set(value.split(',')))
-
+            form_class = attrs.get("form_class", '')
+            form_id = attrs.get("id", "")
+            inputs = attrs.get('inputs', [])
+            toggle_fields = attrs.get('toggle_fields', set(()))
         final_toggle_fields = []
         if toggle_fields:
             final_toggle_fields = []
@@ -86,9 +72,11 @@ class BasicNode(template.Node):
                 if field.auto_id in toggle_fields:
                     final_toggle_fields.append(field)
 
-
+        if helper and helper.layout:
+            form_html = helper.render_layout(actual_form)
         response_dict = {
                         'form':actual_form,
+                        'form_html':form_html,
                         'attrs':attrs,
                         'form_class' : form_class,
                         'form_id' : form_id,
@@ -146,7 +134,7 @@ def do_uni_form(parser, token):
 
     Example::
 
-        {% uni_form my-form id=my-form-id;button=button-one|button-two;submit=submit|go!;toggle_field=field1 field2 %}
+        {% uni_form my-form my_helper %}
 
     """    
     
@@ -154,17 +142,17 @@ def do_uni_form(parser, token):
 
     form = token.pop(1)
     try:
-        attrs = token.pop(1)
+        helper = token.pop(1)
     except IndexError:
-        attrs = None
+        helper = None
                 
 
-    return UniFormNode(form,attrs)    
+    return UniFormNode(form, helper)    
     
     
 class UniFormNode(BasicNode): 
     
-    def render(self,context):
+    def render(self, context):
         
         c = self.get_render(context)
 

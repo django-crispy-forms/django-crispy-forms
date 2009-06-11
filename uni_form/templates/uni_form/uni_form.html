@@ -6,26 +6,6 @@
 </div>
 {% endif %}
 {% for field in form %}
-    {% if field.is_hidden %}
-        {{ field }}
-    {% else %}
-        <div id="div_{{ field.auto_id }}" class="ctrlHolder {% if field.errors %}error{% endif %}">
-            {% for error in field.errors %}
-                <p id="error_{{ field.auto_id }}" class="errorField">
-                    <strong>{{ error }}</strong>
-                </p>       
-            {% endfor %} 
-            {% if field.label %}
-                <label for="{{ field.auto_id }}">
-                    {% if field.field.required %}*{% endif %} 
-                    {{ field.label }}
-                </label>
-            {% endif %}
-            {{ field }}
-            {% if field.help_text %}
-                <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text }}</p>
-            {% endif %}
-        </div>
-    {% endif %}
+    {% include "uni_form/field.html" %}
 {% endfor %}
 

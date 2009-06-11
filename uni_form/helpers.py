@@ -4,6 +4,9 @@
 
 """
 from uni_form.util import BaseInput, Toggle
+from django.utils.safestring import mark_safe
+from django.template.loader import render_to_string
+from django.forms.forms import BoundField
     
 class Submit(BaseInput):
     """
@@ -36,6 +39,101 @@ class Reset(BaseInput):
     input_type = 'reset'      
 
 
+
+class Layout(object):
+    '''
+    Form Layout, add fieldsets, rows, fields and html
+    
+    example:
+    
+    layout = Layout(Fieldset('', 'is_company'),
+                    Fieldset(_('Contact details'),
+                              'email',
+                              Row('password1','password2'),
+                              'first_name',
+                              'last_name',
+                              HTML('<img src="/media/somepicture.jpg"/>'),
+                              'company',)
+    helper.add_layout(layout)
+    '''
+    def __init__(self, *fields):
+        self.fields = fields
+        
+    def render(self, form):
+        html = ""
+        for field in self.fields:
+            html += render_field(field, form)
+        return html
+
+class Fieldset(object):
+
+    ''' Fieldset container. Renders to a <fieldset>. '''
+
+    def __init__(self, legend, *fields, **args):
+        if 'css_class' in args.keys():
+            self.css = args['css_class']
+        else:
+            self.css = None
+        self.legend_html = legend and ('<legend>%s</legend><hr/>' % unicode(legend)) or ''
+        self.fields = fields
+        
+    
+    def render(self, form):
+        if self.css:
+            html = u'<fieldset class="%s">' % self.css
+        else:
+            html = u'<fieldset>'
+        html += self.legend_html
+        for field in self.fields:
+            html += render_field(field, form)
+        html += u'</fieldset>'
+        return html
+    
+def render_field(field, form):
+    if isinstance(field, str):
+        return render_form_field(form, field)
+    else:
+        return field.render(form)
+            
+def render_form_field(form, field):
+    try:
+        field_instance = form.fields[field]
+    except KeyError:
+        raise Exception("Could not resolve form field '%s'." % field)
+
+    bound_field = BoundField(form, field_instance, field)
+    html = render_to_string("uni_form/field.html", {'field': bound_field})
+    return html
+
+class Row(object):
+    ''' row container. Renders to a set of <div>'''
+    def __init__(self, *fields, **kwargs):
+        self.fields = fields
+        if 'css_class' in kwargs.keys():
+            self.css = kwargs['css_class']
+        else:
+            self.css = "formRow"
+            
+    def render(self, form):
+        output = '<div class="%s">' % self.css_class
+        for field in self.fields:
+            output += render_field(field, form)
+        output.append('</div>')
+        return u''.join(output)
+    
+class HTML(object):
+
+    ''' HTML container '''
+
+    def __init__(self, html):
+        self.html = unicode(html)
+
+    def render(self, form):
+        return self.html
+
+
+
+
 class FormHelper(object):
     """
         By setting attributes to me you can easily create the text that goes 
@@ -58,51 +156,41 @@ class FormHelper(object):
         ...     reset = Reset('reset','reset button')                
         ...     helper.add_input(reset)        
         
-        Now lets instantiate the form and investigate it.
-        
-        >>> my_form = MyForm()
-        >>> my_form.helper()
-        'id=this-form-rocks;class=search;submit=search|search this site;reset=reset|reset button'
-        
-        The uni_form.util.FormHelper is returns this string when called because
-        django templates can call things this way. So if I had a template called
-        by a view that called this form we would use this helper thus::
+        After this in the template:
         
             {% load uni_form %}
-        
-            {% with form.helper as helper %}
-                {% uni_form form helper %}
-            {% endwith %}
+            {% uni_form form form.helper %}
+            
         
     """
     
     def __init__(self):
-        
         self.form_id = ''
         self.form_class = ''
         self.inputs = []
         self.toggle = Toggle()
+        self.layout = None
         
-    def add_input(self,input_object):
+    def add_input(self, input_object):
+        self.inputs.append(input_object)
         
-        self.inputs.append(input_object)        
+    def add_layout(self, layout):
+        self.layout = layout
         
-    def __call__(self):
-        items = []
+    def render_layout(self, form):
+        return mark_safe(self.layout.render(form))
+        
+    def get_attr(self):
+        items = {}
         if self.form_id:
-            items.append('id='+self.form_id.strip())
-            
+            items['id'] = self.form_id.strip()   
         if self.form_class:
-            items.append('class='+self.form_class.strip())
-            
+            items['class'] = self.form_class.strip()
         if self.inputs:
+            items['inputs'] = []
             for inp in self.inputs:
-                items.append(inp())
-                
+                items['inputs'].append(inp())
         if self.toggle.fields:
-            items.append('toggle_fields=id_' + ',id_'.join(self.toggle.fields))
-                
-        return ';'.join(items)
-        
-        
+            items['toggle_fields'] = self.toggle.fields
+        return items        
         
