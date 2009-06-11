@@ -187,9 +187,7 @@ class FormHelper(object):
         if self.form_class:
             items['class'] = self.form_class.strip()
         if self.inputs:
-            items['inputs'] = []
-            for inp in self.inputs:
-                items['inputs'].append(inp())
+            items['inputs'] = self.inputs
         if self.toggle.fields:
             items['toggle_fields'] = self.toggle.fields
         return items        

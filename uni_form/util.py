@@ -7,9 +7,6 @@ class BaseInput(object):
         self.name = name
         self.value = value
         
-    def __call__(self):
-
-        return '%s=%s|%s' % (self.input_type, self.name, self.value)
         
 class Toggle(object):
     """
