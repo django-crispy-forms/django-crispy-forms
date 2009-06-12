@@ -7,7 +7,7 @@ from uni_form.util import BaseInput, Toggle
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
 from django.forms.forms import BoundField
-    
+
 class Submit(BaseInput):
     """
         Used to create a Submit button descriptor for the uni_form template tag.    
@@ -38,7 +38,20 @@ class Reset(BaseInput):
 
     input_type = 'reset'      
 
-
+def render_field(field, form):
+    if isinstance(field, str):
+        return render_form_field(form, field)
+    else:
+        return field.render(form)
+            
+def render_form_field(form, field):
+    try:
+        field_instance = form.fields[field]
+    except KeyError:
+        raise Exception("Could not resolve form field '%s'." % field)
+    bound_field = BoundField(form, field_instance, field)
+    html = render_to_string("uni_form/field.html", {'field': bound_field})
+    return html
 
 class Layout(object):
     '''
@@ -89,21 +102,7 @@ class Fieldset(object):
         html += u'</fieldset>'
         return html
     
-def render_field(field, form):
-    if isinstance(field, str):
-        return render_form_field(form, field)
-    else:
-        return field.render(form)
-            
-def render_form_field(form, field):
-    try:
-        field_instance = form.fields[field]
-    except KeyError:
-        raise Exception("Could not resolve form field '%s'." % field)
 
-    bound_field = BoundField(form, field_instance, field)
-    html = render_to_string("uni_form/field.html", {'field': bound_field})
-    return html
 
 class Row(object):
     ''' row container. Renders to a set of <div>'''
@@ -115,10 +114,26 @@ class Row(object):
             self.css = "formRow"
             
     def render(self, form):
-        output = '<div class="%s">' % self.css_class
+        output = u'<div class="%s">' % self.css
         for field in self.fields:
             output += render_field(field, form)
-        output.append('</div>')
+        output += u'</div>'
+        return u''.join(output)
+    
+class Column(object):
+    ''' column container. Renders to a set of <div>'''
+    def __init__(self, *fields, **kwargs):
+        self.fields = fields
+        if 'css_class' in kwargs.keys():
+            self.css = kwargs['css_class']
+        else:
+            self.css = "formColumn"
+            
+    def render(self, form):
+        output = u'<div class="%s">' % self.css
+        for field in self.fields:
+            output += render_field(field, form)
+        output += u'</div>'
         return u''.join(output)
     
 class HTML(object):
@@ -190,5 +205,5 @@ class FormHelper(object):
             items['inputs'] = self.inputs
         if self.toggle.fields:
             items['toggle_fields'] = self.toggle.fields
-        return items        
+        return items    
         
