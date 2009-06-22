@@ -74,6 +74,8 @@ class BasicNode(template.Node):
 
         if helper and helper.layout:
             form_html = helper.render_layout(actual_form)
+        else:
+            form_html = ""
         response_dict = {
                         'form':actual_form,
                         'form_html':form_html,
