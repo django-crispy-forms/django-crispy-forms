@@ -22,6 +22,9 @@ jQuery.fn.uniform = function(settings) {
 
 // Auto set on page load...
 $(document).ready(function() {
-  jQuery('form.uniForm').uniform();
+  q = jQuery('form.uniForm');
+  if(q.length) {
+    q.uniform();
+  }
   $(document.activeElement).focus() //safari doesn't support this and has no alternative
 });
