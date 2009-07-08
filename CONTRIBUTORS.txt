@@ -4,5 +4,8 @@ Daniel Greenfeld <pydanny@gmail.com>
 
 Contributors
 ============
+digi604
+eddymul
 mvaerle
+
 
