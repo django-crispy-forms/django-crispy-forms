@@ -16,8 +16,8 @@
                 </p>       
             {% endfor %}
 			
-			{% if field.help_text %}
-                <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text }}</p>
+	    {% if field.help_text %}
+                <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text|safe }}</p>
             {% endif %} 
         </div>
 	{% endif %}
