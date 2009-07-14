@@ -5,6 +5,7 @@ Daniel Greenfeld <pydanny@gmail.com>
 Contributors
 ============
 Patrick Lauber <digi604>
+Skylar Saveland <skyl>
 eddymul
 mvaerle
 
