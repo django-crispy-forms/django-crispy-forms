@@ -107,7 +107,7 @@ Adding a layout to your form
 ============================
 
 Uniform helper can have a layout. A layout can consist of fieldsets, rows, columns, HTML and fields.
-A complex Example:
+A complex Example::
 
 	help_text = render_to_string("example/help_text.html")
 	layout = Layout(Fieldset(_('Basic Settings'),
