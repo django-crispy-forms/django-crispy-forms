@@ -51,6 +51,12 @@ def render_form_field(form, field):
         raise Exception("Could not resolve form field '%s'." % field)
     bound_field = BoundField(form, field_instance, field)
     html = render_to_string("uni_form/field.html", {'field': bound_field})
+    if not hasattr(form, 'rendered_fields'):
+        form.rendered_fields = []
+    if not field in form.rendered_fields:
+        form.rendered_fields.append(field)
+    else:
+        raise Exception("A field should only be rendered once: %s" % field)
     return html
 
 class Layout(object):
@@ -76,6 +82,9 @@ class Layout(object):
         html = ""
         for field in self.fields:
             html += render_field(field, form)
+        for field in form.fields.keys():
+            if not field in form.rendered_fields:
+                html += render_field(field, form)
         return html
 
 class Fieldset(object):
