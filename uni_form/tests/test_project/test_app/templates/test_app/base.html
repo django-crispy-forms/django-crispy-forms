@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+        <title>{% block head_title %}{% endblock %}</title>
+        <!--[if IE]><style>
+            div {
+                zoom: 1; /* trigger hasLayout */
+            }
+        </style><![endif]-->
+        <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" />
+        {% block extra_head_base %}
+            {% block extra_head %}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        {% endblock %}
+        
+        <script src="{{ MEDIA_URL }}uni_form/test-jquery.js" type="text/javascript"></script>
+        <script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
+    </body>
+</html>

@@ -1,7 +1,17 @@
+{% extends "test_app/base.html" %}
 {% load uni_form %}
 
+{% block body%}
 <h1>
     Django Uni-Form basic tests
 </h1>
 
-{{ form|as_uni_form }}
+    <form method="POST" action="" class="uniForm">
+        <fieldset class="inlineLabels">        
+            {{ form|as_uni_form }}
+            <div class="form_block">
+                <input type="submit" value="submit">
+            </div>            
+        </fieldset>
+    </form>
+{% endblock %}

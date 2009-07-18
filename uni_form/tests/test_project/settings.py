@@ -2,7 +2,9 @@
 
 import os.path
 
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+from os.path import join, abspath, dirname
+PROJECT_ROOT = abspath(dirname(__file__))
+PROJECT_ROOT = PROJECT_ROOT.replace('uni_form/tests/test_project','')
 
 
 DEBUG = True
@@ -40,7 +42,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = join(PROJECT_ROOT, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
