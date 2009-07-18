@@ -1,5 +1,10 @@
 # Django settings for test_project project.
 
+import os.path
+
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -77,4 +82,5 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'test_app',
+    'uni_form'
 )
