@@ -6,8 +6,8 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Example:
-    url(r'^$', "test_app.views.test_me", name='wiki_index'),    
-    (r'^$', include('test_app.urls')),
+    url(r'^$', "test_app.views.basic_test", name='test_index'),    
+    (r'^more/', include('test_app.urls')),
 
     
 
