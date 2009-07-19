@@ -103,8 +103,8 @@ Using the django-uni-form templatetag in your form class (Intermediate)
     {% endwith %}
 
 
-Adding a layout to your form
-============================
+Adding a layout to your form (advanced)
+=======================================
 
 Uniform helper can have a layout. A layout can consist of fieldsets, rows, columns, HTML and fields.
 A complex Example::

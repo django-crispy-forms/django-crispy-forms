@@ -2,14 +2,13 @@
 django-uni-form (Django Uni-Form)
 =====================================
 
-[http://djangoproject.com Django] forms are easily rendered as tables,
+Django_ forms are easily rendered as tables,
 paragraphs, and unordered lists. However, elegantly rendered div based forms
 is something you have to do by hand. The purpose of this application is to
 provide a simple tag and/or filter that lets you quickly render forms in a div
 format.
 
-[http://sprawsm.com/uni-form Uni-form]  has been selected as the base model
-for the design of the forms.
+`Uni-form`_ has been selected as the base model for the design of the forms.
 
 Installing django-uni-form
 ============================
@@ -104,3 +103,56 @@ Using the django-uni-form templatetag in your form class (Intermediate)
     {% endwith %}
 
 
+Adding a layout to your form (advanced)
+=======================================
+
+Uniform helper can have a layout. A layout can consist of fieldsets, rows, columns, HTML and fields.
+A complex Example::
+
+    from uni_form.helpers import Layout, Fieldset, Column, Row, HTML
+	
+    help_text = render_to_string("example/help_text.html")
+    layout = Layout(Fieldset(_('Basic Settings'),
+                             'title',
+                             'type',
+                             'available_date',
+                    		),
+                    Fieldset(_('Overview'),
+                             Column(Fieldset(_('Object address'),
+                                             Row('address', 'street_number'),
+                                             Row('zip', 'city'),
+                                             'area',
+                                            ),
+                                    Fieldset(_("Next public transport"),
+                                             'train_station',
+                                             Row('tram_station','tram_number'),
+                                             Row('bus_station','bus_number'),
+                                             ),
+                                    ),
+                             Column("is_for_rent",
+                                    Fieldset(_("Rent"),
+                                             'rent-price',
+                                             ),
+                                    Fieldset(_("Sell"),
+                                             'buy_price',
+                                             ),
+                                    Fieldset(_("Measurements"),
+                                             'floor_space',
+                                             'room_height',
+                                             'construction_year',
+                                             ),
+                             ),
+                    Fieldset(_('Additional Function'),
+                             HTML('<p class="tip">%s</p>' % unicode(help_text)),
+                             'features',
+                             ),
+                    Fieldset(_("Description"),
+                             "description")
+                    )
+    helper.add_layout(layout)
+
+This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
+
+
+.. _Django: http://djangoproject.com
+.. _`Uni-form`: http://sprawsm.com/uni-form

@@ -6,7 +6,7 @@ Contributors
 ============
 Patrick Lauber <digi604>
 Skylar Saveland <skyl>
-eddymul
+Eddy Mulyono <eddymul>
 mvaerle
 
 

@@ -4,3 +4,4 @@ include MANIFEST.in
 recursive-include docs *
 recursive-include uni_form/media *
 recursive-include uni_form/templates *
+recursive-include uni_form/tests/test_project/test_app/templates *
