@@ -9,7 +9,9 @@
                 zoom: 1; /* trigger hasLayout */
             }
         </style><![endif]-->
-        <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" />
+        <style>
+            {% include "uni-form.css" %}        
+        </style>
         {% block extra_head_base %}
             {% block extra_head %}{% endblock %}
         {% endblock %}
@@ -17,8 +19,11 @@
     <body>
         {% block body %}
         {% endblock %}
-        
-        <script src="{{ MEDIA_URL }}uni_form/test-jquery.js" type="text/javascript"></script>
-        <script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
+<script type="javascript">
+    {% include "test_app/jquery.js" %}
+</script>
+<script type="javascript">
+    {% include "uni-form.jquery.js" %}
+</script>              
     </body>
 </html>
