@@ -4,7 +4,7 @@ from django.template import RequestContext
 
 from uni_form.helpers import FormHelper, Submit, Reset
 
-from test_app.forms import TestForm, HelperTestForm
+from test_app.forms import TestForm, HelperTestForm, LayoutTestForm
 
 def basic_test(request):
     if request.method == "POST":
@@ -49,7 +49,17 @@ def form_helper(request):
     else:
         form = HelperTestForm()
     
-    
     return render_to_response('test_app/form_helper.html', {
         'form': form
-    }, context_instance=RequestContext(request))          
+    }, context_instance=RequestContext(request))
+    
+def layout_test(request):
+    if request.method == "POST":
+        form = LayoutTestForm(request.POST)
+    else:
+        form = LayoutTestForm()
+        
+    return render_to_response('test_app/form_helper.html', {
+        'form': form
+    }, context_instance=RequestContext(request))
+    

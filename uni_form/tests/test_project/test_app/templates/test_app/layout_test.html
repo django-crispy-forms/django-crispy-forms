@@ -1,0 +1,14 @@
+{% extends "test_app/base.html" %}
+{% load uni_form %}
+
+{% block body%}
+<h1>
+    Django Uni-Form view layout test
+</h1>
+
+{% with form.helper as helper %}
+    {% uni_form form helper %}
+{% endwith %}
+
+
+{% endblock %}

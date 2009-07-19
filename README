@@ -35,7 +35,7 @@ Using the django-uni-form filter (Easy and fun!)
 
 Using the django-uni-form templatetag in your view (Intermediate)
 ====================================================================
-1. In your form class add the following after field definitions::
+1. In your views.py add the following after field definitions::
 
     from django.shortcuts import render_to_response
     
@@ -103,53 +103,65 @@ Using the django-uni-form templatetag in your form class (Intermediate)
     {% endwith %}
 
 
-Adding a layout to your form (advanced)
-=======================================
+Adding a layout to your form class (advanced)
+==============================================
 
-Uniform helper can have a layout. A layout can consist of fieldsets, rows, columns, HTML and fields.
-A complex Example::
+Uniform helpers can use layout objects. A layout can consist of fieldsets, rows, columns, HTML and fields. A simple Example::
 
-    from uni_form.helpers import Layout, Fieldset, Column, Row, HTML
+    from django import forms
+    
+    from uni_form.helpers import FormHelper, Submit, Reset
+    from uni_form.helpers import Layout, Fieldset, Row, HTML
 	
-    help_text = render_to_string("example/help_text.html")
-    layout = Layout(Fieldset(_('Basic Settings'),
-                             'title',
-                             'type',
-                             'available_date',
-                    		),
-                    Fieldset(_('Overview'),
-                             Column(Fieldset(_('Object address'),
-                                             Row('address', 'street_number'),
-                                             Row('zip', 'city'),
-                                             'area',
-                                            ),
-                                    Fieldset(_("Next public transport"),
-                                             'train_station',
-                                             Row('tram_station','tram_number'),
-                                             Row('bus_station','bus_number'),
-                                             ),
-                                    ),
-                             Column("is_for_rent",
-                                    Fieldset(_("Rent"),
-                                             'rent-price',
-                                             ),
-                                    Fieldset(_("Sell"),
-                                             'buy_price',
-                                             ),
-                                    Fieldset(_("Measurements"),
-                                             'floor_space',
-                                             'room_height',
-                                             'construction_year',
-                                             ),
-                             ),
-                    Fieldset(_('Additional Function'),
-                             HTML('<p class="tip">%s</p>' % unicode(help_text)),
-                             'features',
-                             ),
-                    Fieldset(_("Description"),
-                             "description")
-                    )
-    helper.add_layout(layout)
+    class LayoutTestForm(forms.Form):
+
+        is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())    
+        email = forms.CharField(label="email", max_length=30, required=True, widget=forms.TextInput())        
+        password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
+        password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())    
+        first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())        
+        last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())            
+    
+        # Attach a formHelper to your forms class.
+        helper = FormHelper()
+
+        # Create some HTML that you want in the page.
+        # Yes, in real life your CSS would be cached, but this is just a simple example.
+        style = """
+        <style>
+            .formRow {
+                color: red;
+            }
+        </style>
+    
+        """
+        # create the layout object
+        layout = Layout(
+                        # first fieldset shows the company
+                        Fieldset('', 'is_company'),
+                    
+                        # second fieldset shows the contact info
+                        Fieldset('Contact details',
+                                HTML(style),
+                                'email',
+                                Row('password1','password2'),
+                                'first_name',
+                                'last_name',
+                                 )
+                        )
+
+        helper.add_layout(layout)
+                      
+        submit = Submit('add','Add this contact')
+        helper.add_input(submit)
+        
+Then, just like in the previous example, add the following to your template::
+
+    {% load uni_form %}
+    {% with form.helper as helper %}
+        {% uni_form form helper %}
+    {% endwith %}
+           
 
 This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
 
