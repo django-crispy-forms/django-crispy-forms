@@ -1,3 +1,25 @@
+=====================================
+django-uni-form (Django Uni-Form)
+=====================================
+
+Django_ forms are easily rendered as tables,
+paragraphs, and unordered lists. However, elegantly rendered div based forms
+is something you have to do by hand. The purpose of this application is to
+provide a simple tag and/or filter that lets you quickly render forms in a div
+format.
+
+`Uni-form`_ has been selected as the base model for the design of the forms.
+
+Installing django-uni-form
+============================
+1. Install as uni_form in your Django apps directory.
+2. Copy the site_media files in uni_form to your project site_media directory.
+    uni-form-generic.css
+    uni-form.css
+    uni-form.jquery.js
+3. Add 'uni_form' to INSTALLED_APPS in settings.py.
+
+
 Using the django-uni-form filter (Easy and fun!)
 =================================================
 1. Add ``{% load uni_form %}`` to the template that calls your form.
@@ -13,7 +35,7 @@ Using the django-uni-form filter (Easy and fun!)
 
 Using the django-uni-form templatetag in your view (Intermediate)
 ====================================================================
-1. In your form class add the following after field definitions::
+1. In your views.py add the following after field definitions::
 
     from django.shortcuts import render_to_response
     
@@ -81,3 +103,68 @@ Using the django-uni-form templatetag in your form class (Intermediate)
     {% endwith %}
 
 
+Adding a layout to your form class (Intermediate)
+==================================================
+
+Uniform helpers can use layout objects. A layout can consist of fieldsets, rows, columns, HTML and fields. A simple Example::
+
+    from django import forms
+    
+    from uni_form.helpers import FormHelper, Submit, Reset
+    from uni_form.helpers import Layout, Fieldset, Row, HTML
+	
+    class LayoutTestForm(forms.Form):
+
+        is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())    
+        email = forms.CharField(label="email", max_length=30, required=True, widget=forms.TextInput())        
+        password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
+        password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())    
+        first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())        
+        last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())            
+    
+        # Attach a formHelper to your forms class.
+        helper = FormHelper()
+
+        # Create some HTML that you want in the page.
+        # Yes, in real life your CSS would be cached, but this is just a simple example.
+        style = """
+        <style>
+            .formRow {
+                color: red;
+            }
+        </style>
+    
+        """
+        # create the layout object
+        layout = Layout(
+                        # first fieldset shows the company
+                        Fieldset('', 'is_company'),
+                    
+                        # second fieldset shows the contact info
+                        Fieldset('Contact details',
+                                HTML(style),
+                                'email',
+                                Row('password1','password2'),
+                                'first_name',
+                                'last_name',
+                                 )
+                        )
+
+        helper.add_layout(layout)
+                      
+        submit = Submit('add','Add this contact')
+        helper.add_input(submit)
+        
+Then, just like in the previous example, add the following to your template::
+
+    {% load uni_form %}
+    {% with form.helper as helper %}
+        {% uni_form form helper %}
+    {% endwith %}
+           
+
+This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
+
+
+.. _Django: http://djangoproject.com
+.. _`Uni-form`: http://sprawsm.com/uni-form
