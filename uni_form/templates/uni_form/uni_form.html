@@ -1,10 +1,4 @@
-{% if form.non_field_errors %}
-<div id="errorMsg">
-      <ul>
-        {{ form.non_field_errors|unordered_list }}
-     </ul>
-</div>
-{% endif %}
+{% include "uni_form/errors.html" %}
 {% for field in form %}
     {% include "uni_form/field.html" %}
 {% endfor %}
