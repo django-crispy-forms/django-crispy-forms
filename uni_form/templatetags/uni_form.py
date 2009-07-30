@@ -20,6 +20,17 @@ def as_uni_form(form):
     c = Context({'form':form})
     return template.render(c)
     
+@register.filter
+def as_uni_errors(form):
+    template = get_template('uni_form/errors.html')
+    c = Context({'form':form})
+    return template.render(c)
+
+@register.filter
+def as_uni_field(field):
+    template = get_template('uni_form/field.html')
+    c = Context({'field':field})
+    return template.render(c)
 
 ############################################################################
 #
