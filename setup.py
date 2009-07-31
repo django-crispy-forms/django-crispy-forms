@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
  
-version = '0.5.0'
+version = '0.5.1'
  
 LONG_DESCRIPTION = """
 =====================================
@@ -36,6 +36,5 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['setuptools'],
     setup_requires=['setuptools_git'],
 )
