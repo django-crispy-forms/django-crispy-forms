@@ -2,7 +2,7 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from uni_form.helpers import FormHelper, Submit, Reset
+from uni_form.helpers import FormHelper, Submit, Reset, Hidden
 
 from test_app.forms import TestForm, HelperTestForm, LayoutTestForm
 
@@ -35,13 +35,40 @@ def view_helper(request):
     helper.add_input(submit)
     reset = Reset('reset','reset button')
     helper.add_input(reset)
+    hidden = Hidden('not-seen','hidden value stored here')
+    helper.add_input(hidden)
+
 
     # create the response dictionary
     response_dictionary = {'form':form, 'helper': helper}
     
     return render_to_response('test_app/view_helper.html', 
         response_dictionary, 
-        context_instance=RequestContext(request))      
+        context_instance=RequestContext(request))   
+        
+def view_helper_set_action(request):
+
+    # Create the form
+    form = TestForm()
+
+    # create a formHelper
+    helper = FormHelper()
+
+    # add in a submit and reset button
+    submit = Submit('send-away','Send to other page')
+    helper.add_input(submit)
+    
+    helper.form_action = 'view_helper'
+    helper.form_method = 'GET'    
+
+    # create the response dictionary
+    response_dictionary = {'form':form, 'helper': helper}
+    
+    return render_to_response('test_app/view_helper.html', 
+        response_dictionary, 
+        context_instance=RequestContext(request))   
+
+
     
 def form_helper(request):
     if request.method == "POST":

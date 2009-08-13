@@ -72,6 +72,8 @@ class BasicNode(template.Node):
         inputs = []
         toggle_fields = set(())
         if attrs:
+            form_method = attrs.get("form_method", 'POST')                        
+            form_action = attrs.get("form_action", '')            
             form_class = attrs.get("form_class", '')
             form_id = attrs.get("id", "")
             inputs = attrs.get('inputs', [])
@@ -90,6 +92,8 @@ class BasicNode(template.Node):
         response_dict = {
                         'form':actual_form,
                         'form_html':form_html,
+                        'form_action':form_action,
+                        'form_method':form_method,
                         'attrs':attrs,
                         'form_class' : form_class,
                         'form_id' : form_id,
@@ -119,6 +123,14 @@ def do_uni_form(parser, token):
 
     attrs (optional): A string of semi-colon seperated attributes that can be 
     applied to theform in string format. They are used as follows.
+    
+    form_action: applied to the form action attribute. Must be a named url in your urlconf that can be executed via the *url* default template tag. Defaults to empty::
+    
+        form_action=<my-form-action>
+        
+    form_method: applied to the form action attribute. Defaults to POST and the only available thing you can enter is GET.::
+    
+        form_method=<my-form-method>        
 
     id: applied to the form as a whole. Defaults to empty::
 

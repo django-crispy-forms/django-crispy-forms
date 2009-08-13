@@ -3,10 +3,22 @@
     elements, and UI elements to forms generated via the uni_form template tag.
 
 """
-from uni_form.util import BaseInput, Toggle
-from django.utils.safestring import mark_safe
-from django.template.loader import render_to_string
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.forms.forms import BoundField
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
+
+
+from uni_form.util import BaseInput, Toggle
+
+
+class FormHelpersException(Exception):
+    """ This is raised when building a form via helpers throws an error.
+        We want to catch form helper errors as soon as possible because 
+        debugging templatetags is never fun.
+    """
+    pass
+
 
 class Submit(BaseInput):
     """
@@ -189,12 +201,44 @@ class FormHelper(object):
     """
     
     def __init__(self):
+        self._form_method = 'POST'
+        self._form_action = ''       
         self.form_id = ''
         self.form_class = ''
         self.inputs = []
         self.toggle = Toggle()
         self.layout = None
         
+    def get_form_method(self):
+        return self._form_method
+
+    def set_form_method(self, method):       
+        if method.lower() not in ('get','post'):
+            raise FormHelpersException('Only GET and POST are valid in the \
+                    form_method helper attribute')
+        
+        self._form_method = method.upper()
+        
+    # we set properties the old way because we want to support pre-2.6 python
+    form_method = property(get_form_method, set_form_method)    
+    
+    def get_form_action(self):
+        return self._form_action
+        
+    def set_form_action(self, action):
+        try:
+            self._form_action = reverse(action)
+        except NoReverseMatch, e:
+            msg = 'Your form action needs to be a named url defined in a urlconf file\n'
+            msg += 'Your broken action is: %s\n' % action
+            msg += 'NoReverseMatch: %s' % e
+            raise FormHelpersException(msg)
+            
+
+
+    # we set properties the old way because we want to support pre-2.6 python
+    form_action = property(get_form_action, set_form_action)    
+
     def add_input(self, input_object):
         self.inputs.append(input_object)
         
@@ -206,6 +250,10 @@ class FormHelper(object):
         
     def get_attr(self):
         items = {}
+        items['form_method'] = self.form_method.strip()
+        
+        if self.form_action:
+            items['form_action'] = self.form_action.strip()               
         if self.form_id:
             items['id'] = self.form_id.strip()   
         if self.form_class:
