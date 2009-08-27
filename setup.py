@@ -15,6 +15,11 @@ format.
 
 Uni-form (http://sprawsm.com/uni-form) has been selected as the base model for
 the design of the forms.
+
+This release includes:
+
+#. Adding in new method and action form helpers (functionality).
+#. Putting the error elements where they are supposed to be (bug).
 """
  
 setup(
