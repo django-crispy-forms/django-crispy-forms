@@ -74,7 +74,7 @@ class BasicNode(template.Node):
         if attrs:
             form_method = attrs.get("form_method", 'POST')
             form_action = attrs.get("form_action", '')
-            form_class = attrs.get("form_class", '')
+            form_class = attrs.get("class", '')
             form_id = attrs.get("id", "")
             inputs = attrs.get('inputs', [])
             toggle_fields = attrs.get('toggle_fields', set(()))
