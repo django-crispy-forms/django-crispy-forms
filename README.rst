@@ -12,12 +12,18 @@ format.
 
 Installing django-uni-form
 ============================
-1. Install as uni_form in your Django apps directory.
-2. Copy the site_media files in uni_form to your project site_media directory.
-    uni-form-generic.css
-    uni-form.css
-    uni-form.jquery.js
-3. Add 'uni_form' to INSTALLED_APPS in settings.py.
+
+#. Install as uni_form in your Django apps directory.
+
+#. Copy the site_media files in uni_form to your project site_media directory.
+    
+    * uni-form-generic.css
+    
+    * uni-form.css
+    
+    * uni-form.jquery.js
+    
+#. Add 'uni_form' to INSTALLED_APPS in settings.py.
 
 
 Using the django-uni-form filter (Easy and fun!)
