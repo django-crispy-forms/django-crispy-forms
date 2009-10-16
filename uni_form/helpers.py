@@ -108,7 +108,7 @@ class Fieldset(object):
             self.css = args['css_class']
         else:
             self.css = None
-        self.legend_html = legend and ('<legend>%s</legend><hr/>' % unicode(legend)) or ''
+        self.legend_html = legend and ('<legend>%s</legend>' % unicode(legend)) or ''
         self.fields = fields
     
     
