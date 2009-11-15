@@ -28,7 +28,7 @@ Installing django-uni-form
 
 Using the django-uni-form filter (Easy and fun!)
 =================================================
-1. Add ``{% load uni_form %}`` to the template that calls your form.
+1. Add ``{% load uni_form_tags %}`` to the template that calls your form.
 2. Append your form call with the as_uni_form filter::
 
     {{ my_form|as_uni_form }}
@@ -73,7 +73,7 @@ Using the django-uni-form templatetag in your view (Intermediate)
         
 2. In your template do the following::
 
-    {% load uni_form %}
+    {% load uni_form_tags %}
     
     {% uni_form form helper %}
 
@@ -103,7 +103,7 @@ Using the django-uni-form templatetag in your form class (Intermediate)
         
 2. In your template do the following::
 
-    {% load uni_form %}
+    {% load uni_form_tags %}
     {% with form.helper as helper %}
         {% uni_form form helper %}
     {% endwith %}
@@ -130,7 +130,7 @@ Using the django-uni-form templatetag to change action/method (Intermediate)
         
 2. In your template do the following::
 
-    {% load uni_form %}
+    {% load uni_form_tags %}
     {% with form.helper as helper %}
         {% uni_form form helper %}
     {% endwith %}
@@ -191,7 +191,7 @@ Uniform helpers can use layout objects. A layout can consist of fieldsets, rows,
         
 Then, just like in the previous example, add the following to your template::
 
-    {% load uni_form %}
+    {% load uni_form_tags %}
     {% with form.helper as helper %}
         {% uni_form form helper %}
     {% endwith %}

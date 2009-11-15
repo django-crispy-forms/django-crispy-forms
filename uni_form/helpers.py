@@ -194,7 +194,7 @@ class FormHelper(object):
         
         After this in the template:
             
-            {% load uni_form %}
+            {% load uni_form_tags %}
             {% uni_form form form.helper %}
         
     
