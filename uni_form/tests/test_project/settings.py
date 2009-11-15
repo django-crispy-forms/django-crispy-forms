@@ -87,3 +87,7 @@ INSTALLED_APPS = (
     'test_app',
     'uni_form'
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    )

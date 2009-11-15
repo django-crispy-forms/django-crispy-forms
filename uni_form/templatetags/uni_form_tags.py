@@ -31,6 +31,16 @@ def as_uni_field(field):
     template = get_template('uni_form/field.html')
     c = Context({'field':field})
     return template.render(c)
+    
+@register.inclusion_tag("uni_form/includes.html", takes_context=True)
+def uni_form_setup(context):
+    """
+Create the <style> and <script> tags needed to initialize the uni-form.
+ 
+Create a local uni-form/includes.html template if you want to customize how
+these files are loaded. 
+"""
+    return {'MEDIA_URL': context['MEDIA_URL']}
 
 ############################################################################
 #

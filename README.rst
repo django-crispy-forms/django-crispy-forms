@@ -13,17 +13,50 @@ format.
 Installing django-uni-form
 ============================
 
-#. Install as uni_form in your Django apps directory.
+Install into your python path using pip or easy_install::
 
-#. Copy the site_media files in uni_form to your project site_media directory.
+    pip install django-uni-form
+    easy_install install django-uni-form    
     
-    * uni-form-generic.css
+Add *'uni_form'* to your INSTALLED_APPS in settings.py::
+
+    INSTALLED_APPS = (
+        ...
+        'uni_form',
+        )
+        
+Depending on your setup, you may need to copy the media files to your local 
+media folder::
+
+    cp -r <location-of-django-uni-form>/uni_form/media/uni_form/uni-form-generic.css <my-project>/media/uni_form/uni-form-generic.css
+    cp -r <location-of-django-uni-form>/uni_form/media/uni_form/uni-form.css <my-project>/media/uni_form/uni-form.css
+    cp -r <location-of-django-uni-form>/uni_form/media/uni_form/uni-form.jquery.js <my-project>/media/uni_form/uni-form.jquery.js    
     
-    * uni-form.css
+Displaying the media files
+==========================
+
+Django Uni-Form requires three media files.  You can see how we call them by looking in the templates/includes.html file. You can call those files in several ways:
+
+1. Manually by copying the HTML into your own templates::
+
+    <link rel="stylesheet" href="{{ MEDIA_URL }}uni-form/uni-form-generic.css" type="text/css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}uni-form/uni-form.css" type="text/css" />
+    <script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
+
+2. Via use of the Django **includes** built-in template tag.
+
+    {% include "uni_form/includes.html" %}
     
-    * uni-form.jquery.js
-    
-#. Add 'uni_form' to INSTALLED_APPS in settings.py.
+3. With some additional setup described below, via use of the Django Uni-Form **uni_form_setup** template tag.
+
+    {% uni_form_setup %}
+
+If you want to take advantage of the uni_form_setup tag, then you'll need to make sure '*django.core.context_processors.request*' is in the  TEMPLATE_CONTEXT_PROCESSORS tuple in your settings.py file::
+
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        ...
+        'django.core.context_processors.request',
+        )
 
 
 Using the django-uni-form filter (Easy and fun!)
