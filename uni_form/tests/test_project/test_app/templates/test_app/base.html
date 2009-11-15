@@ -1,6 +1,15 @@
+{% load uni_form_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
     <head>
+    <!-- 
+    Are these actually pulling in content? I don't want to use them, just want
+    to see the results    
+        
+    {% include "uni_form/includes.html" %}
+    {% uni_form_setup %}
+    
+    --> 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
         <title>{% block head_title %}{% endblock %}</title>
@@ -31,6 +40,6 @@
 </script>
 <script type="javascript">
     {% include "uni-form.jquery.js" %}
-</script>              
+</script>
     </body>
 </html>

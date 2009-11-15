@@ -40,7 +40,7 @@ Create the <style> and <script> tags needed to initialize the uni-form.
 Create a local uni-form/includes.html template if you want to customize how
 these files are loaded. 
 """
-    return {'MEDIA_URL': context['MEDIA_URL']}
+    return {}
 
 ############################################################################
 #
