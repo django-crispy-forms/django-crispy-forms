@@ -124,7 +124,10 @@ def do_uni_form(parser, token):
     attrs (optional): A string of semi-colon seperated attributes that can be
     applied to theform in string format. They are used as follows.
     
-    form_action: applied to the form action attribute. Must be a named url in your urlconf that can be executed via the *url* default template tag. Defaults to empty::
+    form_action: applied to the form action attribute. Can be a named url in 
+    your urlconf that can be executed via the *url* default template tag or can
+    simply point to another URL. 
+    Defaults to empty::
         
         form_action=<my-form-action>
     

@@ -1,0 +1,9 @@
+=========
+CHANGELOG
+=========
+
+For 0.6.0
+
+ * Removed a <hr /> from the layout module
+ * Changed templatetags/uni_form.py to templatetags/uni_form_tags.py. Yes, this breaks backwards compatibility but fixes a namespace problems in Django with naming a templatetag library after the parent application.
+ * Changed form_action attribute to accept not just named URLs but also any old URL.
