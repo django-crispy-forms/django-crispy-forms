@@ -4,6 +4,7 @@ Daniel Greenfeld <pydanny@gmail.com>
 
 Contributors
 ============
+Chris Adams <acdha>
 Patrick Lauber <digi604>
 Skylar Saveland <skyl>
 Eddy Mulyono <eddymul>
