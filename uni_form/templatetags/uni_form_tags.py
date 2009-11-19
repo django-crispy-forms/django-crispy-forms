@@ -35,7 +35,7 @@ def as_uni_field(field):
 @register.inclusion_tag("uni_form/includes.html", takes_context=True)
 def uni_form_setup(context):
     """
-Create the <style> and <script> tags needed to initialize the uni-form.
+Creates the <style> and <script> tags needed to initialize the uni-form.
  
 Create a local uni-form/includes.html template if you want to customize how
 these files are loaded. 
