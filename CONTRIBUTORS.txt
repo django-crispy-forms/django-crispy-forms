@@ -4,11 +4,13 @@ Daniel Greenfeld <pydanny@gmail.com>
 
 Contributors
 ============
+bjunix
 Chris Adams <acdha>
-Patrick Lauber <digi604>
-Skylar Saveland <skyl>
 Eddy Mulyono <eddymul>
-mvaerle
 James Pic <jamespic.com>
 Karl Bowden <agentk>
+Marcin Grzybowski <marcin.grzybowski@gildia.info>
+mvaerle
+Patrick Lauber <digi604>
+Skylar Saveland <skyl>
 
