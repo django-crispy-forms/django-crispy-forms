@@ -57,7 +57,18 @@ If you want to take advantage of the uni_form_setup tag, then you'll need to mak
         ...
         'django.core.context_processors.request',
         )
+        
+Customizations on '*' required fields
+=====================================
 
+If you don't like the use of '*' (asterisk) to denote required fields you can simply overrride the Django Uni-Form field.html. In your Django project's templates directory create a new directory called `uni_form`. Copy the Django Uni-Form field.html file to that directory and make the desired changes. For example::
+
+    cd ~/<my-projects>/<my-awesome-django-project>/templates/
+    mkdir uni_form
+    cd uni_form/
+    cp <my-site-packages>/Django-uni-form/uni_form/templates/field.html .
+    
+Now you could change the asterisk to any other character, an image icon, or whatever else you want.
 
 Using the django-uni-form filter (Easy and fun!)
 =================================================
