@@ -1,6 +1,10 @@
-Project Lead
-============
+Django Uni-Form Project Lead
+============================
 Daniel Greenfeld <pydanny@gmail.com>
+
+Uni-Form Author
+===============
+Dragan Babic
 
 Contributors
 ============
@@ -10,6 +14,7 @@ Eddy Mulyono <eddymul>
 James Pic <jamespic.com>
 Karl Bowden <agentk>
 Marcin Grzybowski <marcin.grzybowski@gildia.info>
+Michael Lind Mortensen <illio>
 mvaerle
 Patrick Lauber <digi604>
 Skylar Saveland <skyl>
