@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import get_template
 from django import template
@@ -40,6 +41,8 @@ Creates the <style> and <script> tags needed to initialize the uni-form.
 Create a local uni-form/includes.html template if you want to customize how
 these files are loaded. 
 """
+    if 'MEDIA_URL' not in context:
+        context['MEDIA_URL'] = settings.MEDIA_URL        
     return (context)
 
 ############################################################################
