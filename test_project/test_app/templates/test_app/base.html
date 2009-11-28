@@ -6,7 +6,6 @@
     Are these actually pulling in content? I don't want to use them, just want
     to see the results    
         
-    {% include "uni_form/includes.html" %}
     {% uni_form_setup %}
     
     --> 
@@ -21,6 +20,7 @@
         <style>
             {% include "uni-form.css" %}        
         </style>
+
         {% block extra_head_base %}
             {% block extra_head %}{% endblock %}
         {% endblock %}
