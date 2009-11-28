@@ -12,6 +12,8 @@ class TestForm(forms.Form):
     url_field = forms.URLField(label='URL field', verify_exists=False, max_length=100, required=True, widget=forms.TextInput())
     textarea_field = forms.CharField(label='Textareafield', required=True, widget=forms.Textarea())
     hidden_field = forms.CharField(label='textarea_field', required=True, widget=forms.HiddenInput())
+    file_field  = forms.FileField(label="File Field",required=False)
+
 
 
 class HelperTestForm(TestForm):

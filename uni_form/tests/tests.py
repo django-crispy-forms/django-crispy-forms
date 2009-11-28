@@ -82,10 +82,10 @@ class TestFormHelpers(TestCase):
         """)
         html = template.render(c)
         
-        self.assertTrue('class="submit"' in html)
+        self.assertTrue('class="submit submitButton"' in html)
         self.assertTrue('id="submit-id-my-submit"' in html)        
 
-        self.assertTrue('class="reset"' in html)
+        self.assertTrue('class="reset resetButton"' in html)
         self.assertTrue('id="reset-id-my-reset"' in html)        
 
         self.assertTrue('name="my-hidden"' in html)        

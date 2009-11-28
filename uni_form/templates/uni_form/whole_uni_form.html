@@ -14,7 +14,7 @@
                         name="{{ input.name|slugify }}"
                         value="{{ input.value }}"
                         {% ifnotequal input.input_type "hidden" %}
-                            class="{{ input.input_type }}"
+                            class="{{ input.field_classes }}"
                             id="{{ input.input_type }}-id-{{ input.name|slugify }}"
                         {% endifnotequal %}
                         />

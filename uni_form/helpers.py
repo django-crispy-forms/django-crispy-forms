@@ -26,6 +26,7 @@ class Submit(BaseInput):
     """
     
     input_type = 'submit'
+    field_classes = 'submit submitButton'
 
 
 class Button(BaseInput):
@@ -34,7 +35,7 @@ class Button(BaseInput):
     """
     
     input_type = 'button'
-
+    field_classes = 'button'
 
 class Hidden(BaseInput):
     """
@@ -42,6 +43,7 @@ class Hidden(BaseInput):
     """
     
     input_type = 'hidden'
+    field_classes = 'hidden'
 
 class Reset(BaseInput):
     """
@@ -49,6 +51,7 @@ class Reset(BaseInput):
     """
     
     input_type = 'reset'
+    field_classes = 'reset resetButton'    
 
 def render_field(field, form):
     if isinstance(field, str):
