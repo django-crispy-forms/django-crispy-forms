@@ -81,6 +81,16 @@ If you don't like the use of '*' (asterisk) to denote required fields you can si
     
 Now you could change the asterisk to any other character, an image icon, or whatever else you want.
 
+Using Uni-Form strict fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Django Uni-Form implements form fields in html differently than the standard Uni-Form. If you want to adhere to the strict definition of Django Uni-Form relplace the field.html file with field.strict.html. You can just follow these instructions::
+
+    cd ~/<my-projects>/<my-awesome-django-project>/templates/
+    mkdir uni_form
+    cd uni_form/
+    cp <my-site-packages>/Django-uni-form/uni_form/templates/field.strict.html field.html
+
 
 ----
 
