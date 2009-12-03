@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
  
-version = '0.6.0'
+version = '0.7.0'
  
 LONG_DESCRIPTION = """
 =====================================
@@ -18,8 +18,13 @@ the design of the forms.
 
 This release includes:
 
-#. Adding in new method and action form helpers (functionality).
-#. Putting the error elements where they are supposed to be (bug).
+ * Removed a <hr /> from the layout module.
+ * Changed templatetags/uni_form.py to templatetags/uni_form_tags.py. Yes, this breaks backwards compatibility but fixes a namespace problems in Django with naming a templatetag library after the parent application.
+ * Changed form_action attribute to accept not just named URLs but also any old URL.
+ * Added in uni_form_setup tag.
+ * Added tests
+ * Added several new contributors including Dragan Babic
+ * Added Danish language translation
 """
  
 setup(
