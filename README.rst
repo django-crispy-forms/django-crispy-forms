@@ -86,7 +86,7 @@ If you don't like the use of '*' (asterisk) to denote required fields you can si
     cd ~/<my-projects>/<my-awesome-django-project>/templates/
     mkdir uni_form
     cd uni_form/
-    cp <my-site-packages>/Django-uni-form/uni_form/templates/field.html .
+    cp <my-site-packages>/Django-uni-form/uni_form/templates/uni_form/field.html .
     
 Now you could change the asterisk to any other character, an image icon, or whatever else you want.
 
