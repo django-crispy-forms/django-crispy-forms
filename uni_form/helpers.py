@@ -204,7 +204,7 @@ class FormHelper(object):
     """
     
     def __init__(self):
-        self._form_method = 'POST'
+        self._form_method = 'post'
         self._form_action = ''
         self.form_id = ''
         self.form_class = ''
