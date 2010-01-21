@@ -1,12 +1,12 @@
 {% load uni_form_tags i18n %}
 
-<form action="{{ form_action }}" class="uniForm {{ form_class }}" method="{{ form_method }}" id="{{ form_id|slugify }}" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
-	{% if form_html %}{{ form_html }}{% else %}
-    <fieldset class="inlineLabels">  
-    <legend>* {% trans "Required fields" %}</legend> 
-    	{{ form|as_uni_form }}
+<form action="{{ form_action }}" class="uniForm {{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id|slugify }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+    {% if form_html %}{{ form_html }}{% else %}
+    <fieldset class="inlineLabels">
+    <legend>* {% trans "Required fields" %}</legend>
+        {{ form|as_uni_form }}
     </fieldset>
-	{% endif %}
+    {% endif %}
     {% if inputs %}
         <div class="buttonHolder">
             {% for input in inputs %}
@@ -19,7 +19,6 @@
                         {% endifnotequal %}
                         />
             {% endfor %}
-        </div>    
+        </div>
     {% endif %}
-
 </form>
