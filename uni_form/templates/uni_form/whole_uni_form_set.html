@@ -1,0 +1,26 @@
+{% load uni_form_tags i18n %}
+
+<form action="{{ form_action }}" class="uniForm {{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id|slugify }}"{% endif %}{% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
+    <fieldset class="inlineLabels">
+        <legend>* {% trans "Required fields" %}</legend>
+        {% for form in formset.forms %}
+            {% if form.form_html %}{{ form.form_html }}{% else %}
+                {{ form|as_uni_form }}
+            {% endif %}
+        {% endfor %}
+    </fieldset>
+    {% if inputs %}
+        <div class="buttonHolder">
+            {% for input in inputs %}
+                <input type="{{ input.input_type }}"
+                        name="{{ input.name|slugify }}"
+                        value="{{ input.value }}"
+                        {% ifnotequal input.input_type "hidden" %}
+                            class="{{ input.field_classes }}"
+                            id="{{ input.input_type }}-id-{{ input.name|slugify }}"
+                        {% endifnotequal %}
+                        />
+            {% endfor %}
+        </div>
+    {% endif %}
+</form>
