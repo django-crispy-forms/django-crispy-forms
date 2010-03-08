@@ -1,7 +1,3 @@
-#Eclipse's specific
-.project
-.pydevproject
-.pydevproject.bak
 setuptools_git-0.3.4-py2.6.egg
 #buildout's specific
 .installed.cfg
