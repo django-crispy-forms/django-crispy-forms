@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>uni_form.helpers API &mdash; django-uni-form v0.7 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-uni-form v0.7 documentation" href="index.html" />
+    <link rel="next" title="uni_form.templatetags.uni_form_tags API" href="uni_form_tags.html" />
+    <link rel="prev" title="Ways to use Django-uni-form" href="usage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="uni_form_tags.html" title="uni_form.templatetags.uni_form_tags API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Ways to use Django-uni-form"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-uni_form.helpers">
+<h1>uni_form.helpers API<a class="headerlink" href="#module-uni_form.helpers" title="Permalink to this headline">¶</a></h1>
+<p>Utilities for helping developers use python for adding various attributes,
+elements, and UI elements to forms generated via the uni_form template tag.</p>
+<dl class="class">
+<dt id="uni_form.helpers.Button">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Button</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Button" title="Permalink to this definition">¶</a></dt>
+<dd>Used to create a Submit input descriptor for the uni_form template tag.</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.Column">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Column</tt><big>(</big><em>*fields</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Column" title="Permalink to this definition">¶</a></dt>
+<dd>column container. Renders to a set of &lt;div&gt;</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.Fieldset">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Fieldset</tt><big>(</big><em>legend</em>, <em>*fields</em>, <em>**args</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Fieldset" title="Permalink to this definition">¶</a></dt>
+<dd>Fieldset container. Renders to a &lt;fieldset&gt;.</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.FormHelper">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">FormHelper</tt><a class="headerlink" href="#uni_form.helpers.FormHelper" title="Permalink to this definition">¶</a></dt>
+<dd><p>By setting attributes to me you can easily create the text that goes
+into the uni_form template tag. One use case is to add to your form
+class.</p>
+<p>First we create a MyForm class and instantiate it</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">uni_form.helpers</span> <span class="kn">import</span> <span class="n">FormHelper</span><span class="p">,</span> <span class="n">Submit</span><span class="p">,</span> <span class="n">Reset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+<span class="gp">... </span>    <span class="c"># this displays how to attach a formHelper to your forms class.</span>
+<span class="gp">... </span>    <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">helper</span><span class="o">.</span><span class="n">form_id</span> <span class="o">=</span> <span class="s">&#39;this-form-rocks&#39;</span>
+<span class="gp">... </span>    <span class="n">helper</span><span class="o">.</span><span class="n">form_class</span> <span class="o">=</span> <span class="s">&#39;search&#39;</span>
+<span class="gp">... </span>    <span class="n">submit</span> <span class="o">=</span> <span class="n">Submit</span><span class="p">(</span><span class="s">&#39;search&#39;</span><span class="p">,</span><span class="s">&#39;search this site&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">submit</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">reset</span> <span class="o">=</span> <span class="n">Reset</span><span class="p">(</span><span class="s">&#39;reset&#39;</span><span class="p">,</span><span class="s">&#39;reset button&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After this in the template:</p>
+<div class="highlight-python"><pre>{% load uni_form_tags %}
+{% uni_form form form.helper %}</pre>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="uni_form.helpers.FormHelpersException">
+<em class="property">
+exception </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">FormHelpersException</tt><a class="headerlink" href="#uni_form.helpers.FormHelpersException" title="Permalink to this definition">¶</a></dt>
+<dd>This is raised when building a form via helpers throws an error.
+We want to catch form helper errors as soon as possible because
+debugging templatetags is never fun.</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.HTML">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">HTML</tt><big>(</big><em>html</em><big>)</big><a class="headerlink" href="#uni_form.helpers.HTML" title="Permalink to this definition">¶</a></dt>
+<dd>HTML container</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.Hidden">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Hidden</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Hidden" title="Permalink to this definition">¶</a></dt>
+<dd>Used to create a Hidden input descriptor for the uni_form template tag.</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.Layout">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Layout</tt><big>(</big><em>*fields</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Form Layout, add fieldsets, rows, fields and html</p>
+<p>example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">Fieldset</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;is_company&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">Fieldset</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Contact details&#39;</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="s">&#39;email&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">Row</span><span class="p">(</span><span class="s">&#39;password1&#39;</span><span class="p">,</span><span class="s">&#39;password2&#39;</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="s">&#39;first_name&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s">&#39;last_name&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">HTML</span><span class="p">(</span><span class="s">&#39;&lt;img src=&quot;/media/somepicture.jpg&quot;/&gt;&#39;</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="s">&#39;company&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">helper</span><span class="o">.</span><span class="n">add_layout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.Reset">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Reset</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Reset" title="Permalink to this definition">¶</a></dt>
+<dd>Used to create a Hidden input descriptor for the uni_form template tag.</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.Row">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Row</tt><big>(</big><em>*fields</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Row" title="Permalink to this definition">¶</a></dt>
+<dd>row container. Renders to a set of &lt;div&gt;</dd></dl>
+
+<dl class="class">
+<dt id="uni_form.helpers.Submit">
+<em class="property">
+class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Submit</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Submit" title="Permalink to this definition">¶</a></dt>
+<dd>Used to create a Submit button descriptor for the uni_form template tag.</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="usage.html"
+                                  title="previous chapter">Ways to use Django-uni-form</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="uni_form_tags.html"
+                                  title="next chapter">uni_form.templatetags.uni_form_tags API</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/helpers.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="uni_form_tags.html" title="uni_form.templatetags.uni_form_tags API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Ways to use Django-uni-form"
+             >previous</a> |</li>
+        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Daniel Greenfeld.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

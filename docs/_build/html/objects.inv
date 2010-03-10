@@ -1,0 +1,21 @@
+# Sphinx inventory version 1
+# Project: django-uni-form
+# Version: 0.7
+uni_form.templatetags.uni_form_tags mod uni_form_tags.html
+uni_form.helpers mod helpers.html
+uni_form.templatetags.uni_form_tags.BasicNode class uni_form_tags.html
+uni_form.templatetags.uni_form_tags.do_uni_form function uni_form_tags.html
+uni_form.templatetags.uni_form_tags.uni_form_setup function uni_form_tags.html
+uni_form.helpers.Submit class helpers.html
+uni_form.helpers.Row class helpers.html
+uni_form.helpers.Column class helpers.html
+uni_form.helpers.Button class helpers.html
+uni_form.helpers.Reset class helpers.html
+uni_form.helpers.HTML class helpers.html
+uni_form.helpers.Fieldset class helpers.html
+uni_form.templatetags.uni_form_tags.uni_form_jquery function uni_form_tags.html
+uni_form.helpers.Layout class helpers.html
+uni_form.helpers.FormHelper class helpers.html
+uni_form.helpers.FormHelpersException exception helpers.html
+uni_form.templatetags.uni_form_tags.namify function uni_form_tags.html
+uni_form.helpers.Hidden class helpers.html

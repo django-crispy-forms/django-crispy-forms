@@ -77,22 +77,22 @@ def render_form_field(form, field):
 class Layout(object):
     '''
     Form Layout, add fieldsets, rows, fields and html
-    
+
     example:
-    
-    layout = Layout(Fieldset('', 'is_company'),
-                    Fieldset(_('Contact details'),
-                              'email',
-                              Row('password1','password2'),
-                              'first_name',
-                              'last_name',
-                              HTML('<img src="/media/somepicture.jpg"/>'),
-                              'company',)
-    helper.add_layout(layout)
+
+    >>> layout = Layout(Fieldset('', 'is_company'),
+    ...     Fieldset(_('Contact details'),
+    ...         'email',
+    ...         Row('password1','password2'),
+    ...         'first_name',
+    ...         'last_name',
+    ...         HTML('<img src="/media/somepicture.jpg"/>'),
+    ...         'company'))
+    >>> helper.add_layout(layout)
     '''
     def __init__(self, *fields):
         self.fields = fields
-    
+
     def render(self, form):
         html = ""
         for field in self.fields:
@@ -195,7 +195,7 @@ class FormHelper(object):
         ...     reset = Reset('reset','reset button')
         ...     helper.add_input(reset)
         
-        After this in the template:
+        After this in the template::
             
             {% load uni_form_tags %}
             {% uni_form form form.helper %}
