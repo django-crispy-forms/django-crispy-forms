@@ -136,43 +136,6 @@ def do_uni_form(parser, token):
     
     helper (optional): A uni_form.helpers.FormHelper object.
     
-    form_action: applied to the form action attribute. Can be a named url in 
-    your urlconf that can be executed via the *url* default template tag or can
-    simply point to another URL. 
-
-    Defaults to empty::
-        
-        helper.form_action="<my-form-action>"
-    
-    form_method: applied to the form action attribute. Defaults to POST but you can also do 'GET'::
-        
-        helper.form_method="POST|GET"
-    
-    id: applied to the form as a whole. Defaults to empty::
-        
-        helper.id="<my-form-id>"
-    
-    class: add space seperated classes to the class list. Always starts with uniform::
-        
-        helper.class="<my-first-custom-form-class> <my-custom-form-class>"
-    
-    button: for adding of generic buttons. The name also becomes the slugified id::
-        
-        helper.button="<my-custom-button-name>|<my-custom-button-value>"
-    
-    submit: For adding of submt buttons. The name also becomes the slugified id::
-        
-        submit="<my-custom-submit-name>|<my-custom-submit-value>"
-    
-    hidden: For adding of hidden buttons::
-        
-        hidden="<my-custom-hidden-name>|<my-custom-hidden-value>"
-    
-    reset: For adding of reset buttons::
-        
-        reset="<my-custom-reset-name>|<my-custom-reset-value>"
-
-    
     Example::
         
         {% uni_form my-form my_helper %}
