@@ -11,7 +11,6 @@ from django.utils.safestring import mark_safe
 
 from uni_form.util import BaseInput, Toggle
 
-
 class FormHelpersException(Exception):
     """ This is raised when building a form via helpers throws an error.
         We want to catch form helper errors as soon as possible because
@@ -22,7 +21,13 @@ class FormHelpersException(Exception):
 
 class Submit(BaseInput):
     """
-        Used to create a Submit button descriptor for the uni_form template tag.
+        Used to create a Submit button descriptor for the uni_form template tag:
+			
+			submit = Submit('Search the Site','search this site')
+		
+		Note: The first argument is also slugified and turned into the id for the submit button.
+		
+    
     """
     
     input_type = 'submit'
@@ -31,7 +36,11 @@ class Submit(BaseInput):
 
 class Button(BaseInput):
     """
-        Used to create a Submit input descriptor for the uni_form template tag.
+        Used to create a Submit input descriptor for the uni_form template tag:
+			
+			button = Button('Button 1','Press Me!')
+		
+		Note: The first argument is also slugified and turned into the id for the button.
     """
     
     input_type = 'button'
@@ -48,10 +57,15 @@ class Hidden(BaseInput):
 class Reset(BaseInput):
     """
         Used to create a Hidden input descriptor for the uni_form template tag.
+			
+			reset = Reset('Reset This Form','Revert Me!')
+		
+		Note: The first argument is also slugified and turned into the id for the reset.
+    
     """
     
     input_type = 'reset'
-    field_classes = 'reset resetButton'    
+    field_classes = 'reset resetButton'
 
 def render_field(field, form):
     if isinstance(field, str):
@@ -178,28 +192,45 @@ class FormHelper(object):
         By setting attributes to me you can easily create the text that goes
         into the uni_form template tag. One use case is to add to your form
         class.
-        
-        First we create a MyForm class and instantiate it
-        
-        >>> from django import forms
-        >>> from uni_form.helpers import FormHelper, Submit, Reset
-        >>> from django.utils.translation import ugettext_lazy as _
-        >>> class MyForm(forms.Form):
-        ...     title = forms.CharField(label=_("Title"), max_length=30, widget=forms.TextInput())
-        ...     # this displays how to attach a formHelper to your forms class.
-        ...     helper = FormHelper()
-        ...     helper.form_id = 'this-form-rocks'
-        ...     helper.form_class = 'search'
-        ...     submit = Submit('search','search this site')
-        ...     helper.add_input(submit)
-        ...     reset = Reset('reset','reset button')
-        ...     helper.add_input(reset)
-        
-        After this in the template:
-            
-            {% load uni_form_tags %}
-            {% uni_form form form.helper %}
-        
+		
+		Special attribute behavior:
+			
+			method: Defaults to POST but you can also do 'GET'
+		    
+		    form_action: applied to the form action attribute. Can be a named url in
+		    	your urlconf that can be executed via the *url* default template tag or can
+		    	simply point to another URL.
+			
+			id: Generates a form id for dom identification.
+				If no id provided then no id attribute is created on the form.
+			
+			class: add space seperated classes to the class list.
+				Defaults to uniForm.
+				Always starts with uniForm even do specify classes.
+		
+		Demonstration:
+	        
+	        First we create a MyForm class and instantiate it
+	        
+	        >>> from django import forms
+	        >>> from uni_form.helpers import FormHelper, Submit, Reset
+	        >>> from django.utils.translation import ugettext_lazy as _
+	        >>> class MyForm(forms.Form):
+	        ...     title = forms.CharField(label=_("Title"), max_length=30, widget=forms.TextInput())
+	        ...     # this displays how to attach a formHelper to your forms class.
+	        ...     helper = FormHelper()
+	        ...     helper.form_id = 'this-form-rocks'
+	        ...     helper.form_class = 'search'
+	        ...     submit = Submit('search','search this site')
+	        ...     helper.add_input(submit)
+	        ...     reset = Reset('reset','reset button')
+	        ...     helper.add_input(reset)
+	        
+	        After this in the template:
+	            
+	            {% load uni_form_tags %}
+	            {% uni_form form form.helper %}
+    
     
     """
     
@@ -220,7 +251,7 @@ class FormHelper(object):
             raise FormHelpersException('Only GET and POST are valid in the \
                     form_method helper attribute')
         
-        self._form_method = method.upper()
+        self._form_method = method.lower()
     
     # we set properties the old way because we want to support pre-2.6 python
     form_method = property(get_form_method, set_form_method)
