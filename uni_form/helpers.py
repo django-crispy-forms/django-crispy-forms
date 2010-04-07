@@ -27,7 +27,6 @@ class Submit(BaseInput):
 		
 		Note: The first argument is also slugified and turned into the id for the submit button.
 		
-    
     """
     
     input_type = 'submit'
