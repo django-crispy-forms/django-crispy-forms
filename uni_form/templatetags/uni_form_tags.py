@@ -5,6 +5,8 @@ from django import template
 
 from django.template.defaultfilters import slugify
 
+from uni_form.helpers import FormHelper
+
 register = template.Library()
 
 
@@ -32,17 +34,17 @@ def as_uni_field(field):
     template = get_template('uni_form/field.html')
     c = Context({'field':field})
     return template.render(c)
-    
+
 @register.inclusion_tag("uni_form/includes.html", takes_context=True)
 def uni_form_setup(context):
     """
 Creates the <style> and <script> tags needed to initialize the uni-form.
- 
+
 Create a local uni-form/includes.html template if you want to customize how
-these files are loaded. 
+these files are loaded.
 """
     if 'MEDIA_URL' not in context:
-        context['MEDIA_URL'] = settings.MEDIA_URL        
+        context['MEDIA_URL'] = settings.MEDIA_URL
     return (context)
 
 ############################################################################
@@ -61,7 +63,7 @@ def namify(text):
         So we just replaces hyphens with underscores.
     """
     return slugify(text).replace('-','_')
-    
+
 
 class BasicNode(template.Node):
     """ Basic Node object that we can rely on for Node objects in normal
@@ -79,12 +81,15 @@ class BasicNode(template.Node):
         helper = self.helper.resolve(context)
         attrs = None
         if helper:
+            if not isinstance(helper, FormHelper):
+                raise TypeError('helper object provided to uni_form tag must be a uni_form.helpers.FormHelper object or a None object.')
             attrs = helper.get_attr()
         form_class = ''
         form_id = ''
         inputs = []
         toggle_fields = set(())
         if attrs:
+            form_tag = attrs.get("add_form_tag", True)
             form_method = attrs.get("form_method", 'POST')
             form_action = attrs.get("form_action", '')
             form_class = attrs.get("class", '')
@@ -107,6 +112,7 @@ class BasicNode(template.Node):
                         'form_html':form_html,
                         'form_action':form_action,
                         'form_method':form_method,
+                        'form_tag': form_tag,
                         'attrs':attrs,
                         'form_class' : form_class,
                         'form_id' : form_id,
@@ -115,7 +121,7 @@ class BasicNode(template.Node):
                         }
         c = Context(response_dict)
         return c
-        
+
 
 ##################################################################
 #
@@ -149,10 +155,10 @@ def do_uni_form(parser, token):
         helper = token.pop(1)
     except IndexError:
         helper = None
-
+    
     
     return UniFormNode(form, helper)
-    
+
 
 class UniFormNode(BasicNode):
     
@@ -162,7 +168,7 @@ class UniFormNode(BasicNode):
         
         template = get_template('uni_form/whole_uni_form.html')
         return template.render(c)
-        
+
 
 #################################
 # uni_form scripts
@@ -185,7 +191,7 @@ def uni_form_jquery(parser, token):
         attrs = token.pop(1)
     except IndexError:
         attrs = None
-
+    
     
     return UniFormJqueryNode(form,attrs)
 
