@@ -67,8 +67,6 @@ def view_helper_set_action(request):
     return render_to_response('test_app/view_helper.html', 
         response_dictionary, 
         context_instance=RequestContext(request))   
-
-
     
 def form_helper(request):
     if request.method == "POST":
@@ -89,4 +87,24 @@ def layout_test(request):
     return render_to_response('test_app/form_helper.html', {
         'form': form
     }, context_instance=RequestContext(request))
+    
+def lacking_form_tag(request):
+    # Create the form
+    if request.method == "POST":
+        form = TestForm(request.POST)
+    else:
+        form = TestForm()
+
+    # create a formHelper
+    helper = FormHelper()
+
+    # remove the form tag
+    helper.add_form_tag = False
+
+    # create the response dictionary
+    response_dictionary = {'form':form, 'helper': helper}
+    
+    return render_to_response('test_app/lacking_form_tag.html', 
+        response_dictionary, 
+        context_instance=RequestContext(request))   
     
