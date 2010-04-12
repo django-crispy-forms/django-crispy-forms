@@ -1,6 +1,6 @@
 {% load uni_form_tags i18n %}
 
-{% if form_tag %}<form action="{{ form_action }}" class="uniForm {{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id|slugify }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+{% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {% endif %}{{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id|slugify }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
     {% if form_html %}{{ form_html }}{% else %}
     <fieldset class="inlineLabels">
     <legend>* {% trans "Required fields" %}</legend>
