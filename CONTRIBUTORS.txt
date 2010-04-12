@@ -8,6 +8,7 @@ Dragan Babic
 
 Contributors
 ============
+Alison Rowland <arowla>
 bjunix
 Chris Adams <acdha>
 Eddy Mulyono <eddymul>
@@ -16,7 +17,7 @@ Karl Bowden <agentk>
 Marcin Grzybowski <marcin.grzybowski@gildia.info>
 Michael Lind Mortensen <illio>
 mvaerle
-Nagy Viktor
+Nagy Viktor <nagyv>
 Patrick Lauber <digi604>
 Skylar Saveland <skyl>
 

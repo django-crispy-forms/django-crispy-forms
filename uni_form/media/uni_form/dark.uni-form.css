@@ -1,0 +1,112 @@
+/* ------------------------------------------------------------------------------
+   
+   UNI-FORM DARK by DRAGAN BABIC                            (v2) | Wed, 31 Mar 10
+   
+   ------------------------------------------------------------------------------ */
+
+.uniForm{ background: #343434; color: #ccc; }
+    
+    .uniForm legend{ font-weight: bold; font-size: 100%; margin: 0; padding: 1.5em 0; }
+    
+    .uniForm .ctrlHolder{ padding: 1em; border-bottom: 1px solid #232323; }
+    .uniForm .ctrlHolder.focused{ background: #232323; }
+    
+    .uniForm .buttonHolder{ background: #232323; text-align: right; margin: 1.5em 0 0 0; padding: 1.5em;
+                            /* CSS3 */
+                            border-radius:         4px;
+                            -webkit-border-radius: 4px;
+                            -moz-border-radius:    4px;
+                            -o-border-radius:      4px;
+                            -khtml-border-radius:  4px;
+                          }
+      .uniForm .buttonHolder .primaryAction{ padding: 10px 22px; line-height: 1; background: #59a20e; border: 1px solid #232323; font-size: 12px; font-weight: bold; color: #fff;
+                                             /* CSS3 */
+                                             border-radius:         4px;
+                                             -webkit-border-radius: 4px;
+                                             -moz-border-radius:    4px;
+                                             -o-border-radius:      4px;
+                                             -khtml-border-radius:  4px;
+                                             box-shadow: 1px 1px 0 #232323;
+                                             -webkit-box-shadow: 1px 1px 0 #232323;
+                                             -moz-box-shadow: 1px 1px 0 #232323;
+                                             text-shadow: -1px -1px 0 rgba(0,0,0,.25);
+                                           }
+      .uniForm .buttonHolder .primaryAction:active{ position: relative; top: 1px; }
+      .uniForm .secondaryAction            { text-align: left; }
+      .uniForm button.secondaryAction      { background: transparent; border: none; color: #777; margin: 1.25em 0 0 0; padding: 0; }
+      
+        .uniForm .inlineLabels label em,
+        .uniForm .inlineLabels .label em{ font-style: normal; font-weight: bold; }
+        .uniForm label small{ font-size: .75em; color: #777; }
+        
+      .uniForm .textInput,
+      .uniForm textarea    { padding: 4px 2px; border: 1px solid #232323; background: #555; color: #dfdfdf; }
+      .uniForm textarea    { height: 12em; }
+      .uniForm .textInput:focused,
+      .uniForm textarea:focused{ border-color: #fff; }
+      
+      /* Get rid of the 'glow' effect in WebKit, optional */
+      .uniForm .ctrlHolder .textInput:focus,
+      .uniForm .ctrlHolder textarea:focus{ outline: none; }
+      
+      .uniForm .formHint                    { font-size: .85em; color: #777; }
+      .uniForm .inlineLabels .formHint      { padding-top: .5em; }
+      .uniForm .ctrlHolder.focused .formHint{ color: #fff; }
+      
+/* ----------------------------------------------------------------------------- */
+/* ############################### Messages #################################### */
+/* ----------------------------------------------------------------------------- */
+
+  /* Error message at the top of the form */
+  .uniForm #errorMsg{ background: #c20f2e; border: 1px solid #232323; color: #fff; margin: 0 0 1.5em 0; padding: 0 1.5em;
+                      /* CSS3 */
+                      border-radius:         4px;
+                      -webkit-border-radius: 4px;
+                      -moz-border-radius:    4px;
+                      -o-border-radius:      4px;
+                      -khtml-border-radius:  4px;
+                    }
+    .uniForm #errorMsg ol{ margin: 0 0 1.5em 0; padding: 0; }
+      .uniForm #errorMsg ol li{ margin: 0 0 3px 1.5em; padding: 7px; background: #a20d27; position: relative; font-size: .85em;
+                                /* CSS3 */
+                                border-radius:         4px;
+                                -webkit-border-radius: 4px;
+                                -moz-border-radius:    4px;
+                                -o-border-radius:      4px;
+                                -khtml-border-radius:  4px;
+                              }
+  
+  .uniForm .ctrlHolder.error,
+  .uniForm .ctrlHolder.focused.error{ background: #c20f2e; border: 1px solid #232323; color: #fff;
+                                      /* CSS3 */
+                                      border-radius:         4px;
+                                      -webkit-border-radius: 4px;
+                                      -moz-border-radius:    4px;
+                                      -o-border-radius:      4px;
+                                      -khtml-border-radius:  4px;
+                                    }
+    .uniForm .ctrlHolder.error input.error,
+    .uniForm .ctrlHolder.error select.error,
+    .uniForm .ctrlHolder.error textarea.error{ color: #af4c4c; margin: 0 0 6px 0; padding: 4px; background: #ffbfbf; }
+    
+    .uniForm .ctrlHolder.error .formHint{ color: #fff; }
+    
+  /* Success messages at the top of the form */
+  .uniForm #okMsg{ background: #59a20e; border: 1px solid #232323; color: #fff; margin: 0 0 1.5em 0; padding: 0 1.5em; text-align: center;
+                   /* CSS3 */
+                   border-radius:         4px;
+                   -webkit-border-radius: 4px;
+                   -moz-border-radius:    4px;
+                   -o-border-radius:      4px;
+                   -khtml-border-radius:  4px;
+                 }
+    .uniForm #OKMsg p{ margin: 0; }
+
+/* ----------------------------------------------------------------------------- */
+/* ############################### Columns ##################################### */
+/* ----------------------------------------------------------------------------- */
+
+    .uniForm .col{ margin-bottom: 1.5em; }
+    /* Use .first and .last classes to control the layout/spacing of your columns */
+    .uniForm .col.first{ width: 49%; float: left; clear: none;                   }
+    .uniForm .col.last { width: 49%; float: right; clear: none; margin-right: 0; }
