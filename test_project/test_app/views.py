@@ -99,7 +99,7 @@ def lacking_form_tag(request):
     helper = FormHelper()
 
     # remove the form tag
-    helper.add_form_tag = False
+    helper.form_tag = False
 
     # create the response dictionary
     response_dictionary = {'form':form, 'helper': helper}

@@ -173,4 +173,4 @@ Then, just like in the previous example, add the following to your template::
     {% endwith %}
            
 
-This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
+This allows you to group fields in fieldsets, or rows or columns or add HTML between fields, etc.

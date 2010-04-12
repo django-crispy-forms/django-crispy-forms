@@ -93,20 +93,39 @@ class TestFormHelpers(TestCase):
         self.assertTrue('class="button"' in html)
         self.assertTrue('id="button-id-my-button"' in html)        
         '''
-    def test_uni_form_helper_generic_attributes(self):
+    def test_uni_form_helper_form_attributes(self):
         
+
+        template = get_template_from_string("""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+
+        # First we build a standard form helper
         form_helper = FormHelper()    
         form_helper.form_id = 'this-form-rocks'
         form_helper.form_class = 'forms-that-rock'
         form_helper.form_method = 'GET'
     
+        # now we render it
         c = Context({'form':TestForm(),'form_helper':form_helper})            
-        template = get_template_from_string("""
-{% load uni_form_tags %}
-{% uni_form form form_helper %}
-        """)
         html = template.render(c)        
-
-        good_response = """<form action="" class="uniForm forms-that-rock" method="POST" id="this-form-rocks" >"""
         
-        #self.assertTrue('<form action="" class="uniForm forms-that-rock" method="GET" id="this-form-rocks" >' in html)
+        # Lets make sure everything loads right
+        self.assertTrue("""<form""" in html)                
+        self.assertTrue("""class="uniForm forms-that-rock" """ in html)
+        self.assertTrue("""method="get" """ in html)
+        self.assertTrue("""id="this-form-rocks">""" in html)        
+        
+        # now lets remove the form tag and render it again. All the True items above
+        # should now be false because the form tag is removed.
+        form_helper.form_tag = False
+        c = Context({'form':TestForm(),'form_helper':form_helper})            
+        html = template.render(c)        
+        self.assertFalse("""<form""" in html)        
+        self.assertFalse("""id="this-form-rocks">""" in html)                
+        self.assertFalse("""class="uniForm forms-that-rock" """ in html)
+        self.assertFalse("""method="get" """ in html)
+        self.assertFalse("""id="this-form-rocks">""" in html)        
+        
+        
