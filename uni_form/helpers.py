@@ -93,15 +93,15 @@ class Layout(object):
     
     example:
     
-    layout = Layout(Fieldset('', 'is_company'),
-                    Fieldset(_('Contact details'),
-                              'email',
-                              Row('password1','password2'),
-                              'first_name',
-                              'last_name',
-                              HTML('<img src="/media/somepicture.jpg"/>'),
-                              'company',)
-    helper.add_layout(layout)
+    >>> layout = Layout(Fieldset('', 'is_company'),
+    ...                Fieldset(_('Contact details'),
+    ...                          'email',
+    ...                          Row('password1','password2'),
+    ...                          'first_name',
+    ...                          'last_name',
+    ...                          HTML('<img src="/media/somepicture.jpg"/>'),
+    ...                          'company',)
+    >>> helper.add_layout(layout)
     '''
     def __init__(self, *fields):
         self.fields = fields
