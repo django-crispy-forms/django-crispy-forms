@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ways to use Django-uni-form &mdash; django-uni-form v0.7 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-uni-form v0.7 documentation" href="index.html" />
+    <link rel="next" title="uni_form.helpers API" href="helpers.html" />
+    <link rel="prev" title="Installing django-uni-form" href="install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="uni_form.helpers API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installing django-uni-form"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ways-to-use-django-uni-form">
+<h1>Ways to use Django-uni-form<a class="headerlink" href="#ways-to-use-django-uni-form" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-the-django-uni-form-filter-easy-and-fun">
+<h2>Using the django-uni-form filter (Easy and fun!)<a class="headerlink" href="#using-the-django-uni-form-filter-easy-and-fun" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Add <tt class="docutils literal"><span class="pre">{%</span> <span class="pre">load</span> <span class="pre">uni_form_tags</span> <span class="pre">%}</span></tt> to the template that calls your form.</p>
+</li>
+<li><p class="first">Append your form call with the as_uni_form filter:</p>
+<div class="highlight-python"><pre>{{ my_form|as_uni_form }}</pre>
+</div>
+</li>
+<li><p class="first">Add the class of &#8216;uniForm&#8217; to your form. Example:</p>
+<div class="highlight-python"><pre>&lt;form action="" method="post" class="uniForm"&gt;</pre>
+</div>
+</li>
+<li><p class="first">Refresh and enjoy!</p>
+</li>
+</ol>
+</div>
+<div class="section" id="using-the-django-uni-form-templatetag-in-your-view-intermediate">
+<h2>Using the django-uni-form templatetag in your view (Intermediate)<a class="headerlink" href="#using-the-django-uni-form-templatetag-in-your-view-intermediate" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">In your views.py add the following after field definitions:</p>
+<div class="highlight-python"><pre>from django.shortcuts import render_to_response
+
+from uni_form.helpers import FormHelper, Submit, Reset
+from my_project.forms.MyForm
+
+def my_view(request):
+
+    # Create the form
+    form = MyForm()
+
+    # create a formHelper
+    helper = FormHelper()
+
+    # Add in a class and id
+    helper.form_id = 'this-form-rocks'
+    helper.form_class = 'search'
+
+    # add in a submit and reset button
+    submit = Submit('search','search this site')
+    helper.add_input(submit)
+    reset = Reset('reset','reset button')
+    helper.add_input(reset)
+
+    # create the response dictionary
+    response_dictionary = {'form':form, 'helper': helper}
+
+    return render_to_response('my_template.html', response_dictionary)</pre>
+</div>
+</li>
+<li><p class="first">In your template do the following:</p>
+<div class="highlight-python"><pre>{% load uni_form_tags %}
+
+{% uni_form form helper %}</pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="using-the-django-uni-form-templatetag-in-your-form-class-intermediate">
+<h2>Using the django-uni-form templatetag in your form class (Intermediate)<a class="headerlink" href="#using-the-django-uni-form-templatetag-in-your-form-class-intermediate" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">In your form class add the following after field definitions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">uni_form.helpers</span> <span class="kn">import</span> <span class="n">FormHelper</span><span class="p">,</span> <span class="n">Submit</span><span class="p">,</span> <span class="n">Reset</span>
+
+<span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+
+    <span class="c"># Attach a formHelper to your forms class.</span>
+    <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
+
+    <span class="c"># Add in a class and id</span>
+    <span class="n">helper</span><span class="o">.</span><span class="n">form_id</span> <span class="o">=</span> <span class="s">&#39;this-form-rocks&#39;</span>
+    <span class="n">helper</span><span class="o">.</span><span class="n">form_class</span> <span class="o">=</span> <span class="s">&#39;search&#39;</span>
+
+    <span class="c"># add in a submit and reset button</span>
+    <span class="n">submit</span> <span class="o">=</span> <span class="n">Submit</span><span class="p">(</span><span class="s">&#39;search&#39;</span><span class="p">,</span><span class="s">&#39;search this site&#39;</span><span class="p">)</span>
+    <span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">submit</span><span class="p">)</span>
+    <span class="n">reset</span> <span class="o">=</span> <span class="n">Reset</span><span class="p">(</span><span class="s">&#39;reset&#39;</span><span class="p">,</span><span class="s">&#39;reset button&#39;</span><span class="p">)</span>
+    <span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">reset</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">In your template do the following:</p>
+<div class="highlight-python"><pre>{% load uni_form_tags %}
+{% with form.helper as helper %}
+    {% uni_form form helper %}
+{% endwith %}</pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="using-the-django-uni-form-templatetag-to-change-action-method-intermediate">
+<h2>Using the django-uni-form templatetag to change action/method (Intermediate)<a class="headerlink" href="#using-the-django-uni-form-templatetag-to-change-action-method-intermediate" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">In your form class add the following after field definitions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">uni_form.helpers</span> <span class="kn">import</span> <span class="n">FormHelper</span><span class="p">,</span> <span class="n">Submit</span>
+
+<span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+
+    <span class="c"># Attach a formHelper to your forms class.</span>
+    <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
+
+    <span class="c"># Change the form and method</span>
+    <span class="n">helper</span><span class="o">.</span><span class="n">form_action</span> <span class="o">=</span> <span class="s">&#39;my-url-name-defined-in-url-conf&#39;</span>
+    <span class="n">helper</span><span class="o">.</span><span class="n">form_method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span> <span class="c"># Only GET and POST are legal</span>
+
+    <span class="c"># add in a submit and reset button</span>
+    <span class="n">submit</span> <span class="o">=</span> <span class="n">Submit</span><span class="p">(</span><span class="s">&#39;search&#39;</span><span class="p">,</span><span class="s">&#39;search this site&#39;</span><span class="p">)</span>
+    <span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">submit</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">In your template do the following:</p>
+<div class="highlight-python"><pre>{% load uni_form_tags %}
+{% with form.helper as helper %}
+    {% uni_form form helper %}
+{% endwith %}</pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="adding-a-layout-to-your-form-class-intermediate">
+<h2>Adding a layout to your form class (Intermediate)<a class="headerlink" href="#adding-a-layout-to-your-form-class-intermediate" title="Permalink to this headline">¶</a></h2>
+<p>Uniform helpers can use layout objects. A layout can consist of fieldsets, rows, columns, HTML and fields. A simple Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+
+<span class="kn">from</span> <span class="nn">uni_form.helpers</span> <span class="kn">import</span> <span class="n">FormHelper</span><span class="p">,</span> <span class="n">Submit</span><span class="p">,</span> <span class="n">Reset</span>
+<span class="kn">from</span> <span class="nn">uni_form.helpers</span> <span class="kn">import</span> <span class="n">Layout</span><span class="p">,</span> <span class="n">Fieldset</span><span class="p">,</span> <span class="n">Row</span><span class="p">,</span> <span class="n">HTML</span>
+
+<span class="k">class</span> <span class="nc">LayoutTestForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+
+    <span class="n">is_company</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;company&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">CheckboxInput</span><span class="p">())</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;email&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+    <span class="n">password1</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;password&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">())</span>
+    <span class="n">password2</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;re-enter password&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">())</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;first name&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;last name&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+
+    <span class="c"># Attach a formHelper to your forms class.</span>
+    <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
+
+    <span class="c"># Create some HTML that you want in the page.</span>
+    <span class="c"># Yes, in real life your CSS would be cached, but this is just a simple example.</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    &lt;style&gt;</span>
+<span class="s">        .formRow {</span>
+<span class="s">            color: red;</span>
+<span class="s">        }</span>
+<span class="s">    &lt;/style&gt;</span>
+
+<span class="s">    &quot;&quot;&quot;</span>
+    <span class="c"># create the layout object</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span>
+                    <span class="c"># first fieldset shows the company</span>
+                    <span class="n">Fieldset</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;is_company&#39;</span><span class="p">),</span>
+
+                    <span class="c"># second fieldset shows the contact info</span>
+                    <span class="n">Fieldset</span><span class="p">(</span><span class="s">&#39;Contact details&#39;</span><span class="p">,</span>
+                            <span class="n">HTML</span><span class="p">(</span><span class="n">style</span><span class="p">),</span>
+                            <span class="s">&#39;email&#39;</span><span class="p">,</span>
+                            <span class="n">Row</span><span class="p">(</span><span class="s">&#39;password1&#39;</span><span class="p">,</span><span class="s">&#39;password2&#39;</span><span class="p">),</span>
+                            <span class="s">&#39;first_name&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;last_name&#39;</span><span class="p">,</span>
+                             <span class="p">)</span>
+                    <span class="p">)</span>
+
+    <span class="n">helper</span><span class="o">.</span><span class="n">add_layout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="n">submit</span> <span class="o">=</span> <span class="n">Submit</span><span class="p">(</span><span class="s">&#39;add&#39;</span><span class="p">,</span><span class="s">&#39;Add this contact&#39;</span><span class="p">)</span>
+    <span class="n">helper</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">submit</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, just like in the previous example, add the following to your template:</p>
+<div class="highlight-python"><pre>{% load uni_form_tags %}
+{% with form.helper as helper %}
+    {% uni_form form helper %}
+{% endwith %}</pre>
+</div>
+<p>This allows you to group fields in fieldsets, or rows or columns or add HTML between fields, etc.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Ways to use Django-uni-form</a><ul>
+<li><a class="reference external" href="#using-the-django-uni-form-filter-easy-and-fun">Using the django-uni-form filter (Easy and fun!)</a></li>
+<li><a class="reference external" href="#using-the-django-uni-form-templatetag-in-your-view-intermediate">Using the django-uni-form templatetag in your view (Intermediate)</a></li>
+<li><a class="reference external" href="#using-the-django-uni-form-templatetag-in-your-form-class-intermediate">Using the django-uni-form templatetag in your form class (Intermediate)</a></li>
+<li><a class="reference external" href="#using-the-django-uni-form-templatetag-to-change-action-method-intermediate">Using the django-uni-form templatetag to change action/method (Intermediate)</a></li>
+<li><a class="reference external" href="#adding-a-layout-to-your-form-class-intermediate">Adding a layout to your form class (Intermediate)</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="install.html"
+                                  title="previous chapter">Installing django-uni-form</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="helpers.html"
+                                  title="next chapter">uni_form.helpers API</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/usage.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="uni_form.helpers API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installing django-uni-form"
+             >previous</a> |</li>
+        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Daniel Greenfeld.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

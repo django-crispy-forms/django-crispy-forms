@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>uni_form.templatetags.uni_form_tags API &mdash; django-uni-form v0.7 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-uni-form v0.7 documentation" href="index.html" />
+    <link rel="prev" title="uni_form.helpers API" href="helpers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="uni_form.helpers API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-uni_form.templatetags.uni_form_tags">
+<h1>uni_form.templatetags.uni_form_tags API<a class="headerlink" href="#module-uni_form.templatetags.uni_form_tags" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="uni_form.templatetags.uni_form_tags.BasicNode">
+<em class="property">
+class </em><tt class="descclassname">uni_form.templatetags.uni_form_tags.</tt><tt class="descname">BasicNode</tt><big>(</big><em>form</em>, <em>helper</em><big>)</big><a class="headerlink" href="#uni_form.templatetags.uni_form_tags.BasicNode" title="Permalink to this definition">¶</a></dt>
+<dd>Basic Node object that we can rely on for Node objects in normal
+template tags. I created this because most of the tags we&#8217;ll be using
+will need both the form object and the helper string. This handles
+both the form object and parses out the helper string into attributes
+that templates can easily handle.</dd></dl>
+
+<dl class="function">
+<dt id="uni_form.templatetags.uni_form_tags.do_uni_form">
+<tt class="descclassname">uni_form.templatetags.uni_form_tags.</tt><tt class="descname">do_uni_form</tt><big>(</big><em>parser</em>, <em>token</em><big>)</big><a class="headerlink" href="#uni_form.templatetags.uni_form_tags.do_uni_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>You need to pass in at least the form object, and can also pass in the
+optional attrs string. Writing the attrs string is rather challenging so
+use of the objects found in uni_form.helpers is encouraged.</p>
+<p>form: The forms object to be rendered by the tag</p>
+<p>attrs (optional): A string of semi-colon seperated attributes that can be
+applied to theform in string format. They are used as follows.</p>
+<p>form_action: applied to the form action attribute. Can be a named url in 
+your urlconf that can be executed via the <em>url</em> default template tag or can
+simply point to another URL. 
+Defaults to empty:</p>
+<div class="highlight-python"><pre>form_action=&lt;my-form-action&gt;</pre>
+</div>
+<p>form_method: applied to the form action attribute. Defaults to POST and the only available thing you can enter is GET.:</p>
+<div class="highlight-python"><pre>form_method=&lt;my-form-method&gt;</pre>
+</div>
+<p>id: applied to the form as a whole. Defaults to empty:</p>
+<div class="highlight-python"><pre>id=&lt;my-form-id&gt;</pre>
+</div>
+<p>class: add space seperated classes to the class list. Always starts with uniform:</p>
+<div class="highlight-python"><pre>class=&lt;my-first-custom-form-class&gt; &lt;my-custom-form-class&gt;</pre>
+</div>
+<p>button: for adding of generic buttons. The name also becomes the slugified id:</p>
+<div class="highlight-python"><pre>button=&lt;my-custom-button-name&gt;|&lt;my-custom-button-value&gt;</pre>
+</div>
+<p>submit: For adding of submt buttons. The name also becomes the slugified id:</p>
+<div class="highlight-python"><pre>submit=&lt;my-custom-submit-name&gt;|&lt;my-custom-submit-value&gt;</pre>
+</div>
+<p>hidden: For adding of hidden buttons:</p>
+<div class="highlight-python"><pre>hidden=&lt;my-custom-hidden-name&gt;|&lt;my-custom-hidden-value&gt;</pre>
+</div>
+<p>reset: For adding of reset buttons:</p>
+<div class="highlight-python"><pre>reset=&lt;my-custom-reset-name&gt;|&lt;my-custom-reset-value&gt;</pre>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><pre>{% uni_form my-form my_helper %}</pre>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="uni_form.templatetags.uni_form_tags.namify">
+<tt class="descclassname">uni_form.templatetags.uni_form_tags.</tt><tt class="descname">namify</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#uni_form.templatetags.uni_form_tags.namify" title="Permalink to this definition">¶</a></dt>
+<dd>Some of our values need to be rendered safe as python variable names.
+So we just replaces hyphens with underscores.</dd></dl>
+
+<dl class="function">
+<dt id="uni_form.templatetags.uni_form_tags.uni_form_jquery">
+<tt class="descclassname">uni_form.templatetags.uni_form_tags.</tt><tt class="descname">uni_form_jquery</tt><big>(</big><em>parser</em>, <em>token</em><big>)</big><a class="headerlink" href="#uni_form.templatetags.uni_form_tags.uni_form_jquery" title="Permalink to this definition">¶</a></dt>
+<dd><p>toggle_field: For making fields designed to be toggled for editing add them
+by spaces. You must specify by field id (field.auto_id):</p>
+<div class="highlight-python"><pre>toggle_fields=&lt;first_field&gt;,&lt;second_field&gt;</pre>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="uni_form.templatetags.uni_form_tags.uni_form_setup">
+<tt class="descclassname">uni_form.templatetags.uni_form_tags.</tt><tt class="descname">uni_form_setup</tt><big>(</big><em>context</em><big>)</big><a class="headerlink" href="#uni_form.templatetags.uni_form_tags.uni_form_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the &lt;style&gt; and &lt;script&gt; tags needed to initialize the uni-form.</p>
+<p>Create a local uni-form/includes.html template if you want to customize how
+these files are loaded.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="helpers.html"
+                                  title="previous chapter">uni_form.helpers API</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/uni_form_tags.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="uni_form.helpers API"
+             >previous</a> |</li>
+        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Daniel Greenfeld.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

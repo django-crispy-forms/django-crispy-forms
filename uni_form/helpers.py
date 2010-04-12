@@ -105,7 +105,7 @@ class Layout(object):
     '''
     def __init__(self, *fields):
         self.fields = fields
-    
+
     def render(self, form):
         html = ""
         for field in self.fields:
@@ -202,12 +202,13 @@ class FormHelper(object):
             
             id: Generates a form id for dom identification.
                 If no id provided then no id attribute is created on the form.
-            
+                
             class: add space seperated classes to the class list.
                 Defaults to uniForm.
                 Always starts with uniForm even do specify classes.
-            
+
             form_tag: Defaults to True. If set to False it renders the form without the form tags.
+
         
         Demonstration:
             
