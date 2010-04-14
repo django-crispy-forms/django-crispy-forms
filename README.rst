@@ -10,7 +10,7 @@ format.
 
 `Uni-form`_ has been selected as the base model for the design of the forms.
 
-**Note:** Django Uni-Form 0.7 breaks backwards compatibility with previous versions of Django Uni-Form. See ``Updating legacy Django Uni-Form to 0.7``. All you have to do is update templates that call on the Django Uni-Form template tag from::
+**Note:** Django Uni-Form 0.7 and higher breaks backwards compatibility with previous versions of Django Uni-Form. All you have to do is update templates that call on the Django Uni-Form template tag from::
 
     {% load uni_form %}
     
