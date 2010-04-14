@@ -4,7 +4,7 @@ from django.template import RequestContext
 
 from uni_form.helpers import FormHelper, Submit, Reset, Hidden
 
-from test_app.forms import TestForm, HelperTestForm, LayoutTestForm
+from test_app.forms import TestForm, HelperTestForm, LayoutTestForm, MessageResponseForm
 
 def basic_test(request):
     if request.method == "POST":
@@ -108,3 +108,27 @@ def lacking_form_tag(request):
         response_dictionary, 
         context_instance=RequestContext(request))   
     
+def message_response(request):
+    
+    if request.method == "POST":
+        form = MessageResponseForm(request.POST)
+    else:
+        form = MessageResponseForm()
+    
+    # create a formHelper
+    helper = FormHelper()
+    
+    # add in a error and success button
+    error = Submit('generate-result','Generate Error')
+    helper.add_input(error)
+        
+    # add in a submit and reset button
+    success = Submit('generate-result','Generate Success')
+    helper.add_input(success)    
+    
+    # create the response dictionary
+    response_dictionary = {'form':form, 'helper': helper}
+    
+    return render_to_response('test_app/message_response.html', 
+        response_dictionary, 
+        context_instance=RequestContext(request))    

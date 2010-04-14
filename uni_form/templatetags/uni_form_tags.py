@@ -82,16 +82,19 @@ class BasicNode(template.Node):
         attrs = None
         if helper:
             if not isinstance(helper, FormHelper):
-                raise TypeError('helper object provided to uni_form tag must be a uni_form.helpers.FormHelper object or a None object.')
+                raise TypeError('helper object provided to uni_form tag must be a uni_form.helpers.FormHelper object.')
             attrs = helper.get_attr()
         form_class = ''
         form_id = ''
+        form_method = 'post'
+        form_action = ''
+        form_tag = True
         inputs = []
         toggle_fields = set(())
         if attrs:
             form_tag = attrs.get("form_tag", True)
-            form_method = attrs.get("form_method", 'POST')
-            form_action = attrs.get("form_action", '')
+            form_method = attrs.get("form_method", form_method)
+            form_action = attrs.get("form_action", form_action)
             form_class = attrs.get("class", '')
             form_id = attrs.get("id", "")
             inputs = attrs.get('inputs', [])
