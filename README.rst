@@ -10,6 +10,8 @@ format.
 
 `Uni-form`_ has been selected as the base model for the design of the forms.
 
+**Note:** Django Uni-Form 0.8 and higher lays out the HTML for the uni_form tag differently. The errorMsg div is now outside the fieldset as it should be.
+
 **Note:** Django Uni-Form 0.7 and higher breaks backwards compatibility with previous versions of Django Uni-Form. All you have to do is update templates that call on the Django Uni-Form template tag from::
 
     {% load uni_form %}

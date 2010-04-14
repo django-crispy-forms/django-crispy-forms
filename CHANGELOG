@@ -10,6 +10,9 @@ For 0.8.0
  * Thanks to Nagy Viktor added form_tag attribute to FormHelper. Now you can use the uni_form tag without the leading and training form tags.
  * Thanks for Alison Rowland for giving django-uni-form sphinx docs
  * Incorporated uni-form 1.4 by Dragan Babic
+ * Provide better adherence to uni-form specification of error messages
+ * mirumee provided some great work for making FormHelper more subclassable.
+ *  Django Uni-Form 0.8 and higher lays out the HTML for the uni_form tag differently. The errorMsg div is now outside the fieldset as it should be.
 
 For 0.7.0
 
