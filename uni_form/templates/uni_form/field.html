@@ -21,7 +21,7 @@
         {% endif %}
 
         {% if not field|is_checkbox %}
-            {{ field|with_class }}
+            {{ field }}
         {% endif %}
 
         {% if field.help_text %}
