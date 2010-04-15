@@ -2,6 +2,7 @@
 
 
 {% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {% endif %}{{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id|slugify }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+    {% csrf_token %}
     {% if form.non_field_errors %}
         <div id="errorMsg">
             <h3>{% if error_message_title %}{{ error_message_title }}{% else %}Errors{% endif %}</h3>
@@ -10,7 +11,7 @@
             </ol>
         </div>
     {% endif %}
-    {% if form_html %}{{ form_html }}{% else %} 
+    {% if form_html %}{{ form_html }}{% else %}
     <fieldset class="inlineLabels">
     <legend>* {% trans "Required fields" %}</legend>
         {% for field in form %}

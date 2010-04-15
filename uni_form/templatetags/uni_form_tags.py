@@ -71,11 +71,11 @@ class BasicNode(template.Node):
         will need both the form object and the helper string. This handles
         both the form object and parses out the helper string into attributes
         that templates can easily handle. """
-    
+
     def __init__(self, form, helper):
         self.form = template.Variable(form)
         self.helper = template.Variable(helper)
-    
+
     def get_render(self, context):
         actual_form = self.form.resolve(context)
         helper = self.helper.resolve(context)
@@ -91,6 +91,7 @@ class BasicNode(template.Node):
         form_tag = True
         inputs = []
         toggle_fields = set(())
+        use_csrf_protection = False
         if attrs:
             form_tag = attrs.get("form_tag", True)
             form_method = attrs.get("form_method", form_method)
@@ -99,13 +100,14 @@ class BasicNode(template.Node):
             form_id = attrs.get("id", "")
             inputs = attrs.get('inputs', [])
             toggle_fields = attrs.get('toggle_fields', set(()))
+            use_csrf_protection = attrs.get('use_csrf_protection', False)
         final_toggle_fields = []
         if toggle_fields:
             final_toggle_fields = []
             for field in actual_form:
                 if field.auto_id in toggle_fields:
                     final_toggle_fields.append(field)
-        
+
         if helper and helper.layout:
             form_html = helper.render_layout(actual_form)
         else:
@@ -122,6 +124,10 @@ class BasicNode(template.Node):
                         'inputs' : inputs,
                         'toggle_fields': final_toggle_fields
                         }
+
+        if use_csrf_protection and context.has_key('csrf_token'):
+            response_dict['csrf_token'] = context['csrf_token']
+
         c = Context(response_dict)
         return c
 
@@ -135,40 +141,40 @@ class BasicNode(template.Node):
 
 @register.tag(name="uni_form")
 def do_uni_form(parser, token):
-    
+
     """
     You need to pass in at least the form object, and can also pass in the
     optional helper object. Writing the attrs string is rather challenging so
     use of the objects found in uni_form.helpers is encouraged.
-    
+
     form: The forms object to be rendered by the tag
-    
+
     helper (optional): A uni_form.helpers.FormHelper object.
-    
+
     Example::
-        
+
         {% uni_form my-form my_helper %}
-    
+
     """
-    
+
     token = token.split_contents()
-    
+
     form = token.pop(1)
     try:
         helper = token.pop(1)
     except IndexError:
         helper = None
-    
-    
+
+
     return UniFormNode(form, helper)
 
 
 class UniFormNode(BasicNode):
-    
+
     def render(self, context):
-        
+
         c = self.get_render(context)
-        
+
         template = get_template('uni_form/whole_uni_form.html')
         return template.render(c)
 
@@ -182,27 +188,27 @@ def uni_form_jquery(parser, token):
     """
     toggle_field: For making fields designed to be toggled for editing add them
     by spaces. You must specify by field id (field.auto_id)::
-        
+
         toggle_fields=<first_field>,<second_field>
-    
+
     """
-    
+
     token = token.split_contents()
-    
+
     form = token.pop(1)
     try:
         attrs = token.pop(1)
     except IndexError:
         attrs = None
-    
-    
+
+
     return UniFormJqueryNode(form,attrs)
 
 class UniFormJqueryNode(BasicNode):
-    
+
     def render(self,context):
-        
+
         c = self.get_render(context)
-        
+
         template = get_template('uni_form/uni_form_jquery.html')
-        return template.render(c)   
+        return template.render(c)
