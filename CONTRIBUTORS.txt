@@ -13,9 +13,11 @@ bjunix
 Chris Adams <acdha>
 Eddy Mulyono <eddymul>
 James Pic <jamespic.com>
+James Tauber <jtauber>
 Karl Bowden <agentk>
 Marcin Grzybowski <marcin.grzybowski@gildia.info>
 Michael Lind Mortensen <illio>
+mirumee
 mvaerle
 Nagy Viktor <nagyv>
 Patrick Lauber <digi604>

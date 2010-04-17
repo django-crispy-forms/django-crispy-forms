@@ -233,7 +233,6 @@ class FormHelper(object):
                 {% load uni_form_tags %}
                 {% uni_form form form.helper %}
     
-    
     """
     
     def __init__(self):
