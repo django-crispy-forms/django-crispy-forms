@@ -1,4 +1,4 @@
-from django import get_version
+from django import get_version # TODO: remove when pre-CSRF token templatetags are no longer supported
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import get_template
@@ -11,7 +11,7 @@ from uni_form.helpers import FormHelper
 register = template.Library()
 
 # csrf token fix hack. 
-# Remove when csrf_token is valid in all versions of supported Django.
+# TODO: remove when pre-CSRF token templatetags are no longer supported
 django_version = get_version()
 is_old_django = True
 if django_version.startswith('1.1.2') or django_version.startswith('1.2'):
@@ -132,7 +132,7 @@ class BasicNode(template.Node):
                         'toggle_fields': final_toggle_fields
                         }
 
-        if not is_old_django:
+        if not is_old_django: # TODO: remove when pre-CSRF token templatetags are no longer supported
             if use_csrf_protection and context.has_key('csrf_token'):
                 response_dict['csrf_token'] = context['csrf_token']
 
@@ -222,6 +222,7 @@ class UniFormJqueryNode(BasicNode):
         return template.render(c)
 
 
+# TODO: remove when pre-CSRF token templatetags are no longer supported
 if is_old_django:
     
     # csrf token fix hack.     

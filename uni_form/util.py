@@ -14,5 +14,3 @@ class Toggle(object):
     """
     
     fields = []
-    
-    

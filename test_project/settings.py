@@ -3,6 +3,8 @@
 import os.path
 
 from os.path import join, abspath, dirname
+from django import get_version # TODO: remove when pre-CSRF token templatetags are no longer supported
+
 PROJECT_ROOT = abspath(dirname(__file__))
 PROJECT_ROOT = PROJECT_ROOT.replace('uni_form/tests/test_project','')
 
@@ -64,11 +66,18 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
+
+
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-)
+        'django.middleware.common.CommonMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+    )
+
+django_version = get_version()
+if django_version.startswith('1.1.2') or django_version.startswith('1.2'):
+    MIDDLEWARE_CLASSES += ('django.middleware.csrf.CsrfViewMiddleware',)
+
 
 ROOT_URLCONF = 'test_project.urls'
 
