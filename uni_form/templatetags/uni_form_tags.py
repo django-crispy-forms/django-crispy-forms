@@ -16,6 +16,9 @@ django_version = get_version()
 is_old_django = True
 if django_version.startswith('1.1.2') or django_version.startswith('1.2'):
     is_old_django = False
+else:
+    from warnings import warn    
+    warn("""You are using a version of Django that does not support the new csrf_token templatetag. It is advised that you upgrade to 1.1.2, 1.2, or another modern version of Django""")
 
 ###################################################
 # Core as_uni_form filter.
