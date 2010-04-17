@@ -10,7 +10,7 @@ Contributors
 ============
 Alison Rowland <arowla>
 bjunix
-Casper S. Jensen
+Casper S. Jensen <semadk>
 Chris Adams <acdha>
 Eddy Mulyono <eddymul>
 James Pic <jamespic.com>
