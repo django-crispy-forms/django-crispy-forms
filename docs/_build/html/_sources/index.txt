@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-django-uni-form (Django Uni-Form)
+django-uni-form (django-uni-form)
 =======================================
 
 Django_ forms are easily rendered as tables,
@@ -14,7 +14,7 @@ format.
 
 `Uni-form`_ has been selected as the base model for the design of the forms.
  
-Django Uni-Form lets you easily display Django forms as divs.
+django-uni-form lets you easily display Django forms as divs.
 
 
 .. _Django: http://djangoproject.com

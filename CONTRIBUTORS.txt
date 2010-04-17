@@ -1,4 +1,4 @@
-Django Uni-Form Project Lead
+django-uni-form Project Lead
 ============================
 Daniel Greenfeld <pydanny@gmail.com>
 

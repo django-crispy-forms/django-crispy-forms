@@ -13,18 +13,8 @@ is something you have to do by hand. The purpose of this application is to
 provide a simple tag and/or filter that lets you quickly render forms in a div
 format.
 
-Uni-form (http://sprawsm.com/uni-form) has been selected as the base model for
+Uni-form (http://sprawsm.com/uni-form) has been selected as css/js library for
 the design of the forms.
-
-This release includes:
-
- * Removed a <hr /> from the layout module.
- * Changed templatetags/uni_form.py to templatetags/uni_form_tags.py. Yes, this breaks backwards compatibility but fixes a namespace problems in Django with naming a templatetag library after the parent application.
- * Changed form_action attribute to accept not just named URLs but also any old URL.
- * Added in uni_form_setup tag.
- * Added tests
- * Added several new contributors including Dragan Babic
- * Added Danish language translation
 """
  
 setup(

@@ -1,5 +1,5 @@
 =====================================
-django-uni-form (Django Uni-Form)
+django-uni-form (django-uni-form)
 =====================================
 
 Django_ forms are easily rendered as tables,
@@ -10,9 +10,9 @@ format.
 
 `Uni-form`_ has been selected as the base model for the design of the forms.
 
-**Note:** Django Uni-Form 0.8 and higher lays out the HTML for the uni_form tag differently. The errorMsg div is now outside the fieldset as it should be.
+**Note:** django-uni-form 0.8 and higher lays out the HTML for the uni_form tag differently. The errorMsg div is now outside the fieldset as it should be.
 
-**Note:** Django Uni-Form 0.7 and higher breaks backwards compatibility with previous versions of Django Uni-Form. All you have to do is update templates that call on the Django Uni-Form template tag from::
+**Note:** django-uni-form 0.7 and higher breaks backwards compatibility with previous versions of django-uni-form. All you have to do is update templates that call on the django-uni-form template tag from::
 
     {% load uni_form %}
     
@@ -53,7 +53,7 @@ media folder::
 Displaying the media files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Django Uni-Form requires three media files.  You can see how we call them by looking in the templates/includes.html file. You can call those files in several ways:
+django-uni-form requires three media files.  You can see how we call them by looking in the templates/includes.html file. You can call those files in several ways:
 
 1. Manually by copying the HTML into your own templates::
 
@@ -69,7 +69,7 @@ Django Uni-Form requires three media files.  You can see how we call them by loo
 
     {% include "uni_form/includes.html" %}
     
-4. With some additional setup described below, via use of the Django Uni-Form **uni_form_setup** template tag.
+4. With some additional setup described below, via use of the django-uni-form **uni_form_setup** template tag.
 
     {% uni_form_setup %}
 
@@ -83,7 +83,7 @@ If you want to take advantage of the uni_form_setup tag, then you'll need to mak
 Customizations on '*' required fields (optional)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you don't like the use of '*' (asterisk) to denote required fields you can simply overrride the Django Uni-Form field.html. In your Django project's templates directory create a new directory called `uni_form`. Copy the Django Uni-Form field.html file to that directory and make the desired changes. For example::
+If you don't like the use of '*' (asterisk) to denote required fields you can simply overrride the django-uni-form field.html. In your Django project's templates directory create a new directory called `uni_form`. Copy the django-uni-form field.html file to that directory and make the desired changes. For example::
 
     cd ~/<my-projects>/<my-awesome-django-project>/templates/
     mkdir uni_form
@@ -95,7 +95,7 @@ Now you could change the asterisk to any other character, an image icon, or what
 Using Uni-Form strict fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Django Uni-Form implements form fields in html differently than the standard Uni-Form. If you want to adhere to the strict definition of Django Uni-Form relplace the field.html file with field.strict.html. You can just follow these instructions::
+django-uni-form implements form fields in html differently than the standard Uni-Form. If you want to adhere to the strict definition of django-uni-form relplace the field.html file with field.strict.html. You can just follow these instructions::
 
     cd ~/<my-projects>/<my-awesome-django-project>/templates/
     mkdir uni_form
