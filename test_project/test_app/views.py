@@ -102,9 +102,9 @@ def lacking_form_tag(request):
     helper.form_tag = False
 
     # create the response dictionary
-    response_dictionary = {'form':form, 'helper': helper}
+    response_dictionary = {'form':form, 'helper': helper, 'title':'Lacking Form Tag Test'}
     
-    return render_to_response('test_app/lacking_form_tag.html', 
+    return render_to_response('test_app/generic_form_test.html', 
         response_dictionary, 
         context_instance=RequestContext(request))   
     
@@ -127,8 +127,26 @@ def message_response(request):
     helper.add_input(success)    
     
     # create the response dictionary
-    response_dictionary = {'form':form, 'helper': helper}
+    response_dictionary = {'form':form, 'helper': helper, 'title':'Message response test'}
     
-    return render_to_response('test_app/message_response.html', 
+    return render_to_response('test_app/generic_form_test.html', 
+        response_dictionary, 
+        context_instance=RequestContext(request))
+        
+def csrf_token_test(request):
+    
+    # Create the form
+    if request.method == "POST":
+        form = TestForm(request.POST)
+    else:
+        form = TestForm()
+        
+    helper = FormHelper()                
+    helper.use_csrf_protection = True
+
+    # create the response dictionary
+    response_dictionary = {'form':form, 'helper': helper, 'title':'CSRF token test'}
+    
+    return render_to_response('test_app/generic_form_test.html', 
         response_dictionary, 
         context_instance=RequestContext(request))    
