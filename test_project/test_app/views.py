@@ -1,4 +1,4 @@
-# Create your views here.
+from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -6,6 +6,13 @@ from uni_form.helpers import FormHelper, Submit, Reset, Hidden
 
 from test_app.forms import TestForm, HelperTestForm, LayoutTestForm, MessageResponseForm
 
+try:
+    from django.views.decorators.csrf import csrf_exempt
+except ImportError:
+    def csrf_exempt(func):
+        return func
+
+@csrf_exempt
 def basic_test(request):
     if request.method == "POST":
         form = TestForm(request.POST)
@@ -16,6 +23,7 @@ def basic_test(request):
         'form': form
     }, context_instance=RequestContext(request))    
     
+@csrf_exempt
 def view_helper(request):
     # Create the form
     if request.method == "POST":
@@ -40,12 +48,13 @@ def view_helper(request):
 
 
     # create the response dictionary
-    response_dictionary = {'form':form, 'helper': helper}
+    response_dictionary = {'form':form, 'helper': helper, 'title':'view helper test'}
     
-    return render_to_response('test_app/view_helper.html', 
+    return render_to_response('test_app/generic_form_test.html', 
         response_dictionary, 
         context_instance=RequestContext(request))   
         
+@csrf_exempt
 def view_helper_set_action(request):
 
     # Create the form
@@ -62,30 +71,32 @@ def view_helper_set_action(request):
     helper.form_method = 'GET'    
 
     # create the response dictionary
-    response_dictionary = {'form':form, 'helper': helper}
+    response_dictionary = {'form':form, 'helper': helper, 'title':'view helper action'}
     
-    return render_to_response('test_app/view_helper.html', 
+    return render_to_response('test_app/generic_form_test.html', 
         response_dictionary, 
         context_instance=RequestContext(request))   
     
+@csrf_exempt
 def form_helper(request):
     if request.method == "POST":
         form = HelperTestForm(request.POST)
     else:
         form = HelperTestForm()
     
-    return render_to_response('test_app/form_helper.html', {
-        'form': form
+    return render_to_response('test_app/generic_form_test.html', {
+        'form': form, 'title':'form helper test'
     }, context_instance=RequestContext(request))
     
+@csrf_exempt
 def layout_test(request):
     if request.method == "POST":
         form = LayoutTestForm(request.POST)
     else:
         form = LayoutTestForm()
         
-    return render_to_response('test_app/form_helper.html', {
-        'form': form
+    return render_to_response('test_app/generic_form_test.html', {
+        'form': form, 'title': 'layout test'
     }, context_instance=RequestContext(request))
     
 def lacking_form_tag(request):
@@ -108,6 +119,7 @@ def lacking_form_tag(request):
         response_dictionary, 
         context_instance=RequestContext(request))   
     
+@csrf_exempt
 def message_response(request):
     
     if request.method == "POST":
@@ -120,11 +132,7 @@ def message_response(request):
     
     # add in a error and success button
     error = Submit('generate-result','Generate Error')
-    helper.add_input(error)
-        
-    # add in a submit and reset button
-    success = Submit('generate-result','Generate Success')
-    helper.add_input(success)    
+    helper.add_input(error) 
     
     # create the response dictionary
     response_dictionary = {'form':form, 'helper': helper, 'title':'Message response test'}
@@ -143,6 +151,11 @@ def csrf_token_test(request):
         
     helper = FormHelper()                
     helper.use_csrf_protection = True
+    
+    # add in a submit and reset button
+    success = Submit('check-csrf','Check CSRF')
+    helper.add_input(success)    
+    
 
     # create the response dictionary
     response_dictionary = {'form':form, 'helper': helper, 'title':'CSRF token test'}
