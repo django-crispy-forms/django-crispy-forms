@@ -1,3 +1,4 @@
+from django import get_version
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import get_template
@@ -9,6 +10,12 @@ from uni_form.helpers import FormHelper
 
 register = template.Library()
 
+# csrf token fix hack. 
+# Remove when csrf_token is valid in all versions of supported Django.
+django_version = get_version()
+is_old_django = True
+if django_version.startswith('1.1.2') or django_version.startswith('1.2'):
+    is_old_django = False
 
 ###################################################
 # Core as_uni_form filter.
@@ -125,8 +132,9 @@ class BasicNode(template.Node):
                         'toggle_fields': final_toggle_fields
                         }
 
-        if use_csrf_protection and context.has_key('csrf_token'):
-            response_dict['csrf_token'] = context['csrf_token']
+        if not is_old_django:
+            if use_csrf_protection and context.has_key('csrf_token'):
+                response_dict['csrf_token'] = context['csrf_token']
 
         c = Context(response_dict)
         return c
@@ -212,3 +220,24 @@ class UniFormJqueryNode(BasicNode):
 
         template = get_template('uni_form/uni_form_jquery.html')
         return template.render(c)
+
+
+if is_old_django:
+    
+    # csrf token fix hack.     
+    # Creates bogus csrf_token so we can continue to support older versions of Django.
+
+    class CsrfTokenNode(template.Node):
+
+        def render(self, context):
+            
+            return ''
+
+    @register.tag(name="csrf_token")
+    def dummy_csrf_token(parser, data):
+        
+        return CsrfTokenNode()        
+    
+
+        
+    
