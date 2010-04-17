@@ -41,7 +41,7 @@ setup(
     keywords='forms,django',
     author='Daniel Greenfeld',
     author_email='pydanny@gmail.com',
-    url='http://github.com/pydanny/django-uni-form/tree/master',
+    url='http://github.com/pydanny/django-uni-form',
     license='MIT',
     packages=find_packages(),
     include_package_data=True,
