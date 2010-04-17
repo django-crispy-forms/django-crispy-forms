@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import get_template_from_string
 from django.test import TestCase
@@ -128,21 +129,9 @@ class TestFormHelpers(TestCase):
         self.assertFalse("""method="get" """ in html)
         self.assertFalse("""id="this-form-rocks">""" in html)
         
-    """
+
     def test_csrf_token(self):
-        
-        template = get_template_from_string("""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
-        """)        
-                
-        # First we build a standard form helper
-        form_helper = FormHelper()    
-        
-        # Now we set the CSRF token to bew true
-        form_helper.use_csrf_protection = True
-        
-        # Render the text
-        c = Context({'form':TestForm(),'form_helper':form_helper})            
-        html = template.render(c)
-    """
+        is_old_django = getattr(settings, 'OLD_DJANGO', False) # TODO: remove when pre-CSRF token templatetags are no longer supported
+        if not is_old_django: # TODO: remove when pre-CSRF token templatetags are no longer supported
+            response = self.client.get('/more/csrf_token_test/')
+            self.assertContains(response, "<input type='hidden' name='csrfmiddlewaretoken'")

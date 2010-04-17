@@ -74,9 +74,12 @@ MIDDLEWARE_CLASSES = (
         'django.contrib.auth.middleware.AuthenticationMiddleware',
     )
 
+# TODO: remove when pre-CSRF token templatetags are no longer supported
 django_version = get_version()
+OLD_DJANGO = True
 if django_version.startswith('1.1.2') or django_version.startswith('1.2'):
     MIDDLEWARE_CLASSES += ('django.middleware.csrf.CsrfViewMiddleware',)
+    OLD_DJANGO = False
 
 
 ROOT_URLCONF = 'test_project.urls'
