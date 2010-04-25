@@ -17,7 +17,7 @@ is_old_django = True
 if django_version.startswith('1.1.2') or django_version.startswith('1.2'):
     is_old_django = False
 else:
-    from warnings import warn    
+    from warnings import warn
     warn("""You are using a version of Django that does not support the new csrf_token templatetag. It is advised that you upgrade to 1.1.2, 1.2, or another modern version of Django""")
 
 ###################################################
@@ -227,21 +227,21 @@ class UniFormJqueryNode(BasicNode):
 
 # TODO: remove when pre-CSRF token templatetags are no longer supported
 if is_old_django:
-    
+
     # csrf token fix hack.     
     # Creates bogus csrf_token so we can continue to support older versions of Django.
 
     class CsrfTokenNode(template.Node):
 
         def render(self, context):
-            
+
             return ''
 
     @register.tag(name="csrf_token")
     def dummy_csrf_token(parser, data):
-        
-        return CsrfTokenNode()        
-    
 
-        
-    
+        return CsrfTokenNode()
+
+
+
+
