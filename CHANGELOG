@@ -20,6 +20,7 @@ For 0.8.0
  * Thanks to j0hnsmith changed {{ field.label }} to {{ field.label|safe }} so that html (eg 
  links) can be added to field labels
  * Thanks to Stepan Rakhimov fixed an admin datetime issue.
+ * Thanks to patrys (Patryk Zawadzki) FormHelper class is now easily subclass-able.
 
 For 0.7.0
 
