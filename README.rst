@@ -10,7 +10,9 @@ format.
 
 `Uni-form`_ has been selected as the base model for the design of the forms.
 
-**Note:** django-uni-form 0.8 and higher lays out the HTML for the uni_form tag differently. The errorMsg div is now outside the fieldset as it should be.
+**Warning:** django-uni-form 0.8 and higher renders django.form.field labels with the 'safe' filter. If you have user generated form field labels you should take this into consideration.
+
+**Note:** django-uni-form 0.8 and higher lays out the HTML for the uni_form tag differently than previous versions. The errorMsg div is now outside the fieldset as it should be.
 
 **Note:** django-uni-form 0.7 and higher breaks backwards compatibility with previous versions of django-uni-form. All you have to do is update templates that call on the django-uni-form template tag from::
 
@@ -101,7 +103,6 @@ django-uni-form implements form fields in html differently than the standard Uni
     mkdir uni_form
     cd uni_form/
     cp <my-site-packages>/Django-uni-form/uni_form/templates/field.strict.html field.html
-
 
 ----
 

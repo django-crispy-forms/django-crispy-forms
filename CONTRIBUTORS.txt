@@ -13,6 +13,7 @@ bjunix
 Casper S. Jensen <semadk>
 Chris Adams <acdha>
 Eddy Mulyono <eddymul>
+j0hnsmith
 James Pic <jamespic.com>
 James Tauber <jtauber>
 Karl Bowden <agentk>
