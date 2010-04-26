@@ -51,7 +51,7 @@ class TestBasicFunctionalityTags(TestCase):
         html = template.render(c)
         
         # Just look for file names because locations and names can change.
-        self.assertTrue('uni-form-generic.css' in html)
+        self.assertTrue('default.uni-form.css' in html)
         self.assertTrue('uni-form.css' in html)
         self.assertTrue('uni-form.jquery.js' in html)
         
