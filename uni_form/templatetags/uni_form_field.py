@@ -16,9 +16,15 @@ def with_class(field):
     class_name = field.field.widget.__class__.__name__.lower()
     class_name = class_converter.get(class_name, class_name)
     if "class" in field.field.widget.attrs:
-        field.field.widget.attrs['class'] += " %s" % class_name
+        css_class = field.field.widget.attrs['class']
+        if field.field.widget.attrs['class'].find(class_name) == -1:
+            css_class += " %s" % (class_name,)
     else:
-        field.field.widget.attrs['class'] = class_name
-    return unicode(field)
+        css_class = class_name
+
+    return field.as_widget(attrs={'class': css_class})    
+
+
+
 
 
