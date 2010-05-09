@@ -66,19 +66,16 @@ class Reset(BaseInput):
     input_type = 'reset'
     field_classes = 'reset resetButton'
 
-def render_field(field, form):
-    if isinstance(field, str):
-        return render_form_field(form, field)
-    else:
+def render_field(field, form, template="uni_form/field.html", labelclass=None):
+    if not isinstance(field, str):
         return field.render(form)
 
-def render_form_field(form, field):
     try:
         field_instance = form.fields[field]
     except KeyError:
         raise Exception("Could not resolve form field '%s'." % field)
     bound_field = BoundField(form, field_instance, field)
-    html = render_to_string("uni_form/field.html", {'field': bound_field})
+    html = render_to_string(template, {'field': bound_field, 'labelclass': labelclass})
     if not hasattr(form, 'rendered_fields'):
         form.rendered_fields = []
     if not field in form.rendered_fields:
@@ -120,10 +117,7 @@ class Fieldset(object):
     ''' Fieldset container. Renders to a <fieldset>. '''
     
     def __init__(self, legend, *fields, **args):
-        if 'css_class' in args.keys():
-            self.css = args['css_class']
-        else:
-            self.css = None
+        self.css = args.get('css_class', None)
         self.legend_html = legend and ('<legend>%s</legend>' % unicode(legend)) or ''
         self.fields = fields
 
@@ -141,15 +135,56 @@ class Fieldset(object):
 
 
 
+class MultiField(object):
+    ''' multiField container. Renders to a multiField <div> '''
+
+    def __init__(self, label, *fields, **kwargs):
+        #TODO: Decide on how to support css classes for both container divs
+        self.div_class = kwargs.get('css_class', u'ctrlHolder')
+        self.label_class = kwargs.get('label_class', u'blockLabel')
+        self.label_html = label and (u'<p class="label">%s</p>\n' % unicode(label)) or ''
+        self.fields = fields
+
+    def render(self, form):
+        fieldoutput = u''
+        errors = u''
+        helptext = u''
+        count = 0
+        for field in self.fields:
+            fieldoutput += render_field(field, form, 'uni_form/multifield.html', self.label_class)
+            try:
+                field_instance = form.fields[field]
+            except KeyError:
+                raise Exception("Could not resolve form field '%s'." % field)
+            bound_field = BoundField(form, field_instance, field)
+            auto_id = bound_field.auto_id
+            for error in bound_field.errors:
+                errors += u'<p id="error_%i_%s" class="errorField">%s</p>' % (count, auto_id, error)
+                count += 1
+            if bound_field.help_text:
+                helptext += u'<p id="hint_%s" class="formHint">%s</p>' % (auto_id, bound_field.help_text)
+
+        if errors:
+            self.css += u' error'
+
+        output = u'<div class="%s">\n' % self.div_class
+        output += errors
+        output += self.label_html
+        output += u'<div class="multiField">\n'
+        output += fieldoutput
+        output += u'</div>\n'
+        output += helptext
+        output += u'</div>\n'
+        return output
+
+
+
 class Row(object):
     ''' row container. Renders to a set of <div>'''
     def __init__(self, *fields, **kwargs):
         self.fields = fields
-        if 'css_class' in kwargs.keys():
-            self.css = kwargs['css_class']
-        else:
-            self.css = "formRow"
-    
+        self.css = kwargs.get('css_class', u'formRow')
+
     def render(self, form):
         output = u'<div class="%s">' % self.css
         for field in self.fields:
@@ -157,21 +192,20 @@ class Row(object):
         output += u'</div>'
         return u''.join(output)
 
+
 class Column(object):
     ''' column container. Renders to a set of <div>'''
     def __init__(self, *fields, **kwargs):
         self.fields = fields
-        if 'css_class' in kwargs.keys():
-            self.css = kwargs['css_class']
-        else:
-            self.css = "formColumn"
-    
+        self.css = kwargs.get('css_class', u'formColumn')
+
     def render(self, form):
         output = u'<div class="%s">' % self.css
         for field in self.fields:
             output += render_field(field, form)
         output += u'</div>'
         return u''.join(output)
+
 
 class HTML(object):
     
@@ -182,8 +216,6 @@ class HTML(object):
     
     def render(self, form):
         return self.html
-
-
 
 
 class FormHelper(object):
