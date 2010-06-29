@@ -59,8 +59,8 @@ django-uni-form requires three media files.  You can see how we call them by loo
 
 1. Manually by copying the HTML into your own templates::
 
-    <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form-generic.css" type="text/css" />
     <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" type="text/css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/default.uni-form.css" type="text/css" />
     <script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
 
 2. Also make sure you have a link to where you keep a copy of JQuery 1.2.6 (We are looking into updating this ASAP)::
