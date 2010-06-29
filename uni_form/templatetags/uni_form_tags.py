@@ -80,13 +80,17 @@ class BasicNode(template.Node):
         template tags. I created this because most of the tags we'll be using
         will need both the form object and the helper string. This handles
         both the form object and parses out the helper string into attributes
-        that templates can easily handle. """
+        that templates can easily handle."""
 
     def __init__(self, form, helper):
         self.form = template.Variable(form)
         self.helper = template.Variable(helper)
 
     def get_render(self, context):
+        """ Render the Node """
+        
+        # TODO - rewrite cause this is dog-ugly.
+        
         actual_form = self.form.resolve(context)
         helper = self.helper.resolve(context)
         attrs = None
