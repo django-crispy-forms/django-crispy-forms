@@ -101,7 +101,7 @@ class BasicNode(template.Node):
         form_tag = True
         inputs = []
         toggle_fields = set(())
-        use_csrf_protection = False
+        use_csrf_protection = True
         if attrs:
             form_tag = attrs.get("form_tag", True)
             form_method = attrs.get("form_method", form_method)
@@ -110,7 +110,7 @@ class BasicNode(template.Node):
             form_id = attrs.get("id", "")
             inputs = attrs.get('inputs', [])
             toggle_fields = attrs.get('toggle_fields', set(()))
-            use_csrf_protection = attrs.get('use_csrf_protection', False)
+            use_csrf_protection = attrs.get('use_csrf_protection', True)
         final_toggle_fields = []
         if toggle_fields:
             final_toggle_fields = []
