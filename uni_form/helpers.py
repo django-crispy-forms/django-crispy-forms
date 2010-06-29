@@ -281,7 +281,7 @@ class FormHelper(object):
     inputs = []
     layout = None
     form_tag = True
-    use_csrf_protection = False
+    use_csrf_protection = True
 
     
     def __init__(self):
