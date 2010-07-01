@@ -1,3 +1,5 @@
+from distutils import version
+
 from django import get_version # TODO: remove when pre-CSRF token templatetags are no longer supported
 from django.conf import settings
 from django.template import Context, Template
@@ -14,7 +16,7 @@ register = template.Library()
 # TODO: remove when pre-CSRF token templatetags are no longer supported
 django_version = get_version()
 is_old_django = True
-if django_version.startswith('1.1.2') or django_version.startswith('1.2'):
+if version.LooseVersion(django_version) >= version.LooseVersion('1.1.2'):
     is_old_django = False
 else:
     from warnings import warn

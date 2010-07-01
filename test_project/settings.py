@@ -1,5 +1,6 @@
 # Django settings for test_project project.
 
+from distutils import version
 import os.path
 
 from os.path import join, abspath, dirname
@@ -77,7 +78,7 @@ MIDDLEWARE_CLASSES = (
 # TODO: remove when pre-CSRF token templatetags are no longer supported
 django_version = get_version()
 OLD_DJANGO = True
-if django_version.startswith('1.1.2') or django_version.startswith('1.2'):
+if version.LooseVersion(django_version) >= version.LooseVersion('1.1.2'):
     MIDDLEWARE_CLASSES += ('django.middleware.csrf.CsrfViewMiddleware',)
     OLD_DJANGO = False
 
