@@ -118,7 +118,7 @@ class Fieldset(object):
     
     def __init__(self, legend, *fields, **args):
         self.css = args.get('css_class', None)
-        self.legend_html = legend and ('<legend>%s</legend>' % unicode(legend)) or ''
+        self.legend = legend
         self.fields = fields
 
     
@@ -127,7 +127,7 @@ class Fieldset(object):
             html = u'<fieldset class="%s">' % self.css
         else:
             html = u'<fieldset>'
-        html += self.legend_html
+        html += self.legend and (u'<legend>%s</legend>' % self.legend) or ''
         for field in self.fields:
             html += render_field(field, form)
         html += u'</fieldset>'
