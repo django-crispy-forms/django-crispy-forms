@@ -9,6 +9,7 @@ Dragan Babic
 Contributors
 ============
 Alison Rowland <arowla>
+Bojan Mihelac <bmihelac>
 bjunix
 Casper S. Jensen <semadk>
 Chris Adams <acdha>
