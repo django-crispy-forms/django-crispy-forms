@@ -28,7 +28,7 @@ Installation
 Dependencies
 ~~~~~~~~~~~~
 
- * JQuery 1.2.6
+ * JQuery
 
 Installing django-uni-form
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -48,30 +48,28 @@ Add *'uni_form'* to your INSTALLED_APPS in settings.py::
 Depending on your setup, you may need to copy the media files to your local 
 media folder::
 
-    cp -r <location-of-django-uni-form>/uni_form/media/uni_form/uni-form-generic.css <my-project>/media/uni_form/uni-form-generic.css
-    cp -r <location-of-django-uni-form>/uni_form/media/uni_form/uni-form.css <my-project>/media/uni_form/uni-form.css
-    cp -r <location-of-django-uni-form>/uni_form/media/uni_form/uni-form.jquery.js <my-project>/media/uni_form/uni-form.jquery.js    
+    cp -r <location-of-django-uni-form>/uni_form/media/uni_form <directory-for-my-project's-media-files>
     
 Displaying the media files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-django-uni-form requires three media files.  You can see how we call them by looking in the templates/includes.html file. You can call those files in several ways:
-
-1. Manually by copying the HTML into your own templates::
-
-    <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" type="text/css" />
-    <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/default.uni-form.css" type="text/css" />
-    <script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
-
-2. Also make sure you have a link to where you keep a copy of JQuery 1.2.6 (We are looking into updating this ASAP)::
+First, make sure you're linking to a copy of jQuery.  It's recommended that you use the version hosted on Google's servers since the user's browser might already have it cached.  (You can get the url for the latest version of jQuery at http://scriptsrc.net/.)  But there are some cases in which you'll want to host jQuery yourself, such as if you're doing development offline::
 
     <script src="{{ MEDIA_URL }}js/jquery.js" type="text/javascript"></script>
 
-3. Via use of the Django **includes** built-in template tag.
+Beyond jQuery, django-uni-form requires three media files.  You can see how we call them by looking in the templates/includes.html file. You can call those files in several ways.
+
+1. The best way is probably to copy this HTML into your templates.  (This allows you to make use of django_compressor, a dead easy media compressor for Django that's also hosted here on github.)
+
+    <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" type="text/css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/default.uni-form.css" type="text/css" /> <!-- there's also blue.uni-form.css and dark.uni-form.css available if you want to try changing things up -->
+    <script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
+
+2. Another way is to use Django's built-in **includes** template tag::
 
     {% include "uni_form/includes.html" %}
     
-4. With some additional setup described below, via use of the django-uni-form **uni_form_setup** template tag.
+3. A third way is to use the django-uni-form **uni_form_setup** template tag.  You'll need some additional setup for this.
 
     {% uni_form_setup %}
 
