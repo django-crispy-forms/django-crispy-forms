@@ -1,21 +1,26 @@
 {% include "uni_form/errors.html" %}
-{% for fieldset in form.fieldsets %}
-    <fieldset class="{{ fieldset.classes }}">
-    {% if fieldset.legend %}
-        <legend>{{ fieldset.legend }}</legend>
-    {% endif %}
-    {% if fieldset.description %}
-      <p class="description">{{ fieldset.description }}</p>
-    {% endif %}
-    {% for field in fieldset %}
-        {% if field.is_hidden %}
-            {{ field }}
-        {% else %}
-            {% include "uni_form/field.html" %}
+{% if form.fieldsets %}
+    {% for fieldset in form.fieldsets %}
+        <fieldset class="{{ fieldset.classes }}">
+        {% if fieldset.legend %}
+            <legend>{{ fieldset.legend }}</legend>
+        {% endif %}
+        {% if fieldset.description %}
+          <p class="description">{{ fieldset.description }}</p>
+        {% endif %}
+        {% for field in fieldset %}
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                {% include "uni_form/field.html" %}
+            {% endif %}
+        {% endfor %}
+        {% if not forloop.last %}
+        </fieldset>
         {% endif %}
     {% endfor %}
-    {% if not forloop.last %}
-    </fieldset>
-    {% endif %}
+{% else %}
+{% for field in form %}
+    {% include "uni_form/field.html" %}
 {% endfor %}
-
+{% endif %}
