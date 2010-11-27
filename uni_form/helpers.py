@@ -117,16 +117,20 @@ class Fieldset(object):
     ''' Fieldset container. Renders to a <fieldset>. '''
     
     def __init__(self, legend, *fields, **args):
-        self.css = args.get('css_class', None)
+        self.css_class = args.get('css_class', None)
+        self.css_id = args.get('css_id', None)
         self.legend = legend
         self.fields = fields
 
     
     def render(self, form):
-        if self.css:
-            html = u'<fieldset class="%s">' % self.css
-        else:
-            html = u'<fieldset>'
+        html = u'<fieldset'
+        if self.css_id:
+            html += u' id="%s"' % self.css_id
+        if self.css_class:
+            html += u' class="%s"' % self.css_class
+	html += '>'
+
         html += self.legend and (u'<legend>%s</legend>' % self.legend) or ''
         for field in self.fields:
             html += render_field(field, form)
@@ -141,6 +145,7 @@ class MultiField(object):
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
         self.div_class = kwargs.get('css_class', u'ctrlHolder')
+        self.div_id = kwargs.get('css_id', None)
         self.label_class = kwargs.get('label_class', u'blockLabel')
         self.label_html = label and (u'<p class="label">%s</p>\n' % unicode(label)) or ''
         self.fields = fields
@@ -167,7 +172,12 @@ class MultiField(object):
         if errors:
             self.css += u' error'
 
-        output = u'<div class="%s">\n' % self.div_class
+        output = u'<div'
+        if self.css_id:
+            output += u' id="%s"' % self.div_id
+        if self.css_class:
+            output += u' class="%s"' % self.div_class
+	output += '>\n'
         output += errors
         output += self.label_html
         output += u'<div class="multiField">\n'
@@ -178,29 +188,41 @@ class MultiField(object):
         return output
 
 
-
 class Row(object):
     ''' row container. Renders to a set of <div>'''
     def __init__(self, *fields, **kwargs):
         self.fields = fields
-        self.css = kwargs.get('css_class', u'formRow')
+        self.css_class = kwargs.get('css_class', u'formRow')
+        self.css_id = kwargs.get('css_id', u'')
 
     def render(self, form):
-        output = u'<div class="%s">' % self.css
+        output = u'<div'
+        if self.css_id:
+            output += u' id="%s"' % self.css_id
+        if self.css_class:
+            output += u' class="%s"' % self.css_class
+	output += '>'
+
         for field in self.fields:
             output += render_field(field, form)
         output += u'</div>'
         return u''.join(output)
 
-
 class Column(object):
     ''' column container. Renders to a set of <div>'''
     def __init__(self, *fields, **kwargs):
         self.fields = fields
-        self.css = kwargs.get('css_class', u'formColumn')
+        self.css_class = kwargs.get('css_class', u'formColumn')
+        self.css_id = kwargs.get('css_id', u'')
 
     def render(self, form):
-        output = u'<div class="%s">' % self.css
+        output = u'<div'
+        if self.css_id:
+            output += u' id="%s"' % self.css_id
+        if self.css_class:
+            output += u' class="%s"' % self.css_class
+	output += '>'
+
         for field in self.fields:
             output += render_field(field, form)
         output += u'</div>'
