@@ -59,11 +59,11 @@ First, make sure you're linking to a copy of jQuery.  It's recommended that you 
 
 Beyond jQuery, django-uni-form requires three media files.  You can see how we call them by looking in the templates/includes.html file. You can call those files in several ways.
 
-1. The best way is probably to copy this HTML into your templates.  (This allows you to make use of django_compressor, a dead easy media compressor for Django that's also hosted here on github.)  Here's the HTML::
+1. The best way is probably to copy this HTML into your templates. This allows you to make use of the CSS compressors that have been created by the Django community (http://www.djangopackages.com/grids/g/asset-managers/). Here's the HTML::
 
     <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/uni-form.css" type="text/css" />
     <link rel="stylesheet" href="{{ MEDIA_URL }}uni_form/default.uni-form.css" type="text/css" />
-    <!-- note that there's also blue.uni-form.css and dark.uni-form.css available if you want to try changing things up -->
+    <!-- note that there's also blue.uni-form.css and dark.uni-form.css available if you want to try changing defaults up -->
     <script src="{{ MEDIA_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
 
 2. Another way is to use Django's built-in **includes** template tag::
