@@ -13,6 +13,7 @@ class TestForm(forms.Form):
     textarea_field = forms.CharField(label='Textareafield', required=True, widget=forms.Textarea())
     hidden_field = forms.CharField(label='textarea_field', required=True, widget=forms.HiddenInput())
     file_field  = forms.FileField(label="File Field",required=False)
+    password_field = forms.CharField(label='Password field', max_length=100, widget=forms.PasswordInput())
 
 
 
