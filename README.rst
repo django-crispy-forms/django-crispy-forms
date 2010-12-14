@@ -96,7 +96,7 @@ Now you could change the asterisk to any other character, an image icon, or what
 Using Uni-Form strict fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-django-uni-form implements form fields in html differently than the standard Uni-Form. If you want to adhere to the strict definition of django-uni-form relplace the field.html file with field.strict.html. You can just follow these instructions::
+django-uni-form implements form fields in html differently than the standard Uni-Form. If you want to adhere to the strict definition of django-uni-form replace the field.html file with field.strict.html. You can just follow these instructions::
 
     cd ~/<my-projects>/<my-awesome-django-project>/templates/
     mkdir uni_form
