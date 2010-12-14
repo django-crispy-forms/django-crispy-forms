@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -5,23 +7,24 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>uni_form.helpers API &mdash; django-uni-form v0.7 documentation</title>
+    <title>uni_form.helpers API &mdash; django-uni-form v0.8.0-alpha documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.8.0-alpha',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="django-uni-form v0.7 documentation" href="index.html" />
-    <link rel="next" title="uni_form.templatetags.uni_form_tags API" href="uni_form_tags.html" />
-    <link rel="prev" title="Ways to use Django-uni-form" href="usage.html" /> 
+    <link rel="top" title="django-uni-form v0.8.0-alpha documentation" href="index.html" />
+    <link rel="next" title="Customization" href="customization.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
   </head>
   <body>
     <div class="related">
@@ -31,15 +34,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
-          <a href="uni_form_tags.html" title="uni_form.templatetags.uni_form_tags API"
+          <a href="customization.html" title="Customization"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="usage.html" title="Ways to use Django-uni-form"
+          <a href="usage.html" title="Usage"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+        <li><a href="index.html">django-uni-form v0.8.0-alpha documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,40 +52,67 @@
           <div class="body">
             
   <div class="section" id="module-uni_form.helpers">
-<h1>uni_form.helpers API<a class="headerlink" href="#module-uni_form.helpers" title="Permalink to this headline">¶</a></h1>
+<span id="uni-form-helpers-api"></span><h1>uni_form.helpers API<a class="headerlink" href="#module-uni_form.helpers" title="Permalink to this headline">¶</a></h1>
 <p>Utilities for helping developers use python for adding various attributes,
 elements, and UI elements to forms generated via the uni_form template tag.</p>
 <dl class="class">
 <dt id="uni_form.helpers.Button">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Button</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Button" title="Permalink to this definition">¶</a></dt>
-<dd>Used to create a Submit input descriptor for the uni_form template tag.</dd></dl>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Button</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to create a Submit input descriptor for the uni_form template tag:</p>
+<blockquote>
+button = Button(&#8216;Button 1&#8217;,&#8217;Press Me!&#8217;)</blockquote>
+<p>Note: The first argument is also slugified and turned into the id for the button.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="uni_form.helpers.Column">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Column</tt><big>(</big><em>*fields</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Column" title="Permalink to this definition">¶</a></dt>
-<dd>column container. Renders to a set of &lt;div&gt;</dd></dl>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Column</tt><big>(</big><em>*fields</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Column" title="Permalink to this definition">¶</a></dt>
+<dd><p>column container. Renders to a set of &lt;div&gt;</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="uni_form.helpers.Fieldset">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Fieldset</tt><big>(</big><em>legend</em>, <em>*fields</em>, <em>**args</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Fieldset" title="Permalink to this definition">¶</a></dt>
-<dd>Fieldset container. Renders to a &lt;fieldset&gt;.</dd></dl>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Fieldset</tt><big>(</big><em>legend</em>, <em>*fields</em>, <em>**args</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Fieldset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fieldset container. Renders to a &lt;fieldset&gt;.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="uni_form.helpers.FormHelper">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">FormHelper</tt><a class="headerlink" href="#uni_form.helpers.FormHelper" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">FormHelper</tt><a class="headerlink" href="#uni_form.helpers.FormHelper" title="Permalink to this definition">¶</a></dt>
 <dd><p>By setting attributes to me you can easily create the text that goes
 into the uni_form template tag. One use case is to add to your form
 class.</p>
+<p>Special attribute behavior:</p>
+<blockquote>
+<p>method: Defaults to POST but you can also do &#8216;GET&#8217;</p>
+<dl class="docutils">
+<dt>form_action: applied to the form action attribute. Can be a named url in</dt>
+<dd>your urlconf that can be executed via the <em>url</em> default template tag or can
+simply point to another URL.</dd>
+<dt>id: Generates a form id for dom identification.</dt>
+<dd>If no id provided then no id attribute is created on the form.</dd>
+<dt>class: add space seperated classes to the class list.</dt>
+<dd>Defaults to uniForm.
+Always starts with uniForm even do specify classes.</dd>
+</dl>
+<p>form_tag: Defaults to True. If set to False it renders the form without the form tags.</p>
+<dl class="docutils">
+<dt>use_csrf_protection: Defaults to True. If set to True a CSRF protection token is</dt>
+<dd>rendered in the form. This should only be set as False for forms targeting
+external sites or internal sites without CSRF protection (as described in the
+Django documentation).
+Requires the presence of a csrf token in the current context with the identifier
+&#8220;csrf_token&#8221; (which is automatically added to your context when using RequestContext).</dd>
+</dl>
+</blockquote>
+<p>Demonstration:</p>
+<blockquote>
 <p>First we create a MyForm class and instantiate it</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">uni_form.helpers</span> <span class="kn">import</span> <span class="n">FormHelper</span><span class="p">,</span> <span class="n">Submit</span><span class="p">,</span> <span class="n">Reset</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+<span class="gp">... </span>    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
 <span class="gp">... </span>    <span class="c"># this displays how to attach a formHelper to your forms class.</span>
 <span class="gp">... </span>    <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">helper</span><span class="o">.</span><span class="n">form_id</span> <span class="o">=</span> <span class="s">&#39;this-form-rocks&#39;</span>
@@ -97,32 +127,32 @@ class.</p>
 <div class="highlight-python"><pre>{% load uni_form_tags %}
 {% uni_form form form.helper %}</pre>
 </div>
+</blockquote>
 </dd></dl>
 
 <dl class="exception">
 <dt id="uni_form.helpers.FormHelpersException">
-<em class="property">
-exception </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">FormHelpersException</tt><a class="headerlink" href="#uni_form.helpers.FormHelpersException" title="Permalink to this definition">¶</a></dt>
-<dd>This is raised when building a form via helpers throws an error.
+<em class="property">exception </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">FormHelpersException</tt><a class="headerlink" href="#uni_form.helpers.FormHelpersException" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is raised when building a form via helpers throws an error.
 We want to catch form helper errors as soon as possible because
-debugging templatetags is never fun.</dd></dl>
+debugging templatetags is never fun.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="uni_form.helpers.HTML">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">HTML</tt><big>(</big><em>html</em><big>)</big><a class="headerlink" href="#uni_form.helpers.HTML" title="Permalink to this definition">¶</a></dt>
-<dd>HTML container</dd></dl>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">HTML</tt><big>(</big><em>html</em><big>)</big><a class="headerlink" href="#uni_form.helpers.HTML" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTML container</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="uni_form.helpers.Hidden">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Hidden</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Hidden" title="Permalink to this definition">¶</a></dt>
-<dd>Used to create a Hidden input descriptor for the uni_form template tag.</dd></dl>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Hidden</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Hidden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to create a Hidden input descriptor for the uni_form template tag.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="uni_form.helpers.Layout">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Layout</tt><big>(</big><em>*fields</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Layout" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Layout</tt><big>(</big><em>*fields</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Layout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Form Layout, add fieldsets, rows, fields and html</p>
 <p>example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">Fieldset</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;is_company&#39;</span><span class="p">),</span>
@@ -139,22 +169,34 @@ class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">
 </dd></dl>
 
 <dl class="class">
+<dt id="uni_form.helpers.MultiField">
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">MultiField</tt><big>(</big><em>label</em>, <em>*fields</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#uni_form.helpers.MultiField" title="Permalink to this definition">¶</a></dt>
+<dd><p>multiField container. Renders to a multiField &lt;div&gt;</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="uni_form.helpers.Reset">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Reset</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Reset" title="Permalink to this definition">¶</a></dt>
-<dd>Used to create a Hidden input descriptor for the uni_form template tag.</dd></dl>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Reset</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to create a Hidden input descriptor for the uni_form template tag.</p>
+<blockquote>
+reset = Reset(&#8216;Reset This Form&#8217;,&#8217;Revert Me!&#8217;)</blockquote>
+<p>Note: The first argument is also slugified and turned into the id for the reset.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="uni_form.helpers.Row">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Row</tt><big>(</big><em>*fields</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Row" title="Permalink to this definition">¶</a></dt>
-<dd>row container. Renders to a set of &lt;div&gt;</dd></dl>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Row</tt><big>(</big><em>*fields</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Row" title="Permalink to this definition">¶</a></dt>
+<dd><p>row container. Renders to a set of &lt;div&gt;</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="uni_form.helpers.Submit">
-<em class="property">
-class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Submit</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Submit" title="Permalink to this definition">¶</a></dt>
-<dd>Used to create a Submit button descriptor for the uni_form template tag.</dd></dl>
+<em class="property">class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">Submit</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#uni_form.helpers.Submit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to create a Submit button descriptor for the uni_form template tag:</p>
+<blockquote>
+submit = Submit(&#8216;Search the Site&#8217;,&#8217;search this site&#8217;)</blockquote>
+<p>Note: The first argument is also slugified and turned into the id for the submit button.</p>
+</dd></dl>
 
 </div>
 
@@ -164,30 +206,30 @@ class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="usage.html"
-                                  title="previous chapter">Ways to use Django-uni-form</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="uni_form_tags.html"
-                                  title="next chapter">uni_form.templatetags.uni_form_tags API</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/helpers.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="previous chapter">Usage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="customization.html"
+                        title="next chapter">Customization</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/helpers.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -199,20 +241,20 @@ class </em><tt class="descclassname">uni_form.helpers.</tt><tt class="descname">
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="uni_form_tags.html" title="uni_form.templatetags.uni_form_tags API"
+          <a href="customization.html" title="Customization"
              >next</a> |</li>
         <li class="right" >
-          <a href="usage.html" title="Ways to use Django-uni-form"
+          <a href="usage.html" title="Usage"
              >previous</a> |</li>
-        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+        <li><a href="index.html">django-uni-form v0.8.0-alpha documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Daniel Greenfeld.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+        &copy; Copyright 2010, Daniel Greenfeld.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
     </div>
   </body>
 </html>

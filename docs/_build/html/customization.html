@@ -1,0 +1,144 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Customization &mdash; django-uni-form v0.8.0-alpha documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.8.0-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-uni-form v0.8.0-alpha documentation" href="index.html" />
+    <link rel="next" title="uni_form.templatetags.uni_form_tags API" href="uni_form_tags.html" />
+    <link rel="prev" title="uni_form.helpers API" href="helpers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="uni_form_tags.html" title="uni_form.templatetags.uni_form_tags API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="uni_form.helpers API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">django-uni-form v0.8.0-alpha documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="customization">
+<h1>Customization<a class="headerlink" href="#customization" title="Permalink to this headline">¶</a></h1>
+<p>Some ways to customize the behavior of django-uni-form.</p>
+<div class="section" id="customizations-on-required-fields-optional">
+<h2>Customizations on &#8216;*&#8217; required fields (optional)<a class="headerlink" href="#customizations-on-required-fields-optional" title="Permalink to this headline">¶</a></h2>
+<p>If you don&#8217;t like the use of &#8216;*&#8217; (asterisk) to denote required fields you can simply overrride the django-uni-form field.html. In your Django project&#8217;s templates directory create a new directory called <cite>uni_form</cite>. Copy the django-uni-form field.html file to that directory and make the desired changes. For example:</p>
+<div class="highlight-python"><pre>cd ~/&lt;my-projects&gt;/&lt;my-awesome-django-project&gt;/templates/
+mkdir uni_form
+cd uni_form/
+cp &lt;my-site-packages&gt;/Django-uni-form/uni_form/templates/uni_form/field.html .</pre>
+</div>
+<p>Now you could change the asterisk to any other character, an image icon, or whatever else you want.</p>
+</div>
+<div class="section" id="using-uni-form-strict-fields">
+<h2>Using Uni-Form strict fields<a class="headerlink" href="#using-uni-form-strict-fields" title="Permalink to this headline">¶</a></h2>
+<p>django-uni-form implements form fields in html differently than the standard Uni-Form. If you want to adhere to the strict definition of django-uni-form replace the field.html file with field.strict.html. You can just follow these instructions:</p>
+<div class="highlight-python"><pre>cd ~/&lt;my-projects&gt;/&lt;my-awesome-django-project&gt;/templates/
+mkdir uni_form
+cd uni_form/
+cp &lt;my-site-packages&gt;/Django-uni-form/uni_form/templates/field.strict.html field.html</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Customization</a><ul>
+<li><a class="reference internal" href="#customizations-on-required-fields-optional">Customizations on &#8216;*&#8217; required fields (optional)</a></li>
+<li><a class="reference internal" href="#using-uni-form-strict-fields">Using Uni-Form strict fields</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="helpers.html"
+                        title="previous chapter">uni_form.helpers API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="uni_form_tags.html"
+                        title="next chapter">uni_form.templatetags.uni_form_tags API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/customization.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="uni_form_tags.html" title="uni_form.templatetags.uni_form_tags API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="uni_form.helpers API"
+             >previous</a> |</li>
+        <li><a href="index.html">django-uni-form v0.8.0-alpha documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Daniel Greenfeld.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+    </div>
+  </body>
+</html>

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -5,23 +7,24 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Ways to use Django-uni-form &mdash; django-uni-form v0.7 documentation</title>
+    <title>Usage &mdash; django-uni-form v0.8.0-alpha documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7',
-        COLLAPSE_MODINDEX: false,
+        VERSION:     '0.8.0-alpha',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="django-uni-form v0.7 documentation" href="index.html" />
+    <link rel="top" title="django-uni-form v0.8.0-alpha documentation" href="index.html" />
     <link rel="next" title="uni_form.helpers API" href="helpers.html" />
-    <link rel="prev" title="Installing django-uni-form" href="install.html" /> 
+    <link rel="prev" title="Installation" href="install.html" /> 
   </head>
   <body>
     <div class="related">
@@ -31,15 +34,15 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="helpers.html" title="uni_form.helpers API"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="install.html" title="Installing django-uni-form"
+          <a href="install.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+        <li><a href="index.html">django-uni-form v0.8.0-alpha documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -48,8 +51,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="ways-to-use-django-uni-form">
-<h1>Ways to use Django-uni-form<a class="headerlink" href="#ways-to-use-django-uni-form" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>How to use django-uni-form</p>
 <div class="section" id="using-the-django-uni-form-filter-easy-and-fun">
 <h2>Using the django-uni-form filter (Easy and fun!)<a class="headerlink" href="#using-the-django-uni-form-filter-easy-and-fun" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
@@ -115,7 +119,7 @@ def my_view(request):
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">uni_form.helpers</span> <span class="kn">import</span> <span class="n">FormHelper</span><span class="p">,</span> <span class="n">Submit</span><span class="p">,</span> <span class="n">Reset</span>
 
 <span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
 
     <span class="c"># Attach a formHelper to your forms class.</span>
     <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
@@ -148,7 +152,7 @@ def my_view(request):
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">uni_form.helpers</span> <span class="kn">import</span> <span class="n">FormHelper</span><span class="p">,</span> <span class="n">Submit</span>
 
 <span class="k">class</span> <span class="nc">MyForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Title&quot;</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
 
     <span class="c"># Attach a formHelper to your forms class.</span>
     <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
@@ -183,11 +187,11 @@ def my_view(request):
 <span class="k">class</span> <span class="nc">LayoutTestForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
 
     <span class="n">is_company</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;company&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">CheckboxInput</span><span class="p">())</span>
-    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;email&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
-    <span class="n">password1</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;password&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">())</span>
-    <span class="n">password2</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;re-enter password&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">())</span>
-    <span class="n">first_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;first name&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
-    <span class="n">last_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;last name&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;email&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+    <span class="n">password1</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;password&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">())</span>
+    <span class="n">password2</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;re-enter password&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">())</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;first name&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;last name&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
 
     <span class="c"># Attach a formHelper to your forms class.</span>
     <span class="n">helper</span> <span class="o">=</span> <span class="n">FormHelper</span><span class="p">()</span>
@@ -229,7 +233,7 @@ def my_view(request):
     {% uni_form form helper %}
 {% endwith %}</pre>
 </div>
-<p>This allows you to group fields in fieldsets, or rows or columns or add HTML between fields, etc.</p>
+<p>This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.</p>
 </div>
 </div>
 
@@ -239,42 +243,42 @@ def my_view(request):
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="">Ways to use Django-uni-form</a><ul>
-<li><a class="reference external" href="#using-the-django-uni-form-filter-easy-and-fun">Using the django-uni-form filter (Easy and fun!)</a></li>
-<li><a class="reference external" href="#using-the-django-uni-form-templatetag-in-your-view-intermediate">Using the django-uni-form templatetag in your view (Intermediate)</a></li>
-<li><a class="reference external" href="#using-the-django-uni-form-templatetag-in-your-form-class-intermediate">Using the django-uni-form templatetag in your form class (Intermediate)</a></li>
-<li><a class="reference external" href="#using-the-django-uni-form-templatetag-to-change-action-method-intermediate">Using the django-uni-form templatetag to change action/method (Intermediate)</a></li>
-<li><a class="reference external" href="#adding-a-layout-to-your-form-class-intermediate">Adding a layout to your form class (Intermediate)</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#using-the-django-uni-form-filter-easy-and-fun">Using the django-uni-form filter (Easy and fun!)</a></li>
+<li><a class="reference internal" href="#using-the-django-uni-form-templatetag-in-your-view-intermediate">Using the django-uni-form templatetag in your view (Intermediate)</a></li>
+<li><a class="reference internal" href="#using-the-django-uni-form-templatetag-in-your-form-class-intermediate">Using the django-uni-form templatetag in your form class (Intermediate)</a></li>
+<li><a class="reference internal" href="#using-the-django-uni-form-templatetag-to-change-action-method-intermediate">Using the django-uni-form templatetag to change action/method (Intermediate)</a></li>
+<li><a class="reference internal" href="#adding-a-layout-to-your-form-class-intermediate">Adding a layout to your form class (Intermediate)</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="install.html"
-                                  title="previous chapter">Installing django-uni-form</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="helpers.html"
-                                  title="next chapter">uni_form.helpers API</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/usage.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="helpers.html"
+                        title="next chapter">uni_form.helpers API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/usage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -286,20 +290,20 @@ def my_view(request):
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="modindex.html" title="Global Module Index"
+          <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="helpers.html" title="uni_form.helpers API"
              >next</a> |</li>
         <li class="right" >
-          <a href="install.html" title="Installing django-uni-form"
+          <a href="install.html" title="Installation"
              >previous</a> |</li>
-        <li><a href="index.html">django-uni-form v0.7 documentation</a> &raquo;</li> 
+        <li><a href="index.html">django-uni-form v0.8.0-alpha documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Daniel Greenfeld.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+        &copy; Copyright 2010, Daniel Greenfeld.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
     </div>
   </body>
 </html>

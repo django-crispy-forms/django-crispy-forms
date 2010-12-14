@@ -1,9 +1,11 @@
-===========================
-Ways to use Django-uni-form
+Usage
 ===========================
 
+How to use django-uni-form
+
+
 Using the django-uni-form filter (Easy and fun!)
-=================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. Add ``{% load uni_form_tags %}`` to the template that calls your form.
 2. Append your form call with the as_uni_form filter::
 
@@ -16,7 +18,7 @@ Using the django-uni-form filter (Easy and fun!)
 4. Refresh and enjoy!
 
 Using the django-uni-form templatetag in your view (Intermediate)
-====================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your views.py add the following after field definitions::
 
     from django.shortcuts import render_to_response
@@ -53,10 +55,8 @@ Using the django-uni-form templatetag in your view (Intermediate)
     
     {% uni_form form helper %}
 
-
-
 Using the django-uni-form templatetag in your form class (Intermediate)
-========================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your form class add the following after field definitions::
 
     from uni_form.helpers import FormHelper, Submit, Reset
@@ -85,7 +85,7 @@ Using the django-uni-form templatetag in your form class (Intermediate)
     {% endwith %}
     
 Using the django-uni-form templatetag to change action/method (Intermediate)
-============================================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your form class add the following after field definitions::
 
     from uni_form.helpers import FormHelper, Submit
@@ -114,7 +114,7 @@ Using the django-uni-form templatetag to change action/method (Intermediate)
 
 
 Adding a layout to your form class (Intermediate)
-==================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Uniform helpers can use layout objects. A layout can consist of fieldsets, rows, columns, HTML and fields. A simple Example::
 
@@ -173,5 +173,7 @@ Then, just like in the previous example, add the following to your template::
     {% endwith %}
            
 
-This allows you to group fields in fieldsets, or rows or columns or add HTML between fields, etc.
+This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
 
+.. _Django: http://djangoproject.com
+.. _`Uni-form`: http://sprawsm.com/uni-form
