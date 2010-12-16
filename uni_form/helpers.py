@@ -28,9 +28,14 @@ class Submit(BaseInput):
         Note: The first argument is also slugified and turned into the id for the submit button.
     
     """
-    
     input_type = 'submit'
     field_classes = 'submit submitButton'
+
+    def __init__(self, name, value, *args, **kwargs):
+        if kwargs.has_key('css_class'):
+            self.field_classes = self.field_classes + ' ' + kwargs.get('css_class')
+
+        super(self.__class__, self).__init__(name, value)
 
 
 class Button(BaseInput):
