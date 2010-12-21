@@ -19,7 +19,7 @@
         {{ field|with_class }}
 
         {% if field.help_text %}
-            <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text|safe }}</p>
+            <div id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text|safe }}</div>
         {% endif %}
     </div>
 {% endif %}
