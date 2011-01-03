@@ -1,7 +1,7 @@
 {% load uni_form_tags i18n %}
 
 
-{% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {% endif %}{{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id|slugify }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+{% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {% endif %}{{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
     {% if form_method|lower == 'post' %}
         {% csrf_token %}
     {% endif %}
