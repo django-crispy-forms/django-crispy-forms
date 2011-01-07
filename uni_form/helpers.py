@@ -146,7 +146,7 @@ class Layout(object):
         >>> helper.add_layout(layout)
     """
     def __init__(self, *fields):
-        self.fields = fields
+        self.fields = list(fields)
     
     def render(self, form):
         html = ""
@@ -165,7 +165,7 @@ class Fieldset(object):
         self.css_class = kwargs.get('css_class', None)
         self.css_id = kwargs.get('css_id', None)
         self.legend = legend
-        self.fields = fields
+        self.fields = list(fields)
     
     def render(self, form):
         html = u'<fieldset'
