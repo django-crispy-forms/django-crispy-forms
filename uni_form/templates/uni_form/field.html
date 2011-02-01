@@ -11,7 +11,7 @@
         {% endfor %}
 
         {% if field.label %}
-            <label for="{{ field.auto_id }}">
+            <label for="{{ field.auto_id }}" {% if field.field.required %}class="required"{% endif %}>
                 {{ field.label|safe }}{% if field.field.required %}<span>*</span>{% endif %}
             </label>
         {% endif %}
