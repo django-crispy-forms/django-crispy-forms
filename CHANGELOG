@@ -15,12 +15,12 @@ For 0.8.0
  * django-uni-form 0.8 and higher lays out the HTML for the uni_form tag differently. The errorMsg div is now outside the fieldset as it should be.
  * Thanks to Casper S. Jensen django-uni-form now supports 1.2 style csrf_token.
  * csrf_token does not break earlier versions of Django. This will change when no version of django does not support csrf_token.
- * Thanks to j0hnsmith changed {{ error }} to {{ error|safe }} so that html (eg links) can be 
- added to error messages.
+ * Thanks to j0hnsmith changed {{ error }} to {{ error|safe }} so that html (eg links) can be added to error messages.
  * Thanks to j0hnsmith changed {{ field.label }} to {{ field.label|safe }} so that html (eg 
  links) can be added to field labels
- * Thanks to Stepan Rakhimov fixed an admin datetime issue.
+ * Kudos to Stepan Rakhimov fixed an admin datetime issue.
  * Thanks to patrys (Patryk Zawadzki) FormHelper class is now easily subclass-able.
+ * Sorki (Richard Marko) made it so things work better in direct_to_template.
 
 For 0.7.0
 

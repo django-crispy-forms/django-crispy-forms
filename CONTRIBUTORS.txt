@@ -28,3 +28,4 @@ Patryk Zawadzki <patrys>
 Skylar Saveland <skyl>
 Stepan Rakhimov
 John Maxwell <astrofinch>
+Richard Marko <sorki>
