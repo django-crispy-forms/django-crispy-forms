@@ -44,7 +44,6 @@ class Button(BaseInput):
     
     Note: The first argument is also slugified and turned into the id for the button.
     """
-    
     input_type = 'button'
     field_classes = 'button'
 
@@ -69,22 +68,35 @@ class Reset(BaseInput):
 
 
 def render_field(field, form, template="uni_form/field.html", labelclass=None):
-    if not isinstance(field, str):
+    """
+    Renders a field, if the field is a django-uni-form object like a `Row` or a 
+    `Fieldset`, calls its render method. The field is added to a list that the form 
+    holds called `rendered_fields` to avoid double rendering fields. Finally a Django 
+    form `BoundField` is instantiated, rendered and its html returned.
+    """
+    if hasattr(field, 'render'):
         return field.render(form)
+    else:
+        # This allows fields to be unicode strings, always they don't use non ASCII
+        try:
+            field = str(field)
+        except UnicodeEncodeError:
+            raise Exception("Field '%s' is using forbidden unicode characters" % field)
 
     try:
         field_instance = form.fields[field]
     except KeyError:
         raise Exception("Could not resolve form field '%s'." % field)
-    bound_field = BoundField(form, field_instance, field)
-    html = render_to_string(template, {'field': bound_field, 'labelclass': labelclass})
+
     if not hasattr(form, 'rendered_fields'):
         form.rendered_fields = []
     if not field in form.rendered_fields:
         form.rendered_fields.append(field)
     else:
         raise Exception("A field should only be rendered once: %s" % field)
-    return html
+
+    bound_field = BoundField(form, field_instance, field)
+    return render_to_string(template, {'field': bound_field, 'labelclass': labelclass})
 
 
 class Layout(object):
