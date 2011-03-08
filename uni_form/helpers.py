@@ -12,21 +12,20 @@ from django.utils.safestring import mark_safe
 from uni_form.util import BaseInput, Toggle
 
 class FormHelpersException(Exception):
-    """ This is raised when building a form via helpers throws an error.
-        We want to catch form helper errors as soon as possible because
-        debugging templatetags is never fun.
+    """ 
+    This is raised when building a form via helpers throws an error.
+    We want to catch form helper errors as soon as possible because
+    debugging templatetags is never fun.
     """
     pass
 
 
 class Submit(BaseInput):
     """
-        Used to create a Submit button descriptor for the uni_form template tag:
-            
-            submit = Submit('Search the Site','search this site')
-        
-        Note: The first argument is also slugified and turned into the id for the submit button.
+    Used to create a Submit button descriptor for the uni_form template tag:
+        submit = Submit('Search the Site', 'search this site')
     
+    Note: The first argument is also slugified and turned into the id for the submit button.
     """
     input_type = 'submit'
     field_classes = 'submit submitButton'
@@ -40,36 +39,34 @@ class Submit(BaseInput):
 
 class Button(BaseInput):
     """
-        Used to create a Submit input descriptor for the uni_form template tag:
-            
-            button = Button('Button 1','Press Me!')
-        
-        Note: The first argument is also slugified and turned into the id for the button.
+    Used to create a Submit input descriptor for the uni_form template tag:
+        button = Button('Button 1', 'Press Me!')
+    
+    Note: The first argument is also slugified and turned into the id for the button.
     """
     
     input_type = 'button'
     field_classes = 'button'
 
+
 class Hidden(BaseInput):
     """
-        Used to create a Hidden input descriptor for the uni_form template tag.
+    Used to create a Hidden input descriptor for the uni_form template tag.
     """
-    
     input_type = 'hidden'
     field_classes = 'hidden'
 
+
 class Reset(BaseInput):
     """
-        Used to create a Hidden input descriptor for the uni_form template tag.
-            
-            reset = Reset('Reset This Form','Revert Me!')
-        
-        Note: The first argument is also slugified and turned into the id for the reset.
+    Used to create a Hidden input descriptor for the uni_form template tag.
+        reset = Reset('Reset This Form', 'Revert Me!')
     
+    Note: The first argument is also slugified and turned into the id for the reset.
     """
-    
     input_type = 'reset'
     field_classes = 'reset resetButton'
+
 
 def render_field(field, form, template="uni_form/field.html", labelclass=None):
     if not isinstance(field, str):
@@ -89,22 +86,22 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
         raise Exception("A field should only be rendered once: %s" % field)
     return html
 
+
 class Layout(object):
-    '''
+    """ 
     Form Layout, add fieldsets, rows, fields and html
     
     example:
-    
-    >>> layout = Layout(Fieldset('', 'is_company'),
-    ...     Fieldset(_('Contact details'),
-    ...         'email',
-    ...         Row('password1','password2'),
-    ...         'first_name',
-    ...         'last_name',
-    ...         HTML('<img src="/media/somepicture.jpg"/>'),
-    ...         'company'))
-    >>> helper.add_layout(layout)
-    '''
+        >>> layout = Layout(Fieldset('', 'is_company'),
+        ...     Fieldset(_('Contact details'),
+        ...         'email',
+        ...         Row('password1','password2'),
+        ...         'first_name',
+        ...         'last_name',
+        ...         HTML('<img src="/media/somepicture.jpg"/>'),
+        ...         'company'))
+        >>> helper.add_layout(layout)
+    """
     def __init__(self, *fields):
         self.fields = fields
     
@@ -117,16 +114,15 @@ class Layout(object):
                 html += render_field(field, form)
         return html
 
+
 class Fieldset(object):
-    
-    ''' Fieldset container. Renders to a <fieldset>. '''
-    
+    """ Fieldset container. Renders to a <fieldset> """
+
     def __init__(self, legend, *fields, **kwargs):
         self.css_class = kwargs.get('css_class', None)
         self.css_id = kwargs.get('css_id', None)
         self.legend = legend
         self.fields = fields
-
     
     def render(self, form):
         html = u'<fieldset'
@@ -143,9 +139,8 @@ class Fieldset(object):
         return html
 
 
-
 class MultiField(object):
-    ''' multiField container. Renders to a multiField <div> '''
+    """ multiField container. Renders to a multiField <div> """
 
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
@@ -194,7 +189,8 @@ class MultiField(object):
 
 
 class Row(object):
-    ''' row container. Renders to a set of <div>'''
+    """ row container. Renders to a set of <div> """
+
     def __init__(self, *fields, **kwargs):
         self.fields = fields
         self.css_class = kwargs.get('css_class', u'formRow')
@@ -213,8 +209,10 @@ class Row(object):
         output += u'</div>'
         return u''.join(output)
 
+
 class Column(object):
-    ''' column container. Renders to a set of <div>'''
+    """ column container. Renders to a set of <div> """
+    
     def __init__(self, *fields, **kwargs):
         self.fields = fields
         self.css_class = kwargs.get('css_class', u'formColumn')
@@ -235,8 +233,7 @@ class Column(object):
 
 
 class HTML(object):
-    
-    ''' HTML container '''
+    """ HTML container """
     
     def __init__(self, html):
         self.html = unicode(html)
@@ -247,39 +244,38 @@ class HTML(object):
 
 class FormHelper(object):
     """
-        By setting attributes to me you can easily create the text that goes
-        into the uni_form template tag. One use case is to add to your form
-        class.
+    By setting attributes to me you can easily create the text that goes
+    into the uni_form template tag. One use case is to add to your form
+    class.
+    
+    Special attribute behavior:
         
-        Special attribute behavior:
-            
-            method: Defaults to POST but you can also do 'GET'
-            
-            form_action: applied to the form action attribute. Can be a named url in
-                your urlconf that can be executed via the *url* default template tag or can
-                simply point to another URL.
-            
-            id: Generates a form id for dom identification.
-                If no id provided then no id attribute is created on the form.
-            
-            class: add space seperated classes to the class list.
-                Defaults to uniForm.
-                Always starts with uniForm even do specify classes.
-            
-            form_tag: Defaults to True. If set to False it renders the form without the form tags.
-            
-            use_csrf_protection: Defaults to True. If set to True a CSRF protection token is
-                rendered in the form. This should only be set as False for forms targeting
-                external sites or internal sites without CSRF protection (as described in the
-                Django documentation).
-                Requires the presence of a csrf token in the current context with the identifier
-                "csrf_token" (which is automatically added to your context when using RequestContext).
+        method: Defaults to POST but you can also do 'GET'
+        
+        form_action: applied to the form action attribute. Can be a named url in
+            your urlconf that can be executed via the *url* default template tag or can
+            simply point to another URL.
+        
+        id: Generates a form id for dom identification.
+            If no id provided then no id attribute is created on the form.
+        
+        class: add space seperated classes to the class list.
+            Defaults to uniForm.
+            Always starts with uniForm even do specify classes.
+        
+        form_tag: Defaults to True. If set to False it renders the form without the form tags.
+        
+        use_csrf_protection: Defaults to True. If set to True a CSRF protection token is
+            rendered in the form. This should only be set as False for forms targeting
+            external sites or internal sites without CSRF protection (as described in the
+            Django documentation).
+            Requires the presence of a csrf token in the current context with the identifier
+            "csrf_token" (which is automatically added to your context when using RequestContext).
 
+    
+    Demonstration:
         
-        Demonstration:
-            
-            First we create a MyForm class and instantiate it
-            
+        First we create a MyForm class and instantiate it:
             >>> from django import forms
             >>> from uni_form.helpers import FormHelper, Submit, Reset
             >>> from django.utils.translation import ugettext_lazy as _
@@ -293,13 +289,10 @@ class FormHelper(object):
             ...     helper.add_input(submit)
             ...     reset = Reset('reset','reset button')
             ...     helper.add_input(reset)
-            
-            After this in the template::
-                
-                {% load uni_form_tags %}
-                {% uni_form form form.helper %}
-
-    
+        
+        After this in the template::
+            {% load uni_form_tags %}
+            {% uni_form form form.helper %}
     """
     _form_method = 'post'
     _form_action = ''
@@ -310,9 +303,7 @@ class FormHelper(object):
     form_tag = True
     use_csrf_protection = True
 
-    
     def __init__(self):
-        
         self.inputs = self.inputs[:]
         self.toggle = Toggle()
     
