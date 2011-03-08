@@ -6,7 +6,6 @@
         {% csrf_token %}
     {% endif %}
 
->>>>>>> add0955... csrf_token should only be used in POST forms. See::uni_form/templates/uni_form/whole_uni_form.html
     {% if form.non_field_errors %}
         <div id="errorMsg">
             <h3>{% if error_message_title %}{{ error_message_title }}{% else %}Errors{% endif %}</h3>

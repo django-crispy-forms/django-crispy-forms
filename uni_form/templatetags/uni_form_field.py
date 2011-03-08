@@ -6,7 +6,6 @@ class_converter = {
     "textinput":"textinput textInput",
     "fileinput":"fileinput fileUpload",
     "passwordinput":"textinput textInput",
->>>>>>> f85af74... Convert css class of PasswordInput widget:uni_form/templatetags/uni_form_field.py
 }
 
 @register.filter
