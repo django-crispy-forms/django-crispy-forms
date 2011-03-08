@@ -8,7 +8,7 @@
 
     {% if form.non_field_errors %}
         <div id="errorMsg">
-            <h3>{% if error_message_title %}{{ error_message_title }}{% else %}Errors{% endif %}</h3>
+            <h3>{% if error_message_title %}{{ error_message_title }}{% else %}{% trans Errors %}{% endif %}</h3>
             <ol>
                 {{ form.non_field_errors|unordered_list }}
             </ol>
