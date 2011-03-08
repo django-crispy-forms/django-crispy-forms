@@ -121,9 +121,9 @@ class Fieldset(object):
     
     ''' Fieldset container. Renders to a <fieldset>. '''
     
-    def __init__(self, legend, *fields, **args):
-        self.css_class = args.get('css_class', None)
-        self.css_id = args.get('css_id', None)
+    def __init__(self, legend, *fields, **kwargs):
+        self.css_class = kwargs.get('css_class', None)
+        self.css_id = kwargs.get('css_id', None)
         self.legend = legend
         self.fields = fields
 
