@@ -134,7 +134,7 @@ class Fieldset(object):
             html += u' id="%s"' % self.css_id
         if self.css_class:
             html += u' class="%s"' % self.css_class
-	html += '>'
+        html += '>'
 
         html += self.legend and (u'<legend>%s</legend>' % self.legend) or ''
         for field in self.fields:
@@ -182,7 +182,7 @@ class MultiField(object):
             output += u' id="%s"' % self.div_id
         if self.css_class:
             output += u' class="%s"' % self.div_class
-	output += '>\n'
+        output += '>\n'
         output += errors
         output += self.label_html
         output += u'<div class="multiField">\n'
@@ -206,7 +206,7 @@ class Row(object):
             output += u' id="%s"' % self.css_id
         if self.css_class:
             output += u' class="%s"' % self.css_class
-	output += '>'
+        output += '>'
 
         for field in self.fields:
             output += render_field(field, form)
@@ -226,7 +226,7 @@ class Column(object):
             output += u' id="%s"' % self.css_id
         if self.css_class:
             output += u' class="%s"' % self.css_class
-	output += '>'
+        output += '>'
 
         for field in self.fields:
             output += render_field(field, form)
