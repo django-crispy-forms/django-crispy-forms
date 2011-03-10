@@ -86,20 +86,27 @@ class BasicNode(template.Node):
 
     def __init__(self, form, helper):
         self.form = template.Variable(form)
-        self.helper = template.Variable(helper)
+        if helper is not None:
+            self.helper = template.Variable(helper)
+        else:
+            self.helper = None
 
     def get_render(self, context):
         """ Render the Node """
         
         # TODO - rewrite cause this is dog-ugly.
-        
+             
         actual_form = self.form.resolve(context)
-        helper = self.helper.resolve(context)
         attrs = None
-        if helper:
+        if self.helper is not None:
+            helper = self.helper.resolve(context)
+            
             if not isinstance(helper, FormHelper):
                 raise TypeError('helper object provided to uni_form tag must be a uni_form.helpers.FormHelper object.')
             attrs = helper.get_attr()
+        else:
+            helper = None
+
         form_class = ''
         form_id = ''
         form_method = 'post'
@@ -117,9 +124,9 @@ class BasicNode(template.Node):
             inputs = attrs.get('inputs', [])
             toggle_fields = attrs.get('toggle_fields', set(()))
             use_csrf_protection = attrs.get('use_csrf_protection', True)
+
         final_toggle_fields = []
         if toggle_fields:
-            final_toggle_fields = []
             for field in actual_form:
                 if field.auto_id in toggle_fields:
                     final_toggle_fields.append(field)
@@ -128,6 +135,7 @@ class BasicNode(template.Node):
             form_html = helper.render_layout(actual_form)
         else:
             form_html = ""
+
         response_dict = {
                         'form':actual_form,
                         'form_html':form_html,
@@ -145,8 +153,7 @@ class BasicNode(template.Node):
             if use_csrf_protection and context.has_key('csrf_token'):
                 response_dict['csrf_token'] = context['csrf_token']
 
-        c = Context(response_dict)
-        return c
+        return Context(response_dict)
 
 
 ##################################################################
@@ -189,7 +196,6 @@ def do_uni_form(parser, token):
 class UniFormNode(BasicNode):
 
     def render(self, context):
-
         c = self.get_render(context)
 
         template = get_template('uni_form/whole_uni_form.html')
