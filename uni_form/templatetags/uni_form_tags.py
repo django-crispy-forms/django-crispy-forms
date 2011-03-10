@@ -2,6 +2,7 @@ from distutils import version
 
 from django import get_version # TODO: remove when pre-CSRF token templatetags are no longer supported
 from django.conf import settings
+from django.forms.formsets import BaseFormSet
 from django.template import Context, Template
 from django.template.loader import get_template
 from django import template
@@ -97,13 +98,18 @@ class BasicNode(template.Node):
     def get_render(self, context):
         """ 
         Renders the Node.
-        self.form and self.helper are resolved into real Python objects extracting them
-        from the context. 
-        If there is a helper, we use it to extract customized attributes of the form, otherwise
-        we use defaults. 
-        If the helper has a layout we render it, otherwise `form_html` is not set and the 
-        template used for rendering the form will have to use a default behavior.
+        :param context: `django.template.Context` variable holding the context for the node
+
         Returns a `Context` object with all the necessary stuff to render the form.
+
+        `self.form` and `self.helper` are resolved into real Python objects resolving them
+        from the `context`. 
+        The form can be a form or a formset:
+            * If it's a form. If it's got a helper with a layout we use it, otherwise 
+            `form_html` is not set and the template used for rendering the form will have 
+            to use a default behavior. The form is stored in key `form`.
+            * If it's a formset `is_formset` is set to True. The formset is stored in key
+            `formset`.
         """
         actual_form = self.form.resolve(context)
         attrs = {}
@@ -115,7 +121,36 @@ class BasicNode(template.Node):
             attrs = helper.get_attr()
         else:
             helper = None
+      
+        # We get the response dictionary 
+        response_dict = self.get_response_dict(attrs, context)
+        is_formset = isinstance(actual_form, BaseFormSet)
 
+        # If we have a form and a layout we use it
+        if helper and helper.layout and not is_formset:
+            form_html = helper.render_layout(actual_form)
+        else:
+            form_html = ""
+
+        if is_formset:
+            response_dict.update({'formset': actual_form})
+        else:
+            response_dict.update({'form': actual_form})
+
+        response_dict.update({
+            'is_formset': is_formset,
+            'form_html': form_html,
+        })
+            
+        return Context(response_dict)
+
+    def get_response_dict(self, attrs, context):
+        """
+        Returns a dictionary with all the parameters necessary to render the form in a template.
+        
+        :param attrs: Dictionary with the customized attributes of the form extracted from the helper
+        :param context: `django.template.Context` for the node
+        """
         # We take form parameters from attrs if they are set, otherwise we use defaults
         form_tag = attrs.get("form_tag", True)
         form_method = attrs.get("form_method", 'post')
@@ -132,23 +167,15 @@ class BasicNode(template.Node):
                 if field.auto_id in toggle_fields:
                     final_toggle_fields.append(field)
 
-        # If we have a layout, we use it
-        if helper and helper.layout:
-            form_html = helper.render_layout(actual_form)
-        else:
-            form_html = ""
-
         response_dict = {
-            'form': actual_form,
-            'form_html': form_html,
             'form_action': form_action,
             'form_method': form_method,
             'form_tag': form_tag,
             'attrs': attrs,
-            'form_class' : form_class,
-            'form_id' : form_id,
-            'inputs' : inputs,
-            'toggle_fields': final_toggle_fields
+            'form_class': form_class,
+            'form_id': form_id,
+            'inputs': inputs,
+            'toggle_fields': final_toggle_fields,
         }
 
         # TODO: remove when pre-CSRF token templatetags are no longer supported
@@ -156,8 +183,7 @@ class BasicNode(template.Node):
             if use_csrf_protection and context.has_key('csrf_token'):
                 response_dict['csrf_token'] = context['csrf_token']
 
-        return Context(response_dict)
-
+        return response_dict
 
 ##################################################################
 #
@@ -196,7 +222,11 @@ def do_uni_form(parser, token):
 class UniFormNode(BasicNode):
     def render(self, context):
         c = self.get_render(context)
-        template = get_template('uni_form/whole_uni_form.html')
+        
+        if c['is_formset']:
+            template = get_template('uni_form/whole_uni_formset.html')
+        else:
+            template = get_template('uni_form/whole_uni_form.html')
 
         return template.render(c)
 
