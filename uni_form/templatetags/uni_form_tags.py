@@ -71,19 +71,21 @@ these files are loaded.
 ############################################################################
 
 def namify(text):
-    """ Some of our values need to be rendered safe as python variable names.
-        So we just replaces hyphens with underscores.
+    """ 
+    Some of our values need to be rendered safe as python variable names.
+    So we just replaces hyphens with underscores.
     """
     return slugify(text).replace('-','_')
 
 
 class BasicNode(template.Node):
-    """ Basic Node object that we can rely on for Node objects in normal
-        template tags. I created this because most of the tags we'll be using
-        will need both the form object and the helper string. This handles
-        both the form object and parses out the helper string into attributes
-        that templates can easily handle."""
-
+    """ 
+    Basic Node object that we can rely on for Node objects in normal
+    template tags. I created this because most of the tags we'll be using
+    will need both the form object and the helper string. This handles
+    both the form object and parses out the helper string into attributes
+    that templates can easily handle.
+    """
     def __init__(self, form, helper):
         self.form = template.Variable(form)
         if helper is not None:
@@ -92,12 +94,18 @@ class BasicNode(template.Node):
             self.helper = None
 
     def get_render(self, context):
-        """ Render the Node """
-        
-        # TODO - rewrite cause this is dog-ugly.
-             
+        """ 
+        Renders the Node.
+        self.form and self.helper are resolved into real Python objects extracting them
+        from the context. 
+        If there is a helper, we use it to extract customized attributes of the form, otherwise
+        we use defaults. 
+        If the helper has a layout we render it, otherwise `form_html` is not set and the 
+        template used for rendering the form will have to use a default behavior.
+        Returns a `Context` object with all the necessary stuff to render the form.
+        """
         actual_form = self.form.resolve(context)
-        attrs = None
+        attrs = {}
         if self.helper is not None:
             helper = self.helper.resolve(context)
             
@@ -107,23 +115,15 @@ class BasicNode(template.Node):
         else:
             helper = None
 
-        form_class = ''
-        form_id = ''
-        form_method = 'post'
-        form_action = ''
-        form_tag = True
-        inputs = []
-        toggle_fields = set(())
-        use_csrf_protection = True
-        if attrs:
-            form_tag = attrs.get("form_tag", True)
-            form_method = attrs.get("form_method", form_method)
-            form_action = attrs.get("form_action", form_action)
-            form_class = attrs.get("class", '')
-            form_id = attrs.get("id", "")
-            inputs = attrs.get('inputs', [])
-            toggle_fields = attrs.get('toggle_fields', set(()))
-            use_csrf_protection = attrs.get('use_csrf_protection', True)
+        # We take form parameters from attrs if they are set, otherwise we use defaults
+        form_tag = attrs.get("form_tag", True)
+        form_method = attrs.get("form_method", 'post')
+        form_action = attrs.get("form_action", '')
+        form_class = attrs.get("class", '')
+        form_id = attrs.get("id", "")
+        inputs = attrs.get('inputs', [])
+        toggle_fields = attrs.get('toggle_fields', set(()))
+        use_csrf_protection = attrs.get('use_csrf_protection', True)
 
         final_toggle_fields = []
         if toggle_fields:
@@ -131,25 +131,27 @@ class BasicNode(template.Node):
                 if field.auto_id in toggle_fields:
                     final_toggle_fields.append(field)
 
+        # If we have a layout, we use it
         if helper and helper.layout:
             form_html = helper.render_layout(actual_form)
         else:
             form_html = ""
 
         response_dict = {
-                        'form':actual_form,
-                        'form_html':form_html,
-                        'form_action':form_action,
-                        'form_method':form_method,
-                        'form_tag': form_tag,
-                        'attrs':attrs,
-                        'form_class' : form_class,
-                        'form_id' : form_id,
-                        'inputs' : inputs,
-                        'toggle_fields': final_toggle_fields
-                        }
+            'form': actual_form,
+            'form_html': form_html,
+            'form_action': form_action,
+            'form_method': form_method,
+            'form_tag': form_tag,
+            'attrs': attrs,
+            'form_class' : form_class,
+            'form_id' : form_id,
+            'inputs' : inputs,
+            'toggle_fields': final_toggle_fields
+        }
 
-        if not is_old_django: # TODO: remove when pre-CSRF token templatetags are no longer supported
+        # TODO: remove when pre-CSRF token templatetags are no longer supported
+        if not is_old_django: 
             if use_csrf_protection and context.has_key('csrf_token'):
                 response_dict['csrf_token'] = context['csrf_token']
 
