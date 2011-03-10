@@ -14,14 +14,18 @@
             </ol>
         </div>
     {% endif %}
-    {% if form_html %}{{ form_html }}{% else %}
-    <fieldset class="inlineLabels">
-    <legend>* {% trans "Required fields" %}</legend>
-        {% for field in form %}
-            {% include "uni_form/field.html" %}
-        {% endfor %}
-    </fieldset>
+
+    {% if form_html %}
+        {{ form_html }}
+    {% else %}
+        <fieldset class="inlineLabels">
+        <legend>* {% trans "Required fields" %}</legend>
+            {% for field in form %}
+                {% include "uni_form/field.html" %}
+            {% endfor %}
+        </fieldset>
     {% endif %}
+
     {% if inputs %}
         <div class="buttonHolder">
             {% for input in inputs %}
