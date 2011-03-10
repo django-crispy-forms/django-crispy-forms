@@ -20,7 +20,8 @@ if version.LooseVersion(django_version) >= version.LooseVersion('1.1.2'):
     is_old_django = False
 else:
     from warnings import warn
-    warn("""You are using a version of Django that does not support the new csrf_token templatetag. It is advised that you upgrade to 1.1.2, 1.2, or another modern version of Django""")
+    warn("""You are using a version of Django that does not support the new csrf_token templatetag. 
+        It is advised that you upgrade to 1.1.2, 1.2, or another modern version of Django""")
 
 ###################################################
 # Core as_uni_form filter.
@@ -50,11 +51,11 @@ def as_uni_field(field):
 @register.inclusion_tag("uni_form/includes.html", takes_context=True)
 def uni_form_setup(context):
     """
-Creates the <style> and <script> tags needed to initialize the uni-form.
+    Creates the <style> and <script> tags needed to initialize the uni-form.
 
-Create a local uni-form/includes.html template if you want to customize how
-these files are loaded.
-"""
+    Create a local uni-form/includes.html template if you want to customize how
+    these files are loaded.
+    """
     if 'MEDIA_URL' not in context:
         context['MEDIA_URL'] = settings.MEDIA_URL
     return (context)
@@ -167,7 +168,6 @@ class BasicNode(template.Node):
 
 @register.tag(name="uni_form")
 def do_uni_form(parser, token):
-
     """
     You need to pass in at least the form object, and can also pass in the
     optional helper object. Writing the attrs string is rather challenging so
@@ -182,25 +182,22 @@ def do_uni_form(parser, token):
         {% uni_form my-form my_helper %}
 
     """
-
     token = token.split_contents()
-
     form = token.pop(1)
+
     try:
         helper = token.pop(1)
     except IndexError:
         helper = None
 
-
     return UniFormNode(form, helper)
 
 
 class UniFormNode(BasicNode):
-
     def render(self, context):
         c = self.get_render(context)
-
         template = get_template('uni_form/whole_uni_form.html')
+
         return template.render(c)
 
 
@@ -215,45 +212,38 @@ def uni_form_jquery(parser, token):
     by spaces. You must specify by field id (field.auto_id)::
 
         toggle_fields=<first_field>,<second_field>
-
     """
-
     token = token.split_contents()
-
     form = token.pop(1)
+    
     try:
         attrs = token.pop(1)
     except IndexError:
         attrs = None
 
-
     return UniFormJqueryNode(form,attrs)
 
+
 class UniFormJqueryNode(BasicNode):
-
     def render(self,context):
-
         c = self.get_render(context)
-
         template = get_template('uni_form/uni_form_jquery.html')
+
         return template.render(c)
 
 
 # TODO: remove when pre-CSRF token templatetags are no longer supported
 if is_old_django:
-
     # csrf token fix hack.     
     # Creates bogus csrf_token so we can continue to support older versions of Django.
 
     class CsrfTokenNode(template.Node):
-
         def render(self, context):
-
             return ''
+
 
     @register.tag(name="csrf_token")
     def dummy_csrf_token(parser, data):
-
         return CsrfTokenNode()
 
 
