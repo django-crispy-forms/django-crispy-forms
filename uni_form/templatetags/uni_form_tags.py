@@ -121,13 +121,13 @@ class BasicNode(template.Node):
         attrs = {}
         if self.helper is not None:
             helper = self.helper.resolve(context)
-            
+
             if not isinstance(helper, FormHelper):
                 raise TypeError('helper object provided to uni_form tag must be a uni_form.helpers.FormHelper object.')
             attrs = helper.get_attr()
         else:
             helper = None
-      
+
         # We get the response dictionary 
         response_dict = self.get_response_dict(attrs, context)
         is_formset = isinstance(actual_form, BaseFormSet)
@@ -147,7 +147,7 @@ class BasicNode(template.Node):
             'is_formset': is_formset,
             'form_html': form_html,
         })
-            
+
         return Context(response_dict)
 
     def get_response_dict(self, attrs, context):
@@ -160,7 +160,7 @@ class BasicNode(template.Node):
         # We take form parameters from attrs if they are set, otherwise we use defaults
         form_tag = attrs.get("form_tag", True)
         form_method = attrs.get("form_method", 'post')
-        form_action = attrs.get("form_action", '')
+        form_action = attrs.get("form_action", '.')
         form_class = attrs.get("class", '')
         form_id = attrs.get("id", "")
         inputs = attrs.get('inputs', [])
