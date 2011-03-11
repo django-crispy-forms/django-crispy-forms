@@ -38,6 +38,12 @@ def as_uni_form(form):
     return template.render(c)
 
 @register.filter
+def as_uni_form_set(formset):
+    template = get_template('uni_form/uni_form_set.html')
+    c = Context({'formset':formset})
+    return template.render(c)
+
+@register.filter
 def as_uni_errors(form):
     template = get_template('uni_form/errors.html')
     c = Context({'form':form})
