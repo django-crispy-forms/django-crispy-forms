@@ -1,5 +1,6 @@
 from django import forms
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.template import Context, Template
 from django.template.loader import get_template_from_string
 from django.template.loader import render_to_string
@@ -88,11 +89,12 @@ class TestFormHelpers(TestCase):
         self.assertTrue('id="button-id-my-button"' in html)        
         '''
         
-    def test_uni_form_helper_form_attributes(self):
+    def test_uni_form_with_helper_attributes(self):
         form_helper = FormHelper()    
         form_helper.form_id = 'this-form-rocks'
         form_helper.form_class = 'forms-that-rock'
         form_helper.form_method = 'GET'
+        form_helper.form_action = 'simpleAction'
     
         template = get_template_from_string(u"""
             {% load uni_form_tags %}
@@ -104,20 +106,69 @@ class TestFormHelpers(TestCase):
         html = template.render(c)        
         
         # Lets make sure everything loads right
-        self.assertTrue('<form' in html)                
+        self.assertTrue('<form' in html)
         self.assertTrue('class="uniForm forms-that-rock"' in html)
         self.assertTrue('method="get"' in html)
-        self.assertTrue('id="this-form-rocks">' in html)        
+        self.assertTrue('id="this-form-rocks">' in html)
+        self.assertTrue('action="%s"' % reverse('simpleAction') in html)
         
         # now lets remove the form tag and render it again. All the True items above
         # should now be false because the form tag is removed.
-        form_helper.form_tag = False
+        form_helper.form_tag = False 
         html = template.render(c)        
-
         self.assertFalse('<form' in html)        
         self.assertFalse('class="uniForm forms-that-rock"' in html)
         self.assertFalse('method="get"' in html)
         self.assertFalse('id="this-form-rocks">' in html)
+
+    def test_uni_form_without_helper(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form %}
+        """)
+        c = Context({'form': TestForm()})            
+        html = template.render(c)        
+        
+        # Lets make sure everything loads right
+        self.assertTrue('<form' in html)
+        self.assertTrue('class="uniForm"' in html)
+        self.assertTrue('method="post"' in html)
+        self.assertTrue('action="."' in html)
+
+    def test_uni_form_invalid_helper(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)
+        c = Context({'form': TestForm(), 'form_helper': "invalid"})
+        self.assertRaises(TypeError, lambda:template.render(c))
+
+    def test_uni_form_formset(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form testFormSet formset_helper %}
+        """)
+        
+        form_helper = FormHelper()    
+        form_helper.form_id = 'this-formset-rocks'
+        form_helper.form_class = 'formsets-that-rock'
+        form_helper.form_method = 'GET'
+        form_helper.form_action = 'simpleAction'
+                
+        from django.forms.models import formset_factory
+        TestFormSet = formset_factory(TestForm, extra = 3)
+        testFormSet = TestFormSet()
+        
+        c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper})
+        html = template.render(c)        
+
+        self.assertTrue('<form' in html)
+        self.assertEqual(html.count('<form'), 1)
+        self.assertTrue('class="uniForm formsets-that-rock"' in html)
+        self.assertTrue('method="get"' in html)
+        self.assertTrue('id="this-formset-rocks">' in html)
+        self.assertTrue('action="%s"' % reverse('simpleAction') in html)
+        
 
     def test_csrf_token_POST_form(self):
         # TODO: remove when pre-CSRF token templatetags are no longer supported
@@ -131,7 +182,7 @@ class TestFormHelpers(TestCase):
 
             # The middleware only initializes the CSRF token when processing a real request
             # So using RequestContext or csrf(request) here does not work.
-            # Instead I set the key `csrf_token` to a CSRF manually, which csrf_token tag
+            # Instead I set the key `csrf_token` to a CSRF token manually, which `csrf_token` tag
             # reads to put a hidden input in > django.template.defaulttags.CsrfTokenNode
             # This way we don't need to use Django's client, have a test_app and urls
             # I like self-contained tests :) CSRF could be any number, we don't care
