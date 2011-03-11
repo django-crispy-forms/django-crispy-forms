@@ -33,14 +33,12 @@ else:
 ###################################################
 @register.filter
 def as_uni_form(form):
-    template = get_template('uni_form/uni_form.html')
-    c = Context({'form':form})
-    return template.render(c)
-
-@register.filter
-def as_uni_form_set(formset):
-    template = get_template('uni_form/uni_form_set.html')
-    c = Context({'formset':formset})
+    if isinstance(form, BaseFormSet):
+        template = get_template('uni_form/uni_formset.html')
+        c = Context({'formset': form})
+    else:
+        template = get_template('uni_form/uni_form.html')
+        c = Context({'form': form})
     return template.render(c)
 
 @register.filter
