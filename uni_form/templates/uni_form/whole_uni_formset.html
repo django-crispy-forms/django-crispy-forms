@@ -7,7 +7,7 @@
             {% if form.helper %}
                 {% uni_form form form.helper %}
             {% else %}
-                {% uni_form form %}
+                {{ form|as_uni_form }}
             {% endif %}
         {% endfor %}
     </fieldset>
