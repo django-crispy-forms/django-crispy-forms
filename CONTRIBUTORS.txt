@@ -29,3 +29,5 @@ Skylar Saveland <skyl>
 Stepan Rakhimov
 John Maxwell <astrofinch>
 Richard Marko <sorki>
+Victor Nagy <nagyv>
+Antti Kaihola <akaihola>
