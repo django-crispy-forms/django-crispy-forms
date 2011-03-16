@@ -86,8 +86,14 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
     else:
         # This allows fields to be unicode strings, always they don't use non ASCII
         try:
-            field = str(field)
-        except UnicodeEncodeError:
+            if isinstance(field, unicode):
+                field = str(field)
+            # If `field` is not unicode then we turn it into a unicode string, otherwise doing
+            # str(field) would give no error and the field would not be resolved, causing confusion 
+            else:
+                field = str(unicode(field))
+                
+        except (UnicodeEncodeError, UnicodeDecodeError):
             raise Exception("Field '%s' is using forbidden unicode characters" % field)
 
     try:
