@@ -1,28 +1,13 @@
-from distutils import version
-
-from django import get_version # TODO: remove when pre-CSRF token templatetags are no longer supported
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
-from django.template import Context, Template
+from django.template import Context
 from django.template.loader import get_template
 from django import template
-
-from django.template.defaultfilters import slugify
 
 from uni_form.helpers import FormHelper
 
 register = template.Library()
-
-# csrf token fix hack. 
-# TODO: remove when pre-CSRF token templatetags are no longer supported
-django_version = get_version()
-is_old_django = True
-if version.LooseVersion(django_version) >= version.LooseVersion('1.1.2'):
-    is_old_django = False
-else:
-    from warnings import warn
-    warn("""You are using a version of Django that does not support the new csrf_token templatetag. 
-        It is advised that you upgrade to 1.1.2, 1.2, or another modern version of Django""")
 
 ###################################################
 # Core as_uni_form filter.
@@ -31,6 +16,7 @@ else:
 # This is easy to get working and very simple in
 # concept and execution.
 ###################################################
+
 @register.filter
 def as_uni_form(form):
     if isinstance(form, BaseFormSet):
@@ -75,14 +61,6 @@ def uni_form_setup(context):
 # so all the fancy JS bits are garanteed to degrade gracefully.
 #
 ############################################################################
-
-def namify(text):
-    """ 
-    Some of our values need to be rendered safe as python variable names.
-    So we just replaces hyphens with underscores.
-    """
-    return slugify(text).replace('-','_')
-
 
 class BasicNode(template.Node):
     """ 
@@ -162,14 +140,7 @@ class BasicNode(template.Node):
         form_class = attrs.get("class", '')
         form_id = attrs.get("id", "")
         inputs = attrs.get('inputs', [])
-        toggle_fields = attrs.get('toggle_fields', set(()))
         use_csrf_protection = attrs.get('use_csrf_protection', True)
-
-        final_toggle_fields = []
-        if toggle_fields:
-            for field in actual_form:
-                if field.auto_id in toggle_fields:
-                    final_toggle_fields.append(field)
 
         response_dict = {
             'form_action': form_action,
@@ -179,13 +150,12 @@ class BasicNode(template.Node):
             'form_class': form_class,
             'form_id': form_id,
             'inputs': inputs,
-            'toggle_fields': final_toggle_fields,
         }
 
         # TODO: remove when pre-CSRF token templatetags are no longer supported
-        if not is_old_django: 
-            if use_csrf_protection and context.has_key('csrf_token'):
-                response_dict['csrf_token'] = context['csrf_token']
+        #if not is_old_django: 
+        if use_csrf_protection and context.has_key('csrf_token'):
+            response_dict['csrf_token'] = context['csrf_token']
 
         return response_dict
 
@@ -233,53 +203,3 @@ class UniFormNode(BasicNode):
             template = get_template('uni_form/whole_uni_form.html')
 
         return template.render(c)
-
-
-#################################
-# uni_form scripts
-#################################
-
-@register.tag(name="uni_form_jquery")
-def uni_form_jquery(parser, token):
-    """
-    toggle_field: For making fields designed to be toggled for editing add them
-    by spaces. You must specify by field id (field.auto_id)::
-
-        toggle_fields=<first_field>,<second_field>
-    """
-    token = token.split_contents()
-    form = token.pop(1)
-    
-    try:
-        attrs = token.pop(1)
-    except IndexError:
-        attrs = None
-
-    return UniFormJqueryNode(form,attrs)
-
-
-class UniFormJqueryNode(BasicNode):
-    def render(self,context):
-        c = self.get_render(context)
-        template = get_template('uni_form/uni_form_jquery.html')
-
-        return template.render(c)
-
-
-# TODO: remove when pre-CSRF token templatetags are no longer supported
-if is_old_django:
-    # csrf token fix hack.     
-    # Creates bogus csrf_token so we can continue to support older versions of Django.
-
-    class CsrfTokenNode(template.Node):
-        def render(self, context):
-            return ''
-
-
-    @register.tag(name="csrf_token")
-    def dummy_csrf_token(parser, data):
-        return CsrfTokenNode()
-
-
-
-

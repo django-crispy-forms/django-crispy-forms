@@ -9,8 +9,6 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 
-from uni_form.util import BaseInput, Toggle
-
 class FormHelpersException(Exception):
     """ 
     This is raised when building a form via helpers throws an error.
@@ -18,6 +16,15 @@ class FormHelpersException(Exception):
     debugging templatetags is never fun.
     """
     pass
+
+
+class BaseInput(object):
+    """
+    A base class to reduce the amount of code in the Input classes.
+    """
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
 
 
 class Submit(BaseInput):
@@ -317,7 +324,6 @@ class FormHelper(object):
 
     def __init__(self):
         self.inputs = self.inputs[:]
-        self.toggle = Toggle()
     
     def get_form_method(self):
         return self._form_method
@@ -367,7 +373,5 @@ class FormHelper(object):
             items['class'] = self.form_class.strip()
         if self.inputs:
             items['inputs'] = self.inputs
-        if self.toggle.fields:
-            items['toggle_fields'] = self.toggle.fields
         return items
 
