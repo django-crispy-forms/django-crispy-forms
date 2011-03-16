@@ -198,10 +198,9 @@ class MultiField(object):
             self.css += u' error'
 
         output = u'<div'
-        if self.css_id:
+        if self.div_id:
             output += u' id="%s"' % self.div_id
-        if self.css_class:
-            output += u' class="%s"' % self.div_class
+        output += u' class="%s"' % self.div_class
         output += '>\n'
         output += errors
         output += self.label_html
