@@ -3,6 +3,8 @@ setuptools_git-0.3.4-py2.6.egg
 .installed.cfg
 eggs/*
 bin/*
+build/*
+dist/*
 develop-eggs/*
 parts/*
 downloads/*
