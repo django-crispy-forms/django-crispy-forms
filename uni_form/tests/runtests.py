@@ -15,6 +15,7 @@ def runtests():
     failures = run_tests([
         'uni_form.TestBasicFunctionalityTags',
         'uni_form.TestFormHelpers',
+        'uni_form.TestFormLayout',
         ], verbosity=1, interactive=True)
     sys.exit(failures)
 

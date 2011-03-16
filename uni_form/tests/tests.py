@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -7,7 +8,9 @@ from django.template.loader import render_to_string
 from django.middleware.csrf import _get_new_csrf_key
 from django.test import TestCase
 
-from uni_form.helpers import FormHelper, Submit, Reset, Hidden, Button
+from uni_form.helpers import FormHelper, FormHelpersException, Submit, Reset, Hidden, Button
+from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML
+
 
 class TestForm(forms.Form):
     is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
@@ -49,16 +52,17 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue('uni-form.css' in html)
         self.assertTrue('uni-form.jquery.js' in html)
         
+
 class TestFormHelpers(TestCase):
     def setUp(self):
         pass
     
     def tearDown(self):
         pass    
-    
+
     def test_uni_form_helper_inputs(self):
         form_helper = FormHelper()
-        submit  = Submit('my-submit', 'Submit')
+        submit  = Submit('my-submit', 'Submit', css_class="button white")
         reset   = Reset('my-reset', 'Reset')
         hidden  = Hidden('my-hidden', 'Hidden')
         button  = Button('my-button', 'Button')
@@ -71,13 +75,11 @@ class TestFormHelpers(TestCase):
             {% load uni_form_tags %}
             {% uni_form form form_helper %}
         """)
-        
         c = Context({'form': TestForm(), 'form_helper': form_helper})        
         html = template.render(c)
 
         # NOTE: Not sure why this is commented
-        '''
-        self.assertTrue('class="submit submitButton"' in html)
+        self.assertTrue('class="submit submitButton button white"' in html)
         self.assertTrue('id="submit-id-my-submit"' in html)        
 
         self.assertTrue('class="reset resetButton"' in html)
@@ -87,8 +89,15 @@ class TestFormHelpers(TestCase):
 
         self.assertTrue('class="button"' in html)
         self.assertTrue('id="button-id-my-button"' in html)        
-        '''
-        
+
+    def test_invalid_helper_method(self):
+        form_helper = FormHelper()
+        try:
+            form_helper.form_method = "superPost"
+            self.fail("Setting an invalid form_method within the helper should raise an Exception")
+        except FormHelpersException: 
+            pass
+
     def test_uni_form_with_helper_attributes(self):
         form_helper = FormHelper()    
         form_helper.form_id = 'this-form-rocks'
@@ -168,28 +177,24 @@ class TestFormHelpers(TestCase):
         self.assertTrue('method="get"' in html)
         self.assertTrue('id="this-formset-rocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
-        
 
     def test_csrf_token_POST_form(self):
-        # TODO: remove when pre-CSRF token templatetags are no longer supported
-        is_old_django = getattr(settings, 'OLD_DJANGO', False) 
-        if not is_old_django:
-            form_helper = FormHelper()    
-            template = get_template_from_string(u"""
-                {% load uni_form_tags %}
-                {% uni_form form form_helper %}
-            """)        
+        form_helper = FormHelper()    
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
 
-            # The middleware only initializes the CSRF token when processing a real request
-            # So using RequestContext or csrf(request) here does not work.
-            # Instead I set the key `csrf_token` to a CSRF token manually, which `csrf_token` tag
-            # reads to put a hidden input in > django.template.defaulttags.CsrfTokenNode
-            # This way we don't need to use Django's client, have a test_app and urls
-            # I like self-contained tests :) CSRF could be any number, we don't care
-            c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
-            html = template.render(c)
+        # The middleware only initializes the CSRF token when processing a real request
+        # So using RequestContext or csrf(request) here does not work.
+        # Instead I set the key `csrf_token` to a CSRF token manually, which `csrf_token` tag
+        # reads to put a hidden input in > django.template.defaulttags.CsrfTokenNode
+        # This way we don't need to use Django's client, have a test_app and urls
+        # I like self-contained tests :) CSRF could be any number, we don't care
+        c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+        html = template.render(c)
 
-            self.assertTrue("<input type='hidden' name='csrfmiddlewaretoken'" in html)                
+        self.assertTrue("<input type='hidden' name='csrfmiddlewaretoken'" in html)                
 
     def test_csrf_token_GET_form(self):
         form_helper = FormHelper()    
@@ -203,3 +208,127 @@ class TestFormHelpers(TestCase):
         html = template.render(c)
         
         self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html)                
+
+
+class TestFormLayout(TestCase):
+    def test_layout_invalid_unicode_characters(self):
+        # Adds a BooleanField that uses non valid unicode characters "ñ"
+        form = TestForm()
+        
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                'españa'
+            )
+        )
+        
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        self.assertRaises(Exception, lambda:template.render(c))
+
+    def test_layout_unresolved_field(self):
+        form = TestForm()
+        
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                'typo'
+            )
+        )
+
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        self.assertRaises(Exception, lambda:template.render(c))
+
+    def test_double_rendered_field(self):
+        form = TestForm()
+        
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                'is_company', 'is_company'
+            )
+        )
+
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        self.assertRaises(Exception, lambda:template.render(c))
+
+    def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                Fieldset(
+                    u'Company Data',
+                    u'is_company',
+                    css_id = "fieldset_company_data",
+                    css_class = "fieldsets"
+                ),
+                Fieldset(
+                    u'User Data',
+                    u'email',
+                    Row(
+                        u'password1', 
+                        u'password2',
+                        css_id = "row_passwords",
+                        css_class = "rows"
+                    ),
+                    HTML('<a href="#" id="testLink">test link</a>'),
+                    u'first_name',
+                    u'last_name',
+                )
+            )
+        )
+
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        html = template.render(c)
+
+        self.assertTrue('id="fieldset_company_data"' in html)
+        self.assertTrue('class="fieldsets"' in html)
+        self.assertTrue('id="row_passwords"' in html)
+        self.assertTrue('class="rows"' in html)
+        self.assertTrue('testLink' in html)
+
+    def test_second_layout_multifield_column(self):
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                MultiField(
+                    'is_company',
+                    'email',
+                    'password1', 
+                    'password2',
+                    css_id = "multifield_info",
+                ),
+                Column(
+                    'first_name',
+                    'last_name',
+                    css_id = "column_name",
+                )
+            )
+        )
+
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        html = template.render(c)
+
+        self.assertTrue('multiField' in html)
+        self.assertTrue('formColumn' in html)
+        self.assertTrue('id="multifield_info"' in html)
+        self.assertTrue('id="column_name"' in html)
