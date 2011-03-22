@@ -7,7 +7,9 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.forms.forms import BoundField
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
+from django.conf import settings
 
+FAIL_SILENTLY = getattr(settings,'UNIFORM_FAIL_SILENTLY',True)
 
 from uni_form.util import BaseInput, Toggle
 
@@ -73,7 +75,8 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
     try:
         field_instance = form.fields[field]
     except KeyError:
-        raise Exception("Could not resolve form field '%s'." % field)
+        if not FAIL_SILENTLY:
+            raise Exception("Could not resolve form field '%s'." % field)
     bound_field = BoundField(form, field_instance, field)
     html = render_to_string(template, {'field': bound_field, 'labelclass': labelclass})
     if not hasattr(form, 'rendered_fields'):
@@ -81,7 +84,8 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
     if not field in form.rendered_fields:
         form.rendered_fields.append(field)
     else:
-        raise Exception("A field should only be rendered once: %s" % field)
+        if not FAIL_SILENTLY:
+            raise Exception("A field should only be rendered once: %s" % field)
     return html
 
 class Layout(object):
@@ -155,7 +159,8 @@ class MultiField(object):
             try:
                 field_instance = form.fields[field]
             except KeyError:
-                raise Exception("Could not resolve form field '%s'." % field)
+                if not FAIL_SILENTLY:
+                    raise Exception("Could not resolve form field '%s'." % field)
             bound_field = BoundField(form, field_instance, field)
             auto_id = bound_field.auto_id
             for error in bound_field.errors:
