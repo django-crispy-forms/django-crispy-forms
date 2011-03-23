@@ -77,8 +77,14 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
     except KeyError:
         if not FAIL_SILENTLY:
             raise Exception("Could not resolve form field '%s'." % field)
-    bound_field = BoundField(form, field_instance, field)
-    html = render_to_string(template, {'field': bound_field, 'labelclass': labelclass})
+        else:
+            field_instance = None
+    if field_instance == None and FAIL_SILENTLY:
+        bound_field = None
+        html = ''
+    else:
+        bound_field = BoundField(form, field_instance, field)
+        html = render_to_string(template, {'field': bound_field, 'labelclass': labelclass})
     if not hasattr(form, 'rendered_fields'):
         form.rendered_fields = []
     if not field in form.rendered_fields:
