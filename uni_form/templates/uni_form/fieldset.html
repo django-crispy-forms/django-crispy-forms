@@ -1,4 +1,4 @@
-<fieldset class="{{ fieldset.classes }}">
+<fieldset class="fieldset-{{ forloop.counter }} {{ fieldset.classes }}">
     {% if fieldset.legend %}
         <legend>{{ fieldset.legend }}</legend>
     {% endif %}
@@ -14,4 +14,6 @@
             {% include "uni_form/field.html" %}
         {% endif %}
     {% endfor %}
-{% if not forloop.last %}</fieldset>{% endif %}
+{% if not forloop.last or not fieldset_open %}
+    </fieldset>
+{% endif %}
