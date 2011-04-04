@@ -63,6 +63,11 @@
       .uniForm select,
       .uniForm textarea{ float: left; width: 53%; margin: 0; }
       
+      /* Read-Only output */
+      .uniForm .readOnlyLabel{ margin: 0; font-size: 1em; font-weight: bold; }
+      .uniForm .readOnly{ font-size: .85em; }
+        .uniForm .readOnly .choiceLabel{ color: #777; text-transform: uppercase; font-size: .75em; letter-spacing: .15em; }
+      
       /* Postition the hints */
       .uniForm .formHint{ float: right; width: 43%; margin: 0; clear: none; }
       
@@ -92,7 +97,10 @@
 /* ------------------------------------------------------------------------------ */
 
       .uniForm .inlineLabels label,
-      .uniForm .inlineLabels .label{ float: left; margin: .3em 2% 0 0; padding: 0; line-height: 1; position: relative; width: 32%; }
+      .uniForm .inlineLabels .label,
+      .uniForm .inlineLabels .readOnlyLabel{ float: left; margin: .3em 2% 0 0; padding: 0; line-height: 1; position: relative; width: 32%; }
+      
+      .uniForm .inlineLabels .readOnlyLabel{ margin: 0; }
       
       /* Float the input elements */
       .uniForm .inlineLabels .textInput,
@@ -100,7 +108,7 @@
       .uniForm .inlineLabels .selectInput,
       .uniForm .inlineLabels select,
       .uniForm .inlineLabels textarea{ float: left; width: 64%; }
-
+            
     /* Postition the hints */
     .uniForm .inlineLabels .formHint{ clear: both; float: none; width: auto; margin-left: 34%; position: static; }
     
@@ -113,6 +121,8 @@
           .uniForm .inlineLabels ul li label .textInput,
           .uniForm .inlineLabels ul li label textarea,
           .uniForm .inlineLabels ul li label select{ float: none; display: block; width: 98%;  }
+    
+    .uniForm .inlineLabels .readOnly{ float: right; width: 66%; }
     
     /* Required fields asterisk styling */
     .uniForm .inlineLabels label em,
@@ -144,7 +154,7 @@
       .uniForm .small { width: 30% !important; }
       .uniForm .medium{ width: 45% !important; }
       .uniForm .large {  } /* Large is default and should match the value you set for .textInput, textarea or select */
-      .uniForm .auto  { width: auto !important; }
+      .uniForm .auto  { width: auto !important; height: auto !important; }
       .uniForm .small,
       .uniForm .medium,
       .uniForm .auto{ margin-right: 4px; }
