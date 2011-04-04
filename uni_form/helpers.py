@@ -9,7 +9,6 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
-FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
 class FormHelpersException(Exception):
     """ 
@@ -83,6 +82,8 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
     holds called `rendered_fields` to avoid double rendering fields. Finally a Django 
     form `BoundField` is instantiated, rendered and its html returned.
     """
+    FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
+
     if hasattr(field, 'render'):
         return field.render(form)
     else:
@@ -187,6 +188,8 @@ class MultiField(object):
         self.fields = fields
 
     def render(self, form):
+        FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
+
         fieldoutput = u''
         errors = u''
         helptext = u''

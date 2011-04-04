@@ -150,7 +150,10 @@ class TestFormHelpers(TestCase):
             {% uni_form form form_helper %}
         """)
         c = Context({'form': TestForm(), 'form_helper': "invalid"})
+
+        settings.UNIFORM_FAIL_SILENTLY = False
         self.assertRaises(TypeError, lambda:template.render(c))
+        del settings.UNIFORM_FAIL_SILENTLY
 
     def test_uni_form_formset(self):
         template = get_template_from_string(u"""
@@ -227,7 +230,9 @@ class TestFormLayout(TestCase):
             {% uni_form form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
+        settings.UNIFORM_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
+        del settings.UNIFORM_FAIL_SILENTLY
 
     def test_layout_unresolved_field(self):
         form = TestForm()
@@ -244,7 +249,9 @@ class TestFormLayout(TestCase):
             {% uni_form form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
+        settings.UNIFORM_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
+        del settings.UNIFORM_FAIL_SILENTLY
 
     def test_double_rendered_field(self):
         form = TestForm()
@@ -261,7 +268,9 @@ class TestFormLayout(TestCase):
             {% uni_form form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
+        settings.UNIFORM_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
+        del settings.UNIFORM_FAIL_SILENTLY
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
         form_helper = FormHelper()
