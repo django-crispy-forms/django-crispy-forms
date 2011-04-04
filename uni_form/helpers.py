@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
-FAIL_SILENTLY = getattr(settings,'UNIFORM_FAIL_SILENTLY',True)
+FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
 class FormHelpersException(Exception):
     """ 
@@ -114,8 +114,7 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
         if not FAIL_SILENTLY:
             raise Exception("A field should only be rendered once: %s" % field)
 
-    if field_instance == None and FAIL_SILENTLY:
-        bound_field = None
+    if field_instance is None:
         html = ''
     else:
         bound_field = BoundField(form, field_instance, field)
@@ -199,6 +198,9 @@ class MultiField(object):
             except KeyError:
                 if not FAIL_SILENTLY:
                     raise Exception("Could not resolve form field '%s'." % field)
+                else:
+                    continue
+
             bound_field = BoundField(form, field_instance, field)
             auto_id = bound_field.auto_id
             for error in bound_field.errors:
