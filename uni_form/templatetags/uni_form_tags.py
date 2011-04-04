@@ -142,7 +142,6 @@ class BasicNode(template.Node):
         form_class = attrs.get("class", '')
         form_id = attrs.get("id", "")
         inputs = attrs.get('inputs', [])
-        use_csrf_protection = attrs.get('use_csrf_protection', True)
 
         response_dict = {
             'form_action': form_action,
@@ -153,11 +152,6 @@ class BasicNode(template.Node):
             'form_id': form_id,
             'inputs': inputs,
         }
-
-        # TODO: remove when pre-CSRF token templatetags are no longer supported
-        #if not is_old_django: 
-        if use_csrf_protection and context.has_key('csrf_token'):
-            response_dict['csrf_token'] = context['csrf_token']
 
         return response_dict
 

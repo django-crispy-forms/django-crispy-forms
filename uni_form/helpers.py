@@ -314,13 +314,6 @@ class FormHelper(object):
         
         form_tag: Defaults to True. If set to False it renders the form without the form tags.
         
-        use_csrf_protection: Defaults to True. If set to True a CSRF protection token is
-            rendered in the form. This should only be set as False for forms targeting
-            external sites or internal sites without CSRF protection (as described in the
-            Django documentation).
-            Requires the presence of a csrf token in the current context with the identifier
-            "csrf_token" (which is automatically added to your context when using RequestContext).
-
     
     Demonstration:
         
@@ -350,7 +343,6 @@ class FormHelper(object):
     inputs = []
     layout = None
     form_tag = True
-    use_csrf_protection = True
 
     def __init__(self):
         self.inputs = self.inputs[:]
@@ -393,7 +385,6 @@ class FormHelper(object):
         items = {}
         items['form_method'] = self.form_method.strip()
         items['form_tag'] = self.form_tag
-        items['use_csrf_protection'] = self.use_csrf_protection
         
         if self.form_action:
             items['form_action'] = self.form_action.strip()
