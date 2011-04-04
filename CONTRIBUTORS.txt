@@ -31,3 +31,7 @@ John Maxwell <astrofinch>
 Richard Marko <sorki>
 Victor Nagy <nagyv>
 Antti Kaihola <akaihola>
+J. Javier Maestro <jjmaestro>
+Issac Kelly <issackelly>
+John Debs <johnthedebs>
+Adam Cupiał <adamcupial>
