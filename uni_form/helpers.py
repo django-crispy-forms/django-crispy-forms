@@ -106,6 +106,7 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
             raise Exception("Could not resolve form field '%s'." % field)
         else:
             field_instance = None
+            logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
             
     if not hasattr(form, 'rendered_fields'):
         form.rendered_fields = []
@@ -114,6 +115,8 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
     else:
         if not FAIL_SILENTLY:
             raise Exception("A field should only be rendered once: %s" % field)
+        else:
+            logging.warning("A field should only be rendered once: %s" % field, exc_info=sys.exc_info())
 
     if field_instance is None:
         html = ''
@@ -202,6 +205,7 @@ class MultiField(object):
                 if not FAIL_SILENTLY:
                     raise Exception("Could not resolve form field '%s'." % field)
                 else:
+                    logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
                     continue
 
             bound_field = BoundField(form, field_instance, field)
