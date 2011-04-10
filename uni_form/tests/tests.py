@@ -341,3 +341,38 @@ class TestFormLayout(TestCase):
         self.assertTrue('formColumn' in html)
         self.assertTrue('id="multifield_info"' in html)
         self.assertTrue('id="column_name"' in html)
+
+    def test_change_layout_dynamically_delete_field(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+        
+        form = TestForm()
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                Fieldset(
+                    u'Company Data',
+                    'is_company',
+                    'email',
+                    'password1', 
+                    'password2',
+                    css_id = "multifield_info",
+                ),
+                Column(
+                    'first_name',
+                    'last_name',
+                    css_id = "column_name",
+                )
+            )
+        )
+
+        # We remove email field on the go
+        # Layout needs to be adapted for the new form fields
+        del form.fields['email']
+        del form_helper.layout.fields[0].fields[1]
+
+        c = Context({'form': form, 'form_helper': form_helper})
+        html = template.render(c)
+        self.assertFalse('email' in html)
