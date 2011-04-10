@@ -6,11 +6,12 @@
 import logging
 import sys
 
+from django.conf import settings
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.forms.forms import BoundField
+from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
-from django.conf import settings
 
 
 class FormHelpersException(Exception):
@@ -288,8 +289,7 @@ class HTML(object):
         self.html = unicode(html)
     
     def render(self, form):
-        return self.html
-
+        return Template(self.html).render(Context({'form': form}))
 
 class FormHelper(object):
     """
