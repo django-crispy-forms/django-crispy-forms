@@ -275,7 +275,7 @@ class TestFormLayout(TestCase):
         html = template.render(c)
 
         self.assertTrue('id="fieldset_company_data"' in html)
-        self.assertTrue('class="fieldsets"' in html)
+        self.assertTrue('class="fieldsets' in html)
         self.assertTrue('id="row_passwords"' in html)
         self.assertTrue('class="rows"' in html)
         self.assertTrue('testLink' in html)

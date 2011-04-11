@@ -112,7 +112,7 @@ class BasicNode(template.Node):
 
         # If we have a form and a layout we use it
         if helper and helper.layout and not is_formset:
-            form_html = helper.render_layout(actual_form)
+            form_html = helper.render_layout(actual_form, attrs['form_style'])
         else:
             form_html = ""
 

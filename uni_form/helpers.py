@@ -79,7 +79,7 @@ class Reset(BaseInput):
     field_classes = 'reset resetButton'
 
 
-def render_field(field, form, template="uni_form/field.html", labelclass=None):
+def render_field(field, form, form_style='', template="uni_form/field.html", labelclass=None):
     """
     Renders a field, if the field is a django-uni-form object like a `Row` or a 
     `Fieldset`, calls its render method. The field is added to a list that the form 
@@ -89,7 +89,10 @@ def render_field(field, form, template="uni_form/field.html", labelclass=None):
     FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
     if hasattr(field, 'render'):
-        return field.render(form)
+        if isinstance(field, Fieldset):
+            return field.render(form, form_style)
+        else:
+            return field.render(form)
     else:
         # This allows fields to be unicode strings, always they don't use non ASCII
         try:
@@ -149,13 +152,13 @@ class Layout(object):
     def __init__(self, *fields):
         self.fields = list(fields)
     
-    def render(self, form):
+    def render(self, form, form_style):
         html = ""
         for field in self.fields:
-            html += render_field(field, form)
+            html += render_field(field, form, form_style)
         for field in form.fields.keys():
             if not field in form.rendered_fields:
-                html += render_field(field, form)
+                html += render_field(field, form, form_style)
         return html
 
 
@@ -168,12 +171,14 @@ class Fieldset(object):
         self.legend = legend
         self.fields = list(fields)
     
-    def render(self, form):
+    def render(self, form, form_style):
         html = u'<fieldset'
         if self.css_id:
             html += u' id="%s"' % self.css_id
         if self.css_class:
-            html += u' class="%s"' % self.css_class
+            html += u' class="%s %s"' % (self.css_class, form_style)
+        else:
+            html += u' class="%s"' % form_style
         html += '>'
 
         html += self.legend and (u'<legend>%s</legend>' % self.legend) or ''
@@ -202,7 +207,7 @@ class MultiField(object):
         helptext = u''
         count = 0
         for field in self.fields:
-            fieldoutput += render_field(field, form, 'uni_form/multifield.html', self.label_class)
+            fieldoutput += render_field(field, form, '', 'uni_form/multifield.html', self.label_class)
             try:
                 field_instance = form.fields[field]
             except KeyError:
@@ -322,7 +327,7 @@ class FormHelper(object):
             >>> from uni_form.helpers import FormHelper, Submit, Reset
             >>> from django.utils.translation import ugettext_lazy as _
             >>> class MyForm(forms.Form):
-            ...     title = forms.CharField(label=_("Title"), max_length=30, widget=forms.TextInput())
+            ...     title = forms.CharField(label=_('Title'), max_length=30, widget=forms.TextInput())
             ...     # this displays how to attach a formHelper to your forms class.
             ...     helper = FormHelper()
             ...     helper.form_id = 'this-form-rocks'
@@ -338,6 +343,7 @@ class FormHelper(object):
     """
     _form_method = 'post'
     _form_action = ''
+    _form_style = 'default'
     form_id = ''
     form_class = ''
     inputs = []
@@ -351,7 +357,7 @@ class FormHelper(object):
         return self._form_method
     
     def set_form_method(self, method):
-        if method.lower() not in ('get','post'):
+        if method.lower() not in ('get', 'post'):
             raise FormHelpersException('Only GET and POST are valid in the \
                     form_method helper attribute')
         
@@ -371,20 +377,37 @@ class FormHelper(object):
     
     # we set properties the old way because we want to support pre-2.6 python
     form_action = property(get_form_action, set_form_action)
+
+    def get_form_style(self):
+        if self._form_style == "default":
+            return ''
+
+        if self._form_style == "inline":
+            return 'inlineLabels'
     
+    def set_form_style(self, style):
+        if style.lower() not in ('default', 'inline'):
+            raise FormHelpersException('Only default and inline are valid in the \
+                    form_style helper attribute')
+        
+        self._form_style = style.lower()
+    
+    form_style = property(get_form_style, set_form_style)
+   
     def add_input(self, input_object):
         self.inputs.append(input_object)
     
     def add_layout(self, layout):
         self.layout = layout
     
-    def render_layout(self, form):
-        return mark_safe(self.layout.render(form))
+    def render_layout(self, form, form_style):
+        return mark_safe(self.layout.render(form, form_style))
     
     def get_attr(self):
         items = {}
         items['form_method'] = self.form_method.strip()
         items['form_tag'] = self.form_tag
+        items['form_style'] = self.form_style.strip()
         
         if self.form_action:
             items['form_action'] = self.form_action.strip()
