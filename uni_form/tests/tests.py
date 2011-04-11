@@ -181,37 +181,6 @@ class TestFormHelpers(TestCase):
         self.assertTrue('id="this-formset-rocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
 
-    def test_csrf_token_POST_form(self):
-        form_helper = FormHelper()    
-        template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
-        """)        
-
-        # The middleware only initializes the CSRF token when processing a real request
-        # So using RequestContext or csrf(request) here does not work.
-        # Instead I set the key `csrf_token` to a CSRF token manually, which `csrf_token` tag
-        # reads to put a hidden input in > django.template.defaulttags.CsrfTokenNode
-        # This way we don't need to use Django's client, have a test_app and urls
-        # I like self-contained tests :) CSRF could be any number, we don't care
-        c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
-        html = template.render(c)
-
-        self.assertTrue("<input type='hidden' name='csrfmiddlewaretoken'" in html)                
-
-    def test_csrf_token_GET_form(self):
-        form_helper = FormHelper()    
-        form_helper.form_method = 'GET'
-        template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
-        """)        
-
-        c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
-        html = template.render(c)
-        
-        self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html)                
-
 
 class TestFormLayout(TestCase):
     def test_layout_invalid_unicode_characters(self):
