@@ -153,6 +153,9 @@ class BasicNode(template.Node):
             'inputs': inputs,
         }
 
+        if context.has_key('csrf_token'):
+            response_dict['csrf_token'] = context['csrf_token']
+
         return response_dict
 
 ##################################################################
