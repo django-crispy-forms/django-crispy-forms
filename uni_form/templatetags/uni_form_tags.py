@@ -49,8 +49,8 @@ def uni_form_setup(context):
     Create a local uni-form/includes.html template if you want to customize how
     these files are loaded.
     """
-    if 'MEDIA_URL' not in context:
-        context['MEDIA_URL'] = settings.MEDIA_URL
+    if 'STATIC_URL' not in context:
+        context['STATIC_URL'] = settings.MEDIA_URL
     return (context)
 
 ############################################################################
