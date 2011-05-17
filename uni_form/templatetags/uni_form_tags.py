@@ -107,14 +107,16 @@ class BasicNode(template.Node):
             helper = None
 
         # We get the response dictionary 
-        response_dict = self.get_response_dict(attrs, context)
         is_formset = isinstance(actual_form, BaseFormSet)
+        response_dict = self.get_response_dict(attrs, context, is_formset)
 
-        # If we have a form and a layout we use it
+        # If we have a helper's layout we use it
+        form_html = ""
         if helper and helper.layout and not is_formset:
             form_html = helper.render_layout(actual_form, attrs['form_style'])
-        else:
-            form_html = ""
+        elif helper and helper.layout and is_formset:
+            for form in actual_form.forms:
+                form.form_html = helper.render_layout(form, attrs['form_style'])
 
         if is_formset:
             response_dict.update({'formset': actual_form})
@@ -128,29 +130,25 @@ class BasicNode(template.Node):
 
         return Context(response_dict)
 
-    def get_response_dict(self, attrs, context):
+    def get_response_dict(self, attrs, context, is_formset):
         """
         Returns a dictionary with all the parameters necessary to render the form in a template.
         
         :param attrs: Dictionary with the customized attributes of the form extracted from the helper
         :param context: `django.template.Context` for the node
         """
-        # We take form parameters from attrs if they are set, otherwise we use defaults
-        form_tag = attrs.get("form_tag", True)
-        form_method = attrs.get("form_method", 'post')
-        form_action = attrs.get("form_action", '.')
-        form_class = attrs.get("class", '')
-        form_id = attrs.get("id", "")
-        inputs = attrs.get('inputs', [])
+        form_type = "form"
+        if is_formset:
+            form_type = "formset"
 
+        # We take form/formset parameters from attrs if they are set, otherwise we use defaults
         response_dict = {
-            'form_action': form_action,
-            'form_method': form_method,
-            'form_tag': form_tag,
-            'attrs': attrs,
-            'form_class': form_class,
-            'form_id': form_id,
-            'inputs': inputs,
+            '%s_action' % form_type: attrs.get("form_action", '.'),
+            '%s_method' % form_type: attrs.get("form_method", 'post'),
+            '%s_tag' % form_type: attrs.get("form_tag", True),
+            '%s_class' % form_type: attrs.get("class", ''),
+            '%s_id' % form_type: attrs.get("id", ""),
+            'inputs': attrs.get('inputs', []),
         }
 
         if context.has_key('csrf_token'):

@@ -1,16 +1,42 @@
 {% load uni_form_tags i18n %}
 
-<form action="{{ form_action }}" class="uniForm {{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id|slugify }}"{% endif %}{% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
-    <fieldset class="inlineLabels">
-        <legend>* {% trans "Required fields" %}</legend>
-        {% for form in formset.forms %}
-            {% if form.helper %}
-                {% uni_form form form.helper %}
-            {% else %}
-                {{ form|as_uni_form }}
+{% if formset_tag %}
+<form action="{{ formset_action }}" class="uniForm {{ formset_class }}" method="{{ formset_method }}" {% if formset_id %}id="{{ formset_id }}"{% endif %}{% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
+{% endif %}
+    {% if formset_method|lower == 'post' %}
+        {% csrf_token %}
+    {% endif %}
+
+    <div>
+        {{ formset.management_form|as_uni_form }}
+    </div>
+
+    {% if formset.non_form_errors %}
+        <div id="errorMsg">
+            {% if formset_error_title %}<h3>{{ formset_error_title }}</h3>{% endif %}
+            <ol>
+                {{ formset.non_form_errors|unordered_list }}
+            </ol>
+        </div>
+    {% endif %}
+
+    {% for form in formset.forms %}
+        {% if form.form_html %}
+            {% if form.non_field_errors %}
+                <div id="errorMsg">
+                    {% if form_error_title %}<h3>{{ form_error_title }}</h3>{% endif %}
+                    <ol>
+                        {{ form.non_field_errors|unordered_list }}
+                    </ol>
+                </div>
             {% endif %}
-        {% endfor %}
-    </fieldset>
+
+           {{ form.form_html }}
+        {% else %}
+            {{ form|as_uni_form }}
+        {% endif %}
+    {% endfor %}
+    
     {% if inputs %}
         <div class="buttonHolder">
             {% for input in inputs %}
@@ -25,4 +51,4 @@
             {% endfor %}
         </div>
     {% endif %}
-</form>
+{% if formset_tag %}</form>{% endif %}

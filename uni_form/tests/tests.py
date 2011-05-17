@@ -162,23 +162,24 @@ class TestFormHelpers(TestCase):
         """)
         
         form_helper = FormHelper()    
-        form_helper.form_id = 'this-formset-rocks'
+        form_helper.form_id = 'thisFormsetRocks'
         form_helper.form_class = 'formsets-that-rock'
-        form_helper.form_method = 'GET'
+        form_helper.form_method = 'POST'
         form_helper.form_action = 'simpleAction'
                 
         from django.forms.models import formset_factory
         TestFormSet = formset_factory(TestForm, extra = 3)
         testFormSet = TestFormSet()
         
-        c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper})
+        c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
         html = template.render(c)        
 
-        self.assertTrue('<form' in html)
         self.assertEqual(html.count('<form'), 1)
+        self.assertEqual(html.count("<input type='hidden' name='csrfmiddlewaretoken'"), 1)
+
         self.assertTrue('class="uniForm formsets-that-rock"' in html)
-        self.assertTrue('method="get"' in html)
-        self.assertTrue('id="this-formset-rocks">' in html)
+        self.assertTrue('method="post"' in html)
+        self.assertTrue('id="thisFormsetRocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
 
 
