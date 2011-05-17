@@ -20,6 +20,14 @@ class TestForm(forms.Form):
     first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())
     last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())
 
+    def clean(self):
+        super(TestForm, self).clean()
+        password1 = self.cleaned_data.get('password1', None)
+        password2 = self.cleaned_data.get('password2', None)
+        if not password1 and not password2 or password1 != password2:
+            raise forms.ValidationError("Passwords dont match")
+
+        return self.cleaned_data
 
 class TestBasicFunctionalityTags(TestCase):
     def setUp(self):
@@ -27,7 +35,32 @@ class TestBasicFunctionalityTags(TestCase):
     
     def tearDown(self):
         pass
-    
+
+    def test_as_uni_errors_form_without_non_field_errors(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {{ form|as_uni_errors }}
+        """)
+        form = TestForm({'password1': "god", 'password2': "god"})
+        form.is_valid()
+
+        c = Context({'form': form})
+        html = template.render(c)
+        self.assertFalse("errorMsg" in html)
+
+    def test_as_uni_errors_form_with_non_field_errors(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {{ form|as_uni_errors }}
+        """)
+        form = TestForm({'password1': "god", 'password2': "wargame"})
+        form.is_valid()
+
+        c = Context({'form': form})
+        html = template.render(c)
+        self.assertTrue("errorMsg" in html)
+        self.assertTrue("<li>Passwords dont match</li>" in html)
+
     def test_as_uni_form(self):
         template = get_template_from_string(u"""
             {% load uni_form_tags %}
