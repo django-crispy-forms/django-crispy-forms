@@ -31,8 +31,12 @@ def as_uni_form(form, arg=None):
 
 @register.filter
 def as_uni_errors(form):
-    template = get_template('uni_form/errors.html')
-    c = Context({'form':form})
+    if isinstance(form, BaseFormSet):
+        template = get_template('uni_form/errors_formset.html')
+        c = Context({'formset': form})
+    else:
+        template = get_template('uni_form/errors.html')
+        c = Context({'form':form})
     return template.render(c)
 
 @register.filter
