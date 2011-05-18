@@ -152,6 +152,8 @@ class BasicNode(template.Node):
             '%s_tag' % form_type: attrs.get("form_tag", True),
             '%s_class' % form_type: attrs.get("class", ''),
             '%s_id' % form_type: attrs.get("id", ""),
+            'form_error_title': attrs.get("form_error_title", None),
+            'formset_error_title': attrs.get("formset_error_title", None),
             'inputs': attrs.get('inputs', []),
         }
 
@@ -197,7 +199,7 @@ def do_uni_form(parser, token):
 class UniFormNode(BasicNode):
     def render(self, context):
         c = self.get_render(context)
-        
+
         if c['is_formset']:
             template = get_template('uni_form/whole_uni_formset.html')
         else:
