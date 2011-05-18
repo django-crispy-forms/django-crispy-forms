@@ -1,29 +1,16 @@
 {% load uni_form_tags i18n %}
 
-
 {% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {% endif %}{{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
     {% if form_method|lower == 'post' %}
         {% csrf_token %}
     {% endif %}
 
-    {% if form.non_field_errors %}
-        <div id="errorMsg">
-            <h3>{% if error_message_title %}{{ error_message_title }}{% else %}{% trans Errors %}{% endif %}</h3>
-            <ol>
-                {{ form.non_field_errors|unordered_list }}
-            </ol>
-        </div>
-    {% endif %}
+    {{ form|as_uni_errors }}
 
     {% if form_html %}
         {{ form_html }}
     {% else %}
-        <fieldset class="inlineLabels">
-        <legend>* {% trans "Required fields" %}</legend>
-            {% for field in form %}
-                {% include "uni_form/field.html" %}
-            {% endfor %}
-        </fieldset>
+        {{ form|as_uni_form }}
     {% endif %}
 
     {% if inputs %}
