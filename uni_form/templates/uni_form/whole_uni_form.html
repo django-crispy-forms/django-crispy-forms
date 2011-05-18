@@ -1,22 +1,19 @@
-{% load uni_form_tags i18n %}
-
-{% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {% endif %}{{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+{% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {{ form_class }}{% endif %}" method="{{ form_method }}"{% if form_id %} id="{{ form_id }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
     {% if form_method|lower == 'post' %}
         {% csrf_token %}
     {% endif %}
 
-    {{ form|as_uni_errors }}
-
     {% if form_html %}
+        {% include "uni_form/errors.html" %}
         {{ form_html }}
     {% else %}
-        {{ form|as_uni_form }}
+        {% include "uni_form/uni_form.html" %}
     {% endif %}
 
     {% if inputs %}
         <div class="buttonHolder">
             {% for input in inputs %}
-                <input type="{{ input.input_type }}"
+                 <input type="{{ input.input_type }}"
                         name="{{ input.name|slugify }}"
                         value="{{ input.value }}"
                         {% ifnotequal input.input_type "hidden" %}
