@@ -349,6 +349,8 @@ class FormHelper(object):
     inputs = []
     layout = None
     form_tag = True
+    form_error_title = None
+    formset_error_title = None
 
     def __init__(self):
         self.inputs = self.inputs[:]
@@ -417,5 +419,9 @@ class FormHelper(object):
             items['class'] = self.form_class.strip()
         if self.inputs:
             items['inputs'] = self.inputs
+        if self.form_error_title:
+            items['form_error_title'] = self.form_error_title.strip()
+        if self.formset_error_title:
+            items['formset_error_title'] = self.formset_error_title.strip()
         return items
 
