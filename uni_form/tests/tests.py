@@ -60,6 +60,7 @@ class TestBasicFunctionalityTags(TestCase):
         html = template.render(c)
         self.assertTrue("errorMsg" in html)
         self.assertTrue("<li>Passwords dont match</li>" in html)
+        self.assertFalse("<h3>" in html)
 
     def test_as_uni_form(self):
         template = get_template_from_string(u"""
@@ -131,21 +132,24 @@ class TestFormHelpers(TestCase):
         except FormHelpersException: 
             pass
 
-    def test_uni_form_with_helper_attributes(self):
+    def test_uni_form_with_helper_attributes_without_layout(self):
         form_helper = FormHelper()    
         form_helper.form_id = 'this-form-rocks'
         form_helper.form_class = 'forms-that-rock'
         form_helper.form_method = 'GET'
         form_helper.form_action = 'simpleAction'
+        form_helper.form_error_title = 'ERRORS'
     
         template = get_template_from_string(u"""
             {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% uni_form testForm form_helper %}
         """)        
 
-        # now we render it
-        c = Context({'form': TestForm(), 'form_helper': form_helper})            
-        html = template.render(c)        
+        # now we render it, with errors
+        form = TestForm({'password1': 'wargame','password2': 'god'})
+        form.is_valid()
+        c = Context({'testForm': form, 'form_helper': form_helper})            
+        html = template.render(c)
         
         # Lets make sure everything loads right
         self.assertTrue('<form' in html)
@@ -153,7 +157,10 @@ class TestFormHelpers(TestCase):
         self.assertTrue('method="get"' in html)
         self.assertTrue('id="this-form-rocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
-        
+
+        self.assertTrue("<h3>ERRORS</h3>" in html)
+        self.assertTrue("<li>Passwords dont match</li>" in html)
+
         # now lets remove the form tag and render it again. All the True items above
         # should now be false because the form tag is removed.
         form_helper.form_tag = False 
