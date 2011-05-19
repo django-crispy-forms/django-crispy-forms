@@ -75,10 +75,6 @@ class BasicNode(template.Node):
         else:
             response_dict.update({'form': actual_form})
 
-        response_dict.update({
-            'is_formset': is_formset,
-        })
-
         return Context(response_dict)
 
     def get_response_dict(self, attrs, context, is_formset):
@@ -102,6 +98,7 @@ class BasicNode(template.Node):
             'form_error_title': attrs.get("form_error_title", None),
             'formset_error_title': attrs.get("formset_error_title", None),
             'inputs': attrs.get('inputs', []),
+            'is_formset': is_formset,
         }
 
         if context.has_key('csrf_token'):
