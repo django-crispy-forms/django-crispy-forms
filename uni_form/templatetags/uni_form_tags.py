@@ -38,19 +38,14 @@ class BasicNode(template.Node):
 
     def get_render(self, context):
         """ 
-        Renders the Node.
-        :param context: `django.template.Context` variable holding the context for the node
+        Returns a `Context` object with all the necesarry stuff for rendering the form
 
-        Returns a `Context` object with all the necessary stuff to render the form.
+        :param context: `django.template.Context` variable holding the context for the node
 
         `self.form` and `self.helper` are resolved into real Python objects resolving them
         from the `context`. 
-        The form can be a form or a formset:
-            * If it's a form. If it's got a helper with a layout we use it, otherwise 
-            `form_html` is not set and the template used for rendering the form will have 
-            to use a default behavior. The form is stored in key `form`.
-            * If it's a formset `is_formset` is set to True. The formset is stored in key
-            `formset`.
+        The `actual_form` can be a form or a formset. If it's a formset `is_formset` is set to True.
+        If the helper has a layout we use it, for rendering the form or the formset's forms.
         """
         actual_form = self.form.resolve(context)
         attrs = {}
