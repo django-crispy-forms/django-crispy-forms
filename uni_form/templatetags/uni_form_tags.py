@@ -62,13 +62,13 @@ class BasicNode(template.Node):
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(attrs, context, is_formset)
 
-        # If we have a helper's layout we use it
-        form_html = ""
-        if helper and helper.layout and not is_formset:
-            form_html = helper.render_layout(actual_form, attrs['form_style'])
-        elif helper and helper.layout and is_formset:
-            for form in actual_form.forms:
-                form.form_html = helper.render_layout(form, attrs['form_style'])
+        # If we have a helper's layout we use it, for the form or the formset's form
+        if helper and helper.layout:
+            if not is_formset:
+                actual_form.form_html = helper.render_layout(actual_form, attrs['form_style'])
+            else:
+                for form in actual_form.forms:
+                    form.form_html = helper.render_layout(form, attrs['form_style'])
 
         if is_formset:
             response_dict.update({'formset': actual_form})
@@ -77,7 +77,6 @@ class BasicNode(template.Node):
 
         response_dict.update({
             'is_formset': is_formset,
-            'form_html': form_html,
         })
 
         return Context(response_dict)

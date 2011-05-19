@@ -3,9 +3,9 @@
         {% csrf_token %}
     {% endif %}
 
-    {% if form_html %}
+    {% if form.form_html %}
         {% include "uni_form/errors.html" %}
-        {{ form_html }}
+        {{ form.form_html }}
     {% else %}
         {% include "uni_form/uni_form.html" %}
     {% endif %}
