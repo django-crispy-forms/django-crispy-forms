@@ -405,7 +405,7 @@ class FormHelper(object):
     def render_layout(self, form, form_style):
         return mark_safe(self.layout.render(form, form_style))
     
-    def get_attr(self):
+    def get_attributes(self):
         items = {}
         items['form_method'] = self.form_method.strip()
         items['form_tag'] = self.form_tag

@@ -54,7 +54,7 @@ class BasicNode(template.Node):
 
             if not isinstance(helper, FormHelper):
                 raise TypeError('helper object provided to uni_form tag must be a uni_form.helpers.FormHelper object.')
-            attrs = helper.get_attr()
+            attrs = helper.get_attributes()
         else:
             helper = None
 
