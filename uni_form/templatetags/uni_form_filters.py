@@ -47,5 +47,5 @@ def uni_form_setup(context):
     these files are loaded.
     """
     if 'STATIC_URL' not in context:
-        context['STATIC_URL'] = settings.MEDIA_URL
+        context['STATIC_URL'] = settings.STATIC_URL
     return (context)
