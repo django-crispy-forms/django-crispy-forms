@@ -89,9 +89,9 @@ class BasicNode(template.Node):
 
     def get_response_dict(self, attrs, context, is_formset):
         """
-        Returns a dictionary with all the parameters necessary to render the form in a template.
+        Returns a dictionary with all the parameters necessary to render the form/formset in a template.
         
-        :param attrs: Dictionary with the customized attributes of the form extracted from the helper
+        :param attrs: Dictionary with the helper's attributes used for rendering the form/formset
         :param context: `django.template.Context` for the node
         """
         form_type = "form"
@@ -115,13 +115,20 @@ class BasicNode(template.Node):
 
         return response_dict
 
-##################################################################
-#
-# Actual tags start here
-#
-##################################################################
+
+class UniFormNode(BasicNode):
+    def render(self, context):
+        c = self.get_render(context)
+
+        if c['is_formset']:
+            template = get_template('uni_form/whole_uni_formset.html')
+        else:
+            template = get_template('uni_form/whole_uni_form.html')
+
+        return template.render(c)
 
 
+# {% uni_form %} tag
 @register.tag(name="uni_form")
 def do_uni_form(parser, token):
     """
@@ -147,15 +154,3 @@ def do_uni_form(parser, token):
         helper = None
 
     return UniFormNode(form, helper)
-
-
-class UniFormNode(BasicNode):
-    def render(self, context):
-        c = self.get_render(context)
-
-        if c['is_formset']:
-            template = get_template('uni_form/whole_uni_formset.html')
-        else:
-            template = get_template('uni_form/whole_uni_form.html')
-
-        return template.render(c)
