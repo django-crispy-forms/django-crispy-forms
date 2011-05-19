@@ -11,15 +11,13 @@ register = template.Library()
 
 
 @register.filter
-def as_uni_form(form, arg=None):
+def as_uni_form(form):
     if isinstance(form, BaseFormSet):
         template = get_template('uni_form/uni_formset.html')
         c = Context({'formset': form})
     else:
         template = get_template('uni_form/uni_form.html')
         c = Context({'form': form})
-    if arg == "fieldset-open":
-        c['fieldset_open'] = True
     return template.render(c)
 
 @register.filter
