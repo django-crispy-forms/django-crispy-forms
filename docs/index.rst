@@ -36,7 +36,6 @@ Contents:
 
    install
    usage
-   helpers
    customization
    uni_form_tags
    reference
