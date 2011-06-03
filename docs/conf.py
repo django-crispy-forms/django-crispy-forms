@@ -17,20 +17,26 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.append(os.path.abspath('../'))
-sys.path.append(os.path.abspath('../'))
-sys.path.append(os.path.abspath('../test_project/'))
+sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../uni_form/'))
+sys.path.insert(0, os.path.abspath('../test_project'))
+
+import settings
+from django.core.management import setup_environ
+setup_environ(settings)
+
 
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.txt'
+source_suffix = '.rst'
 
 # The encoding of source files.
 #source_encoding = 'utf-8'
@@ -40,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'django-uni-form'
-copyright = u'209-2010, Daniel Greenfeld'
+copyright = u'2009-2011, Daniel Greenfeld'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

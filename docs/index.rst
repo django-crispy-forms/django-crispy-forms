@@ -39,6 +39,7 @@ Contents:
    helpers
    customization
    uni_form_tags
+   reference
 
 Indices and tables
 ==================
