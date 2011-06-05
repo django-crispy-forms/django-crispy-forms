@@ -23,3 +23,6 @@ suite of functionality for developers to use. Therefore, all submissions must
 come with either unit tests or browser views of functionality as is 
 demonstrated in the test projects. Inclusion of both will increase the likely
 hood of your pull request being accepted
+
+.. _`Uni-form`: http://sprawsm.com/uni-form
+.. _Django: http://djangoproject.com
