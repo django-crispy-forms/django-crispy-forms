@@ -5,7 +5,7 @@ Usage
 How to use django-uni-form
 
 
-Using the django-uni-form filter (Easy and fun!)
+Using the filter (Easy and fun!)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. Add ``{% load uni_form_filters %}`` to the template that calls your form.
 2. Append your form call with the as_uni_form filter::
@@ -18,7 +18,7 @@ Using the django-uni-form filter (Easy and fun!)
 
 4. Refresh and enjoy!
 
-Using the django-uni-form templatetag in your view (Intermediate)
+Using the templatetag in your view (Intermediate)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your views.py add the following after field definitions::
 
@@ -57,7 +57,7 @@ Using the django-uni-form templatetag in your view (Intermediate)
     {% uni_form form helper %}
 
     
-Using the django-uni-form templatetag to change action/method (Intermediate)
+Using the templatetag to change action/method (Intermediate)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your view class add the following::
 
@@ -154,6 +154,3 @@ Then, just like in the previous example, add the following to your template::
            
 
 This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
-
-.. _Django: http://djangoproject.com
-.. _`Uni-form`: http://sprawsm.com/uni-form
