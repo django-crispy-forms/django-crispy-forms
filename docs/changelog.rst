@@ -36,6 +36,11 @@ Removed {% uni_form_jquery %} tag
 
 This was always somewhat problematic to get working. Static media should not be obfuscated via code and while this tag seemed helpful in practice it caused more headaches then what it was worth. 
 
+Elevated Miguel Araujo to project lead
+--------------------------------------
+
+This project has needed a much more active project lead for some time. Miguel Araujo shares my passion for good form generation and has a very deep understanding of python, django, and HTML. Also, his decisions on everything about this project either matches my own thoughts or he's been able to easily convince me why his concepts are sound.
+
 Miscellaneous
 --------------
 
