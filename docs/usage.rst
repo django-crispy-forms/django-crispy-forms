@@ -56,47 +56,24 @@ Using the django-uni-form templatetag in your view (Intermediate)
     
     {% uni_form form helper %}
 
-Using the django-uni-form templatetag in your form class (Intermediate)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1. In your form class add the following after field definitions::
-
-    from uni_form.helpers import FormHelper, Submit, Reset
-
-    class MyForm(forms.Form):
-        title = forms.CharField(label=_("Title"), max_length=30, widget=forms.TextInput())
-
-        # Attach a formHelper to your forms class.
-        helper = FormHelper()
-        
-        # Add in a class and id
-        helper.form_id = 'this-form-rocks'
-        helper.form_class = 'search'
-        
-        # add in a submit and reset button
-        submit = Submit('search','search this site')
-        helper.add_input(submit)
-        reset = Reset('reset','reset button')                
-        helper.add_input(reset)
-        
-2. In your template do the following::
-
-    {% load uni_form_tags %}
-    {% with form.helper as helper %}
-        {% uni_form form helper %}
-    {% endwith %}
     
 Using the django-uni-form templatetag to change action/method (Intermediate)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1. In your form class add the following after field definitions::
+1. In your view class add the following::
 
-    from uni_form.helpers import FormHelper, Submit
+    from django.shortcuts import render_to_response
 
-    class MyForm(forms.Form):
-        title = forms.CharField(label=_("Title"), max_length=30, widget=forms.TextInput())
+    from uni_form.helpers import FormHelper, Submit, Reset
+    from my_project.forms.MyForm
 
-        # Attach a formHelper to your forms class.
+    def my_view(request):
+
+        # Create the form
+        form = MyForm() 
+
+        # create a formHelper
         helper = FormHelper()
-        
+
         # Change the form and method
         helper.form_action = 'my-url-name-defined-in-url-conf'
         helper.form_method = 'GET' # Only GET and POST are legal
@@ -104,14 +81,16 @@ Using the django-uni-form templatetag to change action/method (Intermediate)
         # add in a submit and reset button
         submit = Submit('search','search this site')
         helper.add_input(submit)
+
+        # create the response dictionary
+        response_dictionary = {'form':form, 'helper': helper}
+
+        return render_to_response('my_template.html', response_dictionary)        
         
 2. In your template do the following::
 
     {% load uni_form_tags %}
-    {% with form.helper as helper %}
-        {% uni_form form helper %}
-    {% endwith %}
-
+    {% uni_form form helper %}
 
 
 Adding a layout to your form class (Intermediate)

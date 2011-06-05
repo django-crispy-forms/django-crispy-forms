@@ -1,6 +1,7 @@
 ==========================================
-API uni_form.templatetags.uni_form_filters
+API templatetags.uni_form_filters
 ==========================================
 
 .. automodule:: templatetags.uni_form_filters
   :members:
+  :undoc-members:    

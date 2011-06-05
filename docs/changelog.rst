@@ -39,6 +39,7 @@ This was always somewhat problematic to get working. Static media should not be 
 Miscellaneous
 --------------
 
+* Elevated Miguel Araujo to project lead!
 * Based on @issackelly's and @johnthedebs's work a template called `betterform` has been added for supporting @carljm's form-utils BetterForms.
 * FormHelper's method get_attr has been renamed to get_attributes
 * uni_form_tags has been split into two different files: `uni_form_tags` and `uni_form_filters`.
