@@ -131,7 +131,9 @@ def do_uni_form(parser, token):
 
     helper (optional): A uni_form.helpers.FormHelper object.
 
-    Example::
+    Usage::
+    
+        {% include uni_form_tags %}
 
         {% uni_form my-form my_helper %}
 

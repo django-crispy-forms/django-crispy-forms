@@ -12,6 +12,21 @@ register = template.Library()
 
 @register.filter
 def as_uni_form(form):
+    """ The original and still very useful way to generate a form. 
+    
+    Usage::
+    
+        {% load uni_form_filters %}
+
+        <form class="uniForm" action="post">
+            
+            {% csrf_token %}
+            
+            {{ myform|as_uni_form }}
+            
+        </form>
+        
+    """
     if isinstance(form, BaseFormSet):
         template = get_template('uni_form/uni_formset.html')
         c = Context({'formset': form})

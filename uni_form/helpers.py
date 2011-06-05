@@ -34,10 +34,11 @@ class BaseInput(object):
 
 class Submit(BaseInput):
     """
-    Used to create a Submit button descriptor for the uni_form template tag:
+    Used to create a Submit button descriptor for the uni_form template tag::
+    
         submit = Submit('Search the Site', 'search this site')
     
-    Note: The first argument is also slugified and turned into the id for the submit button.
+    **Note**: The first argument is also slugified and turned into the id for the submit button.
     """
     input_type = 'submit'
     field_classes = 'submit submitButton'
@@ -51,10 +52,11 @@ class Submit(BaseInput):
 
 class Button(BaseInput):
     """
-    Used to create a Submit input descriptor for the uni_form template tag:
+    Used to create a Submit input descriptor for the uni_form template tag::
+
         button = Button('Button 1', 'Press Me!')
     
-    Note: The first argument is also slugified and turned into the id for the button.
+    **Note**: The first argument is also slugified and turned into the id for the button.
     """
     input_type = 'button'
     field_classes = 'button'
@@ -70,10 +72,11 @@ class Hidden(BaseInput):
 
 class Reset(BaseInput):
     """
-    Used to create a Hidden input descriptor for the uni_form template tag.
+    Used to create a Hidden input descriptor for the uni_form template tag::
+    
         reset = Reset('Reset This Form', 'Revert Me!')
     
-    Note: The first argument is also slugified and turned into the id for the reset.
+    **Note**: The first argument is also slugified and turned into the id for the reset.
     """
     input_type = 'reset'
     field_classes = 'reset resetButton'
@@ -304,16 +307,16 @@ class FormHelper(object):
     
     Special attribute behavior:
         
-        method: Defaults to POST but you can also do 'GET'
+        **method**: Defaults to POST but you can also do 'GET'
         
-        form_action: applied to the form action attribute. Can be a named url in
+        **form_action**: applied to the form action attribute. Can be a named url in
             your urlconf that can be executed via the *url* default template tag or can
             simply point to another URL.
         
-        id: Generates a form id for dom identification.
+        **id**: Generates a form id for dom identification.
             If no id provided then no id attribute is created on the form.
         
-        class: add space seperated classes to the class list.
+        **class**: add space seperated classes to the class list.
             Defaults to uniForm.
             Always starts with uniForm even do specify classes.
         

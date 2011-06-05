@@ -14,18 +14,6 @@ format.
 
 `Uni-form`_ has been selected as the base model for the design of the forms.
 
-**Warning:** django-uni-form 0.8 and higher renders django.form.field labels with the 'safe' filter. If you have user generated form field labels you should take this into consideration.
-
-**Note:** django-uni-form 0.8 and higher lays out the HTML for the uni_form tag differently than previous versions. The errorMsg div is now outside the fieldset as it should be.
-
-**Note:** django-uni-form 0.7 and higher breaks backwards compatibility with previous versions of django-uni-form. All you have to do is update templates that call on the django-uni-form template tag from::
-
-    {% load uni_form %}
-    
-To::
-
-    {% load uni_form_tags %}
-
 .. _Django: http://djangoproject.com
 .. _`Uni-form`: http://sprawsm.com/uni-form
 
@@ -37,8 +25,12 @@ Contents:
    install
    usage
    customization
-   uni_form_tags
-   reference
+   api_helpers
+   api_tags
+   api_filters
+   api_field      
+   changelog
+   contributors
 
 Indices and tables
 ==================

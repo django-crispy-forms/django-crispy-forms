@@ -1,12 +1,13 @@
+=====
 Usage
-===========================
+=====
 
 How to use django-uni-form
 
 
 Using the django-uni-form filter (Easy and fun!)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1. Add ``{% load uni_form_tags %}`` to the template that calls your form.
+1. Add ``{% load uni_form_filters %}`` to the template that calls your form.
 2. Append your form call with the as_uni_form filter::
 
     {{ my_form|as_uni_form }}
