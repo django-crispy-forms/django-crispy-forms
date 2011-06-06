@@ -2,7 +2,7 @@
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.template import Context, Template
+from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import get_template_from_string
 from django.template.loader import render_to_string
 from django.middleware.csrf import _get_new_csrf_key
@@ -88,6 +88,7 @@ class TestBasicFunctionalityTags(TestCase):
         
 
 class TestFormHelpers(TestCase):
+    urls = 'uni_form.tests.urls'
     def setUp(self):
         pass
     
@@ -192,7 +193,7 @@ class TestFormHelpers(TestCase):
         c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
         settings.UNIFORM_FAIL_SILENTLY = False
-        self.assertRaises(TypeError, lambda:template.render(c))
+        self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
         del settings.UNIFORM_FAIL_SILENTLY
 
     def test_uni_form_formset(self):
