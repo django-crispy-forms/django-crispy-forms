@@ -22,7 +22,7 @@ Add `uni_form` to your INSTALLED_APPS in settings.py::
     INSTALLED_APPS = (
         ...
         'uni_form',
-        )
+    )
         
 Depending on your setup, you may need to copy the media files to your local 
 media folder::
@@ -58,7 +58,7 @@ If you want to take advantage of the uni_form_setup tag, then you'll need to mak
     TEMPLATE_CONTEXT_PROCESSORS = (
         ...
         'django.core.context_processors.request',
-        )
+    )
 
 
 .. _Django: http://djangoproject.com

@@ -2,7 +2,7 @@
 Usage: Filters
 ===============
 
-Still quite useful, this is a improved and evolved version of the `original implementation`_ of the django-uni-form project.
+Still quite useful, this is an improved and evolved version of the `original implementation`_ of the django-uni-form project.
 
 Using the filter (Easy and fun!)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
