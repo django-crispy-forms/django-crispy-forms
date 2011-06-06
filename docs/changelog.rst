@@ -23,8 +23,6 @@ errorMsg div now outside the fieldset
 
 This release lays out the HTML for the uni_form tag differently than previous versions. The errorMsg div is now outside the fieldset as it should be.
 
-Support for CSRF in fully generated forms.
-
 uni_form_tags has been split into two files
 ---------------------------------------------
 

@@ -20,8 +20,7 @@ format.
     :maxdepth: 2
 
     install
-    usage_filters
-    usage_tags
+    usage
     customization
    
 **API Docs**
