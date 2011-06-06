@@ -12,6 +12,10 @@ Installing django-uni-form
 Install into your python path using pip or easy_install::
 
     pip install django-uni-form
+
+Or if you are running earlier than Django 1.2 and/or Python 2.6::
+
+    pip install django-uni-form==0.7.0
     
 Add `uni_form` to your INSTALLED_APPS in settings.py::
 
