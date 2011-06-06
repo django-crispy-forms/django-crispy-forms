@@ -38,7 +38,7 @@ class Submit(BaseInput):
     
         submit = Submit('Search the Site', 'search this site')
     
-    **Note**: The first argument is also slugified and turned into the id for the submit button.
+    .. note:: The first argument is also slugified and turned into the id for the submit button.
     """
     input_type = 'submit'
     field_classes = 'submit submitButton'
@@ -56,7 +56,7 @@ class Button(BaseInput):
 
         button = Button('Button 1', 'Press Me!')
     
-    **Note**: The first argument is also slugified and turned into the id for the button.
+    .. note:: The first argument is also slugified and turned into the id for the button.
     """
     input_type = 'button'
     field_classes = 'button'
@@ -76,7 +76,7 @@ class Reset(BaseInput):
     
         reset = Reset('Reset This Form', 'Revert Me!')
     
-    **Note**: The first argument is also slugified and turned into the id for the reset.
+    .. note:: The first argument is also slugified and turned into the id for the reset.
     """
     input_type = 'reset'
     field_classes = 'reset resetButton'

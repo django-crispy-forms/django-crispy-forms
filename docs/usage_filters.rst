@@ -27,4 +27,4 @@ To see this more clearly::
 
     </form>
 
-.. _`original implementation`: http://code.google.com/p/django-uni-form/source/detail?r=2
+.. _`original implementation`: http://code.google.com/p/django-uni-form/source/browse/trunk/uni_form/templatetags/uni_form.py?spec=svn2&r=2

@@ -17,31 +17,31 @@ format.
 **Installation and Usage**
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   install
-   usage_filters
-   usage_tags
-   customization
+    install
+    usage_filters
+    usage_tags
+    customization
    
 **API Docs**
 
 .. toctree::
-  :maxdepth: 2
-   
-   api_helpers
-   api_tags
-   api_filters
-   api_field
+    :maxdepth: 2
+
+    api_helpers
+    api_tags
+    api_filters
+    api_field
    
 **Help**
 
 .. toctree::
- :maxdepth: 2   
-    
-   faq
-   contributors    
-   changelog
+    :maxdepth: 2
+
+    faq
+    contributors    
+    changelog
 
 Indices and tables
 ==================
