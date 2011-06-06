@@ -23,7 +23,8 @@ Contents:
    :maxdepth: 2
 
    install
-   usage
+   usage_filters
+   usage_tags
    customization
    api_helpers
    api_tags

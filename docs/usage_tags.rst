@@ -1,25 +1,9 @@
-=====
-Usage
-=====
-
-How to use django-uni-form
-
-
-Using the filter (Easy and fun!)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1. Add ``{% load uni_form_filters %}`` to the template that calls your form.
-2. Append your form call with the as_uni_form filter::
-
-    {{ my_form|as_uni_form }}
-
-3. Add the class of 'uniForm' to your form. Example::
-
-    <form action="" method="post" class="uniForm">
-
-4. Refresh and enjoy!
+===============
+Usage: Tags
+===============
 
 Using the templatetag in your view (Intermediate)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 1. In your views.py add the following after field definitions::
 
     from django.shortcuts import render_to_response
