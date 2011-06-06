@@ -14,10 +14,7 @@ format.
 
 `Uni-form`_ has been selected as the base model for the design of the forms.
 
-.. _Django: http://djangoproject.com
-.. _`Uni-form`: http://sprawsm.com/uni-form
-
-Contents:
+**Installation and Usage**
 
 .. toctree::
    :maxdepth: 2
@@ -26,12 +23,25 @@ Contents:
    usage_filters
    usage_tags
    customization
+   
+**API Docs**
+
+.. toctree::
+  :maxdepth: 2
+   
    api_helpers
    api_tags
    api_filters
-   api_field      
+   api_field
+   
+**Help**
+
+.. toctree::
+ :maxdepth: 2   
+    
+   faq
+   contributors    
    changelog
-   contributors
 
 Indices and tables
 ==================
@@ -40,3 +50,6 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+.. _Django: http://djangoproject.com
+.. _`Uni-form`: http://sprawsm.com/uni-form
