@@ -85,7 +85,6 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue('default.uni-form.css' in html)
         self.assertTrue('uni-form.css' in html)
         self.assertTrue('uni-form.jquery.js' in html)
-        
 
 class TestFormHelpers(TestCase):
     urls = 'uni_form.tests.urls'
@@ -193,7 +192,10 @@ class TestFormHelpers(TestCase):
         c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
         settings.UNIFORM_FAIL_SILENTLY = False
-        self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
+        if settings.TEMPLATE_DEBUG:
+            self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
+        else:
+            self.assertRaises(TypeError, lambda:template.render(c))
         del settings.UNIFORM_FAIL_SILENTLY
 
     def test_uni_form_formset(self):
@@ -250,7 +252,6 @@ class TestFormHelpers(TestCase):
         html = template.render(c)
         
         self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html) 
-
 
 class TestFormLayout(TestCase):
     def test_layout_invalid_unicode_characters(self):
