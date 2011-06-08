@@ -1,5 +1,5 @@
 ===============
-Usage: Tags
+Usage
 ===============
 
 Using the filter (Easy and fun!)

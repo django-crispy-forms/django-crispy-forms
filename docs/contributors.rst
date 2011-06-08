@@ -48,3 +48,4 @@ Contributors
 * Issac Kelly <issackelly>
 * John Debs <johnthedebs>
 * Adam Cupiał <adamcupial>
+* Nicolas Patry <narsil>
