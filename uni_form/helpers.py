@@ -92,10 +92,7 @@ def render_field(field, form, form_style, context, template="uni_form/field.html
     FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
     if hasattr(field, 'render'):
-        if isinstance(field, Fieldset):
-            return field.render(form, form_style, context)
-        else:
-            return field.render(form, context=context)
+        return field.render(form, form_style, context)
     else:
         # This allows fields to be unicode strings, always they don't use non ASCII
         try:
@@ -201,7 +198,7 @@ class MultiField(object):
         self.label_html = label and (u'<p class="label">%s</p>\n' % unicode(label)) or ''
         self.fields = fields
 
-    def render(self, form, context):
+    def render(self, form, form_style, context):
         FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
         fieldoutput = u''
@@ -209,7 +206,7 @@ class MultiField(object):
         helptext = u''
         count = 0
         for field in self.fields:
-            fieldoutput += render_field(field, form, '', context, 'uni_form/multifield.html', self.label_class)
+            fieldoutput += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class)
             try:
                 field_instance = form.fields[field]
             except KeyError:
@@ -253,7 +250,7 @@ class Row(object):
         self.css_class = kwargs.get('css_class', u'formRow')
         self.css_id = kwargs.get('css_id', u'')
 
-    def render(self, form, context):
+    def render(self, form, form_style, context):
         output = u'<div'
         if self.css_id:
             output += u' id="%s"' % self.css_id
@@ -262,7 +259,7 @@ class Row(object):
         output += '>'
 
         for field in self.fields:
-            output += render_field(field, form, '', context)
+            output += render_field(field, form, form_style, context)
 
         output += u'</div>'
         return u''.join(output)
@@ -276,7 +273,7 @@ class Column(object):
         self.css_class = kwargs.get('css_class', u'formColumn')
         self.css_id = kwargs.get('css_id', u'')
 
-    def render(self, form, context):
+    def render(self, form, form_style, context):
         output = u'<div'
         if self.css_id:
             output += u' id="%s"' % self.css_id
@@ -285,7 +282,7 @@ class Column(object):
         output += '>'
 
         for field in self.fields:
-            output += render_field(field, form, '', context)
+            output += render_field(field, form, form_style, context)
 
         output += u'</div>'
         return u''.join(output)
@@ -297,7 +294,7 @@ class HTML(object):
     def __init__(self, html):
         self.html = unicode(html)
     
-    def render(self, form, context):
+    def render(self, form, form_style, context):
         return Template(self.html).render(context)
 
 
