@@ -10,16 +10,6 @@ register = template.Library()
 # We import the filters, so they are available when doing load uni_form_tags
 from uni_form_filters import *
 
-############################################################################
-#
-# Everything from now on gets more fancy
-# It can be argued that having django-uni-form construct your forms is overkill
-# and that I am playing architecture astronaut games with form building.
-#
-# However, all the bits that follow are designed to be section 508 compliant,
-# so all the fancy JS bits are garanteed to degrade gracefully.
-#
-############################################################################
 
 class BasicNode(template.Node):
     """ 
@@ -65,10 +55,10 @@ class BasicNode(template.Node):
         # If we have a helper's layout we use it, for the form or the formset's form
         if helper and helper.layout:
             if not is_formset:
-                actual_form.form_html = helper.render_layout(actual_form, attrs['form_style'])
+                actual_form.form_html = helper.render_layout(actual_form, context)
             else:
                 for form in actual_form.forms:
-                    form.form_html = helper.render_layout(form, attrs['form_style'])
+                    form.form_html = helper.render_layout(form, context)
 
         if is_formset:
             response_dict.update({'formset': actual_form})
