@@ -11,6 +11,29 @@ register = template.Library()
 from uni_form_filters import *
 
 
+class ForLoopSimulator(object):
+    def __init__(self, formset):
+        self.len_values = len(formset.forms)
+    
+        # Shortcuts for current loop iteration number.
+        self.counter = 1
+        self.counter0 = 0
+        # Reverse counter iteration numbers.
+        self.revcounter = self.len_values
+        self.revcounter0 = self.len_values - 1
+        # Boolean values designating first and last times through loop.
+        self.first = True
+        self.last = (0 == self.len_values - 1)
+
+    def iterate(self):
+        self.counter += 1
+        self.counter0 += 1
+        self.revcounter -= 1
+        self.revcounter0 -= 1
+        self.first = False
+        self.last = (self.revcounter0 == self.len_values - 1)
+
+
 class BasicNode(template.Node):
     """ 
     Basic Node object that we can rely on for Node objects in normal
@@ -57,8 +80,11 @@ class BasicNode(template.Node):
             if not is_formset:
                 actual_form.form_html = helper.render_layout(actual_form, context)
             else:
+                forloop = ForLoopSimulator(actual_form)
                 for form in actual_form.forms:
+                    context.update({'forloop': forloop})
                     form.form_html = helper.render_layout(form, context)
+                    forloop.iterate()
 
         if is_formset:
             response_dict.update({'formset': actual_form})
