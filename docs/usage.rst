@@ -24,6 +24,8 @@ To see this more clearly::
         {{ my_form|as_uni_form }}
 
     </form>
+    
+.. note:: In the beginning, this was 100% of the `original implementation`_ of this project.
 
 .. _`original implementation`: http://code.google.com/p/django-uni-form/source/browse/trunk/uni_form/templatetags/uni_form.py?spec=svn2&r=2
 
