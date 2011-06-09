@@ -23,13 +23,60 @@ class FormHelpersException(Exception):
     pass
 
 
+class ButtonHolder(object):
+    """
+    ButtonHolder container. Renders a <div class="buttonHolder">
+
+    This is where you should put form buttons
+    """
+    def __init__(self, *fields, **kwargs):
+        self.fields = list(fields)
+        self.css_class = kwargs.get('css_class', None)
+        self.css_id = kwargs.get('css_id', None)
+
+    def render(self, form, form_style, context):
+        html = u'<div '
+        if self.css_id:
+            html += u'id="%s" ' % self.css_id
+        if self.css_class:
+            html += u'class="buttonHolder %s">' % self.css_class
+        else:
+            html += u'class="buttonHolder">'
+
+        for field in self.fields:
+            html += render_field(field, form, form_style, context)
+
+        html += u'</div>'
+        return html
+
+
 class BaseInput(object):
     """
     A base class to reduce the amount of code in the Input classes.
     """
-    def __init__(self, name, value):
+    def __init__(self, name, value, **kwargs):
         self.name = name
         self.value = value
+        
+        if kwargs.has_key('css_class'):
+            self.field_classes += ' %s' % kwargs.get('css_class')
+        
+    def render(self, form, form_style, context):
+        """
+        Renders the input container if it's a Layout object
+        """
+        template = Template("""
+            <input type="{{ input.input_type }}"
+                   name="{{ input.name|slugify }}"
+                   value="{{ input.value }}"
+                   {% ifnotequal input.input_type "hidden" %}
+                        class="{{ input.field_classes }}"
+                        id="{{ input.input_type }}-id-{{ input.name|slugify }}"
+                   {% endifnotequal %}/>
+        """)
+       
+        c = Context({'input': self})
+        return template.render(c)
 
 
 class Submit(BaseInput):
@@ -42,12 +89,6 @@ class Submit(BaseInput):
     """
     input_type = 'submit'
     field_classes = 'submit submitButton'
-
-    def __init__(self, name, value, *args, **kwargs):
-        if kwargs.has_key('css_class'):
-            self.field_classes = self.field_classes + ' ' + kwargs.get('css_class')
-
-        super(self.__class__, self).__init__(name, value)
 
 
 class Button(BaseInput):
