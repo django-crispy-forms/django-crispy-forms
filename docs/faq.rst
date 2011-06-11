@@ -11,7 +11,7 @@ So with the encouragement of Katie Cunningham, `James Tauber`_ and `Jannis Leida
 
 Not long before PyCon 2009 James Tauber suggested the `{% uni_form form helper %}` API, where one could trivially create forms without writing any HTML.
 
-At PyCon 2009 Jannis Leidal helped me through releasing the 0.3 release of django-uni-form on PyPI. It was also at that PyCon that I believe I switched the library from Google Project Hosting to Github.
+At PyCon 2009 Jannis Leidel helped me through releasing the 0.3 release of django-uni-form on PyPI. It was also at that PyCon that I believe I switched the library from Google Project Hosting to Github.
 
 .. _Django: http://djangoproject.com
 .. _Pinax: http://pinaxproject.com
