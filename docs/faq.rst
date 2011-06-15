@@ -13,6 +13,23 @@ Not long before PyCon 2009 James Tauber suggested the `{% uni_form form helper %
 
 At PyCon 2009 Jannis Leidel helped me through releasing the 0.3 release of django-uni-form on PyPI. It was also at that PyCon that I believe I switched the library from Google Project Hosting to Github.
 
+How fast is django-uni-form?
+============================
+
+Performance in form rendering is normally a nigh moot issue in Django, because the majority of speed issues are fixable via appropriate use of Django's cache engine. Template and especially form rendering are usually the last thing to worry about when you try to increase performance.
+
+However, because we do care about producing lean and fast code, work is being done to speed up performance of this library. Using the `hotshot` module, Miguel has managed to speed things up a bit::
+
+    # Using cached template loader with the old version:
+    Plain Django: 1.62254595757
+    Django-uni-form |as_uni_form filter: 4.00753116608
+    Django-uni-form {% uni_form %} tag: 4.92533993721
+
+    # Using cached template loader with the improved version:
+    Plain Django: 1.52724218369
+    Django-uni-form |as_uni_form filter: 3.98601007462
+    Django-uni-form {% uni_form %} tag: 4.8678791523
+
 .. _Django: http://djangoproject.com
 .. _Pinax: http://pinaxproject.com
 .. _`NASA's Science Mission Directorate`: http://science.nasa.gov
