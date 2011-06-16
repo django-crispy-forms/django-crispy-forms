@@ -2,8 +2,11 @@
 Usage
 ===============
 
-Using the filter (Easy and fun!)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using the as_uni_form filter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+At it's most basic level django-uni-form renders out the field elements of a form via the `as_uni_form` filter. The steps are simple:
+
 1. Add ``{% load "uni_form_tags" %}`` to the template that calls your form.
 2. Append your form call with the as_uni_form filter::
 
@@ -29,141 +32,7 @@ To see this more clearly::
 
 .. _`original implementation`: http://code.google.com/p/django-uni-form/source/browse/trunk/uni_form/templatetags/uni_form.py?spec=svn2&r=2
 
-Using the templatetag in your view (Intermediate)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1. In your views.py add the following after field definitions::
+Using form helpers because they rock
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    from django.shortcuts import render_to_response
-    
-    from uni_form.helpers import FormHelper, Submit, Reset
-    from my_project.forms.MyForm
-    
-    def my_view(request):
-    
-        # Create the form
-        form = MyForm() 
-    
-        # create a formHelper
-        helper = FormHelper()
-        
-        # Add in a class and id
-        helper.form_id = 'this-form-rocks'
-        helper.form_class = 'search'
-        
-        # add in a submit and reset button
-        submit = Submit('search','search this site')
-        helper.add_input(submit)
-        reset = Reset('reset','reset button')                
-        helper.add_input(reset)
-        
-        # create the response dictionary
-        response_dictionary = {'form':form, 'helper': helper}
-        
-        return render_to_response('my_template.html', response_dictionary)
-        
-2. In your template do the following::
-
-    {% load uni_form_tags %}
-    
-    {% uni_form form helper %}
-
-    
-Using the templatetag to change action/method (Intermediate)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1. In your view class add the following::
-
-    from django.shortcuts import render_to_response
-
-    from uni_form.helpers import FormHelper, Submit, Reset
-    from my_project.forms.MyForm
-
-    def my_view(request):
-
-        # Create the form
-        form = MyForm() 
-
-        # create a formHelper
-        helper = FormHelper()
-
-        # Change the form and method
-        helper.form_action = 'my-url-name-defined-in-url-conf'
-        helper.form_method = 'GET' # Only GET and POST are legal
-        
-        # add in a submit and reset button
-        submit = Submit('search','search this site')
-        helper.add_input(submit)
-
-        # create the response dictionary
-        response_dictionary = {'form':form, 'helper': helper}
-
-        return render_to_response('my_template.html', response_dictionary)        
-        
-2. In your template do the following::
-
-    {% load uni_form_tags %}
-    {% uni_form form helper %}
-
-
-Adding a layout to your form class (Intermediate)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. warning:: Because helpers attached to form objects are  singletons, we are changing the documentation to encourage not doing it as listed in this example.
-
-Uniform helpers can use layout objects. A layout can consist of fieldsets, rows, columns, HTML and fields. A simple Example::
-
-    from django import forms
-    
-    from uni_form.helpers import FormHelper, Submit, Reset
-    from uni_form.helpers import Layout, Fieldset, Row, HTML
-	
-    class LayoutTestForm(forms.Form):
-
-        is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())    
-        email = forms.CharField(label="email", max_length=30, required=True, widget=forms.TextInput())        
-        password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
-        password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())    
-        first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())        
-        last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())            
-    
-        # Attach a formHelper to your forms class.
-        helper = FormHelper()
-
-        # Create some HTML that you want in the page.
-        # Yes, in real life your CSS would be cached, but this is just a simple example.
-        style = """
-        <style>
-            .formRow {
-                color: red;
-            }
-        </style>
-    
-        """
-        # create the layout object
-        layout = Layout(
-                        # first fieldset shows the company
-                        Fieldset('', 'is_company'),
-                    
-                        # second fieldset shows the contact info
-                        Fieldset('Contact details',
-                                HTML(style),
-                                'email',
-                                Row('password1','password2'),
-                                'first_name',
-                                'last_name',
-                                 )
-                        )
-
-        helper.add_layout(layout)
-                      
-        submit = Submit('add','Add this contact')
-        helper.add_input(submit)
-        
-Then, just like in the previous example, add the following to your template::
-
-    {% load uni_form_tags %}
-    {% with form.helper as helper %}
-        {% uni_form form helper %}
-    {% endwith %}
-           
-
-This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
+As handy as the `as_uni_form` filter is, the real advantage of this library are the :ref:`form helpers`. They will change how you do forms in Django.

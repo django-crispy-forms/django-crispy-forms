@@ -98,7 +98,66 @@ Now you can do something simple like this inside your template::
     {% uni_form form form.get_helper %}
 
     
-Layouts
-~~~~~~~
+    Adding a layout to your form class (Intermediate)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TODO - here goes describing how layouts go.
+    .. warning:: Because helpers attached to form objects are  singletons, we are changing the documentation to encourage not doing it as listed in this example.
+
+    Uniform helpers can use layout objects. A layout can consist of fieldsets, rows, columns, HTML and fields. A simple Example::
+
+        from django import forms
+
+        from uni_form.helpers import FormHelper, Submit, Reset
+        from uni_form.helpers import Layout, Fieldset, Row, HTML
+
+        class LayoutTestForm(forms.Form):
+
+            is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())    
+            email = forms.CharField(label="email", max_length=30, required=True, widget=forms.TextInput())        
+            password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
+            password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())    
+            first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())        
+            last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())            
+
+            # Attach a formHelper to your forms class.
+            helper = FormHelper()
+
+            # Create some HTML that you want in the page.
+            # Yes, in real life your CSS would be cached, but this is just a simple example.
+            style = """
+            <style>
+                .formRow {
+                    color: red;
+                }
+            </style>
+
+            """
+            # create the layout object
+            layout = Layout(
+                            # first fieldset shows the company
+                            Fieldset('', 'is_company'),
+
+                            # second fieldset shows the contact info
+                            Fieldset('Contact details',
+                                    HTML(style),
+                                    'email',
+                                    Row('password1','password2'),
+                                    'first_name',
+                                    'last_name',
+                                     )
+                            )
+
+            helper.add_layout(layout)
+
+            submit = Submit('add','Add this contact')
+            helper.add_input(submit)
+
+    Then, just like in the previous example, add the following to your template::
+
+        {% load uni_form_tags %}
+        {% with form.helper as helper %}
+            {% uni_form form helper %}
+        {% endwith %}
+
+
+    This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
