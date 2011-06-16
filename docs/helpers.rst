@@ -115,52 +115,60 @@ Uniform helpers can use layout objects. A layout can consist of fieldsets, rows,
 
     class LayoutTestForm(forms.Form):
 
-        is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())    
-        email = forms.CharField(label="email", max_length=30, required=True, widget=forms.TextInput())        
-        password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
-        password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())    
-        first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())        
-        last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())            
+        is_company = forms.CharField(label="company", required=False,
+            widget=forms.CheckboxInput())    
+        email = forms.CharField(label="email", max_length=30, required=True, 
+            widget=forms.TextInput())        
+        password1 = forms.CharField(label="password", max_length=30, 
+            required=True, widget=forms.PasswordInput())
+        password2 = forms.CharField(label="re-enter password", max_length=30,   
+            required=True, widget=forms.PasswordInput())    
+        first_name = forms.CharField(label="first name", max_length=30, 
+            required=True, widget=forms.TextInput())        
+        last_name = forms.CharField(label="last name", max_length=30, 
+            required=True, widget=forms.TextInput())            
 
-        # Attach a formHelper to your forms class.
-        helper = FormHelper()
 
-        # Create some HTML that you want in the page.
-        # Yes, in real life your CSS would be cached, but this is just a simple example.
-        style = """
-        <style>
-            .formRow {
-                color: red;
-            }
-        </style>
+        def get_helper(self):
 
-        """
-        # create the layout object
-        layout = Layout(
-                        # first fieldset shows the company
-                        Fieldset('', 'is_company'),
+            helper = FormHelper()
 
-                        # second fieldset shows the contact info
-                        Fieldset('Contact details',
-                                HTML(style),
-                                'email',
-                                Row('password1','password2'),
-                                'first_name',
-                                'last_name',
-                                 )
-                        )
+            # Create some HTML that you want in the page.
+            # Yes, in real life your CSS would be cached, 
+            #   but this is just a simple example.
+            style = """
+            <style>
+                .formRow {
+                    color: red;
+                }
+            </style>
 
-        helper.add_layout(layout)
+            """
+            # create the layout object
+            layout = Layout(
+                            # first fieldset shows the company
+                            Fieldset('', 'is_company'),
 
-        submit = Submit('add','Add this contact')
-        helper.add_input(submit)
+                            # second fieldset shows the contact info
+                            Fieldset('Contact details',
+                                    HTML(style),
+                                    'email',
+                                    Row('password1','password2'),
+                                    'first_name',
+                                    'last_name',
+                                     )
+                            )
 
-Then, just like in the previous example, add the following to your template::
+            helper.add_layout(layout)
+
+            submit = Submit('add','Add this contact')
+            helper.add_input(submit)
+        return helper
+
+Now add the following to your template::
 
     {% load uni_form_tags %}
-    {% with form.helper as helper %}
-        {% uni_form form helper %}
-    {% endwith %}
-
+    
+    {% uni_form form form.get_helper %}
 
 This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
