@@ -25,7 +25,7 @@ Via the `uni_form` templatetag::
     {% load uni_form_tags %}
     {% uni_form form %}
 
-And yet, django-uni-form does much more! By providing sophisticated layout controls you write in pure Python you can determine the layout and add buttons and controls to the forms with a minimum of HTML. This is done via the :ref:`helpers` API. This way you can do stuff like::
+And yet, django-uni-form does much more! By providing sophisticated layout controls you write in pure Python you can determine the layout and add buttons and controls to the forms with a minimum of HTML. This is done via the :ref:`form helpers` API. This way you can do stuff like::
 
     from uni_form.helpers import FormHelper, Submit, Reset
     def my_view(request):
