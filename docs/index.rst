@@ -35,7 +35,8 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
         helper.add_input(submit)
         helper.form_action = 'my-url-name-defined-in-url-conf'
         helper.form_method = 'GET' # Only GET and POST are legal
-        return render_to_response('my_template.html', {'form':form, 'helper': helper})
+        return render_to_response('my_template.html',
+                    {'form':form, 'helper': helper})
         
         {% load uni_form_tags %}
         {% uni_form form helper %}
