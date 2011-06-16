@@ -58,6 +58,8 @@ def uni_form_setup(context):
 
     Create a local uni-form/includes.html template if you want to customize how
     these files are loaded.
+    
+    Only works with Django 1.3+
     """
     if 'STATIC_URL' not in context:
         context['STATIC_URL'] = settings.STATIC_URL

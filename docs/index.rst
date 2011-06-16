@@ -46,6 +46,7 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
     :maxdepth: 2
 
     install
+    concepts
     usage
     helpers
     customization

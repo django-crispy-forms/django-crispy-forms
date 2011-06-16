@@ -101,8 +101,8 @@ Now you can do something simple like this inside your template::
     {% uni_form form form.get_helper %}
 
     
-Adding a layout to your form class (Intermediate)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Adding a layout to your form class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. warning:: Because helpers attached to form objects are  singletons, we are changing the documentation to encourage not doing it as listed in this example.
 
