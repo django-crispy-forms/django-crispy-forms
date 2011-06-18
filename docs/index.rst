@@ -50,16 +50,8 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
     usage
     helpers
     customization
-   
-**API Docs**
-
-.. toctree::
-    :maxdepth: 2
-
     api_helpers
-    api_tags
-    api_filters
-    api_field
+    api_templatetags    
    
 **Help**
 

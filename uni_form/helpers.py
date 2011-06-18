@@ -341,8 +341,15 @@ class FormHelper(object):
             ...     helper.add_input(reset)
         
         After this in the template::
+        
             {% load uni_form_tags %}
-            {% uni_form form form.helper %}
+            <html>
+                <body>
+                    <div id="where-I-want-the-generated-form">
+                        {% uni_form form form.helper %}
+                    </div>
+                </body>            
+            </html>
     """
     _form_method = 'post'
     _form_action = ''
