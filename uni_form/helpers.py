@@ -175,16 +175,18 @@ def render_field(field, form, form_style, context, template="uni_form/field.html
 
 class Layout(object):
     """ 
-    Form Layout. It is conformed by Layout objects: Fieldset, Row, Column, MultiField,
-    HTML, ButtonHolder, Button, Hidden, Reset, Submit and fields. 
+    Form Layout. It is conformed by Layout objects: `Fieldset`, `Row`, `Column`, `MultiField`,
+    `HTML`, `ButtonHolder`, `Button`, `Hidden`, `Reset`, `Submit` and fields. Form fields 
+    have to be strings.
     
-    Layout objects Fieldset, Row, Column, MultiField and ButtonHolder can hold other 
-    Layout objects within. Though ButtonHolder should only hold HTML and BaseInput 
-    inherited classes: Button, Hidden, Reset and Submit.
+    Layout objects `Fieldset`, `Row`, `Column`, `MultiField` and `ButtonHolder` can hold other 
+    Layout objects within. Though `ButtonHolder` should only hold `HTML` and BaseInput 
+    inherited classes: `Button`, `Hidden`, `Reset` and `Submit`.
     
     You need to add your `Layout` to the `FormHelper` using its method `add_layout`.
 
-    Example:
+    Example::
+
         layout = Layout(
             Fieldset('Company data', 
                 'is_company'
@@ -222,14 +224,15 @@ class Fieldset(object):
     """ 
     Layout object. It wraps fields in a <fieldset> 
     
-    Example:
+    Example::
+
         Fieldset("Text for the legend",
             'form_field_1',
             'form_field_2'
         )
 
     The first parameter is the text for fieldset legend. This text is context aware,
-    so you can do things like:
+    so you can do things like::
     
         Fieldset("Data for {{ user.username }}",
             'form_field_1',
@@ -318,8 +321,9 @@ class MultiField(object):
 class Row(object):
     """ 
     Layout object. It wraps fields in a div whose default class is "formRow". 
-   
-    Example:
+
+    Example::
+
         Row('form_field_1', 'form_field_2', 'form_field_3')
     """
 
@@ -347,7 +351,8 @@ class Column(object):
     """ 
     Layout object. It wraps fields in a div whose default class is "formColumn".
     
-    Example: 
+    Example::
+
         Column('form_field_1', 'form_field_2') 
     """
     
@@ -376,7 +381,8 @@ class HTML(object):
     Layout object. It can contain pure HTML and it has access to the whole
     context of the page where the form is being rendered.
     
-    Examples:
+    Examples::
+
         HTML("{% if saved %}Data saved{% endif %}")
         HTML('<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />')
     """
@@ -392,19 +398,19 @@ class FormHelper(object):
     """
     This class controls the form rendering behavior of the form passed to 
     the `{% uni_form %}` tag. For doing so you will need to set its attributes
-    and pass the corresponding helper object to the tag:
+    and pass the corresponding helper object to the tag::
 
         {% uni_form form form.helper %}
    
-    Let's see what attributes you can set and what form behavior they apply to:
+    Let's see what attributes you can set and what form behaviors they apply to:
         
         **form_method**: Specifies form method attribute.
             You can see it to 'POST' or 'GET'. Defaults to 'POST'
         
         **form_action**: Applied to the form action attribute:
-            - Can be a named url in your URLconf that can be executed via the 
-            `{% url %}` template tag. Example: 'show_my_profile'
-            In your URLconf you could have something like:
+            - Can be a named url in your URLconf that can be executed via the `{% url %}` template tag. \
+            Example: 'show_my_profile'. In your URLconf you could have something like::
+
             <pre>url(r'^show/profile/$','show_my_profile_view', name = 'show_my_profile')</pre>
 
             - It can simply point to a URL '/whatever/blabla/'.
@@ -439,7 +445,7 @@ class FormHelper(object):
             You can wrap fields, order them, customize pretty much anything in the form.
 
     Best way to add a helper to a form is adding a property named helper to the form 
-    that returns customized `FormHelper` object:
+    that returns customized `FormHelper` object::
 
         from uni_form import helpers
 
@@ -456,7 +462,7 @@ class FormHelper(object):
                 [...]
                 return helper
 
-    You can use it in a template doing:
+    You can use it in a template doing::
         
         {% load uni_form_tags %}
         <html>
@@ -480,7 +486,7 @@ class FormHelper(object):
 
     def __init__(self):
         self.inputs = self.inputs[:]
-    
+ 
     def get_form_method(self):
         return self._form_method
     
@@ -536,7 +542,7 @@ class FormHelper(object):
     
     def get_attributes(self):
         """
-        Used by the uni_form tag to get helper attributes
+        Used by the uni_form_tags to get helper attributes
         """
         items = {}
         items['form_method'] = self.form_method.strip()
