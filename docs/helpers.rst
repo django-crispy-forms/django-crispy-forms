@@ -88,7 +88,9 @@ If you want to attach a form helper to a form, you have to make certain you don'
     
         title = forms.CharField(_("Title"))
         
-        def get_helper(self):
+        @property
+        def helper(self):
+            """ Called as a property so we are certain the helper is not a singleton. """        
             helper = helpers.FormHelper()
             submit = helpers.Submit('submit','Submit')
             helper.add_input(submit)
@@ -126,9 +128,9 @@ Uniform helpers can use layout objects. A layout can consist of fieldsets, rows,
         last_name = forms.CharField(label="last name", max_length=30, 
             required=True, widget=forms.TextInput())            
 
-
-        def get_helper(self):
-            """ Called this way so we are certain the helper is not a singleton. """
+        @property
+        def helper(self):
+            """ Called as a property so we are certain the helper is not a singleton. """
 
             helper = FormHelper()
 
