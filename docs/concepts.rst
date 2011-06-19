@@ -2,6 +2,11 @@
 Concepts
 ========
 
+Form Helpers
+-------------
+
+The biggest advantage of this library are :ref:`form helpers` and layouts. The advantage of these tools is that they let you build forms with most of the coding done in Python, rather than HTML. We **strongly** suggest you study and learn the examples in the :ref:`form helpers` documentation.
+
 Don't Repeat Yourself
 ---------------------
 
@@ -19,17 +24,14 @@ focus on the big picture of your project - the business logic that drives your
 site and is probably a lot more fun to deal with then the tiny particulars of
 forms.
 
-section 508
+Section 508
 -----------
 
-Blah blah blah
+Some years ago the United States congress defined `Section 508`_ as a means to provide enforcement for technology provided or purchased for the government that met a set of specifications so that those with disabilities could use said technologies. Unfortunately, the specification does not normally apply to commercial products not used by the US Government and many US Government projects weasel out of the specification.
 
-helpers
------------
+However, following Section 508 (and the World Wide Web Consortium's (W3C) `Web Accessibility Initiative`_ (WAI)) is the right thing to do. It doesn't hurt to familiarize yourself with these specifications.
 
-Blah blah blah
+In the meantime, django-uni-form provides a means to easily render Section 508 compliant forms. How awesome is that?
 
-layouts
------------
-
-Blah blah blah
+.. _`Section 508`: http://en.wikipedia.org/wiki/Section_508
+.. `Web Accessibility Initiative`: http://en.wikipedia.org/wiki/Web_Accessibility_Initiative

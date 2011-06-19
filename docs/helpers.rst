@@ -104,8 +104,6 @@ Now you can do something simple like this inside your template::
 Adding a layout to your form class
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. warning:: Because helpers attached to form objects are  singletons, we are changing the documentation to encourage not doing it as listed in this example.
-
 Uniform helpers can use layout objects. A layout can consist of fieldsets, rows, columns, HTML and fields. A simple Example::
 
     from django import forms
@@ -130,6 +128,7 @@ Uniform helpers can use layout objects. A layout can consist of fieldsets, rows,
 
 
         def get_helper(self):
+            """ Called this way so we are certain the helper is not a singleton. """
 
             helper = FormHelper()
 

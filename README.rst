@@ -13,7 +13,7 @@ format.
 Documentation
 =============
 
-http://django-uni-form.readthedocs.org/en/latest/index.html
+http://readthedocs.org/docs/django-uni-form/en/latest/
 
 Contributions
 =============
