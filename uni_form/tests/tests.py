@@ -2,6 +2,7 @@
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.forms.models import formset_factory
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import get_template_from_string
 from django.template.loader import render_to_string
@@ -9,7 +10,7 @@ from django.middleware.csrf import _get_new_csrf_key
 from django.test import TestCase
 
 from uni_form.helpers import FormHelper, FormHelpersException, Submit, Reset, Hidden, Button
-from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML
+from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder
 
 
 class TestForm(forms.Form):
@@ -210,7 +211,6 @@ class TestFormHelpers(TestCase):
         form_helper.form_method = 'POST'
         form_helper.form_action = 'simpleAction'
                 
-        from django.forms.models import formset_factory
         TestFormSet = formset_factory(TestForm, extra = 3)
         testFormSet = TestFormSet()
         
@@ -332,6 +332,9 @@ class TestFormLayout(TestCase):
                         css_class = "rows"
                     ),
                     HTML('<a href="#" id="testLink">test link</a>'),
+                    HTML(u"""
+                        {% if flag %}{{ message }}{% endif %}
+                    """),
                     u'first_name',
                     u'last_name',
                 )
@@ -342,20 +345,26 @@ class TestFormLayout(TestCase):
             {% load uni_form_tags %}
             {% uni_form form form_helper %}
         """)        
-        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        c = Context({
+            'form': TestForm(), 
+            'form_helper': form_helper,
+            'flag': True,
+            'message': "Hello!",
+        })
         html = template.render(c)
 
         self.assertTrue('id="fieldset_company_data"' in html)
         self.assertTrue('class="fieldsets' in html)
         self.assertTrue('id="row_passwords"' in html)
         self.assertTrue('class="rows"' in html)
+        self.assertTrue('Hello!' in html)
         self.assertTrue('testLink' in html)
 
-    def test_second_layout_multifield_column(self):
+    def test_second_layout_multifield_column_buttonholder_submit(self):
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
-                MultiField(
+                MultiField("Some company data",
                     'is_company',
                     'email',
                     'password1', 
@@ -366,7 +375,10 @@ class TestFormLayout(TestCase):
                     'first_name',
                     'last_name',
                     css_id = "column_name",
-                )
+                ),
+                ButtonHolder(
+                    Submit('Save', 'Save', css_class='button white'),
+                ),
             )
         )
 
@@ -381,6 +393,9 @@ class TestFormLayout(TestCase):
         self.assertTrue('formColumn' in html)
         self.assertTrue('id="multifield_info"' in html)
         self.assertTrue('id="column_name"' in html)
+        self.assertTrue('div class="buttonHolder">' in html)
+        self.assertTrue('input type="submit"' in html)
+        self.assertTrue('name="save"' in html)
 
     def test_change_layout_dynamically_delete_field(self):
         template = get_template_from_string(u"""
@@ -416,3 +431,55 @@ class TestFormLayout(TestCase):
         c = Context({'form': form, 'form_helper': form_helper})
         html = template.render(c)
         self.assertFalse('email' in html)
+
+    def test_formset_layout(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form testFormSet formset_helper %}
+        """)
+        
+        form_helper = FormHelper()    
+        form_helper.form_id = 'thisFormsetRocks'
+        form_helper.form_class = 'formsets-that-rock'
+        form_helper.form_method = 'POST'
+        form_helper.form_action = 'simpleAction'
+        form_helper.add_layout(
+            Layout(
+                Fieldset("Item {{ forloop.counter }}",
+                    'is_company',
+                    'email',
+                ),
+                HTML("{% if forloop.first %}Note for first form only{% endif %}"),
+                Row('password1', 'password2'),
+                Fieldset("",
+                    'first_name',
+                    'last_name'
+                )
+            )
+        )
+                
+        TestFormSet = formset_factory(TestForm, extra = 3)
+        testFormSet = TestFormSet()
+        
+        c = Context({
+            'testFormSet': testFormSet, 
+            'formset_helper': form_helper, 
+            'csrf_token': _get_new_csrf_key()
+        })
+        html = template.render(c)        
+
+        # Check form parameters
+        self.assertEqual(html.count('<form'), 1)
+        self.assertEqual(html.count("<input type='hidden' name='csrfmiddlewaretoken'"), 1)
+
+        self.assertTrue('class="uniForm formsets-that-rock"' in html)
+        self.assertTrue('method="post"' in html)
+        self.assertTrue('id="thisFormsetRocks">' in html)
+        self.assertTrue('action="%s"' % reverse('simpleAction') in html)
+
+        # Check form layout
+        self.assertTrue('Item 1' in html)
+        self.assertTrue('Item 2' in html)
+        self.assertTrue('Item 3' in html)
+        self.assertEqual(html.count('Note for first form only'), 1)
+        self.assertEqual(html.count('formRow'), 3)
