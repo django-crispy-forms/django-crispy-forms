@@ -27,7 +27,15 @@ class ButtonHolder(object):
     """
     Layout object. It wraps fields in a <div class="buttonHolder">
 
-    This is where you should put Layout objects that render to form buttons like Submit
+    This is where you should put Layout objects that render to form buttons like Submit. 
+    It should only hold `HTML` and `BaseInput` inherited objects.
+
+    Example::
+        
+        ButtonHolder(
+            HTML(<span style="display: hidden;">Information Saved</span>),
+            Submit('Save', 'Save')
+        )
     """
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
@@ -63,7 +71,7 @@ class BaseInput(object):
         
     def render(self, form, form_style, context):
         """
-        Renders an <input> if container is used as a Layout object
+        Renders an `<input />` if container is used as a Layout object
         """
         template = Template("""
             <input type="{{ input.input_type }}"
@@ -127,8 +135,8 @@ def render_field(field, form, form_style, context, template="uni_form/field.html
     """
     Renders a field, if the field is a django-uni-form object like a `Row` or a 
     `Fieldset`, calls its render method. The field is added to a list that the form 
-    holds called `rendered_fields` to avoid double rendering fields. Finally a Django 
-    form `BoundField` is instantiated, rendered and its html returned.
+    holds called `rendered_fields` to avoid double rendering fields. If the field is 
+    a form field a `BoundField` is instantiated, rendered and its html returned.
     """
     FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
@@ -231,7 +239,7 @@ class Fieldset(object):
             'form_field_2'
         )
 
-    The first parameter is the text for fieldset legend. This text is context aware,
+    The first parameter is the text for the fieldset legend. This text is context aware,
     so you can do things like::
     
         Fieldset("Data for {{ user.username }}",
@@ -411,7 +419,7 @@ class FormHelper(object):
             - Can be a named url in your URLconf that can be executed via the `{% url %}` template tag. \
             Example: 'show_my_profile'. In your URLconf you could have something like::
 
-            <pre>url(r'^show/profile/$','show_my_profile_view', name = 'show_my_profile')</pre>
+            url(r'^show/profile/$','show_my_profile_view', name = 'show_my_profile')
 
             - It can simply point to a URL '/whatever/blabla/'.
        
