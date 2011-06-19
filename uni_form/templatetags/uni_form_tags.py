@@ -10,16 +10,29 @@ register = template.Library()
 # We import the filters, so they are available when doing load uni_form_tags
 from uni_form_filters import *
 
-############################################################################
-#
-# Everything from now on gets more fancy
-# It can be argued that having django-uni-form construct your forms is overkill
-# and that I am playing architecture astronaut games with form building.
-#
-# However, all the bits that follow are designed to be section 508 compliant,
-# so all the fancy JS bits are garanteed to degrade gracefully.
-#
-############################################################################
+
+class ForLoopSimulator(object):
+    def __init__(self, formset):
+        self.len_values = len(formset.forms)
+    
+        # Shortcuts for current loop iteration number.
+        self.counter = 1
+        self.counter0 = 0
+        # Reverse counter iteration numbers.
+        self.revcounter = self.len_values
+        self.revcounter0 = self.len_values - 1
+        # Boolean values designating first and last times through loop.
+        self.first = True
+        self.last = (0 == self.len_values - 1)
+
+    def iterate(self):
+        self.counter += 1
+        self.counter0 += 1
+        self.revcounter -= 1
+        self.revcounter0 -= 1
+        self.first = False
+        self.last = (self.revcounter0 == self.len_values - 1)
+
 
 class BasicNode(template.Node):
     """ 
@@ -65,10 +78,13 @@ class BasicNode(template.Node):
         # If we have a helper's layout we use it, for the form or the formset's form
         if helper and helper.layout:
             if not is_formset:
-                actual_form.form_html = helper.render_layout(actual_form, attrs['form_style'])
+                actual_form.form_html = helper.render_layout(actual_form, context)
             else:
+                forloop = ForLoopSimulator(actual_form)
                 for form in actual_form.forms:
-                    form.form_html = helper.render_layout(form, attrs['form_style'])
+                    context.update({'forloop': forloop})
+                    form.form_html = helper.render_layout(form, context)
+                    forloop.iterate()
 
         if is_formset:
             response_dict.update({'formset': actual_form})

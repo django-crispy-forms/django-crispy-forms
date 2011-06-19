@@ -23,13 +23,60 @@ class FormHelpersException(Exception):
     pass
 
 
+class ButtonHolder(object):
+    """
+    ButtonHolder container. Renders a <div class="buttonHolder">
+
+    This is where you should put form buttons
+    """
+    def __init__(self, *fields, **kwargs):
+        self.fields = list(fields)
+        self.css_class = kwargs.get('css_class', None)
+        self.css_id = kwargs.get('css_id', None)
+
+    def render(self, form, form_style, context):
+        html = u'<div '
+        if self.css_id:
+            html += u'id="%s" ' % self.css_id
+        if self.css_class:
+            html += u'class="buttonHolder %s">' % self.css_class
+        else:
+            html += u'class="buttonHolder">'
+
+        for field in self.fields:
+            html += render_field(field, form, form_style, context)
+
+        html += u'</div>'
+        return html
+
+
 class BaseInput(object):
     """
     A base class to reduce the amount of code in the Input classes.
     """
-    def __init__(self, name, value):
+    def __init__(self, name, value, **kwargs):
         self.name = name
         self.value = value
+        
+        if kwargs.has_key('css_class'):
+            self.field_classes += ' %s' % kwargs.get('css_class')
+        
+    def render(self, form, form_style, context):
+        """
+        Renders the input container if it's a Layout object
+        """
+        template = Template("""
+            <input type="{{ input.input_type }}"
+                   name="{{ input.name|slugify }}"
+                   value="{{ input.value }}"
+                   {% ifnotequal input.input_type "hidden" %}
+                        class="{{ input.field_classes }}"
+                        id="{{ input.input_type }}-id-{{ input.name|slugify }}"
+                   {% endifnotequal %}/>
+        """)
+       
+        c = Context({'input': self})
+        return template.render(c)
 
 
 class Submit(BaseInput):
@@ -42,12 +89,6 @@ class Submit(BaseInput):
     """
     input_type = 'submit'
     field_classes = 'submit submitButton'
-
-    def __init__(self, name, value, *args, **kwargs):
-        if kwargs.has_key('css_class'):
-            self.field_classes = self.field_classes + ' ' + kwargs.get('css_class')
-
-        super(self.__class__, self).__init__(name, value)
 
 
 class Button(BaseInput):
@@ -82,7 +123,7 @@ class Reset(BaseInput):
     field_classes = 'reset resetButton'
 
 
-def render_field(field, form, form_style='', template="uni_form/field.html", labelclass=None):
+def render_field(field, form, form_style, context, template="uni_form/field.html", labelclass=None):
     """
     Renders a field, if the field is a django-uni-form object like a `Row` or a 
     `Fieldset`, calls its render method. The field is added to a list that the form 
@@ -92,10 +133,7 @@ def render_field(field, form, form_style='', template="uni_form/field.html", lab
     FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
     if hasattr(field, 'render'):
-        if isinstance(field, Fieldset):
-            return field.render(form, form_style)
-        else:
-            return field.render(form)
+        return field.render(form, form_style, context)
     else:
         # This allows fields to be unicode strings, always they don't use non ASCII
         try:
@@ -118,8 +156,6 @@ def render_field(field, form, form_style='', template="uni_form/field.html", lab
             field_instance = None
             logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
             
-    if not hasattr(form, 'rendered_fields'):
-        form.rendered_fields = []
     if not field in form.rendered_fields:
         form.rendered_fields.append(field)
     else:
@@ -155,13 +191,14 @@ class Layout(object):
     def __init__(self, *fields):
         self.fields = list(fields)
     
-    def render(self, form, form_style):
+    def render(self, form, form_style, context):
+        form.rendered_fields = []
         html = ""
         for field in self.fields:
-            html += render_field(field, form, form_style)
+            html += render_field(field, form, form_style, context)
         for field in form.fields.keys():
             if not field in form.rendered_fields:
-                html += render_field(field, form, form_style)
+                html += render_field(field, form, form_style, context)
         return html
 
 
@@ -171,10 +208,10 @@ class Fieldset(object):
     def __init__(self, legend, *fields, **kwargs):
         self.css_class = kwargs.get('css_class', None)
         self.css_id = kwargs.get('css_id', None)
-        self.legend = legend
+        self.legend = Template(legend)
         self.fields = list(fields)
     
-    def render(self, form, form_style):
+    def render(self, form, form_style, context):
         html = u'<fieldset'
         if self.css_id:
             html += u' id="%s"' % self.css_id
@@ -184,9 +221,9 @@ class Fieldset(object):
             html += u' class="%s"' % form_style
         html += '>'
 
-        html += self.legend and (u'<legend>%s</legend>' % self.legend) or ''
+        html += self.legend and (u'<legend>%s</legend>' % self.legend.render(context)) or ''
         for field in self.fields:
-            html += render_field(field, form)
+            html += render_field(field, form, form_style, context)
         html += u'</fieldset>'
         return html
 
@@ -202,7 +239,7 @@ class MultiField(object):
         self.label_html = label and (u'<p class="label">%s</p>\n' % unicode(label)) or ''
         self.fields = fields
 
-    def render(self, form):
+    def render(self, form, form_style, context):
         FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
         fieldoutput = u''
@@ -210,7 +247,7 @@ class MultiField(object):
         helptext = u''
         count = 0
         for field in self.fields:
-            fieldoutput += render_field(field, form, '', 'uni_form/multifield.html', self.label_class)
+            fieldoutput += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class)
             try:
                 field_instance = form.fields[field]
             except KeyError:
@@ -254,7 +291,7 @@ class Row(object):
         self.css_class = kwargs.get('css_class', u'formRow')
         self.css_id = kwargs.get('css_id', u'')
 
-    def render(self, form):
+    def render(self, form, form_style, context):
         output = u'<div'
         if self.css_id:
             output += u' id="%s"' % self.css_id
@@ -263,7 +300,8 @@ class Row(object):
         output += '>'
 
         for field in self.fields:
-            output += render_field(field, form)
+            output += render_field(field, form, form_style, context)
+
         output += u'</div>'
         return u''.join(output)
 
@@ -276,7 +314,7 @@ class Column(object):
         self.css_class = kwargs.get('css_class', u'formColumn')
         self.css_id = kwargs.get('css_id', u'')
 
-    def render(self, form):
+    def render(self, form, form_style, context):
         output = u'<div'
         if self.css_id:
             output += u' id="%s"' % self.css_id
@@ -285,7 +323,8 @@ class Column(object):
         output += '>'
 
         for field in self.fields:
-            output += render_field(field, form)
+            output += render_field(field, form, form_style, context)
+
         output += u'</div>'
         return u''.join(output)
 
@@ -296,8 +335,9 @@ class HTML(object):
     def __init__(self, html):
         self.html = unicode(html)
     
-    def render(self, form):
-        return Template(self.html).render(Context({'form': form}))
+    def render(self, form, form_style, context):
+        return Template(self.html).render(context)
+
 
 class FormHelper(object):
     """
@@ -412,8 +452,8 @@ class FormHelper(object):
     def add_layout(self, layout):
         self.layout = layout
     
-    def render_layout(self, form, form_style):
-        return mark_safe(self.layout.render(form, form_style))
+    def render_layout(self, form, context):
+        return mark_safe(self.layout.render(form, self.form_style, context))
     
     def get_attributes(self):
         items = {}
