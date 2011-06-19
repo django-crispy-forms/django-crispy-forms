@@ -145,24 +145,25 @@ Uniform helpers can use layout objects. A layout can consist of fieldsets, rows,
             """
             # create the layout object
             layout = Layout(
-                            # first fieldset shows the company
-                            Fieldset('', 'is_company'),
+                # first fieldset shows the company
+                Fieldset('', 'is_company'),
 
-                            # second fieldset shows the contact info
-                            Fieldset('Contact details',
-                                    HTML(style),
-                                    'email',
-                                    Row('password1','password2'),
-                                    'first_name',
-                                    'last_name',
-                                     )
-                            )
+                # second fieldset shows the contact info
+                Fieldset('Contact details',
+                    HTML(style),
+                    'email',
+                    Row('password1','password2'),
+                    'first_name',
+                    'last_name',
+                )
+            )
 
             helper.add_layout(layout)
 
             submit = Submit('add','Add this contact')
             helper.add_input(submit)
-        return helper
+
+            return helper
 
 Now add the following to your template::
 
