@@ -25,9 +25,9 @@ class FormHelpersException(Exception):
 
 class ButtonHolder(object):
     """
-    ButtonHolder container. Renders a <div class="buttonHolder">
+    Layout object. It wraps fields in a <div class="buttonHolder">
 
-    This is where you should put form buttons
+    This is where you should put Layout objects that render to form buttons like Submit
     """
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
@@ -63,7 +63,7 @@ class BaseInput(object):
         
     def render(self, form, form_style, context):
         """
-        Renders the input container if it's a Layout object
+        Renders an <input> if container is used as a Layout object
         """
         template = Template("""
             <input type="{{ input.input_type }}"
@@ -175,18 +175,34 @@ def render_field(field, form, form_style, context, template="uni_form/field.html
 
 class Layout(object):
     """ 
-    Form Layout, add fieldsets, rows, fields and html
+    Form Layout. It is conformed by Layout objects: Fieldset, Row, Column, MultiField,
+    HTML, ButtonHolder, Button, Hidden, Reset, Submit and fields. 
     
-    example:
-        >>> layout = Layout(Fieldset('', 'is_company'),
-        ...     Fieldset(_('Contact details'),
-        ...         'email',
-        ...         Row('password1','password2'),
-        ...         'first_name',
-        ...         'last_name',
-        ...         HTML('<img src="/media/somepicture.jpg"/>'),
-        ...         'company'))
-        >>> helper.add_layout(layout)
+    Layout objects Fieldset, Row, Column, MultiField and ButtonHolder can hold other 
+    Layout objects within. Though ButtonHolder should only hold HTML and BaseInput 
+    inherited classes: Button, Hidden, Reset and Submit.
+    
+    You need to add your `Layout` to the `FormHelper` using its method `add_layout`.
+
+    Example:
+        layout = Layout(
+            Fieldset('Company data', 
+                'is_company'
+            ),
+            Fieldset(_('Contact details'),
+                'email',
+                Row('password1', 'password2'),
+                'first_name',
+                'last_name',
+                HTML('<img src="/media/somepicture.jpg"/>'),
+                'company'
+            ),
+            ButtonHolder(
+                Submit('Save', 'Save', css_class='button white'),
+            ),
+        )
+        
+        helper.add_layout(layout)
     """
     def __init__(self, *fields):
         self.fields = list(fields)
@@ -203,7 +219,23 @@ class Layout(object):
 
 
 class Fieldset(object):
-    """ Fieldset container. Renders to a <fieldset> """
+    """ 
+    Layout object. It wraps fields in a <fieldset> 
+    
+    Example:
+        Fieldset("Text for the legend",
+            'form_field_1',
+            'form_field_2'
+        )
+
+    The first parameter is the text for fieldset legend. This text is context aware,
+    so you can do things like:
+    
+        Fieldset("Data for {{ user.username }}",
+            'form_field_1',
+            'form_field_2'
+        )
+    """
 
     def __init__(self, legend, *fields, **kwargs):
         self.css_class = kwargs.get('css_class', None)
@@ -284,7 +316,12 @@ class MultiField(object):
 
 
 class Row(object):
-    """ row container. Renders to a set of <div> """
+    """ 
+    Layout object. It wraps fields in a div whose default class is "formRow". 
+   
+    Example:
+        Row('form_field_1', 'form_field_2', 'form_field_3')
+    """
 
     def __init__(self, *fields, **kwargs):
         self.fields = fields
@@ -307,7 +344,12 @@ class Row(object):
 
 
 class Column(object):
-    """ column container. Renders to a set of <div> """
+    """ 
+    Layout object. It wraps fields in a div whose default class is "formColumn".
+    
+    Example: 
+        Column('form_field_1', 'form_field_2') 
+    """
     
     def __init__(self, *fields, **kwargs):
         self.fields = fields
@@ -330,7 +372,14 @@ class Column(object):
 
 
 class HTML(object):
-    """ HTML container """
+    """ 
+    Layout object. It can contain pure HTML and it has access to the whole
+    context of the page where the form is being rendered.
+    
+    Examples:
+        HTML("{% if saved %}Data saved{% endif %}")
+        HTML('<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />')
+    """
     
     def __init__(self, html):
         self.html = unicode(html)
@@ -341,55 +390,82 @@ class HTML(object):
 
 class FormHelper(object):
     """
-    By setting attributes to me you can easily create the text that goes
-    into the uni_form template tag. One use case is to add to your form
-    class.
-    
-    Special attribute behavior:
+    This class controls the form rendering behavior of the form passed to 
+    the `{% uni_form %}` tag. For doing so you will need to set its attributes
+    and pass the corresponding helper object to the tag:
+
+        {% uni_form form form.helper %}
+   
+    Let's see what attributes you can set and what form behavior they apply to:
         
-        **method**: Defaults to POST but you can also do 'GET'
+        **form_method**: Specifies form method attribute.
+            You can see it to 'POST' or 'GET'. Defaults to 'POST'
         
-        **form_action**: applied to the form action attribute. Can be a named url in
-            your urlconf that can be executed via the *url* default template tag or can
-            simply point to another URL.
-        
-        **id**: Generates a form id for dom identification.
+        **form_action**: Applied to the form action attribute:
+            - Can be a named url in your URLconf that can be executed via the 
+            `{% url %}` template tag. Example: 'show_my_profile'
+            In your URLconf you could have something like:
+            <pre>url(r'^show/profile/$','show_my_profile_view', name = 'show_my_profile')</pre>
+
+            - It can simply point to a URL '/whatever/blabla/'.
+       
+        **form_id**: Generates a form id for dom identification.
             If no id provided then no id attribute is created on the form.
         
-        **class**: add space seperated classes to the class list.
-            Defaults to uniForm.
-            Always starts with uniForm even do specify classes.
+        **form_class**: String containing separated CSS clases to be applied 
+            to form class attribute. The form will always have by default
+            'uniForm' class.
         
-        form_tag: Defaults to True. If set to False it renders the form without the form tags.
+        **form_tag**: It specifies if <form></form> tags should be rendered when using a Layout. 
+            If set to False it renders the form without the <form></form> tags. Defaults to True.
         
+        **form_error_title**: If a form has `non_field_errors` to display, they 
+            are rendered in a div. You can set title's div with this attribute.
+            Example: "Oooops!" or "Form Errors"
+
+        **formset_error_title**: If a formset has `non_form_errors` to display, they 
+            are rendered in a div. You can set title's div with this attribute.
     
-    Demonstration:
+        **form_style**: Uni-form has two built in different form styles. You can choose
+            your favorite. This can be set to "default" or "inline". Defaults to "default".
+
+    Public Methods:
         
-        First we create a MyForm class and instantiate it:
-            >>> from django import forms
-            >>> from uni_form.helpers import FormHelper, Submit, Reset
-            >>> from django.utils.translation import ugettext_lazy as _
-            >>> class MyForm(forms.Form):
-            ...     title = forms.CharField(label=_('Title'), max_length=30, widget=forms.TextInput())
-            ...     # this displays how to attach a formHelper to your forms class.
-            ...     helper = FormHelper()
-            ...     helper.form_id = 'this-form-rocks'
-            ...     helper.form_class = 'search'
-            ...     submit = Submit('search','search this site')
-            ...     helper.add_input(submit)
-            ...     reset = Reset('reset','reset button')
-            ...     helper.add_input(reset)
+        **add_input(input)**: You can add input buttons using this method. Inputs
+            added using this method will be rendered at the end of the form/formset.
+
+        **add_layout(layout)**: You can add a `Layout` object to `FormHelper`. The Layout
+            specifies in a simple, clean and DRY way how the form fields should be rendered.
+            You can wrap fields, order them, customize pretty much anything in the form.
+
+    Best way to add a helper to a form is adding a property named helper to the form 
+    that returns customized `FormHelper` object:
+
+        from uni_form import helpers
+
+        class MyForm(forms.Form):
+            title = forms.CharField(_("Title"))
+
+            @property
+            def helper(self):
+                helper = helpers.FormHelper()
+                helper.form_id = 'this-form-rocks'
+                helper.form_class = 'search'
+                submit = helpers.Submit('submit','Submit')
+                helper.add_input(submit)
+                [...]
+                return helper
+
+    You can use it in a template doing:
         
-        After this in the template::
-        
-            {% load uni_form_tags %}
-            <html>
-                <body>
-                    <div id="where-I-want-the-generated-form">
-                        {% uni_form form form.helper %}
-                    </div>
-                </body>            
-            </html>
+        {% load uni_form_tags %}
+        <html>
+            <body>
+                <div id="where-I-want-the-generated-form">
+                    {% uni_form form form.helper %}
+                </div>
+            </body>            
+        </html>
     """
     _form_method = 'post'
     _form_action = ''
@@ -453,9 +529,15 @@ class FormHelper(object):
         self.layout = layout
     
     def render_layout(self, form, context):
+        """
+        Returns safe html of the rendering of the layout
+        """
         return mark_safe(self.layout.render(form, self.form_style, context))
     
     def get_attributes(self):
+        """
+        Used by the uni_form tag to get helper attributes
+        """
         items = {}
         items['form_method'] = self.form_method.strip()
         items['form_tag'] = self.form_tag
@@ -474,4 +556,3 @@ class FormHelper(object):
         if self.formset_error_title:
             items['formset_error_title'] = self.formset_error_title.strip()
         return items
-
