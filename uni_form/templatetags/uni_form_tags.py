@@ -12,6 +12,17 @@ from uni_form_filters import *
 
 
 class ForLoopSimulator(object):
+    """
+    Simulates a forloop tag, precisely:: 
+        
+        {% for form in formset.forms %}
+
+    If `{% uni_form %}` is rendering a formset with a helper, We inject a `ForLoopSimulator` object
+    in the context as `forloop` so that formset forms can do things like::
+        
+        Fieldset("Item {{ forloop.counter }}", [...])
+        HTML("{% if forloop.first %}First form text{% endif %}"
+    """
     def __init__(self, formset):
         self.len_values = len(formset.forms)
     
@@ -26,6 +37,9 @@ class ForLoopSimulator(object):
         self.last = (0 == self.len_values - 1)
 
     def iterate(self):
+        """
+        Updates values as if we had iterated over the for
+        """
         self.counter += 1
         self.counter0 += 1
         self.revcounter -= 1
@@ -56,9 +70,9 @@ class BasicNode(template.Node):
         :param context: `django.template.Context` variable holding the context for the node
 
         `self.form` and `self.helper` are resolved into real Python objects resolving them
-        from the `context`. 
-        The `actual_form` can be a form or a formset. If it's a formset `is_formset` is set to True.
-        If the helper has a layout we use it, for rendering the form or the formset's forms.
+        from the `context`. The `actual_form` can be a form or a formset. If it's a formset 
+        `is_formset` is set to True. If the helper has a layout we use it, for rendering the
+        form or the formset's forms.
         """
         actual_form = self.form.resolve(context)
         attrs = {}
@@ -75,7 +89,7 @@ class BasicNode(template.Node):
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(attrs, context, is_formset)
 
-        # If we have a helper's layout we use it, for the form or the formset's form
+        # If we have a helper's layout we use it, for the form or the formset's forms
         if helper and helper.layout:
             if not is_formset:
                 actual_form.form_html = helper.render_layout(actual_form, context)
@@ -99,6 +113,7 @@ class BasicNode(template.Node):
         
         :param attrs: Dictionary with the helper's attributes used for rendering the form/formset
         :param context: `django.template.Context` for the node
+        :param is_formset: Boolean value. If set to True, indicates we are working with a formset.
         """
         form_type = "form"
         if is_formset:
@@ -139,13 +154,10 @@ class UniFormNode(BasicNode):
 @register.tag(name="uni_form")
 def do_uni_form(parser, token):
     """
-    You need to pass in at least the form object, and can also pass in the
-    optional helper object. Writing the attrs string is rather challenging so
-    use of the objects found in uni_form.helpers is encouraged.
+    You need to pass in at least the form/formset object, and can also pass in the
+    optional `uni_form.helpers.FormHelper` object. 
 
-    form: The forms object to be rendered by the tag
-
-    helper (optional): A uni_form.helpers.FormHelper object.
+    helper (optional): A `uni_form.helpers.FormHelper` object.
 
     Usage::
     
