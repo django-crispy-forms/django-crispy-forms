@@ -18,12 +18,7 @@ How fast is django-uni-form?
 
 Performance in form rendering is normally a nigh moot issue in Django, because the majority of speed issues are fixable via appropriate use of Django's cache engine. Template and especially form rendering are usually the last thing to worry about when you try to increase performance.
 
-However, because we do care about producing lean and fast code, work is being done to speed up performance of this library. Using the `hotshot` module, Miguel has managed to speed things up a bit::
-
-    # Using cached template loader with the old version:
-    Plain Django: 1.62254595757
-    Django-uni-form |as_uni_form filter: 4.00753116608
-    Django-uni-form {% uni_form %} tag: 4.92533993721
+However, because we do care about producing lean and fast code, work is being done to speed up and measure performance of this library. These are the results of rendering 1000 forms using the cached template loader with the latest django-uni-form code::
 
     # Using cached template loader with the improved version:
     Plain Django: 1.52724218369
