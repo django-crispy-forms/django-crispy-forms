@@ -12,20 +12,15 @@ register = template.Library()
 
 @register.filter
 def as_uni_form(form):
-    """ The original and still very useful way to generate a form. 
+    """ 
+    The original and still very useful way to generate a uni-form form/formset::
     
-    Usage::
-    
-        {% load uni_form_filters %}
+        {% load uni_form_tags %}
 
         <form class="uniForm" action="post">
-            
             {% csrf_token %}
-            
             {{ myform|as_uni_form }}
-            
         </form>
-        
     """
     if isinstance(form, BaseFormSet):
         template = get_template('uni_form/uni_formset.html')
@@ -37,6 +32,12 @@ def as_uni_form(form):
 
 @register.filter
 def as_uni_errors(form):
+    """
+    Renders only form errors like django-uni-form::
+
+        {% load uni_form_tags %}
+        {{ form|as_uni_errors }}
+    """
     if isinstance(form, BaseFormSet):
         template = get_template('uni_form/errors_formset.html')
         c = Context({'formset': form})
@@ -47,6 +48,12 @@ def as_uni_errors(form):
 
 @register.filter
 def as_uni_field(field):
+    """
+    Renders a form field like a django-uni-form field::
+
+        {% load uni_form_tags %}
+        {{ form.field|as_uni_field }}
+    """
     template = get_template('uni_form/field.html')
     c = Context({'field':field})
     return template.render(c)
@@ -54,9 +61,9 @@ def as_uni_field(field):
 @register.inclusion_tag("uni_form/includes.html", takes_context=True)
 def uni_form_setup(context):
     """
-    Creates the <style> and <script> tags needed to initialize the uni-form.
+    Creates the `<style>` and `<script>` tags needed to initialize uni-form.
 
-    Create a local uni-form/includes.html template if you want to customize how
+    You can create a local uni-form/includes.html template if you want to customize how
     these files are loaded.
     
     Only works with Django 1.3+
