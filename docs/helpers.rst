@@ -98,7 +98,7 @@ Now you can do something simple like this inside your template::
 
     {% load uni_form_tags %}
 
-    {% uni_form form form.get_helper %}
+    {% uni_form form form.helper %}
 
     
 Adding a layout to your form class
@@ -169,6 +169,6 @@ Now add the following to your template::
 
     {% load uni_form_tags %}
     
-    {% uni_form form form.get_helper %}
+    {% uni_form form form.helper %}
 
 This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
