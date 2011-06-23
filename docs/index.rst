@@ -22,21 +22,24 @@ Via the `as_uni_form` filter::
 
 And yet, django-uni-form does much more! By providing sophisticated layout controls you write in pure Python you can determine the layout and add buttons and controls to the forms with a minimum of HTML. This is done via the :ref:`form helpers` API. This way you can do stuff like::
 
-    # In the view
+    # In the form
     from uni_form.helpers import FormHelper, Submit, Reset
-    def my_view(request):
-        form = MyForm()
-        helper = FormHelper()
-        submit = Submit('search','search this site')
-        helper.add_input(submit)
-        helper.form_action = 'my-url-name-defined-in-url-conf'
-        helper.form_method = 'GET' # Only GET and POST are legal
-        return render_to_response('my_template.html',
-                    {'form':form, 'helper': helper})
+    
+    class MyForm(forms.Form): # or class MyForm(forms.ModelForm)
+    
+        @property
+        def helper(self):
+            form = MyForm()
+            helper = FormHelper()
+            submit = Submit('search','search this site')
+            helper.add_input(submit)
+            helper.form_action = 'my-url-name-defined-in-url-conf'
+            helper.form_method = 'GET' # Only GET and POST are legal
+            return helper
     
     # In the template
     {% load uni_form_tags %}
-    {% uni_form form helper %}
+    {% uni_form form form.helper %}
         
 .. note:: Obviously, the excellent `Uni-form`_ has been selected as the base model for the design of the forms.
 
