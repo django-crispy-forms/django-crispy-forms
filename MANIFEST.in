@@ -5,4 +5,4 @@ include README.rst
 recursive-include docs *
 recursive-include uni_form/static *
 recursive-include uni_form/templates *
-recursive-include uni_form/test_project/test_app/templates/test_app *
+recursive-include test_project/test_app/templates/test_app *
