@@ -26,7 +26,6 @@ setup(
         "Development Status :: 4 - Beta",        
         "Environment :: Web Environment",    
         "Framework :: Django",
-        "Intended Audience :: Developer",        
         "License :: OSI Approved :: BSD License",    
         "Operating System :: OS Independent",        
         "Programming Language :: JavaScript",
