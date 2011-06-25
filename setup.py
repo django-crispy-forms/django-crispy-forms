@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
  
-version = '0.8.0-beta'
+version = '0.8.0'
  
 LONG_DESCRIPTION = """
 =====================================
@@ -39,11 +39,11 @@ setup(
     description="django-uni-form",
     long_description=LONG_DESCRIPTION,
     classifiers=[
-        "Development Status :: 4 - Beta",        
-        "Environment :: Web Environment",    
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Web Environment",
         "Framework :: Django",
-        "License :: OSI Approved :: BSD License",    
-        "Operating System :: OS Independent",        
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
         "Programming Language :: JavaScript",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
