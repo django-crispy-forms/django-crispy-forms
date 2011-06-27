@@ -326,62 +326,55 @@ class MultiField(object):
         return output
 
 
-class Row(object):
-    """ 
-    Layout object. It wraps fields in a div whose default class is "formRow". 
+class Div(object):
+    """
+    Layout object. It wraps fields in a <div>
+    
+    You can set `css_id` for a DOM id and `css_class` for a DOM class. Example::
 
-    Example::
+        Div('form_field_1', 'form_field_2', css_id='div-example', css_class='divs')
+    """
+    def __init__(self, *fields, **kwargs):
+        self.fields = fields
+        
+        if hasattr(self, 'css_class') and kwargs.has_key('css_class'):
+            self.css_class += ' %s' % kwargs.get('css_class')
+        if not hasattr(self, 'css_class'):
+            self.css_class = kwargs.get('css_class', None)
+       
+        self.css_id = kwargs.get('css_id', '')
+
+    def render(self, form, form_style, context):
+        output = u'<div'
+        if self.css_id:
+            output += u' id="%s"' % self.css_id
+        if self.css_class:
+            output += u' class="%s"' % self.css_class
+        output += '>'
+
+        for field in self.fields:
+            output += render_field(field, form, form_style, context)
+
+        output += u'</div>'
+        return u''.join(output)
+
+
+class Row(Div):
+    """ 
+    Layout object. It wraps fields in a div whose default class is "formRow". Example::
 
         Row('form_field_1', 'form_field_2', 'form_field_3')
     """
-
-    def __init__(self, *fields, **kwargs):
-        self.fields = fields
-        self.css_class = kwargs.get('css_class', u'formRow')
-        self.css_id = kwargs.get('css_id', u'')
-
-    def render(self, form, form_style, context):
-        output = u'<div'
-        if self.css_id:
-            output += u' id="%s"' % self.css_id
-        if self.css_class:
-            output += u' class="%s"' % self.css_class
-        output += '>'
-
-        for field in self.fields:
-            output += render_field(field, form, form_style, context)
-
-        output += u'</div>'
-        return u''.join(output)
+    css_class = 'formRow'
 
 
-class Column(object):
+class Column(Div):
     """ 
-    Layout object. It wraps fields in a div whose default class is "formColumn".
-    
-    Example::
+    Layout object. It wraps fields in a div whose default class is "formColumn". Example::
 
         Column('form_field_1', 'form_field_2') 
     """
-    
-    def __init__(self, *fields, **kwargs):
-        self.fields = fields
-        self.css_class = kwargs.get('css_class', u'formColumn')
-        self.css_id = kwargs.get('css_id', u'')
-
-    def render(self, form, form_style, context):
-        output = u'<div'
-        if self.css_id:
-            output += u' id="%s"' % self.css_id
-        if self.css_class:
-            output += u' class="%s"' % self.css_class
-        output += '>'
-
-        for field in self.fields:
-            output += render_field(field, form, form_style, context)
-
-        output += u'</div>'
-        return u''.join(output)
+    css_class = 'formColumn'
 
 
 class HTML(object):

@@ -10,7 +10,7 @@ from django.middleware.csrf import _get_new_csrf_key
 from django.test import TestCase
 
 from uni_form.helpers import FormHelper, FormHelpersException, Submit, Reset, Hidden, Button
-from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder
+from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div
 
 
 class TestForm(forms.Form):
@@ -356,29 +356,34 @@ class TestFormLayout(TestCase):
         self.assertTrue('id="fieldset_company_data"' in html)
         self.assertTrue('class="fieldsets' in html)
         self.assertTrue('id="row_passwords"' in html)
-        self.assertTrue('class="rows"' in html)
+        self.assertTrue('class="formRow rows"' in html)
         self.assertTrue('Hello!' in html)
         self.assertTrue('testLink' in html)
 
-    def test_second_layout_multifield_column_buttonholder_submit(self):
+    def test_second_layout_multifield_column_buttonholder_submit_div(self):
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
                 MultiField("Some company data",
                     'is_company',
                     'email',
-                    'password1', 
-                    'password2',
                     css_id = "multifield_info",
                 ),
                 Column(
                     'first_name',
                     'last_name',
                     css_id = "column_name",
+                    css_class = "columns",
                 ),
                 ButtonHolder(
                     Submit('Save', 'Save', css_class='button white'),
                 ),
+                Div(
+                    'password1', 
+                    'password2',
+                    css_id="custom-div",
+                    css_class="customdivs",
+                )
             )
         )
 
@@ -393,9 +398,12 @@ class TestFormLayout(TestCase):
         self.assertTrue('formColumn' in html)
         self.assertTrue('id="multifield_info"' in html)
         self.assertTrue('id="column_name"' in html)
+        self.assertTrue('class="formColumn columns"' in html)
         self.assertTrue('div class="buttonHolder">' in html)
         self.assertTrue('input type="submit"' in html)
         self.assertTrue('name="save"' in html)
+        self.assertTrue('id="custom-div"' in html)
+        self.assertTrue('class="customdivs"' in html)
 
     def test_change_layout_dynamically_delete_field(self):
         template = get_template_from_string(u"""
