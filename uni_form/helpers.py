@@ -345,18 +345,19 @@ class Div(object):
         self.css_id = kwargs.get('css_id', '')
 
     def render(self, form, form_style, context):
-        output = u'<div'
-        if self.css_id:
-            output += u' id="%s"' % self.css_id
-        if self.css_class:
-            output += u' class="%s"' % self.css_class
-        output += '>'
+        template = Template("""
+            <div {% if div.css_id %}id="{{ div.css_id }}"{% endif %} 
+                {% if div.css_class %}class="{{ div.css_class }}"{% endif %}>
+                   {{ fields|safe }}
+            </div>
+        """)
 
+        fields = ''
         for field in self.fields:
-            output += render_field(field, form, form_style, context)
+            fields += render_field(field, form, form_style, context)
 
-        output += u'</div>'
-        return u''.join(output)
+        c = Context({'div': self, 'fields': fields})
+        return template.render(c)
 
 
 class Row(Div):
