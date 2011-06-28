@@ -43,19 +43,19 @@ class ButtonHolder(object):
         self.css_id = kwargs.get('css_id', None)
 
     def render(self, form, form_style, context):
-        html = u'<div '
-        if self.css_id:
-            html += u'id="%s" ' % self.css_id
-        if self.css_class:
-            html += u'class="buttonHolder %s">' % self.css_class
-        else:
-            html += u'class="buttonHolder">'
-
+        template = Template("""
+            <div {% if buttonholder.css_id %}id="{{ buttonholder.css_id }}"{% endif %} 
+                class="buttonHolder{% if buttonholder.css_class %} {{ buttonholder.css_class }}{% endif %}">
+                   {{ fields_output|safe }}
+            </div>
+        """)
+      
+        html = u''
         for field in self.fields:
             html += render_field(field, form, form_style, context)
 
-        html += u'</div>'
-        return html
+        c = Context({'buttonholder': self, 'fields_output': html})
+        return template.render(c)
 
 
 class BaseInput(object):

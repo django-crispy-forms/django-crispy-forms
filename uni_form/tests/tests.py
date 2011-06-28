@@ -399,7 +399,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('id="multifield_info"' in html)
         self.assertTrue('id="column_name"' in html)
         self.assertTrue('class="formColumn columns"' in html)
-        self.assertTrue('div class="buttonHolder">' in html)
+        self.assertTrue('class="buttonHolder">' in html)
         self.assertTrue('input type="submit"' in html)
         self.assertTrue('name="save"' in html)
         self.assertTrue('id="custom-div"' in html)
