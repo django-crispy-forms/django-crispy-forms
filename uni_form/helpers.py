@@ -131,12 +131,25 @@ class Reset(BaseInput):
     field_classes = 'reset resetButton'
 
 
-def render_field(field, form, form_style, context, template="uni_form/field.html", labelclass=None):
+def render_field(field, form, form_style, context, template="uni_form/field.html", labelclass=None, layout_object=None):
     """
-    Renders a field, if the field is a django-uni-form object like a `Row` or a 
-    `Fieldset`, calls its render method. The field is added to a list that the form 
-    holds called `rendered_fields` to avoid double rendering fields. If the field is 
-    a form field a `BoundField` is instantiated, rendered and its html returned.
+    Renders a django-uni-form field
+    
+    :param field: Can be a string or a Layout object like `Row`. If it's a layout
+        object, we call its render method, otherwise we instantiate a BoundField
+        and render it using default template 'uni_form/field.html'
+        The field is added to a list that the form holds called `rendered_fields`
+        to avoid double rendering fields.
+
+    :param form: The form/formset to which that field belongs to.
+    
+    :param form_style: We need this to render uni-form divs using helper's chosen
+        style.
+
+    :template: Template used for rendering the field.
+
+    :layout_object: If passed, it points to the Layout object that is being rendered.
+        We use it to store its bound fields in a list called `layout_object.bound_fields`
     """
     FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
@@ -177,6 +190,10 @@ def render_field(field, form, form_style, context, template="uni_form/field.html
     else:
         bound_field = BoundField(form, field_instance, field)
         html = render_to_string(template, {'field': bound_field, 'labelclass': labelclass})
+
+        # We save the Layout object's bound fields in the layout object's `bound_fields` list
+        if layout_object is not None:
+            layout_object.bound_fields.append(bound_field) 
 
     return html
 
@@ -276,54 +293,55 @@ class MultiField(object):
 
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
-        self.div_class = kwargs.get('css_class', u'ctrlHolder')
-        self.div_id = kwargs.get('css_id', None)
         self.label_class = kwargs.get('label_class', u'blockLabel')
-        self.label_html = label and (u'<p class="label">%s</p>\n' % unicode(label)) or ''
+        self.label_html = unicode(label)
         self.fields = fields
+        self.css_class = kwargs.get('css_class', u'ctrlHolder')
+        self.css_id = kwargs.get('css_id', None)
 
     def render(self, form, form_style, context):
         FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
-        fieldoutput = u''
-        errors = u''
-        helptext = u''
-        count = 0
+        template = Template("""
+            <div {% if multifield.css_id or errors %}id="{{ multifield.css_id }}"{% endif %} 
+                {% if multifield.css_class %}class="{{ multifield.css_class }}"{% endif %}>
+
+                {% for field in multifield.bound_fields %}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="errorField">{{ error|safe }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if multifield.label_html %}
+                    <p {% if multifield.label_class %}class="{{ multifield.label_class }}"{% endif %}>{{ multifield.label_html|safe }}</p>
+                {% endif %}
+
+                <div class="multiField">
+                    {{ fields_output|safe }}
+                </div>
+
+                {% for field in multifield.bound_fields %}
+                    {% if field.help_text %}
+                        <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        """)
+
+        if form.errors:
+            self.css_class += " error"
+
+        # We need to render fields using django-uni-form render_field so that MultiField can 
+        # hold other Layout objects inside itself
+        fields = []
+        fields_output = u''
+        self.bound_fields = []
         for field in self.fields:
-            fieldoutput += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class)
-            try:
-                field_instance = form.fields[field]
-            except KeyError:
-                if not FAIL_SILENTLY:
-                    raise Exception("Could not resolve form field '%s'." % field)
-                else:
-                    logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
-                    continue
-
-            bound_field = BoundField(form, field_instance, field)
-            auto_id = bound_field.auto_id
-            for error in bound_field.errors:
-                errors += u'<p id="error_%i_%s" class="errorField">%s</p>' % (count, auto_id, error)
-                count += 1
-            if bound_field.help_text:
-                helptext += u'<p id="hint_%s" class="formHint">%s</p>' % (auto_id, bound_field.help_text)
-
-        if errors:
-            self.css += u' error'
-
-        output = u'<div'
-        if self.div_id:
-            output += u' id="%s"' % self.div_id
-        output += u' class="%s"' % self.div_class
-        output += '>\n'
-        output += errors
-        output += self.label_html
-        output += u'<div class="multiField">\n'
-        output += fieldoutput
-        output += u'</div>\n'
-        output += helptext
-        output += u'</div>\n'
-        return output
+            fields_output += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class, layout_object=self)
+        
+        return template.render(Context({'multifield': self, 'fields_output': fields_output}))
 
 
 class Div(object):
