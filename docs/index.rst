@@ -22,21 +22,26 @@ Via the `as_uni_form` filter::
 
 And yet, django-uni-form does much more! By providing sophisticated layout controls you write in pure Python you can determine the layout and add buttons and controls to the forms with a minimum of HTML. This is done via the :ref:`form helpers` API. This way you can do stuff like::
 
-    # In the view
+    # In the form
     from uni_form.helpers import FormHelper, Submit, Reset
-    def my_view(request):
-        form = MyForm()
-        helper = FormHelper()
-        submit = Submit('search','search this site')
-        helper.add_input(submit)
-        helper.form_action = 'my-url-name-defined-in-url-conf'
-        helper.form_method = 'GET' # Only GET and POST are legal
-        return render_to_response('my_template.html',
-                    {'form':form, 'helper': helper})
+    
+    class MyForm(forms.Form): # or class MyForm(forms.ModelForm)
+    
+        @property
+        def helper(self):
+            form = MyForm()
+            helper = FormHelper()
+            submit = Submit('search','search this site')
+            helper.add_input(submit)
+            helper.form_action = 'my-url-name-defined-in-url-conf'
+            helper.form_method = 'GET' # Only GET and POST are legal
+            return helper
     
     # In the template
     {% load uni_form_tags %}
-    {% uni_form form helper %}
+    {% uni_form form form.helper %}
+    
+Think this is awesome and want to make it better? Read our contribution_ page, make it better, and we'll add you to the contributors_ list!
         
 .. note:: Obviously, the excellent `Uni-form`_ has been selected as the base model for the design of the forms.
 
@@ -51,7 +56,7 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
     helpers
     customization
     api_helpers
-    api_templatetags    
+    api_templatetags
    
 **Help**
 
@@ -59,7 +64,8 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
     :maxdepth: 2
 
     faq
-    contributors    
+    contributing
+    contributors
     changelog
 
 Indices and tables
@@ -69,6 +75,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-
+.. _contribution: contributing.html
+.. _contributors: contributors.html
 .. _Django: http://djangoproject.com
 .. _`Uni-form`: http://sprawsm.com/uni-form

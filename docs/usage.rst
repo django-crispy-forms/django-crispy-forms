@@ -20,7 +20,7 @@ At it's most basic level django-uni-form renders out the field elements of a for
 
 To see this more clearly::
 
-    {% extends "uni_form" %}
+    {% load "uni_form_tags" %}
     
     <form method="post" class="uniForm">
 

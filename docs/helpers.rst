@@ -16,37 +16,35 @@ Import the uni_form helpers::
 
     from uni_form import helpers
     
-In the appropriate view function (or Class Based View), instantiate the form helper class and include a form helper in the response context::
+In the appropriate form class, create a method (or better yet, a property) or instantiate the form helper class and include a form helper in the response context::
 
-    def my_view(request):
+    class MyForm(forms.Form):
     
-        # create the form
-        form = SearchForm()
+        @property
+        def helper(self):
+            """ We call this as a method/property so we don't make the form helper a singleton. """
         
-        # instantiate the form helper object
-        helper = helpers.FormHelper()
+            # instantiate the form helper object
+            helper = helpers.FormHelper()
 
-        # add in some input controls (a.k.a. buttons)
-        submit = helpers.Submit('submit','Submit')
-        helper.add_input(submit)
-        reset = helpers.Reset('reset','Reset')
-        helper.add_input(reset)
+            # add in some input controls (a.k.a. buttons)
+            submit = helpers.Submit('submit','Submit')
+            helper.add_input(submit)
+            reset = helpers.Reset('reset','Reset')
+            helper.add_input(reset)
         
-        # define the form action
-        helper.form_action = reverse('awesome-form-action')
-        helper.form_method = 'POST'
-        helper.form_class = 'awesomeness'
-        helper.form_id = 'form-100'
+            # define the form action
+            helper.form_action = reverse('awesome-form-action')
+            helper.form_method = 'POST'
+            helper.form_class = 'awesomeness'
+            helper.form_id = 'form-100'
+            return helper
         
-        # create the response dictionary
-        response_dictionary = {'form':form, 'helper': helper}        
-        return render_to_response('my_template.html', response_dictionary)        
-
-Now include it in my_template.html::
+Now include use it in my_template.html::
 
     {% load uni_form_tags %}
 
-    {% uni_form form helper %}
+    {% uni_form form form.helper %}
 
 What you'll get is the form rendered as HTML with awesome bits. Specifically...
 
@@ -100,7 +98,7 @@ Now you can do something simple like this inside your template::
 
     {% load uni_form_tags %}
 
-    {% uni_form form form.get_helper %}
+    {% uni_form form form.helper %}
 
     
 Adding a layout to your form class
@@ -171,6 +169,6 @@ Now add the following to your template::
 
     {% load uni_form_tags %}
     
-    {% uni_form form form.get_helper %}
+    {% uni_form form form.helper %}
 
 This allows you to group fields in fieldsets, or rows or columns or add HTML between fields etc.
