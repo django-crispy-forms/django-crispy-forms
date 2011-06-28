@@ -4,6 +4,7 @@ CHANGELOG
 
 For 0.8.1
 
+ * Removed test_project from the project
  * Improved MultiField performance avoiding instantiating BoundFields twice.
  * Fixed a bug in `MultiField` that raised an exception when internal fields had errors, because of `self.css` not existing.
  * Added an extra optional parameter to `render_field` called `layout_object`, used for storing in it a list of bound fields.
