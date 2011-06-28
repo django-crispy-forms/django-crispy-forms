@@ -40,6 +40,8 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
     # In the template
     {% load uni_form_tags %}
     {% uni_form form form.helper %}
+    
+Think this is awesome and want to make it better? Read our contribution_ page, make it better, and we'll add you to the contributors_ list!
         
 .. note:: Obviously, the excellent `Uni-form`_ has been selected as the base model for the design of the forms.
 
@@ -54,7 +56,7 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
     helpers
     customization
     api_helpers
-    api_templatetags    
+    api_templatetags
    
 **Help**
 
@@ -62,7 +64,8 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
     :maxdepth: 2
 
     faq
-    contributors    
+    contributing
+    contributors
     changelog
 
 Indices and tables
@@ -72,6 +75,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-
+.. _contribution: contributing.html
+.. _contributors: contributors.html
 .. _Django: http://djangoproject.com
 .. _`Uni-form`: http://sprawsm.com/uni-form
