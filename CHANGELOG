@@ -8,7 +8,7 @@ For 0.8.1
  * Improved MultiField performance avoiding instantiating BoundFields twice.
  * Fixed a bug in `MultiField` that raised an exception when internal fields had errors, because of `self.css` not existing.
  * Added an extra optional parameter to `render_field` called `layout_object`, used for storing in it a list of bound fields.
- * Refactor all Layout objects to use Templates and not having hardcoded HTML in the code. Resolves Issue #GH-37
+ * Refactor all Layout objects to use Templates and not having hardcoded HTML in the code, based on Jonas Obrist work. Resolves Issue #GH-37 
  * Added a Layout object called `Div`. `Row` and `Column` both inherit from `Div`
 
 For 0.8.0
