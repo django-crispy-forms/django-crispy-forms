@@ -405,6 +405,54 @@ class TestFormLayout(TestCase):
         self.assertTrue('id="custom-div"' in html)
         self.assertTrue('class="customdivs"' in html)
 
+    def test_layout_within_layout(self):
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                Layout(
+                    MultiField("Some company data",
+                        'is_company',
+                        'email',
+                        css_id = "multifield_info",
+                    ),
+                ),
+                Column(
+                    'first_name',
+                    # 'last_name', Missing a field on purpose
+                    css_id = "column_name",
+                    css_class = "columns",
+                ),
+                ButtonHolder(
+                    Submit('Save', 'Save', css_class='button white'),
+                ),
+                Div(
+                    'password1', 
+                    'password2',
+                    css_id="custom-div",
+                    css_class="customdivs",
+                )
+            )
+        )
+
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        html = template.render(c)
+
+        self.assertTrue('multiField' in html)
+        self.assertTrue('formColumn' in html)
+        self.assertTrue('id="multifield_info"' in html)
+        self.assertTrue('id="column_name"' in html)
+        self.assertTrue('class="formColumn columns"' in html)
+        self.assertTrue('class="buttonHolder">' in html)
+        self.assertTrue('input type="submit"' in html)
+        self.assertTrue('name="save"' in html)
+        self.assertTrue('id="custom-div"' in html)
+        self.assertTrue('class="customdivs"' in html)
+        self.assertTrue('last_name' in html)
+       
     def test_change_layout_dynamically_delete_field(self):
         template = get_template_from_string(u"""
             {% load uni_form_tags %}

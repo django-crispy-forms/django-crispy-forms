@@ -10,6 +10,7 @@ For 0.8.1
  * Added an extra optional parameter to `render_field` called `layout_object`, used for storing in it a list of bound fields.
  * Refactor all Layout objects to use Templates and not having hardcoded HTML in the code, based on Jonas Obrist work. Resolves Issue #GH-37 
  * Added a Layout object called `Div`. `Row` and `Column` both inherit from `Div`
+ * `Layout` can now be a child of `Layout`, see issue #GH-76.
 
 For 0.8.0
 

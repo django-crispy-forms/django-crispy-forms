@@ -235,13 +235,9 @@ class Layout(object):
         self.fields = list(fields)
     
     def render(self, form, form_style, context):
-        form.rendered_fields = []
         html = ""
         for field in self.fields:
             html += render_field(field, form, form_style, context)
-        for field in form.fields.keys():
-            if not field in form.rendered_fields:
-                html += render_field(field, form, form_style, context)
         return html
 
 
@@ -558,7 +554,15 @@ class FormHelper(object):
         """
         Returns safe html of the rendering of the layout
         """
-        return mark_safe(self.layout.render(form, self.form_style, context))
+        form.rendered_fields = []
+        
+        html = self.layout.render(form, self.form_style, context)
+
+        for field in form.fields.keys():
+            if not field in form.rendered_fields:
+                html += render_field(field, form, self.form_style, context)
+
+        return mark_safe(html)
     
     def get_attributes(self):
         """
