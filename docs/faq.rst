@@ -25,6 +25,16 @@ However, because we do care about producing lean and fast code, work is being do
     Django-uni-form |as_uni_form filter: 3.98601007462
     Django-uni-form {% uni_form %} tag: 4.8678791523
 
+Which versions of Python does this support?
+=============================================
+
+Versions supported include Python 2.5.4, 2.6.x, and 2.7.x. If you need greater backwards compatibility django-uni-form 0.7.0 supports Python 2.4.x.
+
+Which versions of Django does this support?
+=============================================
+
+Versions supported include Django 1.2.x and Django 1.3.x. If you need greater backwards compatibility django-uni-form 0.7.0 supports Django 1.1.x.
+
 .. _Django: http://djangoproject.com
 .. _Pinax: http://pinaxproject.com
 .. _`NASA's Science Mission Directorate`: http://science.nasa.gov

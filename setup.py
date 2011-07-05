@@ -20,14 +20,10 @@ Documentation
 
 http://readthedocs.org/docs/django-uni-form/en/latest/
 
-Contributions
-=============
+.. note:: django-uni-form only supports Django 1.2 or higher and Python
+2.5.4, Python 2.6.x and Python 2.7.x. If you need to support earlier versions
+of Django or Python you will need to use django-uni-form 0.7.0.
 
-The maintainers of django-uni-form are committed to providing a fully tested
-suite of functionality for developers to use. Therefore, all submissions must
-come with either unit tests or browser views of functionality as is 
-demonstrated in the test projects. Inclusion of both will increase the likely
-hood of your pull request being accepted
 
 .. _`Uni-form`: http://sprawsm.com/uni-form
 .. _Django: http://djangoproject.com
