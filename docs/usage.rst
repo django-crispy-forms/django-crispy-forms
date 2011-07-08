@@ -7,7 +7,7 @@ Using the as_uni_form filter
 
 At it's most basic level django-uni-form renders out the field elements of a form via the `as_uni_form` filter. The steps are simple:
 
-1. Add ``{% load "uni_form_tags" %}`` to the template that calls your form.
+1. Add ``{% load uni_form_tags %}`` to the template that calls your form.
 2. Append your form call with the as_uni_form filter::
 
     {{ my_form|as_uni_form }}
@@ -20,7 +20,7 @@ At it's most basic level django-uni-form renders out the field elements of a for
 
 To see this more clearly::
 
-    {% load "uni_form_tags" %}
+    {% load uni_form_tags %}
     
     <form method="post" class="uniForm">
 
