@@ -254,6 +254,7 @@ class TestFormHelpers(TestCase):
         self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html) 
 
 class TestFormLayout(TestCase):
+    urls = 'uni_form.tests.urls'
     def test_layout_invalid_unicode_characters(self):
         # Adds a BooleanField that uses non valid unicode characters "ñ"
         form = TestForm()
