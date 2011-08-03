@@ -1,7 +1,7 @@
 {% load uni_form_tags %}
 
 {% if formset_tag %}
-<form action="{{ formset_action }}" class="uniForm {{ formset_class }}" method="{{ formset_method }}" {% if formset_id %}id="{{ formset_id }}"{% endif %}{% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
+<form {% if formset_action %}action="{{ formset_action }}" {% endif %}class="uniForm {{ formset_class }}" method="{{ formset_method }}" {% if formset_id %}id="{{ formset_id }}"{% endif %}{% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
 {% endif %}
     {% if formset_method|lower == 'post' %}
         {% csrf_token %}
