@@ -268,7 +268,6 @@ class Fieldset(object):
         self.fields = list(fields)
     
     def render(self, form, form_style, context):
-        print form_style
         template = Template("""
             <fieldset {% if fieldset.css_id %}id="{{ fieldset.css_id }}"{% endif %} 
                 {% if fieldset.css_class or form_style %}class="{{ fieldset.css_class }} {{ form_style }}"{% endif %}>
