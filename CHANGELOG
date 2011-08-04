@@ -4,15 +4,23 @@ CHANGELOG
 
 For 0.8.1
 
+ * Moved template code in Layout objects into separate files in `uni_form/layout` directory. Layout objects templates can now be easily overriden, see #GH-37.
+ * `form_style` can now be used without having to set a helper Layout, see #GH-85 
+ * `form_action` is not lowered anymore and `form_action` is set to "" by default instead of "." thanks to Jianbo Guo, see #GH-84
+ * `Multifield` field template `multifield.html` markup fixed, adding help_text support and removing labelclass from labels.
+ * Fixed testing suite, when run not using DjangoTestSuiteRunner provided, thanks to Narsil.
  * Removed test_project from the project
- * Improved MultiField performance avoiding instantiating BoundFields twice.
+ * Improved `MultiField` performance avoiding instantiating BoundFields twice.
  * Fixed a bug in `MultiField` that raised an exception when internal fields had errors, because of `self.css` not existing.
  * Added an extra optional parameter to `render_field` called `layout_object`, used for storing in it a list of bound fields.
- * Refactor all Layout objects to use Templates and not having hardcoded HTML in the code, based on Jonas Obrist work. Resolves Issue #GH-37 
+ * Refactor all Layout objects to use templates and not having hardcoded HTML in the code, based on Jonas Obrist work. Resolves Issue #GH-37 
  * Added a Layout object called `Div`. `Row` and `Column` both inherit from `Div`
  * `Layout` can now be a child of `Layout`, see issue #GH-76.
 
 For 0.8.0
+
+You can read on how to use new features included in this version at:
+http://tothinkornottothink.com/post/7339670508/new-kung-fu-in-django-uni-form-0-8-0
 
  * Elevated Miguel Araujo to project lead!
  * Added a forloop simulator for formset forms rendering.
