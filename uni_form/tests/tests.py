@@ -183,7 +183,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('<form' in html)
         self.assertTrue('class="uniForm"' in html)
         self.assertTrue('method="post"' in html)
-        self.assertTrue('action="."' in html)
+        self.assertFalse('action' in html)
 
     def test_uni_form_invalid_helper(self):
         template = get_template_from_string(u"""
