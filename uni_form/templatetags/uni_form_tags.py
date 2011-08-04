@@ -121,7 +121,7 @@ class BasicNode(template.Node):
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
         response_dict = {
-            '%s_action' % form_type: attrs.get("form_action", '.'),
+            '%s_action' % form_type: attrs.get("form_action", ''),
             '%s_method' % form_type: attrs.get("form_method", 'post'),
             '%s_tag' % form_type: attrs.get("form_tag", True),
             '%s_class' % form_type: attrs.get("class", ''),
