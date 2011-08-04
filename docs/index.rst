@@ -29,7 +29,6 @@ And yet, django-uni-form does much more! By providing sophisticated layout contr
     
         @property
         def helper(self):
-            form = MyForm()
             helper = FormHelper()
             submit = Submit('search','search this site')
             helper.add_input(submit)
