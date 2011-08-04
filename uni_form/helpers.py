@@ -37,31 +37,27 @@ class ButtonHolder(object):
             Submit('Save', 'Save')
         )
     """
+    template = "uni_form/layout/buttonholder.html"
+
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
         self.css_class = kwargs.get('css_class', None)
         self.css_id = kwargs.get('css_id', None)
 
     def render(self, form, form_style, context):
-        template = Template("""
-            <div {% if buttonholder.css_id %}id="{{ buttonholder.css_id }}"{% endif %} 
-                class="buttonHolder{% if buttonholder.css_class %} {{ buttonholder.css_class }}{% endif %}">
-                   {{ fields_output|safe }}
-            </div>
-        """)
-      
         html = u''
         for field in self.fields:
             html += render_field(field, form, form_style, context)
 
-        c = Context({'buttonholder': self, 'fields_output': html})
-        return template.render(c)
+        return render_to_string(self.template, Context({'buttonholder': self, 'fields_output': html}))
 
 
 class BaseInput(object):
     """
     A base class to reduce the amount of code in the Input classes.
     """
+    template = "uni_form/layout/baseinput.html"
+
     def __init__(self, name, value, **kwargs):
         self.name = name
         self.value = value
@@ -73,18 +69,7 @@ class BaseInput(object):
         """
         Renders an `<input />` if container is used as a Layout object
         """
-        template = Template("""
-            <input type="{{ input.input_type }}"
-                   name="{{ input.name|slugify }}"
-                   value="{{ input.value }}"
-                   {% ifnotequal input.input_type "hidden" %}
-                        class="{{ input.field_classes }}"
-                        id="{{ input.input_type }}-id-{{ input.name|slugify }}"
-                   {% endifnotequal %}/>
-        """)
-       
-        c = Context({'input': self})
-        return template.render(c)
+        return render_to_string(self.template, Context({'input': self}))
 
 
 class Submit(BaseInput):
@@ -260,6 +245,7 @@ class Fieldset(object):
             'form_field_2'
         )
     """
+    template = "uni_form/layout/fieldset.html"
 
     def __init__(self, legend, *fields, **kwargs):
         self.css_class = kwargs.get('css_class', '')
@@ -268,25 +254,17 @@ class Fieldset(object):
         self.fields = list(fields)
     
     def render(self, form, form_style, context):
-        template = Template("""
-            <fieldset {% if fieldset.css_id %}id="{{ fieldset.css_id }}"{% endif %} 
-                {% if fieldset.css_class or form_style %}class="{{ fieldset.css_class }} {{ form_style }}"{% endif %}>
-                <legend>{{ legend|safe }}</legend> 
-                {{ fields|safe }} 
-            </fieldset>
-        """)
-
         fields = ''
         for field in self.fields:
             fields += render_field(field, form, form_style, context)
 
         legend = u'%s' % self.legend.render(context)
-        c = Context({'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style})
-        return template.render(c)
+        return render_to_string(self.template, Context({'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style}))
 
 
 class MultiField(object):
     """ multiField container. Renders to a multiField <div> """
+    template = "uni_form/layout/multifield.html"
 
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
@@ -297,36 +275,6 @@ class MultiField(object):
         self.css_id = kwargs.get('css_id', None)
 
     def render(self, form, form_style, context):
-        FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
-
-        template = Template("""
-            <div {% if multifield.css_id or errors %}id="{{ multifield.css_id }}"{% endif %} 
-                {% if multifield.css_class %}class="{{ multifield.css_class }}"{% endif %}>
-
-                {% for field in multifield.bound_fields %}
-                    {% if field.errors %}
-                        {% for error in field.errors %}
-                            <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="errorField">{{ error|safe }}</p>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
-
-                {% if multifield.label_html %}
-                    <p {% if multifield.label_class %}class="{{ multifield.label_class }}"{% endif %}>{{ multifield.label_html|safe }}</p>
-                {% endif %}
-
-                <div class="multiField">
-                    {{ fields_output|safe }}
-                </div>
-
-                {% for field in multifield.bound_fields %}
-                    {% if field.help_text %}
-                        <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text|safe }}</p>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        """)
-
         if form.errors:
             self.css_class += " error"
 
@@ -338,7 +286,7 @@ class MultiField(object):
         for field in self.fields:
             fields_output += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class, layout_object=self)
         
-        return template.render(Context({'multifield': self, 'fields_output': fields_output}))
+        return render_to_string(self.template, Context({'multifield': self, 'fields_output': fields_output}))
 
 
 class Div(object):
@@ -349,6 +297,8 @@ class Div(object):
 
         Div('form_field_1', 'form_field_2', css_id='div-example', css_class='divs')
     """
+    template = "uni_form/layout/div.html"
+
     def __init__(self, *fields, **kwargs):
         self.fields = fields
         
@@ -371,8 +321,7 @@ class Div(object):
         for field in self.fields:
             fields += render_field(field, form, form_style, context)
 
-        c = Context({'div': self, 'fields': fields})
-        return template.render(c)
+        return render_to_string(self.template, Context({'div': self, 'fields': fields}))
 
 
 class Row(Div):
