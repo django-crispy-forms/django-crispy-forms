@@ -126,6 +126,7 @@ class BasicNode(template.Node):
             '%s_tag' % form_type: attrs.get("form_tag", True),
             '%s_class' % form_type: attrs.get("class", ''),
             '%s_id' % form_type: attrs.get("id", ""),
+            '%s_style' % form_type: attrs.get("form_style", None),
             'form_error_title': attrs.get("form_error_title", None),
             'formset_error_title': attrs.get("formset_error_title", None),
             'inputs': attrs.get('inputs', []),
