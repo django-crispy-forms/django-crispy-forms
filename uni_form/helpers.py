@@ -262,26 +262,28 @@ class Fieldset(object):
     """
 
     def __init__(self, legend, *fields, **kwargs):
-        self.css_class = kwargs.get('css_class', None)
+        self.css_class = kwargs.get('css_class', '')
         self.css_id = kwargs.get('css_id', None)
         self.legend = Template(legend)
         self.fields = list(fields)
     
     def render(self, form, form_style, context):
-        html = u'<fieldset'
-        if self.css_id:
-            html += u' id="%s"' % self.css_id
-        if self.css_class:
-            html += u' class="%s %s"' % (self.css_class, form_style)
-        else:
-            html += u' class="%s"' % form_style
-        html += '>'
+        print form_style
+        template = Template("""
+            <fieldset {% if fieldset.css_id %}id="{{ fieldset.css_id }}"{% endif %} 
+                {% if fieldset.css_class or form_style %}class="{{ fieldset.css_class }} {{ form_style }}"{% endif %}>
+                <legend>{{ legend|safe }}</legend> 
+                {{ fields|safe }} 
+            </fieldset>
+        """)
 
-        html += self.legend and (u'<legend>%s</legend>' % self.legend.render(context)) or ''
+        fields = ''
         for field in self.fields:
-            html += render_field(field, form, form_style, context)
-        html += u'</fieldset>'
-        return html
+            fields += render_field(field, form, form_style, context)
+
+        legend = u'%s' % self.legend.render(context)
+        c = Context({'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style})
+        return template.render(c)
 
 
 class MultiField(object):
