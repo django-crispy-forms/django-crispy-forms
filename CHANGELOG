@@ -4,12 +4,14 @@ CHANGELOG
 
 For 0.8.1
 
+ * Improved rendering performance of `{% uni_form %}` tag and `|as_uni_form` filter avoiding reloading templates every time, see #GH-81.
+ * Added support for Django `Form.error_css_class` and `Form.required_css_class` custom CSS classes, see #GH-87.
  * Moved template code in Layout objects into separate files in `uni_form/layout` directory. Layout objects templates can now be easily overriden, see #GH-37.
- * `form_style` can now be used without having to set a helper Layout, see #GH-85 
- * `form_action` is not lowered anymore and `form_action` is set to "" by default instead of "." thanks to Jianbo Guo, see #GH-84
+ * `form_style` can now be used without having to set a helper Layout, see #GH-85.
+ * `form_action` is not lowered anymore and `form_action` is set to "" by default instead of "." thanks to Jianbo Guo, see #GH-84.
  * `Multifield` field template `multifield.html` markup fixed, adding help_text support and removing labelclass from labels.
- * Fixed testing suite, when run not using DjangoTestSuiteRunner provided, thanks to Narsil.
- * Removed test_project from the project
+ * Fixed testing suite, when run not using DjangoTestSuiteRunner provided, thanks to Narsil #GH-82.
+ * Removed test_project from the project.
  * Improved `MultiField` performance avoiding instantiating BoundFields twice.
  * Fixed a bug in `MultiField` that raised an exception when internal fields had errors, because of `self.css` not existing.
  * Added an extra optional parameter to `render_field` called `layout_object`, used for storing in it a list of bound fields.
