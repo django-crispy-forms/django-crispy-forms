@@ -63,7 +63,7 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue("<li>Passwords dont match</li>" in html)
         self.assertFalse("<h3>" in html)
 
-    def test_as_uni_form(self):
+    def test_as_uni_form_with_form(self):
         template = get_template_from_string(u"""
             {% load uni_form_tags %}
             {{ form|as_uni_form }}
@@ -73,7 +73,25 @@ class TestBasicFunctionalityTags(TestCase):
         
         self.assertTrue("<td>" not in html)
         self.assertTrue("id_is_company" in html)
-    
+
+    def test_as_uni_form_with_formset(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {{ testFormset|as_uni_form }}
+        """)
+
+        TestFormset = formset_factory(TestForm, extra = 4)
+        testFormset = TestFormset()
+
+        c = Context({'testFormset': testFormset})
+        html = template.render(c)
+
+        self.assertEqual(html.count('<form'), 0)
+        # Check formset management form
+        self.assertTrue('form-TOTAL_FORMS' in html)
+        self.assertTrue('form-INITIAL_FORMS' in html)
+        self.assertTrue('form-MAX_NUM_FORMS' in html)
+
     def test_uni_form_setup(self):
         template = get_template_from_string("""
             {% load uni_form_tags %}
@@ -133,7 +151,7 @@ class TestFormHelpers(TestCase):
         except FormHelpersException: 
             pass
 
-    def test_uni_form_with_helper_attributes_without_layout(self):
+    def test_uni_form_with_helper_without_layout(self):
         form_helper = FormHelper()    
         form_helper.form_id = 'this-form-rocks'
         form_helper.form_class = 'forms-that-rock'
@@ -199,7 +217,7 @@ class TestFormHelpers(TestCase):
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.UNIFORM_FAIL_SILENTLY
 
-    def test_uni_form_formset(self):
+    def test_uni_form_formset_with_helper_without_layout(self):
         template = get_template_from_string(u"""
             {% load uni_form_tags %}
             {% uni_form testFormSet formset_helper %}
@@ -220,6 +238,11 @@ class TestFormHelpers(TestCase):
         self.assertEqual(html.count('<form'), 1)
         self.assertEqual(html.count("<input type='hidden' name='csrfmiddlewaretoken'"), 1)
 
+        # Check formset management form
+        self.assertTrue('form-TOTAL_FORMS' in html)
+        self.assertTrue('form-INITIAL_FORMS' in html)
+        self.assertTrue('form-MAX_NUM_FORMS' in html)
+    
         self.assertTrue('class="uniForm formsets-that-rock"' in html)
         self.assertTrue('method="post"' in html)
         self.assertTrue('id="thisFormsetRocks">' in html)
