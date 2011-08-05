@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.forms.forms import BoundField
 from django.template import Context, Template
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string, get_template
 from django.utils.safestring import mark_safe
 
 
@@ -115,8 +115,11 @@ class Reset(BaseInput):
     input_type = 'reset'
     field_classes = 'reset resetButton'
 
+# Global field template, default template used for rendering a field. This way we avoid 
+# loading the template every time render_field is called without a template
+default_field_template = get_template("uni_form/field.html")
 
-def render_field(field, form, form_style, context, template="uni_form/field.html", labelclass=None, layout_object=None):
+def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None):
     """
     Renders a django-uni-form field
     
@@ -174,11 +177,17 @@ def render_field(field, form, form_style, context, template="uni_form/field.html
         html = ''
     else:
         bound_field = BoundField(form, field_instance, field)
-        html = render_to_string(template, {'field': bound_field, 'labelclass': labelclass})
+
+        if template is None:
+            template = default-field_template
+        else:
+            template = get_template(template)
 
         # We save the Layout object's bound fields in the layout object's `bound_fields` list
         if layout_object is not None:
             layout_object.bound_fields.append(bound_field) 
+        
+        html = template.render(Context({'field': bound_field, 'labelclass': labelclass}))
 
     return html
 
