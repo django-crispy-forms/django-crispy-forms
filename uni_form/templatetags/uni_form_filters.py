@@ -7,8 +7,10 @@ from django import template
 
 from uni_form.helpers import FormHelper
 
-register = template.Library()
+uni_formset_template = get_template('uni_form/uni_formset.html')
+uni_form_template = get_template('uni_form/uni_form.html')
 
+register = template.Library()
 
 @register.filter
 def as_uni_form(form):
@@ -23,10 +25,16 @@ def as_uni_form(form):
         </form>
     """
     if isinstance(form, BaseFormSet):
-        template = get_template('uni_form/uni_formset.html')
+        if settings.DEBUG:
+            template = get_template('uni_form/uni_formset.html')
+        else:
+            template = uni_formset_template
         c = Context({'formset': form})
     else:
-        template = get_template('uni_form/uni_form.html')
+        if settings.DEBUG:
+            template = get_template('uni_form/uni_form.html')
+        else:
+            template = uni_form_template
         c = Context({'form': form})
     return template.render(c)
 
