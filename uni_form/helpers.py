@@ -179,7 +179,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         bound_field = BoundField(form, field_instance, field)
 
         if template is None:
-            template = default-field_template
+            template = default_field_template
         else:
             template = get_template(template)
 
