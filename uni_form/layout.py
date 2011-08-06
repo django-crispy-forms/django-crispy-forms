@@ -1,7 +1,7 @@
 from django.template import Context, Template
 from django.template.loader import render_to_string
 
-from util import render_field
+from utils import render_field
 
 
 class Layout(object):

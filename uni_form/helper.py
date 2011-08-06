@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 
-from util import render_field
+from utils import render_field
 
 
 class FormHelpersException(Exception):
