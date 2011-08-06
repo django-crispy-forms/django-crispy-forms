@@ -43,6 +43,7 @@ class ButtonHolder(object):
         self.fields = list(fields)
         self.css_class = kwargs.get('css_class', None)
         self.css_id = kwargs.get('css_id', None)
+        self.template = kwargs.get('template', self.template)
 
     def render(self, form, form_style, context):
         html = u''
@@ -64,6 +65,8 @@ class BaseInput(object):
         
         if kwargs.has_key('css_class'):
             self.field_classes += ' %s' % kwargs.get('css_class')
+
+        self.template = kwargs.get('template', self.template)
         
     def render(self, form, form_style, context):
         """
@@ -261,6 +264,8 @@ class Fieldset(object):
         self.css_id = kwargs.get('css_id', None)
         self.legend = Template(legend)
         self.fields = list(fields)
+        # Overrides class variable with an instance level variable
+        self.template = kwargs.get('template', self.template)
     
     def render(self, form, form_style, context):
         fields = ''
@@ -282,6 +287,7 @@ class MultiField(object):
         self.fields = fields
         self.css_class = kwargs.get('css_class', u'ctrlHolder')
         self.css_id = kwargs.get('css_id', None)
+        self.template = kwargs.get('template', self.template)
 
     def render(self, form, form_style, context):
         if form.errors:
@@ -317,6 +323,7 @@ class Div(object):
             self.css_class = kwargs.get('css_class', None)
        
         self.css_id = kwargs.get('css_id', '')
+        self.template = kwargs.get('template', self.template)
 
     def render(self, form, form_style, context):
         template = Template("""
