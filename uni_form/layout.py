@@ -231,13 +231,6 @@ class Div(object):
         self.template = kwargs.get('template', self.template)
 
     def render(self, form, form_style, context):
-        template = Template("""
-            <div {% if div.css_id %}id="{{ div.css_id }}"{% endif %} 
-                {% if div.css_class %}class="{{ div.css_class }}"{% endif %}>
-                   {{ fields|safe }}
-            </div>
-        """)
-
         fields = ''
         for field in self.fields:
             fields += render_field(field, form, form_style, context)
