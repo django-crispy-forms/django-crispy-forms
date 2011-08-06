@@ -131,7 +131,6 @@ class TestFormHelpers(TestCase):
         c = Context({'form': TestForm(), 'form_helper': form_helper})        
         html = template.render(c)
 
-        # NOTE: Not sure why this is commented
         self.assertTrue('class="submit submitButton button white"' in html)
         self.assertTrue('id="submit-id-my-submit"' in html)        
 
@@ -171,11 +170,13 @@ class TestFormHelpers(TestCase):
         html = template.render(c)
         
         # Lets make sure everything loads right
-        self.assertTrue('<form' in html)
+        self.assertTrue(html.count('<form'), 1)
         self.assertTrue('class="uniForm forms-that-rock"' in html)
         self.assertTrue('method="get"' in html)
         self.assertTrue('id="this-form-rocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
+        self.assertEqual(html.count('<fieldset'), 1)
+
 
         self.assertTrue("<h3>ERRORS</h3>" in html)
         self.assertTrue("<li>Passwords dont match</li>" in html)
