@@ -2,8 +2,11 @@
 CHANGELOG
 =========
 
-For 0.8.1
+For 0.9.0
 
+ * Updating and improving docs, adding more use examples.
+ * Split `helpers.py` file into `helper.py`, `layout.py` and `utils.py`. Added a deprecation warning. 
+ * Improved testing coverage, specially for formsets.
  * Improved rendering performance of `{% uni_form %}` tag and `|as_uni_form` filter avoiding reloading templates every time, see #GH-81.
  * Added support for Django `Form.error_css_class` and `Form.required_css_class` custom CSS classes, see #GH-87.
  * Moved template code in Layout objects into separate files in `uni_form/layout` directory. Layout objects templates can now be easily overriden, see #GH-37.
