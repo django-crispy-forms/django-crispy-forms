@@ -1,8 +1,8 @@
 .. _`form helpers`:
 
-==============
+============
 Form Helpers
-==============
+============
 
 django-uni-form implements a class called `FormHelper` that defines the form rendering behavior. Helpers give you a way to control form attributes and its layout, doing this in a programatic way using Python. This way you touch HTML as little as possible, and all your logic stays in the forms and views files.
 
@@ -176,6 +176,16 @@ form_style
     If you are using uni-form CSS, it has two different form styles built-in. You can choose which one to use, setting this variable to “default” or “inline”.
 
 
+Rendering several forms with helpers 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Often we get asked, how do you render two or more forms, with their respective helpers, using `{% uni_form %}` tags, without having `<form>` tags rendered twice? Easy, you need to set `form_tag` helper property to False in every helper and write a little of html code::
+
+    <form action="{% url submit_survey %}" class="uniForm" method="post">
+        {% uni_form first_form first_form.helper %}
+        {% uni_form second_form second_form.helper %}
+    </form>
+
 =======
 Layouts 
 =======
@@ -183,11 +193,11 @@ Layouts
 Fundamentals
 ~~~~~~~~~~~~
 
-You might be thinking that helpers are nice, but what if you need to change the way the form fields are rendered, answer is layouts. Django-uni-form defines another powerful class called `Layout`. You can create your `Layout` to define how the form fields should be rendered: order of the fields, wrap them in divs or other html structures with ids or classes set to whatever you want, add things in between, etc. And all that without writing a custom template, rather fully reusable without writing it twice.
+You might be thinking that helpers are nice, but what if you need to change the way the form fields are rendered, answer is layouts. Django-uni-form defines another powerful class called `Layout`. You can create your `Layout` to define how the form fields should be rendered: order of the fields, wrap them in divs or other structures, add html, set ids or classes to whatever you want, etc. And all that without writing a custom template, rather fully reusable without writing it twice. Then just attach the layout to a helper, layouts are optional, but probably the most powerful thing django-uni-form has to offer.
 
-A Layout is constructed by what I like to call layout objects, which can be thought of as form components. You assemble your layout using those. For the time being, your choices are: ButtonHolder, Button, Div, Row, Column, Fieldset, HTML, Hidden, MultiField, Reset and Submit.
+A Layout is constructed by layout objects, which can be thought of as form components. You assemble your layout using those. For the time being, your choices are: `ButtonHolder`, `Button`, `Div`, `Row`, `Column`, `Fieldset`, `HTML`, `Hidden`, `MultiField`, `Reset` and `Submit`.
 
-All these components are explained in helper API docs. What you need to know now about them is that every component renders a different template. Let’s write a couple of different layouts for our form, continuing with our form class example (note that I’m not showing the full form again):
+All these components are explained in helper API docs. What you need to know now about them is that every component renders a different template. Let’s write a couple of different layouts for our form, continuing with our form class example (note that the full form is not shown again):
 
 Let's add a layout to our helper::
 
@@ -200,7 +210,7 @@ Let's add a layout to our helper::
             self.helper = FormHelper()
             self.helper.layout = Layout(
                 Fieldset(
-                    'legend of the fieldset',
+                    'first arg is the legend of the fieldset',
                     'like_website',
                     'favorite_number',
                     'favorite_color',
@@ -218,13 +228,13 @@ When we render the form now using::
     {% load uni_form_tags %}
     {% uni_form example_form example_form.helper %}
 
-We will get the fields wrapped in a fieldset, the fields order will be: like_website, favorite_number, favorite_color, favorite_food and notes. We also get a Submit button wrapped in a `<div class="buttonHolder">` which uni-form CSS positions in a nice way. That button has its CSS class set to `button white`.
+We will get the fields wrapped in a fieldset, whose legend will be set to 'first arg is the legend of the fieldset'. The fields order will be: `like_website`, `favorite_number`, `favorite_color`, `favorite_food` and `notes`. We also get a submit button wrapped in a `<div class="buttonHolder">` which uni-form CSS positions in a nice way. That button has its CSS class set to `button white`.
 
 This is just the peak of the iceberg. Now imagine you want to add an explanation for what notes are, you can use `HTML` layout object::
 
     Layout(
         Fieldset(
-            'legend of the fieldset',
+            'Tell us your favorite stuff {{ username }}',
             'like_website',
             'favorite_number',
             'favorite_color',
@@ -236,15 +246,153 @@ This is just the peak of the iceberg. Now imagine you want to add an explanation
         )
     )
 
-This way you will get a message before the notes input. Note how you can wrap layout objects into other layout objects.
+As you notice the fieldset legend is context aware and you can write it as if it were a chunk of a template where the form will be rendered. the `HTML` object will add a message before the notes input and it's also context aware. Note how you can wrap layout objects into other layout objects. Layout objects `Fieldset`, `Div`, `Row`, `Column`, `MultiField` and `ButtonHolder` can hold other Layout objects within. Let's do an alternative layout for the same form::
 
+    Layout(
+        MultiField(
+            'Tell us your favorite stuff {{ username }}',
+            Div(
+                'like_website',
+                'favorite_number',
+                css_id = 'special-fields'
+            )
+            'favorite_color',
+            'favorite_food',
+            'notes'
+        )
+    )
+
+This time we are using a `MultiField`, which is a layout object that as a general rule can be used in the same places as `Fieldset`. The main difference is that this renders all the fields wrapped in a div and when there are errors in the form submission, they are shown in a list instead of each one surrounding the field. Sometimes the best way to see what layout objects do, is just try them and play with them a little bit.
+
+Layout parameters
+~~~~~~~~~~~~~~~~~
+
+Let's see an example of every layout object in use, to understand what parameters each one expects.
+
+- Div: It wraps fields in a div::
+
+    Div('form_field_1', 'form_field_2', 'form_field_3', ...)
+
+- Row and Column: They are child classes of `Div`, which wrap fields in divs with CSS classes already set to `formRow` and `formColumn` respectively. These are maintained for backwards compatibility, but uni-form CSS rules doesn't format this in any way. It is recommended to use `Div` instead for new projects::
+
+    Row('form_field_1', 'form_field_2', 'form_field_3', ...)
+    Column('form_field_1', 'form_field_2', 'form_field_3', ...)
+
+- HTML: A very powerful layout object, to render pure html code. You can write as a Django template and it has access to the whole context of the page where the form is being rendered::
+
+    HTML("{% if success %} <p>Operation was successful</p> {% endif %}")
+
+- Submit: Used to create a submit button. First parameter is the `name` attribute of the button, second parameter is the `value` attribute::
+
+    Submit('search', 'SEARCH')
+
+Renders to::
+    
+    <input type="submit" name="search" value="SEARCH" class="submit submitButton" id="submit-id-search" />
+
+- Hidden: Used to create a hidden input::
+
+    Hidden('name', 'value')
+
+- Button: Creates a button::
+    
+    Button('name', 'value')
+    
+- Reset: Used to create a reset input::
+
+    reset = Reset('Reset This Form', 'Revert Me!')
+
+- ButtonHolder: It wraps fields in a `<div class=”buttonHolder”>`, which uni-form positions in a nice way. This is where you should put visible layout objects that render to form inputs like `Submit` or `Button`.
+
+    ButtonHolder(
+        HTML("<span class="hidden">✓ Saved data</span>"),
+        Submit('save', 'Save')
+    )
+
+- Fieldset: It wraps fields in a `<fieldset>`. The first parameter is the text for the fieldset legend, as we've said it behaves like a Django template::
+
+    Fieldset("Text for the legend {{ username }}",
+        'form_field_1',
+        'form_field_2'
+    )
+
+- MultiField: It wraps fields in a div with a label on top. When there are errors in the form submission it renders them in a list instead of each one surrounding the field::
+
+    Fieldset("Text for the label {{ username }}",
+        'form_field_1',
+        'form_field_2'
+    )
+
+All this layout objects, can have their DOM id or class set using named arguments `css_id` and `css_class`::
+
+    Div('form_field_1', 'form_field_2', 'form_field_3', css_id = 'magic-div-1', css = 'magic-divs')
+    Submit('save', 'Save', css_id = 'submit-save', css_class = 'button white')
+
+
+Overriding layout objects templates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Django-uni-form provides a set of layout objects, that have been thoroughly designed to be flexible, standard compatible and support Django form features. Every Layout object is associated to a different template that lives in `templates/uni_form/layout/` directory.
+
+Some advanced users may want to use their own templates, to adapt the layout objects to their use or necessities. There are two ways to override the template that a layout object uses. 
+
+- Globally: You override the template of the layout object, for all instances of that layout object you use::
+
+    from uni_form.layout import Div
+    Div.template = 'my_div_template.html'
+
+- Individually: You can override the template for a specific layout object in a layout::
+
+    Layout(
+        Div(
+            'field1',
+            'field2',
+            template = 'my_div_template.html'
+        )
+    )
 
 Creating your own layout objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    
-Overriding layout objects templates
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The layout objects bundled with django-uni-form are a set of the most seen components that build a form. You will probably be able to do anything you need combining them. Anyway, you may want to create your own components, for doing that, you will need a good grasp of django-uni-form. Every layout object must have a method called `render`. Its prototype should be::
 
+    def render(self, form, form_style, context):
+
+The official layout objects django-uni-form has live in layout.py, you may want to have a look at them to fully understand how to proceed. But in general terms, a layout object is a template rendered with some parameters passed.
+
+If you come up with a good idea and design a layout object you think others could benefit from, please open an issue or send us a pull request, so we can make django-uni-form better.
+
+
+Inheriting layouts
+~~~~~~~~~~~~~~~~~~
+
+Imagine you have several forms that share a big chunk of the same layout. There is a way you can create a `Layout`, reuse and extend it in an easy way. You can have a `Layout` as a component of another `Layout`, let's see an example::
+
+    common_layout = Layout(
+        MultiField("User data",
+            'username',
+            'lastname',
+            'age'
+        )
+    )
+
+    example_layout = Layout(
+        common_layout,
+        Div(
+            'favorite_food',
+            'favorite_bread',
+            css_id = 'favorite-stuff'
+        )
+    )
+
+    example_layout2 = Layout(
+        common_layout,
+        Div(
+            'professional_interests',
+            'job_description', 
+        )
+    )
+
+We have defined a `common_layout` that is used as a base for two different layouts: `example_layout` and `example_layout2`, which means that those two layouts will start the same way and then extend the layout in different ways. 
 
 .. _`Be careful how you use static variables in forms`: http://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms 
