@@ -47,7 +47,7 @@ Let's see how helpers works step by step, with some examples explained. First yo
 
     from uni_form.helper import FormHelper
 
-Your helper can be a class level variable or an instance level variable, if you don't know what this means you might want to read the article "`Be careful how you use static variables in forms`_". As a rule of thumb, if you are not going to manipulate a form helper in your code, like in a view, you should be using a static helper, otherwise you should be using an instance level helper. In the next steps I will show you how to manipulate the form helper, so we will create an instance level helper. This is how you would do it::
+Your helper can be a class level variable or an instance level variable, if you don't know what this means you might want to read the article "`Be careful how you use static variables in forms`_". As a rule of thumb, if you are not going to manipulate a form helper in your code, like in a view, you should be using a static helper, otherwise you should be using an instance level helper. If you still don't understand the subtle differences between both, use an instance level helper, because you won't end up suffering side effects. As in the next steps I will show you how to manipulate the form helper, so we will create an instance level helper. This is how you would do it::
 
     from uni_form.helper import FormHelper
     
@@ -71,7 +71,7 @@ As you can see you need to override the constructor and call the base class cons
             self.helper.form_method = 'post'
             self.helper.form_action = 'submit_survey'
 
-            self.helper.add_inputs(Submit('submit', 'Submit')
+            self.helper.add_input(Submit('submit', 'Submit')
             return super(ExampleForm, self).__init__(*args, **kwargs)
 
 Note that we are importing here a class called `Submit` that is a layout object. We will see what layout objects are in detail later on, for now on let's just say that this adds a submit button to our form, so people can send their survey.
@@ -142,6 +142,24 @@ What you'll get is the form rendered as HTML with awesome bits. Specifically...
     <div class="buttonHolder">
         <input type="submit" name="submit" value="Submit" class="submit submitButton" id="submit-id-submit" />
     </div>
+
+
+Let's see how we could change any helper property in a view::
+
+    @login_required()
+    def inbox(request, template_name):
+        example_form = ExampleForm()
+        redirect_url = request.GET.get('next')
+
+        # Form handling logic
+        [...]
+ 
+        if redirect_url is not None:
+            example_form.helper.form_action = reverse('submit_survey') + '?next=' + redirectUrl
+        
+        return render_to_response(template_name, {'example_form': example_form}, context_instance=RequestContext(request))
+
+We are changing `form_action` helper property in case the view was called with a `next` GET parameter.
 
 
 Helper attributes you can set
@@ -269,20 +287,20 @@ Layout parameters
 
 Let's see an example of every layout object in use, to understand what parameters each one expects.
 
-- Div: It wraps fields in a div::
+- **Div**: It wraps fields in a div::
 
     Div('form_field_1', 'form_field_2', 'form_field_3', ...)
 
-- Row and Column: They are child classes of `Div`, which wrap fields in divs with CSS classes already set to `formRow` and `formColumn` respectively. These are maintained for backwards compatibility, but uni-form CSS rules doesn't format this in any way. It is recommended to use `Div` instead for new projects::
+- **Row and Column**: They are child classes of `Div`, which wrap fields in divs with CSS classes already set to `formRow` and `formColumn` respectively. These are maintained for backwards compatibility, but uni-form CSS rules doesn't format this in any way. It is recommended to use `Div` instead for new projects::
 
     Row('form_field_1', 'form_field_2', 'form_field_3', ...)
     Column('form_field_1', 'form_field_2', 'form_field_3', ...)
 
-- HTML: A very powerful layout object, to render pure html code. You can write as a Django template and it has access to the whole context of the page where the form is being rendered::
+- **HTML**: A very powerful layout object, to render pure html code. You can write as a Django template and it has access to the whole context of the page where the form is being rendered::
 
     HTML("{% if success %} <p>Operation was successful</p> {% endif %}")
 
-- Submit: Used to create a submit button. First parameter is the `name` attribute of the button, second parameter is the `value` attribute::
+- **Submit**: Used to create a submit button. First parameter is the `name` attribute of the button, second parameter is the `value` attribute::
 
     Submit('search', 'SEARCH')
 
@@ -290,33 +308,33 @@ Renders to::
     
     <input type="submit" name="search" value="SEARCH" class="submit submitButton" id="submit-id-search" />
 
-- Hidden: Used to create a hidden input::
+- **Hidden**: Used to create a hidden input::
 
     Hidden('name', 'value')
 
-- Button: Creates a button::
+- **Button**: Creates a button::
     
     Button('name', 'value')
     
-- Reset: Used to create a reset input::
+- **Reset**: Used to create a reset input::
 
-    reset = Reset('Reset This Form', 'Revert Me!')
+    reset = Reset('name', 'value')
 
-- ButtonHolder: It wraps fields in a `<div class=”buttonHolder”>`, which uni-form positions in a nice way. This is where you should put visible layout objects that render to form inputs like `Submit` or `Button`.
+- **ButtonHolder**: It wraps fields in a `<div class=”buttonHolder”>`, which uni-form positions in a nice way. This is where you should put visible layout objects that render to form inputs like `Submit` or `Button`::
 
     ButtonHolder(
         HTML("<span class="hidden">✓ Saved data</span>"),
         Submit('save', 'Save')
     )
 
-- Fieldset: It wraps fields in a `<fieldset>`. The first parameter is the text for the fieldset legend, as we've said it behaves like a Django template::
+- **Fieldset**: It wraps fields in a `<fieldset>`. The first parameter is the text for the fieldset legend, as we've said it behaves like a Django template::
 
     Fieldset("Text for the legend {{ username }}",
         'form_field_1',
         'form_field_2'
     )
 
-- MultiField: It wraps fields in a div with a label on top. When there are errors in the form submission it renders them in a list instead of each one surrounding the field::
+- **MultiField**: It wraps fields in a div with a label on top. When there are errors in the form submission it renders them in a list instead of each one surrounding the field::
 
     Fieldset("Text for the label {{ username }}",
         'form_field_1',
@@ -336,12 +354,12 @@ Django-uni-form provides a set of layout objects, that have been thoroughly desi
 
 Some advanced users may want to use their own templates, to adapt the layout objects to their use or necessities. There are two ways to override the template that a layout object uses. 
 
-- Globally: You override the template of the layout object, for all instances of that layout object you use::
+- **Globally**: You override the template of the layout object, for all instances of that layout object you use::
 
     from uni_form.layout import Div
     Div.template = 'my_div_template.html'
 
-- Individually: You can override the template for a specific layout object in a layout::
+- **Individually**: You can override the template for a specific layout object in a layout::
 
     Layout(
         Div(
@@ -394,5 +412,38 @@ Imagine you have several forms that share a big chunk of the same layout. There 
     )
 
 We have defined a `common_layout` that is used as a base for two different layouts: `example_layout` and `example_layout2`, which means that those two layouts will start the same way and then extend the layout in different ways. 
+
+Updating layouts on the go
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Layouts can be changed, adapted and generated dynamically. At the moment, layout doesn't have an API for handling this, so as in Django you will need to access inner attribute fields, which is a Python list and play with it as you would do with `form.fields`. All layout objects hold also a `fields` list that you can tamper too. You can access the layout attached to a helper with::
+
+    form.helper.layout
+
+This is how you would add one layout object at the end of the layout::
+
+    layout.fields.append(HTML("<p>whatever</p>"))
+
+This is how you would add several layout objects::
+
+    layout.fields.extend([
+        HTML("<p>whatever</p>"),
+        Div('add_field_on_the_go')
+    ])
+
+This is how you would replace a layout object::
+
+    layout.fields[2] = HTML("<p>whatever</p>")
+
+This is how you would delete the second layout object::
+
+    layout.fields.pop(1)
+
+This is how you would insert a layout object in the second position::
+
+    layout.fields.insert(1, HTML("<p>whatever</p>"))
+
+Remember always that if you are going to manipulate a helper or layout in a view or any part of your code, you better use an instance level variable.
+
 
 .. _`Be careful how you use static variables in forms`: http://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms 
