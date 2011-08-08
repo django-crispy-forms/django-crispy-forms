@@ -6,11 +6,7 @@
 django-uni-form (django-uni-form)
 =======================================
 
-Django_ forms are easily rendered as tables,
-paragraphs, and unordered lists. However, elegantly rendered div based forms
-is something you have to do by hand. The purpose of this application is to
-provide a simple filter that lets you quickly render forms in a div
-format. Simple forms are easily rendered by the `as_uni_form` filter.
+Django_ forms are easily rendered as tables, paragraphs, and unordered lists. However, elegantly rendered div based forms is something you have to do by hand. The purpose of this application is to provide a tag and filter that lets you quickly render forms in a div format while providing an enormous amount of capability to configure and control the rendered HTML. 
 
 Via the `as_uni_form` filter::
 
@@ -44,7 +40,8 @@ Think this is awesome and want to make it better? Read our contribution_ page, m
         
 .. note:: Obviously, the excellent `Uni-form`_ has been selected as the base model for the design of the forms.
 
-**Installation and Usage**
+**User Guide**
+This part of the documentation, which is mostly prose, begins with some background information about django-uni-form, then focuses on step-by-step instructions for getting the most out of it.
 
 .. toctree::
     :maxdepth: 2
@@ -54,18 +51,27 @@ Think this is awesome and want to make it better? Read our contribution_ page, m
     usage
     helpers
     customization
+    faq
+    contributors
+    changelog
+
+**API documentation**
+If you are looking for information on a specific function, class or method, this part of the documentation is for you.
+
+.. doctree::
+    :maxdepth: 2
+    
     api_helpers
+    api_layout
     api_templatetags
    
-**Help**
+**Developer Guide**
+If you want to contribute to the project, this part of the documentation is for you.
 
 .. toctree::
     :maxdepth: 2
 
-    faq
     contributing
-    contributors
-    changelog
 
 Indices and tables
 ==================
