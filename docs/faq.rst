@@ -21,9 +21,9 @@ Performance in form rendering is normally a nigh moot issue in Django, because t
 
 However, because we do care about producing lean and fast code, work is being done to speed up and measure performance of this library. These are the average times of rendering 1000 forms with the latest django-uni-form code in Dell Latitude E6500 Intel Core 2 Duo @ 2.53GHz::
 
-========================                  =============================   ========================
+========================                  =============================   ==========================
 Method                                    Time without template caching   Time with template caching
-========================                  =============================   ========================
+========================                  =============================   ==========================
 Plain Django                              0.921598911285 sec              0.915469169617 sec
 Django-uni-form `|as_uni_form` filter     4.37760996819 sec               4.23220916295 sec
 Django-uni-form `{% uni_form %}` tag:     5.63008499146 sec               4.53284406662 sec
