@@ -1,10 +1,13 @@
 .. _`form helpers`:
 
-============
-Form Helpers
-============
+==================
+{% uni_form %} tag
+==================
 
 django-uni-form implements a class called `FormHelper` that defines the form rendering behavior. Helpers give you a way to control form attributes and its layout, doing this in a programatic way using Python. This way you touch HTML as little as possible, and all your logic stays in the forms and views files.
+
+For using this you will need to use django-uni-form `{% uni_form %}` tag.
+
 
 Fundamentals
 ~~~~~~~~~~~~
@@ -144,6 +147,9 @@ What you'll get is the form rendered as HTML with awesome bits. Specifically...
     </div>
 
 
+Manipulating a helper in a view
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Let's see how we could change any helper property in a view::
 
     @login_required()
@@ -162,6 +168,54 @@ Let's see how we could change any helper property in a view::
 We are changing `form_action` helper property in case the view was called with a `next` GET parameter.
 
 
+Rendering several forms with helpers 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Often we get asked, how do you render two or more forms, with their respective helpers, using `{% uni_form %}` tags, without having `<form>` tags rendered twice? Easy, you need to set `form_tag` helper property to False in every helper::
+
+    self.helper.form_tag = False
+
+ Then you will have to write a little of html code surrounding the forms::
+
+    <form action="{% url submit_survey %}" class="uniForm" method="post">
+        {% uni_form first_form first_form.helper %}
+        {% uni_form second_form second_form.helper %}
+    </form>
+
+You can read a list of :ref:`helper attributes` and what they are for.
+
+
+Make django-uni-form fail loud
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default when django-uni-form encounters errors, it fails silently, logs them and continue working if possible. A settings variable called `UNIFORM_FAIL_SILENTLY` has been added so that you can control this behavior. If you want django-uni-form to raise errors instead of logging, telling you what’s going on when you are developing in debug mode, you can set it to::
+
+    UNIFORM_FAIL_SILENTLY = not DEBUG
+
+
+Rendering a formset
+~~~~~~~~~~~~~~~~~~~
+
+`{% uni_form %}` tag supports formsets rendering too. All the previous stated things apply to formsets the same way. Imagine you create a formset using the previous `ExampleForm` form::
+
+    from django.forms.models import formset_factory
+
+    ExampleFormset = formset_factory(ExampleForm, extra = 3)
+    example_formset = ExampleFormset()
+
+This is how you would render the formset::
+
+    {% uni_form formset formset.form.helper %}
+
+Note that you can still use a helper (in this case we are using the helper of the form used for building the formset). The main difference here is that helper attributes are applied to the form structure, while the layout is applied to the formset’s forms. Rendering formsets injects some extra context in the layout rendering so that you can do things like::
+
+    HTML("{% if forloop.first %}Message displayed only in the first form of a formset forms list{% endif %}",
+    Fielset("Item {{ forloop.counter }}", 'field-1', [...])
+
+Basically you can access a `forloop` Django node, as if you were rendering your formsets forms using a for loop.
+
+
+.. _`helper attributes`:
 Helper attributes you can set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -194,16 +248,6 @@ form_style
     If you are using uni-form CSS, it has two different form styles built-in. You can choose which one to use, setting this variable to “default” or “inline”.
 
 
-Rendering several forms with helpers 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Often we get asked, how do you render two or more forms, with their respective helpers, using `{% uni_form %}` tags, without having `<form>` tags rendered twice? Easy, you need to set `form_tag` helper property to False in every helper and write a little of html code::
-
-    <form action="{% url submit_survey %}" class="uniForm" method="post">
-        {% uni_form first_form first_form.helper %}
-        {% uni_form second_form second_form.helper %}
-    </form>
-
 =======
 Layouts 
 =======
@@ -215,7 +259,7 @@ You might be thinking that helpers are nice, but what if you need to change the 
 
 A Layout is constructed by layout objects, which can be thought of as form components. You assemble your layout using those. For the time being, your choices are: `ButtonHolder`, `Button`, `Div`, `Row`, `Column`, `Fieldset`, `HTML`, `Hidden`, `MultiField`, `Reset` and `Submit`.
 
-All these components are explained in helper API docs. What you need to know now about them is that every component renders a different template. Let’s write a couple of different layouts for our form, continuing with our form class example (note that the full form is not shown again):
+All these components are explained later in :ref:`layout objects`. What you need to know now about them is that every component renders a different template. Let’s write a couple of different layouts for our form, continuing with our form class example (note that the full form is not shown again):
 
 Let's add a layout to our helper::
 
@@ -282,8 +326,10 @@ As you notice the fieldset legend is context aware and you can write it as if it
 
 This time we are using a `MultiField`, which is a layout object that as a general rule can be used in the same places as `Fieldset`. The main difference is that this renders all the fields wrapped in a div and when there are errors in the form submission, they are shown in a list instead of each one surrounding the field. Sometimes the best way to see what layout objects do, is just try them and play with them a little bit.
 
-Layout parameters
-~~~~~~~~~~~~~~~~~
+
+.. _`layout objects`:
+Layout objects
+~~~~~~~~~~~~~~
 
 Let's see an example of every layout object in use, to understand what parameters each one expects.
 
@@ -350,7 +396,7 @@ All this layout objects, can have their DOM id or class set using named argument
 Overriding layout objects templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Django-uni-form provides a set of layout objects, that have been thoroughly designed to be flexible, standard compatible and support Django form features. Every Layout object is associated to a different template that lives in `templates/uni_form/layout/` directory.
+Django-uni-form provides a set of :ref:`layout objects`, that have been thoroughly designed to be flexible, standard compatible and support Django form features. Every Layout object is associated to a different template that lives in `templates/uni_form/layout/` directory.
 
 Some advanced users may want to use their own templates, to adapt the layout objects to their use or necessities. There are two ways to override the template that a layout object uses. 
 
@@ -369,14 +415,15 @@ Some advanced users may want to use their own templates, to adapt the layout obj
         )
     )
 
+
 Creating your own layout objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The layout objects bundled with django-uni-form are a set of the most seen components that build a form. You will probably be able to do anything you need combining them. Anyway, you may want to create your own components, for doing that, you will need a good grasp of django-uni-form. Every layout object must have a method called `render`. Its prototype should be::
+The :ref:`layout objects` bundled with django-uni-form are a set of the most seen components that build a form. You will probably be able to do anything you need combining them. Anyway, you may want to create your own components, for doing that, you will need a good grasp of django-uni-form. Every layout object must have a method called `render`. Its prototype should be::
 
     def render(self, form, form_style, context):
 
-The official layout objects django-uni-form has live in layout.py, you may want to have a look at them to fully understand how to proceed. But in general terms, a layout object is a template rendered with some parameters passed.
+The official layout objects live in `layout.py`, you may want to have a look at them to fully understand how to proceed. But in general terms, a layout object is a template rendered with some parameters passed.
 
 If you come up with a good idea and design a layout object you think others could benefit from, please open an issue or send us a pull request, so we can make django-uni-form better.
 
@@ -413,10 +460,11 @@ Imagine you have several forms that share a big chunk of the same layout. There 
 
 We have defined a `common_layout` that is used as a base for two different layouts: `example_layout` and `example_layout2`, which means that those two layouts will start the same way and then extend the layout in different ways. 
 
+
 Updating layouts on the go
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Layouts can be changed, adapted and generated dynamically. At the moment, layout doesn't have an API for handling this, so as in Django you will need to access inner attribute fields, which is a Python list and play with it as you would do with `form.fields`. All layout objects hold also a `fields` list that you can tamper too. You can access the layout attached to a helper with::
+Layouts can be changed, adapted and generated dynamically. At the moment, layout doesn't have an API for handling this, so as in Django forms you will need to access inner attribute `fields`, which is a Python list and play with it as you would do with `form.fields`. All layout objects hold also a `fields` list that you can tamper too. You can access the layout attached to a helper with::
 
     form.helper.layout
 
@@ -443,7 +491,9 @@ This is how you would insert a layout object in the second position::
 
     layout.fields.insert(1, HTML("<p>whatever</p>"))
 
-Remember always that if you are going to manipulate a helper or layout in a view or any part of your code, you better use an instance level variable.
+.. Warning ::
+
+    Remember always that if you are going to manipulate a helper or layout in a view or any part of your code, you better use an instance level variable.
 
 
 .. _`Be careful how you use static variables in forms`: http://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms 
