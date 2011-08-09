@@ -1,6 +1,6 @@
-=====================================
-django-uni-form (django-uni-form)
-=====================================
+===============
+django-uni-form
+===============
 
 Django_ forms are easily rendered as tables,
 paragraphs, and unordered lists. However, elegantly rendered div based forms
