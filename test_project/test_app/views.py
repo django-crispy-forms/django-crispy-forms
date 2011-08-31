@@ -91,7 +91,7 @@ def form_helper(request):
 @csrf_exempt
 def layout_test(request):
     if request.method == "POST":
-        form = LayoutTestForm(request.POST)
+        form = LayoutTestForm(request.POST or None)
     else:
         form = LayoutTestForm()
         

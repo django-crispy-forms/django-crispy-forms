@@ -5,6 +5,12 @@ from uni_form.helpers import FormHelper, Submit, Reset
 
 from uni_form.helpers import Layout, Fieldset, Column, Row, HTML
 
+CHOICES = (
+            ("A", "Alpha"),
+            ("B", "Bravo"),
+            ("C", "Charlie"),                        
+        )
+
 
 class TestForm(forms.Form):
     
@@ -13,6 +19,10 @@ class TestForm(forms.Form):
     textarea_field = forms.CharField(label='Textareafield', required=True, widget=forms.Textarea())
     hidden_field = forms.CharField(label='textarea_field', required=True, widget=forms.HiddenInput())
     file_field  = forms.FileField(label="File Field",required=False)
+    password_field = forms.CharField(label='Password field', max_length=100, widget=forms.PasswordInput())
+    boolean_field = forms.BooleanField(label="Boolean Field", required=False)
+    choice_field = forms.ChoiceField(label="Choice Field", required=False, choices=CHOICES)
+    multiple_choice_field = forms.MultipleChoiceField(label="multiple_choice_field", required=False, choices=CHOICES)
 
 
 
@@ -35,7 +45,7 @@ class HelperTestForm(TestForm):
 
 class LayoutTestForm(forms.Form):
 
-    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())    
+    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
     email = forms.CharField(label="email", max_length=30, required=True, widget=forms.TextInput())        
     password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())    

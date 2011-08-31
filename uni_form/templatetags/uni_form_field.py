@@ -4,7 +4,8 @@ register = template.Library()
 
 class_converter = {
     "textinput":"textinput textInput",
-    "fileinput":"fileinput fileUpload"
+    "fileinput":"fileinput fileUpload",
+    "passwordinput":"textinput textInput",
 }
 
 @register.filter

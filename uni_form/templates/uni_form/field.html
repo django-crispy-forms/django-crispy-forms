@@ -10,22 +10,16 @@
             </p>
         {% endfor %}
 
-        {% if field|is_checkbox %}
-            {{ field|with_class }}
-        {% endif %}
-
         {% if field.label %}
-            <label for="{{ field.auto_id }}">
-                {{ field.label|safe }}{% if field.field.required %}<span>*</span>{% endif %}
+            <label for="{{ field.auto_id }}" {% if field.field.required %}class="requiredField"{% endif %}>
+                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
             </label>
         {% endif %}
 
-        {% if not field|is_checkbox %}
-            {{ field|with_class }}
-        {% endif %}
+        {{ field|with_class }}
 
         {% if field.help_text %}
-            <p id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text|safe }}</p>
+            <div id="hint_{{ field.auto_id }}" class="formHint">{{ field.help_text|safe }}</div>
         {% endif %}
     </div>
 {% endif %}

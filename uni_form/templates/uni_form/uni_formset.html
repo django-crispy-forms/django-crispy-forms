@@ -1,0 +1,7 @@
+{% load uni_form_tags %}
+{{ formset.management_form|as_uni_form }}
+{% for form in formset.forms %}
+    <div class="multiField">
+        {% include 'uni_form/uni_form.html' %}
+    </div>
+{% endfor %}

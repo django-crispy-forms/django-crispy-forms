@@ -1,28 +1,19 @@
-{% load uni_form_tags i18n %}
-
-
-{% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {% endif %}{{ form_class }}" method="{{ form_method }}"{% if form_id %} id="{{ form_id|slugify }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-        <div id="errorMsg">
-            <h3>{% if error_message_title %}{{ error_message_title }}{% else %}Errors{% endif %}</h3>
-            <ol>
-                {{ form.non_field_errors|unordered_list }}
-            </ol>
-        </div>
+{% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {{ form_class }}{% endif %}" method="{{ form_method }}"{% if form_id %} id="{{ form_id }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+    {% if form_method|lower == 'post' %}
+        {% csrf_token %}
     {% endif %}
-    {% if form_html %}{{ form_html }}{% else %}
-    <fieldset class="inlineLabels">
-    <legend>* {% trans "Required fields" %}</legend>
-        {% for field in form %}
-            {% include "uni_form/field.html" %}
-        {% endfor %}
-    </fieldset>
+
+    {% if form.form_html %}
+        {% include "uni_form/errors.html" %}
+        {{ form.form_html }}
+    {% else %}
+        {% include "uni_form/uni_form.html" %}
     {% endif %}
+
     {% if inputs %}
         <div class="buttonHolder">
             {% for input in inputs %}
-                <input type="{{ input.input_type }}"
+                 <input type="{{ input.input_type }}"
                         name="{{ input.name|slugify }}"
                         value="{{ input.value }}"
                         {% ifnotequal input.input_type "hidden" %}
