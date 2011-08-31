@@ -60,6 +60,17 @@ If you want to take advantage of the `{% uni_form_setup %}` tag, then you'll nee
         'django.core.context_processors.request',
     )
 
+Activate uni-form.jquery
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Do not forget to activate uni-form.jquery plugin for given forms::
+
+    <script>
+      $(function(){
+        $('form.uniForm').uniform();
+      });
+    </script>
+
 
 .. _Django: http://djangoproject.com
 .. _`Uni-form`: http://sprawsm.com/uni-form
