@@ -251,7 +251,7 @@ class Fieldset(object):
     def __init__(self, legend, *fields, **kwargs):
         self.css_class = kwargs.get('css_class', None)
         self.css_id = kwargs.get('css_id', None)
-        self.legend = Template(legend)
+        self.legend = legend
         self.fields = list(fields)
     
     def render(self, form, form_style, context):
@@ -264,7 +264,8 @@ class Fieldset(object):
             html += u' class="%s"' % form_style
         html += '>'
 
-        html += self.legend and (u'<legend>%s</legend>' % self.legend.render(context)) or ''
+        if self.legend:
+            html += u'<legend>%s</legend>' % Template(unicode(self.legend)).render(context)
         for field in self.fields:
             html += render_field(field, form, form_style, context)
         html += u'</fieldset>'
