@@ -464,7 +464,7 @@ We have defined a `common_layout` that is used as a base for two different layou
 Updating layouts on the go
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Layouts can be changed, adapted and generated dynamically. At the moment, layout doesn't have an API for handling this, so as in Django forms you will need to access inner attribute `fields`, which is a Python list and play with it as you would do with `form.fields`. All layout objects hold also a `fields` list that you can tamper too. You can access the layout attached to a helper with::
+Layouts can be changed, adapted and generated dynamically. At the moment, `Layout` doesn't have an API for handling this, so as in Django forms you will need to access inner attribute `fields`. Main difference compared to Django forms is that `fields` is a Python list and not a dictionary. To sum up all layout objects and `Layout` itself hold a `fields` list that you can tamper. You can access the layout attached to a helper with::
 
     form.helper.layout
 
