@@ -415,6 +415,15 @@ Some advanced users may want to use their own templates, to adapt the layout obj
         )
     )
 
+Overriding project templates 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You need to differentiate between layout objects templates and django-uni-form templates. There are some templates that live in `templates/uni_form` that define the form/formset structure, how a field or errors are rendered, etc. They add very little logic and are pretty much basic wrappers for the rest of django-uni-form power. This were thought to be used with uni-form, although they work without it, as they simply add some CSS classes that don't cause any trouble.
+
+You can overwrite the templates that django-uni-form comes geared with using your own. As it was mentioned, you are free to not use uni-form anymore. Kenneth Love has created `django-uni-form-contrib`_ for adding more template packs to django-uni-form you can easily plug in, such as a `Bootstrap`_ pack. If you have a template pack based on a CSS library, submit it so more people can benefit from it.
+
+.. _`django-uni-form-contrib`: https://github.com/kennethlove/django-uni-form-contrib
+.. _`Bootstrap`: https://github.com/twitter/bootstrap
 
 Creating your own layout objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
