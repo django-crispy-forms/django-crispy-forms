@@ -4,7 +4,7 @@
     {% for field in multifield.bound_fields %}
         {% if field.errors %}
             {% for error in field.errors %}
-                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="errorField">{{ error|safe }}</p>
+                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="errorField">{{ error }}</p>
             {% endfor %}
         {% endif %}
     {% endfor %}
