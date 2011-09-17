@@ -4,6 +4,7 @@ CHANGELOG
 
 For 0.9.0
 
+ * Fixed a problem on Fieldset's legends internationalization by Bojan Mihelac, see #GH-90.
  * Fixed XSS bug thanks to Charlie Denton, see #GH-98. Errors cannot be rendered safe, because field's input can be part of the error message, that would mean XSS.
  * Updating and improving docs, adding more use examples.
  * Split `helpers.py` file into `helper.py`, `layout.py` and `utils.py`. Added a deprecation warning. 
