@@ -50,3 +50,4 @@ Contributors
 * Adam Cupiał <adamcupial>
 * Nicolas Patry <narsil>
 * Jonas Obrist <ojii>
+* Charlie Denton <meshy>
