@@ -166,7 +166,7 @@ class Fieldset(object):
 
     def __init__(self, legend, *fields, **kwargs):
         self.fields = list(fields)
-        self.legend = Template(legend)
+        self.legend = unicode(legend)
         self.css_class = kwargs.get('css_class', '')
         self.css_id = kwargs.get('css_id', None)
         # Overrides class variable with an instance level variable
@@ -177,7 +177,9 @@ class Fieldset(object):
         for field in self.fields:
             fields += render_field(field, form, form_style, context)
 
-        legend = u'%s' % self.legend.render(context)
+        legend = ''
+        if self.legend:
+            legend = u'%s' % Template(self.legend).render(context)
         return render_to_string(self.template, Context({'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style}))
 
 
