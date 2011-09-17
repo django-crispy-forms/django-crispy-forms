@@ -4,18 +4,19 @@ CHANGELOG
 
 For 0.9.0
 
- * Fixed a problem on Fieldset's legends internationalization by Bojan Mihelac, see #GH-90.
+ * Fixed a bug in `|with_class` filter so that it supports `show_hidden_initial`, see #GH-95 to not break.
+ * Fixed a problem on Fieldset's legends internationalization. Thanks to Bojan Mihelac, see #GH-90.
  * Fixed XSS bug thanks to Charlie Denton, see #GH-98. Errors cannot be rendered safe, because field's input can be part of the error message, that would mean XSS.
- * Updating and improving docs, adding more use examples.
+ * Updating and improving docs, adding more use case examples.
  * Split `helpers.py` file into `helper.py`, `layout.py` and `utils.py`. Added a deprecation warning. 
- * Improved testing coverage, specially for formsets.
+ * Improved testing coverage, specially for formsets and i18n.
  * Improved rendering performance of `{% uni_form %}` tag and `|as_uni_form` filter avoiding reloading templates every time, see #GH-81.
  * Added support for Django `Form.error_css_class` and `Form.required_css_class` custom CSS classes, see #GH-87.
  * Moved template code in Layout objects into separate files in `uni_form/layout` directory. Layout objects templates can now be easily overriden, see #GH-37.
  * `form_style` can now be used without having to set a helper Layout, see #GH-85.
  * `form_action` is not lowered anymore and `form_action` is set to "" by default instead of "." thanks to Jianbo Guo, see #GH-84.
- * `Multifield` field template `multifield.html` markup fixed, adding help_text support and removing labelclass from labels.
- * Fixed testing suite, when run not using DjangoTestSuiteRunner provided, thanks to Narsil #GH-82.
+ * `Multifield` field template `multifield.html` markup fixed, adding `help_text` support and removing `labelclass` from labels.
+ * Fixed testing suite, when run not using `DjangoTestSuiteRunner` provided, thanks to Narsil #GH-82.
  * Removed test_project from the project.
  * Improved `MultiField` performance avoiding instantiating BoundFields twice.
  * Fixed a bug in `MultiField` that raised an exception when internal fields had errors, because of `self.css` not existing.
