@@ -8,6 +8,7 @@ from django.template.loader import get_template_from_string
 from django.template.loader import render_to_string
 from django.middleware.csrf import _get_new_csrf_key
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
 from uni_form.helpers import FormHelper, FormHelpersException, Submit, Reset, Hidden, Button
 from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div
@@ -564,3 +565,22 @@ class TestFormLayout(TestCase):
         self.assertTrue('Item 3' in html)
         self.assertEqual(html.count('Note for first form only'), 1)
         self.assertEqual(html.count('formRow'), 3)
+
+    def test_i18n(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form.helper %}
+        """)
+        form = TestForm()
+        form_helper = FormHelper()
+        form_helper.layout = Layout(
+            HTML(_("i18n text")),
+            Fieldset(
+                _("i18n legend"),
+                'first_name',
+                'last_name',
+            )
+        )
+        form.helper = form_helper
+
+        html = template.render(Context({'form': form}))
