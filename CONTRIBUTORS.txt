@@ -51,4 +51,3 @@ Contributors
 * Nicolas Patry <narsil>
 * Jonas Obrist <ojii>
 * Charlie Denton <meshy>
-* Bojan Mihelac <bmihelac>
