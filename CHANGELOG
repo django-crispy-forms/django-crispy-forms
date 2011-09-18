@@ -2,38 +2,69 @@
 CHANGELOG
 =========
 
+For 0.9.0
+
+ * Fixed a bug in `|with_class` filter so that it supports `show_hidden_initial`, see #GH-95 to not break.
+ * Fixed a problem on Fieldset's legends internationalization. Thanks to Bojan Mihelac, see #GH-90.
+ * Fixed XSS bug thanks to Charlie Denton, see #GH-98. Errors cannot be rendered safe, because field's input can be part of the error message, that would mean XSS.
+ * Updating and improving docs, adding more use case examples.
+ * Split `helpers.py` file into `helper.py`, `layout.py` and `utils.py`. Added a deprecation warning. 
+ * Improved testing coverage, specially for formsets and i18n.
+ * Improved rendering performance of `{% uni_form %}` tag and `|as_uni_form` filter avoiding reloading templates every time, see #GH-81.
+ * Added support for Django `Form.error_css_class` and `Form.required_css_class` custom CSS classes, see #GH-87.
+ * Moved template code in Layout objects into separate files in `uni_form/layout` directory. Layout objects templates can now be easily overriden, see #GH-37.
+ * `form_style` can now be used without having to set a helper Layout, see #GH-85.
+ * `form_action` is not lowered anymore and `form_action` is set to "" by default instead of "." thanks to Jianbo Guo, see #GH-84.
+ * `Multifield` field template `multifield.html` markup fixed, adding `help_text` support and removing `labelclass` from labels.
+ * Fixed testing suite, when run not using `DjangoTestSuiteRunner` provided, thanks to Narsil #GH-82.
+ * Removed test_project from the project.
+ * Improved `MultiField` performance avoiding instantiating BoundFields twice.
+ * Fixed a bug in `MultiField` that raised an exception when internal fields had errors, because of `self.css` not existing.
+ * Added an extra optional parameter to `render_field` called `layout_object`, used for storing in it a list of bound fields.
+ * Refactor all Layout objects to use templates and not having hardcoded HTML in the code, based on Jonas Obrist work. Resolves Issue #GH-37 
+ * Added a Layout object called `Div`. `Row` and `Column` both inherit from `Div`
+ * `Layout` can now be a child of `Layout`, see issue #GH-76.
+
 For 0.8.0
 
+You can read on how to use new features included in this version at:
+http://tothinkornottothink.com/post/7339670508/new-kung-fu-in-django-uni-form-0-8-0
+
  * Elevated Miguel Araujo to project lead!
+ * Added a forloop simulator for formset forms rendering.
+ * `ButtonHolder` Layout object added for holding `HTML` and buttons: `Submit`, `Reset`, `Button`.
+ * Turned BaseInput inherited objects like: `Submit`, `Reset`, `Hidden` and `Button` into Layout objects.
+ * Fixed a bug with `rendered_fields` when no fields where in the Layout.
+ * `Fieldset` legends are now templates full context aware.
  * Based on @issackelly's and @johnthedebs's work a template called `betterform` has been added for supporting @carljm's form-utils BetterForms.
- * FormHelper's method get_attr has been renamed to get_attributes
- * uni_form_tags has been split into two different files: `uni_form_tags` and `uni_form_filters`.
+ * `FormHelper` method `get_attr` has been renamed to `get_attributes`
+ * `uni_form_tags` has been split into two different files: `uni_form_tags` and `uni_form_filters`.
  * Removing i18n tags from the templates, as they are not necessary anymore.
- * Removed all the internationalized hardcoded text, in favor of template variables: `form_error_title` and `formset_error_title`, bot can be set as helper's attributes.
- * as_uni_errors filter can now render formset's non_form_errors uni-form way.
- * Moved setup filter to use STATIC_URL instead of MEDIA_URL
+ * Removed all the internationalized hardcoded text, in favor of template variables: `form_error_title` and `formset_error_title`, both can be set as helper's attributes.
+ * `as_uni_errors` filter can now render formset's `non_form_errors` uni-form way.
+ * Moved `{% uni_form_setup %}` tag to use STATIC_URL instead of MEDIA_URL
  * Added the possibility to specify a helper for formsets too.
  * Renamed media directory to static, to be compatible with Django 1.3 staticfiles.
- * Added a form_style Helper attribute for setting global style of a form: inline or default.
- * Turning HTML into a context aware field, having form as a context variable and working as a Django template.
- * Turning Layout and Fieldset fields into lists, so that they can be changed dynamically.
+ * Added a `form_style` FormHelper attribute for setting global style of a form: inline or default.
+ * Turning `HTML` into a full context aware django template field, having access to the whole context of the template in which the form is rendered.
+ * Turning `Layout` and `Fieldset` fields attributes into lists, so that they can be changed dynamically.
  * Changing formHints from paragraphs to divs, so ul or ol can be placed within.
  * Removing slugify filter from form ids, so they can be set as user's preferences.
  * Added CSS class 'asteriskField' for asterisks. Added CSS class 'fieldRequired' for required input labels. 
- * FAIL_SILENTLY setting has been added for making django-uni-form log errors and fail silently, based on Adam Cupiał's work.
- * Several bug fixes in MultiField.
+ * `UNIFORM_FAIL_SILENTLY` variable setting has been added for making django-uni-form log errors and fail silently, based on Adam Cupiał's work.
+ * Several bug fixes in `MultiField`.
  * Added unicode support for layout field names and improved error handling.
  * Refactored testing system and raised testing coverage.
  * Clean part of the code base and comments. All old CSRF code for supporting old versions of Django has been removed.
  * Refactored BasicNode for better readability and reducing lines of code. 
  * Added formsets support based on Victor Nagy's (nagyv) and Antti Kaihola's (akahiola) work.
- * Bug fix in {% uni_form %} tag that didn't work without a helper and it was meant to be optional.
+ * Bug fix in `{% uni_form %}` tag that didn't work without a helper and it was meant to be optional.
  * CSS classes can be set in Submit buttons.
- * Thanks to J. Javier Maestro (jjmaestro) now we can set ids and classes for Fieldset, MultiField, Row and Column.
+ * Thanks to J. Javier Maestro (jjmaestro) now we can set ids and classes for `Fieldset`, `MultiField`, `Row` and `Column`.
  * Thanks to Richard Marko (sorki) changed CSS class of PasswordInput widget.
- * Removing Toggle class as it wasn't being used anywhere.
- * Moved BaseInput to helpers and removed util.py file.
- * Removed {% uni_form_jquery %} tag
+ * Removing `Toggle` class as it wasn't being used anywhere.
+ * Moved `BaseInput` to helpers and removed `util.py` file.
+ * Removed `{% uni_form_jquery %}` tag
  * Removed `namify` function from tags, as It wasn't being used anywhere.
 
  * Improved internal documentation

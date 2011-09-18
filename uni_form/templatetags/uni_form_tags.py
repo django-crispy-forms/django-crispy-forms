@@ -121,11 +121,12 @@ class BasicNode(template.Node):
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
         response_dict = {
-            '%s_action' % form_type: attrs.get("form_action", '.'),
+            '%s_action' % form_type: attrs.get("form_action", ''),
             '%s_method' % form_type: attrs.get("form_method", 'post'),
             '%s_tag' % form_type: attrs.get("form_tag", True),
             '%s_class' % form_type: attrs.get("class", ''),
             '%s_id' % form_type: attrs.get("id", ""),
+            '%s_style' % form_type: attrs.get("form_style", None),
             'form_error_title': attrs.get("form_error_title", None),
             'formset_error_title': attrs.get("formset_error_title", None),
             'inputs': attrs.get('inputs', []),
@@ -138,14 +139,23 @@ class BasicNode(template.Node):
         return response_dict
 
 
+whole_uni_formset_template = get_template('uni_form/whole_uni_formset.html')
+whole_uni_form_template = get_template('uni_form/whole_uni_form.html')
+
 class UniFormNode(BasicNode):
     def render(self, context):
         c = self.get_render(context)
 
         if c['is_formset']:
-            template = get_template('uni_form/whole_uni_formset.html')
+            if settings.DEBUG:
+                template = get_template('uni_form/whole_uni_formset.html')
+            else:
+                template = whole_uni_formset_template
         else:
-            template = get_template('uni_form/whole_uni_form.html')
+            if settings.DEBUG:
+                template = get_template('uni_form/whole_uni_form.html')
+            else:
+                template = whole_uni_form_template
 
         return template.render(c)
 

@@ -1,14 +1,14 @@
 ====================
-Absolute Basic Usage
+|as_uni_form filter
 ====================
 
-Using the as_uni_form filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Usage
+~~~~~
 
-At it's most basic level django-uni-form renders out the field elements of a form via the `as_uni_form` filter. The steps are simple:
+Django-uni-form provides a filter called `as_uni_form`, that lets you render a form or formset using django-uni-form elegantly div based fields. The steps are simple:
 
-1. Add ``{% load uni_form_tags %}`` to the template that calls your form.
-2. Append your form call with the as_uni_form filter::
+1. Add ``{% load uni_form_tags %}`` to the template.
+2. Append the as_uni_form filter to your form::
 
     {{ my_form|as_uni_form }}
 
@@ -18,21 +18,21 @@ At it's most basic level django-uni-form renders out the field elements of a for
 
 4. Refresh and enjoy!
 
-To see this more clearly::
+To see this more clearly, let's see a formset example all together::
 
     {% load uni_form_tags %}
     
     <form method="post" class="uniForm">
-
-        {{ my_form|as_uni_form }}
-
+        {{ my_formset|as_uni_form }}
     </form>
     
 .. note:: In the beginning, this was 100% of the `original implementation`_ of this project.
 
-.. _`original implementation`: http://code.google.com/p/django-uni-form/source/browse/trunk/uni_form/templatetags/uni_form.py?spec=svn2&r=2
 
-Using form helpers because they rock
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using {% uni_form %} tag because it rocks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As handy as the `as_uni_form` filter is, the real advantage of this library are the :ref:`form helpers`. They will change how you do forms in Django.
+
+
+.. _`original implementation`: http://code.google.com/p/django-uni-form/source/browse/trunk/uni_form/templatetags/uni_form.py?spec=svn2&r=2

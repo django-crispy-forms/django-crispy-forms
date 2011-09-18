@@ -1,9 +1,9 @@
-.. _`helpers api`:
+.. _`layout api`:
 
 ===================================
-API helpers
+API Layout
 ===================================
 
 
-.. automodule:: helper
+.. automodule:: layout
    :members:

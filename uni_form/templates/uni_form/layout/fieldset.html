@@ -1,0 +1,5 @@
+<fieldset {% if fieldset.css_id %}id="{{ fieldset.css_id }}"{% endif %} 
+    {% if fieldset.css_class or form_style %}class="{{ fieldset.css_class }} {{ form_style }}"{% endif %}>
+    <legend>{{ legend|safe }}</legend> 
+    {{ fields|safe }} 
+</fieldset>

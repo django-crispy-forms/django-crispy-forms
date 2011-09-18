@@ -49,3 +49,6 @@ Contributors
 * John Debs <johnthedebs>
 * Adam Cupiał <adamcupial>
 * Nicolas Patry <narsil>
+* Jonas Obrist <ojii>
+* Charlie Denton <meshy>
+* Bojan Mihelac <bmihelac>

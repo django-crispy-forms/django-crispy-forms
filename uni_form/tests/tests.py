@@ -8,9 +8,10 @@ from django.template.loader import get_template_from_string
 from django.template.loader import render_to_string
 from django.middleware.csrf import _get_new_csrf_key
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
 from uni_form.helpers import FormHelper, FormHelpersException, Submit, Reset, Hidden, Button
-from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder
+from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div
 
 
 class TestForm(forms.Form):
@@ -63,7 +64,7 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue("<li>Passwords dont match</li>" in html)
         self.assertFalse("<h3>" in html)
 
-    def test_as_uni_form(self):
+    def test_as_uni_form_with_form(self):
         template = get_template_from_string(u"""
             {% load uni_form_tags %}
             {{ form|as_uni_form }}
@@ -73,7 +74,25 @@ class TestBasicFunctionalityTags(TestCase):
         
         self.assertTrue("<td>" not in html)
         self.assertTrue("id_is_company" in html)
-    
+
+    def test_as_uni_form_with_formset(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {{ testFormset|as_uni_form }}
+        """)
+
+        TestFormset = formset_factory(TestForm, extra = 4)
+        testFormset = TestFormset()
+
+        c = Context({'testFormset': testFormset})
+        html = template.render(c)
+
+        self.assertEqual(html.count('<form'), 0)
+        # Check formset management form
+        self.assertTrue('form-TOTAL_FORMS' in html)
+        self.assertTrue('form-INITIAL_FORMS' in html)
+        self.assertTrue('form-MAX_NUM_FORMS' in html)
+
     def test_uni_form_setup(self):
         template = get_template_from_string("""
             {% load uni_form_tags %}
@@ -113,7 +132,6 @@ class TestFormHelpers(TestCase):
         c = Context({'form': TestForm(), 'form_helper': form_helper})        
         html = template.render(c)
 
-        # NOTE: Not sure why this is commented
         self.assertTrue('class="submit submitButton button white"' in html)
         self.assertTrue('id="submit-id-my-submit"' in html)        
 
@@ -133,7 +151,7 @@ class TestFormHelpers(TestCase):
         except FormHelpersException: 
             pass
 
-    def test_uni_form_with_helper_attributes_without_layout(self):
+    def test_uni_form_with_helper_without_layout(self):
         form_helper = FormHelper()    
         form_helper.form_id = 'this-form-rocks'
         form_helper.form_class = 'forms-that-rock'
@@ -153,11 +171,13 @@ class TestFormHelpers(TestCase):
         html = template.render(c)
         
         # Lets make sure everything loads right
-        self.assertTrue('<form' in html)
+        self.assertTrue(html.count('<form'), 1)
         self.assertTrue('class="uniForm forms-that-rock"' in html)
         self.assertTrue('method="get"' in html)
         self.assertTrue('id="this-form-rocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
+        self.assertEqual(html.count('<fieldset'), 1)
+
 
         self.assertTrue("<h3>ERRORS</h3>" in html)
         self.assertTrue("<li>Passwords dont match</li>" in html)
@@ -183,7 +203,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('<form' in html)
         self.assertTrue('class="uniForm"' in html)
         self.assertTrue('method="post"' in html)
-        self.assertTrue('action="."' in html)
+        self.assertFalse('action' in html)
 
     def test_uni_form_invalid_helper(self):
         template = get_template_from_string(u"""
@@ -199,7 +219,7 @@ class TestFormHelpers(TestCase):
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.UNIFORM_FAIL_SILENTLY
 
-    def test_uni_form_formset(self):
+    def test_uni_form_formset_with_helper_without_layout(self):
         template = get_template_from_string(u"""
             {% load uni_form_tags %}
             {% uni_form testFormSet formset_helper %}
@@ -220,6 +240,11 @@ class TestFormHelpers(TestCase):
         self.assertEqual(html.count('<form'), 1)
         self.assertEqual(html.count("<input type='hidden' name='csrfmiddlewaretoken'"), 1)
 
+        # Check formset management form
+        self.assertTrue('form-TOTAL_FORMS' in html)
+        self.assertTrue('form-INITIAL_FORMS' in html)
+        self.assertTrue('form-MAX_NUM_FORMS' in html)
+    
         self.assertTrue('class="uniForm formsets-that-rock"' in html)
         self.assertTrue('method="post"' in html)
         self.assertTrue('id="thisFormsetRocks">' in html)
@@ -357,29 +382,34 @@ class TestFormLayout(TestCase):
         self.assertTrue('id="fieldset_company_data"' in html)
         self.assertTrue('class="fieldsets' in html)
         self.assertTrue('id="row_passwords"' in html)
-        self.assertTrue('class="rows"' in html)
+        self.assertTrue('class="formRow rows"' in html)
         self.assertTrue('Hello!' in html)
         self.assertTrue('testLink' in html)
 
-    def test_second_layout_multifield_column_buttonholder_submit(self):
+    def test_second_layout_multifield_column_buttonholder_submit_div(self):
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
                 MultiField("Some company data",
                     'is_company',
                     'email',
-                    'password1', 
-                    'password2',
                     css_id = "multifield_info",
                 ),
                 Column(
                     'first_name',
                     'last_name',
                     css_id = "column_name",
+                    css_class = "columns",
                 ),
                 ButtonHolder(
                     Submit('Save', 'Save', css_class='button white'),
                 ),
+                Div(
+                    'password1', 
+                    'password2',
+                    css_id="custom-div",
+                    css_class="customdivs",
+                )
             )
         )
 
@@ -394,10 +424,61 @@ class TestFormLayout(TestCase):
         self.assertTrue('formColumn' in html)
         self.assertTrue('id="multifield_info"' in html)
         self.assertTrue('id="column_name"' in html)
-        self.assertTrue('div class="buttonHolder">' in html)
+        self.assertTrue('class="formColumn columns"' in html)
+        self.assertTrue('class="buttonHolder">' in html)
         self.assertTrue('input type="submit"' in html)
         self.assertTrue('name="save"' in html)
+        self.assertTrue('id="custom-div"' in html)
+        self.assertTrue('class="customdivs"' in html)
 
+    def test_layout_within_layout(self):
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                Layout(
+                    MultiField("Some company data",
+                        'is_company',
+                        'email',
+                        css_id = "multifield_info",
+                    ),
+                ),
+                Column(
+                    'first_name',
+                    # 'last_name', Missing a field on purpose
+                    css_id = "column_name",
+                    css_class = "columns",
+                ),
+                ButtonHolder(
+                    Submit('Save', 'Save', css_class='button white'),
+                ),
+                Div(
+                    'password1', 
+                    'password2',
+                    css_id="custom-div",
+                    css_class="customdivs",
+                )
+            )
+        )
+
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form_helper %}
+        """)        
+        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        html = template.render(c)
+
+        self.assertTrue('multiField' in html)
+        self.assertTrue('formColumn' in html)
+        self.assertTrue('id="multifield_info"' in html)
+        self.assertTrue('id="column_name"' in html)
+        self.assertTrue('class="formColumn columns"' in html)
+        self.assertTrue('class="buttonHolder">' in html)
+        self.assertTrue('input type="submit"' in html)
+        self.assertTrue('name="save"' in html)
+        self.assertTrue('id="custom-div"' in html)
+        self.assertTrue('class="customdivs"' in html)
+        self.assertTrue('last_name' in html)
+       
     def test_change_layout_dynamically_delete_field(self):
         template = get_template_from_string(u"""
             {% load uni_form_tags %}
@@ -484,3 +565,22 @@ class TestFormLayout(TestCase):
         self.assertTrue('Item 3' in html)
         self.assertEqual(html.count('Note for first form only'), 1)
         self.assertEqual(html.count('formRow'), 3)
+
+    def test_i18n(self):
+        template = get_template_from_string(u"""
+            {% load uni_form_tags %}
+            {% uni_form form form.helper %}
+        """)
+        form = TestForm()
+        form_helper = FormHelper()
+        form_helper.layout = Layout(
+            HTML(_("i18n text")),
+            Fieldset(
+                _("i18n legend"),
+                'first_name',
+                'last_name',
+            )
+        )
+        form.helper = form_helper
+
+        html = template.render(Context({'form': form}))
