@@ -3,12 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-django-uni-form (django-uni-form)
-=======================================
+django-uni-form
+===============
 
 Django_ forms are easily rendered as tables, paragraphs, and unordered lists. However, elegantly rendered div based forms is something you have to do by hand. The purpose of this application is to provide a tag and filter that lets you quickly render forms in a div format while providing an enormous amount of capability to configure and control the rendered HTML. 
 
-It comes geared with a filter called `|as_uni_form` and a tag called `{% uni_form %}`. 
+It comes geared with a filter called ``|as_uni_form`` and a tag called ``{% uni_form %}``. 
 
 You can use the filter to render your forms using elegantly div based fields::
 
@@ -71,7 +71,7 @@ This part of the documentation, which is mostly prose, begins with some backgrou
 **API documentation**
 If you are looking for information on a specific function, class or method, this part of the documentation is for you.
 
-.. doctree::
+.. toctree::
     :maxdepth: 2
     
     api_helpers
