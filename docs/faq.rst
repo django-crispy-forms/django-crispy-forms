@@ -19,7 +19,7 @@ How fast is django-uni-form?
 
 Performance in form rendering is normally a nigh moot issue in Django, because the majority of speed issues are fixable via appropriate use of Django's cache engine. Templates and especially form rendering are usually the last things to worry about when you try to increase performance.
 
-However, because we do care about producing lean and fast code, work is being done to speed up and measure performance of this library. These are the average times of rendering 1000 forms with the latest django-uni-form code in Dell Latitude E6500 Intel Core 2 Duo @ 2.53GHz::
+However, because we do care about producing lean and fast code, work is being done to speed up and measure performance of this library. These are the average times of rendering 1000 forms with the latest django-uni-form code in Dell Latitude E6500 Intel Core 2 Duo @ 2.53GHz:
 
 ===================================== ============================= ==========================
 Method                                Time without template caching Time with template caching
