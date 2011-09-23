@@ -4,7 +4,7 @@ from django.template import Context
 from django.template.loader import get_template
 from django import template
 
-from uni_form.helpers import FormHelper
+from uni_form.helper import FormHelper
 
 register = template.Library()
 # We import the filters, so they are available when doing load uni_form_tags
