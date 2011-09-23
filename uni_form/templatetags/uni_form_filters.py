@@ -5,7 +5,7 @@ from django.template import Context
 from django.template.loader import get_template
 from django import template
 
-from uni_form.helpers import FormHelper
+from uni_form.helper import FormHelper
 
 uni_formset_template = get_template('uni_form/uni_formset.html')
 uni_form_template = get_template('uni_form/uni_form.html')
