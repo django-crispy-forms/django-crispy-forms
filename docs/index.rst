@@ -38,10 +38,10 @@ And yet, django-uni-form does much more! By providing a form helper and sophisti
                 )
                 Div(
                     'form_field_2',
-                    'form_field_',
+                    'form_field_3',
                 )
                 ButtonHolder(
-                    Submit('svae', 'Save', css_class='button white')
+                    Submit('save', 'Save', css_class='button white')
                 )
             )
             return super(MyForm, self).__init__(*args, **kwargs)
