@@ -26,7 +26,7 @@ And yet, django-uni-form does much more! By providing a form helper and sophisti
     class MyForm(forms.Form):   # or class MyForm(forms.ModelForm)
         form_field_1 = forms.CharField(...)
 
-        def __init__(self, *arg, **kwargs):
+        def __init__(self, *args, **kwargs):
             self.helper = FormHelper()
             self.helper.form_action = 'my-url-name-defined-in-url-conf'
             self.helper.form_method = 'GET'
@@ -35,11 +35,11 @@ And yet, django-uni-form does much more! By providing a form helper and sophisti
                 Div(
                     'form_field_4',
                     'form_field_1',
-                )
+                ),
                 Div(
                     'form_field_2',
                     'form_field_3',
-                )
+                ),
                 ButtonHolder(
                     Submit('save', 'Save', css_class='button white')
                 )
