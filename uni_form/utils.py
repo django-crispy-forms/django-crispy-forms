@@ -58,7 +58,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
             
     if not field in form.rendered_fields:
-        form.rendered_fields.append(field)
+        form.rendered_fields.add(field)
     else:
         if not FAIL_SILENTLY:
             raise Exception("A field should only be rendered once: %s" % field)

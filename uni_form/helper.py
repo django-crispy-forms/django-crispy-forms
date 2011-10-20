@@ -157,12 +157,20 @@ class FormHelper(object):
         """
         Returns safe html of the rendering of the layout
         """
-        form.rendered_fields = []
-        
+        form.rendered_fields = set()
+ 
+        # This renders the specifed Layout
         html = self.layout.render(form, self.form_style, context)
 
-        for field in form.fields.keys():
-            if not field in form.rendered_fields:
+        # If the user has meta fields defined, not included in the layout
+        # we suppose they need to be rendered. Othewise we renderd the
+        # layout fields strictly
+        if getattr(form, 'Meta', None):
+            fields = set(getattr(form.Meta, 'fields', []))
+            exclude = set(getattr(form.Meta, 'exclude', []))
+            left_fields_to_render = fields - exclude - form.rendered_fields
+
+            for field in left_fields_to_render:
                 html += render_field(field, form, self.form_style, context)
 
         return mark_safe(html)
