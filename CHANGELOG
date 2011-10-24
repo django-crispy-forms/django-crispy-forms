@@ -2,6 +2,14 @@
 CHANGELOG
 =========
 
+For 1.0.0
+
+ * Using `baseinput.html` template within `whole_uni_form.html`, to be DRY and consistent.
+ * `BaseInput` subclasses like `Submit` can now have ids set, ussing `css_id`
+ * Adding a simplified alternative syntax for `{% uni_form %}` tag. We can now do `{% uni_form form %}` for rendering a form using a helper, instead of `{% uni_form form form.helper %}`, if the `FormHelper` attribute attached to the form is named `helper`.
+ * Improving `rendered_fields` checking performance.
+ * Layouts are now rendered strictly. We don't render fields missed in the layout. If the form has a Meta class with `fields` or `exclude`, then we follow Django standards.
+
 For 0.9.0
 
  * Fixed a bug in `|with_class` filter so that it supports `show_hidden_initial`, see #GH-95 to not break.
