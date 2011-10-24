@@ -4,7 +4,7 @@ from django.template import Context
 from django.template.loader import get_template
 from django import template
 
-from uni_form.helper import FormHelper
+from uni_form.helpers import FormHelper
 
 register = template.Library()
 # We import the filters, so they are available when doing load uni_form_tags
@@ -78,12 +78,15 @@ class BasicNode(template.Node):
         attrs = {}
         if self.helper is not None:
             helper = self.helper.resolve(context)
+        else:
+            # If the user names the helper within the form `helper` (standard), we use it
+            # This allows us to have simplified tag syntax: {% uni_form form %}
+            helper = None if not hasattr(actual_form, 'helper') else actual_form.helper
 
+        if helper:
             if not isinstance(helper, FormHelper):
                 raise TypeError('helper object provided to uni_form tag must be a uni_form.helpers.FormHelper object.')
             attrs = helper.get_attributes()
-        else:
-            helper = None
 
         # We get the response dictionary 
         is_formset = isinstance(actual_form, BaseFormSet)
