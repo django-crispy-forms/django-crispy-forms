@@ -44,7 +44,7 @@ And yet, django-uni-form does much more! By providing a form helper and sophisti
                     Submit('save', 'Save', css_class='button white')
                 )
             )
-            return super(MyForm, self).__init__(*args, **kwargs)
+            super(MyForm, self).__init__(*args, **kwargs)
 
 You can render an instance of `MyForm` using this helper and layout adding this code to a template, you wont::
     
