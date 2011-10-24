@@ -477,7 +477,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('name="save"' in html)
         self.assertTrue('id="custom-div"' in html)
         self.assertTrue('class="customdivs"' in html)
-        self.assertTrue('last_name' in html)
+        self.assertFalse('last_name' in html)
        
     def test_change_layout_dynamically_delete_field(self):
         template = get_template_from_string(u"""
