@@ -86,6 +86,7 @@ class BaseInput(object):
     def __init__(self, name, value, **kwargs):
         self.name = name
         self.value = value
+        self.id = kwargs.get('css_id') if kwargs.has_key('css_id') else ""
         
         if kwargs.has_key('css_class'):
             self.field_classes += ' %s' % kwargs.get('css_class')

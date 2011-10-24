@@ -3,5 +3,5 @@
     value="{{ input.value }}"
     {% ifnotequal input.input_type "hidden" %}
         class="{{ input.field_classes }}"
-        id="{{ input.input_type }}-id-{{ input.name|slugify }}"
+        id="{% if input.id %}{{ input.id }}{% else %}{{ input.input_type }}-id-{{ input.name|slugify }}{% endif %}"
     {% endifnotequal %}/>
