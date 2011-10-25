@@ -133,7 +133,7 @@ class Hidden(BaseInput):
 
 class Reset(BaseInput):
     """
-    Used to create a Hidden input descriptor for the uni_form template tag::
+    Used to create a Reset button input descriptor for the uni_form template tag::
     
         reset = Reset('Reset This Form', 'Revert Me!')
     
