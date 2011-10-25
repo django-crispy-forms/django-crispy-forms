@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django import forms
+from django import forms, VERSION
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
@@ -94,17 +94,19 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue('form-MAX_NUM_FORMS' in html)
 
     def test_uni_form_setup(self):
-        template = get_template_from_string("""
-            {% load uni_form_tags %}
-            {% uni_form_setup %}
-        """)
-        c = Context()
-        html = template.render(c)
+        # uni_form_setup only works with version 1.3+
+        if VERSION[:2] > (1,2):
+            template = get_template_from_string("""
+                {% load uni_form_tags %}
+                {% uni_form_setup %}
+            """)
+            c = Context()
+            html = template.render(c)
         
-        # Just look for file names because locations and names can change.
-        self.assertTrue('default.uni-form.css' in html)
-        self.assertTrue('uni-form.css' in html)
-        self.assertTrue('uni-form.jquery.js' in html)
+            # Just look for file names because locations and names can change.
+            self.assertTrue('default.uni-form.css' in html)
+            self.assertTrue('uni-form.css' in html)
+            self.assertTrue('uni-form.jquery.js' in html)
 
 class TestFormHelpers(TestCase):
     urls = 'uni_form.tests.urls'
