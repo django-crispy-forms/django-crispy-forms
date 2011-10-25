@@ -9,7 +9,6 @@ class Layout(object):
     Form Layout. It is conformed by Layout objects: `Fieldset`, `Row`, `Column`, `MultiField`,
     `HTML`, `ButtonHolder`, `Button`, `Hidden`, `Reset`, `Submit` and fields. Form fields 
     have to be strings.
-    
     Layout objects `Fieldset`, `Row`, `Column`, `MultiField` and `ButtonHolder` can hold other 
     Layout objects within. Though `ButtonHolder` should only hold `HTML` and BaseInput 
     inherited classes: `Button`, `Hidden`, `Reset` and `Submit`.
@@ -275,3 +274,27 @@ class HTML(object):
     
     def render(self, form, form_style, context):
         return Template(self.html).render(context)
+
+
+class Field(object):
+    """
+    Layout object, It contains one field name, and you can add attributes to it easily.
+    For setting class attributes, you need to use `css_class`, as `class` is a Python keyword.
+
+    Example::
+
+        Field('field_name', style="color: #333;", css_class="whatever", id="field_name")
+    """
+    template = "uni_form/field.html"
+
+    def __init__(self, field, *args, **kwargs):
+        self.field = field
+        self.attrs = {}
+
+        if kwargs.has_key('css_class'):
+            self.attrs['class'] = kwargs.pop('css_class')
+
+        self.attrs.update(kwargs)
+
+    def render(self, form, form_style, context):
+        return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)

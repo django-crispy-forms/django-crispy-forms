@@ -11,7 +11,7 @@ from django.template.loader import get_template
 # loading the template every time render_field is called without a template
 default_field_template = get_template("uni_form/field.html")
 
-def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None):
+def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None):
     """
     Renders a django-uni-form field
     
@@ -30,6 +30,8 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
     :layout_object: If passed, it points to the Layout object that is being rendered.
         We use it to store its bound fields in a list called `layout_object.bound_fields`
+
+    :attrs: Attributes for the field's widget
     """
     FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
 
@@ -50,6 +52,8 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
     try:
         field_instance = form.fields[field]
+        if attrs is not None:
+            field_instance.widget.attrs.update(attrs)
     except KeyError:
         if not FAIL_SILENTLY:
             raise Exception("Could not resolve form field '%s'." % field)
