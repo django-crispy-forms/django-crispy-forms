@@ -11,7 +11,7 @@ The application mainly provides:
 
 By default all the templates were designed to work with `Uni-form`_, but you can create your own or use other bundles available, `see the docs`_ for more information.
 
-.. _`see the docs`: http://readthedocs.org/docs/django-uni-form/en/latest/
+.. _`see the docs`: http://django-crispy-forms.readthedocs.org/en/latest/index.html
 
 Authors
 =======
@@ -28,7 +28,7 @@ Documentation
 
 For extensive documentation see the ``docs`` folder or `read it on readthedocs`_
 
-.. _`read it on readthedocs`: http://readthedocs.org/docs/django-uni-form/en/latest/
+.. _`read it on readthedocs`: http://django-crispy-forms.readthedocs.org/en/latest/index.html
 
 Note
 ----
