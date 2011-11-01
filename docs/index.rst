@@ -16,8 +16,8 @@ Get the most out django-crispy-forms
 
     install
     concepts
-    usage
-    helpers
+    filters
+    tags
     customization
     faq
     contributors
