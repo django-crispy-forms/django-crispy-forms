@@ -94,20 +94,6 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue('form-INITIAL_FORMS' in html)
         self.assertTrue('form-MAX_NUM_FORMS' in html)
 
-    def test_crispy_forms_setup(self):
-        # crispy_forms_setup only works with version 1.3+
-        if VERSION[:2] > (1,2):
-            template = get_template_from_string("""
-                {% load crispy_forms_tags %}
-                {% crispy_forms_setup %}
-            """)
-            c = Context()
-            html = template.render(c)
-        
-            # Just look for file names because locations and names can change.
-            self.assertTrue('default.uni-form.css' in html)
-            self.assertTrue('uni-form.css' in html)
-            self.assertTrue('uni-form.jquery.js' in html)
 
 class TestFormHelpers(TestCase):
     urls = 'crispy_forms.tests.urls'
