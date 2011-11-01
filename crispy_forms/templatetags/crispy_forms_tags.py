@@ -7,7 +7,7 @@ from django import template
 from crispy_forms.helper import FormHelper
 
 register = template.Library()
-# We import the filters, so they are available when doing load uni_form_tags
+# We import the filters, so they are available when doing load crispy_forms_tags
 from crispy_forms_filters import *
 
 
@@ -17,7 +17,7 @@ class ForLoopSimulator(object):
         
         {% for form in formset.forms %}
 
-    If `{% uni_form %}` is rendering a formset with a helper, We inject a `ForLoopSimulator` object
+    If `{% crispy %}` is rendering a formset with a helper, We inject a `ForLoopSimulator` object
     in the context as `forloop` so that formset forms can do things like::
         
         Fieldset("Item {{ forloop.counter }}", [...])
@@ -80,12 +80,12 @@ class BasicNode(template.Node):
             helper = self.helper.resolve(context)
         else:
             # If the user names the helper within the form `helper` (standard), we use it
-            # This allows us to have simplified tag syntax: {% uni_form form %}
+            # This allows us to have simplified tag syntax: {% crispy form %}
             helper = None if not hasattr(actual_form, 'helper') else actual_form.helper
 
         if helper:
             if not isinstance(helper, FormHelper):
-                raise TypeError('helper object provided to uni_form tag must be a uni_form.helpers.FormHelper object.')
+                raise TypeError('helper object provided to {% crispy %} tag must be a crispy.helper.FormHelper object.')
             attrs = helper.get_attributes()
 
         # We get the response dictionary 
@@ -171,7 +171,7 @@ def do_uni_form(parser, token):
     You need to pass in at least the form/formset object, and can also pass in the
     optional `crispy_forms.helpers.FormHelper` object. 
 
-    helper (optional): A `uni_form.helpers.FormHelper` object.
+    helper (optional): A `uni_form.helper.FormHelper` object.
 
     Usage::
     
@@ -198,7 +198,7 @@ def crispy_forms_setup(context):
     """
     Creates the `<style>` and `<script>` tags needed to initialize uni-form.
 
-    You can create a local uni-form/includes.html template if you want to customize how
+    You can create a local uni_form/includes.html template if you want to customize how
     these files are loaded.
     
     Only works with Django 1.3+

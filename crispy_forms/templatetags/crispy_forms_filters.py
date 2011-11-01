@@ -14,15 +14,15 @@ register = template.Library()
 
 @register.filter(name='as_uni_form')
 @register.filter(name='crispy')
-def as_uni_form(form):
+def as_crispy_form(form):
     """ 
-    The original and still very useful way to generate a uni-form form/formset::
+    The original and still very useful way to generate a div elegant form/formset::
     
-        {% load uni_form_tags %}
+        {% load crispy_forms_tags %}
 
         <form class="uniForm" action="post">
             {% csrf_token %}
-            {{ myform|as_uni_form }}
+            {{ myform|crispy }}
         </form>
     """
     if isinstance(form, BaseFormSet):
@@ -41,9 +41,9 @@ def as_uni_form(form):
 
 @register.filter(name='as_uni_errors')
 @register.filter(name='as_crispy_errors')
-def as_uni_errors(form):
+def as_crispy_errors(form):
     """
-    Renders only form errors like django-uni-form::
+    Renders only form errors the same way as django-crispy-forms::
 
         {% load crispy_forms_tags %}
         {{ form|as_crispy_errors }}
@@ -58,7 +58,7 @@ def as_uni_errors(form):
 
 @register.filter(name='as_uni_field')
 @register.filter(name='as_crispy_field')
-def as_uni_field(field):
+def as_crispy_field(field):
     """
     Renders a form field like a django-crispy-forms field::
 
