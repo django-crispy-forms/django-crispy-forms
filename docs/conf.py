@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# django-uni-form documentation build configuration file, created by
+# django-crispy-forms documentation build configuration file, created by
 # sphinx-quickstart on Mon Mar  8 22:42:02 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -17,9 +17,8 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('../uni_form'))
-sys.path.insert(0, os.path.abspath('../uni_form/templatetags'))
-sys.path.insert(0, os.path.abspath('../test_project'))
+sys.path.insert(0, os.path.abspath('../crispy_forms'))
+sys.path.insert(0, os.path.abspath('../crispy_forms/templatetags'))
 sys.path.append(os.path.abspath('_themes'))
 
 import settings
@@ -46,7 +45,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-uni-form'
+project = u'django-crispy-forms'
 copyright = u'2009-2011, Daniel Greenfeld'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -167,7 +166,7 @@ html_static_path = ['_static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'django-uni-formdoc'
+htmlhelp_basename = 'django-crispy-formdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -181,7 +180,7 @@ htmlhelp_basename = 'django-uni-formdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-uni-form.tex', u'django-uni-form Documentation',
+  ('index', 'django-crispy-forms.tex', u'django-crispy-forms Documentation',
    u'Daniel Greenfeld', 'manual'),
 ]
 
