@@ -1,38 +1,22 @@
-====================
-|as_uni_form filter
-====================
+crispy filter
+=============
 
-Usage
-~~~~~
-
-Django-uni-form provides a filter called `as_uni_form`, that lets you render a form or formset using django-uni-form elegantly div based fields. The steps are simple:
-
-1. Add ``{% load uni_form_tags %}`` to the template.
-2. Append the as_uni_form filter to your form::
-
-    {{ my_form|as_uni_form }}
-
-3. Add the class of 'uniForm' to your form. Example::
-
-    <form action="" method="post" class="uniForm">
-
-4. Refresh and enjoy!
-
-To see this more clearly, let's see a formset example all together::
+Crispy filter lets you render a form or formset using django-crispy-forms elegantly div based fields. Let's see a usage example::
 
     {% load uni_form_tags %}
     
     <form method="post" class="uniForm">
-        {{ my_formset|as_uni_form }}
+        {{ my_formset|crispy }}
     </form>
-    
-.. note:: In the beginning, this was 100% of the `original implementation`_ of this project.
 
+1. Add `{% load uni_form_tags %}` to the template.
+2. Append the `|crispy` filter to your form or formset context variable.
+3. Add the class of 'uniForm' to your form.
+4. Refresh and enjoy!
 
-Using {% uni_form %} tag because it rocks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using {% crispy %} tag because it rocks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As handy as the `as_uni_form` filter is, the real advantage of this library are the :ref:`form helpers`. They will change how you do forms in Django.
-
+As handy as the `|crispy` filter is, the best way to make your forms crisp is using the :ref:`form helpers`. It will change how you do forms in Django.
 
 .. _`original implementation`: http://code.google.com/p/django-uni-form/source/browse/trunk/uni_form/templatetags/uni_form.py?spec=svn2&r=2
