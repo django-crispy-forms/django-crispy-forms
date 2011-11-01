@@ -13,9 +13,9 @@ from django.conf import settings
 
 def runtests():
     DjangoTestSuiteRunner(failfast=False).run_tests([
-        'uni_form.TestBasicFunctionalityTags',
-        'uni_form.TestFormHelpers',
-        'uni_form.TestFormLayout',
+        'crispy_forms.TestBasicFunctionalityTags',
+        'crispy_forms.TestFormHelpers',
+        'crispy_forms.TestFormLayout',
         ], verbosity=1, interactive=True)
 
 if __name__ == '__main__':

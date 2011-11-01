@@ -10,8 +10,9 @@ from django.middleware.csrf import _get_new_csrf_key
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from uni_form.helpers import FormHelper, FormHelpersException, Submit, Reset, Hidden, Button
-from uni_form.helpers import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div
+from crispy_forms.helper import FormHelper, FormHelpersException
+from crispy_forms.layout import Submit, Reset, Hidden, Button
+from crispy_forms.layout import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div
 
 
 class TestForm(forms.Form):
@@ -40,7 +41,7 @@ class TestBasicFunctionalityTags(TestCase):
 
     def test_as_uni_errors_form_without_non_field_errors(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
+            {% load crispy_forms_tags %}
             {{ form|as_uni_errors }}
         """)
         form = TestForm({'password1': "god", 'password2': "god"})
@@ -52,7 +53,7 @@ class TestBasicFunctionalityTags(TestCase):
 
     def test_as_uni_errors_form_with_non_field_errors(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
+            {% load crispy_forms_tags %}
             {{ form|as_uni_errors }}
         """)
         form = TestForm({'password1': "god", 'password2': "wargame"})
@@ -66,8 +67,8 @@ class TestBasicFunctionalityTags(TestCase):
 
     def test_as_uni_form_with_form(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {{ form|as_uni_form }}
+            {% load crispy_forms_tags %}
+            {{ form|crispy }}
         """)
         c = Context({'form': TestForm()})
         html = template.render(c)
@@ -77,8 +78,8 @@ class TestBasicFunctionalityTags(TestCase):
 
     def test_as_uni_form_with_formset(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {{ testFormset|as_uni_form }}
+            {% load crispy_forms_tags %}
+            {{ testFormset|crispy }}
         """)
 
         TestFormset = formset_factory(TestForm, extra = 4)
@@ -97,8 +98,8 @@ class TestBasicFunctionalityTags(TestCase):
         # uni_form_setup only works with version 1.3+
         if VERSION[:2] > (1,2):
             template = get_template_from_string("""
-                {% load uni_form_tags %}
-                {% uni_form_setup %}
+                {% load crispy_forms_tags %}
+                {% crispy_forms_setup %}
             """)
             c = Context()
             html = template.render(c)
@@ -128,8 +129,8 @@ class TestFormHelpers(TestCase):
         form_helper.add_input(button)
         
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)
         c = Context({'form': TestForm(), 'form_helper': form_helper})        
         html = template.render(c)
@@ -162,8 +163,8 @@ class TestFormHelpers(TestCase):
         form_helper.form_error_title = 'ERRORS'
     
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form testForm form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy testForm form_helper %}
         """)        
 
         # now we render it, with errors
@@ -195,8 +196,8 @@ class TestFormHelpers(TestCase):
 
     def test_uni_form_without_helper(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form %}
+            {% load crispy_forms_tags %}
+            {% crispy form %}
         """)
         c = Context({'form': TestForm()})            
         html = template.render(c)        
@@ -209,8 +210,8 @@ class TestFormHelpers(TestCase):
 
     def test_uni_form_invalid_helper(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)
         c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
@@ -223,8 +224,8 @@ class TestFormHelpers(TestCase):
 
     def test_uni_form_formset_with_helper_without_layout(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form testFormSet formset_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy testFormSet formset_helper %}
         """)
         
         form_helper = FormHelper()    
@@ -255,8 +256,8 @@ class TestFormHelpers(TestCase):
     def test_CSRF_token_POST_form(self):
         form_helper = FormHelper()    
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
 
         # The middleware only initializes the CSRF token when processing a real request
@@ -271,8 +272,8 @@ class TestFormHelpers(TestCase):
         form_helper = FormHelper()    
         form_helper.form_method = 'GET'
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
 
         c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
@@ -281,7 +282,7 @@ class TestFormHelpers(TestCase):
         self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html) 
 
 class TestFormLayout(TestCase):
-    urls = 'uni_form.tests.urls'
+    urls = 'crispy_forms.tests.urls'
     def test_layout_invalid_unicode_characters(self):
         # Adds a BooleanField that uses non valid unicode characters "ñ"
         form = TestForm()
@@ -294,8 +295,8 @@ class TestFormLayout(TestCase):
         )
         
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         settings.UNIFORM_FAIL_SILENTLY = False
@@ -313,8 +314,8 @@ class TestFormLayout(TestCase):
         )
 
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         settings.UNIFORM_FAIL_SILENTLY = False
@@ -332,8 +333,8 @@ class TestFormLayout(TestCase):
         )
 
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         settings.UNIFORM_FAIL_SILENTLY = False
@@ -370,8 +371,8 @@ class TestFormLayout(TestCase):
         )
 
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
         c = Context({
             'form': TestForm(), 
@@ -416,8 +417,8 @@ class TestFormLayout(TestCase):
         )
 
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         html = template.render(c)
@@ -463,8 +464,8 @@ class TestFormLayout(TestCase):
         )
 
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         html = template.render(c)
@@ -483,8 +484,8 @@ class TestFormLayout(TestCase):
        
     def test_change_layout_dynamically_delete_field(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
         """)        
         
         form = TestForm()
@@ -518,8 +519,8 @@ class TestFormLayout(TestCase):
 
     def test_formset_layout(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form testFormSet formset_helper %}
+            {% load crispy_forms_tags %}
+            {% crispy testFormSet formset_helper %}
         """)
         
         form_helper = FormHelper()    
@@ -570,8 +571,8 @@ class TestFormLayout(TestCase):
 
     def test_i18n(self):
         template = get_template_from_string(u"""
-            {% load uni_form_tags %}
-            {% uni_form form form.helper %}
+            {% load crispy_forms_tags %}
+            {% crispy form form.helper %}
         """)
         form = TestForm()
         form_helper = FormHelper()

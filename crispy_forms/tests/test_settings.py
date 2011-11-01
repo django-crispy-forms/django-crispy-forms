@@ -7,7 +7,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.contenttypes',
     'django.contrib.admin',
-    'uni_form',
+    'crispy_forms',
 )
 
 DATABASES = {

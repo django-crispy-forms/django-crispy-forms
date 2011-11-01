@@ -191,3 +191,18 @@ def do_uni_form(parser, token):
         helper = None
 
     return UniFormNode(form, helper)
+
+
+@register.inclusion_tag("uni_form/includes.html", takes_context=True)
+def crispy_forms_setup(context):
+    """
+    Creates the `<style>` and `<script>` tags needed to initialize uni-form.
+
+    You can create a local uni-form/includes.html template if you want to customize how
+    these files are loaded.
+    
+    Only works with Django 1.3+
+    """
+    if 'STATIC_URL' not in context:
+        context['STATIC_URL'] = settings.STATIC_URL
+    return (context)
