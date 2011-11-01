@@ -2,14 +2,13 @@
 Contributors
 ============
 
-django-uni-form Project Leads
-=============================
+django-crispy-forms Project Lead
+================================
 
 * Miguel Araujo <miguel.araujo.perez@gmail.com>
-* Daniel Greenfeld <pydanny@gmail.com>
 
 django-uni-form Project Founder
-================================
+===============================
 
 * Daniel Greenfeld <pydanny@gmail.com>
 
