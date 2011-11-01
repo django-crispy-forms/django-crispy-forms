@@ -2,14 +2,14 @@
 API templatetags
 ==========================================
 
-.. automodule:: templatetags.uni_form_tags
+.. automodule:: templatetags.crispy_forms_tags
   :members:
   :undoc-members:
 
-.. automodule:: templatetags.uni_form_filters
+.. automodule:: templatetags.crispy_forms_filters
   :members:
   :undoc-members:
 
-.. automodule:: templatetags.uni_form_field
+.. automodule:: templatetags.crispy_forms_field
   :members:
   :undoc-members:
