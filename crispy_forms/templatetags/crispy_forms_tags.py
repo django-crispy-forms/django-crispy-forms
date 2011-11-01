@@ -4,11 +4,11 @@ from django.template import Context
 from django.template.loader import get_template
 from django import template
 
-from uni_form.helpers import FormHelper
+from crispy_forms.helper import FormHelper
 
 register = template.Library()
 # We import the filters, so they are available when doing load uni_form_tags
-from uni_form_filters import *
+from crispy_forms_filters import *
 
 
 class ForLoopSimulator(object):
