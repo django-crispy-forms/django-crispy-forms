@@ -2,68 +2,51 @@
 Installation
 ============
 
-Installing django-uni-form
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Installing django-crispy-forms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Install into your python path using pip or easy_install::
 
-    pip install -U django-uni-form
+    pip install --upgrade django-crispy-forms
 
-Or if you are running earlier than Django_ 1.2 and/or Python 2.5::
-
-    pip install django-uni-form==0.7.0
-    
-Add `uni_form` to your INSTALLED_APPS in settings.py::
+Add `crispy_forms` to your INSTALLED_APPS in settings.py::
 
     INSTALLED_APPS = (
         ...
-        'uni_form',
+        'crispy_forms',
     )
     
 Dependencies
 ~~~~~~~~~~~~
 
-Django-uni-form is a Django application that lets you build Django forms in a DRY programmatic way. By default the different components available, have been designed to be used in conjuction with `Uni-form`_, a CSS framework for form markup. You should understand that this has been done with the best intention. However, you are actually free to use default components as they are, without attaching `Uni-form`_ media files or you can customize templates from those components (ref).
+Django-crispy-forms uses by default `Uni-form`_ (a CSS framework for form markup) templates. However, you are actually free to use any other CSS form framework. 
 
-If you want to use `Uni-form`_ with django-uni-form, depending on your setup, you may need to copy the static files to your local static folder::
+Setting uni-form templates 
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    cp -r <location-of-django-uni-form>/uni_form/static/uni_form <directory-for-my-project's-static-files>
+For using default `Uni-form`_ templates, you will need to include the proper media files. django-crispy-forms comes with the necessary files in a directory named static. Depending on your setup, you may need to copy those files to your local static folder::
 
-Displaying the static files
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    cp -r <location-of-django-crispy-forms>/crispy_forms/static/uni_form <directory-for-my-project's-static-files>
 
-If you are using `Uni-form`_, it is recommended that you link a copy of jQuery, this will give some extra goodies. Preferably you should use a version hosted on Google's CDN servers since the user's browser might already have it cached.  (You can get the url for the latest version of jQuery at http://scriptsrc.net/.)  But there are some cases in which you'll want to host jQuery yourself, such as if you're doing development offline::
+Displaying uni-form static files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    <script src="{{ STATIC_URL }}js/jquery.js" type="text/javascript"></script>
+`Uni-form`_ files are composed of two CSS files and one JS library based on jQuery. Uni-form's JS library provides some nice interactions, but you will need to link a copy of jQuery. Preferably you should use a `version hosted`_ on Google's CDN servers since the user's browser might already have it cached.
 
-Beyond jQuery, `Uni-form`_ requires three static files. You can see how we call them by looking in the `templates/uni_form/includes.html` file. You can call those files in several ways.
+.. _`version hosted`: http://scriptsrc.net/.
 
-1. The best way is probably to copy this HTML into your templates. This allows you to make use of the CSS compressors that have been created by the Django community (http://www.djangopackages.com/grids/g/asset-managers/). Here's the HTML::
+For linking `Uni-form`_ static files add the proper lines to your HTML head. This is an example on how to do it if you are using `STATIC_URL`::
 
+    <!-- note that there's also blue.uni-form.css and dark.uni-form.css available if you want to try changing defaults up -->
     <link rel="stylesheet" href="{{ STATIC_URL }}uni_form/uni-form.css" type="text/css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}uni_form/default.uni-form.css" type="text/css" />
-    <!-- note that there's also blue.uni-form.css and dark.uni-form.css available if you want to try changing defaults up -->
+    <!-- uni-form JS library, optional -->
     <script src="{{ STATIC_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>
-
-2. Another way is to use Django's built-in **includes** template tag::
-
-    {% include "uni_form/includes.html" %}
-    
-3. **ONLY FOR DJANGO 1.3 OR LATER** A third way is to use the django-uni-form **uni_form_setup** template tag.  Note that you'll need some additional setup for this::
-
-    {% uni_form_setup %}
-
-If you want to take advantage of the `{% uni_form_setup %}` tag, then you'll need to make sure `django.core.context_processors.request` is in the  TEMPLATE_CONTEXT_PROCESSORS tuple in your settings.py file::
-
-    TEMPLATE_CONTEXT_PROCESSORS = (
-        ...
-        'django.core.context_processors.request',
-    )
 
 Activate uni-form.jquery
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Do not forget to activate uni-form.jquery plugin for given forms::
+If you link `Uni-form`_ JS library do not forget to activate given forms::
 
     <script>
       $(function(){
