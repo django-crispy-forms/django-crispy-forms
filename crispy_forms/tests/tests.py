@@ -39,10 +39,10 @@ class TestBasicFunctionalityTags(TestCase):
     def tearDown(self):
         pass
 
-    def test_as_uni_errors_form_without_non_field_errors(self):
+    def test_as_crispy_errors_form_without_non_field_errors(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
-            {{ form|as_uni_errors }}
+            {{ form|as_crispy_errors }}
         """)
         form = TestForm({'password1': "god", 'password2': "god"})
         form.is_valid()
@@ -51,10 +51,10 @@ class TestBasicFunctionalityTags(TestCase):
         html = template.render(c)
         self.assertFalse("errorMsg" in html)
 
-    def test_as_uni_errors_form_with_non_field_errors(self):
+    def test_as_crispy_errors_form_with_non_field_errors(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
-            {{ form|as_uni_errors }}
+            {{ form|as_crispy_errors }}
         """)
         form = TestForm({'password1': "god", 'password2': "wargame"})
         form.is_valid()
@@ -65,7 +65,7 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue("<li>Passwords dont match</li>" in html)
         self.assertFalse("<h3>" in html)
 
-    def test_as_uni_form_with_form(self):
+    def test_crispy_filter_with_form(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {{ form|crispy }}
@@ -76,7 +76,7 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue("<td>" not in html)
         self.assertTrue("id_is_company" in html)
 
-    def test_as_uni_form_with_formset(self):
+    def test_crispy_filter_with_formset(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {{ testFormset|crispy }}
@@ -94,8 +94,8 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue('form-INITIAL_FORMS' in html)
         self.assertTrue('form-MAX_NUM_FORMS' in html)
 
-    def test_uni_form_setup(self):
-        # uni_form_setup only works with version 1.3+
+    def test_crispy_forms_setup(self):
+        # crispy_forms_setup only works with version 1.3+
         if VERSION[:2] > (1,2):
             template = get_template_from_string("""
                 {% load crispy_forms_tags %}
@@ -110,14 +110,14 @@ class TestBasicFunctionalityTags(TestCase):
             self.assertTrue('uni-form.jquery.js' in html)
 
 class TestFormHelpers(TestCase):
-    urls = 'uni_form.tests.urls'
+    urls = 'crispy_forms.tests.urls'
     def setUp(self):
         pass
     
     def tearDown(self):
         pass    
 
-    def test_uni_form_helper_inputs(self):
+    def test_crispy_tag_helper_inputs(self):
         form_helper = FormHelper()
         submit  = Submit('my-submit', 'Submit', css_class="button white")
         reset   = Reset('my-reset', 'Reset')
@@ -154,7 +154,7 @@ class TestFormHelpers(TestCase):
         except FormHelpersException: 
             pass
 
-    def test_uni_form_with_helper_without_layout(self):
+    def test_crispy_tag_with_helper_without_layout(self):
         form_helper = FormHelper()    
         form_helper.form_id = 'this-form-rocks'
         form_helper.form_class = 'forms-that-rock'
@@ -194,7 +194,7 @@ class TestFormHelpers(TestCase):
         self.assertFalse('method="get"' in html)
         self.assertFalse('id="this-form-rocks">' in html)
 
-    def test_uni_form_without_helper(self):
+    def test_crispy_tag_without_helper(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form %}
@@ -208,7 +208,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('method="post"' in html)
         self.assertFalse('action' in html)
 
-    def test_uni_form_invalid_helper(self):
+    def test_crispy_tag_invalid_helper(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
@@ -222,7 +222,7 @@ class TestFormHelpers(TestCase):
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.UNIFORM_FAIL_SILENTLY
 
-    def test_uni_form_formset_with_helper_without_layout(self):
+    def test_crispy_tag_formset_with_helper_without_layout(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testFormSet formset_helper %}
