@@ -13,7 +13,7 @@ default_field_template = get_template("uni_form/field.html")
 
 def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None):
     """
-    Renders a django-uni-form field
+    Renders a django-crispy-forms field
     
     :param field: Can be a string or a Layout object like `Row`. If it's a layout
         object, we call its render method, otherwise we instantiate a BoundField
@@ -23,8 +23,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
     :param form: The form/formset to which that field belongs to.
     
-    :param form_style: We need this to render uni-form divs using helper's chosen
-        style.
+    :param form_style: A way to pass style name to the CSS framework used.
 
     :template: Template used for rendering the field.
 

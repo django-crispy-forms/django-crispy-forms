@@ -16,10 +16,10 @@ class FormHelpersException(Exception):
 class FormHelper(object):
     """
     This class controls the form rendering behavior of the form passed to 
-    the `{% uni_form %}` tag. For doing so you will need to set its attributes
+    the `{% crispy %}` tag. For doing so you will need to set its attributes
     and pass the corresponding helper object to the tag::
 
-        {% uni_form form form.helper %}
+        {% crispy form form.helper %}
    
     Let's see what attributes you can set and what form behaviors they apply to:
         
@@ -66,31 +66,25 @@ class FormHelper(object):
     Best way to add a helper to a form is adding a property named helper to the form 
     that returns customized `FormHelper` object::
 
-        from uni_form import helpers
+        from crispy_forms.helper import FormHelper
+        from crispy_forms.layout import Submit
 
         class MyForm(forms.Form):
             title = forms.CharField(_("Title"))
 
             @property
             def helper(self):
-                helper = helpers.FormHelper()
+                helper = FormHelper()
                 helper.form_id = 'this-form-rocks'
                 helper.form_class = 'search'
-                submit = helpers.Submit('submit','Submit')
-                helper.add_input(submit)
+                helper.add_input(Submit('save', 'save'))
                 [...]
                 return helper
 
     You can use it in a template doing::
         
-        {% load uni_form_tags %}
-        <html>
-            <body>
-                <div id="where-I-want-the-generated-form">
-                    {% uni_form form form.helper %}
-                </div>
-            </body>            
-        </html>
+        {% load crispy_forms_tags %}
+        {% crispy form %}
     """
     _form_method = 'post'
     _form_action = ''
@@ -177,7 +171,7 @@ class FormHelper(object):
     
     def get_attributes(self):
         """
-        Used by the uni_form_tags to get helper attributes
+        Used by crispy_forms_tags to get helper attributes
         """
         items = {}
         items['form_method'] = self.form_method.strip()

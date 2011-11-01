@@ -101,7 +101,7 @@ class BaseInput(object):
 
 class Submit(BaseInput):
     """
-    Used to create a Submit button descriptor for the uni_form template tag::
+    Used to create a Submit button descriptor for the {% crispy %} template tag::
     
         submit = Submit('Search the Site', 'search this site')
     
@@ -113,7 +113,7 @@ class Submit(BaseInput):
 
 class Button(BaseInput):
     """
-    Used to create a Submit input descriptor for the uni_form template tag::
+    Used to create a Submit input descriptor for the {% crispy %} template tag::
 
         button = Button('Button 1', 'Press Me!')
     
@@ -125,7 +125,7 @@ class Button(BaseInput):
 
 class Hidden(BaseInput):
     """
-    Used to create a Hidden input descriptor for the uni_form template tag.
+    Used to create a Hidden input descriptor for the {% crispy %} template tag.
     """
     input_type = 'hidden'
     field_classes = 'hidden'
@@ -133,7 +133,7 @@ class Hidden(BaseInput):
 
 class Reset(BaseInput):
     """
-    Used to create a Reset button input descriptor for the uni_form template tag::
+    Used to create a Reset button input descriptor for the {% crispy %} template tag::
     
         reset = Reset('Reset This Form', 'Revert Me!')
     
