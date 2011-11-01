@@ -163,21 +163,24 @@ class UniFormNode(BasicNode):
         return template.render(c)
 
 
-# {% uni_form %} tag
+# {% crispy %} tag
 @register.tag(name="uni_form")
+@register.tag(name="crispy")
 def do_uni_form(parser, token):
     """
     You need to pass in at least the form/formset object, and can also pass in the
-    optional `uni_form.helpers.FormHelper` object. 
+    optional `crispy_forms.helpers.FormHelper` object. 
 
     helper (optional): A `uni_form.helpers.FormHelper` object.
 
     Usage::
     
-        {% include uni_form_tags %}
+        {% include crispy_tags %}
+        {% crispy form form.helper %}
 
-        {% uni_form my-form my_helper %}
+    If the `FormHelper` attribute is named `helper` you can simply do::
 
+        {% crispy form %}
     """
     token = token.split_contents()
     form = token.pop(1)
