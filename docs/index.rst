@@ -15,6 +15,7 @@ Get the most out django-crispy-forms
     :maxdepth: 2
 
     install
+    migration
     concepts
     filters
     tags
