@@ -1,0 +1,8 @@
+{% if form.form_html %}
+    {% if form_show_errors %}
+        {% include "uni_form/errors.html" %}
+    {% endif %}
+    {{ form.form_html }}
+{% else %}
+    {% include "uni_form/uni_form.html" %}
+{% endif %}
