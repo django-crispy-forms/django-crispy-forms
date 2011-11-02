@@ -18,10 +18,13 @@ Authors
 
 django-crispy-forms is the new django-uni-form. django-uni-form was an application created by `Daniel Greenfeld`_ that I leaded since version 0.8.0. The name change tries to better explain the purpose of the application, which changed in a significant way since its birth.
 
+If you are upgrading from django-uni-form, we have `instructions`_ for helping you.
+
 * Lead developer: `Miguel Araujo`_
 
 .. _`Daniel Greenfeld`: https://github.com/pydanny
 .. _`Miguel Araujo`: https://github.com/maraujop
+.. _`instructions`: http://django-crispy-forms.readthedocs.org/en/latest/migration.html
 
 Documentation
 =============
