@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'django-crispy-forms'
-copyright = u'2009-2011, Daniel Greenfeld'
+copyright = u'2009-2011, Miguel Araujo and Daniel Greenfeld'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -181,7 +181,7 @@ htmlhelp_basename = 'django-crispy-formdoc'
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'django-crispy-forms.tex', u'django-crispy-forms Documentation',
-   u'Daniel Greenfeld', 'manual'),
+   u'Miguel Araujo', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
