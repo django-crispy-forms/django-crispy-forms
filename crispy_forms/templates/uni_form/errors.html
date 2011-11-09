@@ -1,6 +1,10 @@
+{% load i18n %}
 {% if form.non_field_errors %}
     <div id="errorMsg">
-        {% if form_error_title %}<h3>{{ form_error_title }}</h3>{% endif %}
+        {% if form_error_title %}<h3>{{ form_error_title }}</h3>
+        {% else %}
+        <h3>{% blocktrans count form.non_field_errors|length as counter %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}</h3>
+        {% endif %}
         <ol>
             {{ form.non_field_errors|unordered_list }}
         </ol>
