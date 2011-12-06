@@ -9,7 +9,7 @@ django-crispy-forms implements a class called ``FormHelper`` that defines the fo
 Fundamentals
 ~~~~~~~~~~~~
 
-From now onwards we will use the following form to exemplify how to use a helper. This form is in charge of gathering some user information::
+For the rest of this document we will use the following example form of how to use a helper. This form is in charge of gathering some user information::
 
     class ExampleForm(forms.Form):
         like_website = forms.TypedChoiceField(
@@ -74,16 +74,16 @@ As you can see you need to override the constructor and call the base class cons
             self.helper.add_input(Submit('submit', 'Submit')
             super(ExampleForm, self).__init__(*args, **kwargs)
 
-Note that we are importing here a class called ``Submit`` that is a layout object. We will see what layout objects are in detail later on, for now on let's just say that this adds a submit button to our form, so people can send their survey.
+Note that we are importing a class called ``Submit`` that is a layout object. We will see what layout objects are in detail later on, for now on let's just say that this adds a submit button to our form, so people can send their survey.
 
-We've also done some helper magic. ``FormHelper`` has a list of attributes that can be set, that affect mainly form attributes. Our form will have as DOM id ``id-exampleForm``, it will have as DOM CSS class ``blueForms``, it will use http ``POST`` to send information and its action will be set to ``reverse(submit_survey)``. 
+We've also done some helper magic. ``FormHelper`` has a list of attributes that can be set, that effect mainly form attributes. Our form will have as DOM id ``id-exampleForm``, it will have as DOM CSS class ``blueForms``, it will use http ``POST`` to send information and its action will be set to ``reverse(submit_survey)``. 
 
-Let's how to render the form in a template. Supposing we have the form in the template context as ``example_form``, we would render it doing:
+Let's see how to render the form in a template. Supposing we have the form in the template context as ``example_form``, we would render it doing:
 
     {% load crispy_forms_tags %}
     {% crispy example_form example_form.helper %}
 
-Realize, that `{% crispy %}` tags expects two parameters. First the form variable and then the helper. In this case we use the `FormHelper` attached to the form, but you could aslo create a `FormHelper` instance and pass it as a context variable. Most of the times, you will want to use the helper attached. Note that If you name your `FormHelper` attribute `helper` you will only need to do:
+Notice that the `{% crispy %}` tags expects two parameters: first the form variable and then the helper. In this case we use the `FormHelper` attached to the form, but you could also create a `FormHelper` instance and pass it as a context variable. Most of the time, you will want to use the helper attached. Note that if you name your `FormHelper` attribute `helper` you will only need to do:
 
     {% crispy form %}
 
@@ -169,7 +169,7 @@ We are changing ``form_action`` helper property in case the view was called with
 Rendering several forms with helpers 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Often we get asked, how do you render two or more forms, with their respective helpers, using ``{% crispy %}`` tag, without having ``<form>`` tags rendered twice? Easy, you need to set ``form_tag`` helper property to False in every helper::
+Often we get asked: "How do you render two or more forms, with their respective helpers, using ``{% crispy %}`` tag, without having ``<form>`` tags rendered twice?" Easy, you need to set ``form_tag`` helper property to False in every helper::
 
     self.helper.form_tag = False
 
@@ -253,7 +253,7 @@ Layouts
 Fundamentals
 ~~~~~~~~~~~~
 
-You might be thinking that helpers are nice, but what if you need to change the way the form fields are rendered, answer is layouts. Django-crispy-forms defines another powerful class called ``Layout``. You can create your ``Layout`` to define how the form fields should be rendered: order of the fields, wrap them in divs or other structures, add html, set ids or classes to whatever you want, etc. And all that without writing a custom template, rather fully reusable without writing it twice. Then just attach the layout to a helper, layouts are optional, but probably the most powerful thing django-crispy-forms has to offer.
+Django-crispy-forms defines another powerful class called ``Layout``, which allows you to change the way the form fields are rendered. This allows you to set the order of the fields, wrap them in divs or other structures, add html, set ids or classes to whatever you want, etc. And all that without writing a custom template, rather fully reusable without writing it twice. Then just attach the layout to a helper, layouts are optional, but probably the most powerful thing django-crispy-forms has to offer.
 
 A Layout is constructed by layout objects, which can be thought of as form components. You assemble your layout using those. For the time being, your choices are: ``ButtonHolder``, ``Button``, ``Div``, ``Row``, ``Column``, ``Fieldset``, ``MultiField``, ``HTML``, ``TemplateInclude``, ``Hidden``, ``Reset``, ``Submit`` and ``Field``.
 
@@ -276,7 +276,7 @@ Let's add a layout to our helper::
                     'favorite_color',
                     'favorite_food',
                     'notes'
-                )
+                ),
                 ButtonHolder(
                     Submit('submit', 'Submit', css_class='button white')
                 )
@@ -288,9 +288,9 @@ When we render the form now using::
     {% load crispy_forms_tags %}
     {% crispy example_form example_form.helper %}
 
-We will get the fields wrapped in a fieldset, whose legend will be set to 'first arg is the legend of the fieldset'. The fields order will be: ``like_website``, ``favorite_number``, ``favorite_color``, ``favorite_food`` and ``notes``. We also get a submit button wrapped in a ``<div class="buttonHolder">`` which uni-form CSS positions in a nice way. That button has its CSS class set to ``button white``.
+We will get the fields wrapped in a fieldset, whose legend will be set to 'first arg is the legend of the fieldset'. The fields' order will be: ``like_website``, ``favorite_number``, ``favorite_color``, ``favorite_food`` and ``notes``. We also get a submit button wrapped in a ``<div class="buttonHolder">`` which uni-form CSS positions in a nice way. That button has its CSS class set to ``button white``.
 
-This is just the peak of the iceberg. Now imagine you want to add an explanation for what notes are, you can use ``HTML`` layout object::
+This is just the tip of the iceberg: now imagine you want to add an explanation for what notes are, you can use ``HTML`` layout object::
 
     Layout(
         Fieldset(
@@ -301,12 +301,12 @@ This is just the peak of the iceberg. Now imagine you want to add an explanation
             'favorite_food',
             HTML("""
                 <p>We use notes to get better, <strong>please help us {{ username }}</strong></p> 
-            """)
+            """),
             'notes'
         )
     )
 
-As you notice the fieldset legend is context aware and you can write it as if it were a chunk of a template where the form will be rendered. the ``HTML`` object will add a message before the notes input and it's also context aware. Note how you can wrap layout objects into other layout objects. Layout objects ``Fieldset``, ``Div``, ``Row``, ``Column``, ``MultiField`` and ``ButtonHolder`` can hold other Layout objects within. Let's do an alternative layout for the same form::
+As you'll notice the fieldset legend is context aware and you can write it as if it were a chunk of a template where the form will be rendered. The ``HTML`` object will add a message before the notes input and it's also context aware. Note how you can wrap layout objects into other layout objects. Layout objects ``Fieldset``, ``Div``, ``Row``, ``Column``, ``MultiField`` and ``ButtonHolder`` can hold other Layout objects within. Let's do an alternative layout for the same form::
 
     Layout(
         MultiField(
@@ -315,7 +315,7 @@ As you notice the fieldset legend is context aware and you can write it as if it
                 'like_website',
                 'favorite_number',
                 css_id = 'special-fields'
-            )
+            ),
             'favorite_color',
             'favorite_food',
             'notes'
@@ -331,7 +331,7 @@ Layout objects
 
 Let's see an example of every layout object in use, to understand what parameters each one expects.
 
-- **Div**: It wraps fields in a div::
+- **Div**: It wraps fields in a ``<div>``::
 
     Div('form_field_1', 'form_field_2', 'form_field_3', ...)
 
@@ -378,14 +378,14 @@ Renders to::
         'form_field_2'
     )
 
-- **MultiField**: It wraps fields in a div with a label on top. When there are errors in the form submission it renders them in a list instead of each one surrounding the field::
+- **MultiField**: It wraps fields in a ``<div>`` with a label on top. When there are errors in the form submission it renders them in a list instead of each one surrounding the field::
 
-    Fieldset("Text for the label {{ username }}",
+    MultiField("Text for the label {{ username }}",
         'form_field_1',
         'form_field_2'
     )
 
-All this layout objects, can have their DOM id or class set using named arguments ``css_id`` and ``css_class``::
+All of these layout objects can have their CSS class or ID set using named arguments ``css_class`` and ``css_id``::
 
     Div('form_field_1', 'form_field_2', 'form_field_3', css_id = 'magic-div-1', css = 'magic-divs')
     Submit('save', 'Save', css_id = 'submit-save', css_class = 'button white')
