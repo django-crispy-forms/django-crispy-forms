@@ -95,6 +95,7 @@ class FormHelper(object):
     form_error_title = None
     formset_error_title = None
     form_show_errors = True
+    render_unmentioned_fields = True
 
     def __init__(self):
         self.inputs = self.inputs[:]
@@ -158,7 +159,7 @@ class FormHelper(object):
         # If the user has meta fields defined, not included in the layout
         # we suppose they need to be rendered. Othewise we renderd the
         # layout fields strictly
-        if getattr(form, 'Meta', None):
+        if self.render_unmentioned_fields and getattr(form, 'Meta', None):
             fields = set(getattr(form.Meta, 'fields', []))
             exclude = set(getattr(form.Meta, 'exclude', []))
             left_fields_to_render = fields - exclude - form.rendered_fields
