@@ -3,12 +3,14 @@
 {% if field.is_hidden %}
     {{ field }}
 {% else %}
-    <div id="div_{{ field.auto_id }}" class="ctrlHolder{% if field.errors %} error{% endif %}{% if field|is_checkbox %} checkbox{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
-        {% for error in field.errors %}
-            <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="errorField">
-                {{ error }}
-            </p>
-        {% endfor %}
+    <div id="div_{{ field.auto_id }}" class="ctrlHolder{% if field.errors and form_show_errors %} error{% endif %}{% if field|is_checkbox %} checkbox{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+        {% if form_show_errors %}
+            {% for error in field.errors %}
+                <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="errorField">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        {% endif %}
 
         {% if field.label %}
             <label for="{{ field.auto_id }}" {% if field.field.required %}class="requiredField"{% endif %}>
