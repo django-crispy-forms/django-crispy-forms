@@ -180,6 +180,38 @@ class TestFormHelpers(TestCase):
         self.assertFalse('method="get"' in html)
         self.assertFalse('id="this-form-rocks">' in html)
 
+    def test_crispy_tag_with_helper_form_show_errors(self):
+        '''
+        Ensure that show_form_errors option on FormHelper works as expected.
+        '''
+        form_helper = FormHelper()
+        form_helper.form_show_errors = True
+
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy testForm %}
+        """)
+
+        # First we render with errors...
+        form = TestForm({'password1': 'wargame','password2': 'god'})
+        form.is_valid()
+        c = Context({'testForm': form, 'form_helper': form_helper})
+        html = template.render(c)
+
+        # ...and ensure those errors were rendered:
+        self.assertTrue('<li>Passwords dont match</li>' in html)
+        self.assertTrue('This field is required.' in html)
+        self.assertTrue('error' in html)
+
+        # Now we render without errors...
+        form_helper.form_show_errors = False
+        html = template.render(c)
+
+        # ... and ensure they were not:
+        self.assertFalse('<li>Passwords dont match</li>' in html)
+        self.assertFalse('This field is required.' in html)
+        self.assertFalse('error' in html)
+
     def test_crispy_tag_without_helper(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
