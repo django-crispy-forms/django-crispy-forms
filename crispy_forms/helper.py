@@ -190,4 +190,9 @@ class FormHelper(object):
             items['form_error_title'] = self.form_error_title.strip()
         if self.formset_error_title:
             items['formset_error_title'] = self.formset_error_title.strip()
+
+        for attribute_name, value in self.__dict__.items():
+            if attribute_name not in items and attribute_name not in ['layout', 'inputs'] and not attribute_name.startswith('_'):
+                items[attribute_name] = value
+
         return items

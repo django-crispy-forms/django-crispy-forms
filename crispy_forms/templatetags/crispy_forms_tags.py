@@ -91,6 +91,7 @@ class BasicNode(template.Node):
         # We get the response dictionary 
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(attrs, context, is_formset)
+        context.update(response_dict)
 
         # If we have a helper's layout we use it, for the form or the formset's forms
         if helper and helper.layout:
@@ -136,6 +137,11 @@ class BasicNode(template.Node):
             'inputs': attrs.get('inputs', []),
             'is_formset': is_formset,
         }
+
+        # Handles custom attributes added to helpers
+        for attribute_name, value in attrs.items():
+            if attribute_name not in response_dict:
+                response_dict[attribute_name] = value
 
         if context.has_key('csrf_token'):
             response_dict['csrf_token'] = context['csrf_token']
