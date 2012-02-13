@@ -1,4 +1,4 @@
-{% load uni_form_field %}
+{% load crispy_forms_field %}
 
 {% if field.is_hidden %}
 	{{ field }}
@@ -11,7 +11,7 @@
 		{% endif %}
 
 		<div class="input">
-			{{ field|with_class }}
+			{% crispy_field field %}
 			{% for error in field.errors %}
 				<span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error|safe }}</strong></span>
 			{% endfor %}

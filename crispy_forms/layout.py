@@ -1,7 +1,10 @@
+from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import render_to_string
 
 from utils import render_field
+
+TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
 
 class Layout(object):
@@ -185,7 +188,7 @@ class Fieldset(object):
 
 class MultiField(object):
     """ multiField container. Renders to a multiField <div> """
-    template = "uni_form/layout/multifield.html"
+    template = "%s/layout/multifield.html" % TEMPLATE_PACK
 
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
@@ -285,7 +288,7 @@ class Field(object):
 
         Field('field_name', style="color: #333;", css_class="whatever", id="field_name")
     """
-    template = "uni_form/field.html"
+    template = "%s/field.html" % TEMPLATE_PACK
 
     def __init__(self, field, *args, **kwargs):
         self.field = field

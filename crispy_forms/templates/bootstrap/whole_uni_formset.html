@@ -1,4 +1,4 @@
-{% load uni_form_tags %}
+{% load crispy_forms_tags %}
 
 {% if formset_tag %}
 <form action="{{ formset_action }}" class="uniForm {{ formset_class }}" method="{{ formset_method }}" {% if formset_id %}id="{{ formset_id }}"{% endif %}{% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
@@ -8,7 +8,7 @@
     {% endif %}
 
     <div>
-        {{ formset.management_form|as_uni_form }}
+        {{ formset.management_form|crispy }}
     </div>
 
     {% include "uni_form/errors_formset.html" %}

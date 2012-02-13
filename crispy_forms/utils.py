@@ -9,7 +9,8 @@ from django.template.loader import get_template
 
 # Global field template, default template used for rendering a field. This way we avoid 
 # loading the template every time render_field is called without a template
-default_field_template = get_template("uni_form/field.html")
+TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+default_field_template = get_template("%s/field.html" % TEMPLATE_PACK)
 
 def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None):
     """

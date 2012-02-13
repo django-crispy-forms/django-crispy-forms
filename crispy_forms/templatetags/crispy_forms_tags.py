@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
@@ -9,6 +10,8 @@ from crispy_forms.helper import FormHelper
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
 from crispy_forms_filters import *
+
+TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
 
 class ForLoopSimulator(object):
@@ -149,8 +152,8 @@ class BasicNode(template.Node):
         return response_dict
 
 
-whole_uni_formset_template = get_template('uni_form/whole_uni_formset.html')
-whole_uni_form_template = get_template('uni_form/whole_uni_form.html')
+whole_uni_formset_template = get_template('%s/whole_uni_formset.html' % TEMPLATE_PACK)
+whole_uni_form_template = get_template('%s/whole_uni_form.html' % TEMPLATE_PACK)
 
 class UniFormNode(BasicNode):
     def render(self, context):
@@ -158,12 +161,12 @@ class UniFormNode(BasicNode):
 
         if c['is_formset']:
             if settings.DEBUG:
-                template = get_template('uni_form/whole_uni_formset.html')
+                template = get_template('%s/whole_uni_formset.html' % TEMPLATE_PACK)
             else:
                 template = whole_uni_formset_template
         else:
             if settings.DEBUG:
-                template = get_template('uni_form/whole_uni_form.html')
+                template = get_template('%s/whole_uni_form.html' % TEMPLATE_PACK)
             else:
                 template = whole_uni_form_template
 
