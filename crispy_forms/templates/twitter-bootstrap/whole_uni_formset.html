@@ -1,0 +1,39 @@
+{% load uni_form_tags %}
+
+{% if formset_tag %}
+<form action="{{ formset_action }}" class="uniForm {{ formset_class }}" method="{{ formset_method }}" {% if formset_id %}id="{{ formset_id }}"{% endif %}{% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
+{% endif %}
+    {% if formset_method|lower == 'post' %}
+        {% csrf_token %}
+    {% endif %}
+
+    <div>
+        {{ formset.management_form|as_uni_form }}
+    </div>
+
+    {% include "uni_form/errors_formset.html" %}
+
+    {% for form in formset.forms %}
+        {% if form.form_html %}
+            {% include "uni_form/errors.html" %}
+            {{ form.form_html }}
+        {% else %}
+            {% include "uni_form/uni_form.html" %}
+        {% endif %}
+    {% endfor %}
+    
+    {% if inputs %}
+        <div class="actions">
+            {% for input in inputs %}
+                <input type="{{ input.input_type }}"
+                        name="{{ input.name|slugify }}"
+                        value="{{ input.value }}"
+                        {% ifnotequal input.input_type "hidden" %}
+                            class="btn {{ input.field_classes }}"
+                            id="{{ input.input_type }}-id-{{ input.name|slugify }}"
+                        {% endifnotequal %}
+                        />
+            {% endfor %}
+        </div>
+    {% endif %}
+{% if formset_tag %}</form>{% endif %}

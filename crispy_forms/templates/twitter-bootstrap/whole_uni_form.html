@@ -1,0 +1,27 @@
+{% if form_tag %}<form action="{{ form_action|lower }}" class="uniForm{% if form_class %} {{ form_class }}{% endif %}" method="{{ form_method }}"{% if form_id %} id="{{ form_id }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+    {% if form_method|lower == 'post' %}
+        {% csrf_token %}
+    {% endif %}
+
+    {% if form.form_html %}
+        {% include "uni_form/errors.html" %}
+        {{ form.form_html }}
+    {% else %}
+        {% include "uni_form/uni_form.html" %}
+    {% endif %}
+
+    {% if inputs %}
+        <div class="actions">
+            {% for input in inputs %}
+                 <input type="{{ input.input_type }}"
+                        name="{{ input.name|slugify }}"
+                        value="{{ input.value }}"
+                        {% ifnotequal input.input_type "hidden" %}
+                            class="btn {{ input.field_classes }}"
+                            id="{{ input.input_type }}-id-{{ input.name|slugify }}"
+                        {% endifnotequal %}
+                        />
+            {% endfor %}
+        </div>
+    {% endif %}
+{% if form_tag %}</form>{% endif %}
