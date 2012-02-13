@@ -49,7 +49,7 @@ class TestBasicFunctionalityTags(TestCase):
 
         c = Context({'form': form})
         html = template.render(c)
-        self.assertFalse("errorMsg" in html)
+        self.assertFalse("errorMsg" in html or "alert-message" in html)
 
     def test_as_crispy_errors_form_with_non_field_errors(self):
         template = get_template_from_string(u"""
@@ -61,7 +61,7 @@ class TestBasicFunctionalityTags(TestCase):
 
         c = Context({'form': form})
         html = template.render(c)
-        self.assertTrue("errorMsg" in html)
+        self.assertTrue("errorMsg" in html or "alert-message" in html)
         self.assertTrue("<li>Passwords dont match</li>" in html)
         self.assertFalse("<h3>" in html)
 
@@ -121,15 +121,16 @@ class TestFormHelpers(TestCase):
         c = Context({'form': TestForm(), 'form_helper': form_helper})        
         html = template.render(c)
 
-        self.assertTrue('class="submit submitButton button white"' in html)
+        self.assertTrue('button white' in html)
+        self.assertTrue('submit submitButton' in html or 'btn' in html)
         self.assertTrue('id="submit-id-my-submit"' in html)        
 
-        self.assertTrue('class="reset resetButton"' in html)
+        self.assertTrue('reset resetButton' in html)
         self.assertTrue('id="reset-id-my-reset"' in html)        
 
         self.assertTrue('name="my-hidden"' in html)        
 
-        self.assertTrue('class="button"' in html)
+        self.assertTrue('button' in html)
         self.assertTrue('id="button-id-my-button"' in html)        
 
     def test_invalid_helper_method(self):
