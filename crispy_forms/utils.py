@@ -33,7 +33,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
     :attrs: Attributes for the field's widget
     """
-    FAIL_SILENTLY = getattr(settings, 'UNIFORM_FAIL_SILENTLY', True)
+    FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
 
     if hasattr(field, 'render'):
         return field.render(form, form_style, context)
