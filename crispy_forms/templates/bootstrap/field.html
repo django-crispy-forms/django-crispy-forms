@@ -13,7 +13,7 @@
 		<div class="input">
 			{% crispy_field field %}
 			{% for error in field.errors %}
-				<span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error|safe }}</strong></span>
+				<span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error }}</strong></span>
 			{% endfor %}
 			{% if field.help_text %}
 				<span id="hint_{{ field.auto_id }}" class="help-inline">{{ field.help_text|safe }}</span>
