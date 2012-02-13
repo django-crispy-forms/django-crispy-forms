@@ -95,6 +95,7 @@ class FormHelper(object):
     form_error_title = None
     formset_error_title = None
     form_show_errors = True
+    render_unmentioned_fields = False
 
     def __init__(self):
         self.inputs = self.inputs[:]
@@ -154,6 +155,12 @@ class FormHelper(object):
  
         # This renders the specifed Layout
         html = self.layout.render(form, self.form_style, context)
+
+        if self.render_unmentioned_fields:
+            fields = set(form.fields.keys())
+            left_fields_to_render = fields - form.rendered_fields
+            for field in left_fields_to_render:
+                html += render_field(field, form, self.form_style, context)
 
         # If the user has meta fields defined, not included in the layout
         # we suppose they need to be rendered. Othewise we renderd the
