@@ -188,7 +188,7 @@ class Fieldset(object):
 
 class MultiField(object):
     """ multiField container. Renders to a multiField <div> """
-    template = "%s/layout/multifield.html" % TEMPLATE_PACK
+    template = "uni_form/layout/multifield.html"
 
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
