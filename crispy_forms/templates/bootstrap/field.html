@@ -1,4 +1,5 @@
 {% load crispy_forms_field %}
+{% load core_tags %}
 
 {% if field.is_hidden %}
 	{{ field }}
@@ -9,15 +10,25 @@
 				{{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
 			</label>
 		{% endif %}
+    
+        {% if field|css_class == "checkboxselectmultiple" %}
+            {% include 'bootstrap/layout/checkboxselectmultiple.html' %}
+        {% endif %} 
 
-		<div class="input controls">
-			{% crispy_field field %}
-			{% for error in field.errors %}
-				<span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error }}</strong></span>
-			{% endfor %}
-			{% if field.help_text %}
-				<span id="hint_{{ field.auto_id }}" class="help-inline">{{ field.help_text|safe }}</span>
-			{% endif %}
-		</div>
+        {% if field|css_class == "radioselect" %}
+            {% include 'bootstrap/layout/radioselect.html' %}
+        {% endif %}
+
+        {% if field|css_class != "checkboxselectmultiple" and field|css_class != "radioselect" %}
+            <div class="controls">
+                {% crispy_field field %}
+                {% for error in field.errors %}
+                    <span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error }}</strong></span>
+                {% endfor %}
+                {% if field.help_text %}
+                    <span id="hint_{{ field.auto_id }}" class="help-inline">{{ field.help_text|safe }}</span>
+                {% endif %}
+            </div>
+        {% endif %}
 	</div>
 {% endif %}
