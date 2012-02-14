@@ -18,6 +18,9 @@ def is_checkbox(field):
 def is_password(field):
     return field.field.widget.__class__.__name__.lower() == "passwordinput"
 
+@register.filter
+def css_class(field):
+    return field.field.widget.__class__.__name__.lower()
 
 def pairwise(iterable):
     "s -> (s0,s1), (s2,s3), (s4, s5), ..."
