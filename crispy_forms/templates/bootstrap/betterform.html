@@ -12,7 +12,7 @@
             {% if field.is_hidden %}
                 {{ field }}
             {% else %}
-                {% include "uni_form/field.html" %}
+                {% include "bootstrap/field.html" %}
             {% endif %}
         {% endfor %}
     {% if not forloop.last or not fieldset_open %}
