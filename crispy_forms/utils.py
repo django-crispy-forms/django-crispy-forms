@@ -5,6 +5,7 @@ from django.conf import settings
 from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
+from django.forms.util import flatatt
 
 
 # Global field template, default template used for rendering a field. This way we avoid 
@@ -83,7 +84,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         if layout_object is not None:
             layout_object.bound_fields.append(bound_field) 
        
-        context.update({'field': bound_field, 'labelclass': labelclass})
+        context.update({'field': bound_field, 'labelclass': labelclass, 'flat_attrs': flatatt(attrs or {})})
         html = template.render(context)
 
     return html
