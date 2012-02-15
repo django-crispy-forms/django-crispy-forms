@@ -137,6 +137,7 @@ class BasicNode(template.Node):
             'form_error_title': attrs.get("form_error_title", None),
             'formset_error_title': attrs.get("formset_error_title", None),
             'form_show_errors': attrs.get("form_show_errors", True),
+            'help_text_inline': attrs.get("help_text_inline", False),
             'inputs': attrs.get('inputs', []),
             'is_formset': is_formset,
         }

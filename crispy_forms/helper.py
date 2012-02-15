@@ -96,6 +96,7 @@ class FormHelper(object):
     formset_error_title = None
     form_show_errors = True
     render_unmentioned_fields = False
+    help_text_inline = False
 
     def __init__(self):
         self.inputs = self.inputs[:]
@@ -184,6 +185,7 @@ class FormHelper(object):
         items['form_tag'] = self.form_tag
         items['form_style'] = self.form_style.strip()
         items['form_show_errors'] = self.form_show_errors
+        items['help_text_inline'] = self.help_text_inline
         
         if self.form_action:
             items['form_action'] = self.form_action.strip()
