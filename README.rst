@@ -36,9 +36,11 @@ If you are upgrading from django-uni-form, we have `instructions`_ for helping y
 Example
 =======
 
-This is a teaser of what you can do with latest django-crispy-forms:
+This is a teaser of what you can do with latest django-crispy-forms. `Find here the gist`_ for generating this form:
 
 .. image:: http://i.imgur.com/LSREg.png
+
+.. _`Find here the gist`: https://gist.github.com/1838193
 
 Documentation
 =============
@@ -52,7 +54,7 @@ Special thanks
 
 * To Daniel Greenfeld (`@pydanny`_) for his support, time and the opportunity given to me to do this.
 * The name of the project was suggested by the fantastic Audrey Roy (`@audreyr`_)
-* To Kenneth Love (`@kennethlove`) for creating django-uni-form-contrib from which bootstrap template pack was started.
+* To Kenneth Love (`@kennethlove`_) for creating django-uni-form-contrib from which bootstrap template pack was started.
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`@pydanny`: https://github.com/pydanny
