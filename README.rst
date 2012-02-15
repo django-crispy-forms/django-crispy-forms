@@ -14,7 +14,7 @@ Django-crispy-forms 1.1.0 has built-in support for two different CSS frameworks,
 * `bootstrap`_ The default template pack. The popular simple and flexible HTML, CSS, and Javascript for user interfaces from Twitter.
 * `Uni-form`_ Nice looking, well structured, highly customizable, accessible and usable forms.
 
-But you can create a template pack for your own CSS framework and submit it. `see the docs`_ for more information. You can easily switch between both using `CRISPY_TEMPLATE_PACK` setting variable, setting it to `bootstrap` or `uni_form`.
+But you can create a template pack for your own CSS framework and submit it. `see the docs`_ for more information. You can easily switch between both using ``CRISPY_TEMPLATE_PACK`` setting variable, setting it to ``bootstrap`` or ``uni_form``.
 
 .. _`Uni-form`: http://sprawsm.com/uni-form
 .. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
