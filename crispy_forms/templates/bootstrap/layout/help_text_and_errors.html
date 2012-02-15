@@ -1,10 +1,2 @@
-{% for error in field.errors %}
-    <span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="{% if help_text_inline %}help-inline{% else %}help-block{% endif %}"><strong>{{ error }}</strong></span>
-{% endfor %}
-{% if field.help_text %}
-    {% if help_text_inline %}
-        <span id="hint_{{ field.auto_id }}" class="help-inline">{{ field.help_text|safe }}</span>
-    {% else %}
-        <p id="hint_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</p>
-    {% endif %}
-{% endif %}
+{% include 'bootstrap/layout/field_errors.html' %}
+{% include 'bootstrap/layout/help_text.html' %}
