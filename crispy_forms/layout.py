@@ -296,6 +296,8 @@ class Field(object):
 
         if kwargs.has_key('css_class'):
             self.attrs['class'] = kwargs.pop('css_class')
+        if kwargs.has_key('template'):
+            self.template = kwargs.pop('template')
 
         self.attrs.update(kwargs)
 
