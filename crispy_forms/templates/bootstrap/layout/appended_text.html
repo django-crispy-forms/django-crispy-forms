@@ -1,15 +1,24 @@
 {% load crispy_forms_field %}
 
-<div class="controls">
-    <div class="input-append">
-        {% crispy_field field %}
-        <span class="add-on {% if active %}active{% endif %}">{{ crispy_appended_text|safe }}</span>
+<div id="div_{{ field.auto_id }}" class="clearfix control-group{% if field.errors %} error{% endif %} {% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}">
 
-        {% for error in field.errors %}
-            <span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error }}</strong></span>
-        {% endfor %}
-        {% if field.help_text %}
-            <span id="hint_{{ field.auto_id }}" class="help-inline">{{ field.help_text|safe }}</span>
-        {% endif %}
+    {% if field.label %}
+        <label for="{{ field.auto_id }}" {% if field.field.required %}class="requiredField"{% endif %}>
+            {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+        </label>
+    {% endif %}
+
+    <div class="controls">
+        <div class="input-append">
+            {% crispy_field field %}
+            <span class="add-on {% if active %}active{% endif %}">{{ crispy_appended_text|safe }}</span>
+
+            {% for error in field.errors %}
+                <span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error }}</strong></span>
+            {% endfor %}
+            {% if field.help_text %}
+                <span id="hint_{{ field.auto_id }}" class="help-inline">{{ field.help_text|safe }}</span>
+            {% endif %}
+        </div>
     </div>
 </div>
