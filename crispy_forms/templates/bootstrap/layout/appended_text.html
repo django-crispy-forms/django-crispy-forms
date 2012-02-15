@@ -13,12 +13,7 @@
             {% crispy_field field %}
             <span class="add-on {% if active %}active{% endif %}">{{ crispy_appended_text|safe }}</span>
 
-            {% for error in field.errors %}
-                <span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error }}</strong></span>
-            {% endfor %}
-            {% if field.help_text %}
-                <span id="hint_{{ field.auto_id }}" class="help-inline">{{ field.help_text|safe }}</span>
-            {% endif %}
+            {% include 'bootstrap/layout/help_text_and_errors.html' %}
         </div>
     </div>
 </div>
