@@ -162,12 +162,10 @@ class TestFormHelpers(TestCase):
         
         # Lets make sure everything loads right
         self.assertTrue(html.count('<form'), 1)
-        self.assertTrue('class="uniForm forms-that-rock"' in html)
+        self.assertTrue('forms-that-rock' in html)
         self.assertTrue('method="get"' in html)
         self.assertTrue('id="this-form-rocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
-        self.assertEqual(html.count('<fieldset'), 1)
-
 
         self.assertTrue("<h3>ERRORS</h3>" in html)
         self.assertTrue("<li>Passwords dont match</li>" in html)
@@ -177,7 +175,7 @@ class TestFormHelpers(TestCase):
         form_helper.form_tag = False 
         html = template.render(c)        
         self.assertFalse('<form' in html)        
-        self.assertFalse('class="uniForm forms-that-rock"' in html)
+        self.assertFalse('forms-that-rock' in html)
         self.assertFalse('method="get"' in html)
         self.assertFalse('id="this-form-rocks">' in html)
 
@@ -221,7 +219,6 @@ class TestFormHelpers(TestCase):
         
         # Lets make sure everything loads right
         self.assertTrue('<form' in html)
-        self.assertTrue('class="uniForm"' in html)
         self.assertTrue('method="post"' in html)
         self.assertFalse('action' in html)
 
@@ -232,12 +229,12 @@ class TestFormHelpers(TestCase):
         """)
         c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
-        settings.UNIFORM_FAIL_SILENTLY = False
+        settings.CRISPY_FAIL_SILENTLY = False
         if settings.TEMPLATE_DEBUG:
             self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
         else:
             self.assertRaises(TypeError, lambda:template.render(c))
-        del settings.UNIFORM_FAIL_SILENTLY
+        del settings.CRISPY_FAIL_SILENTLY
 
     def test_crispy_tag_formset_with_helper_without_layout(self):
         template = get_template_from_string(u"""
@@ -265,7 +262,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('form-INITIAL_FORMS' in html)
         self.assertTrue('form-MAX_NUM_FORMS' in html)
     
-        self.assertTrue('class="uniForm formsets-that-rock"' in html)
+        self.assertTrue('formsets-that-rock' in html)
         self.assertTrue('method="post"' in html)
         self.assertTrue('id="thisFormsetRocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
@@ -316,9 +313,9 @@ class TestFormLayout(TestCase):
             {% crispy form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
-        settings.UNIFORM_FAIL_SILENTLY = False
+        settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
-        del settings.UNIFORM_FAIL_SILENTLY
+        del settings.CRISPY_FAIL_SILENTLY
 
     def test_layout_unresolved_field(self):
         form = TestForm()
@@ -335,9 +332,9 @@ class TestFormLayout(TestCase):
             {% crispy form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
-        settings.UNIFORM_FAIL_SILENTLY = False
+        settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
-        del settings.UNIFORM_FAIL_SILENTLY
+        del settings.CRISPY_FAIL_SILENTLY
 
     def test_double_rendered_field(self):
         form = TestForm()
@@ -354,9 +351,9 @@ class TestFormLayout(TestCase):
             {% crispy form form_helper %}
         """)        
         c = Context({'form': TestForm(), 'form_helper': form_helper})
-        settings.UNIFORM_FAIL_SILENTLY = False
+        settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
-        del settings.UNIFORM_FAIL_SILENTLY
+        del settings.CRISPY_FAIL_SILENTLY
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
         form_helper = FormHelper()
@@ -574,7 +571,7 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('<form'), 1)
         self.assertEqual(html.count("<input type='hidden' name='csrfmiddlewaretoken'"), 1)
 
-        self.assertTrue('class="uniForm formsets-that-rock"' in html)
+        self.assertTrue('formsets-that-rock' in html)
         self.assertTrue('method="post"' in html)
         self.assertTrue('id="thisFormsetRocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
