@@ -1,4 +1,6 @@
-{% include "bootstrap/errors.html" %}
+{% if form_show_errors %}
+    {% include "bootstrap/errors.html" %}
+{% endif %}
 {% for field in form %}
     {% include "bootstrap/field.html" %}
 {% endfor %}
