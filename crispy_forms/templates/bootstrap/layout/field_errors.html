@@ -1,3 +1,5 @@
-{% for error in field.errors %}
-    <span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error }}</strong></span>
-{% endfor %}
+{% if form_show_errors %}
+    {% for error in field.errors %}
+        <span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="help-inline"><strong>{{ error }}</strong></span>
+    {% endfor %}
+{% endif %}
