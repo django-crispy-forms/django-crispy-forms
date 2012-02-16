@@ -38,3 +38,9 @@ Using rpl::
     rpl -R "{% uni_form" "{% crispy" .
     rpl -R "|as_uni_errors" "|as_crispy_errors" .
     rpl -R "|as_uni_field" "|as_crispy_field" .
+
+There is one filter that has been turned into a tag for extra layout power, so former filter name will not work. You will only need to update this if you have custom or overriden templates in your project::
+
+    field|with_class ------> {% crispy_field field %}
+
+5. If you have ``UNIFORM_FAIL_SILENTLY`` setting variable defined, you have to rename it to ``CRISPY_FAIL_SILENTLY``.
