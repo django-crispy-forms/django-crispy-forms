@@ -2,9 +2,17 @@
 Change Log
 ===========
 
+0.9.0
+=====
+
+You can read on changes introduced to version 0.9.0 on this `blog post`_
+.. _`blog post`: http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-security-fix
 
 0.8.0
 =====
+
+You can read on changes introduced to version 0.8.0 on this `blog post`_
+.. _`blog post`: http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-security-fix
 
 Built-in csrf support
 ----------------------
@@ -116,4 +124,3 @@ Miscellaneous
 * Added tests
 * Added several new contributors including Dragan Babic
 * Added Danish language translation
-
