@@ -8,28 +8,21 @@ Setup
 Fork on github
 --------------
 
-Before you do anything else, login/signup on Github.com and fork django-uni-form from https://github.com/pydanny/django-uni-form.
+Before you do anything else, login/signup on Github.com and fork django-crispy-forms from https://github.com/pydanny/django-crispy-forms.
 
-Clone your package locally
---------------------------
+Clone your fork locally
+-----------------------
 
 If you have git-scm installed, you now clone your git repo using the following command-line argument where <my-github-name> is your account name on github::
 
-    git clone git@github.com/<my-github-name>/django-uni-form.git
-
-Issues!
-=======
-
-django-uni-form has a list of existing issues_. Pick an unassigned issue that you think you can accomplish, add comment that you are attempting to do it, and shortly your own personal label matching your github ID will be assigned to that issue.
-
-Feel free to propose issues that aren't described!
+    git clone git@github.com/<my-github-name>/django-crispy-forms.git
 
 Setting up topic branches and generating pull requests
 ======================================================
 
 While it's handy to provide useful code snippets in an issue, it is better for
 you as a developer to submit pull requests. By submitting pull request your
-contribution to django-uni-form will be recorded by Github. 
+contribution to django-crispy-forms will be recorded by Github. 
 
 In git it is best to isolate each topic or feature into a "topic branch".  While
 individual commits allow you control over how small individual changes are made
@@ -53,7 +46,7 @@ checkout``::
     Switched to a new branch 'fix-broken-thing'
 
 You should use a verbose enough name for your branch so it is clear what it is
-about.  Now you can commit your changes and regularly merge in the upstream
+about. Now you can commit your changes and regularly merge in the upstream
 master as described below.
 
 When you are ready to generate a pull request, either for preliminary review,
@@ -79,20 +72,20 @@ add a comment to the discussion section of the pull request.
 Pull upstream changes into your fork regularly
 ==================================================
 
-django-uni-form is worked on by a lot of people. It is therefore critical that you pull upstream changes from master into your fork on a regular basis. Nothing is worse than putting in days of hard work into a pull request only to have it rejected because it has diverged too far from master. 
+django-crispy-forms is worked on by a lot of people. It is therefore critical that you pull upstream changes from trunk into your fork on a regular basis. Nothing is worse than putting in days of hard work into a pull request only to have it rejected because it has diverged too far from trunk.
 
 To pull in upstream changes::
 
-    git remote add django-uni-form git://github.com/pydanny/django-uni-form.git
-    git fetch django-uni-form
+    git remote add trunk git://github.com/maraujop/django-crispy-forms.git
+    git fetch trunk
 
 Check the log to be sure that you actually want the changes, before merging::
 
-    git log ..django-uni-form/master
+    git log ..django-crispy-forms/master
 
 Then merge the changes that you fetched::
 
-    git merge django-uni-form/master
+    git merge django-crispy-forms/master
 
 For more info, see http://help.github.com/fork-a-repo/
 
@@ -104,16 +97,17 @@ We want your submission. But we also want to provide a stable experience for our
 Run the tests!
 --------------
 
-Before you submit a pull request, please run the entire django-uni-form test suite via::
+Before you submit a pull request, please run the entire django-crispy-forms test suite via::
 
-    # TODO - document this!
+    cd crispy_forms/tests
+    ./runtests.py
 
 The first thing the core committers will do is run this command. Any pull request that fails this test suite will be **rejected**.
 
-If you add code/views you need to add tests!
---------------------------------------------
+It's always good to add tests!
+------------------------------
 
-We've learned the hard way that code without tests is undependable. If your pull request reduces our test coverage because it lacks tests then it will be **rejected**.
+We've learned the hard way that code without tests is undependable. If your pull request comes with tests, it's got a greater chance to be included. Otherwise the lead will ask you to code them or will help you doing so.
 
 We use the Django Test framework (based on unittest).
 
@@ -127,14 +121,13 @@ If you change two lines of code and correct 200 lines of whitespace issues in a 
 Keep your pull requests limited to a single issue
 --------------------------------------------------
 
-django-uni-form pull requests should be as small/atomic as possible. Large, wide-sweeping changes in a pull request will be **rejected**, with comments to isolate the specific code in your pull request. Some examples:
+django-crispy-forms pull requests should be as small/atomic as possible. Large, wide-sweeping changes in a pull request will be **rejected**, with comments to isolate the specific code in your pull request. Some examples:
 
-#. If you are making spelling corrections in the docs, don't modify the settings.py file (pydanny_ is guilty of this mistake).
 #. If you are fixing a bug in one helper class don't '*cleanup*' unrelated helpers. That cleanup belongs in another pull request.
 #. Changing permissions on a file should be in its own pull request with explicit reasons why.
 
-Follow pep-8 and keep your code simple!
----------------------------------------
+Keep your code simple!
+----------------------
 
 Memorize the Zen of Python::
 
@@ -145,9 +138,5 @@ Please keep your code as clean and straightforward as possible. When we see more
 Furthermore, the pixel shortage is over. We want to see:
 
 * `helper` instead of `hpr`
-* `django-uni-form` instead of `duf`
+* `django-crispy-forms` instead of `dcf`
 * `my_function_that_does_things` instead of `mftdt`
-
-.. _issue tracker: https://github.com/pydanny/django-uni-form/issues
-.. _issues: https://github.com/pydanny/django-uni-form/issues
-.. _pydanny: http://pydanny.blogspot.com
