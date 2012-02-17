@@ -17,6 +17,7 @@
  * Redoing bootstrap `field.html` template to render `radioselect` and `checkboxselectmultiple` Django widgets a la bootstrap.
  * Adding a `render_unmentioned_fields` helper attribute, that renders all fields in a form, no matter what the layout is. Default is `False`.
  * Adding a `|css_class` filter that renders field classes in an elegant way.
+ * Turning `|with_class` filter into `{% crispy_field %}` tag, so that parameters for rendering the field can be passed.
  * Adding a `help_text_inline` helper attribute, that controls wether to render help texts in bootstrap with "help-inline" or "help-block".
  * Adding a `flat_attrs` variable to the context passed to `field.html` to be able to do all kind of html attributes when rendering a field, using `Field` layout object.
  * Adding a `template` kwarg to `Field` layout object that allows to override template used for rendering a field.
@@ -31,7 +32,7 @@
  * Improving `rendered_fields` checking performance.
  * Layouts are now rendered strictly. We don't render fields missed in the layout. If the form has a Meta class with `fields` or `exclude`, then we follow Django standards.
  * Added `Field` layout object. You can wrap name fields within and set all kind of attributes easily or override widget template.
- * Fixed #GH-111 we were not rendering all the classes in |with_class filter
+ * Fixed #GH-111 we were not rendering all the classes in `|with_class` filter
  * Moving django-uni-form to django-crispy-forms. Renaming tags, filters and modules. Updating tests and so on. Adding migration instructions.
  * More work on simpler and easier docs.
  * Adding `form_show_errors` helper attribute, that controls wether to render or not `form.errors`
