@@ -21,9 +21,9 @@ sys.path.insert(0, os.path.abspath('../crispy_forms'))
 sys.path.insert(0, os.path.abspath('../crispy_forms/templatetags'))
 sys.path.append(os.path.abspath('_themes'))
 
-#import settings
-#from django.core.management import setup_environ
-#setup_environ(settings)
+import settings
+from django.core.management import setup_environ
+setup_environ(settings)
 
 
 # -- General configuration -----------------------------------------------------
