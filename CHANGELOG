@@ -2,6 +2,29 @@
 CHANGELOG
 =========
 
+For 1.1.1
+
+ * Fixing a critical bug in bootstrap templates, that was breaking `{% load crispy_forms_tags %}`
+
+For 1.1.0
+
+ * Fixing produced html by a checkbox field, closing label the right way and rendering checkbox in the right place.
+ * Passing full context to field rendering, to be consistent and having acess in field.html template to helper attributes.
+ * Custom helper attributes can now be set and will be part of templates context, this way you can define custom specific behavior.
+ * Adding @kennethlove bootstrap template pack into django-crispy-forms core.
+ * Adding `CRISPY_TEMPLATE_PACK` setting variable to easily switch between different template packs. Default template pack is now bootstrap.
+ * Upgrading bootstrap templates, fixing some bugs and redoing the hierarchy.
+ * Upgrading tests for multiple template packs. 
+ * Renaming `UNIFORM_FAIL_SILENTLY` setting variable to `CRISPY_FAIL_SILENTLY`, upgrading migration instructions.
+ * Redoing bootstrap `field.html` template to render `radioselect` and `checkboxselectmultiple` Django widgets a la bootstrap.
+ * Adding a `render_unmentioned_fields` helper attribute, that renders all fields in a form, no matter what the layout is. Default is `False`.
+ * Adding a `|css_class` filter that renders field classes in an elegant way.
+ * Adding a `help_text_inline` helper attribute, that controls wether to render help texts in bootstrap with "help-inline" or "help-block".
+ * Adding a `flat_attrs` variable to the context passed to `field.html` to be able to do all kind of html attributes when rendering a field, using `Field` layout object.
+ * Adding a `template` kwarg to `Field` layout object that allows to override template used for rendering a field.
+ * Adding a `bootstrap.py` module that holds bootstrap specific layout objects, for higher bootstrap integration.
+ * Adding a `AppendedText`, `PrependedText` and `FormActions` bootstrap layout objects. First two based in polyvalent `Field` layout object.
+
 For 1.0.0
 
  * Using `baseinput.html` template within `whole_uni_form.html`, to be DRY and consistent.
@@ -9,6 +32,12 @@ For 1.0.0
  * Adding a simplified alternative syntax for `{% uni_form %}` tag. We can now do `{% uni_form form %}` for rendering a form using a helper, instead of `{% uni_form form form.helper %}`, if the `FormHelper` attribute attached to the form is named `helper`.
  * Improving `rendered_fields` checking performance.
  * Layouts are now rendered strictly. We don't render fields missed in the layout. If the form has a Meta class with `fields` or `exclude`, then we follow Django standards.
+ * Added `Field` layout object. You can wrap name fields within and set all kind of attributes easily or override widget template.
+ * Fixed #GH-111 we were not rendering all the classes in |with_class filter
+ * Moving django-uni-form to django-crispy-forms. Renaming tags, filters and modules. Updating tests and so on. Adding migration instructions.
+ * More work on simpler and easier docs.
+ * Adding `form_show_errors` helper attribute, that controls wether to render or not `form.errors`
+ * Improving template hierarchy for more template code reusability.
 
 For 0.9.0
 
