@@ -1,15 +1,13 @@
-=========
-CHANGELOG
-=========
+# CHANGELOG for django-crispy-forms
 
-For 1.1.1
+## 1.1.1 (2012/2/17)
 
  * Fixing a critical bug in bootstrap templates, that was breaking `{% load crispy_forms_tags %}`
 
-For 1.1.0
+## 1.1.0
 
  * Fixing produced html by a checkbox field, closing label the right way and rendering checkbox in the right place.
- * Passing full context to field rendering, to be consistent and having acess in field.html template to helper attributes.
+ * Passing full context to field rendering, to be consistent and having acess in `field.html` template to helper attributes.
  * Custom helper attributes can now be set and will be part of templates context, this way you can define custom specific behavior.
  * Adding @kennethlove bootstrap template pack into django-crispy-forms core.
  * Adding `CRISPY_TEMPLATE_PACK` setting variable to easily switch between different template packs. Default template pack is now bootstrap.
@@ -25,7 +23,7 @@ For 1.1.0
  * Adding a `bootstrap.py` module that holds bootstrap specific layout objects, for higher bootstrap integration.
  * Adding a `AppendedText`, `PrependedText` and `FormActions` bootstrap layout objects. First two based in polyvalent `Field` layout object.
 
-For 1.0.0
+## 1.0.0
 
  * Using `baseinput.html` template within `whole_uni_form.html`, to be DRY and consistent.
  * `BaseInput` subclasses like `Submit` can now have ids set, ussing `css_id`
@@ -39,7 +37,12 @@ For 1.0.0
  * Adding `form_show_errors` helper attribute, that controls wether to render or not `form.errors`
  * Improving template hierarchy for more template code reusability.
 
-For 0.9.0
+# CHANGELOG for django-uni-form
+
+## 0.9.0
+
+You can read on how to use new features included in this version at:
+http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-security-fix
 
  * Fixed a bug in `|with_class` filter so that it supports `show_hidden_initial`, see #GH-95 to not break.
  * Fixed a problem on Fieldset's legends internationalization. Thanks to Bojan Mihelac, see #GH-90.
@@ -62,7 +65,7 @@ For 0.9.0
  * Added a Layout object called `Div`. `Row` and `Column` both inherit from `Div`
  * `Layout` can now be a child of `Layout`, see issue #GH-76.
 
-For 0.8.0
+## 0.8.0
 
 You can read on how to use new features included in this version at:
 http://tothinkornottothink.com/post/7339670508/new-kung-fu-in-django-uni-form-0-8-0
@@ -120,7 +123,7 @@ http://tothinkornottothink.com/post/7339670508/new-kung-fu-in-django-uni-form-0-
  * Thanks to patrys (Patryk Zawadzki) FormHelper class is now easily subclass-able.
  * Sorki (Richard Marko) made it so things work better in direct_to_template.
 
-For 0.7.0
+## 0.7.0
 
  * Removed a <hr /> from the layout module.
  * Changed templatetags/uni_form.py to templatetags/uni_form_tags.py. Yes, this breaks backwards compatibility but fixes a namespace problems in Django with naming a templatetag library after the parent application.
