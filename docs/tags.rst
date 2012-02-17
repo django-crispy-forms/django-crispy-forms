@@ -214,6 +214,7 @@ Basically you can access a ``forloop`` Django node, as if you were rendering you
 
 
 .. _`helper attributes`:
+
 Helper attributes you can set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -337,6 +338,7 @@ This time we are using a ``MultiField``, which is a layout object that as a gene
 
 
 .. _`layout objects`:
+
 Universal layout objects
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -346,9 +348,7 @@ These ones live in module ``crispy_forms.layout``. These are layout objects that
 
     Div('form_field_1', 'form_field_2', 'form_field_3', ...)
 
-.. Warning ::
-
-Mainly in all layout objects you can set kwargs that will be used as HTML attributes. As ``class`` is a reserved keyword in Python, for it you will have to use ``css_class``. For example::
+**NOTE** Mainly in all layout objects you can set kwargs that will be used as HTML attributes. As ``class`` is a reserved keyword in Python, for it you will have to use ``css_class``. For example::
 
     Div('form_field_1', style="background: white;", title="Explication title", css_class="bigdivs")
 
