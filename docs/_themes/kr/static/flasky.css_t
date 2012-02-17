@@ -87,7 +87,7 @@ div.sphinxsidebar {
 }
 
 div.sphinxsidebarwrapper {
-    padding: 18px 10px;
+    padding: 0px 10px;
 }
 
 div.sphinxsidebarwrapper p.logo {
@@ -99,7 +99,7 @@ div.sphinxsidebarwrapper p.logo {
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
     font-family: 'Garamond', 'Georgia', serif;
-    color: #444;
+    color: #555;
     font-size: 24px;
     font-weight: normal;
     margin: 0 0 5px 0;
@@ -132,6 +132,9 @@ div.sphinxsidebar ul {
     color: #000;
 }
 
+div.sphinxsidebar input[type="text"] {
+    width: 160px!important;
+}
 div.sphinxsidebar input {
     border: 1px solid #ccc;
     font-family: 'Georgia', serif;

@@ -9,6 +9,17 @@
 {% endblock %}
 {%- block relbar2 %}{% endblock %}
 {%- block footer %}
+    <script type="text/javascript">
+    /* <![CDATA[ */
+        (function() {
+            var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+            t.parentNode.insertBefore(s, t);
+        })();
+    /* ]]> */</script>
+
     <div class="footer">
       &copy; Copyright {{ copyright }}.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
