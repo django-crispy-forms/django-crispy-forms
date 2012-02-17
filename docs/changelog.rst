@@ -5,14 +5,14 @@ Change Log
 0.9.0
 =====
 
-You can read on changes introduced to version 0.9.0 on this `blog post`_
-.. _`blog post`: http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-security-fix
+You can read on changes introduced to version `0.9.0 on this blog post`_
+.. _`0.9.0 on this blog post`: http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-security-fix
 
 0.8.0
 =====
 
-You can read on changes introduced to version 0.8.0 on this `blog post`_
-.. _`blog post`: http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-security-fix
+You can read on changes introduced to version `0.8.0 on this blog post`_
+.. _`0.8.0 on this blog post`: http://tothinkornottothink.com/post/7339670508/new-kung-fu-in-django-uni-form-0-8-0
 
 Built-in csrf support
 ----------------------
