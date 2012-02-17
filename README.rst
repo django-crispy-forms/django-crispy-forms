@@ -18,7 +18,7 @@ But you can create a template pack for your own CSS framework and submit it. `se
 
 .. _`Uni-form`: http://sprawsm.com/uni-form
 .. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
-.. _`see the docs`: http://django-crispy-forms.readthedocs.org/en/latest/index.html
+.. _`see the docs`: http://django-crispy-forms.rtfd.org
 
 Authors
 =======
@@ -31,7 +31,7 @@ If you are upgrading from django-uni-form, we have `instructions`_ for helping y
 
 .. _`Daniel Greenfeld`: https://github.com/pydanny
 .. _`Miguel Araujo`: https://github.com/maraujop
-.. _`instructions`: http://django-crispy-forms.readthedocs.org/en/latest/migration.html
+.. _`instructions`: http://django-crispy-forms.readthedocs.org/en/1.1.1/migration.html
 
 Example
 =======
