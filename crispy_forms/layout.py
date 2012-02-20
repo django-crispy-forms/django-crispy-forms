@@ -63,7 +63,7 @@ class ButtonHolder(object):
             Submit('Save', 'Save')
         )
     """
-    template = "uni_form/layout/buttonholder.html"
+    template = "%s/layout/buttonholder.html" % TEMPLATE_PACK
 
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
@@ -83,7 +83,7 @@ class BaseInput(object):
     """
     A base class to reduce the amount of code in the Input classes.
     """
-    template = "uni_form/layout/baseinput.html"
+    template = "%s/layout/baseinput.html" % TEMPLATE_PACK
 
     def __init__(self, name, value, **kwargs):
         self.name = name
@@ -165,7 +165,7 @@ class Fieldset(object):
             'form_field_2'
         )
     """
-    template = "uni_form/layout/fieldset.html"
+    template = "%s/layout/fieldset.html" % TEMPLATE_PACK
 
     def __init__(self, legend, *fields, **kwargs):
         self.fields = list(fields)
@@ -188,7 +188,7 @@ class Fieldset(object):
 
 class MultiField(object):
     """ multiField container. Renders to a multiField <div> """
-    template = "uni_form/layout/multifield.html"
+    template = "%s/layout/multifield.html" % TEMPLATE_PACK
 
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
@@ -222,7 +222,7 @@ class Div(object):
 
         Div('form_field_1', 'form_field_2', css_id='div-example', css_class='divs')
     """
-    template = "uni_form/layout/div.html"
+    template = "%s/layout/div.html" % TEMPLATE_PACK
 
     def __init__(self, *fields, **kwargs):
         self.fields = fields
@@ -293,13 +293,19 @@ class Field(object):
     def __init__(self, field, *args, **kwargs):
         self.field = field
         self.attrs = {}
+        self.template = None
+        self.labelclass = None
 
         if kwargs.has_key('css_class'):
             self.attrs['class'] = kwargs.pop('css_class')
         if kwargs.has_key('template'):
             self.template = kwargs.pop('template')
+        if kwargs.has_key('labelclass'):
+            self.labelclass = kwargs.pop('labelclass')
 
         self.attrs.update(kwargs)
 
     def render(self, form, form_style, context):
-        return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
+        return render_field(self.field, form, form_style, context,
+            template=self.template, labelclass=self.labelclass,
+            attrs=self.attrs)
