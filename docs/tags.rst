@@ -71,7 +71,7 @@ As you can see you need to override the constructor and call the base class cons
             self.helper.form_method = 'post'
             self.helper.form_action = 'submit_survey'
 
-            self.helper.add_input(Submit('submit', 'Submit')
+            self.helper.add_input(Submit('submit', 'Submit'))
             super(ExampleForm, self).__init__(*args, **kwargs)
 
 Note that we are importing a class called ``Submit`` that is a layout object. We will see what layout objects are in detail later on, for now on let's just say that this adds a submit button to our form, so people can send their survey.
