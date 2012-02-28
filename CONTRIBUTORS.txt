@@ -52,3 +52,6 @@ Contributors
 * Charlie Denton <meshy>
 * Jason Culverhouse <jasonculverhouse>
 * James Turnbull <hturnbull>
+* Patrick Toal <ptoal>
+* David Bennett <dbinit>
+* bitrut <bitrut>
