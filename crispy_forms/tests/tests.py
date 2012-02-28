@@ -49,7 +49,7 @@ class TestBasicFunctionalityTags(TestCase):
 
         c = Context({'form': form})
         html = template.render(c)
-        self.assertFalse("errorMsg" in html or "alert-message" in html)
+        self.assertFalse("errorMsg" in html or "alert" in html)
 
     def test_as_crispy_errors_form_with_non_field_errors(self):
         template = get_template_from_string(u"""
