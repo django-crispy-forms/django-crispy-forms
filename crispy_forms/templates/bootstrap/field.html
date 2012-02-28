@@ -4,7 +4,7 @@
 	{{ field }}
 {% else %}
 	<div id="div_{{ field.auto_id }}" class="clearfix control-group{% if form_show_errors%}{% if field.errors %} error{% endif %}{% endif %} {% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}">
-		{% if field.label %}
+		{% if field.label and not field|is_checkbox %}
 			<label for="{{ field.auto_id }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
 				{{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
 			</label>
@@ -20,7 +20,14 @@
 
         {% if field|css_class != "checkboxselectmultiple" and field|css_class != "radioselect" %}
             <div class="controls">
-                {% crispy_field field %}
+                {% if field|is_checkbox %}
+                    <label for="{{ field.auto_id }}" class="checkbox {% if field.field.required %}requiredField{% endif %}">
+                        {% crispy_field field %}
+                        {{ field.label|safe }}
+                    </label>
+                {% else %}
+                    {% crispy_field field %}
+                {% endif %}
 
                 {% include 'bootstrap/layout/help_text_and_errors.html' %}
             </div>
