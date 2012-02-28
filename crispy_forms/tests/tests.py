@@ -61,7 +61,7 @@ class TestBasicFunctionalityTags(TestCase):
 
         c = Context({'form': form})
         html = template.render(c)
-        self.assertTrue("errorMsg" in html or "alert-message" in html)
+        self.assertTrue("errorMsg" in html or "alert" in html)
         self.assertTrue("<li>Passwords dont match</li>" in html)
         self.assertFalse("<h3>" in html)
 
@@ -167,7 +167,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('id="this-form-rocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
 
-        self.assertTrue("<h3>ERRORS</h3>" in html)
+        self.assertTrue("ERRORS" in html)
         self.assertTrue("<li>Passwords dont match</li>" in html)
 
         # now lets remove the form tag and render it again. All the True items above
