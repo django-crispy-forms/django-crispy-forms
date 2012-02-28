@@ -419,7 +419,7 @@ class TestFormLayout(TestCase):
                     css_class = "columns",
                 ),
                 ButtonHolder(
-                    Submit('Save', 'Save', css_class='button white'),
+                    Submit('Save the world', 'Save', css_class='button white'),
                 ),
                 Div(
                     'password1', 
@@ -444,7 +444,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('class="formColumn columns"' in html)
         self.assertTrue('class="buttonHolder">' in html)
         self.assertTrue('input type="submit"' in html)
-        self.assertTrue('name="save"' in html)
+        self.assertTrue('name="save-the-world"' in html)
         self.assertTrue('id="custom-div"' in html)
         self.assertTrue('class="customdivs"' in html)
 
@@ -491,7 +491,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('class="formColumn columns"' in html)
         self.assertTrue('class="buttonHolder">' in html)
         self.assertTrue('input type="submit"' in html)
-        self.assertTrue('name="save"' in html)
+        self.assertTrue('name="Save"' in html)
         self.assertTrue('id="custom-div"' in html)
         self.assertTrue('class="customdivs"' in html)
         self.assertFalse('last_name' in html)
