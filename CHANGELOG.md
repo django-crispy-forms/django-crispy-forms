@@ -1,5 +1,15 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.1.2 (2012/2/29)
+
+ * input name attribute is no longer slugified if only one word is provided, respecting caps.
+ * Changes in bootstrap global error templates by David Bennett.
+ * Added class `control-label` to labels, for horizontal layout thanks to bitrut.
+ * Using `{{ field.html_name }}` instead of `{{ field.name }}` in field templates, so that they work with form prefixes (formwizard) by Patrick Toal.
+ * Fixing error rendering in bootstrap AppendedText and PrependedText.
+ * Applying `field.css_classes` in bootstrap `field.html` instead of widget classes.
+ * Fixes for bootstrap simple checkbox input to be wrapped correctly.
+
 ## 1.1.1 (2012/2/17)
 
  * Fixing a critical bug in bootstrap templates, that was breaking `{% load crispy_forms_tags %}`
