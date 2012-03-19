@@ -5,7 +5,6 @@ from django.template import Context
 from django.template.loader import get_template
 from django import template
 
-from crispy_forms.helper import FormHelper
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 uni_formset_template = get_template('%s/uni_formset.html' % TEMPLATE_PACK)
@@ -31,13 +30,13 @@ def as_crispy_form(form):
             template = get_template('%s/uni_formset.html' % TEMPLATE_PACK)
         else:
             template = uni_formset_template
-        c = Context({'formset': form})
+        c = Context({'formset': form, 'form_show_errors': True})
     else:
         if settings.DEBUG:
             template = get_template('%s/uni_form.html' % TEMPLATE_PACK)
         else:
             template = uni_form_template
-        c = Context({'form': form})
+        c = Context({'form': form, 'form_show_errors': True})
     return template.render(c)
 
 @register.filter(name='as_uni_errors')
