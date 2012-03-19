@@ -42,6 +42,9 @@ class FormHelper(object):
         **form_tag**: It specifies if <form></form> tags should be rendered when using a Layout. 
             If set to False it renders the form without the <form></form> tags. Defaults to True.
         
+        **legend**:  If you are rendering a form using {% uni_form %} tag, you can specify form or formset legend.
+            Example: “Enter the site” or “Set your details”.
+        
         **form_error_title**: If a form has `non_field_errors` to display, they 
             are rendered in a div. You can set title's div with this attribute.
             Example: "Oooops!" or "Form Errors"
@@ -94,6 +97,7 @@ class FormHelper(object):
     form_tag = True
     form_error_title = None
     formset_error_title = None
+    legend = None
     form_show_errors = True
     render_unmentioned_fields = False
     help_text_inline = False
@@ -193,6 +197,8 @@ class FormHelper(object):
             items['id'] = self.form_id.strip()
         if self.form_class:
             items['class'] = self.form_class.strip()
+        if self.legend:
+            items['legend'] = self.legend
         if self.inputs:
             items['inputs'] = self.inputs
         if self.form_error_title:
