@@ -206,7 +206,7 @@ class TestFormHelpers(TestCase):
 
         # Ensure errors were not rendered
         self.assertFalse('<li>Passwords dont match</li>' in html)
-        self.assertFalse('This field is required.' in html)
+        self.assertFalse(unicode(_('This field is required.')) in html)
         self.assertFalse('error' in html)
 
     def test_crispy_tag_without_helper(self):
