@@ -89,11 +89,20 @@ class BaseInput(object):
         self.name = name
         self.value = value
         self.id = kwargs.get('css_id') if kwargs.has_key('css_id') else ""
+        self.attrs = {}
         
         if kwargs.has_key('css_class'):
-            self.field_classes += ' %s' % kwargs.get('css_class')
+            self.field_classes += ' %s' % kwargs.pop('css_class')
 
         self.template = kwargs.get('template', self.template)
+        if kwargs.has_key('template'):
+            kwargs.pop('template')
+
+        self.attrs.update(kwargs)
+        for attr, value in self.attrs.items():
+            self.attrs.pop(attr)
+            attr = attr.replace('_','-')
+            self.attrs[attr] = value
         
     def render(self, form, form_style, context):
         """
