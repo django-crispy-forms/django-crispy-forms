@@ -35,20 +35,25 @@ class CrispyFieldNode(template.Node):
     def render(self, context):
         field = self.field.resolve(context)
 
-        class_name = field.field.widget.__class__.__name__.lower()
-        class_name = class_converter.get(class_name, class_name)
         
-        css_class = field.field.widget.attrs.get('class', '')
-        if css_class:
-            if css_class.find(class_name) == -1:
-                css_class += " %s" % class_name
-        else:
-            css_class = class_name
+        widgets = getattr(field.field.widget, 'widgets', [field.field.widget,])
+        if isinstance(self.attrs, dict):
+            attrs = [self.attrs] * len(widgets)
 
-        field.field.widget.attrs['class'] = css_class
+        for widget, attr in zip(widgets, attrs):
+            print widget.__class__.__name__.lower()
+            class_name = widget.__class__.__name__.lower()
+            class_name = class_converter.get(class_name, class_name)
+            css_class = widget.attrs.get('class', '')
+            if css_class:
+                if css_class.find(class_name) == -1:
+                    css_class += " %s" % class_name
+            else:
+                css_class = class_name
+            widget.attrs['class'] = css_class
 
-        for attribute_name, attribute in self.attrs.items():
-            field.field.widget.attrs[template.Variable(attribute_name).resolve(context)] = template.Variable(attribute).resolve(context)
+            for attribute_name, attribute in attr.items():
+                widget.attrs[template.Variable(attribute_name).resolve(context)] = template.Variable(attribute).resolve(context)
 
         return field
 
