@@ -66,5 +66,5 @@ def as_crispy_field(field):
         {{ form.field|as_crispy_field }}
     """
     template = get_template('%s/field.html' % TEMPLATE_PACK)
-    c = Context({'field':field})
+    c = Context({'field':field, 'form_show_errors': True})
     return template.render(c)
