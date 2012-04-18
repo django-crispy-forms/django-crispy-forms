@@ -316,6 +316,29 @@ class TestFormLayout(TestCase):
         settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
+        
+    def test_layout_uses_instance_for_missing_fields(self):
+        class FormWithMeta(TestForm):
+            class Meta:
+                fields = ('email', 'first_name', 'last_name')
+        form = FormWithMeta()
+        # We remove email field on the go
+        del form.fields['email']
+                
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                'first_name',
+            )
+        )
+
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
+        """)        
+        c = Context({'form': form, 'form_helper': form_helper})
+        html = template.render(c)
+        self.assertFalse('email' in html)
 
     def test_layout_unresolved_field(self):
         form = TestForm()

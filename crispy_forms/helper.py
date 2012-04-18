@@ -167,7 +167,8 @@ class FormHelper(object):
         # we suppose they need to be rendered. Othewise we renderd the
         # layout fields strictly
         if getattr(form, 'Meta', None):
-            fields = set(getattr(form.Meta, 'fields', []))
+            # Take the fields from the instance since the user might have deleted some
+            fields = set(getattr(form, 'fields', []))
             exclude = set(getattr(form.Meta, 'exclude', []))
             left_fields_to_render = fields - exclude - form.rendered_fields
 
