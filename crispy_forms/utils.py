@@ -3,9 +3,8 @@ import sys
 
 from django.conf import settings
 from django.forms.forms import BoundField
-from django.template import Context
 from django.template.loader import get_template
-from django.forms.util import flatatt
+from django.utils.html import conditional_escape
 
 
 # Global field template, default template used for rendering a field. This way we avoid 
@@ -88,3 +87,14 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         html = template.render(context)
 
     return html
+
+
+def flatatt(attrs):
+    """
+    Taken from django.core.utils 
+    Convert a dictionary of attributes to a single string.
+    The returned string will contain a leading space followed by key="value",
+    XML-style pairs.  It is assumed that the keys do not need to be XML-escaped.
+    If the passed dictionary is empty, then return an empty string.
+    """
+    return u''.join([u' %s="%s"' % (k.replace('_', '-'), conditional_escape(v)) for k, v in attrs.items()])

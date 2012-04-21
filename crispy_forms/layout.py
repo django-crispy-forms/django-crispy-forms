@@ -2,7 +2,7 @@ from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import render_to_string
 
-from utils import render_field
+from utils import render_field, flatatt
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
@@ -88,21 +88,14 @@ class BaseInput(object):
     def __init__(self, name, value, **kwargs):
         self.name = name
         self.value = value
-        self.id = kwargs.get('css_id') if kwargs.has_key('css_id') else ""
+        self.id = kwargs.get('css_id', '')
         self.attrs = {}
         
         if kwargs.has_key('css_class'):
             self.field_classes += ' %s' % kwargs.pop('css_class')
 
-        self.template = kwargs.get('template', self.template)
-        if kwargs.has_key('template'):
-            kwargs.pop('template')
-
-        self.attrs.update(kwargs)
-        for attr, value in self.attrs.items():
-            self.attrs.pop(attr)
-            attr = attr.replace('_','-')
-            self.attrs[attr] = value
+        self.template = kwargs.pop('template', self.template)
+        self.flat_attrs = flatatt(kwargs)
         
     def render(self, form, form_style, context):
         """
@@ -214,7 +207,6 @@ class MultiField(object):
 
         # We need to render fields using django-uni-form render_field so that MultiField can 
         # hold other Layout objects inside itself
-        fields = []
         fields_output = u''
         self.bound_fields = []
         for field in self.fields:
