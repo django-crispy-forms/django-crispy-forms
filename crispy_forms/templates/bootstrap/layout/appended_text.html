@@ -3,7 +3,7 @@
 <div id="div_{{ field.auto_id }}" class="clearfix control-group{% if field.errors %} error{% endif %} {% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}">
 
     {% if field.label %}
-        <label for="{{ field.auto_id }}" {% if field.field.required %}class="requiredField"{% endif %}>
+        <label for="{{ field.id_for_label }}" {% if field.field.required %}class="requiredField"{% endif %}>
             {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
         </label>
     {% endif %}
