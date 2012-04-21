@@ -229,12 +229,13 @@ class Div(object):
         self.fields = fields
         
         if hasattr(self, 'css_class') and kwargs.has_key('css_class'):
-            self.css_class += ' %s' % kwargs.get('css_class')
+            self.css_class += ' %s' % kwargs.pop('css_class')
         if not hasattr(self, 'css_class'):
-            self.css_class = kwargs.get('css_class', None)
+            self.css_class = kwargs.pop('css_class', None)
        
-        self.css_id = kwargs.get('css_id', '')
-        self.template = kwargs.get('template', self.template)
+        self.css_id = kwargs.pop('css_id', '')
+        self.template = kwargs.pop('template', self.template)
+        self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context):
         fields = ''

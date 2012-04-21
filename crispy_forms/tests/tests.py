@@ -449,6 +449,7 @@ class TestFormLayout(TestCase):
                     'password2',
                     css_id="custom-div",
                     css_class="customdivs",
+                    test_markup="123"
                 )
             )
         )
@@ -473,6 +474,8 @@ class TestFormLayout(TestCase):
         self.assertTrue('name="save-the-world"' in html)
         self.assertTrue('id="custom-div"' in html)
         self.assertTrue('class="customdivs"' in html)
+        self.assertTrue('test-markup="123"' in html)
+
 
     def test_layout_within_layout(self):
         form_helper = FormHelper()
