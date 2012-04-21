@@ -4,4 +4,8 @@
     {% ifnotequal input.input_type "hidden" %}
         class="{{ input.field_classes }}"
         id="{% if input.id %}{{ input.id }}{% else %}{{ input.input_type }}-id-{{ input.name|slugify }}{% endif %}"
-    {% endifnotequal %}/>
+    {% endifnotequal %}
+    {% for attr, value in input.attrs.iteritems %}
+    	{{ attr|slugify }}="{{ value }}"
+    {% endfor %}
+    />
