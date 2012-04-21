@@ -18,6 +18,7 @@ downloads/*
 
 #temp file
 tempfile
+*.swp
 
 # coverage 
 .coverage
