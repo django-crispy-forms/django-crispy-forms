@@ -16,7 +16,7 @@ def runtests():
         'crispy_forms.TestBasicFunctionalityTags',
         'crispy_forms.TestFormHelpers',
         'crispy_forms.TestFormLayout',
-        ], verbosity=1, interactive=True)
+    ], verbosity=1, interactive=True)
 
 if __name__ == '__main__':
     runtests()
