@@ -61,3 +61,4 @@ Contributors
 * Jeroen Vloothuis <jeroenvloothuis>
 * Daniel Izquierdo <izquierdo>
 * gaftech
+* Michal Kuffa <beezz>
