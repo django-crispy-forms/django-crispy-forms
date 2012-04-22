@@ -3,6 +3,7 @@ from django import forms, VERSION
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
+from django.forms.widgets import MultiWidget, TextInput
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import get_template_from_string
 from django.template.loader import render_to_string
@@ -12,7 +13,18 @@ from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import Submit, Reset, Hidden, Button
-from crispy_forms.layout import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div
+from crispy_forms.layout import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div, Field
+
+
+class AddressWidget(MultiWidget):
+    def __init__(self, attrs=None):
+        widgets = (TextInput, TextInput, TextInput)
+        super(AddressWidget, self).__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if value:
+            return value.split(',')
+        return [None, None, None]
 
 
 class TestForm(forms.Form):
@@ -22,6 +34,7 @@ class TestForm(forms.Form):
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
     first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())
     last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())
+    address = forms.CharField(widget=AddressWidget)
 
     def clean(self):
         super(TestForm, self).clean()
@@ -611,6 +624,27 @@ class TestFormLayout(TestCase):
         self.assertTrue('Item 3' in html)
         self.assertEqual(html.count('Note for first form only'), 1)
         self.assertEqual(html.count('formRow'), 3)
+
+    def test_multiwidget_Field(self):
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
+        """)
+        
+        form_helper = FormHelper()    
+        form_helper.add_layout(
+            Layout(
+                Field('address', data_name='test')
+            )
+        )
+        
+        c = Context({
+            'form': TestForm(),
+            'form_helper': form_helper, 
+        })
+        html = template.render(c)
+        self.assertEqual(html.count('data-name="test"'), 3)
+        self.assertEqual(html.count('class="textinput textInput"'), 3)
 
     def test_i18n(self):
         template = get_template_from_string(u"""

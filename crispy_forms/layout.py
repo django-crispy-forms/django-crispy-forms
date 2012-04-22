@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import render_to_string
+from django.utils.html import conditional_escape
+
 
 from utils import render_field, flatatt
 
@@ -301,7 +303,8 @@ class Field(object):
         if kwargs.has_key('template'):
             self.template = kwargs.pop('template')
 
-        self.attrs.update(kwargs)
+        # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
+        self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k,v in kwargs.items()]))
 
     def render(self, form, form_style, context):
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)

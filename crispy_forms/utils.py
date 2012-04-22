@@ -51,6 +51,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             raise Exception("Field '%s' is using forbidden unicode characters" % field)
 
     try:
+        # Injecting HTML attributes into field's widget, Django handles rendering these
         field_instance = form.fields[field]
         if attrs is not None:
             field_instance.widget.attrs.update(attrs)
@@ -81,8 +82,8 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
         # We save the Layout object's bound fields in the layout object's `bound_fields` list
         if layout_object is not None:
-            layout_object.bound_fields.append(bound_field) 
-       
+            layout_object.bound_fields.append(bound_field)
+
         context.update({'field': bound_field, 'labelclass': labelclass, 'flat_attrs': flatatt(attrs or {})})
         html = template.render(context)
 
