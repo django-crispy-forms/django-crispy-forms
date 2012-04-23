@@ -319,7 +319,7 @@ class MultiWidgetField(Field):
             ),
         )
 
-    .. note:: To override widget's css class use ``class`` not ``class_name``.
+    .. note:: To override widget's css class use ``class`` not ``css_class``.
     """
     def __init__(self, field, *args, **kwargs):
         self.field = field
