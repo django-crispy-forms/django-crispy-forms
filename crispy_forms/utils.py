@@ -54,7 +54,11 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
     try:
         field_instance = form.fields[field]
         if attrs is not None:
-            field_instance.widget.attrs.update(attrs)
+            widgets = getattr( field_instance.widget, 'widgets', [field_instance.widget,])
+            if isinstance(attrs, dict):
+                attrs = [attrs] * len(widgets)
+            for widget, attr in  zip(widgets, attrs):
+                widget.attrs.update(attr)
     except KeyError:
         if not FAIL_SILENTLY:
             raise Exception("Could not resolve form field '%s'." % field)
@@ -84,7 +88,11 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         if layout_object is not None:
             layout_object.bound_fields.append(bound_field) 
        
-        context.update({'field': bound_field, 'labelclass': labelclass, 'flat_attrs': flatatt(attrs or {})})
+        context.update({
+            'field': bound_field,
+            'labelclass': labelclass,
+            'flat_attrs': flatatt(attrs if isinstance(attrs, dict) else {}),
+        })
         html = template.render(context)
 
     return html
