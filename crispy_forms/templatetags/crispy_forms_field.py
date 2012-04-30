@@ -40,11 +40,9 @@ class CrispyFieldNode(template.Node):
             attrs = [self.attrs] * len(widgets)
 
         for widget, attr in zip(widgets, attrs):
-
             class_name = widget.__class__.__name__.lower()
             class_name = class_converter.get(class_name, class_name)
             css_class = widget.attrs.get('class', '')
-
             if css_class:
                 if css_class.find(class_name) == -1:
                     css_class += " %s" % class_name
