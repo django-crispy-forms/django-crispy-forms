@@ -308,3 +308,25 @@ class Field(object):
 
     def render(self, form, form_style, context):
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
+
+class MultiWidgetField(Field):
+    """
+    Layout object. For fields with :class:`~django.forms.MultiWidget` as `widget`, you can pass
+    additional attributes to each widget.
+
+    Example::
+
+        MultiWidgetField(
+            'multiwidget_field_name',
+            attrs=(
+                {'style': 'width: 30px;'},
+                {'class': 'second_widget_class'}
+            ),
+        )
+
+    .. note:: To override widget's css class use ``class`` not ``css_class``.
+    """
+    def __init__(self, field, *args, **kwargs):
+        self.field = field
+        self.attrs = kwargs.pop('attrs', {})
+        self.template = kwargs.pop('template', self.template)
