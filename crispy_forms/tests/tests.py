@@ -628,13 +628,6 @@ class TestFormLayout(TestCase):
                 Field('datetime_field')
             )
         )
-
-        form_helper = FormHelper()    
-        form_helper.add_layout(
-            Layout(
-                Field('address', data_name='test')
-            )
-        )
         
         c = Context({
             'form': TestForm(),
@@ -645,17 +638,16 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('class="dateinput"'), 1)
         self.assertEqual(html.count('class="timeinput"'), 1)
 
-        form_helper.add_layout(
-            Layout(
-                MultiWidgetField(
-                    'datetime_field',
-                    attrs=(
-                        {'rel': 'test_dateinput'},
-                        {'rel': 'test_timeinput', 'style': 'width: 30px;'}
-                    )
+        form_helper.layout = Layout(
+            MultiWidgetField(
+                'datetime_field',
+                attrs=(
+                    {'rel': 'test_dateinput'},
+                    {'rel': 'test_timeinput', 'style': 'width: 30px;'}
                 )
             )
         )
+        
 
         c = Context({
             'form': TestForm(),
