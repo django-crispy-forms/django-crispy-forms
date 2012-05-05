@@ -10,8 +10,10 @@
 
     <div class="controls">
         <div class="input-prepend">
+            {% spaceless %}
             <span class="add-on {% if active %}active{% endif %}">{{ crispy_prepended_text|safe }}</span>
             {% crispy_field field %}
+            {% endspaceless %}
             {% include 'bootstrap/layout/field_errors.html' %}
         </div>
         {% include 'bootstrap/layout/help_text.html' %}
