@@ -29,15 +29,21 @@ def pairwise(iterable):
 
 class CrispyFieldNode(template.Node):
     def __init__(self, field, attrs):
-       self.field = template.Variable(field)
+       self.field = field
        self.attrs = attrs
 
     def render(self, context):
-        field = self.field.resolve(context)
+        # Nodes are not threadsafe so we must store and look up our instance
+        # variables in the current rendering context first
+        if self not in context.render_context:
+            context.render_context[self] = (template.Variable(self.field), self.attrs,)
+
+        field, attrs = context.render_context[self]
+        field = field.resolve(context)
 
         class_name = field.field.widget.__class__.__name__.lower()
         class_name = class_converter.get(class_name, class_name)
-        
+
         css_class = field.field.widget.attrs.get('class', '')
         if css_class:
             if css_class.find(class_name) == -1:
@@ -47,7 +53,7 @@ class CrispyFieldNode(template.Node):
 
         field.field.widget.attrs['class'] = css_class
 
-        for attribute_name, attribute in self.attrs.items():
+        for attribute_name, attribute in attrs.items():
             field.field.widget.attrs[template.Variable(attribute_name).resolve(context)] = template.Variable(attribute).resolve(context)
 
         return field
