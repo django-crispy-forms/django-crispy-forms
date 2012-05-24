@@ -60,9 +60,9 @@ class BasicNode(template.Node):
     that templates can easily handle.
     """
     def __init__(self, form, helper):
-        self.form = template.Variable(form)
+        self.form = form
         if helper is not None:
-            self.helper = template.Variable(helper)
+            self.helper = helper
         else:
             self.helper = None
 
@@ -77,10 +77,19 @@ class BasicNode(template.Node):
         `is_formset` is set to True. If the helper has a layout we use it, for rendering the
         form or the formset's forms.
         """
-        actual_form = self.form.resolve(context)
+        # Nodes are not thread safe in multithreaded environments
+        # https://docs.djangoproject.com/en/dev/howto/custom-template-tags/#thread-safety-considerations
+        if self not in context.render_context:
+            context.render_context[self] = (
+                template.Variable(self.form),
+                template.Variable(self.helper) if self.helper else None
+            )
+        form, helper = context.render_context[self]
+
+        actual_form = form.resolve(context)
         attrs = {}
         if self.helper is not None:
-            helper = self.helper.resolve(context)
+            helper = helper.resolve(context)
         else:
             # If the user names the helper within the form `helper` (standard), we use it
             # This allows us to have simplified tag syntax: {% crispy form %}
