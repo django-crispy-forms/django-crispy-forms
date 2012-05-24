@@ -5,7 +5,7 @@
 {% else %}
 
     {% if field.label %}
-        <label for="{{ field.auto_id }}"{% if labelclass %} class="{{ labelclass }}"{% endif %}>
+        <label for="{{ field.id_for_label }}"{% if labelclass %} class="{{ labelclass }}"{% endif %}>
     {% endif %}
 
     {% if field|is_checkbox %}

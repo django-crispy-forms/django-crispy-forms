@@ -55,3 +55,10 @@ Contributors
 * Patrick Toal <ptoal>
 * David Bennett <dbinit>
 * bitrut <bitrut>
+* ximi
+* Christopher Petrilli <petrilli>
+* James <jamesmfriedman>
+* Jeroen Vloothuis <jeroenvloothuis>
+* Daniel Izquierdo <izquierdo>
+* gaftech
+* Michal Kuffa <beezz>

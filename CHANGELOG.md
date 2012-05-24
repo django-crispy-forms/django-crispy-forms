@@ -1,5 +1,23 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.1.4
+ 
+ * Added css class `control-label` to AppendedText and PrependedText layout object's templates.
+ * `{% crispy field %}` tag can now pass attrs to MultiWidget subclasses by Michal Kuffa. `attrs` are set for sub-widgets. Also `attrs` can now be an iterable for passing different attributes to different sub-widgets. For example,this way MultiWidget's widgets get css classes set correctly.
+ * Turning underscores into hyphens for `Field` layout objects.
+
+## 1.1.3 (2012/4/21)
+
+ * `|crispy` and `|as_crispy_field` filters were not rendering errors. Thanks to @ximi for reporting it and submitting a patch. See issue #GH-28
+ * Fixing a test that was breaking when language was not English. Thanks to @gaftech, see #GH-30 
+ * Fixing `radioselect.html` and `checkboxselectmultiple.html` templates. Thanks to Christopher Petrilli for submitting a patch for `radioselect`. See issue #GH-35
+ * HTML attributes can now be set in `BaseInput` subclasses like `Button` by @jamesmfriedman. See #GH-32
+ * Fix for dynamic crispy-forms with Meta classes by Jeroen Vloothuis. See #GH-37
+ * Labels now use `id_for_label` instead of `auto_id` to avoid ids breaking on multiwidgets. by Daniel Izquierdo. See #GH-38
+ * Adding a flatatt custom function in `utils.py` for flatting extra HTML attributes.
+ * HTML attributes can now be set in `Div` layout object.
+ * Adding tests for new functionality and bugs.
+
 ## 1.1.2 (2012/2/29)
 
  * input name attribute is no longer slugified if only one word is provided, respecting caps.

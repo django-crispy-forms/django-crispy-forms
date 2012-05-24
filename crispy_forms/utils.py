@@ -3,9 +3,8 @@ import sys
 
 from django.conf import settings
 from django.forms.forms import BoundField
-from django.template import Context
 from django.template.loader import get_template
-from django.forms.util import flatatt
+from django.utils.html import conditional_escape
 
 
 # Global field template, default template used for rendering a field. This way we avoid 
@@ -52,6 +51,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             raise Exception("Field '%s' is using forbidden unicode characters" % field)
 
     try:
+        # Injecting HTML attributes into field's widget, Django handles rendering these
         field_instance = form.fields[field]
         if attrs is not None:
             field_instance.widget.attrs.update(attrs)
@@ -82,9 +82,20 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
         # We save the Layout object's bound fields in the layout object's `bound_fields` list
         if layout_object is not None:
-            layout_object.bound_fields.append(bound_field) 
-       
+            layout_object.bound_fields.append(bound_field)
+
         context.update({'field': bound_field, 'labelclass': labelclass, 'flat_attrs': flatatt(attrs or {})})
         html = template.render(context)
 
     return html
+
+
+def flatatt(attrs):
+    """
+    Taken from django.core.utils 
+    Convert a dictionary of attributes to a single string.
+    The returned string will contain a leading space followed by key="value",
+    XML-style pairs.  It is assumed that the keys do not need to be XML-escaped.
+    If the passed dictionary is empty, then return an empty string.
+    """
+    return u''.join([u' %s="%s"' % (k.replace('_', '-'), conditional_escape(v)) for k, v in attrs.items()])

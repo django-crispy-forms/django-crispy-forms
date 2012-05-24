@@ -3,6 +3,7 @@ from django import forms, VERSION
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
+from django.forms.widgets import MultiWidget, TextInput
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import get_template_from_string
 from django.template.loader import render_to_string
@@ -12,7 +13,18 @@ from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import Submit, Reset, Hidden, Button
-from crispy_forms.layout import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div
+from crispy_forms.layout import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div, Field
+
+
+class AddressWidget(MultiWidget):
+    def __init__(self, attrs=None):
+        widgets = (TextInput, TextInput, TextInput)
+        super(AddressWidget, self).__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if value:
+            return value.split(',')
+        return [None, None, None]
 
 
 class TestForm(forms.Form):
@@ -22,6 +34,7 @@ class TestForm(forms.Form):
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
     first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())
     last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())
+    address = forms.CharField(widget=AddressWidget)
 
     def clean(self):
         super(TestForm, self).clean()
@@ -316,6 +329,29 @@ class TestFormLayout(TestCase):
         settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
+        
+    def test_layout_uses_instance_for_missing_fields(self):
+        class FormWithMeta(TestForm):
+            class Meta:
+                fields = ('email', 'first_name', 'last_name')
+        form = FormWithMeta()
+        # We remove email field on the go
+        del form.fields['email']
+                
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                'first_name',
+            )
+        )
+
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
+        """)        
+        c = Context({'form': form, 'form_helper': form_helper})
+        html = template.render(c)
+        self.assertFalse('email' in html)
 
     def test_layout_unresolved_field(self):
         form = TestForm()
@@ -419,13 +455,14 @@ class TestFormLayout(TestCase):
                     css_class = "columns",
                 ),
                 ButtonHolder(
-                    Submit('Save the world', 'Save', css_class='button white'),
+                    Submit('Save the world', 'Save', css_class='button white', data_id='test', data_name='test'),
                 ),
                 Div(
                     'password1', 
                     'password2',
                     css_id="custom-div",
                     css_class="customdivs",
+                    test_markup="123"
                 )
             )
         )
@@ -444,9 +481,14 @@ class TestFormLayout(TestCase):
         self.assertTrue('class="formColumn columns"' in html)
         self.assertTrue('class="buttonHolder">' in html)
         self.assertTrue('input type="submit"' in html)
+        self.assertTrue('button white' in html)
+        self.assertTrue('data-id="test"' in html)
+        self.assertTrue('data-name="test"' in html)
         self.assertTrue('name="save-the-world"' in html)
         self.assertTrue('id="custom-div"' in html)
         self.assertTrue('class="customdivs"' in html)
+        self.assertTrue('test-markup="123"' in html)
+
 
     def test_layout_within_layout(self):
         form_helper = FormHelper()
@@ -582,6 +624,27 @@ class TestFormLayout(TestCase):
         self.assertTrue('Item 3' in html)
         self.assertEqual(html.count('Note for first form only'), 1)
         self.assertEqual(html.count('formRow'), 3)
+
+    def test_multiwidget_Field(self):
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
+        """)
+        
+        form_helper = FormHelper()    
+        form_helper.add_layout(
+            Layout(
+                Field('address', data_name='test')
+            )
+        )
+        
+        c = Context({
+            'form': TestForm(),
+            'form_helper': form_helper, 
+        })
+        html = template.render(c)
+        self.assertEqual(html.count('data-name="test"'), 3)
+        self.assertEqual(html.count('class="textinput textInput"'), 3)
 
     def test_i18n(self):
         template = get_template_from_string(u"""
