@@ -165,7 +165,7 @@ class BasicNode(template.Node):
 whole_uni_formset_template = get_template('%s/whole_uni_formset.html' % TEMPLATE_PACK)
 whole_uni_form_template = get_template('%s/whole_uni_form.html' % TEMPLATE_PACK)
 
-class UniFormNode(BasicNode):
+class CrispyFormNode(BasicNode):
     def render(self, context):
         c = self.get_render(context)
 
@@ -210,4 +210,4 @@ def do_uni_form(parser, token):
     except IndexError:
         helper = None
 
-    return UniFormNode(form, helper)
+    return CrispyFormNode(form, helper)
