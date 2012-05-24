@@ -1,10 +1,13 @@
 # CHANGELOG for django-crispy-forms
 
 ## 1.1.4
- 
- * Added css class `control-label` to AppendedText and PrependedText layout object's templates.
- * `{% crispy field %}` tag can now pass attrs to MultiWidget subclasses by Michal Kuffa. `attrs` are set for sub-widgets. Also `attrs` can now be an iterable for passing different attributes to different sub-widgets. For example,this way MultiWidget's widgets get css classes set correctly.
+
+ * Thread safety improvements for `BasicNode`.
+ * Security fix: Thread safety fixes to `CrispyFieldNode` thanks Paul Oswald. This avoids leaking information between requests in multithreaded wsgi servers.
+ * Added css class `control-label` to `AppendedText` and `PrependedText` layout object's templates.
+ * `{% crispy field %}` tag can now pass attrs to `MultiWidget` subclasses by Michal Kuffa. `attrs` are set for sub-widgets. Also `attrs` can now be an iterable for passing different attributes to different sub-widgets. For example,this way MultiWidget's widgets get css classes set correctly.
  * Turning underscores into hyphens for `Field` layout objects.
+ * Fix for `ChoiceFields` using non-string choices with radio buttons thanks to Rudy Mutter. See #GH-46, #GH-43 and #GH-35.
 
 ## 1.1.3 (2012/4/21)
 

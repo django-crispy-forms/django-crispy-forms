@@ -62,3 +62,5 @@ Contributors
 * Daniel Izquierdo <izquierdo>
 * gaftech
 * Michal Kuffa <beezz>
+* Paul Oswald <poswald>
+* Rudy Mutter <rmutter>
