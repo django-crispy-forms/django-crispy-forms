@@ -10,10 +10,8 @@
 
     <div class="controls">
         <div class="input-append">
-            {% spaceless %}
             {% crispy_field field %}
             <span class="add-on {% if active %}active{% endif %}">{{ crispy_appended_text|safe }}</span>
-            {% endspaceless %}
             {% include 'bootstrap/layout/field_errors.html' %}
         </div>
 
