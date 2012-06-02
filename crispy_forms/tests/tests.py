@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from django import forms, VERSION
+import django
+from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
@@ -13,18 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import Submit, Reset, Hidden, Button
-from crispy_forms.layout import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div, Field
-
-
-class AddressWidget(MultiWidget):
-    def __init__(self, attrs=None):
-        widgets = (TextInput, TextInput, TextInput)
-        super(AddressWidget, self).__init__(widgets, attrs)
-
-    def decompress(self, value):
-        if value:
-            return value.split(',')
-        return [None, None, None]
+from crispy_forms.layout import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div, Field, MultiWidgetField
 
 
 class TestForm(forms.Form):
@@ -34,7 +24,7 @@ class TestForm(forms.Form):
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
     first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())
     last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())
-    address = forms.CharField(widget=AddressWidget)
+    datetime_field = forms.DateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
 
     def clean(self):
         super(TestForm, self).clean()
@@ -244,7 +234,8 @@ class TestFormHelpers(TestCase):
         c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
         settings.CRISPY_FAIL_SILENTLY = False
-        if settings.TEMPLATE_DEBUG:
+        # Django >= 1.4 is not wrapping exceptions in TEMPLATE_DEBUG mode
+        if settings.TEMPLATE_DEBUG and django.get_version() < '1.4':
             self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
         else:
             self.assertRaises(TypeError, lambda:template.render(c))
@@ -627,16 +618,16 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('Note for first form only'), 1)
         self.assertEqual(html.count('formRow'), 3)
 
-    def test_multiwidget_Field(self):
+    def test_multiwidget_field(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
-        
+
         form_helper = FormHelper()    
         form_helper.add_layout(
             Layout(
-                Field('address', data_name='test')
+                Field('datetime_field')
             )
         )
         
@@ -644,9 +635,33 @@ class TestFormLayout(TestCase):
             'form': TestForm(),
             'form_helper': form_helper, 
         })
+
         html = template.render(c)
-        self.assertEqual(html.count('data-name="test"'), 3)
-        self.assertEqual(html.count('class="textinput textInput"'), 3)
+        self.assertEqual(html.count('class="dateinput"'), 1)
+        self.assertEqual(html.count('class="timeinput"'), 1)
+
+        form_helper.layout = Layout(
+            MultiWidgetField(
+                'datetime_field',
+                attrs=(
+                    {'rel': 'test_dateinput'},
+                    {'rel': 'test_timeinput', 'style': 'width: 30px;'}
+                )
+            )
+        )
+        
+
+        c = Context({
+            'form': TestForm(),
+            'form_helper': form_helper, 
+        })
+
+        html = template.render(c)
+        self.assertEqual(html.count('class="dateinput"'), 1)
+        self.assertEqual(html.count('class="timeinput"'), 1)
+        self.assertEqual(html.count('rel="test_dateinput"'), 1)
+        self.assertEqual(html.count('rel="test_timeinput"'), 1)
+        self.assertEqual(html.count('style="width: 30px;"'), 1)
 
     def test_i18n(self):
         template = get_template_from_string(u"""

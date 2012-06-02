@@ -54,11 +54,24 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         # Injecting HTML attributes into field's widget, Django handles rendering these
         field_instance = form.fields[field]
         if attrs is not None:
-            if 'type' in attrs and attrs['type'] == "hidden":
-                field_instance.widget.is_hidden = True
-                field_instance.widget = field_instance.hidden_widget()
+            widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget,])
 
-            field_instance.widget.attrs.update(attrs)
+            if isinstance(attrs, dict):
+                attrs = [attrs] * len(widgets)
+
+            for index, (widget, attr) in enumerate(zip(widgets, attrs)):
+                if hasattr(field_instance.widget, 'widgets'):
+                    if 'type' in attr and attr['type'] == "hidden":
+                        field_instance.widget.widgets[index].is_hidden = True
+                        field_instance.widget.widgets[index] = field_instance.hidden_widget()
+
+                    field_instance.widget.widgets[index].attrs.update(attr)
+                else:
+                    if 'type' in attr and attr['type'] == "hidden":
+                        field_instance.widget.is_hidden = True
+                        field_instance.widget = field_instance.hidden_widget()
+
+                    field_instance.widget.attrs.update(attr)
 
     except KeyError:
         if not FAIL_SILENTLY:
@@ -87,9 +100,13 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
         # We save the Layout object's bound fields in the layout object's `bound_fields` list
         if layout_object is not None:
-            layout_object.bound_fields.append(bound_field)
-
-        context.update({'field': bound_field, 'labelclass': labelclass, 'flat_attrs': flatatt(attrs or {})})
+            layout_object.bound_fields.append(bound_field) 
+       
+        context.update({
+            'field': bound_field,
+            'labelclass': labelclass,
+            'flat_attrs': flatatt(attrs if isinstance(attrs, dict) else {}),
+        })
         html = template.render(context)
 
     return html
