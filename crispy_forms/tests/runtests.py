@@ -13,10 +13,10 @@ from django.conf import settings
 
 def runtests():
     DjangoTestSuiteRunner(failfast=False).run_tests([
-        #'crispy_forms.TestBasicFunctionalityTags',
-        #'crispy_forms.TestFormHelpers',
-        #'crispy_forms.TestFormLayout',
-        'crispy_forms.TestLayoutObjects.test_Field_type_hidden',
+        'crispy_forms.TestBasicFunctionalityTags',
+        'crispy_forms.TestFormHelpers',
+        'crispy_forms.TestFormLayout',
+        'crispy_forms.TestLayoutObjects',
     ], verbosity=1, interactive=True)
 
 if __name__ == '__main__':

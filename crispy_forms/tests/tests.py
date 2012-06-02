@@ -621,47 +621,29 @@ class TestFormLayout(TestCase):
     def test_multiwidget_field(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
-            {% crispy form form_helper %}
+            {% crispy form %}
         """)
 
-        form_helper = FormHelper()    
-        form_helper.add_layout(
-            Layout(
-                Field('datetime_field')
-            )
-        )
-        
-        c = Context({
-            'form': TestForm(),
-            'form_helper': form_helper, 
-        })
-
-        html = template.render(c)
-        self.assertEqual(html.count('class="dateinput"'), 1)
-        self.assertEqual(html.count('class="timeinput"'), 1)
-
-        form_helper.layout = Layout(
+        test_form = TestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
             MultiWidgetField(
                 'datetime_field',
                 attrs=(
                     {'rel': 'test_dateinput'},
-                    {'rel': 'test_timeinput', 'style': 'width: 30px;'}
+                    {'rel': 'test_timeinput', 'style': 'width: 30px;', 'type': "hidden"}
                 )
             )
         )
-        
 
-        c = Context({
-            'form': TestForm(),
-            'form_helper': form_helper, 
-        })
+        c = Context({'form': test_form})
 
         html = template.render(c)
         self.assertEqual(html.count('class="dateinput"'), 1)
-        self.assertEqual(html.count('class="timeinput"'), 1)
         self.assertEqual(html.count('rel="test_dateinput"'), 1)
         self.assertEqual(html.count('rel="test_timeinput"'), 1)
         self.assertEqual(html.count('style="width: 30px;"'), 1)
+        self.assertEqual(html.count('type="hidden"'), 1)
 
     def test_i18n(self):
         template = get_template_from_string(u"""
@@ -684,7 +666,7 @@ class TestFormLayout(TestCase):
 
 
 class TestLayoutObjects(TestCase):
-    def test_Field_type_hidden(self):
+    def test_field_type_hidden(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy test_form %}
@@ -695,7 +677,7 @@ class TestLayoutObjects(TestCase):
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Field('email', type="hidden", data_mierda=12),
-            'is_company'
+            Field('datetime_field'),
         )
                 
         
@@ -706,4 +688,5 @@ class TestLayoutObjects(TestCase):
 
         # Check form parameters
         self.assertEqual(html.count('<input type="hidden" data-mierda="12" name="email"'), 1)
-        self.assertTrue('is_company' in html)
+        self.assertEqual(html.count('class="dateinput"'), 1)
+        self.assertEqual(html.count('class="timeinput"'), 1)
