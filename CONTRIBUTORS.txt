@@ -64,3 +64,4 @@ Contributors
 * Michal Kuffa <beezz>
 * Paul Oswald <poswald>
 * Rudy Mutter <rmutter>
+* Samuel Goldszmidt <ouhouhsami>

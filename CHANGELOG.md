@@ -1,5 +1,12 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.1.5
+
+ * New `AppendedPrependedText` layout object thanks to Samuel Goldszmidt, see #GH-45.
+ * New `MultiWidgetField` layout object by Michal Kuffa, see #GH-39.
+ * Support for hiding fields using `Field('field_name', type="hidden")`, see #GH-55.
+ * Fix for context pollution when using `{% crispy %}` tag, see #GH-54.
+
 ## 1.1.4 (2012/5/24)
 
  * Multithread safety improvements for `BasicNode`.
