@@ -1,6 +1,6 @@
 {% load crispy_forms_field %}
 
-<div id="div_{{ field.auto_id }}" class="clearfix control-group{% if field.errors %} error{% endif %} {% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}">
+<div id="div_{{ field.auto_id }}" class="clearfix control-group{% if field.errors %} error{% endif %} ">
 
     {% if field.label %}
         <label for="{{ field.id_for_label }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
@@ -9,10 +9,11 @@
     {% endif %}
 
     <div class="controls">
-        <div class="input-prepend">
+        <div class="input-prepend input-append">
             {% spaceless %}
-            <span class="add-on {% if active %}active{% endif %}">{{ crispy_prepended_text|safe }}</span>
+            {% if crispy_prepended_text %}<span class="add-on {% if active %}active{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
             {% crispy_field field %}
+            {% if crispy_appended_text %}<span class="add-on {% if active %}active{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
             {% endspaceless %}
             {% include 'bootstrap/layout/field_errors.html' %}
         </div>

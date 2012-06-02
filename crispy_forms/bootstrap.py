@@ -27,6 +27,24 @@ class PrependedText(AppendedText):
         context.update({'crispy_prepended_text': self.text, 'active': getattr(self, "active", False)})
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
 
+class AppendedPrependedText(Field):
+    template = "bootstrap/layout/appended_prepended_text.html"
+
+    def __init__(self, field, prepended_text=None, appended_text=None, *args, **kwargs):
+        self.appended_text = appended_text
+        self.prepended_text = prepended_text
+        if 'active' in kwargs:
+            self.active = kwargs.pop('active')
+
+        super(AppendedPrependedText, self).__init__(field, *args, **kwargs)
+
+    def render(self, form, form_style, context):
+        context.update({'crispy_appended_text': self.appended_text, 
+                        'crispy_prepended_text': self.prepended_text,
+                        'active': getattr(self, "active", False)})
+        return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
+
+
 class FormActions(object):
     """
     Bootstrap layout object. It wraps fields in a <div class="form-actions">
