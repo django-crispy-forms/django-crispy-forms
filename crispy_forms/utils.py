@@ -57,9 +57,9 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget,])
 
             if isinstance(attrs, dict):
-                attrs = [attrs] * len(widgets)
+                list_attrs = [attrs] * len(widgets)
 
-            for index, (widget, attr) in enumerate(zip(widgets, attrs)):
+            for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
                 if hasattr(field_instance.widget, 'widgets'):
                     if 'type' in attr and attr['type'] == "hidden":
                         field_instance.widget.widgets[index].is_hidden = True
