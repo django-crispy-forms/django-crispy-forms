@@ -14,7 +14,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import Submit, Reset, Hidden, Button
-from crispy_forms.layout import Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder, Div, Field, MultiWidgetField
+from crispy_forms.layout import (
+    Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder,
+    Div, Field, MultiWidgetField
+)
+from crispy_forms.bootstrap import AppendedPrependedText
 
 
 class TestForm(forms.Form):
@@ -679,7 +683,6 @@ class TestLayoutObjects(TestCase):
             Field('email', type="hidden", data_mierda=12),
             Field('datetime_field'),
         )
-                
         
         c = Context({
             'test_form': test_form, 
@@ -690,3 +693,24 @@ class TestLayoutObjects(TestCase):
         self.assertEqual(html.count('<input type="hidden" data-mierda="12" name="email"'), 1)
         self.assertEqual(html.count('class="dateinput"'), 1)
         self.assertEqual(html.count('class="timeinput"'), 1)
+
+    def test_appended_prepended_text(self):
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy test_form %}
+        """)
+
+        test_form = TestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            AppendedPrependedText('email', '@', 'gmail.com'),
+        )
+        
+        c = Context({
+            'test_form': test_form, 
+        })
+        html = template.render(c)        
+
+        # Check form parameters
+        self.assertEqual(html.count('<span class="add-on ">@</span>'), 1)
+        self.assertEqual(html.count('<span class="add-on ">gmail.com</span>'), 1)
