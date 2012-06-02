@@ -45,6 +45,7 @@ class TestForm(forms.Form):
 
         return self.cleaned_data
 
+
 class TestBasicFunctionalityTags(TestCase):
     def setUp(self):
         pass
@@ -307,6 +308,7 @@ class TestFormHelpers(TestCase):
         html = template.render(c)
         
         self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html) 
+
 
 class TestFormLayout(TestCase):
     urls = 'crispy_forms.tests.urls'
@@ -664,3 +666,29 @@ class TestFormLayout(TestCase):
         form.helper = form_helper
 
         html = template.render(Context({'form': form}))
+
+
+class TestLayoutObjects(TestCase):
+    def test_Field_type_hidden(self):
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy test_form %}
+        """)
+
+        
+        test_form = TestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            Field('email', type="hidden", data_mierda=12),
+            'is_company'
+        )
+                
+        
+        c = Context({
+            'test_form': test_form, 
+        })
+        html = template.render(c)        
+
+        # Check form parameters
+        self.assertEqual(html.count('<input type="hidden" data-mierda="12" name="email"'), 1)
+        self.assertTrue('is_company' in html)

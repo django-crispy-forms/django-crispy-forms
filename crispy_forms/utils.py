@@ -54,7 +54,12 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         # Injecting HTML attributes into field's widget, Django handles rendering these
         field_instance = form.fields[field]
         if attrs is not None:
+            if 'type' in attrs and attrs['type'] == "hidden":
+                field_instance.widget.is_hidden = True
+                field_instance.widget = field_instance.hidden_widget()
+
             field_instance.widget.attrs.update(attrs)
+
     except KeyError:
         if not FAIL_SILENTLY:
             raise Exception("Could not resolve form field '%s'." % field)
