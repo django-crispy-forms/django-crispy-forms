@@ -56,6 +56,8 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         if attrs is not None:
             widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget,])
 
+            # We use attrs as a dictionary later, so here we make a copy
+            list_attrs = attrs
             if isinstance(attrs, dict):
                 list_attrs = [attrs] * len(widgets)
 
