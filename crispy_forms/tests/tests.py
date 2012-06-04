@@ -39,6 +39,9 @@ class TestForm(forms.Form):
 
         return self.cleaned_data
 
+class ExampleForm(forms.Form):
+    comment = forms.CharField()
+
 
 class TestBasicFunctionalityTags(TestCase):
     def setUp(self):
@@ -387,6 +390,23 @@ class TestFormLayout(TestCase):
         settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
+
+    def test_context_pollution(self):
+        form = ExampleForm()
+        form2 = TestForm()
+
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {{ form.as_ul }}
+            {% crispy form2 %}
+            {{ form.as_ul }}
+        """)        
+        c = Context({'form': form, 'form2': form2})
+        html = template.render(c)
+
+        self.assertEqual(html.count('<input type="text" name="comment"'), 2)
+        self.assertEqual(html.count('name="is_company"'), 1)
+       
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
         form_helper = FormHelper()
