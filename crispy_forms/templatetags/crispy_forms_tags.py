@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from copy import deepcopy
-
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import Context
@@ -105,7 +103,7 @@ class BasicNode(template.Node):
         # We get the response dictionary
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(attrs, context, is_formset)
-        node_context = deepcopy(context)
+        node_context = context.__copy__()
         node_context.update(response_dict)
 
         # If we have a helper's layout we use it, for the form or the formset's forms
