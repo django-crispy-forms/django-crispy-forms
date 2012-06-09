@@ -6,12 +6,6 @@ from django.forms.forms import BoundField
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
 
-
-# Global field template, default template used for rendering a field. This way we avoid 
-# loading the template every time render_field is called without a template
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
-default_field_template = get_template("%s/field.html" % TEMPLATE_PACK)
-
 def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None):
     """
     Renders a django-crispy-forms field
@@ -96,7 +90,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         bound_field = BoundField(form, field_instance, field)
 
         if template is None:
-            template = default_field_template
+            template = get_template("%s/field.html" % getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap'))
         else:
             template = get_template(template)
 
