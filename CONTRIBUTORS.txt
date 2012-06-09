@@ -65,3 +65,4 @@ Contributors
 * Paul Oswald <poswald>
 * Rudy Mutter <rmutter>
 * Samuel Goldszmidt <ouhouhsami>
+* Andrei Antoukh <niwibe>
