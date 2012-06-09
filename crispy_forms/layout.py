@@ -50,6 +50,37 @@ class Layout(object):
             html += render_field(field, form, form_style, context)
         return html
 
+    def all(self):
+        return LayoutSlice(self, slice(0, len(self.fields), 1))
+
+    def filter(self, LayoutClass):
+        filtered_fields = []
+        for i in range(len(self.fields)):
+            if isinstance(self.fields[i], LayoutClass):
+                filtered_fields.append(i)
+
+        return LayoutSlice(self, filtered_fields)
+
+    def __getitem__(self, key):
+        return LayoutSlice(self, key)
+
+
+class LayoutSlice(object):
+    def __init__(self, layout, key):
+        self.layout = layout
+        if isinstance(key, (int, long)):
+            self.slice = slice(key, key+1, 1)
+        else:
+            self.slice = key
+
+    def wrap(self, LayoutClass, **kwargs):
+        if isinstance(self.slice, slice):
+            for i in range(*self.slice.indices(len(self.layout.fields))):
+                self.layout.fields[i] = LayoutClass(self.layout.fields[i], **kwargs)
+        else:
+            for i in self.slice:
+                self.layout.fields[i] = LayoutClass(self.layout.fields[i], **kwargs)
+
 
 class ButtonHolder(object):
     """

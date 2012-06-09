@@ -734,3 +734,47 @@ class TestLayoutObjects(TestCase):
         # Check form parameters
         self.assertEqual(html.count('<span class="add-on ">@</span>'), 1)
         self.assertEqual(html.count('<span class="add-on ">gmail.com</span>'), 1)
+
+
+class TestDynamicLayouts(TestCase):
+    def test_wrap_all_fields(self):
+        layout = Layout(
+            'email',
+            'password1',
+            'password2',
+        )
+        layout.all().wrap(Field, css_class="test-class")
+
+        for field in layout.fields:
+            self.assertTrue(isinstance(field, Field))
+            self.assertEqual(field.attrs['class'], "test-class")
+
+    def test_wrap_selected_fields(self):
+        layout = Layout(
+            'email',
+            'password1',
+            'password2',
+        )
+        layout[1:3].wrap(Field, css_class="test-class")
+        self.assertFalse(isinstance(layout.fields[0], Field))
+        self.assertTrue(isinstance(layout.fields[1], Field))
+        self.assertTrue(isinstance(layout.fields[2], Field))
+
+        layout[0].wrap(Field, css_class="test-class")
+        self.assertTrue(isinstance(layout.fields[0], Field))
+
+    def test_wrap_filtered_fields(self):
+        layout = Layout(
+            'email',
+            Div('password1'),
+            'password2',
+        )
+        layout.filter(basestring).wrap(Field, css_class="test-class")
+        self.assertTrue(isinstance(layout.fields[0], Field))
+        self.assertTrue(isinstance(layout.fields[1], Div))
+        self.assertTrue(isinstance(layout.fields[2], Field))
+
+        # Wrapping a div in a div
+        layout.filter(Div).wrap(Div, css_class="test-class")
+        self.assertTrue(isinstance(layout.fields[1], Div))
+        self.assertTrue(isinstance(layout.fields[1].fields[0], Div))
