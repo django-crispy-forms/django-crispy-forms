@@ -8,7 +8,7 @@ from django.utils.html import conditional_escape
 from django.utils.functional import SimpleLazyObject
 
 
-# Global field template, default template used for rendering a field. This way we avoid 
+# Global field template, default template used for rendering a field. This way we avoid
 # loading the template every time render_field is called without a template
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 default_field_template = SimpleLazyObject(lambda: get_template("%s/field.html" % TEMPLATE_PACK))
@@ -17,7 +17,7 @@ default_field_template = SimpleLazyObject(lambda: get_template("%s/field.html" %
 def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None):
     """
     Renders a django-crispy-forms field
-    
+
     :param field: Can be a string or a Layout object like `Row`. If it's a layout
         object, we call its render method, otherwise we instantiate a BoundField
         and render it using default template 'uni_form/field.html'
@@ -25,7 +25,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         to avoid double rendering fields.
 
     :param form: The form/formset to which that field belongs to.
-    
+
     :param form_style: A way to pass style name to the CSS framework used.
 
     :template: Template used for rendering the field.
@@ -45,10 +45,10 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             if isinstance(field, unicode):
                 field = str(field)
             # If `field` is not unicode then we turn it into a unicode string, otherwise doing
-            # str(field) would give no error and the field would not be resolved, causing confusion 
+            # str(field) would give no error and the field would not be resolved, causing confusion
             else:
                 field = str(unicode(field))
-                
+
         except (UnicodeEncodeError, UnicodeDecodeError):
             raise Exception("Field '%s' is using forbidden unicode characters" % field)
 
@@ -83,7 +83,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         else:
             field_instance = None
             logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
-            
+
     if not field in form.rendered_fields:
         form.rendered_fields.add(field)
     else:
@@ -104,8 +104,8 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
         # We save the Layout object's bound fields in the layout object's `bound_fields` list
         if layout_object is not None:
-            layout_object.bound_fields.append(bound_field) 
-       
+            layout_object.bound_fields.append(bound_field)
+
         context.update({
             'field': bound_field,
             'labelclass': labelclass,
@@ -118,7 +118,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
 def flatatt(attrs):
     """
-    Taken from django.core.utils 
+    Taken from django.core.utils
     Convert a dictionary of attributes to a single string.
     The returned string will contain a leading space followed by key="value",
     XML-style pairs.  It is assumed that the keys do not need to be XML-escaped.

@@ -10,20 +10,20 @@ TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
 
 class Layout(object):
-    """ 
+    """
     Form Layout. It is conformed by Layout objects: `Fieldset`, `Row`, `Column`, `MultiField`,
-    `HTML`, `ButtonHolder`, `Button`, `Hidden`, `Reset`, `Submit` and fields. Form fields 
+    `HTML`, `ButtonHolder`, `Button`, `Hidden`, `Reset`, `Submit` and fields. Form fields
     have to be strings.
-    Layout objects `Fieldset`, `Row`, `Column`, `MultiField` and `ButtonHolder` can hold other 
-    Layout objects within. Though `ButtonHolder` should only hold `HTML` and BaseInput 
+    Layout objects `Fieldset`, `Row`, `Column`, `MultiField` and `ButtonHolder` can hold other
+    Layout objects within. Though `ButtonHolder` should only hold `HTML` and BaseInput
     inherited classes: `Button`, `Hidden`, `Reset` and `Submit`.
-    
+
     You need to add your `Layout` to the `FormHelper` using its method `add_layout`.
 
     Example::
 
         layout = Layout(
-            Fieldset('Company data', 
+            Fieldset('Company data',
                 'is_company'
             ),
             Fieldset(_('Contact details'),
@@ -38,12 +38,12 @@ class Layout(object):
                 Submit('Save', 'Save', css_class='button white'),
             ),
         )
-        
+
         helper.add_layout(layout)
     """
     def __init__(self, *fields):
         self.fields = list(fields)
-    
+
     def render(self, form, form_style, context):
         html = ""
         for field in self.fields:
@@ -86,11 +86,11 @@ class ButtonHolder(object):
     """
     Layout object. It wraps fields in a <div class="buttonHolder">
 
-    This is where you should put Layout objects that render to form buttons like Submit. 
+    This is where you should put Layout objects that render to form buttons like Submit.
     It should only hold `HTML` and `BaseInput` inherited objects.
 
     Example::
-        
+
         ButtonHolder(
             HTML(<span style="display: hidden;">Information Saved</span>),
             Submit('Save', 'Save')
@@ -123,13 +123,13 @@ class BaseInput(object):
         self.value = value
         self.id = kwargs.get('css_id', '')
         self.attrs = {}
-        
+
         if kwargs.has_key('css_class'):
             self.field_classes += ' %s' % kwargs.pop('css_class')
 
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
-        
+
     def render(self, form, form_style, context):
         """
         Renders an `<input />` if container is used as a Layout object
@@ -140,9 +140,9 @@ class BaseInput(object):
 class Submit(BaseInput):
     """
     Used to create a Submit button descriptor for the {% crispy %} template tag::
-    
+
         submit = Submit('Search the Site', 'search this site')
-    
+
     .. note:: The first argument is also slugified and turned into the id for the submit button.
     """
     input_type = 'submit'
@@ -154,7 +154,7 @@ class Button(BaseInput):
     Used to create a Submit input descriptor for the {% crispy %} template tag::
 
         button = Button('Button 1', 'Press Me!')
-    
+
     .. note:: The first argument is also slugified and turned into the id for the button.
     """
     input_type = 'button'
@@ -172,9 +172,9 @@ class Hidden(BaseInput):
 class Reset(BaseInput):
     """
     Used to create a Reset button input descriptor for the {% crispy %} template tag::
-    
+
         reset = Reset('Reset This Form', 'Revert Me!')
-    
+
     .. note:: The first argument is also slugified and turned into the id for the reset.
     """
     input_type = 'reset'
@@ -182,9 +182,9 @@ class Reset(BaseInput):
 
 
 class Fieldset(object):
-    """ 
-    Layout object. It wraps fields in a <fieldset> 
-    
+    """
+    Layout object. It wraps fields in a <fieldset>
+
     Example::
 
         Fieldset("Text for the legend",
@@ -194,7 +194,7 @@ class Fieldset(object):
 
     The first parameter is the text for the fieldset legend. This text is context aware,
     so you can do things like::
-    
+
         Fieldset("Data for {{ user.username }}",
             'form_field_1',
             'form_field_2'
@@ -209,7 +209,7 @@ class Fieldset(object):
         self.css_id = kwargs.get('css_id', None)
         # Overrides class variable with an instance level variable
         self.template = kwargs.get('template', self.template)
-    
+
     def render(self, form, form_style, context):
         fields = ''
         for field in self.fields:
@@ -238,20 +238,20 @@ class MultiField(object):
         if form.errors:
             self.css_class += " error"
 
-        # We need to render fields using django-uni-form render_field so that MultiField can 
+        # We need to render fields using django-uni-form render_field so that MultiField can
         # hold other Layout objects inside itself
         fields_output = u''
         self.bound_fields = []
         for field in self.fields:
             fields_output += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class, layout_object=self)
-        
+
         return render_to_string(self.template, Context({'multifield': self, 'fields_output': fields_output}))
 
 
 class Div(object):
     """
     Layout object. It wraps fields in a <div>
-    
+
     You can set `css_id` for a DOM id and `css_class` for a DOM class. Example::
 
         Div('form_field_1', 'form_field_2', css_id='div-example', css_class='divs')
@@ -260,12 +260,12 @@ class Div(object):
 
     def __init__(self, *fields, **kwargs):
         self.fields = fields
-        
+
         if hasattr(self, 'css_class') and kwargs.has_key('css_class'):
             self.css_class += ' %s' % kwargs.pop('css_class')
         if not hasattr(self, 'css_class'):
             self.css_class = kwargs.pop('css_class', None)
-       
+
         self.css_id = kwargs.pop('css_id', '')
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
@@ -279,7 +279,7 @@ class Div(object):
 
 
 class Row(Div):
-    """ 
+    """
     Layout object. It wraps fields in a div whose default class is "formRow". Example::
 
         Row('form_field_1', 'form_field_2', 'form_field_3')
@@ -288,28 +288,28 @@ class Row(Div):
 
 
 class Column(Div):
-    """ 
+    """
     Layout object. It wraps fields in a div whose default class is "formColumn". Example::
 
-        Column('form_field_1', 'form_field_2') 
+        Column('form_field_1', 'form_field_2')
     """
     css_class = 'formColumn'
 
 
 class HTML(object):
-    """ 
+    """
     Layout object. It can contain pure HTML and it has access to the whole
     context of the page where the form is being rendered.
-    
+
     Examples::
 
         HTML("{% if saved %}Data saved{% endif %}")
         HTML('<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />')
     """
-    
+
     def __init__(self, html):
         self.html = unicode(html)
-    
+
     def render(self, form, form_style, context):
         return Template(self.html).render(context)
 

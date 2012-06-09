@@ -15,9 +15,9 @@ register = template.Library()
 @register.filter(name='as_uni_form')
 @register.filter(name='crispy')
 def as_crispy_form(form):
-    """ 
+    """
     The original and still very useful way to generate a div elegant form/formset::
-    
+
         {% load crispy_forms_tags %}
 
         <form class="uniForm" action="post">

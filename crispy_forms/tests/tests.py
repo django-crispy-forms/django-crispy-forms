@@ -46,7 +46,7 @@ class ExampleForm(forms.Form):
 class TestBasicFunctionalityTags(TestCase):
     def setUp(self):
         pass
-    
+
     def tearDown(self):
         pass
 
@@ -83,7 +83,7 @@ class TestBasicFunctionalityTags(TestCase):
         """)
         c = Context({'form': TestForm()})
         html = template.render(c)
-        
+
         self.assertTrue("<td>" not in html)
         self.assertTrue("id_is_company" in html)
 
@@ -110,9 +110,9 @@ class TestFormHelpers(TestCase):
     urls = 'crispy_forms.tests.urls'
     def setUp(self):
         pass
-    
+
     def tearDown(self):
-        pass    
+        pass
 
     def test_crispy_tag_helper_inputs(self):
         form_helper = FormHelper()
@@ -124,53 +124,53 @@ class TestFormHelpers(TestCase):
         form_helper.add_input(reset)
         form_helper.add_input(hidden)
         form_helper.add_input(button)
-        
+
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
-        c = Context({'form': TestForm(), 'form_helper': form_helper})        
+        c = Context({'form': TestForm(), 'form_helper': form_helper})
         html = template.render(c)
 
         self.assertTrue('button white' in html)
         self.assertTrue('submit submitButton' in html or 'btn' in html)
-        self.assertTrue('id="submit-id-my-submit"' in html)        
+        self.assertTrue('id="submit-id-my-submit"' in html)
 
         self.assertTrue('reset resetButton' in html)
-        self.assertTrue('id="reset-id-my-reset"' in html)        
+        self.assertTrue('id="reset-id-my-reset"' in html)
 
-        self.assertTrue('name="my-hidden"' in html)        
+        self.assertTrue('name="my-hidden"' in html)
 
         self.assertTrue('button' in html)
-        self.assertTrue('id="button-id-my-button"' in html)        
+        self.assertTrue('id="button-id-my-button"' in html)
 
     def test_invalid_helper_method(self):
         form_helper = FormHelper()
         try:
             form_helper.form_method = "superPost"
             self.fail("Setting an invalid form_method within the helper should raise an Exception")
-        except FormHelpersException: 
+        except FormHelpersException:
             pass
 
     def test_crispy_tag_with_helper_without_layout(self):
-        form_helper = FormHelper()    
+        form_helper = FormHelper()
         form_helper.form_id = 'this-form-rocks'
         form_helper.form_class = 'forms-that-rock'
         form_helper.form_method = 'GET'
         form_helper.form_action = 'simpleAction'
         form_helper.form_error_title = 'ERRORS'
-    
+
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testForm form_helper %}
-        """)        
+        """)
 
         # now we render it, with errors
         form = TestForm({'password1': 'wargame','password2': 'god'})
         form.is_valid()
-        c = Context({'testForm': form, 'form_helper': form_helper})            
+        c = Context({'testForm': form, 'form_helper': form_helper})
         html = template.render(c)
-        
+
         # Lets make sure everything loads right
         self.assertTrue(html.count('<form'), 1)
         self.assertTrue('forms-that-rock' in html)
@@ -183,9 +183,9 @@ class TestFormHelpers(TestCase):
 
         # now lets remove the form tag and render it again. All the True items above
         # should now be false because the form tag is removed.
-        form_helper.form_tag = False 
-        html = template.render(c)        
-        self.assertFalse('<form' in html)        
+        form_helper.form_tag = False
+        html = template.render(c)
+        self.assertFalse('<form' in html)
         self.assertFalse('forms-that-rock' in html)
         self.assertFalse('method="get"' in html)
         self.assertFalse('id="this-form-rocks">' in html)
@@ -225,9 +225,9 @@ class TestFormHelpers(TestCase):
             {% load crispy_forms_tags %}
             {% crispy form %}
         """)
-        c = Context({'form': TestForm()})            
-        html = template.render(c)        
-        
+        c = Context({'form': TestForm()})
+        html = template.render(c)
+
         # Lets make sure everything loads right
         self.assertTrue('<form' in html)
         self.assertTrue('method="post"' in html)
@@ -253,18 +253,18 @@ class TestFormHelpers(TestCase):
             {% load crispy_forms_tags %}
             {% crispy testFormSet formset_helper %}
         """)
-        
-        form_helper = FormHelper()    
+
+        form_helper = FormHelper()
         form_helper.form_id = 'thisFormsetRocks'
         form_helper.form_class = 'formsets-that-rock'
         form_helper.form_method = 'POST'
         form_helper.form_action = 'simpleAction'
-                
+
         TestFormSet = formset_factory(TestForm, extra = 3)
         testFormSet = TestFormSet()
-        
+
         c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
-        html = template.render(c)        
+        html = template.render(c)
 
         self.assertEqual(html.count('<form'), 1)
         self.assertEqual(html.count("<input type='hidden' name='csrfmiddlewaretoken'"), 1)
@@ -273,18 +273,18 @@ class TestFormHelpers(TestCase):
         self.assertTrue('form-TOTAL_FORMS' in html)
         self.assertTrue('form-INITIAL_FORMS' in html)
         self.assertTrue('form-MAX_NUM_FORMS' in html)
-    
+
         self.assertTrue('formsets-that-rock' in html)
         self.assertTrue('method="post"' in html)
         self.assertTrue('id="thisFormsetRocks">' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
 
     def test_CSRF_token_POST_form(self):
-        form_helper = FormHelper()    
+        form_helper = FormHelper()
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
 
         # The middleware only initializes the CSRF token when processing a real request
         # So using RequestContext or csrf(request) here does not work.
@@ -292,20 +292,20 @@ class TestFormHelpers(TestCase):
         c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
         html = template.render(c)
 
-        self.assertTrue("<input type='hidden' name='csrfmiddlewaretoken'" in html)                
+        self.assertTrue("<input type='hidden' name='csrfmiddlewaretoken'" in html)
 
     def test_CSRF_token_GET_form(self):
-        form_helper = FormHelper()    
+        form_helper = FormHelper()
         form_helper.form_method = 'GET'
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
 
         c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
         html = template.render(c)
-        
-        self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html) 
+
+        self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html)
 
 
 class TestFormLayout(TestCase):
@@ -313,23 +313,23 @@ class TestFormLayout(TestCase):
     def test_layout_invalid_unicode_characters(self):
         # Adds a BooleanField that uses non valid unicode characters "ñ"
         form = TestForm()
-        
+
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
                 'españa'
             )
         )
-        
+
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
-        
+
     def test_layout_uses_instance_for_missing_fields(self):
         class FormWithMeta(TestForm):
             class Meta:
@@ -337,7 +337,7 @@ class TestFormLayout(TestCase):
         form = FormWithMeta()
         # We remove email field on the go
         del form.fields['email']
-                
+
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -348,14 +348,14 @@ class TestFormLayout(TestCase):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
         c = Context({'form': form, 'form_helper': form_helper})
         html = template.render(c)
         self.assertFalse('email' in html)
 
     def test_layout_unresolved_field(self):
         form = TestForm()
-        
+
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -366,7 +366,7 @@ class TestFormLayout(TestCase):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
@@ -374,7 +374,7 @@ class TestFormLayout(TestCase):
 
     def test_double_rendered_field(self):
         form = TestForm()
-        
+
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -385,7 +385,7 @@ class TestFormLayout(TestCase):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         settings.CRISPY_FAIL_SILENTLY = False
         self.assertRaises(Exception, lambda:template.render(c))
@@ -400,13 +400,13 @@ class TestFormLayout(TestCase):
             {{ form.as_ul }}
             {% crispy form2 %}
             {{ form.as_ul }}
-        """)        
+        """)
         c = Context({'form': form, 'form2': form2})
         html = template.render(c)
 
         self.assertEqual(html.count('<input type="text" name="comment"'), 2)
         self.assertEqual(html.count('name="is_company"'), 1)
-       
+
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
         form_helper = FormHelper()
@@ -422,7 +422,7 @@ class TestFormLayout(TestCase):
                     u'User Data',
                     u'email',
                     Row(
-                        u'password1', 
+                        u'password1',
                         u'password2',
                         css_id = "row_passwords",
                         css_class = "rows"
@@ -440,9 +440,9 @@ class TestFormLayout(TestCase):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
         c = Context({
-            'form': TestForm(), 
+            'form': TestForm(),
             'form_helper': form_helper,
             'flag': True,
             'message': "Hello!",
@@ -475,7 +475,7 @@ class TestFormLayout(TestCase):
                     Submit('Save the world', 'Save', css_class='button white', data_id='test', data_name='test'),
                 ),
                 Div(
-                    'password1', 
+                    'password1',
                     'password2',
                     css_id="custom-div",
                     css_class="customdivs",
@@ -487,7 +487,7 @@ class TestFormLayout(TestCase):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         html = template.render(c)
 
@@ -528,7 +528,7 @@ class TestFormLayout(TestCase):
                     Submit('Save', 'Save', css_class='button white'),
                 ),
                 Div(
-                    'password1', 
+                    'password1',
                     'password2',
                     css_id="custom-div",
                     css_class="customdivs",
@@ -539,7 +539,7 @@ class TestFormLayout(TestCase):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
+        """)
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         html = template.render(c)
 
@@ -554,13 +554,13 @@ class TestFormLayout(TestCase):
         self.assertTrue('id="custom-div"' in html)
         self.assertTrue('class="customdivs"' in html)
         self.assertFalse('last_name' in html)
-       
+
     def test_change_layout_dynamically_delete_field(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
-        """)        
-        
+        """)
+
         form = TestForm()
         form_helper = FormHelper()
         form_helper.add_layout(
@@ -569,7 +569,7 @@ class TestFormLayout(TestCase):
                     u'Company Data',
                     'is_company',
                     'email',
-                    'password1', 
+                    'password1',
                     'password2',
                     css_id = "multifield_info",
                 ),
@@ -595,8 +595,8 @@ class TestFormLayout(TestCase):
             {% load crispy_forms_tags %}
             {% crispy testFormSet formset_helper %}
         """)
-        
-        form_helper = FormHelper()    
+
+        form_helper = FormHelper()
         form_helper.form_id = 'thisFormsetRocks'
         form_helper.form_class = 'formsets-that-rock'
         form_helper.form_method = 'POST'
@@ -615,16 +615,16 @@ class TestFormLayout(TestCase):
                 )
             )
         )
-                
+
         TestFormSet = formset_factory(TestForm, extra = 3)
         testFormSet = TestFormSet()
-        
+
         c = Context({
-            'testFormSet': testFormSet, 
-            'formset_helper': form_helper, 
+            'testFormSet': testFormSet,
+            'formset_helper': form_helper,
             'csrf_token': _get_new_csrf_key()
         })
-        html = template.render(c)        
+        html = template.render(c)
 
         # Check form parameters
         self.assertEqual(html.count('<form'), 1)
@@ -696,18 +696,18 @@ class TestLayoutObjects(TestCase):
             {% crispy test_form %}
         """)
 
-        
+
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Field('email', type="hidden", data_mierda=12),
             Field('datetime_field'),
         )
-        
+
         c = Context({
-            'test_form': test_form, 
+            'test_form': test_form,
         })
-        html = template.render(c)        
+        html = template.render(c)
 
         # Check form parameters
         self.assertEqual(html.count('<input type="hidden" data-mierda="12" name="email"'), 1)
@@ -725,11 +725,11 @@ class TestLayoutObjects(TestCase):
         test_form.helper.layout = Layout(
             AppendedPrependedText('email', '@', 'gmail.com'),
         )
-        
+
         c = Context({
-            'test_form': test_form, 
+            'test_form': test_form,
         })
-        html = template.render(c)        
+        html = template.render(c)
 
         # Check form parameters
         self.assertEqual(html.count('<span class="add-on ">@</span>'), 1)
