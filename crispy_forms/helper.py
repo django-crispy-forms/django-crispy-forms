@@ -91,7 +91,6 @@ class FormHelper(object):
     _form_style = 'default'
     form_id = ''
     form_class = ''
-    inputs = []
     layout = None
     form_tag = True
     form_error_title = None
@@ -101,7 +100,7 @@ class FormHelper(object):
     help_text_inline = False
 
     def __init__(self):
-        self.inputs = self.inputs[:]
+        self.inputs = []
 
     def get_form_method(self):
         return self._form_method
