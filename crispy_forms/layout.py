@@ -296,18 +296,24 @@ class Field(object):
 
     def __init__(self, field, *args, **kwargs):
         self.field = field
-        self.attrs = {}
+
+        if not hasattr(self, 'attrs'):
+            self.attrs = {}
 
         if kwargs.has_key('css_class'):
-            self.attrs['class'] = kwargs.pop('css_class')
-        if kwargs.has_key('template'):
-            self.template = kwargs.pop('template')
+            if 'class' in self.attrs:
+                self.attrs['class'] += " %s" % kwargs.pop('css_class')
+            else:
+                self.attrs['class'] = kwargs.pop('css_class')
+
+        self.template = kwargs.pop('template', self.template)
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k,v in kwargs.items()]))
 
     def render(self, form, form_style, context):
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
+
 
 class MultiWidgetField(Field):
     """
@@ -330,3 +336,18 @@ class MultiWidgetField(Field):
         self.field = field
         self.attrs = kwargs.pop('attrs', {})
         self.template = kwargs.pop('template', self.template)
+
+
+class UneditableField(Field):
+    """
+    Layout object for rendering fields as uneditable in bootstrap
+
+    Example::
+
+        UneditableField('field_name', css_class="input-xlarge")
+    """
+    template = "bootstrap/layout/uneditable_input.html"
+
+    def __init__(self, field, *args, **kwargs):
+        self.attrs = {'class': 'uneditable-input'}
+        super(UneditableField, self).__init__(field, *args, **kwargs)
