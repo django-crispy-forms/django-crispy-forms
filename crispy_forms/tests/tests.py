@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import django
 from django import forms
+from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
@@ -38,6 +39,28 @@ class TestForm(forms.Form):
             raise forms.ValidationError("Passwords dont match")
 
         return self.cleaned_data
+
+
+class TestForm2(TestForm):
+    def __init__(self, *args, **kwargs):
+        super(TestForm2, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+
+
+class TestModel(models.Model):
+    email = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+
+
+class TestForm3(forms.ModelForm):
+    class Meta:
+        model = TestModel
+        fields = ['email']
+
+    def __init__(self, *args, **kwargs):
+        super(TestForm3, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+
 
 class ExampleForm(forms.Form):
     comment = forms.CharField()
@@ -687,6 +710,16 @@ class TestFormLayout(TestCase):
         form.helper = form_helper
 
         html = template.render(Context({'form': form}))
+
+    def test_default_layout(self):
+        test_form = TestForm2()
+        self.assertEqual(test_form.helper.layout.fields,
+            ['is_company', 'email', 'password1', 'password2', 'first_name', 'last_name', 'datetime_field']
+        )
+
+    def test_default_layout(self):
+        test_form = TestForm3()
+        self.assertEqual(test_form.helper.layout.fields, ['email'])
 
 
 class TestLayoutObjects(TestCase):

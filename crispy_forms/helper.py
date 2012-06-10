@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
+from layout import Layout
 
 from utils import render_field
 
@@ -99,8 +100,14 @@ class FormHelper(object):
     render_unmentioned_fields = False
     help_text_inline = False
 
-    def __init__(self):
+    def __init__(self, form=None):
         self.inputs = []
+
+        if form is not None:
+            self.layout = self.build_default_layout(form)
+
+    def build_default_layout(self, form):
+        return Layout(*form.fields.keys())
 
     def get_form_method(self):
         return self._form_method
