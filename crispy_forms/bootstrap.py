@@ -10,6 +10,7 @@ class AppendedText(Field):
     template = "bootstrap/layout/appended_text.html"
 
     def __init__(self, field, text, *args, **kwargs):
+        self.field = field
         self.text = text
         if 'active' in kwargs:
             self.active = kwargs.pop('active')

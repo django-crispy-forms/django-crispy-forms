@@ -5,10 +5,8 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
-from django.forms.widgets import MultiWidget, TextInput
-from django.template import Context, Template, TemplateSyntaxError
+from django.template import Context, TemplateSyntaxError
 from django.template.loader import get_template_from_string
-from django.template.loader import render_to_string
 from django.middleware.csrf import _get_new_csrf_key
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
@@ -19,7 +17,9 @@ from crispy_forms.layout import (
     Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder,
     Div, Field, MultiWidgetField
 )
-from crispy_forms.bootstrap import AppendedPrependedText
+from crispy_forms.bootstrap import (
+    AppendedPrependedText, AppendedText, PrependedText
+)
 
 
 class TestForm(forms.Form):
@@ -757,6 +757,8 @@ class TestLayoutObjects(TestCase):
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             AppendedPrependedText('email', '@', 'gmail.com'),
+            AppendedText('password1', '#'),
+            PrependedText('password2', '$'),
         )
 
         c = Context({
@@ -767,6 +769,8 @@ class TestLayoutObjects(TestCase):
         # Check form parameters
         self.assertEqual(html.count('<span class="add-on ">@</span>'), 1)
         self.assertEqual(html.count('<span class="add-on ">gmail.com</span>'), 1)
+        self.assertEqual(html.count('<span class="add-on ">#</span>'), 1)
+        self.assertEqual(html.count('<span class="add-on ">$</span>'), 1)
 
 
 class TestDynamicLayouts(TestCase):
