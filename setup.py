@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
- 
+
 version = '1.1.4'
- 
+
 setup(
     name='django-crispy-forms',
     version=version,
