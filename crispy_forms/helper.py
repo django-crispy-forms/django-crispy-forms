@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
-from layout import Layout
+from layout import Layout, LayoutSlice
 
 from utils import render_field
 
@@ -14,7 +14,61 @@ class FormHelpersException(Exception):
     pass
 
 
-class FormHelper(object):
+class DynamicLayoutHandler(object):
+    def all(self):
+        """
+        Returns all layout objects of first level of depth
+        """
+        return LayoutSlice(self.layout, slice(0, len(self.layout.fields), 1))
+
+    def filter(self, LayoutClass):
+        """
+        Returns a LayoutSlice pointing to layout objects of type `LayoutClass`
+        """
+        filtered_fields = []
+        for i in range(len(self.layout.fields)):
+            if isinstance(self.layout.fields[i], LayoutClass):
+                filtered_fields.append(i)
+
+        return LayoutSlice(self.layout, filtered_fields)
+
+    def filter_by_widget(self, widget_type):
+        """
+        Returns a LayoutSlice pointing to fields with widgets of `widget_type`
+        """
+        assert(self.layout is not None and self.form is not None)
+        layout_field_names = self.layout.get_field_names()
+
+        # Let's filter all fields with widgets like widget_type
+        filtered_fields = []
+        for pointer in layout_field_names:
+            if isinstance(self.form.fields[pointer[1]].widget, widget_type):
+                filtered_fields.append(pointer)
+
+        return LayoutSlice(self.layout, filtered_fields)
+
+    def __getitem__(self, key):
+        """
+        Return a LayoutSlice that makes changes affect the current instance of the layout
+        and not a copy.
+        """
+        assert(self.layout is not None)
+
+        # when key is a string containing the field name
+        if isinstance(key, basestring):
+            layout_field_names = self.layout.get_field_names()
+
+            filtered_field = []
+            for pointer in layout_field_names:
+                if pointer[1] == key:
+                    filtered_field.append(pointer)
+
+            return LayoutSlice(self.layout, filtered_field)
+
+        return LayoutSlice(self.layout, key)
+
+
+class FormHelper(DynamicLayoutHandler):
     """
     This class controls the form rendering behavior of the form passed to
     the `{% crispy %}` tag. For doing so you will need to set its attributes
@@ -90,6 +144,7 @@ class FormHelper(object):
     _form_method = 'post'
     _form_action = ''
     _form_style = 'default'
+    form = None
     form_id = ''
     form_class = ''
     layout = None
@@ -104,6 +159,7 @@ class FormHelper(object):
         self.inputs = []
 
         if form is not None:
+            self.form = form
             self.layout = self.build_default_layout(form)
 
     def build_default_layout(self, form):

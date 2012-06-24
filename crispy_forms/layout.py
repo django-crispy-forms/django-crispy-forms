@@ -1,15 +1,60 @@
+import itertools
+
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
-
 
 from utils import render_field, flatatt
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
 
-class Layout(object):
+class LayoutObject(object):
+    def __getitem__(self, slice):
+        return self.fields[slice]
+
+    def get_field_names(self, index=None):
+        """
+        Returns a list of lists, those lists are pointers to field names. First parameter
+        is the location of the field, second one the name of the field. Example::
+
+            [
+               [[0,1,2], 'field_name1'], [[0,3], 'field_name2']
+            ]
+        """
+        field_names = []
+
+        if index is not None and not isinstance(index, list):
+            index = [index]
+        elif index is None:
+            index = []
+
+        # The layout object contains other layout objects
+        if not all([isinstance(layout_object, basestring) for layout_object in self.fields]):
+            for i, layout_object in enumerate(self.fields):
+                # If it's a layout object, we recursive call
+                if not isinstance(layout_object, basestring):
+                    if hasattr(layout_object, 'get_field_names'):
+                        field_names.append(layout_object.get_field_names(index + [i]))
+                # If it's a string, then it's a basic case
+                else:
+                    field_names.append([index + [i], layout_object])
+
+            if len(field_names) == 1:
+                return field_names[0]
+            else:
+                return field_names
+
+        # Base case: It only contains field_names
+        else:
+            fields_to_return = []
+            for i, field_name in enumerate(self.fields):
+                fields_to_return.append([index + [i], field_name])
+            return list(itertools.chain.from_iterable(fields_to_return))
+
+
+class Layout(LayoutObject):
     """
     Form Layout. It is conformed by Layout objects: `Fieldset`, `Row`, `Column`, `MultiField`,
     `HTML`, `ButtonHolder`, `Button`, `Hidden`, `Reset`, `Submit` and fields. Form fields
@@ -50,20 +95,6 @@ class Layout(object):
             html += render_field(field, form, form_style, context)
         return html
 
-    def all(self):
-        return LayoutSlice(self, slice(0, len(self.fields), 1))
-
-    def filter(self, LayoutClass):
-        filtered_fields = []
-        for i in range(len(self.fields)):
-            if isinstance(self.fields[i], LayoutClass):
-                filtered_fields.append(i)
-
-        return LayoutSlice(self, filtered_fields)
-
-    def __getitem__(self, key):
-        return LayoutSlice(self, key)
-
 
 class LayoutSlice(object):
     def __init__(self, layout, key):
@@ -77,12 +108,24 @@ class LayoutSlice(object):
         if isinstance(self.slice, slice):
             for i in range(*self.slice.indices(len(self.layout.fields))):
                 self.layout.fields[i] = LayoutClass(self.layout.fields[i], **kwargs)
-        else:
-            for i in self.slice:
-                self.layout.fields[i] = LayoutClass(self.layout.fields[i], **kwargs)
+
+        elif isinstance(self.slice, list):
+            # filter returns a list of integers
+            for pointer in self.slice:
+                if isinstance(pointer, int):
+                    self.layout.fields[pointer] = LayoutClass(self.layout.fields[pointer], **kwargs)
+                else:
+                    pos = pointer[0]
+                    layout_object = self.layout.fields[pos[0]]
+                    for i in pointer[0][1:-1]:
+                        layout_object = layout_object.fields[i]
+
+                    layout_object.fields[pos[-1]] = LayoutClass(layout_object.fields[pos[-1]], **kwargs)
 
 
-class ButtonHolder(object):
+
+
+class ButtonHolder(LayoutObject):
     """
     Layout object. It wraps fields in a <div class="buttonHolder">
 
@@ -181,7 +224,7 @@ class Reset(BaseInput):
     field_classes = 'reset resetButton'
 
 
-class Fieldset(object):
+class Fieldset(LayoutObject):
     """
     Layout object. It wraps fields in a <fieldset>
 
@@ -221,13 +264,13 @@ class Fieldset(object):
         return render_to_string(self.template, Context({'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style}))
 
 
-class MultiField(object):
+class MultiField(LayoutObject):
     """ multiField container. Renders to a multiField <div> """
     template = "uni_form/layout/multifield.html"
 
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
-        self.fields = fields
+        self.fields = list(fields)
         self.label_html = unicode(label)
         self.label_class = kwargs.get('label_class', u'blockLabel')
         self.css_class = kwargs.get('css_class', u'ctrlHolder')
@@ -248,7 +291,7 @@ class MultiField(object):
         return render_to_string(self.template, Context({'multifield': self, 'fields_output': fields_output}))
 
 
-class Div(object):
+class Div(LayoutObject):
     """
     Layout object. It wraps fields in a <div>
 
@@ -259,7 +302,7 @@ class Div(object):
     template = "uni_form/layout/div.html"
 
     def __init__(self, *fields, **kwargs):
-        self.fields = fields
+        self.fields = list(fields)
 
         if hasattr(self, 'css_class') and kwargs.has_key('css_class'):
             self.css_class += ' %s' % kwargs.pop('css_class')
@@ -314,7 +357,7 @@ class HTML(object):
         return Template(self.html).render(context)
 
 
-class Field(object):
+class Field(LayoutObject):
     """
     Layout object, It contains one field name, and you can add attributes to it easily.
     For setting class attributes, you need to use `css_class`, as `class` is a Python keyword.
@@ -325,8 +368,8 @@ class Field(object):
     """
     template = "%s/field.html" % TEMPLATE_PACK
 
-    def __init__(self, field, *args, **kwargs):
-        self.field = field
+    def __init__(self, *args, **kwargs):
+        self.fields = list(args)
 
         if not hasattr(self, 'attrs'):
             self.attrs = {}
@@ -343,8 +386,10 @@ class Field(object):
         self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k,v in kwargs.items()]))
 
     def render(self, form, form_style, context):
-        return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
-
+        html = ''
+        for field in self.fields:
+            html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs)
+        return html
 
 class MultiWidgetField(Field):
     """
@@ -363,8 +408,8 @@ class MultiWidgetField(Field):
 
     .. note:: To override widget's css class use ``class`` not ``css_class``.
     """
-    def __init__(self, field, *args, **kwargs):
-        self.field = field
+    def __init__(self, *args, **kwargs):
+        self.fields = list(args)
         self.attrs = kwargs.pop('attrs', {})
         self.template = kwargs.pop('template', self.template)
 

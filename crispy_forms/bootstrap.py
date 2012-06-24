@@ -2,7 +2,7 @@ from django.template import Context
 from django.template.loader import render_to_string
 from django.forms.util import flatatt
 
-from layout import Field
+from layout import LayoutObject, Field
 from utils import render_field
 
 
@@ -20,6 +20,7 @@ class AppendedText(Field):
         context.update({'crispy_appended_text': self.text, 'active': getattr(self, "active", False)})
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
 
+
 class PrependedText(AppendedText):
     template = "bootstrap/layout/prepended_text.html"
 
@@ -27,10 +28,12 @@ class PrependedText(AppendedText):
         context.update({'crispy_prepended_text': self.text, 'active': getattr(self, "active", False)})
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
 
+
 class AppendedPrependedText(Field):
     template = "bootstrap/layout/appended_prepended_text.html"
 
     def __init__(self, field, prepended_text=None, appended_text=None, *args, **kwargs):
+        self.field = field
         self.appended_text = appended_text
         self.prepended_text = prepended_text
         if 'active' in kwargs:
@@ -45,7 +48,7 @@ class AppendedPrependedText(Field):
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs)
 
 
-class FormActions(object):
+class FormActions(LayoutObject):
     """
     Bootstrap layout object. It wraps fields in a <div class="form-actions">
 

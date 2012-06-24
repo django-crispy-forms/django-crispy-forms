@@ -771,43 +771,158 @@ class TestLayoutObjects(TestCase):
 
 class TestDynamicLayouts(TestCase):
     def test_wrap_all_fields(self):
+        helper = FormHelper()
         layout = Layout(
             'email',
             'password1',
             'password2',
         )
-        layout.all().wrap(Field, css_class="test-class")
+        helper.layout = layout
 
+        helper.all().wrap(Field, css_class="test-class")
         for field in layout.fields:
             self.assertTrue(isinstance(field, Field))
             self.assertEqual(field.attrs['class'], "test-class")
 
     def test_wrap_selected_fields(self):
+        helper = FormHelper()
         layout = Layout(
             'email',
             'password1',
             'password2',
         )
-        layout[1:3].wrap(Field, css_class="test-class")
+        helper.layout = layout
+
+        helper[1:3].wrap(Field, css_class="test-class")
         self.assertFalse(isinstance(layout.fields[0], Field))
         self.assertTrue(isinstance(layout.fields[1], Field))
         self.assertTrue(isinstance(layout.fields[2], Field))
 
-        layout[0].wrap(Field, css_class="test-class")
+        helper[0].wrap(Field, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[0], Field))
 
     def test_wrap_filtered_fields(self):
+        helper = FormHelper()
         layout = Layout(
             'email',
             Div('password1'),
             'password2',
         )
-        layout.filter(basestring).wrap(Field, css_class="test-class")
+        helper.layout = layout
+
+        helper.filter(basestring).wrap(Field, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[0], Field))
         self.assertTrue(isinstance(layout.fields[1], Div))
         self.assertTrue(isinstance(layout.fields[2], Field))
 
         # Wrapping a div in a div
-        layout.filter(Div).wrap(Div, css_class="test-class")
+        helper.filter(Div).wrap(Div, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[1], Div))
         self.assertTrue(isinstance(layout.fields[1].fields[0], Div))
+
+    def test_get_field_names(self):
+        layout_1 = Div('field_name')
+        self.assertEqual(layout_1.get_field_names(), [[0], 'field_name'])
+
+        layout_2 = Div(
+            Div('field_name')
+        )
+        self.assertEqual(layout_2.get_field_names(), [[0, 0], 'field_name'])
+
+        layout_3 = Div(
+            Div('field_name'),
+            'password'
+        )
+        self.assertEqual(layout_3.get_field_names(), [
+            [[0, 0], 'field_name'],
+            [[1], 'password']
+        ])
+
+        layout_4 = Div(
+            Div(Div('field_name')),
+            Div('password'),
+            'extra_field'
+        )
+        self.assertEqual(layout_4.get_field_names(), [
+            [[0, 0, 0], 'field_name'],
+            [[1, 0], 'password'],
+            [[2], 'extra_field']
+        ])
+
+    def test_layout_get_field_names(self):
+        layout_1 = Layout(
+            Div('field_name'),
+            'password'
+        )
+        self.assertEqual(layout_1.get_field_names(), [
+            [[0, 0], 'field_name'],
+            [[1], 'password'],
+        ])
+
+        layout_2 = Layout(
+            Div('field_name'),
+            'password',
+            Fieldset('legend', 'extra_field')
+        )
+        self.assertEqual(layout_2.get_field_names(), [
+            [[0, 0], 'field_name'],
+            [[1], 'password'],
+            [[2, 0], 'extra_field'],
+        ])
+
+        layout_3 = Layout(
+            Div(
+                Div(
+                    Div('email')
+                ),
+                Div('password1'),
+                'password2'
+            )
+        )
+        self.assertEqual(layout_3.get_field_names(), [
+            [[0, 0, 0, 0], 'email'],
+            [[0, 1, 0], 'password1'],
+            [[0, 2], 'password2'],
+        ])
+
+    def test_filter_by_widget(self):
+        form = TestForm()
+        form.helper = FormHelper(form)
+        layout = Layout(
+            Div(
+                Div(Div('email')),
+                Div('password1'),
+                'password2'
+            )
+        )
+        form.helper.layout = layout
+        form.helper.filter_by_widget(forms.PasswordInput).wrap(Field, css_class='hero')
+        self.assertTrue(isinstance(layout.fields[0].fields[2], Field))
+
+    def test_getitem_by_field_name(self):
+        form = TestForm()
+        form.helper = FormHelper(form)
+        layout = Layout(
+            Div('email'),
+            'password1',
+        )
+        form.helper.layout = layout
+        form.helper['email'].wrap(Field, css_class='hero')
+        self.assertTrue(isinstance(layout.fields[0].fields[0], Field))
+
+    def test_getitem_layout_object(self):
+        layout = Layout(
+            Div(
+                Div(
+                    Div('email')
+                ),
+                Div('password1'),
+                'password2'
+            )
+        )
+        self.assertTrue(isinstance(layout[0], Div))
+        self.assertTrue(isinstance(layout[0][0], Div))
+        self.assertTrue(isinstance(layout[0][0][0], Div))
+        self.assertTrue(isinstance(layout[0][1], Div))
+        self.assertTrue(isinstance(layout[0][1][0], basestring))
+        self.assertTrue(isinstance(layout[0][2], basestring))
