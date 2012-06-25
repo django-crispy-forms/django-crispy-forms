@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import django
 from django import forms
-from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
@@ -20,50 +19,9 @@ from crispy_forms.layout import (
 from crispy_forms.bootstrap import (
     AppendedPrependedText, AppendedText, PrependedText
 )
-
-
-class TestForm(forms.Form):
-    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
-    email = forms.CharField(label="email", max_length=30, required=True, widget=forms.TextInput())
-    password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
-    password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
-    first_name = forms.CharField(label="first name", max_length=30, required=True, widget=forms.TextInput())
-    last_name = forms.CharField(label="last name", max_length=30, required=True, widget=forms.TextInput())
-    datetime_field = forms.DateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
-
-    def clean(self):
-        super(TestForm, self).clean()
-        password1 = self.cleaned_data.get('password1', None)
-        password2 = self.cleaned_data.get('password2', None)
-        if not password1 and not password2 or password1 != password2:
-            raise forms.ValidationError("Passwords dont match")
-
-        return self.cleaned_data
-
-
-class TestForm2(TestForm):
-    def __init__(self, *args, **kwargs):
-        super(TestForm2, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-
-
-class TestModel(models.Model):
-    email = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-
-
-class TestForm3(forms.ModelForm):
-    class Meta:
-        model = TestModel
-        fields = ['email']
-
-    def __init__(self, *args, **kwargs):
-        super(TestForm3, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-
-
-class ExampleForm(forms.Form):
-    comment = forms.CharField()
+from forms import (
+    TestForm, TestForm2, TestForm3, ExampleForm
+)
 
 
 class TestBasicFunctionalityTags(TestCase):
@@ -347,8 +305,6 @@ class TestFormLayout(TestCase):
     urls = 'crispy_forms.tests.urls'
     def test_layout_invalid_unicode_characters(self):
         # Adds a BooleanField that uses non valid unicode characters "ñ"
-        form = TestForm()
-
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -389,8 +345,6 @@ class TestFormLayout(TestCase):
         self.assertFalse('email' in html)
 
     def test_layout_unresolved_field(self):
-        form = TestForm()
-
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -408,8 +362,6 @@ class TestFormLayout(TestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_double_rendered_field(self):
-        form = TestForm()
-
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -722,6 +674,7 @@ class TestFormLayout(TestCase):
         form.helper = form_helper
 
         html = template.render(Context({'form': form}))
+        self.assertEqual(html.count('i18n legend'), 1)
 
     def test_default_layout(self):
         test_form = TestForm2()
@@ -729,7 +682,7 @@ class TestFormLayout(TestCase):
             ['is_company', 'email', 'password1', 'password2', 'first_name', 'last_name', 'datetime_field']
         )
 
-    def test_default_layout(self):
+    def test_default_layout_two(self):
         test_form = TestForm3()
         self.assertEqual(test_form.helper.layout.fields, ['email'])
 
