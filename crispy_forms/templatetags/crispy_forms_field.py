@@ -19,6 +19,10 @@ def is_password(field):
     return field.field.widget.__class__.__name__.lower() == "passwordinput"
 
 @register.filter
+def classes(field):
+    return field.widget.attrs.get('class', None)
+
+@register.filter
 def css_class(field):
     return field.field.widget.__class__.__name__.lower()
 

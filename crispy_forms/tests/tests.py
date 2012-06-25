@@ -128,6 +128,18 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue('form-INITIAL_FORMS' in html)
         self.assertTrue('form-MAX_NUM_FORMS' in html)
 
+    def test_classes_filter(self):
+        template = get_template_from_string(u"""
+            {% load crispy_forms_field %}
+            {{ testField|classes }}
+        """)
+
+        test_form = TestForm()
+        test_form.fields['email'].widget.attrs.update({'class': 'email-fields'})
+        c = Context({'testField': test_form.fields['email']})
+        html = template.render(c)
+        self.assertTrue('email-fields' in html)
+
 
 class TestFormHelpers(TestCase):
     urls = 'crispy_forms.tests.urls'
