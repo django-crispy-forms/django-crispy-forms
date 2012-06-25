@@ -231,10 +231,11 @@ class FormHelper(DynamicLayoutHandler):
         # we suppose they need to be rendered. Othewise we renderd the
         # layout fields strictly
         if getattr(form, 'Meta', None):
+            fields = set(getattr(form.Meta, 'fields', []))
             # Take the fields from the instance since the user might have deleted some
-            fields = set(getattr(form, 'fields', []))
+            current_fields = set(getattr(form, 'fields', []))
             exclude = set(getattr(form.Meta, 'exclude', []))
-            left_fields_to_render = fields - exclude - form.rendered_fields
+            left_fields_to_render = fields & current_fields - exclude - form.rendered_fields
 
             for field in left_fields_to_render:
                 html += render_field(field, form, self.form_style, context)
