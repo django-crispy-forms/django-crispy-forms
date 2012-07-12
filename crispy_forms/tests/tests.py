@@ -895,3 +895,20 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(layout[0][1], Div))
         self.assertTrue(isinstance(layout[0][1][0], basestring))
         self.assertTrue(isinstance(layout[0][2], basestring))
+
+    def test_append_layout_object(self):
+        layout = Layout(
+            Div('email')
+        )
+        layout.append('password1')
+        self.assertTrue(isinstance(layout[0], Div))
+        self.assertTrue(isinstance(layout[0][0], basestring))
+        self.assertTrue(isinstance(layout[1], basestring))
+
+    def test_setitem_layout_object(self):
+        layout = Layout(
+            Div('email')
+        )
+        layout[0][0] = 'password1'
+        self.assertTrue(isinstance(layout[0], Div))
+        self.assertEqual(layout[0][0], 'password1')

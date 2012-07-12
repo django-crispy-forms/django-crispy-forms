@@ -14,6 +14,12 @@ class LayoutObject(object):
     def __getitem__(self, slice):
         return self.fields[slice]
 
+    def __setitem__(self, slice, value):
+        self.fields[slice] = value
+
+    def append(self, value):
+        self.fields.append(value)
+
     def get_field_names(self, index=None):
         """
         Returns a list of lists, those lists are pointers to field names. First parameter
