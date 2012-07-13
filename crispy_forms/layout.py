@@ -253,7 +253,7 @@ class Fieldset(LayoutObject):
 
     def __init__(self, legend, *fields, **kwargs):
         self.fields = list(fields)
-        self.legend = unicode(legend)
+        self.legend = legend
         self.css_class = kwargs.get('css_class', '')
         self.css_id = kwargs.get('css_id', None)
         # Overrides class variable with an instance level variable
@@ -266,7 +266,7 @@ class Fieldset(LayoutObject):
 
         legend = ''
         if self.legend:
-            legend = u'%s' % Template(self.legend).render(context)
+            legend = u'%s' % Template(unicode(self.legend)).render(context)
         return render_to_string(self.template, Context({'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style}))
 
 
@@ -277,7 +277,7 @@ class MultiField(LayoutObject):
     def __init__(self, label, *fields, **kwargs):
         #TODO: Decide on how to support css classes for both container divs
         self.fields = list(fields)
-        self.label_html = unicode(label)
+        self.label_html = label
         self.label_class = kwargs.get('label_class', u'blockLabel')
         self.css_class = kwargs.get('css_class', u'ctrlHolder')
         self.css_id = kwargs.get('css_id', None)
@@ -357,10 +357,10 @@ class HTML(object):
     """
 
     def __init__(self, html):
-        self.html = unicode(html)
+        self.html = html
 
     def render(self, form, form_style, context):
-        return Template(self.html).render(context)
+        return Template(unicode(self.html)).render(context)
 
 
 class Field(LayoutObject):
