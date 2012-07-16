@@ -20,6 +20,9 @@ class LayoutObject(object):
     def append(self, value):
         self.fields.append(value)
 
+    def insert(self, postion, value):
+        self.fields.insert(postion, value)
+
     def get_field_names(self, index=None):
         """
         Returns a list of lists, those lists are pointers to field names. First parameter
