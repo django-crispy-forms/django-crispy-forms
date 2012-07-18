@@ -274,7 +274,7 @@ Some layout objects are specific to a template pack. For example ``ButtonHolder`
 Let's add a layout to our helper::
 
     from crispy_forms.helper import FormHelper
-    from crispy_forms.layout import Layout, Fieldset
+    from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 
     class ExampleForm(forms.Form):
         [...]
