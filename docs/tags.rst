@@ -104,11 +104,11 @@ This is exactly the html that you would get::
             </div>
             <div id="div_id_favorite_food" class="ctrlHolder">
                 <label for="id_favorite_food" class="requiredField">What is you favorite food?<span class="asteriskField">*</span></label>
-                <input id="id_favorite_food" class="textinput textInput" type="text" name="favorite_food" maxlength="80" />
+                <input id="id_favorite_food" class="textinput textInput" type="text" name="favorite_food" maxlength="80" required="required" />
             </div>
             <div id="div_id_favorite_color" class="ctrlHolder">
                 <label for="id_favorite_color" class="requiredField">What is you favorite color?<span class="asteriskField">*</span></label>
-                <input id="id_favorite_color" class="textinput textInput" type="text" name="favorite_color" maxlength="80" />
+                <input id="id_favorite_color" class="textinput textInput" type="text" name="favorite_color" maxlength="80" required="required" />
             </div>
             <div id="div_id_favorite_number" class="ctrlHolder">
                 <label for="id_favorite_number">Favorite number</label>
