@@ -62,6 +62,11 @@ class CrispyFieldNode(template.Node):
 
             widget.attrs['class'] = css_class
 
+            if field.field.required and 'required' not in widget.attrs:
+                # Ignore radioselect
+                if field.field.widget.__class__.__name__ is not 'RadioSelect':
+                    widget.attrs['required'] = 'required'
+
             for attribute_name, attribute in attr.items():
                 widget.attrs[template.Variable(attribute_name).resolve(context)] = template.Variable(attribute).resolve(context)
 
