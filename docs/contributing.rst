@@ -57,7 +57,7 @@ topic branch back up to github::
 
 Now when you go to your fork on github, you will see this branch listed under
 the "Source" tab where it says "Switch Branches".  Go ahead and select your
-topic branch from this list, and then click the "Pull requst" button.
+topic branch from this list, and then click the "Pull request" button.
 
 Here you can add a comment about your branch.  If this in response to
 a submitted issue, it is good to put a link to that issue in this initial
