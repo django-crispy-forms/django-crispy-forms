@@ -8,7 +8,7 @@ Setup
 Fork on github
 --------------
 
-Before you do anything else, login/signup on Github.com and fork django-crispy-forms from https://github.com/pydanny/django-crispy-forms.
+Before you do anything else, login/signup on Github.com and fork django-crispy-forms from https://github.com/maraujop/django-crispy-forms.
 
 Clone your fork locally
 -----------------------
