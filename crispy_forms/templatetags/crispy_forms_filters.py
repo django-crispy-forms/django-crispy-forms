@@ -20,7 +20,7 @@ def as_crispy_form(form):
 
         {% load crispy_forms_tags %}
 
-        <form class="uniForm" action="post">
+        <form class="uniForm" method="post">
             {% csrf_token %}
             {{ myform|crispy }}
         </form>
