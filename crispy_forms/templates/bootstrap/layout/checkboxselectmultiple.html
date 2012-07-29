@@ -3,8 +3,8 @@
 
     {% for choice in field.field.choices %}
         <label class="checkbox">
-            <input type="checkbox" {% if choice.0 in field.value or choice.0 == field.value %}checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}">{{ choice.1 }}
-        </label> 
+            <input type="checkbox" {% if choice.0 in field.value or choice.0|stringformat:"s" == field.value|stringformat:"s" %}checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}">{{ choice.1 }}
+        </label>
     {% endfor %}
 
     {% include 'bootstrap/layout/help_text.html' %}
