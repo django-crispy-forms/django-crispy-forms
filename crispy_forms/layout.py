@@ -172,7 +172,7 @@ class BaseInput(object):
     """
     A base class to reduce the amount of code in the Input classes.
     """
-    template = "uni_form/layout/baseinput.html"
+    template = "%s/layout/baseinput.html" % TEMPLATE_PACK
 
     def __init__(self, name, value, **kwargs):
         self.name = name
