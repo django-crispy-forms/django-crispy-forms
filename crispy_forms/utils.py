@@ -3,6 +3,7 @@ import sys
 
 from django.conf import settings
 from django.forms.forms import BoundField
+from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
 from django.utils.functional import SimpleLazyObject
@@ -125,3 +126,22 @@ def flatatt(attrs):
     If the passed dictionary is empty, then return an empty string.
     """
     return u''.join([u' %s="%s"' % (k.replace('_', '-'), conditional_escape(v)) for k, v in attrs.items()])
+
+
+def render_crispy_form(form, helper=None, context=None):
+    """
+    Renders a form and returns its HTML output.
+
+    This function wraps the template logic in a function easy to use in a Django view.
+    """
+    from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
+
+    node = CrispyFormNode('form', 'helper')
+    node_context = Context({
+        'form': form,
+        'helper': helper
+    })
+    if context is not None:
+        node_context.update(context)
+
+    return node.render(node_context)
