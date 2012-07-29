@@ -66,3 +66,7 @@ Contributors
 * Rudy Mutter <rmutter>
 * Samuel Goldszmidt <ouhouhsami>
 * Andrei Antoukh <niwibe>
+* <clairetheyers>
+* Rivo Laks <rivol>
+* Lloyd Philbrook <phoolish>
+* Piet Delport <pjdelport>
