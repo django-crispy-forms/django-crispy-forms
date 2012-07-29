@@ -28,6 +28,38 @@ class TestForm2(TestForm):
         self.helper = FormHelper(self)
 
 
+class CheckboxesTestForm(forms.Form):
+    checkboxes = forms.MultipleChoiceField(
+        choices = (
+            (1, "Option one"),
+            (2, "Option two"),
+            (3, "Option three")
+        ),
+        initial = 1,
+        widget = forms.CheckboxSelectMultiple,
+    )
+
+    alphacheckboxes = forms.MultipleChoiceField(
+        choices = (
+            ('option_one', "Option one"),
+            ('option_two', "Option two"),
+            ('option_three', "Option three")
+        ),
+        initial = ('option_two', 'option_three'),
+        widget = forms.CheckboxSelectMultiple,
+    )
+
+    numeric_multiple_checkboxes = forms.MultipleChoiceField(
+        choices = (
+            (1, "Option one"),
+            (2, "Option two"),
+            (3, "Option three")
+        ),
+        initial = (1, 2),
+        widget = forms.CheckboxSelectMultiple,
+    )
+
+
 class TestModel(models.Model):
     email = models.CharField(max_length=20)
     password = models.CharField(max_length=20)

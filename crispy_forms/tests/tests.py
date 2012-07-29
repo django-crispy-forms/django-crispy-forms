@@ -19,8 +19,10 @@ from crispy_forms.layout import (
 from crispy_forms.bootstrap import (
     AppendedPrependedText, AppendedText, PrependedText
 )
+from crispy_forms.utils import render_crispy_form
+
 from forms import (
-    TestForm, TestForm2, TestForm3, ExampleForm
+    TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm
 )
 
 
@@ -693,6 +695,12 @@ class TestFormLayout(TestCase):
     def test_default_layout_two(self):
         test_form = TestForm3()
         self.assertEqual(test_form.helper.layout.fields, ['email'])
+
+    def test_multiplecheckboxes(self):
+        test_form = CheckboxesTestForm()
+        html = render_crispy_form(test_form)
+
+        self.assertEqual(html.count('checked="checked"'), 5)
 
 
 class TestLayoutObjects(TestCase):
