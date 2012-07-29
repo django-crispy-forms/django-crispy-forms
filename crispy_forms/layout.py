@@ -17,8 +17,15 @@ class LayoutObject(object):
     def __setitem__(self, slice, value):
         self.fields[slice] = value
 
-    def append(self, value):
-        self.fields.append(value)
+    def __getattr__(self, name):
+        """
+        This allows us to access self.fields list methods like append or insert, without
+        having to declare them one by one
+        """
+        if hasattr(self.fields, name):
+            return getattr(self.fields, name)
+        else:
+            return object.__getattribute__(self, name)
 
     def get_field_names(self, index=None):
         """
