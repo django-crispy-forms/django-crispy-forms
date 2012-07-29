@@ -403,7 +403,9 @@ class TestFormLayout(TestCase):
                     u'Company Data',
                     u'is_company',
                     css_id = "fieldset_company_data",
-                    css_class = "fieldsets"
+                    css_class = "fieldsets",
+                    title = "fieldset_title",
+                    test_fieldset = "123"
                 ),
                 Fieldset(
                     u'User Data',
@@ -412,7 +414,7 @@ class TestFormLayout(TestCase):
                         u'password1',
                         u'password2',
                         css_id = "row_passwords",
-                        css_class = "rows"
+                        css_class = "rows",
                     ),
                     HTML('<a href="#" id="testLink">test link</a>'),
                     HTML(u"""
@@ -438,6 +440,8 @@ class TestFormLayout(TestCase):
 
         self.assertTrue('id="fieldset_company_data"' in html)
         self.assertTrue('class="fieldsets' in html)
+        self.assertTrue('title="fieldset_title"' in html)
+        self.assertTrue('test-fieldset="123"' in html)
         self.assertTrue('id="row_passwords"' in html)
         self.assertTrue('class="formRow rows"' in html)
         self.assertTrue('Hello!' in html)
@@ -451,6 +455,8 @@ class TestFormLayout(TestCase):
                     'is_company',
                     'email',
                     css_id = "multifield_info",
+                    title = "multifield_title",
+                    multifield_test = "123"
                 ),
                 Column(
                     'first_name',
@@ -481,6 +487,8 @@ class TestFormLayout(TestCase):
         self.assertTrue('multiField' in html)
         self.assertTrue('formColumn' in html)
         self.assertTrue('id="multifield_info"' in html)
+        self.assertTrue('title="multifield_title"' in html)
+        self.assertTrue('multifield-test="123"' in html)
         self.assertTrue('id="column_name"' in html)
         self.assertTrue('class="formColumn columns"' in html)
         self.assertTrue('class="buttonHolder">' in html)
@@ -912,3 +920,21 @@ class TestDynamicLayouts(TestCase):
         layout[0][0] = 'password1'
         self.assertTrue(isinstance(layout[0], Div))
         self.assertEqual(layout[0][0], 'password1')
+
+    def test_auto_add_required_attribute(self):
+        form_helper = FormHelper()
+
+        template = get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
+        """)
+        c = Context({
+            'form': TestForm(),
+            'form_helper': form_helper,
+            'flag': True,
+            'message': "Hello!",
+        })
+        html = template.render(c)
+
+        # 6 out of 7 fields are required and an extra field for the SplitDateTimeWidget is 7.
+        self.assertEqual(html.count('required="required"'), 7)

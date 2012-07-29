@@ -261,10 +261,11 @@ class Fieldset(LayoutObject):
     def __init__(self, legend, *fields, **kwargs):
         self.fields = list(fields)
         self.legend = legend
-        self.css_class = kwargs.get('css_class', '')
-        self.css_id = kwargs.get('css_id', None)
+        self.css_class = kwargs.pop('css_class', '')
+        self.css_id = kwargs.pop('css_id', None)
         # Overrides class variable with an instance level variable
-        self.template = kwargs.get('template', self.template)
+        self.template = kwargs.pop('template', self.template)
+        self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context):
         fields = ''
@@ -285,10 +286,11 @@ class MultiField(LayoutObject):
         #TODO: Decide on how to support css classes for both container divs
         self.fields = list(fields)
         self.label_html = label
-        self.label_class = kwargs.get('label_class', u'blockLabel')
-        self.css_class = kwargs.get('css_class', u'ctrlHolder')
-        self.css_id = kwargs.get('css_id', None)
-        self.template = kwargs.get('template', self.template)
+        self.label_class = kwargs.pop('label_class', u'blockLabel')
+        self.css_class = kwargs.pop('css_class', u'ctrlHolder')
+        self.css_id = kwargs.pop('css_id', None)
+        self.template = kwargs.pop('template', self.template)
+        self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context):
         if form.errors:
