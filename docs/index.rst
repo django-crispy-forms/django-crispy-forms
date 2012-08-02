@@ -20,6 +20,8 @@ Get the most out django-crispy-forms
     migration
     filters
     tags
+    layouts
+    dynamic_layouts
 
 .. toctree::
     :maxdepth: 1
