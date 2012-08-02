@@ -1,10 +1,11 @@
+import crispy_forms
+
 from setuptools import setup, find_packages
 
-version = '1.1.4'
 
 setup(
     name='django-crispy-forms',
-    version=version,
+    version=crispy_forms.__version__,
     description="Best way to have Django DRY forms",
     long_description=open('README.rst').read(),
     classifiers=[
