@@ -215,6 +215,30 @@ class TestFormHelpers(TestCase):
         self.assertFalse(unicode(_('This field is required.')) in html)
         self.assertFalse('error' in html)
 
+    def test_form_show_errors(self):
+        form = TestForm({
+            'email': 'invalidemail',
+            'first_name': 'first_name_too_long',
+            'last_name': 'last_name_too_long',
+            'password1': 'yes',
+            'password2': 'yes',
+        })
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            AppendedText('email', 'whatever'),
+            PrependedText('first_name', 'blabla'),
+            AppendedPrependedText('last_name', 'foo', 'bar'),
+        )
+        form.is_valid()
+
+        form.helper.form_show_errors = True
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('error'), 6)
+
+        form.helper.form_show_errors = False
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('error'), 0)
+
     def test_crispy_tag_without_helper(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}

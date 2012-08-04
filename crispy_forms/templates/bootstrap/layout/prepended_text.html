@@ -1,6 +1,6 @@
 {% load crispy_forms_field %}
 
-<div id="div_{{ field.auto_id }}" class="clearfix control-group{% if field.errors %} error{% endif %} {% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}">
+<div id="div_{{ field.auto_id }}" class="clearfix control-group{% if form_show_errors and field.errors %} error{% endif %} {% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}">
 
     {% if field.label %}
         <label for="{{ field.id_for_label }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
