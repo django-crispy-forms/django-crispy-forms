@@ -136,11 +136,16 @@ def render_crispy_form(form, helper=None, context=None):
     """
     from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
-    node = CrispyFormNode('form', 'helper')
+    if helper is not None:
+        node = CrispyFormNode('form', 'helper')
+    else:
+        node = CrispyFormNode('form', None)
+
     node_context = Context({
         'form': form,
         'helper': helper
     })
+
     if context is not None:
         node_context.update(context)
 
