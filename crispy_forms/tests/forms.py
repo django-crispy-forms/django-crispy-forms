@@ -35,7 +35,7 @@ class CheckboxesTestForm(forms.Form):
             (2, "Option two"),
             (3, "Option three")
         ),
-        initial = 1,
+        initial = (1,),
         widget = forms.CheckboxSelectMultiple,
     )
 
