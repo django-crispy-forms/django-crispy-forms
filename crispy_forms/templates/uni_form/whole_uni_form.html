@@ -1,4 +1,4 @@
-{% if form_tag %}<form {% if form_action %}action="{{ form_action }}" {% endif %}class="uniForm{% if form_class %} {{ form_class }}{% endif %}" method="{{ form_method }}"{% if form_id %} id="{{ form_id }}"{% endif %}{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+{% if form_tag %}<form {{ flat_attrs|safe }} method="{{ form_method }}" {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
     {% if form_method|lower == 'post' %}
         {% csrf_token %}
     {% endif %}

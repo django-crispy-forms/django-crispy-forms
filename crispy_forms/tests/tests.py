@@ -170,8 +170,11 @@ class TestFormHelpers(TestCase):
         self.assertTrue(html.count('<form'), 1)
         self.assertTrue('forms-that-rock' in html)
         self.assertTrue('method="get"' in html)
-        self.assertTrue('id="this-form-rocks">' in html)
+        self.assertTrue('id="this-form-rocks"' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
+
+        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+            self.assertTrue('class="uniForm' in html)
 
         self.assertTrue("ERRORS" in html)
         self.assertTrue("<li>Passwords dont match</li>" in html)
@@ -183,7 +186,7 @@ class TestFormHelpers(TestCase):
         self.assertFalse('<form' in html)
         self.assertFalse('forms-that-rock' in html)
         self.assertFalse('method="get"' in html)
-        self.assertFalse('id="this-form-rocks">' in html)
+        self.assertFalse('id="this-form-rocks"' in html)
 
     def test_crispy_tag_with_helper_form_show_errors(self):
         form = TestForm({'password1': 'wargame', 'password2': 'god'})
@@ -239,7 +242,14 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
         self.assertEqual(html.count('error'), 0)
 
-    def test_crispy_tag_without_helper(self):
+    def test_attrs(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.attrs = {'id': 'TestIdForm', 'autocomplete': "off"}
+        html = render_crispy_form(form)
+
+        self.assertTrue('autocomplete="off"' in html)
+        self.assertTrue('id="TestIdForm"' in html)
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form %}
@@ -251,6 +261,8 @@ class TestFormHelpers(TestCase):
         self.assertTrue('<form' in html)
         self.assertTrue('method="post"' in html)
         self.assertFalse('action' in html)
+        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+            self.assertTrue('class="uniForm' in html)
 
     def test_crispy_tag_invalid_helper(self):
         template = get_template_from_string(u"""
@@ -295,8 +307,10 @@ class TestFormHelpers(TestCase):
 
         self.assertTrue('formsets-that-rock' in html)
         self.assertTrue('method="post"' in html)
-        self.assertTrue('id="thisFormsetRocks">' in html)
+        self.assertTrue('id="thisFormsetRocks"' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
+        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+            self.assertTrue('class="uniForm' in html)
 
     def test_CSRF_token_POST_form(self):
         form_helper = FormHelper()
@@ -653,7 +667,7 @@ class TestFormLayout(TestCase):
 
         self.assertTrue('formsets-that-rock' in html)
         self.assertTrue('method="post"' in html)
-        self.assertTrue('id="thisFormsetRocks">' in html)
+        self.assertTrue('id="thisFormsetRocks"' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
 
         # Check form layout

@@ -87,22 +87,16 @@ class BasicNode(template.Node):
         form, helper = context.render_context[self]
 
         actual_form = form.resolve(context)
-        attrs = {}
         if self.helper is not None:
             helper = helper.resolve(context)
         else:
             # If the user names the helper within the form `helper` (standard), we use it
             # This allows us to have simplified tag syntax: {% crispy form %}
-            helper = None if not hasattr(actual_form, 'helper') else actual_form.helper
-
-        if helper:
-            if not isinstance(helper, FormHelper):
-                raise TypeError('helper object provided to {% crispy %} tag must be a crispy.helper.FormHelper object.')
-            attrs = helper.get_attributes()
+            helper = FormHelper() if not hasattr(actual_form, 'helper') else actual_form.helper
 
         # We get the response dictionary
         is_formset = isinstance(actual_form, BaseFormSet)
-        response_dict = self.get_response_dict(attrs, context, is_formset)
+        response_dict = self.get_response_dict(helper, context, is_formset)
         node_context = context.__copy__()
         node_context.update(response_dict)
 
@@ -124,7 +118,7 @@ class BasicNode(template.Node):
 
         return Context(response_dict)
 
-    def get_response_dict(self, attrs, context, is_formset):
+    def get_response_dict(self, helper, context, is_formset):
         """
         Returns a dictionary with all the parameters necessary to render the form/formset in a template.
 
@@ -132,17 +126,18 @@ class BasicNode(template.Node):
         :param context: `django.template.Context` for the node
         :param is_formset: Boolean value. If set to True, indicates we are working with a formset.
         """
+        if not isinstance(helper, FormHelper):
+            raise TypeError('helper object provided to {% crispy %} tag must be a crispy.helper.FormHelper object.')
+
+        attrs = helper.get_attributes()
         form_type = "form"
         if is_formset:
             form_type = "formset"
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
         response_dict = {
-            '%s_action' % form_type: attrs.get("form_action", ''),
             '%s_method' % form_type: attrs.get("form_method", 'post'),
             '%s_tag' % form_type: attrs.get("form_tag", True),
-            '%s_class' % form_type: attrs.get("class", ''),
-            '%s_id' % form_type: attrs.get("id", ""),
             '%s_style' % form_type: attrs.get("form_style", None),
             'form_error_title': attrs.get("form_error_title", None),
             'formset_error_title': attrs.get("formset_error_title", None),
@@ -150,6 +145,7 @@ class BasicNode(template.Node):
             'help_text_inline': attrs.get("help_text_inline", False),
             'inputs': attrs.get('inputs', []),
             'is_formset': is_formset,
+            'flat_attrs': attrs.get('flat_attrs', ''),
         }
 
         # Handles custom attributes added to helpers

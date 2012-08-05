@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 from layout import Layout, LayoutSlice
 
-from utils import render_field
+from utils import render_field, flatatt
 
 
 class FormHelpersException(Exception):
@@ -156,6 +157,7 @@ class FormHelper(DynamicLayoutHandler):
     help_text_inline = False
 
     def __init__(self, form=None):
+        self.attrs = {}
         self.inputs = []
 
         if form is not None:
@@ -253,12 +255,25 @@ class FormHelper(DynamicLayoutHandler):
         items['form_show_errors'] = self.form_show_errors
         items['help_text_inline'] = self.help_text_inline
 
+        items['attrs'] = {}
+        if self.attrs:
+            items['attrs'] = self.attrs.copy()
         if self.form_action:
-            items['form_action'] = self.form_action.strip()
+            items['attrs']['action'] = self.form_action.strip()
         if self.form_id:
-            items['id'] = self.form_id.strip()
+            items['attrs']['id'] = self.form_id.strip()
         if self.form_class:
-            items['class'] = self.form_class.strip()
+            # uni_form TEMPLATE PACK has a uniForm class by default
+            if getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap') == 'uni_form':
+                items['attrs']['class'] = "uniForm %s" % self.form_class.strip()
+            else:
+                items['attrs']['class'] = self.form_class.strip()
+        else:
+            if getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap') == 'uni_form':
+                items['attrs']['class'] = "uniForm"
+
+        items['flat_attrs'] = flatatt(items['attrs'])
+
         if self.inputs:
             items['inputs'] = self.inputs
         if self.form_error_title:
