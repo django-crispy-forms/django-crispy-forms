@@ -77,3 +77,9 @@ class TestForm3(forms.ModelForm):
 
 class ExampleForm(forms.Form):
     comment = forms.CharField()
+
+
+class FormWithMeta(TestForm):
+    class Meta:
+        fields = ('email', 'first_name', 'last_name')
+

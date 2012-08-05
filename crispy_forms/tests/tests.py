@@ -22,7 +22,8 @@ from crispy_forms.bootstrap import (
 from crispy_forms.utils import render_crispy_form
 
 from forms import (
-    TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm
+    TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
+    FormWithMeta
 )
 
 
@@ -364,19 +365,14 @@ class TestFormLayout(TestCase):
         self.assertRaises(Exception, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
 
-    def test_uses_instance_for_missing_fields(self):
-        class FormWithMeta(TestForm):
-            class Meta:
-                fields = ('email', 'first_name', 'last_name')
+    def test_meta_extra_fields_with_missing_fields(self):
         form = FormWithMeta()
         # We remove email field on the go
         del form.fields['email']
 
         form_helper = FormHelper()
-        form_helper.add_layout(
-            Layout(
-                'first_name',
-            )
+        form_helper.layout = Layout(
+            'first_name',
         )
 
         template = get_template_from_string(u"""
