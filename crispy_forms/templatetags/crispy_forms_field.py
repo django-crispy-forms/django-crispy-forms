@@ -2,6 +2,7 @@ from itertools import izip
 
 from django import template
 
+
 register = template.Library()
 
 class_converter = {
@@ -35,15 +36,24 @@ class CrispyFieldNode(template.Node):
     def __init__(self, field, attrs):
        self.field = field
        self.attrs = attrs
+       self.html5_required = 'html5_required'
 
     def render(self, context):
         # Nodes are not threadsafe so we must store and look up our instance
         # variables in the current rendering context first
         if self not in context.render_context:
-            context.render_context[self] = (template.Variable(self.field), self.attrs,)
+            context.render_context[self] = (
+                template.Variable(self.field),
+                self.attrs,
+                template.Variable(self.html5_required)
+            )
 
-        field, attrs = context.render_context[self]
+        field, attrs, html5_required = context.render_context[self]
         field = field.resolve(context)
+        try:
+            html5_required = html5_required.resolve(context)
+        except template.VariableDoesNotExist:
+            html5_required = False
 
         widgets = getattr(field.field.widget, 'widgets', [field.field.widget,])
 
@@ -62,8 +72,8 @@ class CrispyFieldNode(template.Node):
 
             widget.attrs['class'] = css_class
 
-            if field.field.required and 'required' not in widget.attrs:
-                # Ignore radioselect
+            # HTML5 required attribute
+            if html5_required and field.field.required and 'required' not in widget.attrs:
                 if field.field.widget.__class__.__name__ is not 'RadioSelect':
                     widget.attrs['required'] = 'required'
 

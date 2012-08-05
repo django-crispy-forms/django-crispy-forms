@@ -155,6 +155,7 @@ class FormHelper(DynamicLayoutHandler):
     form_show_errors = True
     render_unmentioned_fields = False
     help_text_inline = False
+    html5_required = False
 
     def __init__(self, form=None):
         self.attrs = {}
@@ -251,6 +252,7 @@ class FormHelper(DynamicLayoutHandler):
         items['form_style'] = self.form_style.strip()
         items['form_show_errors'] = self.form_show_errors
         items['help_text_inline'] = self.help_text_inline
+        items['html5_required'] = self.html5_required
 
         items['attrs'] = {}
         if self.attrs:

@@ -243,6 +243,20 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
         self.assertEqual(html.count('error'), 0)
 
+    def test_html5_required(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.html5_required = True
+        html = render_crispy_form(form)
+        # 6 out of 7 fields are required and an extra one for the SplitDateTimeWidget makes 7.
+        self.assertEqual(html.count('required="required"'), 7)
+
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.html5_required = False
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('required="required"'), 0)
+
     def test_attrs(self):
         form = TestForm()
         form.helper = FormHelper()
@@ -965,21 +979,3 @@ class TestDynamicLayouts(TestCase):
         layout[0][0] = 'password1'
         self.assertTrue(isinstance(layout[0], Div))
         self.assertEqual(layout[0][0], 'password1')
-
-    def test_auto_add_required_attribute(self):
-        form_helper = FormHelper()
-
-        template = get_template_from_string(u"""
-            {% load crispy_forms_tags %}
-            {% crispy form form_helper %}
-        """)
-        c = Context({
-            'form': TestForm(),
-            'form_helper': form_helper,
-            'flag': True,
-            'message': "Hello!",
-        })
-        html = template.render(c)
-
-        # 6 out of 7 fields are required and an extra field for the SplitDateTimeWidget is 7.
-        self.assertEqual(html.count('required="required"'), 7)
