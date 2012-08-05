@@ -109,7 +109,7 @@ class TestFormHelpers(TestCase):
     def tearDown(self):
         pass
 
-    def test_crispy_tag_helper_inputs(self):
+    def test_inputs(self):
         form_helper = FormHelper()
         submit  = Submit('my-submit', 'Submit', css_class="button white")
         reset   = Reset('my-reset', 'Reset')
@@ -139,7 +139,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('button' in html)
         self.assertTrue('id="button-id-my-button"' in html)
 
-    def test_invalid_helper_method(self):
+    def test_invalid_form_method(self):
         form_helper = FormHelper()
         try:
             form_helper.form_method = "superPost"
@@ -147,7 +147,7 @@ class TestFormHelpers(TestCase):
         except FormHelpersException:
             pass
 
-    def test_crispy_tag_with_helper_without_layout(self):
+    def test_form_with_helper_without_layout(self):
         form_helper = FormHelper()
         form_helper.form_id = 'this-form-rocks'
         form_helper.form_class = 'forms-that-rock'
@@ -188,7 +188,7 @@ class TestFormHelpers(TestCase):
         self.assertFalse('method="get"' in html)
         self.assertFalse('id="this-form-rocks"' in html)
 
-    def test_crispy_tag_with_helper_form_show_errors(self):
+    def test_form_show_errors_non_field_errors(self):
         form = TestForm({'password1': 'wargame', 'password2': 'god'})
         form.helper = FormHelper()
         form.helper.form_show_errors = True
@@ -250,6 +250,8 @@ class TestFormHelpers(TestCase):
 
         self.assertTrue('autocomplete="off"' in html)
         self.assertTrue('id="TestIdForm"' in html)
+
+    def test_without_helper(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form %}
@@ -264,7 +266,7 @@ class TestFormHelpers(TestCase):
         if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
             self.assertTrue('class="uniForm' in html)
 
-    def test_crispy_tag_invalid_helper(self):
+    def test_invalid_helper(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
@@ -279,7 +281,7 @@ class TestFormHelpers(TestCase):
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
 
-    def test_crispy_tag_formset_with_helper_without_layout(self):
+    def test_formset_with_helper_without_layout(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testFormSet formset_helper %}
@@ -343,7 +345,8 @@ class TestFormHelpers(TestCase):
 
 class TestFormLayout(TestCase):
     urls = 'crispy_forms.tests.urls'
-    def test_layout_invalid_unicode_characters(self):
+
+    def test_invalid_unicode_characters(self):
         # Adds a BooleanField that uses non valid unicode characters "ñ"
         form_helper = FormHelper()
         form_helper.add_layout(
@@ -361,7 +364,7 @@ class TestFormLayout(TestCase):
         self.assertRaises(Exception, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
 
-    def test_layout_uses_instance_for_missing_fields(self):
+    def test_uses_instance_for_missing_fields(self):
         class FormWithMeta(TestForm):
             class Meta:
                 fields = ('email', 'first_name', 'last_name')
