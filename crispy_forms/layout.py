@@ -136,8 +136,6 @@ class LayoutSlice(object):
                     layout_object.fields[pos[-1]] = LayoutClass(layout_object.fields[pos[-1]], **kwargs)
 
 
-
-
 class ButtonHolder(LayoutObject):
     """
     Layout object. It wraps fields in a <div class="buttonHolder">
