@@ -24,3 +24,4 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'urls'
+CRISPY_TEMPLATE_PACK = 'bootstrap'
