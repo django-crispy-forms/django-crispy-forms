@@ -1,11 +1,29 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.1.5
+## 1.2.0
 
- * New `AppendedPrependedText` layout object thanks to Samuel Goldszmidt, see #GH-45.
- * New `MultiWidgetField` layout object by Michal Kuffa, see #GH-39.
+ * Redoing testing structure a litte bit, to run uni_form and bootstrap tests separately. They share most of the code base, but templates pack are separate and we need to care both have the same quality assurance.
+ * `AppendedText`, `PrependedText` and `AppendedPrependedText` were not respecting `form_show_errors` helper attribute, see #GH-77.
+ * Added a version string to the app under root __init__, see #GH-76.
+ * Added `html5_required` helper attribute for rendering required fields using HTML5 required attribute within the input, see #GH-72. Thanks to Lloyd Philbrook.
+ * Some docs typos and erros fixed, also a major upgrade to docs covering the new functionality.
+ * Adding a `utils.render_crispy_form` function, that renders a form the crispy way in Python code. This might be useful with AJAX, testing or text generation/manipulation, see #GH-64.
+ * Tiny cosmetic fix, that adds an space after a button, see #GH-62.
+ * `MultiField` and `Fieldset` layout objects can now have any kind of attribute defined, thanks to Lloyd Philbrook, see #GH-71.
+ * Making `Fieldset`, `MultiField` & `HTML` contents lazy translatable thanks to Rivo Laks, see #GH-69.
+ * Fixing `radioselect` checked status when used for a FK in a ModelForm, see #GH-68.
+ * Fixing `form.Meta` usage, using instance `fields` instead of static `Meta` definition, so that it works when updating forms on the go, see #GH-59.
+ * Added a low level manipulation API for layout and layout objects. Added a `LayoutObject` base class that creates an interface. This allows to access nested fields easily and use list methods without know internals of the system.
+ * Added a `|classes` filter that returns field's classes.
+ * Now `FormHelper` can accept a form instance as an optional first argument, from which it can build a default layout.
+ * Added an API for manipulating dynamic layouts and programmatic layout building.
+ * Added `UneditableField` bootstrap layout object for uneditable fields.
  * Support for hiding fields using `Field('field_name', type="hidden")`, see #GH-55.
- * Fix for context pollution when using `{% crispy %}` tag, see #GH-54.
+ * Avoid template context pollution of variable `form` after using {% crispy %} tag, see #GH-54.
+ * Added an `attrs` helper attribute, for more flexible form attributes, see #GH-48.
+ * New `AppendedPrependedText` layout object thanks to Samuel Goldszmidt, see #GH-45.
+ * Removal of some whitespace in crispy form's HTML generated, see #GH-42.
+ * New `MultiWidgetField` layout object by Michal Kuffa, see #GH-39.
 
 ## 1.1.4 (2012/5/24)
 
@@ -18,12 +36,12 @@
 
 ## 1.1.3 (2012/4/21)
 
- * `|crispy` and `|as_crispy_field` filters were not rendering errors. Thanks to @ximi for reporting it and submitting a patch. See issue #GH-28
- * Fixing a test that was breaking when language was not English. Thanks to @gaftech, see #GH-30 
- * Fixing `radioselect.html` and `checkboxselectmultiple.html` templates. Thanks to Christopher Petrilli for submitting a patch for `radioselect`. See issue #GH-35
- * HTML attributes can now be set in `BaseInput` subclasses like `Button` by @jamesmfriedman. See #GH-32
- * Fix for dynamic crispy-forms with Meta classes by Jeroen Vloothuis. See #GH-37
- * Labels now use `id_for_label` instead of `auto_id` to avoid ids breaking on multiwidgets. by Daniel Izquierdo. See #GH-38
+ * `|crispy` and `|as_crispy_field` filters were not rendering errors. Thanks to @ximi for reporting it and submitting a patch. See issue #GH-28.
+ * Fixing a test that was breaking when language was not English. Thanks to @gaftech, see #GH-30.
+ * Fixing `radioselect.html` and `checkboxselectmultiple.html` templates. Thanks to Christopher Petrilli for submitting a patch for `radioselect`. See issue #GH-35.
+ * HTML attributes can now be set in `BaseInput` subclasses like `Button` by @jamesmfriedman. See #GH-32.
+ * Fix for dynamic crispy-forms with Meta classes by Jeroen Vloothuis. See #GH-37.
+ * Labels now use `id_for_label` instead of `auto_id` to avoid ids breaking on multiwidgets. by Daniel Izquierdo. See #GH-38.
  * Adding a flatatt custom function in `utils.py` for flatting extra HTML attributes.
  * HTML attributes can now be set in `Div` layout object.
  * Adding tests for new functionality and bugs.
