@@ -20,6 +20,7 @@ from crispy_forms.bootstrap import (
     AppendedPrependedText, AppendedText, PrependedText
 )
 from crispy_forms.utils import render_crispy_form
+from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
 from forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
@@ -265,6 +266,23 @@ class TestFormHelpers(TestCase):
 
         self.assertTrue('autocomplete="off"' in html)
         self.assertTrue('id="TestIdForm"' in html)
+
+    def test_template_context(self):
+        helper = FormHelper()
+        helper.attrs = {
+            'id': 'test-form',
+            'class': 'test-forms',
+            'action': 'submit/test/form',
+        }
+        node = CrispyFormNode('form', 'helper')
+        context = node.get_response_dict(helper, {}, False)
+
+        self.assertEqual(context['form_id'], "test-form")
+        self.assertEqual(context['form_attrs']['id'], "test-form")
+        self.assertEqual(context['form_class'], "test-forms")
+        self.assertEqual(context['form_attrs']['class'], "test-forms")
+        self.assertEqual(context['form_action'], "submit/test/form")
+        self.assertEqual(context['form_attrs']['action'], "submit/test/form")
 
     def test_without_helper(self):
         template = get_template_from_string(u"""
