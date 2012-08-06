@@ -273,6 +273,7 @@ class TestFormHelpers(TestCase):
             'id': 'test-form',
             'class': 'test-forms',
             'action': 'submit/test/form',
+            'autocomplete': 'off',
         }
         node = CrispyFormNode('form', 'helper')
         context = node.get_response_dict(helper, {}, False)
@@ -283,6 +284,28 @@ class TestFormHelpers(TestCase):
         self.assertEqual(context['form_attrs']['class'], "test-forms")
         self.assertEqual(context['form_action'], "submit/test/form")
         self.assertEqual(context['form_attrs']['action'], "submit/test/form")
+        self.assertEqual(context['form_attrs']['autocomplete'], "off")
+
+    def test_template_context_using_form_attrs(self):
+        helper = FormHelper()
+        helper.form_id = 'test-form'
+        helper.form_class = 'test-forms'
+        helper.form_action = 'submit/test/form'
+        node = CrispyFormNode('form', 'helper')
+        context = node.get_response_dict(helper, {}, False)
+
+        self.assertEqual(context['form_id'], "test-form")
+        self.assertEqual(context['form_attrs']['id'], "test-form")
+        self.assertEqual(context['form_class'], "test-forms")
+        self.assertEqual(context['form_attrs']['class'], "test-forms")
+        self.assertEqual(context['form_action'], "submit/test/form")
+        self.assertEqual(context['form_attrs']['action'], "submit/test/form")
+
+    def test_template_helper_access(self):
+        helper = FormHelper()
+        helper.form_id = 'test-form'
+
+        self.assertEqual(helper['form_id'], 'test-form')
 
     def test_without_helper(self):
         template = get_template_from_string(u"""

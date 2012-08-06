@@ -53,15 +53,21 @@ class DynamicLayoutHandler(object):
         Return a LayoutSlice that makes changes affect the current instance of the layout
         and not a copy.
         """
-        assert(self.layout is not None)
-
         # when key is a string containing the field name
         if isinstance(key, basestring):
+
+            # Django templates access FormHelper attribute using dictionary [] operator
+            # This could be a helper['form_id'] access, not looking for a field
+            if hasattr(self, key):
+                return getattr(self, key)
+
+            assert(self.layout is not None)
             layout_field_names = self.layout.get_field_names()
 
             filtered_field = []
             for pointer in layout_field_names:
-                if pointer[1] == key:
+                # There can be an empty pointer
+                if len(pointer) == 2 and pointer[1] == key:
                     filtered_field.append(pointer)
 
             return LayoutSlice(self.layout, filtered_field)
