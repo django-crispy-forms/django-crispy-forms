@@ -16,8 +16,16 @@ def is_checkbox(field):
     return field.field.widget.__class__.__name__.lower() == "checkboxinput"
 
 @register.filter
+def is_select(field):
+    return field.field.widget.__class__.__name__.lower() == "selectinput"
+
+@register.filter
 def is_password(field):
     return field.field.widget.__class__.__name__.lower() == "passwordinput"
+
+@register.filter
+def input_type(field):
+    return field.field.widget.__class__.__name__.lower()[:-5]
 
 @register.filter
 def classes(field):
