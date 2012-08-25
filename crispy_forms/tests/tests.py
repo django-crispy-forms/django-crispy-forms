@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 import django
 from django import forms
 from django.conf import settings
@@ -256,7 +258,58 @@ class TestFormHelpers(TestCase):
         form.helper = FormHelper()
         form.helper.html5_required = False
         html = render_crispy_form(form)
-        self.assertEqual(html.count('required="required"'), 0)
+
+    def test_error_text_inline(self):
+        form = TestForm({'email': 'invalidemail'})
+        form.helper = FormHelper()
+        layout = Layout(
+            AppendedText('first_name', 'wat'),
+            PrependedText('email', '@'),
+            AppendedPrependedText('last_name', '@', 'wat'),
+        )
+        form.helper.layout = layout
+        form.is_valid()
+        html = render_crispy_form(form)
+
+        matches = re.findall('<span id="error_\d_\w*" class="help-inline"', html, re.MULTILINE)
+        self.assertEqual(len(matches), 3)
+
+        form = TestForm({'email': 'invalidemail'})
+        form.helper = FormHelper()
+        form.helper.layout = layout
+        form.helper.error_text_inline = False
+        html = render_crispy_form(form)
+
+        matches = re.findall('<p id="error_\d_\w*" class="help-block"', html, re.MULTILINE)
+        self.assertEqual(len(matches), 3)
+
+    def test_error_and_help_inline(self):
+        form = TestForm({'email': 'invalidemail'})
+        form.helper = FormHelper()
+        form.helper.error_text_inline = False
+        form.helper.help_text_inline = True
+        form.helper.layout = Layout('email')
+        form.is_valid()
+        html = render_crispy_form(form)
+
+        # Check that help goes before error, otherwise CSS won't work
+        help_position = html.find('<span id="hint_id_email" class="help-inline">')
+        error_position = html.find('<p id="error_1_id_email" class="help-block">')
+        self.assertTrue(help_position < error_position)
+
+        # Viceversa
+        form = TestForm({'email': 'invalidemail'})
+        form.helper = FormHelper()
+        form.helper.error_text_inline = True
+        form.helper.help_text_inline = False
+        form.helper.layout = Layout('email')
+        form.is_valid()
+        html = render_crispy_form(form)
+
+        # Check that error goes before help, otherwise CSS won't work
+        error_position = html.find('<span id="error_1_id_email" class="help-inline">')
+        help_position = html.find('<p id="hint_id_email" class="help-block">')
+        self.assertTrue(error_position < help_position)
 
     def test_attrs(self):
         form = TestForm()

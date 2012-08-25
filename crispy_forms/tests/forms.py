@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 
 class TestForm(forms.Form):
     is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
-    email = forms.EmailField(label="email", max_length=30, required=True, widget=forms.TextInput())
+    email = forms.EmailField(label="email", max_length=30, required=True, widget=forms.TextInput(), help_text="Insert your email")
     password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
     first_name = forms.CharField(label="first name", max_length=5, required=True, widget=forms.TextInput())

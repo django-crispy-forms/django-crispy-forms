@@ -12,9 +12,8 @@
         <div class="input-append">
             {% crispy_field field %}
             <span class="add-on {% if active %}active{% endif %}">{{ crispy_appended_text|safe }}</span>
-            {% include 'bootstrap/layout/field_errors.html' %}
         </div>
 
-        {% include 'bootstrap/layout/help_text.html' %}
+        {% include 'bootstrap/layout/help_text_and_errors.html' %}
     </div>
 </div>

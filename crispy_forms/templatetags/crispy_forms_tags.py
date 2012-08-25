@@ -151,6 +151,7 @@ class BasicNode(template.Node):
             'is_formset': is_formset,
             '%s_attrs' % form_type: attrs.get('attrs', ''),
             'flat_attrs': attrs.get('flat_attrs', ''),
+            'error_text_inline': attrs.get('error_text_inline', True),
         }
 
         # Handles custom attributes added to helpers

@@ -10,13 +10,11 @@
 
     <div class="controls">
         <div class="input-prepend input-append">
-            {% spaceless %}
             {% if crispy_prepended_text %}<span class="add-on {% if active %}active{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
             {% crispy_field field %}
             {% if crispy_appended_text %}<span class="add-on {% if active %}active{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
-            {% endspaceless %}
-            {% include 'bootstrap/layout/field_errors.html' %}
         </div>
-        {% include 'bootstrap/layout/help_text.html' %}
+
+        {% include 'bootstrap/layout/help_text_and_errors.html' %}
     </div>
 </div>
