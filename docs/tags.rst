@@ -228,6 +228,12 @@ Helper attributes you can set
 
     You can also point it to a URL ‘/whatever/blabla/’.
 
+**attrs**
+    Added in 1.2.0, a dictionary to set any kind of form attributes. Underscores in keys are translated into hyphens. The recommended way when you need to set several form attributes in order to keep your helper tidy::
+
+        ``{'id': 'form-id', 'data_id': '/whatever'}``
+        <form id="form-id" data-id="/whatever" ...>
+
 **form_id**
     Specifies form DOM id attribute. If no id provided then no id attribute is created on the form.
 
@@ -252,8 +258,19 @@ Helper attributes you can set
 **render_unmentioned_fields = False**
     By default django-crispy-forms renders the layout specified if it exists strictly, which means it only renders what the layout mentions, unless your form has ``Meta.fields`` and ``Meta.exclude`` defined, in that case it uses them. If you want to render unmentioned fields in the layout, for example if you are worried about forgetting mentioning them you have to set this property to ``True``. It defaults to ``False``.
 
+Bootstrap Helper attributes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are currently some helper attributes that only have functionality for a specific template pack. These doesn't necessarily mean that they won't be supported for other template packs in the future.
+
 **help_text_inline = False**
-    Use this helper attribute to set if help texts if you are using bootstrap template pack, should be rendered ``help-inline`` or using ``help-block``. By default ``help-block`` is used.
+    Sets whether help texts should be rendered inline or block. If set to ``True`` help texts will be rendered ``help-inline`` class, otherwise using ``help-block``. By default text messages are rendered in block mode.
+
+**error_text_inline = True**
+    Sets whether to render error messages inline or block. If set to ``True`` errors will be rendered using ``help-inline`` class, otherwise using ``help-block``. By default error messages are rendered in inline mode.
+
+**html5_required = False**
+    When set to ``True`` all required fields inputs will be rendered with HTML5 ``required=required`` attribute.
 
 
 .. _`Be careful how you use static variables in forms`: http://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms
