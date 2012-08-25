@@ -71,3 +71,5 @@ Contributors
 * Lloyd Philbrook <phoolish>
 * Piet Delport <pjdelport>
 * <lmoppert>
+* Markus Hametner <fin>
+* Thomas Grainger <graingert>
