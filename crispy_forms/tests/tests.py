@@ -914,7 +914,8 @@ class TestDynamicLayouts(TestCase):
                 Layout(
                     "password2",
                 ),
-            )
+            ),
+            'last_name',
         )
 
     def test_wrap_all_fields(self):
@@ -968,13 +969,19 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(layout.fields[1].fields[0], Div))
 
     def test_get_field_names(self):
-        layout_1 = Div('field_name')
-        self.assertEqual(layout_1.get_field_names(), [[0], 'field_name'])
+        layout_1 = Div(
+            'field_name'
+        )
+        self.assertEqual(layout_1.get_field_names(), [
+            [[0], 'field_name']
+        ])
 
         layout_2 = Div(
             Div('field_name')
         )
-        self.assertEqual(layout_2.get_field_names(), [[0, 0], 'field_name'])
+        self.assertEqual(layout_2.get_field_names(), [
+            [[0, 0], 'field_name']
+        ])
 
         layout_3 = Div(
             Div('field_name'),
@@ -986,14 +993,31 @@ class TestDynamicLayouts(TestCase):
         ])
 
         layout_4 = Div(
-            Div(Div('field_name')),
+            Div(
+                Div('field_name'),
+                'field_name2',
+            ),
             Div('password'),
             'extra_field'
         )
         self.assertEqual(layout_4.get_field_names(), [
             [[0, 0, 0], 'field_name'],
+            [[0, 1], 'field_name2'],
             [[1, 0], 'password'],
             [[2], 'extra_field']
+        ])
+
+        layout_5 = Div(
+            Div(
+                'field_name',
+                'field_name2',
+            ),
+            'extra_field'
+        )
+        self.assertEqual(layout_5.get_field_names(), [
+            [[0, 0], 'field_name'],
+            [[0, 1], 'field_name2'],
+            [[1], 'extra_field'],
         ])
 
     def test_layout_get_field_names(self):
@@ -1036,14 +1060,22 @@ class TestDynamicLayouts(TestCase):
         form = TestForm()
         form.helper = FormHelper(form)
         form.helper.layout = self.advanced_layout
-        form.helper.filter_by_widget(forms.PasswordInput).wrap(Field, css_class='hero')
-        # Check wrapped fields
-        self.assertTrue(isinstance(form.helper.layout[0][1][0][0], Field))
-        self.assertTrue(isinstance(form.helper.layout[0][4][0], Field))
-        # Check others stay the same
-        self.assertTrue(isinstance(form.helper.layout[0][0][0][0], basestring))
+        self.assertEqual(form.helper.filter_by_widget(forms.PasswordInput).slice, [
+            [[0, 1, 0, 0], 'password1'],
+            [[0, 4, 0], 'password2'],
+        ])
 
     def test_exclude_by_widget(self):
+        form = TestForm()
+        form.helper = FormHelper(form)
+        form.helper.layout = self.advanced_layout
+        self.assertEqual(form.helper.exclude_by_widget(forms.PasswordInput).slice, [
+            [[0, 0, 0, 0], 'email'],
+            [[0, 3, 0], 'first_name'],
+            [[1], 'last_name'],
+        ])
+
+    def test_exclude_by_widget_and_wrap(self):
         form = TestForm()
         form.helper = FormHelper(form)
         form.helper.layout = self.advanced_layout
@@ -1051,8 +1083,9 @@ class TestDynamicLayouts(TestCase):
         # Check wrapped fields
         self.assertTrue(isinstance(form.helper.layout[0][0][0][0], Field))
         self.assertTrue(isinstance(form.helper.layout[0][3][0], Field))
-        self.assertTrue(isinstance(form.helper.layout[0][3][1], HTML))
+        self.assertTrue(isinstance(form.helper.layout[1], Field))
         # Check others stay the same
+        self.assertTrue(isinstance(form.helper.layout[0][3][1], HTML))
         self.assertTrue(isinstance(form.helper.layout[0][1][0][0], basestring))
         self.assertTrue(isinstance(form.helper.layout[0][4][0], basestring))
 

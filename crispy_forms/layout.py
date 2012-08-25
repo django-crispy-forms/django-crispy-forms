@@ -49,22 +49,24 @@ class LayoutObject(object):
                 # If it's a layout object, we recursive call
                 if not isinstance(layout_object, basestring):
                     if hasattr(layout_object, 'get_field_names'):
-                        field_names.append(layout_object.get_field_names(index + [i]))
+                        field_names = field_names + layout_object.get_field_names(index + [i])
                 # If it's a string, then it's a basic case
                 else:
                     field_names.append([index + [i], layout_object])
 
-            if len(field_names) == 1:
-                return field_names[0]
-            else:
-                return field_names
+            return field_names
 
         # Base case: It only contains field_names
         else:
             fields_to_return = []
             for i, field_name in enumerate(self.fields):
                 fields_to_return.append([index + [i], field_name])
-            return list(itertools.chain.from_iterable(fields_to_return))
+
+            # If all the pointers to fields gathered are of length 2, we are done
+            if all(len(pointer) == 2 for pointer in fields_to_return):
+                return fields_to_return
+            else:
+                return list(itertools.chain.from_iterable(fields_to_return))
 
 
 class Layout(LayoutObject):
@@ -133,7 +135,12 @@ class LayoutSlice(object):
                     for i in pointer[0][1:-1]:
                         layout_object = layout_object.fields[i]
 
-                    layout_object.fields[pos[-1]] = LayoutClass(layout_object.fields[pos[-1]], **kwargs)
+                    # If layout object has a fields attribute
+                    if hasattr(layout_object, 'fields'):
+                        layout_object.fields[pos[-1]] = LayoutClass(layout_object.fields[pos[-1]], **kwargs)
+                    else:
+                        # Otherwise it's a basestring (a field name)
+                        self.layout.fields[pos[0]] = LayoutClass(layout_object, **kwargs)
 
 
 class ButtonHolder(LayoutObject):
