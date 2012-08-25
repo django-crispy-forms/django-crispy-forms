@@ -208,7 +208,7 @@ This is how you would render the formset. Note that this time you need to specif
 Note that you can still use a helper (in this case we are using the helper of the form used for building the formset). The main difference here is that helper attributes are applied to the form structure, while the layout is applied to the formset’s forms. Rendering formsets injects some extra context in the layout rendering so that you can do things like::
 
     HTML("{% if forloop.first %}Message displayed only in the first form of a formset forms list{% endif %}",
-    Fielset("Item {{ forloop.counter }}", 'field-1', [...])
+    Fieldset("Item {{ forloop.counter }}", 'field-1', [...])
 
 Basically you can access a ``forloop`` Django node, as if you were rendering your formsets forms using a for loop.
 
