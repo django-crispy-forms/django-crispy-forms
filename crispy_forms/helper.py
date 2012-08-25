@@ -48,6 +48,21 @@ class DynamicLayoutHandler(object):
 
         return LayoutSlice(self.layout, filtered_fields)
 
+    def exclude_by_widget(self, widget_type):
+        """
+        Returns a LayoutSlice pointing to fields with widgets NOT matching `widget_type`
+        """
+        assert(self.layout is not None and self.form is not None)
+        layout_field_names = self.layout.get_field_names()
+
+        # Let's exclude all fields with widgets like widget_type
+        filtered_fields = []
+        for pointer in layout_field_names:
+            if not isinstance(self.form.fields[pointer[1]].widget, widget_type):
+                filtered_fields.append(pointer)
+
+        return LayoutSlice(self.layout, filtered_fields)
+
     def __getitem__(self, key):
         """
         Return a LayoutSlice that makes changes affect the current instance of the layout

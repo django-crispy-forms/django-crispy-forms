@@ -900,6 +900,23 @@ class TestLayoutObjects(TestCase):
 
 
 class TestDynamicLayouts(TestCase):
+    def setUp(self):
+        self.advanced_layout = Layout(
+            Div(
+                Div(Div('email')),
+                Div(Field('password1')),
+                Submit("save", "save"),
+                Fieldset(
+                    "legend",
+                    'first_name',
+                    HTML("extra text"),
+                ),
+                Layout(
+                    "password2",
+                ),
+            )
+        )
+
     def test_wrap_all_fields(self):
         helper = FormHelper()
         layout = Layout(
@@ -1018,16 +1035,26 @@ class TestDynamicLayouts(TestCase):
     def test_filter_by_widget(self):
         form = TestForm()
         form.helper = FormHelper(form)
-        layout = Layout(
-            Div(
-                Div(Div('email')),
-                Div('password1'),
-                'password2'
-            )
-        )
-        form.helper.layout = layout
+        form.helper.layout = self.advanced_layout
         form.helper.filter_by_widget(forms.PasswordInput).wrap(Field, css_class='hero')
-        self.assertTrue(isinstance(layout.fields[0].fields[2], Field))
+        # Check wrapped fields
+        self.assertTrue(isinstance(form.helper.layout[0][1][0][0], Field))
+        self.assertTrue(isinstance(form.helper.layout[0][4][0], Field))
+        # Check others stay the same
+        self.assertTrue(isinstance(form.helper.layout[0][0][0][0], basestring))
+
+    def test_exclude_by_widget(self):
+        form = TestForm()
+        form.helper = FormHelper(form)
+        form.helper.layout = self.advanced_layout
+        form.helper.exclude_by_widget(forms.PasswordInput).wrap(Field, css_class='hero')
+        # Check wrapped fields
+        self.assertTrue(isinstance(form.helper.layout[0][0][0][0], Field))
+        self.assertTrue(isinstance(form.helper.layout[0][3][0], Field))
+        self.assertTrue(isinstance(form.helper.layout[0][3][1], HTML))
+        # Check others stay the same
+        self.assertTrue(isinstance(form.helper.layout[0][1][0][0], basestring))
+        self.assertTrue(isinstance(form.helper.layout[0][4][0], basestring))
 
     def test_getitem_by_field_name(self):
         form = TestForm()

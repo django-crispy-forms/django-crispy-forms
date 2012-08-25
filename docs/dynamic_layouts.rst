@@ -127,11 +127,11 @@ That makes the helper able to cross match the layout with the form instance, bei
 filter_by_widget
 ~~~~~~~~~~~~~~~~
 
-This method assumes you are using a helper with a form attached, you could filter by widget type doing::
+Matches all fields of a widget type. This method assumes you are using a helper with a form attached, you could filter by widget type doing::
 
     form.helper.filter_by_widget(forms.PasswordInput).wrap(Field, css_class="hero")
 
-``filter_by_widget`` is greedy by default, so it searches in depth. Let's see a use case exmpale, imagine we have this Layout::
+``filter_by_widget`` is greedy by default, so it searches in depth. Let's see a use case example, imagine we have this Layout::
 
     Layout(
        'username',
@@ -148,6 +148,29 @@ Supposing ``password1`` and ``password2`` fields are using widget ``PasswordInpu
     )
 
 An interesting real use case example here would be to wrap all ``SelectInputs`` with a custom made ``ChosenField`` that renders the field using a chosenjs compatible field.
+
+exclude_by_widget
+~~~~~~~~~~~~~~~~~
+
+Excludes all fields of a widget type. This method assumes you are using a helper with a form attached::
+
+    form.helper.exclude_by_widget(forms.PasswordInput).wrap(Field, css_class="hero")
+
+``exclude_by_widget`` is greedy by default, so it searches in depth. Let's see a use case example, imagine we have this Layout::
+
+    Layout(
+       'username',
+       Div('password1'),
+       Div('password2')
+    )
+
+Supposing ``password1`` and ``password2`` fields are using widget ``PasswordInput``, would turn into::
+
+    Layout(
+       Field('username', css_class="hero"),
+       Div('password1'),
+       Div('password2')
+    )
 
 Manipulating a layout
 ~~~~~~~~~~~~~~~~~~~~~
