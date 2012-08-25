@@ -1,2 +1,6 @@
-{% include 'bootstrap/layout/field_errors.html' %}
+{% if error_text_inline %}
+    {% include 'bootstrap/layout/field_errors.html' %}
+{% else %}
+    {% include 'bootstrap/layout/field_errors_block.html' %}
+{% endif %}
 {% include 'bootstrap/layout/help_text.html' %}
