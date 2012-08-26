@@ -203,7 +203,14 @@ Rendering formsets
 
 This is how you would render the formset. Note that this time you need to specify the helper explicitly::
 
-    {% crispy formset formset.form.helper %}
+    {% crispy example_formset example_formset.form.helper %}
+
+Note, make sure that you have ``form_tag`` attribute set to ``False`` in your formset's forms, otherwise you will get 3 individual forms rendered::
+
+    class ExampleForm(forms.Form):
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        [...]
 
 Note that you can still use a helper (in this case we are using the helper of the form used for building the formset). The main difference here is that helper attributes are applied to the form structure, while the layout is applied to the formset’s forms. Rendering formsets injects some extra context in the layout rendering so that you can do things like::
 
