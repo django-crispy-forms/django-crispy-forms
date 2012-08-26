@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
 from utils import render_field, flatatt
+from exceptions import DynamicError
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
@@ -33,7 +34,8 @@ class LayoutObject(object):
         is the location of the field, second one the name of the field. Example::
 
             [
-               [[0,1,2], 'field_name1'], [[0,3], 'field_name2']
+               [[0,1,2], 'field_name1'],
+               [[0,3], 'field_name2']
             ]
         """
         field_names = []
@@ -67,6 +69,35 @@ class LayoutObject(object):
                 return fields_to_return
             else:
                 return list(itertools.chain.from_iterable(fields_to_return))
+
+    def get_layout_objects(self, LayoutClass, index=None, max_level=0):
+        """
+        Returns a list of lists pointing to layout objects of type `LayoutClass`::
+
+            [
+               [[0,1,2]],
+               [[0,3]]
+            ]
+
+        It traverses the layout reaching `max_level` depth
+        """
+        pointers = []
+
+        if index is not None and not isinstance(index, list):
+            index = [index]
+        elif index is None:
+            index = []
+
+        for i, layout_object in enumerate(self.fields):
+            if isinstance(layout_object, LayoutClass):
+                pointers.append(index + [i])
+
+            # If it's a layout object and we haven't reached the max depth limit
+            # we recursive call
+            if hasattr(layout_object, 'get_field_names') and len(index) < max_level:
+                pointers = pointers + layout_object.get_layout_objects(LayoutClass, index + [i], max_level=max_level)
+
+        return pointers
 
 
 class Layout(LayoutObject):
@@ -125,10 +156,24 @@ class LayoutSlice(object):
                 self.layout.fields[i] = LayoutClass(self.layout.fields[i], **kwargs)
 
         elif isinstance(self.slice, list):
-            # filter returns a list of integers
             for pointer in self.slice:
-                if isinstance(pointer, int):
-                    self.layout.fields[pointer] = LayoutClass(self.layout.fields[pointer], **kwargs)
+                # A list of integer pointers [0, 0]
+                if len(pointer) != 2 or not isinstance(pointer[1], basestring):
+
+                    layout_object = self.layout.fields[pointer[0]]
+                    # Iterate until the last one
+                    for i in pointer[1:-1]:
+                        layout_object = layout_object.fields[i]
+
+                    try:
+                        self.layout.fields[pointer[-1]] = LayoutClass(self.layout.fields[pointer[-1]], **kwargs)
+                    except IndexError:
+                        # We could avoid this exception, recalculating pointers.
+                        # However this case is most of the time an undesired behavior
+                        raise DynamicError("Trying to wrap a field within an already wrapped field, \
+                            recheck your filter or layout")
+
+                # A list of field_name pointers [[0, 0], 'field_name']
                 else:
                     pos = pointer[0]
                     layout_object = self.layout.fields[pos[0]]

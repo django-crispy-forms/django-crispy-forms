@@ -9,7 +9,7 @@ parent = os.path.dirname(os.path.dirname(os.path.dirname(
 sys.path.insert(0, parent)
 
 from django.test.simple import DjangoTestSuiteRunner
-from django.conf import settings
+
 
 def runtests():
     DjangoTestSuiteRunner(failfast=False).run_tests([

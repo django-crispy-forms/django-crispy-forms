@@ -12,6 +12,7 @@ from django.middleware.csrf import _get_new_csrf_key
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
+from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import Submit, Reset, Hidden, Button
 from crispy_forms.layout import (
@@ -949,7 +950,58 @@ class TestDynamicLayouts(TestCase):
         helper[0].wrap(Field, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[0], Field))
 
-    def test_wrap_filtered_fields(self):
+    def test_get_layout_objects(self):
+        layout_1 = Layout(
+            Div()
+        )
+        self.assertEqual(layout_1.get_layout_objects(Div), [
+            [0]
+        ])
+
+        layout_2 = Layout(
+            Div(
+                Div(
+                    Div('email')
+                ),
+                Div('password1'),
+                'password2'
+            )
+        )
+        self.assertEqual(layout_2.get_layout_objects(Div), [
+            [0]
+        ])
+        self.assertEqual(layout_2.get_layout_objects(Div, max_level=1), [
+            [0], [0, 0], [0, 1]
+        ])
+        self.assertEqual(layout_2.get_layout_objects(Div, max_level=2), [
+            [0], [0, 0], [0, 0, 0], [0, 1]
+        ])
+
+        layout_3 = Layout(
+            'email',
+            Div('password1'),
+            'password2',
+        )
+        self.assertEqual(layout_3.get_layout_objects(basestring, max_level=2), [
+            [0], [1, 0], [2]
+        ])
+
+        layout_4 = Layout(
+            Div(
+                Div('field_name'),
+                'field_name2',
+            ),
+            Div('password'),
+            'extra_field'
+        )
+        self.assertEqual(layout_4.get_layout_objects(Div), [
+            [0], [1]
+        ])
+        self.assertEqual(layout_4.get_layout_objects(Div, max_level=1), [
+            [0], [0, 0], [1]
+        ])
+
+    def test_filter_and_wrap(self):
         helper = FormHelper()
         layout = Layout(
             'email',
@@ -967,6 +1019,17 @@ class TestDynamicLayouts(TestCase):
         helper.filter(Div).wrap(Div, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[1], Div))
         self.assertTrue(isinstance(layout.fields[1].fields[0], Div))
+
+    def test_filter_and_wrap_side_effects(self):
+        helper = FormHelper()
+        layout = Layout(
+            Div(
+                'extra_field',
+                Div('password1'),
+            ),
+        )
+        helper.layout = layout
+        self.assertRaises(DynamicError, lambda: helper.filter(Div, max_level=2).wrap(Div, css_class="test-class"))
 
     def test_get_field_names(self):
         layout_1 = Div(

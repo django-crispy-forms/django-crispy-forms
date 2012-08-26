@@ -14,16 +14,13 @@ class DynamicLayoutHandler(object):
         """
         return LayoutSlice(self.layout, slice(0, len(self.layout.fields), 1))
 
-    def filter(self, LayoutClass):
+    def filter(self, LayoutClass, max_level=0):
         """
         Returns a LayoutSlice pointing to layout objects of type `LayoutClass`
         """
-        filtered_fields = []
-        for i in range(len(self.layout.fields)):
-            if isinstance(self.layout.fields[i], LayoutClass):
-                filtered_fields.append(i)
+        filtered_layout_objects = self.layout.get_layout_objects(LayoutClass, max_level=max_level)
 
-        return LayoutSlice(self.layout, filtered_fields)
+        return LayoutSlice(self.layout, filtered_layout_objects)
 
     def filter_by_widget(self, widget_type):
         """
@@ -63,7 +60,7 @@ class DynamicLayoutHandler(object):
         # when key is a string containing the field name
         if isinstance(key, basestring):
 
-            # Django templates access FormHelper attribute using dictionary [] operator
+            # Django templates access FormHelper attributes using dictionary [] operator
             # This could be a helper['form_id'] access, not looking for a field
             if hasattr(self, key):
                 return getattr(self, key)

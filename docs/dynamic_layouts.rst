@@ -110,7 +110,35 @@ This method will allow you to filter layout objects by its class type, applying 
     form.helper.filter(basestring).wrap(Field, css_class="hello")
     form.helper.filter(Div).wrap(Field, css_class="hello")
 
-Filter is not greedy, so it only searches first depth level.
+By default ``filter`` is not greedy, so it only searches first depth level. But you can tune it to search in different levels of depth with a kwarg ``max_level`` (By default set to 0). Let' see some examples, to clarify it. Imagine we have this layout::
+
+    Layout(
+       'field_1',
+       Div(
+           Div('password')
+        ),
+       'field_3'
+    )
+
+If we did::
+
+    form.helper.filter(basestring).wrap(Field, css_class="hello")
+
+Only ``field_1`` and ``field_3`` would be wrapped, resulting into::
+
+    Layout(
+       Field('field_1', css_class="hello"),
+       Div(
+           Div('password')
+        ),
+       Field('field_3', css_class="hello"),
+    )
+
+If we wanted to search deeper, wrapping ``password``, we would need to set ``max_level`` to 2 or more::
+
+    form.helper.filter(basestring, max_level=2).wrap(Field, css_class="hello")
+
+In other words ``max_level`` indicates the number of jumps crispy-forms can do within a layout object for matching. In this case getting into the first ``Div`` would be one jump, and getting into the next ``Div`` would be the second jump, thus ``max_level=2``.
 
 FormHelper with a form attached
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
