@@ -14,11 +14,12 @@ class DynamicLayoutHandler(object):
         """
         return LayoutSlice(self.layout, slice(0, len(self.layout.fields), 1))
 
-    def filter(self, LayoutClass, max_level=0):
+    def filter(self, *LayoutClasses, **kwargs):
         """
         Returns a LayoutSlice pointing to layout objects of type `LayoutClass`
         """
-        filtered_layout_objects = self.layout.get_layout_objects(LayoutClass, max_level=max_level)
+        max_level = kwargs.pop('max_level', 0)
+        filtered_layout_objects = self.layout.get_layout_objects(LayoutClasses, max_level=max_level)
 
         return LayoutSlice(self.layout, filtered_layout_objects)
 

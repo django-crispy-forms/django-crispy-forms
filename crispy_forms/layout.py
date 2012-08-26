@@ -70,7 +70,7 @@ class LayoutObject(object):
             else:
                 return list(itertools.chain.from_iterable(fields_to_return))
 
-    def get_layout_objects(self, LayoutClass, index=None, max_level=0):
+    def get_layout_objects(self, *LayoutClasses, **kwargs):
         """
         Returns a list of lists pointing to layout objects of type `LayoutClass`::
 
@@ -81,6 +81,9 @@ class LayoutObject(object):
 
         It traverses the layout reaching `max_level` depth
         """
+        index = kwargs.pop('index', None)
+        max_level = kwargs.pop('max_level', 0)
+
         pointers = []
 
         if index is not None and not isinstance(index, list):
@@ -89,13 +92,15 @@ class LayoutObject(object):
             index = []
 
         for i, layout_object in enumerate(self.fields):
-            if isinstance(layout_object, LayoutClass):
+            if isinstance(layout_object, LayoutClasses):
                 pointers.append(index + [i])
 
             # If it's a layout object and we haven't reached the max depth limit
             # we recursive call
             if hasattr(layout_object, 'get_field_names') and len(index) < max_level:
-                pointers = pointers + layout_object.get_layout_objects(LayoutClass, index + [i], max_level=max_level)
+                pointers = pointers + layout_object.get_layout_objects(
+                    LayoutClasses, index=index + [i], max_level=max_level
+                )
 
         return pointers
 

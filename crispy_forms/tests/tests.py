@@ -1001,6 +1001,26 @@ class TestDynamicLayouts(TestCase):
             [0], [0, 0], [1]
         ])
 
+    def test_filter(self):
+        helper = FormHelper()
+        helper.layout = Layout(
+            Div(
+                MultiField('field_name'),
+                'field_name2',
+            ),
+            Div('password'),
+            'extra_field'
+        )
+        self.assertEqual(helper.filter(Div, MultiField).slice, [
+            [0], [1]
+        ])
+        self.assertEqual(helper.filter(Div, MultiField, max_level=1).slice, [
+            [0], [0, 0], [1]
+        ])
+        self.assertEqual(helper.filter(MultiField, max_level=1).slice, [
+            [0, 0]
+        ])
+
     def test_filter_and_wrap(self):
         helper = FormHelper()
         layout = Layout(

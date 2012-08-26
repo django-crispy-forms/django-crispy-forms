@@ -110,6 +110,10 @@ This method will allow you to filter layout objects by its class type, applying 
     form.helper.filter(basestring).wrap(Field, css_class="hello")
     form.helper.filter(Div).wrap(Field, css_class="hello")
 
+You can filter several layout objects types at the same time::
+
+    form.helper.filter(basestring, Div).wrap(Div, css_class="hello")
+
 By default ``filter`` is not greedy, so it only searches first depth level. But you can tune it to search in different levels of depth with a kwarg ``max_level`` (By default set to 0). Let' see some examples, to clarify it. Imagine we have this layout::
 
     Layout(
