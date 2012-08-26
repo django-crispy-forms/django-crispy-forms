@@ -1,18 +1,10 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
+
 from layout import Layout, LayoutSlice
-
 from utils import render_field, flatatt
-
-
-class FormHelpersException(Exception):
-    """
-    This is raised when building a form via helpers throws an error.
-    We want to catch form helper errors as soon as possible because
-    debugging templatetags is never fun.
-    """
-    pass
+from exceptions import FormHelpersException
 
 
 class DynamicLayoutHandler(object):
