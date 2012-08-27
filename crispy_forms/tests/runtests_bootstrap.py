@@ -2,7 +2,7 @@
 
 import os, sys
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'test_settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'test_settings_bootstrap'
 parent = os.path.dirname(os.path.dirname(os.path.dirname(
             os.path.abspath(__file__))))
 

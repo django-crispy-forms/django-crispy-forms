@@ -1,4 +1,6 @@
 #!/usr/bin/env python
 
-execfile('runtests_bootstrap.py')
-execfile('runtests_uniform.py')
+import os
+
+os.system('python runtests_bootstrap.py')
+os.system('python runtests_uniform.py')
