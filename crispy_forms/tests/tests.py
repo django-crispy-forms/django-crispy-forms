@@ -294,9 +294,10 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
 
         # Check that help goes before error, otherwise CSS won't work
-        help_position = html.find('<span id="hint_id_email" class="help-inline">')
-        error_position = html.find('<p id="error_1_id_email" class="help-block">')
-        self.assertTrue(help_position < error_position)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            help_position = html.find('<span id="hint_id_email" class="help-inline">')
+            error_position = html.find('<p id="error_1_id_email" class="help-block">')
+            self.assertTrue(help_position < error_position)
 
         # Viceversa
         form = TestForm({'email': 'invalidemail'})
@@ -308,9 +309,10 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
 
         # Check that error goes before help, otherwise CSS won't work
-        error_position = html.find('<span id="error_1_id_email" class="help-inline">')
-        help_position = html.find('<p id="hint_id_email" class="help-block">')
-        self.assertTrue(error_position < help_position)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            error_position = html.find('<span id="error_1_id_email" class="help-inline">')
+            help_position = html.find('<p id="hint_id_email" class="help-block">')
+            self.assertTrue(error_position < help_position)
 
     def test_attrs(self):
         form = TestForm()
@@ -334,8 +336,8 @@ class TestFormHelpers(TestCase):
 
         self.assertEqual(context['form_id'], "test-form")
         self.assertEqual(context['form_attrs']['id'], "test-form")
-        self.assertEqual(context['form_class'], "test-forms")
-        self.assertEqual(context['form_attrs']['class'], "test-forms")
+        self.assertTrue("test-forms" in context['form_class'])
+        self.assertTrue("test-forms" in context['form_attrs']['class'])
         self.assertEqual(context['form_action'], "submit/test/form")
         self.assertEqual(context['form_attrs']['action'], "submit/test/form")
         self.assertEqual(context['form_attrs']['autocomplete'], "off")
@@ -350,8 +352,8 @@ class TestFormHelpers(TestCase):
 
         self.assertEqual(context['form_id'], "test-form")
         self.assertEqual(context['form_attrs']['id'], "test-form")
-        self.assertEqual(context['form_class'], "test-forms")
-        self.assertEqual(context['form_attrs']['class'], "test-forms")
+        self.assertTrue("test-forms" in context['form_class'])
+        self.assertTrue("test-forms" in context['form_attrs']['class'])
         self.assertEqual(context['form_action'], "submit/test/form")
         self.assertEqual(context['form_attrs']['action'], "submit/test/form")
 
@@ -374,7 +376,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('method="post"' in html)
         self.assertFalse('action' in html)
         if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
-            self.assertTrue('class="uniForm' in html)
+            self.assertTrue('uniForm' in html)
 
     def test_invalid_helper(self):
         template = get_template_from_string(u"""
