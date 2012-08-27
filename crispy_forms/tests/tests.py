@@ -350,8 +350,8 @@ class TestFormHelpers(TestCase):
 
         self.assertEqual(context['form_id'], "test-form")
         self.assertEqual(context['form_attrs']['id'], "test-form")
-        self.assertEqual(context['form_class'], "test-forms")
-        self.assertEqual(context['form_attrs']['class'], "test-forms")
+        self.assertTrue("test-forms" in context['form_class'])
+        self.assertTrue("test-forms" in context['form_attrs']['class'])
         self.assertEqual(context['form_action'], "submit/test/form")
         self.assertEqual(context['form_attrs']['action'], "submit/test/form")
 
