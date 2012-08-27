@@ -282,7 +282,7 @@ class FormHelper(DynamicLayoutHandler):
                 items['attrs']['class'] = self.form_class.strip()
         else:
             if getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap') == 'uni_form':
-                items['attrs']['class'] = "uniForm"
+                items['attrs']['class'] = self.attrs.get('class', '') + " uniForm"
 
         items['flat_attrs'] = flatatt(items['attrs'])
 
