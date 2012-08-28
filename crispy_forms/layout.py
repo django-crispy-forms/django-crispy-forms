@@ -257,7 +257,7 @@ class Submit(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the submit button.
     """
     input_type = 'submit'
-    field_classes = 'submit submitButton' if TEMPLATE_PACK == 'uni_form' else 'btn'
+    field_classes = 'submit submitButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-primary'
 
 
 class Button(BaseInput):
@@ -269,7 +269,7 @@ class Button(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the button.
     """
     input_type = 'button'
-    field_classes = 'button'
+    field_classes = 'button' if TEMPLATE_PACK == 'uni_form' else 'btn'
 
 
 class Hidden(BaseInput):
@@ -289,7 +289,7 @@ class Reset(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the reset.
     """
     input_type = 'reset'
-    field_classes = 'reset resetButton'
+    field_classes = 'reset resetButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-inverse'
 
 
 class Fieldset(LayoutObject):
