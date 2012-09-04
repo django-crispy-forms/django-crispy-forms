@@ -6,7 +6,7 @@
  * `AppendedText`, `PrependedText` and `AppendedPrependedText` were not respecting `form_show_errors` helper attribute, see #GH-77.
  * Added a version string to the app under root __init__, see #GH-76.
  * Added `html5_required` helper attribute for rendering required fields using HTML5 required attribute within the input, see #GH-72. Thanks to Lloyd Philbrook.
- * Some docs typos and erros fixed, also a major upgrade to docs covering the new functionality.
+ * Some docs typos and errors fixed, also a major upgrade to docs covering the new functionality.
  * Adding a `utils.render_crispy_form` function, that renders a form the crispy way in Python code. This might be useful with AJAX, testing or text generation/manipulation, see #GH-64.
  * Tiny cosmetic fix, that adds an space after a button, see #GH-62.
  * `MultiField` and `Fieldset` layout objects can now have any kind of attribute defined, thanks to Lloyd Philbrook, see #GH-71.
