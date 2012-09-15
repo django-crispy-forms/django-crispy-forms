@@ -60,7 +60,6 @@ class DynamicLayoutHandler(object):
         """
         # when key is a string containing the field name
         if isinstance(key, basestring):
-
             # Django templates access FormHelper attributes using dictionary [] operator
             # This could be a helper['form_id'] access, not looking for a field
             if hasattr(self, key):

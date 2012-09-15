@@ -957,7 +957,7 @@ class TestDynamicLayouts(TestCase):
             Div()
         )
         self.assertEqual(layout_1.get_layout_objects(Div), [
-            [0]
+            [[0], 'div']
         ])
 
         layout_2 = Layout(
@@ -970,13 +970,18 @@ class TestDynamicLayouts(TestCase):
             )
         )
         self.assertEqual(layout_2.get_layout_objects(Div), [
-            [0]
+            [[0], 'div']
         ])
         self.assertEqual(layout_2.get_layout_objects(Div, max_level=1), [
-            [0], [0, 0], [0, 1]
+            [[0], 'div'],
+            [[0, 0], 'div'],
+            [[0, 1], 'div']
         ])
         self.assertEqual(layout_2.get_layout_objects(Div, max_level=2), [
-            [0], [0, 0], [0, 0, 0], [0, 1]
+            [[0], 'div'],
+            [[0, 0], 'div'],
+            [[0, 0, 0], 'div'],
+            [[0, 1], 'div']
         ])
 
         layout_3 = Layout(
@@ -985,7 +990,9 @@ class TestDynamicLayouts(TestCase):
             'password2',
         )
         self.assertEqual(layout_3.get_layout_objects(basestring, max_level=2), [
-            [0], [1, 0], [2]
+            [[0], 'email'],
+            [[1, 0], 'password1'],
+            [[2], 'password2']
         ])
 
         layout_4 = Layout(
@@ -997,10 +1004,13 @@ class TestDynamicLayouts(TestCase):
             'extra_field'
         )
         self.assertEqual(layout_4.get_layout_objects(Div), [
-            [0], [1]
+            [[0], 'div'],
+            [[1], 'div']
         ])
         self.assertEqual(layout_4.get_layout_objects(Div, max_level=1), [
-            [0], [0, 0], [1]
+            [[0], 'div'],
+            [[0, 0], 'div'],
+            [[1], 'div']
         ])
 
     def test_filter(self):
@@ -1014,13 +1024,16 @@ class TestDynamicLayouts(TestCase):
             'extra_field'
         )
         self.assertEqual(helper.filter(Div, MultiField).slice, [
-            [0], [1]
+            [[0], 'div'],
+            [[1], 'div']
         ])
         self.assertEqual(helper.filter(Div, MultiField, max_level=1).slice, [
-            [0], [0, 0], [1]
+            [[0], 'div'],
+            [[0, 0], 'multifield'],
+            [[1], 'div']
         ])
         self.assertEqual(helper.filter(MultiField, max_level=1).slice, [
-            [0, 0]
+            [[0, 0], 'multifield']
         ])
 
     def test_filter_and_wrap(self):

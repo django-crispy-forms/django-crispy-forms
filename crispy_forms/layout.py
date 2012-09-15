@@ -1,5 +1,3 @@
-import itertools
-
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import render_to_string
@@ -30,7 +28,7 @@ class LayoutObject(object):
 
     def get_field_names(self, index=None):
         """
-        Returns a list of lists, those lists are pointers to field names. First parameter
+        Returns a list of lists, those lists are named pointers. First parameter
         is the location of the field, second one the name of the field. Example::
 
             [
@@ -38,51 +36,26 @@ class LayoutObject(object):
                [[0,3], 'field_name2']
             ]
         """
-        field_names = []
-
-        if index is not None and not isinstance(index, list):
-            index = [index]
-        elif index is None:
-            index = []
-
-        # The layout object contains other layout objects
-        if not all([isinstance(layout_object, basestring) for layout_object in self.fields]):
-            for i, layout_object in enumerate(self.fields):
-                # If it's a layout object, we recursive call
-                if not isinstance(layout_object, basestring):
-                    if hasattr(layout_object, 'get_field_names'):
-                        field_names = field_names + layout_object.get_field_names(index + [i])
-                # If it's a string, then it's a basic case
-                else:
-                    field_names.append([index + [i], layout_object])
-
-            return field_names
-
-        # Base case: It only contains field_names
-        else:
-            fields_to_return = []
-            for i, field_name in enumerate(self.fields):
-                fields_to_return.append([index + [i], field_name])
-
-            # If all the pointers to fields gathered are of length 2, we are done
-            if all(len(pointer) == 2 for pointer in fields_to_return):
-                return fields_to_return
-            else:
-                return list(itertools.chain.from_iterable(fields_to_return))
+        return self.get_layout_objects(basestring, greedy=True)
 
     def get_layout_objects(self, *LayoutClasses, **kwargs):
         """
-        Returns a list of lists pointing to layout objects of type `LayoutClass`::
+        Returns a list of lists pointing to layout objects of any type matching
+        `LayoutClasses`::
 
             [
-               [[0,1,2]],
-               [[0,3]]
+               [[0,1,2], 'div'],
+               [[0,3], 'field_name']
             ]
 
-        It traverses the layout reaching `max_level` depth
+        :param max_level: An integer that indicates max level depth to reach when
+        traversing a layout.
+        :param greedy: Boolean that indicates whether to be greedy. If set, max_level
+        is skipped.
         """
         index = kwargs.pop('index', None)
         max_level = kwargs.pop('max_level', 0)
+        greedy = kwargs.pop('greedy', False)
 
         pointers = []
 
@@ -93,13 +66,16 @@ class LayoutObject(object):
 
         for i, layout_object in enumerate(self.fields):
             if isinstance(layout_object, LayoutClasses):
-                pointers.append(index + [i])
+                if len(LayoutClasses) == 1 and LayoutClasses[0] == basestring:
+                    pointers.append([index + [i], layout_object])
+                else:
+                    pointers.append([index + [i], layout_object.__class__.__name__.lower()])
 
-            # If it's a layout object and we haven't reached the max depth limit
+            # If it's a layout object and we haven't reached the max depth limit or greedy
             # we recursive call
-            if hasattr(layout_object, 'get_field_names') and len(index) < max_level:
+            if hasattr(layout_object, 'get_field_names') and (len(index) < max_level or greedy):
                 pointers = pointers + layout_object.get_layout_objects(
-                    LayoutClasses, index=index + [i], max_level=max_level
+                    *LayoutClasses, index=index + [i], max_level=max_level, greedy=greedy
                 )
 
         return pointers
@@ -161,36 +137,30 @@ class LayoutSlice(object):
                 self.layout.fields[i] = LayoutClass(self.layout.fields[i], **kwargs)
 
         elif isinstance(self.slice, list):
+            # A list of pointers  Ex: [[[0, 0], 'div'], [[0, 2, 3], 'field_name']]
             for pointer in self.slice:
-                # A list of integer pointers [0, 0]
-                if len(pointer) != 2 or not isinstance(pointer[1], basestring):
+                position = pointer[0]
 
-                    layout_object = self.layout.fields[pointer[0]]
-                    # Iterate until the last one
-                    for i in pointer[1:-1]:
+                # If it's pointing first level, there is no need to traverse
+                if len(position) == 1:
+                    self.layout.fields[position[-1]] = LayoutClass(self.layout.fields[position[-1]], **kwargs)
+                else:
+                    layout_object = self.layout.fields[position[0]]
+                    for i in position[1:-1]:
                         layout_object = layout_object.fields[i]
 
                     try:
-                        self.layout.fields[pointer[-1]] = LayoutClass(self.layout.fields[pointer[-1]], **kwargs)
+                        # If layout object has a fields attribute
+                        if hasattr(layout_object, 'fields'):
+                            layout_object.fields[position[-1]] = LayoutClass(layout_object.fields[position[-1]], **kwargs)
+                        else:
+                            # Otherwise it's a basestring (a field name)
+                            self.layout.fields[position[0]] = LayoutClass(layout_object, **kwargs)
                     except IndexError:
                         # We could avoid this exception, recalculating pointers.
                         # However this case is most of the time an undesired behavior
                         raise DynamicError("Trying to wrap a field within an already wrapped field, \
                             recheck your filter or layout")
-
-                # A list of field_name pointers [[0, 0], 'field_name']
-                else:
-                    pos = pointer[0]
-                    layout_object = self.layout.fields[pos[0]]
-                    for i in pointer[0][1:-1]:
-                        layout_object = layout_object.fields[i]
-
-                    # If layout object has a fields attribute
-                    if hasattr(layout_object, 'fields'):
-                        layout_object.fields[pos[-1]] = LayoutClass(layout_object.fields[pos[-1]], **kwargs)
-                    else:
-                        # Otherwise it's a basestring (a field name)
-                        self.layout.fields[pos[0]] = LayoutClass(layout_object, **kwargs)
 
 
 class ButtonHolder(LayoutObject):
