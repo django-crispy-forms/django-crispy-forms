@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import render_to_string
+from django.template.defaultfilters import slugify
 from django.utils.html import conditional_escape
 
 from utils import render_field, flatatt
@@ -19,7 +20,7 @@ class LayoutObject(object):
     def __getattr__(self, name):
         """
         This allows us to access self.fields list methods like append or insert, without
-        having to declare them one by one
+        having to declaee them one by one
         """
         if hasattr(self.fields, name):
             return getattr(self.fields, name)
@@ -367,7 +368,70 @@ class Row(Div):
 
         Row('form_field_1', 'form_field_2', 'form_field_3')
     """
-    css_class = 'formRow'
+    css_class = 'formRow' if TEMPLATE_PACK == 'uni_form' else 'row'
+
+
+class Tab(Div):
+    """
+    Tab object. It wraps fields in a div whose default class is "tab-pane" and
+    take a name as first argument. Example::
+        Tab('tab_name', 'form_field_1', 'form_field_2', 'form_field_3')
+    """
+    css_class = 'tab-pane'
+    link_template = 'bootstrap/layout/tab-link.html'
+
+    def __init__(self, name, *fields, **kwargs):
+	self.name = name
+	super(Tab, self).__init__(*fields, **kwargs)
+	# id is necessary for the TabHolder links
+	if not self.css_id:
+	    self.css_id = slugify(self.name)
+	self.active = False
+
+    def __contains__(self, field):
+	return field in self.fields
+
+    def render_link(self):
+	"""
+	Render the link for the tab-pane. It must be call after render so css_class is updated
+	with active if needed.
+	"""
+	return render_to_string(self.link_template, Context({'link': self}))
+
+    def render(self, form, form_style, context):
+	if self.active:
+	    self.css_class += ' active'
+	return super(Tab, self).render(form, form_style, context)
+
+
+class TabHolder(Div):
+    """
+    TabHolder object. It wraps Tab objects in a container.
+    *REQUIRES bootstrap-tab.js*
+	Example::  TabHolder(Tab('form_field_1', 'form_field_2'), Tab('form_field_3'))
+    """
+    template = 'bootstrap/layout/tab.html'
+    css_class = 'nav nav-tabs'
+
+    def first_tab_with_errors(self, errors):
+	"""
+	Return the first tab with errors in fields or the first tab if there are no errors.
+	"""
+	for tab in self.fields:
+	    errors_here = bool(filter(lambda err: err in tab, errors))
+	    if errors_here:
+		return tab
+	return self.fields[0]
+
+    def render(self, form, form_style, context):
+	flds = self.fields
+	links, content = '', ''
+	self.first_tab_with_errors(form.errors.keys()).active = True
+	for tab in self.fields:
+	    content += render_field(tab, form, form_style, context)
+	    links += tab.render_link()
+	return render_to_string(self.template,
+	    Context({'tabs': self, 'links': links, 'content': content}))
 
 
 class Column(Div):
