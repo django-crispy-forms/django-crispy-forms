@@ -21,10 +21,16 @@ def is_password(field):
 
 @register.filter
 def classes(field):
+    """
+    Returns CSS classes of a field
+    """
     return field.widget.attrs.get('class', None)
 
 @register.filter
 def css_class(field):
+    """
+    Returns widgets class name in lowercase
+    """
     return field.field.widget.__class__.__name__.lower()
 
 def pairwise(iterable):
