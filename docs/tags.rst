@@ -205,6 +205,12 @@ This is how you would render the formset. Note that this time you need to specif
 
     {% crispy example_formset example_formset.form.helper %}
 
+If your formset's forms have different layouts, because you manipulated them, you will have to do::
+
+    {% for form in example_formset %}
+        {% crispy form %}
+    {% endfor %}
+
 Note, make sure that you have ``form_tag`` attribute set to ``False`` in your formset's forms, otherwise you will get 3 individual forms rendered::
 
     class ExampleForm(forms.Form):
