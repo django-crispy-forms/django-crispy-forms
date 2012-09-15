@@ -593,7 +593,11 @@ class TestFormLayout(TestCase):
         self.assertTrue('title="fieldset_title"' in html)
         self.assertTrue('test-fieldset="123"' in html)
         self.assertTrue('id="row_passwords"' in html)
-        self.assertTrue('class="formRow rows"' in html)
+
+        if settings.CRISPY_TEMPLATE_PACK == 'uni-form':
+            self.assertTrue('class="formRow rows"' in html)
+        else:
+            self.assertTrue('class="row rows"' in html)
         self.assertTrue('Hello!' in html)
         self.assertTrue('testLink' in html)
 
@@ -785,7 +789,11 @@ class TestFormLayout(TestCase):
         self.assertTrue('Item 2' in html)
         self.assertTrue('Item 3' in html)
         self.assertEqual(html.count('Note for first form only'), 1)
-        self.assertEqual(html.count('formRow'), 3)
+
+        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+            self.assertEqual(html.count('formRow'), 3)
+        else:
+            self.assertEqual(html.count('row'), 3)
 
     def test_multiwidget_field(self):
         template = get_template_from_string(u"""
