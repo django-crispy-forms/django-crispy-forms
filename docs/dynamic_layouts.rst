@@ -66,6 +66,32 @@ Beware that the slice ``[1:3]`` only looks in the first level of depth of the la
        Field('field_3', css_class="hello")
     )
 
+wrap_together
+~~~~~~~~~~~~~
+
+One useful action you can apply on a slice is ``wrap_together``, which wraps a whole slice within a layout object type and parameters passed. Let's see an example. If We had this layout::
+
+    Layout(
+        'field_1',
+        'field_2',
+        'field_3'
+    )
+
+We could do::
+
+    form.helper[1:3].wrap_together(Field, css_class="hello")
+
+We would en up having this layout::
+
+    Layout(
+        Field(
+            'field_1',
+            'field_2',
+            'field_3',
+            css_class='hello'
+        )
+    )
+
 all
 ~~~
 

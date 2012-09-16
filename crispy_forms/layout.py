@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import render_to_string
@@ -162,6 +164,23 @@ class LayoutSlice(object):
                         # However this case is most of the time an undesired behavior
                         raise DynamicError("Trying to wrap a field within an already wrapped field, \
                             recheck your filter or layout")
+
+    def wrap_together(self, LayoutClass, **kwargs):
+        """
+        Wraps a list of pointers together under a `LayoutClass` with attributes
+        set to `kwargs`.
+        """
+        if isinstance(self.slice, slice):
+            # The start of the slice is replaced
+            self.layout.fields[self.slice.start] = LayoutClass(*self.layout.fields[self.slice], **kwargs)
+
+            # The rest of places of the slice are removed, as they are included in the previous
+            for i in reversed(range(*self.slice.indices(len(self.layout.fields)))):
+                if i != self.slice.start:
+                    del self.layout.fields[i]
+
+        elif isinstance(self.slice, list):
+            raise DynamicError("wrap_together doesn't work with filter, only with [] operator")
 
 
 class ButtonHolder(LayoutObject):

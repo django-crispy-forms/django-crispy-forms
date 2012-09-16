@@ -967,6 +967,44 @@ class TestDynamicLayouts(TestCase):
         helper[0].wrap(Field, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[0], Field))
 
+    def test_wrap_together_with_slices(self):
+        helper = FormHelper()
+        layout = Layout(
+            'email',
+            'password1',
+            'password2',
+        )
+        helper.layout = layout
+        helper[1:3].wrap_together(Field, css_class="test-class")
+        self.assertEqual(layout.fields[0], 'email')
+        self.assertTrue(isinstance(layout.fields[1], Field))
+        self.assertEqual(layout.fields[1][0], 'password1')
+        self.assertEqual(layout.fields[1][1], 'password2')
+
+        layout = Layout(
+            Div('email'),
+            'password1',
+            'password2',
+        )
+        helper.layout = layout
+        helper[0:3].wrap_together(Field, css_class="test-class")
+        self.assertTrue(isinstance(layout.fields[0], Field))
+        self.assertTrue(isinstance(layout.fields[0][0], Div))
+        self.assertEqual(layout.fields[0][0][0], 'email')
+        self.assertEqual(layout.fields[0][1], 'password1')
+        self.assertEqual(layout.fields[0][2], 'password2')
+
+        layout = Layout(
+            'email',
+            'password1',
+            'password2',
+        )
+        helper.layout = layout
+        helper[0].wrap_together(Field, css_class="test-class")
+        self.assertTrue(isinstance(layout.fields[0], Field))
+        self.assertEqual(layout.fields[1], 'password1')
+        self.assertEqual(layout.fields[2], 'password2')
+
     def test_get_layout_objects(self):
         layout_1 = Layout(
             Div()
