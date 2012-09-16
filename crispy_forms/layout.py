@@ -134,10 +134,32 @@ class LayoutSlice(object):
         else:
             self.slice = key
 
-    def wrap(self, LayoutClass, **kwargs):
+    def wrapped_object(self, LayoutClass, fields, *args, **kwargs):
+        """
+        Returns a layout object of type `LayoutClass` with `args` and `kwargs` that
+        wraps `fields` inside.
+        """
+        if args:
+            if isinstance(fields, list):
+                arguments = args + tuple(fields)
+            else:
+                arguments = args + (fields,)
+
+            return LayoutClass(*arguments, **kwargs)
+        else:
+            if isinstance(fields, list):
+                return LayoutClass(*fields, **kwargs)
+            else:
+                return LayoutClass(fields, **kwargs)
+
+    def wrap(self, LayoutClass, *args, **kwargs):
+        """
+        Wraps each pointer in `self.slice` under a `LayoutClass` instance with
+        `args` and `kwargs` passed.
+        """
         if isinstance(self.slice, slice):
             for i in range(*self.slice.indices(len(self.layout.fields))):
-                self.layout.fields[i] = LayoutClass(self.layout.fields[i], **kwargs)
+                self.layout.fields[i] = self.wrapped_object(LayoutClass, self.layout.fields[i], *args, **kwargs)
 
         elif isinstance(self.slice, list):
             # A list of pointers  Ex: [[[0, 0], 'div'], [[0, 2, 3], 'field_name']]
@@ -146,7 +168,9 @@ class LayoutSlice(object):
 
                 # If it's pointing first level, there is no need to traverse
                 if len(position) == 1:
-                    self.layout.fields[position[-1]] = LayoutClass(self.layout.fields[position[-1]], **kwargs)
+                    self.layout.fields[position[-1]] = self.wrapped_object(
+                        LayoutClass, self.layout.fields[position[-1]], *args, **kwargs
+                    )
                 else:
                     layout_object = self.layout.fields[position[0]]
                     for i in position[1:-1]:
@@ -155,24 +179,30 @@ class LayoutSlice(object):
                     try:
                         # If layout object has a fields attribute
                         if hasattr(layout_object, 'fields'):
-                            layout_object.fields[position[-1]] = LayoutClass(layout_object.fields[position[-1]], **kwargs)
+                            layout_object.fields[position[-1]] = self.wrapped_object(
+                                LayoutClass, layout_object.fields[position[-1]], *args, **kwargs
+                            )
+                        # Otherwise it's a basestring (a field name)
                         else:
-                            # Otherwise it's a basestring (a field name)
-                            self.layout.fields[position[0]] = LayoutClass(layout_object, **kwargs)
+                            self.layout.fields[position[0]] = self.wrapped_object(
+                                LayoutClass, layout_object, *args, **kwargs
+                            )
                     except IndexError:
                         # We could avoid this exception, recalculating pointers.
                         # However this case is most of the time an undesired behavior
                         raise DynamicError("Trying to wrap a field within an already wrapped field, \
                             recheck your filter or layout")
 
-    def wrap_together(self, LayoutClass, **kwargs):
+    def wrap_together(self, LayoutClass, *args, **kwargs):
         """
-        Wraps a list of pointers together under a `LayoutClass` with attributes
-        set to `kwargs`.
+        Wraps pointers in `self.slice` together under a `LayoutClass` instance with
+        `args` and `kwargs` passed.
         """
         if isinstance(self.slice, slice):
             # The start of the slice is replaced
-            self.layout.fields[self.slice.start] = LayoutClass(*self.layout.fields[self.slice], **kwargs)
+            self.layout.fields[self.slice.start] = self.wrapped_object(
+                LayoutClass, self.layout.fields[self.slice], *args, **kwargs
+            )
 
             # The rest of places of the slice are removed, as they are included in the previous
             for i in reversed(range(*self.slice.indices(len(self.layout.fields)))):

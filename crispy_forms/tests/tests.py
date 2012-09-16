@@ -950,6 +950,10 @@ class TestDynamicLayouts(TestCase):
             self.assertTrue(isinstance(field, Field))
             self.assertEqual(field.attrs['class'], "test-class")
 
+        self.assertEqual(layout[0][0], 'email')
+        self.assertEqual(layout[1][0], 'password1')
+        self.assertEqual(layout[2][0], 'password2')
+
     def test_wrap_selected_fields(self):
         helper = FormHelper()
         layout = Layout(
@@ -964,8 +968,10 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(layout.fields[1], Field))
         self.assertTrue(isinstance(layout.fields[2], Field))
 
-        helper[0].wrap(Field, css_class="test-class")
-        self.assertTrue(isinstance(layout.fields[0], Field))
+        helper[0].wrap(Fieldset, 'legend', css_class="test-class")
+        self.assertTrue(isinstance(layout[0], Fieldset))
+        self.assertEqual(layout[0].legend, 'legend')
+        self.assertEqual(layout[0][0], 'email')
 
     def test_wrap_together_with_slices(self):
         helper = FormHelper()
@@ -1002,6 +1008,18 @@ class TestDynamicLayouts(TestCase):
         helper.layout = layout
         helper[0].wrap_together(Field, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[0], Field))
+        self.assertEqual(layout.fields[1], 'password1')
+        self.assertEqual(layout.fields[2], 'password2')
+
+        layout = Layout(
+            'email',
+            'password1',
+            'password2',
+        )
+        helper.layout = layout
+        helper[0].wrap_together(Fieldset, "legend", css_class="test-class")
+        self.assertTrue(isinstance(layout.fields[0], Fieldset))
+        self.assertEqual(layout.fields[0].legend, 'legend')
         self.assertEqual(layout.fields[1], 'password1')
         self.assertEqual(layout.fields[2], 'password2')
 
@@ -1102,11 +1120,13 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(layout.fields[0], Field))
         self.assertTrue(isinstance(layout.fields[1], Div))
         self.assertTrue(isinstance(layout.fields[2], Field))
+        self.assertEqual(layout[2][0], 'password2')
 
         # Wrapping a div in a div
         helper.filter(Div).wrap(Div, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[1], Div))
         self.assertTrue(isinstance(layout.fields[1].fields[0], Div))
+        self.assertEqual(layout[1][0][0], 'password1')
 
     def test_filter_and_wrap_side_effects(self):
         helper = FormHelper()
