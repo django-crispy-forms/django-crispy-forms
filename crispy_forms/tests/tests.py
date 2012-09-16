@@ -133,16 +133,20 @@ class TestFormHelpers(TestCase):
         html = template.render(c)
 
         self.assertTrue('button white' in html)
-        self.assertTrue('submit submitButton' in html or 'btn' in html)
         self.assertTrue('id="submit-id-my-submit"' in html)
-
-        self.assertTrue('reset resetButton' in html)
         self.assertTrue('id="reset-id-my-reset"' in html)
-
         self.assertTrue('name="my-hidden"' in html)
-
-        self.assertTrue('button' in html)
         self.assertTrue('id="button-id-my-button"' in html)
+
+        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+            self.assertTrue('submit submitButton' in html)
+            self.assertTrue('reset resetButton' in html)
+            self.assertTrue('class="button"' in html)
+        else:
+            self.assertTrue('class="btn"' in html)
+            self.assertTrue('btn btn-primary' in html)
+            self.assertTrue('btn btn-inverse' in html)
+            self.assertEqual(html.count('/>&zwnj;'), 4)
 
     def test_invalid_form_method(self):
         form_helper = FormHelper()
@@ -594,7 +598,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('test-fieldset="123"' in html)
         self.assertTrue('id="row_passwords"' in html)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'uni-form':
+        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
             self.assertTrue('class="formRow rows"' in html)
         else:
             self.assertTrue('class="row rows"' in html)
