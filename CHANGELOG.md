@@ -2,6 +2,14 @@
 
 ## 1.2.0
 
+ * `BaseInput` subclasses, like `Submit` can now have its value set to a context variable.
+ * Rendering inputs added with `add_input` in bootstrap using the right templates, see #GH-95.
+ * Improved formsets rendering docs thanks to Samuel Goldszmidt, see #GH-92.
+ * Added `Tab` and `TabHolder` layout objects thanks to david-e, see #GH-91.
+ * Fixed default bootstrap button default classes thanks to david-e, see #GH-90.
+ * Fixed some flaws in new testing structure by Markus Hametner.
+ * Added helper attribute `error_text_inline` thanks to Lee Semel for controlling how to render form errors, as a block or inline, see #GH-87.
+ * Support `ModelMultipleChoiceField` on `checkboxselectmultiple`, see #GH-86.
  * Redoing testing structure a litte bit, to run uni_form and bootstrap tests separately. They share most of the code base, but templates pack are separate and we need to care both have the same quality assurance.
  * `AppendedText`, `PrependedText` and `AppendedPrependedText` were not respecting `form_show_errors` helper attribute, see #GH-77.
  * Added a version string to the app under root __init__, see #GH-76.
