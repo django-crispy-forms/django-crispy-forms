@@ -214,8 +214,10 @@ class BaseInput(object):
 
     def render(self, form, form_style, context):
         """
-        Renders an `<input />` if container is used as a Layout object
+        Renders an `<input />` if container is used as a Layout object.
+        Input button value can be a variable in context.
         """
+        self.value = Template(unicode(self.value)).render(context)
         return render_to_string(self.template, Context({'input': self}))
 
 

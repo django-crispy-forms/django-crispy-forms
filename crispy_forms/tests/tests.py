@@ -623,7 +623,8 @@ class TestFormLayout(TestCase):
                     css_class = "columns",
                 ),
                 ButtonHolder(
-                    Submit('Save the world', 'Save', css_class='button white', data_id='test', data_name='test'),
+                    Submit('Save the world', '{{ value_var }}', css_class='button white', data_id='test', data_name='test'),
+                    Submit('store', 'Store results')
                 ),
                 Div(
                     'password1',
@@ -639,7 +640,7 @@ class TestFormLayout(TestCase):
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
-        c = Context({'form': TestForm(), 'form_helper': form_helper})
+        c = Context({'form': TestForm(), 'form_helper': form_helper, 'value_var': "Save"})
         html = template.render(c)
 
         self.assertTrue('multiField' in html)
@@ -655,10 +656,12 @@ class TestFormLayout(TestCase):
         self.assertTrue('data-id="test"' in html)
         self.assertTrue('data-name="test"' in html)
         self.assertTrue('name="save-the-world"' in html)
+        self.assertTrue('value="Save"' in html)
+        self.assertTrue('name="store"' in html)
+        self.assertTrue('value="Store results"' in html)
         self.assertTrue('id="custom-div"' in html)
         self.assertTrue('class="customdivs"' in html)
         self.assertTrue('test-markup="123"' in html)
-
 
     def test_layout_within_layout(self):
         form_helper = FormHelper()
