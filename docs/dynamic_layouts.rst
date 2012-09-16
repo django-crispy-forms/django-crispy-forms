@@ -43,9 +43,9 @@ We could do::
 We would en up having this layout::
 
     Layout(
-       'field_1',
-       Field('field_2', css_class='hello'),
-       Field('field_3', css_class='hello')
+        'field_1',
+        Field('field_2', css_class='hello'),
+        Field('field_3', css_class='hello')
     )
 
 Note how ``wrap`` affects every different layout object selected, if you would like to wrap ``field_2`` and ``field_3`` together in a ``Field`` layout object you will have to use ``wrap_together``.
@@ -53,17 +53,17 @@ Note how ``wrap`` affects every different layout object selected, if you would l
 Beware that the slice ``[1:3]`` only looks in the first level of depth of the layout. So if the previous layout was this way::
 
     Layout(
-       'field_1',
-       Div('field_2'),
-       'field_3'
+        'field_1',
+        Div('field_2'),
+        'field_3'
     )
 
 ``helper[1:3]`` would return this layout::
 
     Layout(
-       'field_1',
-       Field(Div('field_2'), css_class="hello"),
-       Field('field_3', css_class="hello")
+        'field_1',
+        Field(Div('field_2'), css_class="hello"),
+        Field('field_3', css_class="hello")
     )
 
 wrap_together
@@ -105,11 +105,11 @@ Selecting a field name
 If you pass a string with the field name, this field name will be searched greedy throughout the whole Layout depth levels. Imagine we have this layout::
 
     Layout(
-       'field_1',
-       Div(
-           Div('password')
+        'field_1',
+        Div(
+            Div('password')
         ),
-       'field_3'
+        'field_3'
     )
 
 If we do::
@@ -119,13 +119,13 @@ If we do::
 Previous layout would become::
 
     Layout(
-       'field_1',
-       Div(
-           Div(
-               Field('password', css_class="hero")
-           )
+        'field_1',
+        Div(
+            Div(
+                Field('password', css_class="hero")
+            )
         ),
-       'field_3'
+        'field_3'
     )
 
 filter
@@ -143,11 +143,11 @@ You can filter several layout objects types at the same time::
 By default ``filter`` is not greedy, so it only searches first depth level. But you can tune it to search in different levels of depth with a kwarg ``max_level`` (By default set to 0). Let' see some examples, to clarify it. Imagine we have this layout::
 
     Layout(
-       'field_1',
-       Div(
-           Div('password')
+        'field_1',
+        Div(
+            Div('password')
         ),
-       'field_3'
+        'field_3'
     )
 
 If we did::
@@ -157,11 +157,11 @@ If we did::
 Only ``field_1`` and ``field_3`` would be wrapped, resulting into::
 
     Layout(
-       Field('field_1', css_class="hello"),
-       Div(
-           Div('password')
+        Field('field_1', css_class="hello"),
+        Div(
+            Div('password')
         ),
-       Field('field_3', css_class="hello"),
+        Field('field_3', css_class="hello"),
     )
 
 If we wanted to search deeper, wrapping ``password``, we would need to set ``max_level`` to 2 or more::
@@ -192,17 +192,17 @@ Matches all fields of a widget type. This method assumes you are using a helper 
 ``filter_by_widget`` is greedy by default, so it searches in depth. Let's see a use case example, imagine we have this Layout::
 
     Layout(
-       'username',
-       Div('password1'),
-       Div('password2')
+        'username',
+        Div('password1'),
+        Div('password2')
     )
 
 Supposing ``password1`` and ``password2`` fields are using widget ``PasswordInput``, would turn into::
 
     Layout(
-       'username',
-       Div(Field('password1', css_class="hero")),
-       Div(Field('password2', css_class="hero"))
+        'username',
+        Div(Field('password1', css_class="hero")),
+        Div(Field('password2', css_class="hero"))
     )
 
 An interesting real use case example here would be to wrap all ``SelectInputs`` with a custom made ``ChosenField`` that renders the field using a chosenjs compatible field.
@@ -217,17 +217,17 @@ Excludes all fields of a widget type. This method assumes you are using a helper
 ``exclude_by_widget`` is greedy by default, so it searches in depth. Let's see a use case example, imagine we have this Layout::
 
     Layout(
-       'username',
-       Div('password1'),
-       Div('password2')
+        'username',
+        Div('password1'),
+        Div('password2')
     )
 
 Supposing ``password1`` and ``password2`` fields are using widget ``PasswordInput``, would turn into::
 
     Layout(
-       Field('username', css_class="hero"),
-       Div('password1'),
-       Div('password2')
+        Field('username', css_class="hero"),
+        Div('password1'),
+        Div('password2')
     )
 
 Manipulating a layout
