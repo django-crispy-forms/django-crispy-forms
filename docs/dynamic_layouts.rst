@@ -48,7 +48,7 @@ We would en up having this layout::
         Field('field_3', css_class='hello')
     )
 
-Note how ``wrap`` affects every different layout object selected, if you would like to wrap ``field_2`` and ``field_3`` together in a ``Field`` layout object you will have to use ``wrap_together``.
+Note how ``wrap`` affects each layout object selected, if you would like to wrap ``field_2`` and ``field_3`` together in a ``Field`` layout object you will have to use :ref:`wrap_together`.
 
 Beware that the slice ``[1:3]`` only looks in the first level of depth of the layout. So if the previous layout was this way::
 
@@ -66,10 +66,18 @@ Beware that the slice ``[1:3]`` only looks in the first level of depth of the la
         Field('field_3', css_class="hello")
     )
 
+Parameters passed to ``wrap`` or ``wrap_together`` will be used for creating the layout object that is wrapping selected fields. You can pass ``args`` and ``kwargs``. If you are using a layout object like ``Fieldset`` which needs a string as compulsory first argument, wrap will not work as desired unless you provide the text of the legend as an argument to ``wrap``. Let's see a valid example::
+
+    form.helper[1:3].wrap(Fieldset, "legend of the fieldset")
+
+Also you can pass ``args`` and ``kwargs``::
+
+    form.helper[1:3].wrap(Fieldset, "legend of the fieldset", css_class="fieldsets")
+
 wrap_together
 ~~~~~~~~~~~~~
 
-One useful action you can apply on a slice is ``wrap_together``, which wraps a whole slice within a layout object type and parameters passed. Let's see an example. If We had this layout::
+``wrap_together`` wraps a whole slice within a layout object type with parameters passed. Let's see an example. If We had this layout::
 
     Layout(
         'field_1',
