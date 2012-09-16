@@ -74,6 +74,8 @@ Also you can pass ``args`` and ``kwargs``::
 
     form.helper[1:3].wrap(Fieldset, "legend of the fieldset", css_class="fieldsets")
 
+.. _`wrap_together`:
+
 wrap_together
 ~~~~~~~~~~~~~
 
