@@ -21,7 +21,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
     :param field: Can be a string or a Layout object like `Row`. If it's a layout
         object, we call its render method, otherwise we instantiate a BoundField
-        and render it using default template 'uni_form/field.html'
+        and render it using default template 'CRISPY_TEMPLATE_PACK/field.html'
         The field is added to a list that the form holds called `rendered_fields`
         to avoid double rendering fields.
 
