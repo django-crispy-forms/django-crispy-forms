@@ -78,3 +78,19 @@ class FormActions(LayoutObject):
 
     def flat_attrs(self):
         return flatatt(self.attrs)
+
+
+class InlineCheckboxes(Field):
+    """
+    Layout object for rendering checkboxes inline::
+
+        InlineCheckboxes('field_name')
+    """
+    template = "bootstrap/layout/checkboxselectmultiple_inline.html"
+
+    def render(self, form, form_style, context):
+        context.update({'inline_class': 'inline'})
+        html = super(InlineCheckboxes, self).render(form, form_style, context)
+        # We delete the inserted key to avoid side effects
+        del context.dicts[-2]['inline_class']
+        return html

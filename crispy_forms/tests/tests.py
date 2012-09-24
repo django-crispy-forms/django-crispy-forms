@@ -20,7 +20,7 @@ from crispy_forms.layout import (
     Div, Field, MultiWidgetField
 )
 from crispy_forms.bootstrap import (
-    AppendedPrependedText, AppendedText, PrependedText
+    AppendedPrependedText, AppendedText, PrependedText, InlineCheckboxes
 )
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
@@ -864,6 +864,13 @@ class TestFormLayout(TestCase):
         html = render_crispy_form(test_form)
 
         self.assertEqual(html.count('checked="checked"'), 5)
+
+        test_form.helper = FormHelper(test_form)
+        test_form.helper[1].wrap(InlineCheckboxes, inline=True)
+        html = render_crispy_form(test_form)
+
+        self.assertEqual(html.count('checkbox inline"'), 3)
+        self.assertEqual(html.count('inline"'), 3)
 
 
 class TestLayoutObjects(TestCase):

@@ -2,6 +2,7 @@
 
 ## 1.2.0
 
+ * Added `InlineCheckboxes` to bootstrap layout objects, for renderin checkboxes inline.
  * `BaseInput` subclasses, like `Submit` can now have its value set to a context variable.
  * Rendering inputs added with `add_input` in bootstrap using the right templates, see #GH-95.
  * Improved formsets rendering docs thanks to Samuel Goldszmidt, see #GH-92.
