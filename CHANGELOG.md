@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.2.0
+## 1.2.0 (2012/9/24)
 
  * Update prepended and appended templates to respect hidden fields, thanks to Bojan Mihelac, see #GH-103.
  * Added `InlineCheckboxes` to bootstrap layout objects, for rendering checkboxes inline.
