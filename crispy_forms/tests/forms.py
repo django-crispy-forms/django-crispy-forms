@@ -68,7 +68,8 @@ class TestModel(models.Model):
 class TestForm3(forms.ModelForm):
     class Meta:
         model = TestModel
-        fields = ['email']
+        fields = ['email', 'password']
+        exclude = ['password']
 
     def __init__(self, *args, **kwargs):
         super(TestForm3, self).__init__(*args, **kwargs)
@@ -82,4 +83,3 @@ class ExampleForm(forms.Form):
 class FormWithMeta(TestForm):
     class Meta:
         fields = ('email', 'first_name', 'last_name')
-
