@@ -548,6 +548,21 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('<input type="text" name="comment"'), 2)
         self.assertEqual(html.count('name="is_company"'), 1)
 
+    def test_hidden_fields(self):
+        form = TestForm()
+        # All fields fake hidden
+        for field in form.fields:
+            form[field].field.widget.is_hidden = True
+
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            AppendedText('password1', 'foo'),
+            PrependedText('password2', 'bar'),
+            AppendedPrependedText('email', 'bar'),
+            InlineCheckboxes('first_name'),
+        )
+        html = render_crispy_form(form)
+        self.assertEqual(html.count("<input"), 4)
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
         form_helper = FormHelper()

@@ -1,10 +1,14 @@
-<div id="div_{{ field.auto_id }}" class="clearfix control-group{% if form_show_errors%}{% if field.errors %} error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+    <div id="div_{{ field.auto_id }}" class="clearfix control-group{% if form_show_errors%}{% if field.errors %} error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
 
-    {% if field.label %}
-        <label for="{{ field.auto_id }}"  class="control-label {% if field.field.required %}requiredField {% endif %}">
-            {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
-        </label>
-    {% endif %}
+        {% if field.label %}
+            <label for="{{ field.auto_id }}"  class="control-label {% if field.field.required %}requiredField {% endif %}">
+                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+            </label>
+        {% endif %}
 
-    {% include 'bootstrap/layout/checkboxselectmultiple.html' %}
-</div>
+        {% include 'bootstrap/layout/checkboxselectmultiple.html' %}
+    </div>
+{% endif %}

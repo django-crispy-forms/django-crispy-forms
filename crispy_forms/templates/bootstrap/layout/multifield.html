@@ -11,11 +11,11 @@
     {% if field|is_checkbox %}
         {% crispy_field field %}
     {% endif %}
-    
+
     {% if field.label %}
         {{ field.label }}
     {% endif %}
-    
+
     {% if not field|is_checkbox %}
         {% crispy_field field %}
     {% endif %}
@@ -23,5 +23,5 @@
     {% if field.label %}
         </label>
     {% endif %}
-    
+
 {% endif %}
