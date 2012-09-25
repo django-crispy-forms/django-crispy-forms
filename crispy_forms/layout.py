@@ -75,9 +75,8 @@ class LayoutObject(object):
             # If it's a layout object and we haven't reached the max depth limit or greedy
             # we recursive call
             if hasattr(layout_object, 'get_field_names') and (len(index) < max_level or greedy):
-                pointers = pointers + layout_object.get_layout_objects(
-                    *LayoutClasses, index=index + [i], max_level=max_level, greedy=greedy
-                )
+                new_kwargs = {'index': index + [i], 'max_level': max_level, 'greedy': greedy}
+                pointers = pointers + layout_object.get_layout_objects(*LayoutClasses, **new_kwargs)
 
         return pointers
 
