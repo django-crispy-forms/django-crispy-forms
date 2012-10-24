@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 
 from layout import Layout, LayoutSlice
-from utils import render_field, flatatt
+from utils import render_field, flatatt, TEMPLATE_PACK
 from exceptions import FormHelpersException
 
 
@@ -226,20 +226,21 @@ class FormHelper(DynamicLayoutHandler):
     def add_layout(self, layout):
         self.layout = layout
 
-    def render_layout(self, form, context):
+    def render_layout(self, form, context, template_pack=TEMPLATE_PACK):
         """
         Returns safe html of the rendering of the layout
         """
         form.rendered_fields = set()
 
         # This renders the specifed Layout
-        html = self.layout.render(form, self.form_style, context)
+        html = self.layout.render(form, self.form_style, context,
+                                  template_pack=template_pack)
 
         if self.render_unmentioned_fields:
             fields = set(form.fields.keys())
             left_fields_to_render = fields - form.rendered_fields
             for field in left_fields_to_render:
-                html += render_field(field, form, self.form_style, context)
+                html += render_field(field, form, self.form_style, context, template_pack=template_pack)
 
         # If the user has meta fields defined, not included in the layout
         # we suppose they need to be rendered. Othewise we renderd the
@@ -249,11 +250,11 @@ class FormHelper(DynamicLayoutHandler):
             left_fields_to_render = current_fields - form.rendered_fields
 
             for field in left_fields_to_render:
-                html += render_field(field, form, self.form_style, context)
+                html += render_field(field, form, self.form_style, context, template_pack=template_pack)
 
         return mark_safe(html)
 
-    def get_attributes(self):
+    def get_attributes(self, template_pack=TEMPLATE_PACK):
         """
         Used by crispy_forms_tags to get helper attributes
         """
@@ -275,12 +276,12 @@ class FormHelper(DynamicLayoutHandler):
             items['attrs']['id'] = self.form_id.strip()
         if self.form_class:
             # uni_form TEMPLATE PACK has a uniForm class by default
-            if getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap') == 'uni_form':
+            if template_pack == 'uni_form':
                 items['attrs']['class'] = "uniForm %s" % self.form_class.strip()
             else:
                 items['attrs']['class'] = self.form_class.strip()
         else:
-            if getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap') == 'uni_form':
+            if template_pack == 'uni_form':
                 items['attrs']['class'] = self.attrs.get('class', '') + " uniForm"
 
         items['flat_attrs'] = flatatt(items['attrs'])

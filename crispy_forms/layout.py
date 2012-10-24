@@ -1,5 +1,3 @@
-import os
-
 from django.conf import settings
 from django.template import Context, Template
 from django.template.loader import render_to_string
@@ -77,9 +75,8 @@ class LayoutObject(object):
             # If it's a layout object and we haven't reached the max depth limit or greedy
             # we recursive call
             if hasattr(layout_object, 'get_field_names') and (len(index) < max_level or greedy):
-                pointers = pointers + layout_object.get_layout_objects(
-                    *LayoutClasses, index=index + [i], max_level=max_level, greedy=greedy
-                )
+                new_kwargs = {'index': index + [i], 'max_level': max_level, 'greedy': greedy}
+                pointers = pointers + layout_object.get_layout_objects(*LayoutClasses, **new_kwargs)
 
         return pointers
 
@@ -119,10 +116,11 @@ class Layout(LayoutObject):
     def __init__(self, *fields):
         self.fields = list(fields)
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = ""
         for field in self.fields:
-            html += render_field(field, form, form_style, context)
+            html += render_field(field, form, form_style,
+                                 context, template_pack=template_pack)
         return html
 
 
@@ -235,10 +233,11 @@ class ButtonHolder(LayoutObject):
         self.css_id = kwargs.get('css_id', None)
         self.template = kwargs.get('template', self.template)
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = u''
         for field in self.fields:
-            html += render_field(field, form, form_style, context)
+            html += render_field(field, form, form_style,
+                                 context, template_pack=template_pack)
 
         return render_to_string(self.template, Context({'buttonholder': self, 'fields_output': html}))
 
@@ -261,7 +260,7 @@ class BaseInput(object):
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         """
         Renders an `<input />` if container is used as a Layout object.
         Input button value can be a variable in context.
@@ -344,10 +343,11 @@ class Fieldset(LayoutObject):
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         fields = ''
         for field in self.fields:
-            fields += render_field(field, form, form_style, context)
+            fields += render_field(field, form, form_style, context,
+                                   template_pack=template_pack)
 
         legend = ''
         if self.legend:
@@ -369,7 +369,7 @@ class MultiField(LayoutObject):
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         if form.errors:
             self.css_class += " error"
 
@@ -378,7 +378,7 @@ class MultiField(LayoutObject):
         fields_output = u''
         self.bound_fields = []
         for field in self.fields:
-            fields_output += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class, layout_object=self)
+            fields_output += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class, layout_object=self, template_pack=template_pack)
 
         return render_to_string(self.template, Context({'multifield': self, 'fields_output': fields_output}))
 
@@ -405,10 +405,10 @@ class Div(LayoutObject):
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         fields = ''
         for field in self.fields:
-            fields += render_field(field, form, form_style, context)
+            fields += render_field(field, form, form_style, context, template_pack=template_pack)
 
         return render_to_string(self.template, Context({'div': self, 'fields': fields}))
 
@@ -463,7 +463,7 @@ class TabHolder(Div):
     """
     TabHolder object. It wraps Tab objects in a container. Requiers bootstrap-tab.js::
 
-	    TabHolder(Tab('form_field_1', 'form_field_2'), Tab('form_field_3'))
+            TabHolder(Tab('form_field_1', 'form_field_2'), Tab('form_field_3'))
     """
     template = 'bootstrap/layout/tab.html'
     css_class = 'nav nav-tabs'
@@ -479,11 +479,12 @@ class TabHolder(Div):
 
         return self.fields[0]
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         links, content = '', ''
         self.first_tab_with_errors(form.errors.keys()).active = True
         for tab in self.fields:
-            content += render_field(tab, form, form_style, context)
+            content += render_field(tab, form, form_style, context,
+                                    template_pack=template_pack)
             links += tab.render_link()
         return render_to_string(self.template,
             Context({'tabs': self, 'links': links, 'content': content}))
@@ -512,7 +513,7 @@ class HTML(object):
     def __init__(self, html):
         self.html = html
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         return Template(unicode(self.html)).render(context)
 
 
@@ -544,10 +545,10 @@ class Field(LayoutObject):
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k,v in kwargs.items()]))
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = ''
         for field in self.fields:
-            html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs)
+            html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
         return html
 
 class MultiWidgetField(Field):
