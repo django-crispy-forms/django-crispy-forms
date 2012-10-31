@@ -3,7 +3,7 @@
 {% if field.is_hidden %}
     {{ field }}
 {% else %}
-    <div id="div_{{ field.auto_id }}" class="clearfix control-group{% if form_show_errors and field.errors %} error{% endif %} {% if field.field.widget.attrs.class %} {{ field.field.widget.attrs.class }}{% endif %}">
+    <div id="div_{{ field.auto_id }}" class="clearfix control-group{% if form_show_errors and field.errors %} error{% endif %}">
 
         {% if field.label %}
             <label for="{{ field.id_for_label }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
@@ -12,10 +12,10 @@
         {% endif %}
 
         <div class="controls">
-            <div class="input-prepend">
+            <span class="input-prepend">
                 <span class="add-on {% if active %}active{% endif %}">{{ crispy_prepended_text|safe }}</span>
                 {% crispy_field field %}
-            </div>
+            </span>
 
             {% include 'bootstrap/layout/help_text_and_errors.html' %}
         </div>
