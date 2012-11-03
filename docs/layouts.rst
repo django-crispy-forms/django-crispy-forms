@@ -190,6 +190,13 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: appended_prepended_text.png
    :align: center
 
+- **InlineCheckboxes**: It renders a Django ``forms.MultipleChoiceField`` field using inline checkboxes::
+
+    InlineCheckboxes('field_name')
+
+.. image:: inline_checkboxes.png
+   :align: center
+
 - **StrictButton**: It renders a button using ``<button>`` html, not ``input``. By default ``type`` is set to ``button`` and ``class`` is set to ``btn``::
 
     StrictButton('Button's content', name="go", value="go", css_class="extra")
