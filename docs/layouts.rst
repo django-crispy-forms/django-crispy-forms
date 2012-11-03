@@ -165,7 +165,6 @@ These ones live under module ``crispy_forms.bootstrap``.
     )
 
 .. image:: form_actions.png
-   :scale: 60
    :align: center
 
 - **AppendedText**: It renders a bootstrap appended text input. The first parameter is the name of the field to add appended text to, then the appended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render appended text active::
