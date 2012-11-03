@@ -7,9 +7,9 @@ Fundamentals
 
 Django-crispy-forms defines another powerful class called ``Layout``, which allows you to change the way the form fields are rendered. This allows you to set the order of the fields, wrap them in divs or other structures, add html, set ids, classes or attributes to whatever you want, etc. And all that without writing a custom form template, using programmatic layouts. Just attach the layout to a helper, layouts are optional, but probably the most powerful thing django-crispy-forms has to offer.
 
-A ``Layout`` is constructed by layout objects, which can be thought of as form components. You assemble your layout using those. For the time being, your choices are: ``ButtonHolder``, ``Button``, ``Div``, ``Row``, ``Column``, ``Fieldset``, ``MultiField``, ``HTML``, ``TemplateInclude``, ``Hidden``, ``Reset``, ``Submit``, ``Field``, ``AppendedText``, ``PrependedText``, ``FormActions``.
+A ``Layout`` is constructed by layout objects, which can be thought of as form components.
 
-All these components are explained later in :ref:`layout objects`. What you need to know now about them is that every component renders a different template and has a different purpose. Let’s write a couple of different layouts for our form, continuing with our form class example (note that the full form is not shown again).
+All these components are explained later in :ref:`layout objects`, what you need to know now about them is that every component renders a different template and has a different purpose. Let’s write a couple of different layouts for our form, continuing with our form class example (note that the full form is not shown again).
 
 Some layout objects are specific to a template pack. For example ``ButtonHolder`` is for ``uni_form`` template_pack, while ``FormActions`` is for ``bootstrap`` template pack.
 
@@ -155,23 +155,56 @@ These ones live in module ``crispy_forms.layout``. Probably in the future they w
 Bootstrap Layout objects
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-This ones live in module ``crispy_forms.bootstrap``.
+These ones live under module ``crispy_forms.bootstrap``.
 
-- **FormActions**: It wraps fields in a ``<div class="form-actions">``. This is a bootstrap layout object to wrapp form's submit buttons::
+- **FormActions**: It wraps fields in a ``<div class="form-actions">``. It is usually used to wrap form's buttons::
 
     FormActions(
-        Submit('save', 'save', css_class="btn-primary")
+        Submit('save', 'Save changes'),
+        Button('cancel', 'Cancel')
     )
+
+.. image:: form_actions.png
+   :scale: 60
+   :align: center
 
 - **AppendedText**: It renders a bootstrap appended text input. The first parameter is the name of the field to add appended text to, then the appended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render appended text active::
 
     AppendedText('field_name', 'appended text to show')
-    AppendedText('field_name', 'appended text to show', active=True)
+    AppendedText('field_name', '$', active=True)
+
+.. image:: appended_text.png
+   :align: center
 
 - **PrependedText**: It renders a bootstrap prepended text input. The first parameter is the name of the field to add prepended text to, then the prepended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render prepended text active::
 
     PrependedText('field_name', '<b>Prepended text</b> to show')
+    PrependedText('field_name', '@', placeholder="username")
 
+.. image:: prepended_text.png
+   :align: center
+
+- **AppendedPrependedText**: It renders a combined prepended and appended text. The first parameter is the name of the field, then the prepended text and finally the appended text::
+
+    AppendedPrependedText('field_name', '$', '.00'),
+
+.. image:: appended_prepended_text.png
+   :align: center
+
+- **StrictButton**: It renders a button using ``<button>`` html, not ``input``. By default ``type`` is set to ``button`` and ``class`` is set to ``btn``::
+
+    StrictButton('Button's content', name="go", value="go", css_class="extra")
+    StrictButton('Success', css_class="btn-success")
+
+.. image:: strict_button.png
+   :align: center
+
+- **FieldWithButtons**: You can create an input connected with buttons::
+
+    FieldWithButtons('field_name', StrictButton("Go!"))
+
+.. image:: field_with_buttons.png
+   :align: center
 
 Overriding layout objects templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
