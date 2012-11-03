@@ -1305,6 +1305,17 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(form.helper.layout[0][1][0][0], basestring))
         self.assertTrue(isinstance(form.helper.layout[0][4][0], basestring))
 
+    def test_all_without_layout(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        self.assertRaises(FormHelpersException, lambda: form.helper.all().wrap(Div))
+
+    def test_filter_by_widget_without_form(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.layout = self.advanced_layout
+        self.assertRaises(FormHelpersException, lambda: form.helper.filter_by_widget(forms.PasswordInput))
+
     def test_getitem_by_field_name(self):
         form = TestForm()
         form.helper = FormHelper(form)

@@ -8,16 +8,27 @@ from exceptions import FormHelpersException
 
 
 class DynamicLayoutHandler(object):
+    def _check_layout(self):
+        if self.layout is None:
+            raise FormHelpersException("You need to set a layout in your FormHelper")
+
+    def _check_layout_and_form(self):
+        self._check_layout()
+        if self.form is None:
+            raise FormHelpersException("You need to pass a form instance to your FormHelper")
+
     def all(self):
         """
         Returns all layout objects of first level of depth
         """
+        self._check_layout()
         return LayoutSlice(self.layout, slice(0, len(self.layout.fields), 1))
 
     def filter(self, *LayoutClasses, **kwargs):
         """
         Returns a LayoutSlice pointing to layout objects of type `LayoutClass`
         """
+        self._check_layout()
         max_level = kwargs.pop('max_level', 0)
         filtered_layout_objects = self.layout.get_layout_objects(LayoutClasses, max_level=max_level)
 
@@ -27,7 +38,7 @@ class DynamicLayoutHandler(object):
         """
         Returns a LayoutSlice pointing to fields with widgets of `widget_type`
         """
-        assert(self.layout is not None and self.form is not None)
+        self._check_layout_and_form()
         layout_field_names = self.layout.get_field_names()
 
         # Let's filter all fields with widgets like widget_type
@@ -42,7 +53,7 @@ class DynamicLayoutHandler(object):
         """
         Returns a LayoutSlice pointing to fields with widgets NOT matching `widget_type`
         """
-        assert(self.layout is not None and self.form is not None)
+        self._check_layout_and_form()
         layout_field_names = self.layout.get_field_names()
 
         # Let's exclude all fields with widgets like widget_type
@@ -65,7 +76,7 @@ class DynamicLayoutHandler(object):
             if hasattr(self, key):
                 return getattr(self, key)
 
-            assert(self.layout is not None)
+            self._check_layout()
             layout_field_names = self.layout.get_field_names()
 
             filtered_field = []
