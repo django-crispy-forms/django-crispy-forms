@@ -1,8 +1,8 @@
-from django.template import Context
+from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.forms.util import flatatt
 
-from layout import LayoutObject, Field
+from layout import LayoutObject, Field, Div
 from utils import render_field
 
 
@@ -94,3 +94,46 @@ class InlineCheckboxes(Field):
         # We delete the inserted key to avoid side effects
         del context.dicts[-2]['inline_class']
         return html
+
+
+class FieldWithButtons(Div):
+    css_class = "input-append controls"
+    template = 'bootstrap/layout/field_with_buttons.html'
+
+    def render(self, form, form_style, context):
+        fields = ''
+        for field in self.fields:
+            fields += render_field(field, form, form_style, context, 'bootstrap/layout/simple_field.html')
+
+        return render_to_string(self.template, Context({
+            'div': self, 'fields': fields, 'first_field': self.fields[0]
+        }))
+
+
+class StrictButton(object):
+    """
+    Layout oject for rendering an HTML button::
+
+        Button("button content", css_class="extra")
+    """
+    template = 'bootstrap/layout/button.html'
+    field_classes = 'btn'
+
+    def __init__(self, content, **kwargs):
+        self.content = content
+        self.template = kwargs.pop('template', self.template)
+
+        kwargs.setdefault('type', 'button')
+
+        # We turn css_id and css_class into id and class
+        if kwargs.has_key('css_id'):
+            kwargs['id'] = kwargs.pop('css_id')
+        kwargs['class'] = self.field_classes
+        if kwargs.has_key('css_class'):
+            kwargs['class'] += " %s" % kwargs.pop('css_class')
+
+        self.flat_attrs = flatatt(kwargs)
+
+    def render(self, form, form_style, context):
+        self.content = Template(unicode(self.content)).render(context)
+        return render_to_string(self.template, Context({'button': self}))

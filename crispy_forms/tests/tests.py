@@ -20,7 +20,8 @@ from crispy_forms.layout import (
     Div, Field, MultiWidgetField
 )
 from crispy_forms.bootstrap import (
-    AppendedPrependedText, AppendedText, PrependedText, InlineCheckboxes
+    AppendedPrependedText, AppendedText, PrependedText, InlineCheckboxes,
+    FieldWithButtons, StrictButton
 )
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
@@ -563,6 +564,28 @@ class TestFormLayout(TestCase):
         )
         html = render_crispy_form(form)
         self.assertEqual(html.count("<input"), 4)
+
+    def test_field_with_buttons(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            FieldWithButtons(
+                'password1',
+                StrictButton("Go!", css_id="go-button"),
+                StrictButton("No!", css_class="extra"),
+                StrictButton("Test", type="submit", name="whatever", value="something")
+            )
+        )
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('class="input-append controls"'), 1)
+        self.assertEqual(html.count('id="go-button"'), 1)
+        self.assertEqual(html.count("Go!"), 1)
+        self.assertEqual(html.count("No!"), 1)
+        self.assertEqual(html.count('class="btn"'), 2)
+        self.assertEqual(html.count('class="btn extra"'), 1)
+        self.assertEqual(html.count('type="submit"'), 1)
+        self.assertEqual(html.count('name="whatever"'), 1)
+        self.assertEqual(html.count('value="something"'), 1)
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
         form_helper = FormHelper()
