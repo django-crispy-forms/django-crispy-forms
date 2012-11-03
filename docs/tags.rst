@@ -22,13 +22,13 @@ For the rest of this document we will use the following example form of how to u
         )
 
         favorite_food = forms.CharField(
-            label = "What is you favorite food?",
+            label = "What is your favorite food?",
             max_length = 80,
             required = True,
         )
 
         favorite_color = forms.CharField(
-            label = "What is you favorite color?",
+            label = "What is your favorite color?",
             max_length = 80,
             required = True,
         )
