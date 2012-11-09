@@ -1,5 +1,15 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.2.1
+
+ * Fixed a bug that was making crispy-forms render extra fields with ModelForms that didn't have Meta.fields defined, thanks to Jean-Baptiste Juin for reporting it.
+ * Fixed a bug that was breaking Django 1.2 compatibility when copying context variables, thanks to Alex Yakovlev for submitting a patch, see #108.
+ * Fixed a bug for `AppendedText`, `PrependedText` and `AppendedPrependedText` layout objects, thanks to Bojan Mihelac, see #104.
+ * Fixed a bug in appended and prepended text layout objects for respecting hidden fields, thanks to Bojan Mihelac, see #103.
+ * Added two new bootstrap layout objects: `FieldWithButtons` and `StrictButton`.
+ * Added checks and better error messages for dynamic API.
+ * Fixed `get_layout_objects` recursive call for Python2.5 compatibility, thanks to Can Başçıl for reporting it.
+
 ## 1.2.0 (2012/9/24)
 
  * Update prepended and appended templates to respect hidden fields, thanks to Bojan Mihelac, see #GH-103.
