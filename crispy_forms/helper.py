@@ -252,15 +252,19 @@ class FormHelper(DynamicLayoutHandler):
             for field in left_fields_to_render:
                 html += render_field(field, form, self.form_style, context)
 
-        # If the user has meta fields defined, not included in the layout
-        # we suppose they need to be rendered. Othewise we renderd the
+        # If the user has Meta.fields defined, not included in the layout
+        # we suppose they need to be rendered. Otherwise we render the
         # layout fields strictly
-        if getattr(form, 'Meta', None):
-            current_fields = set(getattr(form, 'fields', []))
-            left_fields_to_render = current_fields - form.rendered_fields
+        if hasattr(form, 'Meta'):
+            if hasattr(form.Meta, 'fields'):
+                current_fields = set(getattr(form, 'fields', []))
+                meta_fields = set(getattr(form.Meta, 'fields'))
 
-            for field in left_fields_to_render:
-                html += render_field(field, form, self.form_style, context)
+                fields_to_render = current_fields & meta_fields
+                left_fields_to_render = fields_to_render - form.rendered_fields
+
+                for field in left_fields_to_render:
+                    html += render_field(field, form, self.form_style, context)
 
         return mark_safe(html)
 

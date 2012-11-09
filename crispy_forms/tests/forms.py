@@ -76,6 +76,11 @@ class TestForm3(forms.ModelForm):
         self.helper = FormHelper(self)
 
 
+class TestForm4(forms.ModelForm):
+    class Meta:
+        model = TestModel
+
+
 class ExampleForm(forms.Form):
     comment = forms.CharField()
 

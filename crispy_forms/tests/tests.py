@@ -28,7 +28,7 @@ from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
 from forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
-    FormWithMeta
+    FormWithMeta, TestForm4
 )
 
 
@@ -896,6 +896,15 @@ class TestFormLayout(TestCase):
     def test_default_layout_two(self):
         test_form = TestForm3()
         self.assertEqual(test_form.helper.layout.fields, ['email'])
+
+    def test_modelform_layout_without_meta(self):
+        test_form = TestForm4()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout('email')
+        html = render_crispy_form(test_form)
+
+        self.assertTrue('email' in html)
+        self.assertFalse('password' in html)
 
     def test_multiplecheckboxes(self):
         test_form = CheckboxesTestForm()
