@@ -1,10 +1,17 @@
-<div {% if div.css_id %}id="{{ div.css_id }}"{% endif %} 
-    {% if div.css_class %}class="{{ div.css_class }}"{% endif %} {{ div.flat_attrs|safe }}>
-    {% if first_field.label %}
-        <label for="{{ first_field.id_for_label }}" class="control-label {% if first_field.field.required %}requiredField{% endif %}">
-            {{ first_field.label|safe }}{% if first_field.field.required %}<span class="asteriskField">*</span>{% endif %}
+{% load crispy_forms_field %}
+
+<div {% if div.css_id %}id="{{ div.css_id }}"{% endif %} class="control-group{% if form_show_errors%}{% if field.errors %} error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}{% if div.css_class %} {{ div.css_class }}{% endif %}" {{ div.flat_attrs|safe }}>
+    {% if field.label %}
+        <label for="{{ field.id_for_label }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
+            {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
         </label>
     {% endif %}
 
-   {{ fields|safe }}
+    <div class="controls">
+        <div class="input-append">
+            {% crispy_field field %}
+            {{ buttons|safe }}
+        </div>
+        {% include 'bootstrap/layout/help_text_and_errors.html' %}
+    </div>
 </div>

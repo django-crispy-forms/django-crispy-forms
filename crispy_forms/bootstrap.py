@@ -97,17 +97,18 @@ class InlineCheckboxes(Field):
 
 
 class FieldWithButtons(Div):
-    css_class = "input-append controls"
     template = 'bootstrap/layout/field_with_buttons.html'
 
     def render(self, form, form_style, context):
-        fields = ''
-        for field in self.fields:
-            fields += render_field(field, form, form_style, context, 'bootstrap/layout/simple_field.html')
+        # We first render the buttons
+        buttons = ''
+        for field in self.fields[1:]:
+            buttons += render_field(field, form, form_style, context,
+                'bootstrap/layout/field.html', layout_object=self)
 
-        return render_to_string(self.template, Context({
-            'div': self, 'fields': fields, 'first_field': self.fields[0]
-        }))
+        context.update({'div': self, 'buttons': buttons})
+        return render_field(self.fields[0], form, form_style, context,
+            'bootstrap/layout/field_with_buttons.html')
 
 
 class StrictButton(object):
