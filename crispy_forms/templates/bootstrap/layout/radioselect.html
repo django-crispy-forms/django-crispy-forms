@@ -1,9 +1,9 @@
-<div class="controls" {% if flat_attrs %}{{ flat_attrs|safe }}{% endif %}>
+<div class="controls"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
     {% include 'bootstrap/layout/field_errors_block.html' %}
 
     {% for choice in field.field.choices %}
         <label class="radio">
-            <input type="radio" {% if choice.0|stringformat:"s" == field.value|stringformat:"s" %}checked="checked" {% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}">{{ choice.1 }}
+            <input type="radio"{% if choice.0|stringformat:"s" == field.value|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}">{{ choice.1 }}
         </label>
     {% endfor %}
 
