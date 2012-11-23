@@ -373,7 +373,6 @@ class MultiField(LayoutObject):
         # We need to render fields using django-uni-form render_field so that MultiField can
         # hold other Layout objects inside itself
         fields_output = u''
-        self.bound_fields = []
         for field in self.fields:
             fields_output += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class, layout_object=self)
 

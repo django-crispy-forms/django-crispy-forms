@@ -105,7 +105,10 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
         # We save the Layout object's bound fields in the layout object's `bound_fields` list
         if layout_object is not None:
-            layout_object.bound_fields.append(bound_field)
+            if hasattr(layout_object, 'bound_fields') and isinstance(layout_object.bound_fields, list):
+                layout_object.bound_fields.append(bound_field)
+            else:
+                layout_object.bound_fields = [bound_field]
 
         context.update({
             'field': bound_field,
