@@ -570,15 +570,19 @@ class TestFormLayout(TestCase):
         form.helper = FormHelper()
         form.helper.layout = Layout(
             FieldWithButtons(
-                'password1',
+                Field('password1', css_class="span4"),
                 StrictButton("Go!", css_id="go-button"),
                 StrictButton("No!", css_class="extra"),
-                StrictButton("Test", type="submit", name="whatever", value="something")
+                StrictButton("Test", type="submit", name="whatever", value="something"),
+                css_class="extra",
+                autocomplete="off"
             )
         )
         html = render_crispy_form(form)
-        self.assertEqual(html.count('class="control-group"'), 1)
+        self.assertEqual(html.count('class="control-group extra"'), 1)
+        self.assertEqual(html.count('autocomplete="off"'), 1)
         self.assertEqual(html.count('class="input-append"'), 1)
+        self.assertEqual(html.count('class="span4'), 1)
         self.assertEqual(html.count('id="go-button"'), 1)
         self.assertEqual(html.count("Go!"), 1)
         self.assertEqual(html.count("No!"), 1)

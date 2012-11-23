@@ -107,8 +107,15 @@ class FieldWithButtons(Div):
                 'bootstrap/layout/field.html', layout_object=self)
 
         context.update({'div': self, 'buttons': buttons})
-        return render_field(self.fields[0], form, form_style, context,
-            'bootstrap/layout/field_with_buttons.html')
+
+        if isinstance(self.fields[0], Field):
+            # FieldWithButtons(Field('field_name'), StrictButton("go"))
+            # We render the field passing its name and attributes
+            return render_field(self.fields[0][0], form, form_style, context,
+                'bootstrap/layout/field_with_buttons.html', attrs=self.fields[0].attrs)
+        else:
+            return render_field(self.fields[0], form, form_style, context,
+                'bootstrap/layout/field_with_buttons.html')
 
 
 class StrictButton(object):
