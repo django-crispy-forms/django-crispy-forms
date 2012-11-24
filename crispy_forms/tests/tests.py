@@ -995,10 +995,10 @@ class TestLayoutObjects(TestCase):
         html = template.render(c)
 
         # Check form parameters
-        self.assertEqual(html.count('<span class="add-on ">@</span>'), 1)
-        self.assertEqual(html.count('<span class="add-on ">gmail.com</span>'), 1)
-        self.assertEqual(html.count('<span class="add-on ">#</span>'), 1)
-        self.assertEqual(html.count('<span class="add-on ">$</span>'), 1)
+        self.assertEqual(html.count('<span class="add-on">@</span>'), 1)
+        self.assertEqual(html.count('<span class="add-on">gmail.com</span>'), 1)
+        self.assertEqual(html.count('<span class="add-on">#</span>'), 1)
+        self.assertEqual(html.count('<span class="add-on">$</span>'), 1)
 
 
 class TestDynamicLayouts(TestCase):
