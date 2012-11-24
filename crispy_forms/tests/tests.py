@@ -241,6 +241,7 @@ class TestFormHelpers(TestCase):
             AppendedText('email', 'whatever'),
             PrependedText('first_name', 'blabla'),
             AppendedPrependedText('last_name', 'foo', 'bar'),
+            MultiField('legend', 'password1', 'password2')
         )
         form.is_valid()
 
@@ -248,6 +249,30 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
         self.assertEqual(html.count('error'), 6)
 
+        form.helper.form_show_errors = False
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('error'), 0)
+
+    def test_multifield_errors(self):
+        form = TestForm({
+            'email': 'invalidemail',
+            'password1': 'yes',
+            'password2': 'yes',
+        })
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            MultiField('legend', 'email')
+        )
+        form.is_valid()
+
+        form.helper.form_show_errors = True
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('error'), 3)
+
+        # Reset layout for avoiding side effects
+        form.helper.layout = Layout(
+            MultiField('legend', 'email')
+        )
         form.helper.form_show_errors = False
         html = render_crispy_form(form)
         self.assertEqual(html.count('error'), 0)

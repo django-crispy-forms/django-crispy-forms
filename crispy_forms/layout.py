@@ -353,7 +353,7 @@ class Fieldset(LayoutObject):
 
 
 class MultiField(LayoutObject):
-    """ multiField container. Renders to a multiField <div> """
+    """ MultiField container. Renders to a MultiField <div> """
     template = "uni_form/layout/multifield.html"
 
     def __init__(self, label, *fields, **kwargs):
@@ -367,16 +367,18 @@ class MultiField(LayoutObject):
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context):
-        if form.errors:
-            self.css_class += " error"
+        # If a field within MultiField contains errors
+        if context['form_show_errors']:
+            for field in map(lambda pointer: pointer[1], self.get_field_names()):
+                if field in form.errors:
+                    self.css_class += " error"
 
-        # We need to render fields using django-uni-form render_field so that MultiField can
-        # hold other Layout objects inside itself
         fields_output = u''
         for field in self.fields:
             fields_output += render_field(field, form, form_style, context, 'uni_form/multifield.html', self.label_class, layout_object=self)
 
-        return render_to_string(self.template, Context({'multifield': self, 'fields_output': fields_output}))
+        context.update({'multifield': self, 'fields_output': fields_output})
+        return render_to_string(self.template, context)
 
 
 class Div(LayoutObject):
