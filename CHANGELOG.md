@@ -2,7 +2,13 @@
 
 ## 1.2.1
 
- * Fixed a bug that was making crispy-forms render extra fields with ModelForms that didn't have Meta.fields defined, thanks to Jean-Baptiste Juin for reporting it.
+ * Removed `clearfix` class from bootstrap templates, not necessary anymore, see #105.
+ * Space cleanup in bootstrap templates, thanks to Si Feng, see #122.
+ * Fixed `MultiField` to work with `form_show_errors` helper attribute.
+ * Fixed a bug in `MultiField` that set error class when there were form errors, no matter if the fields with errors were contained within, see #120.
+ * `FieldWithButtons` now supports `Field` layout object as its first parameter, for setting input attributes.
+ * Bug fixes for `FieldWithButtons`, field label, `help_text` or error messages were not being rendered, see #121.
+ * Fixed a bug that was making crispy-forms render extra fields with ModelForms that didn't have `Meta.fields` defined, thanks to Jean-Baptiste Juin for reporting it.
  * Fixed a bug that was breaking Django 1.2 compatibility when copying context variables, thanks to Alex Yakovlev for submitting a patch, see #108.
  * Fixed a bug for `AppendedText`, `PrependedText` and `AppendedPrependedText` layout objects, thanks to Bojan Mihelac, see #104.
  * Fixed a bug in appended and prepended text layout objects for respecting hidden fields, thanks to Bojan Mihelac, see #103.
