@@ -6,16 +6,20 @@ from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
-from django.utils.functional import SimpleLazyObject
+from django.utils.functional import memoize
 
+# Global field template, default template used for rendering a field.
 
-# Global field template, default template used for rendering a field. This way we avoid
-# loading the template every time render_field is called without a template
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
-default_field_template = SimpleLazyObject(lambda: get_template("%s/field.html" % TEMPLATE_PACK))
+
+# By memoizeing we avoid loading the template every time render_field
+# is called without a template
+def default_field_template(template_pack=TEMPLATE_PACK):
+    return get_template("%s/field.html" % template_pack)
+default_field_template = memoize(default_field_template, {}, 1)
 
 
-def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None):
+def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None, template_pack=TEMPLATE_PACK):
     """
     Renders a django-crispy-forms field
 
@@ -39,7 +43,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
     FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
 
     if hasattr(field, 'render'):
-        return field.render(form, form_style, context)
+        return field.render(form, form_style, context, template_pack=template_pack)
     else:
         # This allows fields to be unicode strings, always they don't use non ASCII
         try:
@@ -99,7 +103,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         bound_field = BoundField(form, field_instance, field)
 
         if template is None:
-            template = default_field_template
+            template = default_field_template(template_pack)
         else:
             template = get_template(template)
 
