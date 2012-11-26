@@ -1,3 +1,4 @@
+import inspect
 import logging
 import sys
 
@@ -43,7 +44,10 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
     FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
 
     if hasattr(field, 'render'):
-        return field.render(form, form_style, context, template_pack=template_pack)
+        if 'template_pack' in inspect.getargspec(field.render).args:
+            return field.render(form, form_style, context, template_pack=template_pack)
+        else:
+            return field.render(form, form_style, context)
     else:
         # This allows fields to be unicode strings, always they don't use non ASCII
         try:
