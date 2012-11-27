@@ -77,3 +77,4 @@ Contributors
 * <david-e>
 * Alex Yakovlev <libraM>
 * Si Feng <devfeng>
+* Igor Katson <ikatson>
