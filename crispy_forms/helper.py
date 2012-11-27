@@ -175,8 +175,8 @@ class FormHelper(DynamicLayoutHandler):
     formset_error_title = None
     form_show_errors = True
     render_unmentioned_fields = False
-    help_text_inline = False
-    error_text_inline = True
+    _help_text_inline = False
+    _error_text_inline = True
     html5_required = False
 
     def __init__(self, form=None):
@@ -230,6 +230,24 @@ class FormHelper(DynamicLayoutHandler):
         self._form_style = style.lower()
 
     form_style = property(get_form_style, set_form_style)
+
+    def get_help_text_inline(self):
+        return self._help_text_inline
+
+    def set_help_text_inline(self, flag):
+        self._help_text_inline = flag
+        self._error_text_inline = not flag
+
+    help_text_inline = property(get_help_text_inline, set_help_text_inline)
+
+    def get_error_text_inline(self):
+        return self._error_text_inline
+
+    def set_error_text_inline(self, flag):
+        self._error_text_inline = flag
+        self._help_text_inline = not flag
+
+    error_text_inline = property(get_error_text_inline, set_error_text_inline)
 
     def add_input(self, input_object):
         self.inputs.append(input_object)
