@@ -256,7 +256,7 @@ class BaseInput(object):
             #check if attribute 'field_classes' is already defined 
             try:
                 kwargs['field_classes']
-            except AttributeError:
+            except KeyError:
                 self.field_classes = '%s' % kwargs.pop('css_class')
             else:
                 self.field_classes += ' %s' % kwargs.pop('css_class')
