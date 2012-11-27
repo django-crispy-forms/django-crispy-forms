@@ -411,17 +411,29 @@ class TestFormHelpers(TestCase):
     def test_template_pack_override(self):
         current_pack = settings.CRISPY_TEMPLATE_PACK
         override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
+
+        # Syntax {% crispy form 'template_pack_name' %}
         template = get_template_from_string(u"""
             {%% load crispy_forms_tags %%}
-            {%% crispy form form_helper '%s' %%}
+            {%% crispy form "%s" %%}
+        """ % override_pack)
+        c = Context({'form': TestForm()})
+        html = template.render(c)
+
+        # Syntax {% crispy form helper 'template_pack_name' %}
+        template = get_template_from_string(u"""
+            {%% load crispy_forms_tags %%}
+            {%% crispy form form_helper "%s" %%}
         """ % override_pack)
         c = Context({'form': TestForm(), 'form_helper': FormHelper()})
-        html = template.render(c)
+        html2 = template.render(c)
 
         if (current_pack == 'uni_form'):
             self.assertTrue('control-group' in html)
+            self.assertTrue('control-group' in html2)
         else:
             self.assertTrue('uniForm' in html)
+            self.assertTrue('uniForm' in html2)
 
     def test_invalid_helper(self):
         template = get_template_from_string(u"""
