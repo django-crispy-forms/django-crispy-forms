@@ -117,14 +117,10 @@ class TestFormHelpers(TestCase):
 
     def test_inputs(self):
         form_helper = FormHelper()
-        submit  = Submit('my-submit', 'Submit', css_class="button white")
-        reset   = Reset('my-reset', 'Reset')
-        hidden  = Hidden('my-hidden', 'Hidden')
-        button  = Button('my-button', 'Button')
-        form_helper.add_input(submit)
-        form_helper.add_input(reset)
-        form_helper.add_input(hidden)
-        form_helper.add_input(button)
+        form_helper.add_input(Submit('my-submit', 'Submit', css_class="button white"))
+        form_helper.add_input(Reset('my-reset', 'Reset'))
+        form_helper.add_input(Hidden('my-hidden', 'Hidden'))
+        form_helper.add_input(Button('my-button', 'Button'))
 
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
@@ -147,7 +143,7 @@ class TestFormHelpers(TestCase):
             self.assertTrue('class="btn"' in html)
             self.assertTrue('btn btn-primary' in html)
             self.assertTrue('btn btn-inverse' in html)
-            self.assertEqual(html.count('/>&zwnj;'), 4)
+            self.assertEqual(len(re.findall(r'<input[^>]+> <', html)), 8)
 
     def test_invalid_form_method(self):
         form_helper = FormHelper()
@@ -643,6 +639,10 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('type="submit"'), 1)
         self.assertEqual(html.count('name="whatever"'), 1)
         self.assertEqual(html.count('value="something"'), 1)
+
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            # Make sure white spaces between buttons are there in bootstrap
+            self.assertEqual(len(re.findall(r'</button> <', html)), 3)
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
         form_helper = FormHelper()

@@ -1,5 +1,7 @@
 {% load crispy_forms_tags %}
+{% load crispy_forms_utils %}
 
+{% specialspaceless %}
 {% if formset_tag %}
 <form {{ flat_attrs|safe }} method="{{ form_method }}" {% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
 {% endif %}
@@ -25,3 +27,4 @@
         </div>
     {% endif %}
 {% if formset_tag %}</form>{% endif %}
+{% endspecialspaceless %}
