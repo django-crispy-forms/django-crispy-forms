@@ -358,15 +358,16 @@ class Fieldset(LayoutObject):
 class MultiField(LayoutObject):
     """ MultiField container. Renders to a MultiField <div> """
     template = "uni_form/layout/multifield.html"
+    field_template = "uni_form/multifield.html"
 
     def __init__(self, label, *fields, **kwargs):
-        #TODO: Decide on how to support css classes for both container divs
         self.fields = list(fields)
         self.label_html = label
         self.label_class = kwargs.pop('label_class', u'blockLabel')
         self.css_class = kwargs.pop('css_class', u'ctrlHolder')
         self.css_id = kwargs.pop('css_id', None)
         self.template = kwargs.pop('template', self.template)
+        self.field_template = kwargs.pop('field_template', self.field_template)
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
@@ -379,7 +380,7 @@ class MultiField(LayoutObject):
         fields_output = u''
         for field in self.fields:
             fields_output += render_field(field, form, form_style, context,
-                'uni_form/multifield.html', self.label_class, layout_object=self,
+                self.field_template, self.label_class, layout_object=self,
                 template_pack=template_pack)
 
         context.update({'multifield': self, 'fields_output': fields_output})
