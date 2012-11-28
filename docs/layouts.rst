@@ -183,9 +183,9 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: prepended_text.png
    :align: center
 
-- **AppendedPrependedText**: It renders a combined prepended and appended text. The first parameter is the name of the field, then the prepended text and finally the appended text::
+- **PrependedAppendedText**: It renders a combined prepended and appended text. The first parameter is the name of the field, then the prepended text and finally the appended text::
 
-    AppendedPrependedText('field_name', '$', '.00'),
+    PrependedAppendedText('field_name', '$', '.00'),
 
 .. image:: appended_prepended_text.png
    :align: center
@@ -195,6 +195,13 @@ These ones live under module ``crispy_forms.bootstrap``.
     InlineCheckboxes('field_name')
 
 .. image:: inline_checkboxes.png
+   :align: center
+
+- **InlineRadios**: It renders a Django ``forms.ChoiceField`` field with its widget set to ``forms.RadioSelect`` using inline radio buttons::
+
+    InlineRadios('field_name')
+
+.. image:: inline_radios.jpg
    :align: center
 
 - **StrictButton**: It renders a button using ``<button>`` html, not ``input``. By default ``type`` is set to ``button`` and ``class`` is set to ``btn``::
@@ -211,6 +218,22 @@ These ones live under module ``crispy_forms.bootstrap``.
 
 .. image:: field_with_buttons.png
    :align: center
+
+- **Tab & TabHolder**: ``Tab`` renders a tab, different tabs need to be wrapped in a ``TabHolder`` for automatic javascript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
+
+    TabHolder(
+        Tab('First Tab',
+            'field_name_1'
+            Div('field_name_2')
+        ),
+        Tab('Second Tab',
+            Field('field_name_3', css_class="extra")
+        )
+    )
+
+.. image:: tab_and_tabholder.jpg
+   :align: center
+
 
 Overriding layout objects templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
