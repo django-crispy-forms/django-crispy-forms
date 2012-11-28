@@ -59,6 +59,15 @@ class CheckboxesTestForm(forms.Form):
         widget = forms.CheckboxSelectMultiple,
     )
 
+    inline_radios = forms.ChoiceField(
+        choices = (
+            ('option_one', "Option one"),
+            ('option_two', "Option two"),
+        ),
+        widget = forms.RadioSelect,
+        initial = 'option_two',
+    )
+
 
 class TestModel(models.Model):
     email = models.CharField(max_length=20)

@@ -21,7 +21,7 @@ from crispy_forms.layout import (
 )
 from crispy_forms.bootstrap import (
     AppendedPrependedText, AppendedText, PrependedText, InlineCheckboxes,
-    FieldWithButtons, StrictButton
+    FieldWithButtons, StrictButton, InlineRadios
 )
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
@@ -599,9 +599,9 @@ class TestFormLayout(TestCase):
 
     def test_hidden_fields(self):
         form = TestForm()
-        # All fields fake hidden
+        # All fields hidden
         for field in form.fields:
-            form[field].field.widget.is_hidden = True
+            form.fields[field].widget = forms.HiddenInput()
 
         form.helper = FormHelper()
         form.helper.layout = Layout(
@@ -609,9 +609,11 @@ class TestFormLayout(TestCase):
             PrependedText('password2', 'bar'),
             AppendedPrependedText('email', 'bar'),
             InlineCheckboxes('first_name'),
+            InlineRadios('last_name'),
         )
         html = render_crispy_form(form)
-        self.assertEqual(html.count("<input"), 4)
+        self.assertEqual(html.count("<input"), 5)
+        self.assertEqual(html.count('type="hidden"'), 5)
 
     def test_field_with_buttons(self):
         form = TestForm()
@@ -967,7 +969,7 @@ class TestFormLayout(TestCase):
         test_form = CheckboxesTestForm()
         html = render_crispy_form(test_form)
 
-        self.assertEqual(html.count('checked="checked"'), 5)
+        self.assertEqual(html.count('checked="checked"'), 6)
 
         test_form.helper = FormHelper(test_form)
         test_form.helper[1].wrap(InlineCheckboxes, inline=True)
@@ -1026,6 +1028,14 @@ class TestLayoutObjects(TestCase):
         self.assertEqual(html.count('<span class="add-on">gmail.com</span>'), 1)
         self.assertEqual(html.count('<span class="add-on">#</span>'), 1)
         self.assertEqual(html.count('<span class="add-on">$</span>'), 1)
+
+    def test_inline_radios(self):
+        test_form = CheckboxesTestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(InlineRadios('inline_radios'))
+        html = render_crispy_form(test_form)
+
+        self.assertEqual(html.count('radio inline"'), 2)
 
 
 class TestDynamicLayouts(TestCase):

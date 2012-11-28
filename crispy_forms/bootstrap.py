@@ -96,6 +96,22 @@ class InlineCheckboxes(Field):
         return html
 
 
+class InlineRadios(Field):
+    """
+    Layout object for rendering radiobuttons inline::
+
+        InlineRadios('field_name')
+    """
+    template = "bootstrap/layout/radioselect_inline.html"
+
+    def render(self, form, form_style, context, template_pack='bootstrap'):
+        context.update({'inline_class': 'inline'})
+        html = super(InlineRadios, self).render(form, form_style, context)
+        # We delete the inserted key to avoid side effects
+        del context.dicts[-2]['inline_class']
+        return html
+
+
 class FieldWithButtons(Div):
     template = 'bootstrap/layout/field_with_buttons.html'
 
