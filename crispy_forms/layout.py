@@ -256,7 +256,13 @@ class BaseInput(object):
         self.attrs = {}
 
         if kwargs.has_key('css_class'):
-            self.field_classes += ' %s' % kwargs.pop('css_class')
+            #check if attribute 'field_classes' is already defined 
+            try:
+                kwargs['field_classes']
+            except KeyError:
+                self.field_classes = '%s' % kwargs.pop('css_class')
+            else:
+                self.field_classes += ' %s' % kwargs.pop('css_class')
 
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
@@ -270,6 +276,27 @@ class BaseInput(object):
         return render_to_string(self.template, Context({'input': self}))
 
 
+class TextInput(BaseInput):
+    """
+    Used to create a Text input descriptor for the {% crispy %} template tag::
+
+        text_input = TextInput('my_input', value = "some value")
+
+    .. note:: The first argument is also slugified and turned into the id for the input.
+    """
+    input_type = 'text'
+
+    def __init__(self, name, **kwargs):
+        self.name = name
+
+        try:
+            self.value = kwargs['value']
+            del kwargs['value']
+        except KeyError:
+            self.value = ""
+
+        super(TextInput, self).__init__(self.name, self.value, **kwargs)
+        
 class Submit(BaseInput):
     """
     Used to create a Submit button descriptor for the {% crispy %} template tag::
