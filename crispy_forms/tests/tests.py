@@ -21,7 +21,7 @@ from crispy_forms.layout import (
 )
 from crispy_forms.bootstrap import (
     AppendedPrependedText, AppendedText, PrependedText, InlineCheckboxes,
-    FieldWithButtons, StrictButton, InlineRadios
+    FieldWithButtons, StrictButton, InlineRadios, Tab, TabHolder
 )
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
@@ -1036,6 +1036,32 @@ class TestLayoutObjects(TestCase):
         html = render_crispy_form(test_form)
 
         self.assertEqual(html.count('radio inline"'), 2)
+
+    def test_tab_and_tabholder(self):
+        test_form = TestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            TabHolder(
+                Tab('one',
+                    'first_name'
+                ),
+                Tab('two',
+                    'password1',
+                    'password2'
+                )
+            )
+        )
+        html = render_crispy_form(test_form)
+
+        self.assertEqual(html.count(
+            '<li class="tab-pane active"><a href="#one" data-toggle="tab">One</a></li>'), 1)
+        self.assertEqual(html.count('<li class="tab-pane'), 2)
+        self.assertEqual(html.count('tab-pane'), 4)
+        self.assertEqual(html.count('<div id="one"'), 1)
+        self.assertEqual(html.count('<div id="two"'), 1)
+        self.assertEqual(html.count('name="first_name"'), 1)
+        self.assertEqual(html.count('name="password1"'), 1)
+        self.assertEqual(html.count('name="password2"'), 1)
 
 
 class TestDynamicLayouts(TestCase):
