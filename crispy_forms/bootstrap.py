@@ -1,3 +1,5 @@
+import warnings
+
 from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
@@ -31,7 +33,7 @@ class PrependedText(AppendedText):
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
 
 
-class AppendedPrependedText(Field):
+class PrependedAppendedText(Field):
     template = "bootstrap/layout/appended_prepended_text.html"
 
     def __init__(self, field, prepended_text=None, appended_text=None, *args, **kwargs):
@@ -48,6 +50,13 @@ class AppendedPrependedText(Field):
                         'crispy_prepended_text': self.prepended_text,
                         'active': getattr(self, "active", False)})
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
+
+
+class AppendedPrependedText(PrependedAppendedText):
+    def __init__(self, *args, **kwargs):
+        warnings.warn("AppendedPrependedText has been renamed to PrependedAppendedText, \
+            it will be removed in 1.3.0", PendingDeprecationWarning)
+        super(AppendedPrependedText, self).__init__(*args, **kwargs)
 
 
 class FormActions(LayoutObject):
