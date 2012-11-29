@@ -43,7 +43,7 @@ class PrependedAppendedText(Field):
         if 'active' in kwargs:
             self.active = kwargs.pop('active')
 
-        super(AppendedPrependedText, self).__init__(field, *args, **kwargs)
+        super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
 
     def render(self, form, form_style, context, template_pack='bootstrap'):
         context.update({'crispy_appended_text': self.appended_text,
