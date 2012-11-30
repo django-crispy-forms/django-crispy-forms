@@ -1,6 +1,12 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.2.1
+## 1.2.2 (2012/11/30)
+
+ * Bug fix, reduction of white space in crispy-forms output could mess within tags, see #127, reverting part of this reduction.
+ * Renamed `AppendedPrependedText` to `PrependedAppendedText`.
+ * Moved `Tab` and `TabHolder` to `bootstrap.py`.
+
+## 1.2.1 (2012/11/28)
 
  * Bug fix `help_text_inline` set to True, see #117.
  * New fix for the space between buttons problems, see #62.
