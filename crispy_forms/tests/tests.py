@@ -1063,6 +1063,25 @@ class TestLayoutObjects(TestCase):
         self.assertEqual(html.count('name="password1"'), 1)
         self.assertEqual(html.count('name="password2"'), 1)
 
+    def test_html_with_carriage_returns(self):
+        test_form = TestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            HTML("""
+                if (a==b){
+                    // some comment
+                    a+1;
+                    foo();
+                }
+            """)
+        )
+        html = render_crispy_form(test_form)
+
+        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+            self.assertEqual(html.count('\n'), 22)
+        else:
+            self.assertEqual(html.count('\n'), 24)
+
 
 class TestDynamicLayouts(TestCase):
     def setUp(self):

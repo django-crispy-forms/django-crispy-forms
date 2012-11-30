@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
 from copy import copy
 
 from django.conf import settings
@@ -16,7 +15,6 @@ register = template.Library()
 from crispy_forms_filters import *
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
-RE_NEWLINE = re.compile(r"\n")
 
 
 class ForLoopSimulator(object):
@@ -202,7 +200,7 @@ class CrispyFormNode(BasicNode):
         else:
             template = whole_uni_form_template(self.template_pack)
 
-        return RE_NEWLINE.sub("", template.render(c))
+        return template.render(c)
 
 
 # {% crispy %} tag
