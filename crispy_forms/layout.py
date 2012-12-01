@@ -527,19 +527,17 @@ class UneditableField(Field):
         super(UneditableField, self).__init__(field, *args, **kwargs)
 
 
-from bootstrap import TabHolder as BootstrapTabHolder
-from bootstrap import Tab as BootstrapTab
+def TabHolder(*args, **kwargs):
+    warnings.warn("TabHolder has been moved to crispy_forms.bootstrap. \
+        Use that path instead, this import will be removed in 1.3.0", PendingDeprecationWarning)
+
+    from bootstrap import TabHolder
+    return TabHolder(*args, **kwargs)
 
 
-class TabHolder(BootstrapTabHolder):
-    def __init__(self, *args, **kwargs):
-        warnings.warn("TabHolder has been moved to crispy_forms.bootstrap. Use that path instead, this import will be removed in 1.3.0", PendingDeprecationWarning)
+def Tab(*args, **kwargs):
+    warnings.warn("Tab has been moved to crispy_forms.bootstrap. \
+        Use that path instead, this import will be removed in 1.3.0", PendingDeprecationWarning)
 
-        super(TabHolder, self).__init__(*args, **kwargs)
-
-
-class Tab(BootstrapTab):
-    def __init__(self, *args, **kwargs):
-        warnings.warn("Tab has been moved to crispy_forms.bootstrap. Use that path instead, this import will be removed in 1.3.0", PendingDeprecationWarning)
-
-        super(Tab, self).__init__(*args, **kwargs)
+    from bootstrap import Tab
+    return Tab(*args, **kwargs)
