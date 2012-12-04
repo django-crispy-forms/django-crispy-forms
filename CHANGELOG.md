@@ -1,5 +1,11 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.2.3 (2012/12/4)
+
+ * Fixed imports to be relative to package, avoiding namespace collisions.
+ * Removed circular dependency between `layout` and `bootstrap`, see #129.
+ * Bug fix, adapted use of inspect module in `utils.py` to avoid breaking Python 2.5 compatibility.
+
 ## 1.2.2 (2012/11/30)
 
  * Bug fix, reduction of white space in crispy-forms output could mess within tags, see #127, reverting part of this reduction.
