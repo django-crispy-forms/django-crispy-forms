@@ -5,8 +5,8 @@ from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 from django.forms.util import flatatt
 
-from layout import LayoutObject, Field, Div
-from utils import render_field
+from .layout import LayoutObject, Field, Div
+from .utils import render_field
 
 
 class AppendedText(Field):

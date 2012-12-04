@@ -26,7 +26,7 @@ from crispy_forms.bootstrap import (
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
-from forms import (
+from .forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
     FormWithMeta, TestForm4
 )

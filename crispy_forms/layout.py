@@ -5,8 +5,8 @@ from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
-from utils import render_field, flatatt
-from exceptions import DynamicError
+from .utils import render_field, flatatt
+from .exceptions import DynamicError
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
@@ -531,7 +531,7 @@ def TabHolder(*args, **kwargs):
     warnings.warn("TabHolder has been moved to crispy_forms.bootstrap. \
         Use that path instead, this import will be removed in 1.3.0", PendingDeprecationWarning)
 
-    from bootstrap import TabHolder
+    from .bootstrap import TabHolder
     return TabHolder(*args, **kwargs)
 
 
@@ -539,5 +539,5 @@ def Tab(*args, **kwargs):
     warnings.warn("Tab has been moved to crispy_forms.bootstrap. \
         Use that path instead, this import will be removed in 1.3.0", PendingDeprecationWarning)
 
-    from bootstrap import Tab
+    from .bootstrap import Tab
     return Tab(*args, **kwargs)
