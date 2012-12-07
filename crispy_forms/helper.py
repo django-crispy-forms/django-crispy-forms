@@ -88,6 +88,18 @@ class DynamicLayoutHandler(object):
 
         return LayoutSlice(self.layout, key)
 
+    def __setitem__(self, key, value):
+        self.layout[key] = value
+
+    def __delitem__(self, key):
+        del self.layout.fields[key]
+
+    def __len__(self):
+        if self.layout is not None:
+            return len(self.layout.fields)
+        else:
+            return 0
+
 
 class FormHelper(DynamicLayoutHandler):
     """

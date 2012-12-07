@@ -18,6 +18,12 @@ class LayoutObject(object):
     def __setitem__(self, slice, value):
         self.fields[slice] = value
 
+    def __delitem__(self, slice):
+        del self.fields[slice]
+
+    def __len__(self):
+        return len(self.fields)
+
     def __getattr__(self, name):
         """
         This allows us to access self.fields list methods like append or insert, without
