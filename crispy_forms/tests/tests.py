@@ -1189,6 +1189,46 @@ class TestDynamicLayouts(TestCase):
         self.assertEqual(layout.fields[1], 'password1')
         self.assertEqual(layout.fields[2], 'password2')
 
+    def test_update_attributes_and_wrap_once(self):
+        helper = FormHelper()
+        layout = Layout(
+            'email',
+            Field('password1'),
+            'password2',
+        )
+        helper.layout = layout
+        helper.filter(Field).update_attributes(readonly=True)
+        self.assertTrue(isinstance(layout[1], Field))
+        self.assertEqual(layout[1].attrs, {'readonly': True})
+
+        layout = Layout(
+            'email',
+            Div(Field('password1')),
+            'password2',
+        )
+        helper.layout = layout
+        helper.filter(Field, max_level=2).update_attributes(readonly=True)
+        self.assertTrue(isinstance(layout[1][0], Field))
+        self.assertEqual(layout[1][0].attrs, {'readonly': True})
+
+        layout = Layout(
+            'email',
+            Div(Field('password1')),
+            'password2',
+        )
+        helper.layout = layout
+
+        helper.filter(basestring, max_level=2).wrap_once(Field)
+        helper.filter(Field, max_level=2).update_attributes(readonly=True)
+
+        self.assertTrue(isinstance(layout[0], Field))
+        self.assertTrue(isinstance(layout[1][0], Field))
+        self.assertTrue(isinstance(layout[1][0][0], basestring))
+        self.assertTrue(isinstance(layout[2], Field))
+        self.assertEqual(layout[1][0].attrs, {'readonly': True})
+        self.assertEqual(layout[0].attrs, {'readonly': True})
+        self.assertEqual(layout[2].attrs, {'readonly': True})
+
     def test_get_layout_objects(self):
         layout_1 = Layout(
             Div()

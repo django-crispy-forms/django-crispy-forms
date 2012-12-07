@@ -227,6 +227,36 @@ class LayoutSlice(object):
         elif isinstance(self.slice, list):
             raise DynamicError("wrap_together doesn't work with filter, only with [] operator")
 
+    def map(self, function):
+        """
+        Iterates over layout objects pointed in `self.slice` executing `function` on them
+        It passes `function` last layout object
+        """
+        if isinstance(self.slice, slice):
+            for i in range(*self.slice.indices(len(self.layout.fields))):
+                function(self.layout.fields[i])
+
+        elif isinstance(self.slice, list):
+            # A list of pointers  Ex: [[[0, 0], 'div'], [[0, 2, 3], 'field_name']]
+            for pointer in self.slice:
+                position = pointer[0]
+
+                layout_object = self.layout.fields[position[0]]
+                for i in position[1:]:
+                    layout_object = layout_object.fields[i]
+
+                function(layout_object)
+
+    def update_attributes(self, **kwargs):
+        """
+        Updates attributes of every layout object pointed in `self.slice` using kwargs
+        """
+        def update_attrs(layout_object):
+            if hasattr(layout_object, 'attrs'):
+                layout_object.attrs.update(kwargs)
+
+        self.map(update_attrs)
+
 
 class ButtonHolder(LayoutObject):
     """
