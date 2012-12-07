@@ -151,51 +151,67 @@ class LayoutSlice(object):
             else:
                 return LayoutClass(fields, **kwargs)
 
-    def wrap(self, LayoutClass, *args, **kwargs):
+    def pre_map(self, function):
         """
-        Wraps each pointer in `self.slice` under a `LayoutClass` instance with
-        `args` and `kwargs` passed.
+        Iterates over layout objects pointed in `self.slice` executing `function` on them.
+        It passes `function` penultimate layout object and the position where to find last one
         """
         if isinstance(self.slice, slice):
             for i in range(*self.slice.indices(len(self.layout.fields))):
-                self.layout.fields[i] = self.wrapped_object(LayoutClass, self.layout.fields[i], *args, **kwargs)
+                function(self.layout, i)
 
         elif isinstance(self.slice, list):
             # A list of pointers  Ex: [[[0, 0], 'div'], [[0, 2, 3], 'field_name']]
             for pointer in self.slice:
                 position = pointer[0]
 
-                # If it's pointing first level, there is no need to traverse
+                # If it's pointing first level
                 if len(position) == 1:
-                    self.layout.fields[position[-1]] = self.wrapped_object(
-                        LayoutClass, self.layout.fields[position[-1]], *args, **kwargs
-                    )
+                    function(self.layout, position[-1])
                 else:
                     layout_object = self.layout.fields[position[0]]
                     for i in position[1:-1]:
                         layout_object = layout_object.fields[i]
 
                     try:
-                        # If layout object has a fields attribute
-                        if hasattr(layout_object, 'fields'):
-                            layout_object.fields[position[-1]] = self.wrapped_object(
-                                LayoutClass, layout_object.fields[position[-1]], *args, **kwargs
-                            )
-                        # Otherwise it's a basestring (a field name)
-                        else:
-                            self.layout.fields[position[0]] = self.wrapped_object(
-                                LayoutClass, layout_object, *args, **kwargs
-                            )
+                        function(layout_object, position[-1])
                     except IndexError:
                         # We could avoid this exception, recalculating pointers.
                         # However this case is most of the time an undesired behavior
                         raise DynamicError("Trying to wrap a field within an already wrapped field, \
                             recheck your filter or layout")
 
+
+    def wrap(self, LayoutClass, *args, **kwargs):
+        """
+        Wraps every layout object pointed in `self.slice` under a `LayoutClass` instance with
+        `args` and `kwargs` passed.
+        """
+        def wrap_object(layout_object, j):
+            layout_object.fields[j] = self.wrapped_object(
+                LayoutClass, layout_object.fields[j], *args, **kwargs
+            )
+
+        self.pre_map(wrap_object)
+
+    def wrap_once(self, LayoutClass, *args, **kwargs):
+        """
+        Wraps every layout object pointed in `self.slice` under a `LayoutClass` instance with
+        `args` and `kwargs` passed, unless layout object's parent is already a subclass of
+        `LayoutClass`.
+        """
+        def wrap_object_once(layout_object, j):
+            if not isinstance(layout_object, LayoutClass):
+                layout_object.fields[j] = self.wrapped_object(
+                    LayoutClass, layout_object.fields[j], *args, **kwargs
+                )
+
+        self.pre_map(wrap_object_once)
+
     def wrap_together(self, LayoutClass, *args, **kwargs):
         """
-        Wraps pointers in `self.slice` together under a `LayoutClass` instance with
-        `args` and `kwargs` passed.
+        Wraps all layout objects pointed in `self.slice` together under a `LayoutClass`
+        instance with `args` and `kwargs` passed.
         """
         if isinstance(self.slice, slice):
             # The start of the slice is replaced
