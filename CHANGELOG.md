@@ -1,5 +1,11 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.2.4
+
+ * Implemented `__delitem__`, `__len__` and `__setitem__` in `LayoutObject` and `DynamicLayoutHandler`, this avoid pylint warnings, see #114.
+ * Docs folder no longer included when installing crispy-forms, see #132.
+ * Added `wrap_once`, `update_attributes`, `map` and `pre_map` to LayoutSlice.
+
 ## 1.2.3 (2012/12/4)
 
  * Fixed imports to be relative to package, avoiding namespace collisions.
