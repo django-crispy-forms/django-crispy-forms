@@ -1,7 +1,11 @@
 {% if field.help_text %}
     {% if help_text_inline %}
-        <span id="hint_{{ field.auto_id }}" class="help-inline">{{ field.help_text|safe }}</span>
+        <span id="hint_{{ field.auto_id }}" class="help-inline">
+        {% if help_text_icon %}<i class="icon-{{ help_text_icon }}"></i>{% endif %}
+        {{ field.help_text|safe }}</span>
     {% else %}
-        <p id="hint_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</p>
+        <span id="hint_{{ field.auto_id }}" class="help-block">
+        {% if help_text_icon %}<i class="icon-{{ help_text_icon }}"></i>{% endif %}
+        {{ field.help_text|safe }}</span>
     {% endif %}
 {% endif %}
