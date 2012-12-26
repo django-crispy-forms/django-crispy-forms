@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
+from django.forms import forms
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.functional import memoize
 from django import template
 
+from ..exceptions import CrispyError
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 def uni_formset_template(template_pack=TEMPLATE_PACK):
@@ -73,6 +75,9 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
         or
         {{ form.field|as_crispy_field:"bootstrap" }}
     """
+    if not isinstance(field, forms.BoundField):
+        raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
+
     template = get_template('%s/field.html' % template_pack)
-    c = Context({'field':field, 'form_show_errors': True})
+    c = Context({'field': field, 'form_show_errors': True})
     return template.render(c)
