@@ -19,7 +19,7 @@ uni_form_template = memoize(uni_form_template, {}, 1)
 
 register = template.Library()
 
-@register.filter(name='as_uni_form')
+
 @register.filter(name='crispy')
 def as_crispy_form(form, template_pack=TEMPLATE_PACK):
     """
@@ -43,7 +43,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK):
         c = Context({'form': form, 'form_show_errors': True})
     return template.render(c)
 
-@register.filter(name='as_uni_errors')
+
 @register.filter(name='as_crispy_errors')
 def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
     """
@@ -63,7 +63,6 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
     return template.render(c)
 
 
-@register.filter(name='as_uni_field')
 @register.filter(name='as_crispy_field')
 def as_crispy_field(field, template_pack=TEMPLATE_PACK):
     """
