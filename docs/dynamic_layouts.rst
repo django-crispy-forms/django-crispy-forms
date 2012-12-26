@@ -180,6 +180,16 @@ If we wanted to search deeper, wrapping ``password``, we would need to set ``max
 
 In other words ``max_level`` indicates the number of jumps crispy-forms can do within a layout object for matching. In this case getting into the first ``Div`` would be one jump, and getting into the next ``Div`` would be the second jump, thus ``max_level=2``.
 
+We can turn filter greedy, making it search as deep as possible, setting ``greedy`` to ``True``::
+
+    form.helper.filter(basestring, greedy=True).wrap(Div, css_class="hello")
+
+**Parameters:**
+
+ * ``max_level``: An integer representing the number of jumps that crispy-forms should do when filtering. Defaults to ``0``.
+ * ``greedy``: A boolean that indicates whether to filter greedy or not. Defaults to ``False``.
+
+
 FormHelper with a form attached
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

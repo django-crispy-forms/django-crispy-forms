@@ -1218,8 +1218,8 @@ class TestDynamicLayouts(TestCase):
         )
         helper.layout = layout
 
-        helper.filter(basestring, max_level=2).wrap_once(Field)
-        helper.filter(Field, max_level=2).update_attributes(readonly=True)
+        helper.filter(basestring, greedy=True).wrap_once(Field)
+        helper.filter(Field, greedy=True).update_attributes(readonly=True)
 
         self.assertTrue(isinstance(layout[0], Field))
         self.assertTrue(isinstance(layout[1][0], Field))
