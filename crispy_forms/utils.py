@@ -117,6 +117,10 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
                 layout_object.bound_fields.append(bound_field)
             else:
                 layout_object.bound_fields = [bound_field]
+            if hasattr(layout_object, 'help_text_icon'):
+                context['help_text_icon'] = layout_object.help_text_icon
+            if hasattr(layout_object, 'text_icon'):
+                context['text_icon'] = layout_object.help_text_icon
 
         context.update({
             'field': bound_field,

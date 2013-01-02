@@ -529,6 +529,8 @@ class Field(LayoutObject):
             else:
                 self.attrs['class'] = kwargs.pop('css_class')
 
+        self.help_text_icon = kwargs.pop('help_text_icon', None)
+        self.text_icon = kwargs.pop('text_icon', None)
         self.template = kwargs.pop('template', self.template)
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
@@ -537,7 +539,7 @@ class Field(LayoutObject):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = ''
         for field in self.fields:
-            html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
+            html += render_field(field, form, form_style, context, layout_object=self, template=self.template, attrs=self.attrs, template_pack=template_pack)
         return html
 
 
