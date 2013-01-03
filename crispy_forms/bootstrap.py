@@ -3,10 +3,9 @@ import warnings
 from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
-from django.forms.util import flatatt
 
 from .layout import LayoutObject, Field, Div
-from .utils import render_field
+from .utils import render_field, flatatt
 
 
 class AppendedText(Field):
