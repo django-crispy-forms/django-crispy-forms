@@ -100,10 +100,7 @@ class InlineCheckboxes(Field):
 
     def render(self, form, form_style, context, template_pack='bootstrap'):
         context.update({'inline_class': 'inline'})
-        html = super(InlineCheckboxes, self).render(form, form_style, context)
-        # We delete the inserted key to avoid side effects
-        del context.dicts[-2]['inline_class']
-        return html
+        return super(InlineCheckboxes, self).render(form, form_style, context)
 
 
 class InlineRadios(Field):
@@ -116,10 +113,7 @@ class InlineRadios(Field):
 
     def render(self, form, form_style, context, template_pack='bootstrap'):
         context.update({'inline_class': 'inline'})
-        html = super(InlineRadios, self).render(form, form_style, context)
-        # We delete the inserted key to avoid side effects
-        del context.dicts[-2]['inline_class']
-        return html
+        return super(InlineRadios, self).render(form, form_style, context)
 
 
 class FieldWithButtons(Div):

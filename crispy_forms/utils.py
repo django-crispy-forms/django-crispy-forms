@@ -1,3 +1,4 @@
+from __future__ import with_statement
 import inspect
 import logging
 import sys
@@ -8,6 +9,8 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
 from django.utils.functional import memoize
+
+from base import KeepContext
 
 # Global field template, default template used for rendering a field.
 
@@ -41,91 +44,92 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
     :attrs: Attributes for the field's widget
     """
-    FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
+    with KeepContext(context):
+        FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
 
-    if hasattr(field, 'render'):
-        if 'template_pack' in inspect.getargspec(field.render)[0]:
-            return field.render(form, form_style, context, template_pack=template_pack)
-        else:
-            return field.render(form, form_style, context)
-    else:
-        # This allows fields to be unicode strings, always they don't use non ASCII
-        try:
-            if isinstance(field, unicode):
-                field = str(field)
-            # If `field` is not unicode then we turn it into a unicode string, otherwise doing
-            # str(field) would give no error and the field would not be resolved, causing confusion
+        if hasattr(field, 'render'):
+            if 'template_pack' in inspect.getargspec(field.render)[0]:
+                return field.render(form, form_style, context, template_pack=template_pack)
             else:
-                field = str(unicode(field))
-
-        except (UnicodeEncodeError, UnicodeDecodeError):
-            raise Exception("Field '%s' is using forbidden unicode characters" % field)
-
-    try:
-        # Injecting HTML attributes into field's widget, Django handles rendering these
-        field_instance = form.fields[field]
-        if attrs is not None:
-            widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget,])
-
-            # We use attrs as a dictionary later, so here we make a copy
-            list_attrs = attrs
-            if isinstance(attrs, dict):
-                list_attrs = [attrs] * len(widgets)
-
-            for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
-                if hasattr(field_instance.widget, 'widgets'):
-                    if 'type' in attr and attr['type'] == "hidden":
-                        field_instance.widget.widgets[index].is_hidden = True
-                        field_instance.widget.widgets[index] = field_instance.hidden_widget()
-
-                    field_instance.widget.widgets[index].attrs.update(attr)
+                return field.render(form, form_style, context)
+        else:
+            # This allows fields to be unicode strings, always they don't use non ASCII
+            try:
+                if isinstance(field, unicode):
+                    field = str(field)
+                # If `field` is not unicode then we turn it into a unicode string, otherwise doing
+                # str(field) would give no error and the field would not be resolved, causing confusion
                 else:
-                    if 'type' in attr and attr['type'] == "hidden":
-                        field_instance.widget.is_hidden = True
-                        field_instance.widget = field_instance.hidden_widget()
+                    field = str(unicode(field))
 
-                    field_instance.widget.attrs.update(attr)
+            except (UnicodeEncodeError, UnicodeDecodeError):
+                raise Exception("Field '%s' is using forbidden unicode characters" % field)
 
-    except KeyError:
-        if not FAIL_SILENTLY:
-            raise Exception("Could not resolve form field '%s'." % field)
-        else:
-            field_instance = None
-            logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
+        try:
+            # Injecting HTML attributes into field's widget, Django handles rendering these
+            field_instance = form.fields[field]
+            if attrs is not None:
+                widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget,])
 
-    if not field in form.rendered_fields:
-        form.rendered_fields.add(field)
-    else:
-        if not FAIL_SILENTLY:
-            raise Exception("A field should only be rendered once: %s" % field)
-        else:
-            logging.warning("A field should only be rendered once: %s" % field, exc_info=sys.exc_info())
+                # We use attrs as a dictionary later, so here we make a copy
+                list_attrs = attrs
+                if isinstance(attrs, dict):
+                    list_attrs = [attrs] * len(widgets)
 
-    if field_instance is None:
-        html = ''
-    else:
-        bound_field = BoundField(form, field_instance, field)
+                for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
+                    if hasattr(field_instance.widget, 'widgets'):
+                        if 'type' in attr and attr['type'] == "hidden":
+                            field_instance.widget.widgets[index].is_hidden = True
+                            field_instance.widget.widgets[index] = field_instance.hidden_widget()
 
-        if template is None:
-            template = default_field_template(template_pack)
-        else:
-            template = get_template(template)
+                        field_instance.widget.widgets[index].attrs.update(attr)
+                    else:
+                        if 'type' in attr and attr['type'] == "hidden":
+                            field_instance.widget.is_hidden = True
+                            field_instance.widget = field_instance.hidden_widget()
 
-        # We save the Layout object's bound fields in the layout object's `bound_fields` list
-        if layout_object is not None:
-            if hasattr(layout_object, 'bound_fields') and isinstance(layout_object.bound_fields, list):
-                layout_object.bound_fields.append(bound_field)
+                        field_instance.widget.attrs.update(attr)
+
+        except KeyError:
+            if not FAIL_SILENTLY:
+                raise Exception("Could not resolve form field '%s'." % field)
             else:
-                layout_object.bound_fields = [bound_field]
+                field_instance = None
+                logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
 
-        context.update({
-            'field': bound_field,
-            'labelclass': labelclass,
-            'flat_attrs': flatatt(attrs if isinstance(attrs, dict) else {}),
-        })
-        html = template.render(context)
+        if not field in form.rendered_fields:
+            form.rendered_fields.add(field)
+        else:
+            if not FAIL_SILENTLY:
+                raise Exception("A field should only be rendered once: %s" % field)
+            else:
+                logging.warning("A field should only be rendered once: %s" % field, exc_info=sys.exc_info())
 
-    return html
+        if field_instance is None:
+            html = ''
+        else:
+            bound_field = BoundField(form, field_instance, field)
+
+            if template is None:
+                template = default_field_template(template_pack)
+            else:
+                template = get_template(template)
+
+            # We save the Layout object's bound fields in the layout object's `bound_fields` list
+            if layout_object is not None:
+                if hasattr(layout_object, 'bound_fields') and isinstance(layout_object.bound_fields, list):
+                    layout_object.bound_fields.append(bound_field)
+                else:
+                    layout_object.bound_fields = [bound_field]
+
+            context.update({
+                'field': bound_field,
+                'labelclass': labelclass,
+                'flat_attrs': flatatt(attrs if isinstance(attrs, dict) else {}),
+            })
+            html = template.render(context)
+
+        return html
 
 
 def flatatt(attrs):
