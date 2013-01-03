@@ -2,7 +2,11 @@
 
 ## 1.2.4
 
- * Implemented `__delitem__`, `__len__` and `__setitem__` in `LayoutObject` and `DynamicLayoutHandler`, this avoid pylint warnings, see #114.
+ * Switched from `django.form.utils.flatatt` to internal `flatatt` utils implementation, this allows adding data-attrs to `FormActions` and `StrictButton`.
+ * `render_field` now uses a context manager to avoid side effects when layout objects update template context. This makes context mutability safe within layout objects.
+ * Added `greedy` kwarg to `filter` dynamic API.
+ * Fixing error logging on `|as_crispy_field` filter, see #135.
+ * Implemented `__delitem__`, `__len__` and `__setitem__` in `LayoutObject` and `DynamicLayoutHandler`, this avoids pylint warnings, see #114.
  * Docs folder no longer included when installing crispy-forms, see #132.
  * Added `wrap_once`, `update_attributes`, `map` and `pre_map` to LayoutSlice.
 
