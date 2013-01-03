@@ -29,7 +29,8 @@ class LayoutObject(object):
         This allows us to access self.fields list methods like append or insert, without
         having to declaee them one by one
         """
-        if hasattr(self.fields, name):
+        # Check necessary for unpickling, see #107
+        if 'fields' in self.__dict__ and hasattr(self.fields, name):
             return getattr(self.fields, name)
         else:
             return object.__getattribute__(self, name)
