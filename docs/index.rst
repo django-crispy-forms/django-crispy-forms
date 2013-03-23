@@ -6,7 +6,7 @@
 Forms have never been this crispy
 =================================
 
-django-crispy-forms provides you with a ``|crispy`` filter and ``{% crispy %}`` tag that will let you control the rendering behavior of yours Django_ forms in a very elegant and DRY way. Have full control without writing custom form templates. All this without breaking the standard way of doing things in Django_, so it plays nice with any other form application.
+django-crispy-forms provides you with a ``|crispy`` filter and ``{% crispy %}`` tag that will let you control the rendering behavior of your Django_ forms in a very elegant and DRY way. Have full control without writing custom form templates. All this without breaking the standard way of doing things in Django_, so it plays nice with any other form application.
 
 User Guide
 ~~~~~~~~~~
