@@ -156,12 +156,10 @@ def render_crispy_form(form, helper=None, context=None):
     else:
         node = CrispyFormNode('form', None)
 
-    node_context = Context({
+    node_context = Context(context)
+    node_context.update({
         'form': form,
         'helper': helper
     })
-
-    if context is not None:
-        node_context.update(context)
 
     return node.render(node_context)
