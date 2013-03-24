@@ -2,6 +2,10 @@
 
 ## 1.2.4
 
+ * Bug fix in `render_crispy_form` to avoid override existing context, see #153.
+ * Use formset iterator instead of `forms` list attribute, see #152.
+ * Don't display fieldset legend if empty, see #147 and #155.
+ * Bug fix for pickling crispy forms by powderflask, see #107.
  * Switched from `django.form.utils.flatatt` to internal `flatatt` utils implementation, this allows adding data-attrs to `FormActions` and `StrictButton`.
  * `render_field` now uses a context manager to avoid side effects when layout objects update template context. This makes context mutability safe within layout objects.
  * Added `greedy` kwarg to `filter` dynamic API.

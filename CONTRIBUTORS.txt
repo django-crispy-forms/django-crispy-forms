@@ -79,3 +79,7 @@ Contributors
 * Si Feng <devfeng>
 * Igor Katson <ikatson>
 * Ben Delevingne <rockingskier>
+* <powderflask>
+* Evan Borgstrom <borgstrom>
+* Daniel Shapiro <danxshap>
+* <SpazioDati>
