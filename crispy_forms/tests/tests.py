@@ -594,7 +594,7 @@ class TestFormLayout(TestCase):
         c = Context({'form': form, 'form2': form2})
         html = template.render(c)
 
-        self.assertEqual(html.count('<input type="text" name="comment"'), 2)
+        self.assertEqual(html.count('name="comment"'), 2)
         self.assertEqual(html.count('name="is_company"'), 1)
 
     def test_hidden_fields(self):
@@ -990,7 +990,7 @@ class TestLayoutObjects(TestCase):
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
-            Field('email', type="hidden", data_mierda=12),
+            Field('email', type="hidden", data_test=12),
             Field('datetime_field'),
         )
 
@@ -1000,7 +1000,8 @@ class TestLayoutObjects(TestCase):
         html = template.render(c)
 
         # Check form parameters
-        self.assertEqual(html.count('<input type="hidden" data-mierda="12" name="email"'), 1)
+        self.assertEqual(html.count('data-test="12"'), 1)
+        self.assertEqual(html.count('name="email"'), 1)
         self.assertEqual(html.count('class="dateinput"'), 1)
         self.assertEqual(html.count('class="timeinput"'), 1)
 
