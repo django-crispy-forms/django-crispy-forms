@@ -45,7 +45,7 @@ Versions supported include Python 2.5.4, 2.6.x, and 2.7.x. If you need greater b
 Which versions of Django does this support?
 =============================================
 
-Versions supported include Django 1.2.x and Django 1.3.x. If you need greater backwards compatibility django-uni-form 0.7.0 supports Django 1.1.x.
+Versions supported include Django 1.2 or higher and Python 2.5, Python 2.6 and Python 2.7. If you need to support earlier versions of Django or Python you will need to use django-uni-form 0.7.0.
 
 .. _`Daniel Greenfeld`: http://twitter.com/pydanny
 .. _`Miguel Araujo`: http://twitter.com/maraujop
