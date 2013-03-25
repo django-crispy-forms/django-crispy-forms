@@ -21,6 +21,7 @@ Let's add a layout to our helper::
     class ExampleForm(forms.Form):
         [...]
         def __init__(self, *args, **kwargs):
+            super(ExampleForm, self).__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.layout = Layout(
                 Fieldset(
@@ -35,7 +36,6 @@ Let's add a layout to our helper::
                     Submit('submit', 'Submit', css_class='button white')
                 )
             )
-            super(ExampleForm, self).__init__(*args, **kwargs)
 
 When we render the form now using::
 
