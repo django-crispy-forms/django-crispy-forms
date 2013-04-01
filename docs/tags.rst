@@ -191,6 +191,16 @@ By default when django-crispy-forms encounters errors, it fails silently, logs t
     CRISPY_FAIL_SILENTLY = not DEBUG
 
 
+Change crispy-forms <input> default classes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Django fields generate default classes, crispy-forms handles these and adds other classes for compatibility with CSS frameworks. For example a ``CharField`` generates an ``<input class="textinput" ...``. But in uni form we need the class to be ``textInput`` (with capital 'I'), so crispy-forms leaves it like ``<input class="textinput textInput"...``. All official template packs are handled automatically, but maybe you are integrating a new CSS framework or your company's custom one with crispy-forms and need to change the default conversions. For this you need to use a settings variable called ``CRISPY_CLASS_CONVERTERS``, expected to be a Python dictionary::
+
+    CRISPY_CLASS_CONVERTERS = {'textinput': "textinput inputtext"}
+
+For example this setting would generate ``<input class"textinput inputtext" ...``. The key of the dictionary ``textinput`` is the Django's default class, the value is what you want it to be substituted with, in this case we are keeping ``textinput``.
+
+
 Rendering formsets
 ~~~~~~~~~~~~~~~~~~
 

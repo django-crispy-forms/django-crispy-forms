@@ -1,6 +1,7 @@
 from itertools import izip
 
 from django import template
+from django.conf import settings
 
 
 register = template.Library()
@@ -10,14 +11,18 @@ class_converter = {
     "fileinput": "fileinput fileUpload",
     "passwordinput": "textinput textInput",
 }
+class_converter.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
+
 
 @register.filter
 def is_checkbox(field):
     return field.field.widget.__class__.__name__.lower() == "checkboxinput"
 
+
 @register.filter
 def is_password(field):
     return field.field.widget.__class__.__name__.lower() == "passwordinput"
+
 
 @register.filter
 def classes(field):
@@ -26,6 +31,7 @@ def classes(field):
     """
     return field.widget.attrs.get('class', None)
 
+
 @register.filter
 def css_class(field):
     """
@@ -33,10 +39,12 @@ def css_class(field):
     """
     return field.field.widget.__class__.__name__.lower()
 
+
 def pairwise(iterable):
     "s -> (s0,s1), (s2,s3), (s4, s5), ..."
     a = iter(iterable)
     return izip(a, a)
+
 
 class CrispyFieldNode(template.Node):
     def __init__(self, field, attrs):
@@ -93,6 +101,7 @@ class CrispyFieldNode(template.Node):
 
 
         return field
+
 
 @register.tag(name="crispy_field")
 def crispy_field(parser, token):
