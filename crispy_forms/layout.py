@@ -531,6 +531,9 @@ class Field(LayoutObject):
             else:
                 self.attrs['class'] = kwargs.pop('css_class')
 
+        if 'wrapper_class' in kwargs:
+            self.wrapper_class = kwargs.pop('wrapper_class')
+
         self.template = kwargs.pop('template', self.template)
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
@@ -538,6 +541,8 @@ class Field(LayoutObject):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = ''
+        if hasattr(self, 'wrapper_class'):
+            context['wrapper_class'] = self.wrapper_class
         for field in self.fields:
             html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
         return html
