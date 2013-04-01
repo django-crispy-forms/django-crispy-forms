@@ -183,10 +183,10 @@ Then you will have to write a little of html code surrounding the forms::
 You can read a list of :ref:`helper attributes` and what they are for.
 
 
-Make django-crispy-forms fail loud
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Make crispy-forms fail loud
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default when django-crispy-forms encounters errors, it fails silently, logs them and continues working if possible. A settings variable called ``CRISPY_FAIL_SILENTLY`` has been added so that you can control this behavior. If you want to raise exceptions instead of logging, telling you what’s going on when you are developing in debug mode, you can set it to::
+By default when crispy-forms encounters errors, it fails silently, logs them and continues working if possible. A settings variable called ``CRISPY_FAIL_SILENTLY`` has been added so that you can control this behavior. If you want to raise exceptions instead of logging, telling you what’s going on when you are developing in debug mode, you can set it to::
 
     CRISPY_FAIL_SILENTLY = not DEBUG
 
