@@ -1053,6 +1053,28 @@ class TestLayoutObjects(TestCase):
 
         self.assertEqual(html.count('radio inline"'), 2)
 
+    def test_accordion_and_accordiongroup(self):
+        test_form = TestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            Accordion(
+                AccordionGroup('one',
+                               'first_name'
+                              ),
+                AccordionGroup('two',
+                               'password1',
+                               'password2'
+                              )
+            )
+        )
+        html = render_crispy_form(test_form)
+
+        self.assertEqual(html.count('<div class="accordion"'), 1)
+        self.assertEqual(html.count('<div class="accordion-group">'), 2)
+        self.assertEqual(html.count('name="first_name"'), 1)
+        self.assertEqual(html.count('name="password1"'), 1)
+        self.assertEqual(html.count('name="password2"'), 1)
+
     def test_tab_and_tabholder(self):
         test_form = TestForm()
         test_form.helper = FormHelper()
