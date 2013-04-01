@@ -12,3 +12,4 @@ TEMPLATE_DIRS = (os.path.join(SITE_ROOT, 'templates'))
 INSTALLED_APPS = (
     'crispy_forms'
 )
+SECRET_KEY = "secretkey"
