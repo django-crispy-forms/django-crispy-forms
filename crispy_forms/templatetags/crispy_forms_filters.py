@@ -7,7 +7,7 @@ from django.template.loader import get_template
 from django.utils.functional import memoize
 from django import template
 
-from ..exceptions import CrispyError
+from crispy_forms.exceptions import CrispyError
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 def uni_formset_template(template_pack=TEMPLATE_PACK):

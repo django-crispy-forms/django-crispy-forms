@@ -1,9 +1,9 @@
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 
-from .layout import Layout, LayoutSlice
-from .utils import render_field, flatatt, TEMPLATE_PACK
-from .exceptions import FormHelpersException
+from crispy_forms.layout import Layout, LayoutSlice
+from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK
+from crispy_forms.exceptions import FormHelpersException
 
 
 class DynamicLayoutHandler(object):
