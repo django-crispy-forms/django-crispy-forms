@@ -22,7 +22,8 @@ from crispy_forms.layout import (
 )
 from crispy_forms.bootstrap import (
     AppendedPrependedText, AppendedText, PrependedText, InlineCheckboxes,
-    FieldWithButtons, StrictButton, InlineRadios, Tab, TabHolder
+    FieldWithButtons, StrictButton, InlineRadios, Tab, TabHolder,
+    AccordionGroup, Accordion
 )
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
@@ -1071,6 +1072,8 @@ class TestLayoutObjects(TestCase):
 
         self.assertEqual(html.count('<div class="accordion"'), 1)
         self.assertEqual(html.count('<div class="accordion-group">'), 2)
+        self.assertEqual(html.count('<div id="one"'), 1)
+        self.assertEqual(html.count('<div id="two"'), 1)
         self.assertEqual(html.count('name="first_name"'), 1)
         self.assertEqual(html.count('name="password1"'), 1)
         self.assertEqual(html.count('name="password2"'), 1)
