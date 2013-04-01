@@ -103,7 +103,9 @@ These ones live in module ``crispy_forms.layout``. These are layout objects that
     Field('password', id="password-field", css_class="passwordfields", title="Explanation")
     Field('slider', template="custom-slider.html")
 
-This layout object can be used to easily extend Django's widgets.
+This layout object can be used to easily extend Django's widgets. If you want to render a Django form field as hidden you can simply do::
+
+    Field('field_name', type="hidden")
 
 - **Submit**: Used to create a submit button. First parameter is the ``name`` attribute of the button, second parameter is the ``value`` attribute::
 
