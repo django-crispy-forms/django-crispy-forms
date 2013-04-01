@@ -164,7 +164,7 @@ These ones live under module ``crispy_forms.bootstrap``.
         Button('cancel', 'Cancel')
     )
 
-.. image:: form_actions.png
+.. image:: images/form_actions.png
    :align: center
 
 - **AppendedText**: It renders a bootstrap appended text input. The first parameter is the name of the field to add appended text to, then the appended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render appended text active::
@@ -172,7 +172,7 @@ These ones live under module ``crispy_forms.bootstrap``.
     AppendedText('field_name', 'appended text to show')
     AppendedText('field_name', '$', active=True)
 
-.. image:: appended_text.png
+.. image:: images/appended_text.png
    :align: center
 
 - **PrependedText**: It renders a bootstrap prepended text input. The first parameter is the name of the field to add prepended text to, then the prepended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render prepended text active::
@@ -180,28 +180,28 @@ These ones live under module ``crispy_forms.bootstrap``.
     PrependedText('field_name', '<b>Prepended text</b> to show')
     PrependedText('field_name', '@', placeholder="username")
 
-.. image:: prepended_text.png
+.. image:: images/prepended_text.png
    :align: center
 
 - **PrependedAppendedText**: It renders a combined prepended and appended text. The first parameter is the name of the field, then the prepended text and finally the appended text::
 
     PrependedAppendedText('field_name', '$', '.00'),
 
-.. image:: appended_prepended_text.png
+.. image:: images/appended_prepended_text.png
    :align: center
 
 - **InlineCheckboxes**: It renders a Django ``forms.MultipleChoiceField`` field using inline checkboxes::
 
     InlineCheckboxes('field_name')
 
-.. image:: inline_checkboxes.png
+.. image:: images/inline_checkboxes.png
    :align: center
 
 - **InlineRadios**: It renders a Django ``forms.ChoiceField`` field with its widget set to ``forms.RadioSelect`` using inline radio buttons::
 
     InlineRadios('field_name')
 
-.. image:: inline_radios.jpg
+.. image:: images/inline_radios.jpg
    :align: center
 
 - **StrictButton**: It renders a button using ``<button>`` html, not ``input``. By default ``type`` is set to ``button`` and ``class`` is set to ``btn``::
@@ -209,14 +209,14 @@ These ones live under module ``crispy_forms.bootstrap``.
     StrictButton('Button's content', name="go", value="go", css_class="extra")
     StrictButton('Success', css_class="btn-success")
 
-.. image:: strict_button.png
+.. image:: images/strict_button.png
    :align: center
 
 - **FieldWithButtons**: You can create an input connected with buttons::
 
     FieldWithButtons('field_name', StrictButton("Go!"))
 
-.. image:: field_with_buttons.png
+.. image:: images/field_with_buttons.png
    :align: center
 
 - **Tab & TabHolder**: ``Tab`` renders a tab, different tabs need to be wrapped in a ``TabHolder`` for automatic javascript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
@@ -231,7 +231,7 @@ These ones live under module ``crispy_forms.bootstrap``.
         )
     )
 
-.. image:: tab_and_tabholder.jpg
+.. image:: images/tab_and_tabholder.jpg
    :align: center
 
 
