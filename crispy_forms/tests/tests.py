@@ -5,6 +5,7 @@ import django
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.forms.forms import BoundField
 from django.forms.models import formset_factory
 from django.template import Context, TemplateSyntaxError
 from django.template.loader import get_template_from_string
@@ -105,6 +106,19 @@ class TestBasicFunctionalityTags(TestCase):
         c = Context({'testField': test_form.fields['email']})
         html = template.render(c)
         self.assertTrue('email-fields' in html)
+
+    def test_crispy_field(self):
+        template = get_template_from_string(u"""
+            {% load crispy_forms_field %}
+            {% crispy_field testField 'class' 'error' %}
+        """)
+        test_form = TestForm()
+        field_instance = test_form.fields['email']
+        bound_field = BoundField(test_form, field_instance, 'email')
+
+        c = Context({'testField': bound_field})
+        html = template.render(c)
+        self.assertTrue('class="textinput textInput error"' in html)
 
 
 class TestFormHelpers(TestCase):

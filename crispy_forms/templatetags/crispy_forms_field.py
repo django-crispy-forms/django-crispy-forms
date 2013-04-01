@@ -84,7 +84,13 @@ class CrispyFieldNode(template.Node):
                     widget.attrs['required'] = 'required'
 
             for attribute_name, attribute in attr.items():
-                widget.attrs[template.Variable(attribute_name).resolve(context)] = template.Variable(attribute).resolve(context)
+                attribute_name = template.Variable(attribute_name).resolve(context)
+
+                if attribute_name in widget.attrs:
+                    widget.attrs[attribute_name] += " " + template.Variable(attribute).resolve(context)
+                else:
+                    widget.attrs[attribute_name] = template.Variable(attribute).resolve(context)
+
 
         return field
 
