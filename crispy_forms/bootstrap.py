@@ -1,4 +1,5 @@
 import warnings
+from random import randint
 
 from django.template import Context, Template
 from django.template.loader import render_to_string
@@ -231,3 +232,79 @@ class TabHolder(Div):
             links += tab.render_link()
         return render_to_string(self.template,
             Context({'tabs': self, 'links': links, 'content': content}))
+
+
+class AccordionGroup(Div):
+    """
+    Accordion Group (pane) object. It wraps given fields inside an accordion
+    tab. It takes accordion tab name as first argument.
+
+        AccordionGroup("group name", "form_field_1", "form_field_2")
+    """
+    template = "bootstrap/accordion-group.html"
+    data_parent = ""  # accordion parent div id.
+
+    def __init__(self, name, *fields, **kwargs):
+        super(AccordionGroup, self).__init__(*fields, **kwargs)
+        self.name = name
+        self.active = False
+
+        if not self.css_id:
+            self.css_id = slugify(self.name)
+
+    def __contains__(self, field_name):
+        """
+        check if field_name is contained within accordion.
+        """
+        return field_name in map(lambda pointer: pointer[1], self.get_field_names())
+
+    def render(self, form, form_style, context, template_pack='bootstrap'):
+        content = ''
+
+        for field in self.fields:
+            content += render_field(field, form, form_style, context,
+                                    template_pack=template_pack)
+
+        return render_to_string(self.template,
+                                Context({'group': self, 'content': content,
+                                         'data_parent': self.data_parent}))
+
+
+class Accordion(Div):
+    """
+    Accordion menu object. It wraps `AccordionGroup` objects in a container.
+
+        Accordion(AccordionGroup("group name", "form_field_1", "form_field_2"),
+                  AccordionGroup("another group name", "form_field"))
+    """
+    template = "bootstrap/accordion.html"
+
+    def first_group_with_errors(self, errors):
+        """
+        Returns the first group with errors, otherwise returns the first group
+        """
+        for group in self.fields:
+            errors_here = bool(filter(lambda error: error in group, errors))
+            if errors_here:
+                return group
+
+        return self.fields[0]
+
+    def render(self, form, form_style, context, template_pack='bootstrap'):
+        content = ''
+
+        # accordion group needs the parent div id to set `data-parent` (I don't
+        # know why). This needs to be a unique id
+        if not self.css_id:
+            self.css_id = "-".join(["accordion", str(randint(1000, 9999))])
+
+        # first group will be visible, others will be collapsed
+        self.first_group_with_errors(form.errors.keys()).active = True
+
+        for group in self.fields:
+            group.data_parent = self.css_id
+            content += render_field(group, form, form_style, context,
+                                    template_pack=template_pack)
+
+        return render_to_string(self.template,
+                                Context({'accordion': self, 'content': content}))

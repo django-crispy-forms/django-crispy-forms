@@ -1,0 +1,11 @@
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" 
+            data-parent="#{{ data_parent }}" href="#{{ group.css_id }}">{{ group.name }}</a>
+    </div>
+    <div id="{{ group.css_id }}" class="accordion-body collapse{% if group.active %} in{% endif %}" >
+        <div class="accordion-inner">
+            {{ content|safe }}
+        </div>
+    </div>
+</div>
