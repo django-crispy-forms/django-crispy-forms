@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 
 from .layout import Layout, LayoutSlice
-from .utils import render_field, flatatt, TEMPLATE_PACK
+from .utils import render_field, flatatt, TEMPLATE_PACK, render_field_multiple
 from .exceptions import FormHelpersException
 
 
@@ -343,3 +343,25 @@ class FormHelper(DynamicLayoutHandler):
                 items[attribute_name] = value
 
         return items
+
+
+class MultipleFormRenderer(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(MultipleFormRenderer, self).__init__(*args, **kwargs)
+        self.form_mapping = {}
+
+    def add_form(self, form_name, form):
+        """
+        Maps a `form_name` to a `form`
+        """
+        self.form_mapping[form_name] = form
+
+    def render(self, context, template_pack=TEMPLATE_PACK):
+        """
+        Returns safe html of the rendering of the layout
+        """
+        html = ""
+        for field in self.layout.fields:
+            html += render_field_multiple(field, self, self.form_style, context, template_pack=template_pack)
+
+        return mark_safe(html)

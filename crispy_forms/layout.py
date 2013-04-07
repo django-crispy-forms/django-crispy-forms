@@ -1,11 +1,12 @@
 import warnings
 
 from django.conf import settings
+from django.forms import BaseForm
 from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
-from .utils import render_field, flatatt
+from .utils import render_field, flatatt, render_field_multiple
 from .exceptions import DynamicError
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
@@ -538,7 +539,11 @@ class Field(LayoutObject):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = ''
         for field in self.fields:
-            html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
+            if isinstance(form, BaseForm):
+                html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
+            else:
+                html += render_field_multiple(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
+
         return html
 
 

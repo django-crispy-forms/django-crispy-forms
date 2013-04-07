@@ -13,7 +13,7 @@ from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.exceptions import DynamicError
-from crispy_forms.helper import FormHelper, FormHelpersException
+from crispy_forms.helper import FormHelper, FormHelpersException, MultipleFormRenderer
 from crispy_forms.layout import Submit, Reset, Hidden, Button
 from crispy_forms.layout import (
     Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder,
@@ -506,6 +506,50 @@ class TestFormHelpers(TestCase):
         html = template.render(c)
 
         self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html)
+
+
+class TestMultipleFormRenderer(TestCase):
+    urls = 'crispy_forms.tests.urls'
+
+    def setUp(self):
+        renderer = MultipleFormRenderer()
+        renderer.add_form("test_form", TestForm())
+        renderer.add_form("checkboxes_form", CheckboxesTestForm())
+        self.renderer = renderer
+
+    def tearDown(self):
+        pass
+
+    def test_renderer_layout(self):
+        self.renderer.layout = Layout(
+            "test_form.email",
+            Field("checkboxes_form.checkboxes", extra="extra"),
+        )
+        html = self.renderer.render(Context())
+        self.assertEqual(html.count('name="email"'), 1)
+        self.assertEqual(html.count('name="checkboxes"'), 3)
+        self.assertEqual(html.count('extra="extra"'), 1)
+
+    def test_Field_render_multiple(self):
+        field = Field("checkboxes_form.checkboxes", extra="extra", type="hidden")
+        html = field.render(self.renderer, 'bootstrap', Context())
+        self.assertEqual(html.count('extra="extra"'), 1)
+        self.assertEqual(html.count('type="hidden"'), 1)
+
+    def test_renderer_layout_whole_form(self):
+        self.renderer.layout = Layout(
+            "test_form",
+            Field("checkboxes_form.checkboxes"),
+        )
+        html = self.renderer.render(Context())
+        self.assertEqual(html.count('name="is_company"'), 1)
+        self.assertEqual(html.count('name="email"'), 1)
+        self.assertEqual(html.count('name="password1"'), 1)
+        self.assertEqual(html.count('name="password2"'), 1)
+        self.assertEqual(html.count('name="first_name"'), 1)
+        self.assertEqual(html.count('name="last_name"'), 1)
+        self.assertEqual(html.count('name="datetime_field'), 2)
+        self.assertEqual(html.count('name="checkboxes"'), 3)
 
 
 class TestFormLayout(TestCase):
