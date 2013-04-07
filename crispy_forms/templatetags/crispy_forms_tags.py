@@ -176,7 +176,7 @@ class BasicNode(template.Node):
             if attribute_name not in response_dict:
                 response_dict[attribute_name] = value
 
-        if context.has_key('csrf_token'):
+        if 'csrf_token' in context:
             response_dict['csrf_token'] = context['csrf_token']
 
         return response_dict
@@ -185,6 +185,7 @@ class BasicNode(template.Node):
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_formset.html' % template_pack)
 whole_uni_formset_template = memoize(whole_uni_formset_template, {}, 1)
+
 
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_form.html' % template_pack)

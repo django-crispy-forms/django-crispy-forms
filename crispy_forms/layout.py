@@ -188,7 +188,6 @@ class LayoutSlice(object):
                         raise DynamicError("Trying to wrap a field within an already wrapped field, \
                             recheck your filter or layout")
 
-
     def wrap(self, LayoutClass, *args, **kwargs):
         """
         Wraps every layout object pointed in `self.slice` under a `LayoutClass` instance with
@@ -308,7 +307,7 @@ class BaseInput(object):
         self.id = kwargs.get('css_id', '')
         self.attrs = {}
 
-        if kwargs.has_key('css_class'):
+        if 'css_class' in kwargs:
             self.field_classes += ' %s' % kwargs.pop('css_class')
 
         self.template = kwargs.pop('template', self.template)
@@ -433,9 +432,11 @@ class MultiField(LayoutObject):
 
         fields_output = u''
         for field in self.fields:
-            fields_output += render_field(field, form, form_style, context,
+            fields_output += render_field(
+                field, form, form_style, context,
                 self.field_template, self.label_class, layout_object=self,
-                template_pack=template_pack)
+                template_pack=template_pack
+            )
 
         context.update({'multifield': self, 'fields_output': fields_output})
         return render_to_string(self.template, context)
@@ -454,7 +455,7 @@ class Div(LayoutObject):
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
 
-        if hasattr(self, 'css_class') and kwargs.has_key('css_class'):
+        if hasattr(self, 'css_class') and 'css_class' in kwargs:
             self.css_class += ' %s' % kwargs.pop('css_class')
         if not hasattr(self, 'css_class'):
             self.css_class = kwargs.pop('css_class', None)
@@ -524,19 +525,24 @@ class Field(LayoutObject):
         if not hasattr(self, 'attrs'):
             self.attrs = {}
 
-        if kwargs.has_key('css_class'):
+        if 'css_class' in kwargs:
             if 'class' in self.attrs:
                 self.attrs['class'] += " %s" % kwargs.pop('css_class')
             else:
                 self.attrs['class'] = kwargs.pop('css_class')
 
+        if 'wrapper_class' in kwargs:
+            self.wrapper_class = kwargs.pop('wrapper_class')
+
         self.template = kwargs.pop('template', self.template)
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
-        self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k,v in kwargs.items()]))
+        self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k, v in kwargs.items()]))
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = ''
+        if hasattr(self, 'wrapper_class'):
+            context['wrapper_class'] = self.wrapper_class
         for field in self.fields:
             html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
         return html

@@ -10,6 +10,8 @@ from django import template
 from crispy_forms.exceptions import CrispyError
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+
+
 def uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_formset.html' % template_pack)
 uni_formset_template = memoize(uni_formset_template, {}, 1)
@@ -61,7 +63,7 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
         c = Context({'formset': form})
     else:
         template = get_template('%s/errors.html' % template_pack)
-        c = Context({'form':form})
+        c = Context({'form': form})
     return template.render(c)
 
 
