@@ -236,6 +236,21 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/tab_and_tabholder.jpg
    :align: center
 
+- **Accordion & AccordionGroup**: ``AccordionGroup`` renders an accordion pane, different groups need to be wrapped in an ``Accordion`` for automatic javascript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
+
+    Accordion(
+        AccordionGroup('First Group',
+            'radio_buttons'
+        ),
+        Tab('Second Group',
+            Field('field_name_3', css_class="extra")
+        )
+    )
+
+.. image:: images/accordiongroup_and_accordion.jpg
+   :align: center
+
+
 
 Overriding layout objects templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
