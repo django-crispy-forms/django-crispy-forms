@@ -107,6 +107,15 @@ This layout object can be used to easily extend Django's widgets. If you want to
 
     Field('field_name', type="hidden")
 
+If you need HTML5 attributes, you can easily do those using underscores ``data_name`` kwarg here will become into ``data-name`` in your generated html::
+
+    Field('field_name', data_name="special")
+
+Fields in bootstrap are wrapped in a ``<div class="control-group">``. You may want to set extra classes in this div, for that do::
+
+    Field('field_name', wrapper_class="extra-class")
+
+
 - **Submit**: Used to create a submit button. First parameter is the ``name`` attribute of the button, second parameter is the ``value`` attribute::
 
     Submit('search', 'SEARCH')
