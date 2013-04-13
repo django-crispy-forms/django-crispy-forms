@@ -16,6 +16,7 @@ from base import KeepContext
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
+
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template
 def default_field_template(template_pack=TEMPLATE_PACK):
@@ -69,7 +70,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             # Injecting HTML attributes into field's widget, Django handles rendering these
             field_instance = form.fields[field]
             if attrs is not None:
-                widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget,])
+                widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget])
 
                 # We use attrs as a dictionary later, so here we make a copy
                 list_attrs = attrs

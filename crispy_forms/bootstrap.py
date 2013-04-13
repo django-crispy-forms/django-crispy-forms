@@ -123,16 +123,20 @@ class FieldWithButtons(Div):
         # We first render the buttons
         buttons = ''
         for field in self.fields[1:]:
-            buttons += render_field(field, form, form_style, context,
-                'bootstrap/layout/field.html', layout_object=self)
+            buttons += render_field(
+                field, form, form_style, context,
+                'bootstrap/layout/field.html', layout_object=self
+            )
 
         context.update({'div': self, 'buttons': buttons})
 
         if isinstance(self.fields[0], Field):
             # FieldWithButtons(Field('field_name'), StrictButton("go"))
             # We render the field passing its name and attributes
-            return render_field(self.fields[0][0], form, form_style, context,
-                self.template, attrs=self.fields[0].attrs)
+            return render_field(
+                self.fields[0][0], form, form_style, context,
+                self.template, attrs=self.fields[0].attrs
+            )
         else:
             return render_field(self.fields[0], form, form_style, context, self.template)
 
@@ -153,10 +157,10 @@ class StrictButton(object):
         kwargs.setdefault('type', 'button')
 
         # We turn css_id and css_class into id and class
-        if kwargs.has_key('css_id'):
+        if 'css_id' in kwargs:
             kwargs['id'] = kwargs.pop('css_id')
         kwargs['class'] = self.field_classes
-        if kwargs.has_key('css_class'):
+        if 'css_class' in kwargs:
             kwargs['class'] += " %s" % kwargs.pop('css_class')
 
         self.flat_attrs = flatatt(kwargs)
@@ -294,6 +298,7 @@ class Accordion(ContainerHolder):
                 group, form, form_style, context, template_pack=template_pack
             )
 
-        return render_to_string(self.template, Context({
-            'accordion': self, 'content': content
+        return render_to_string(
+            self.template,
+            Context({'accordion': self, 'content': content
         }))

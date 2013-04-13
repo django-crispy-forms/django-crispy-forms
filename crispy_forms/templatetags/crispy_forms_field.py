@@ -48,9 +48,9 @@ def pairwise(iterable):
 
 class CrispyFieldNode(template.Node):
     def __init__(self, field, attrs):
-       self.field = field
-       self.attrs = attrs
-       self.html5_required = 'html5_required'
+        self.field = field
+        self.attrs = attrs
+        self.html5_required = 'html5_required'
 
     def render(self, context):
         # Nodes are not threadsafe so we must store and look up our instance
@@ -69,7 +69,7 @@ class CrispyFieldNode(template.Node):
         except template.VariableDoesNotExist:
             html5_required = False
 
-        widgets = getattr(field.field.widget, 'widgets', [field.field.widget,])
+        widgets = getattr(field.field.widget, 'widgets', [field.field.widget])
 
         if isinstance(attrs, dict):
             attrs = [attrs] * len(widgets)
@@ -98,7 +98,6 @@ class CrispyFieldNode(template.Node):
                     widget.attrs[attribute_name] += " " + template.Variable(attribute).resolve(context)
                 else:
                     widget.attrs[attribute_name] = template.Variable(attribute).resolve(context)
-
 
         return field
 
