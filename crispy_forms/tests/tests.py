@@ -1021,6 +1021,11 @@ class TestLayoutObjects(TestCase):
         self.assertEqual(html.count('class="dateinput"'), 1)
         self.assertEqual(html.count('class="timeinput"'), 1)
 
+    def test_field_wrapper_class(self):
+        html = Field('email', wrapper_class="testing").render(TestForm(), "", Context())
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            self.assertEqual(html.count('class="control-group testing"'), 1)
+
     def test_appended_prepended_text(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}

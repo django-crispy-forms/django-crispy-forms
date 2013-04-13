@@ -531,18 +531,17 @@ class Field(LayoutObject):
             else:
                 self.attrs['class'] = kwargs.pop('css_class')
 
-        if 'wrapper_class' in kwargs:
-            self.wrapper_class = kwargs.pop('wrapper_class')
-
+        self.wrapper_class = kwargs.pop('wrapper_class', None)
         self.template = kwargs.pop('template', self.template)
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k, v in kwargs.items()]))
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
-        html = ''
         if hasattr(self, 'wrapper_class'):
             context['wrapper_class'] = self.wrapper_class
+
+        html = ''
         for field in self.fields:
             html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
         return html
