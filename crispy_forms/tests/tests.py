@@ -1059,13 +1059,15 @@ class TestLayoutObjects(TestCase):
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Accordion(
-                AccordionGroup('one',
-                               'first_name'
-                              ),
-                AccordionGroup('two',
-                               'password1',
-                               'password2'
-                              )
+                AccordionGroup(
+                    'one',
+                    'first_name'
+                ),
+                AccordionGroup(
+                    'two',
+                    'password1',
+                    'password2'
+                )
             )
         )
         html = render_crispy_form(test_form)

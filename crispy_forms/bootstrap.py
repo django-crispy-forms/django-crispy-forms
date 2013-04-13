@@ -166,21 +166,17 @@ class StrictButton(object):
         return render_to_string(self.template, Context({'button': self}))
 
 
-class Tab(Div):
+class Container(Div):
     """
-    Tab object. It wraps fields in a div whose default class is "tab-pane" and
-    takes a name as first argument. Example::
-
-        Tab('tab_name', 'form_field_1', 'form_field_2', 'form_field_3')
+    Base class used for `Tab` and `AccordionGroup`, represents a basic container concept
     """
-    css_class = 'tab-pane'
-    link_template = 'bootstrap/layout/tab-link.html'
+    css_class = ""
 
     def __init__(self, name, *fields, **kwargs):
-        super(Tab, self).__init__(*fields, **kwargs)
+        super(Container, self).__init__(*fields, **kwargs)
+        self.template = kwargs.pop('template', self.template)
         self.name = name
-        self.active = False
-        # id is necessary for the TabHolder links
+        self.active = kwargs.pop("active", False)
         if not self.css_id:
             self.css_id = slugify(self.name)
 
@@ -190,31 +186,19 @@ class Tab(Div):
         """
         return field_name in map(lambda pointer: pointer[1], self.get_field_names())
 
-    def render_link(self):
-        """
-        Render the link for the tab-pane. It must be called after render so css_class is updated
-        with active if needed.
-        """
-        return render_to_string(self.link_template, Context({'link': self}))
-
     def render(self, form, form_style, context):
         if self.active:
             self.css_class += ' active'
-        return super(Tab, self).render(form, form_style, context)
+        return super(Container, self).render(form, form_style, context)
 
 
-class TabHolder(Div):
+class ContainerHolder(Div):
     """
-    TabHolder object. It wraps Tab objects in a container. Requiers bootstrap-tab.js::
-
-            TabHolder(Tab('form_field_1', 'form_field_2'), Tab('form_field_3'))
+    Base class used for `TabHolder` and `Accordion`, groups containers
     """
-    template = 'bootstrap/layout/tab.html'
-    css_class = 'nav nav-tabs'
-
-    def first_tab_with_errors(self, errors):
+    def first_container_with_errors(self, errors):
         """
-        Returns the first tab with errors, otherwise returns the first tab
+        Returns the first container with errors, otherwise returns the first one
         """
         for tab in self.fields:
             errors_here = bool(filter(lambda error: error in tab, errors))
@@ -223,72 +207,75 @@ class TabHolder(Div):
 
         return self.fields[0]
 
+
+class Tab(Container):
+    """
+    Tab object. It wraps fields in a div whose default class is "tab-pane" and
+    takes a name as first argument. Example::
+
+        Tab('tab_name', 'form_field_1', 'form_field_2', 'form_field_3')
+    """
+    css_class = 'tab-pane'
+    link_template = 'bootstrap/layout/tab-link.html'
+
+    def render_link(self):
+        """
+        Render the link for the tab-pane. It must be called after render so css_class is updated
+        with active if needed.
+        """
+        return render_to_string(self.link_template, Context({'link': self}))
+
+
+class TabHolder(ContainerHolder):
+    """
+    TabHolder object. It wraps Tab objects in a container. Requires bootstrap-tab.js::
+
+        TabHolder(
+            Tab('form_field_1', 'form_field_2'),
+            Tab('form_field_3')
+        )
+    """
+    template = 'bootstrap/layout/tab.html'
+    css_class = 'nav nav-tabs'
+
     def render(self, form, form_style, context, template_pack='bootstrap'):
         links, content = '', ''
-        self.first_tab_with_errors(form.errors.keys()).active = True
+
+        # The first tab with errors will be active
+        self.first_container_with_errors(form.errors.keys()).active = True
+
         for tab in self.fields:
-            content += render_field(tab, form, form_style, context,
-                                    template_pack=template_pack)
+            content += render_field(
+                tab, form, form_style, context, template_pack=template_pack
+            )
             links += tab.render_link()
-        return render_to_string(self.template,
-            Context({'tabs': self, 'links': links, 'content': content}))
+
+        return render_to_string(self.template, Context({
+            'tabs': self, 'links': links, 'content': content
+        }))
 
 
-class AccordionGroup(Div):
+class AccordionGroup(Container):
     """
     Accordion Group (pane) object. It wraps given fields inside an accordion
-    tab. It takes accordion tab name as first argument.
+    tab. It takes accordion tab name as first argument::
 
         AccordionGroup("group name", "form_field_1", "form_field_2")
     """
     template = "bootstrap/accordion-group.html"
     data_parent = ""  # accordion parent div id.
 
-    def __init__(self, name, *fields, **kwargs):
-        super(AccordionGroup, self).__init__(*fields, **kwargs)
-        self.name = name
-        self.active = False
 
-        if not self.css_id:
-            self.css_id = slugify(self.name)
-
-    def __contains__(self, field_name):
-        """
-        check if field_name is contained within accordion.
-        """
-        return field_name in map(lambda pointer: pointer[1], self.get_field_names())
-
-    def render(self, form, form_style, context, template_pack='bootstrap'):
-        content = ''
-
-        for field in self.fields:
-            content += render_field(field, form, form_style, context,
-                                    template_pack=template_pack)
-
-        return render_to_string(self.template,
-                                Context({'group': self, 'content': content,
-                                         'data_parent': self.data_parent}))
-
-
-class Accordion(Div):
+class Accordion(ContainerHolder):
     """
-    Accordion menu object. It wraps `AccordionGroup` objects in a container.
+    Accordion menu object. It wraps `AccordionGroup` objects in a container::
 
-        Accordion(AccordionGroup("group name", "form_field_1", "form_field_2"),
-                  AccordionGroup("another group name", "form_field"))
+        Accordion(
+            AccordionGroup("group name", "form_field_1", "form_field_2"),
+            AccordionGroup("another group name", "form_field")
+        )
     """
     template = "bootstrap/accordion.html"
-
-    def first_group_with_errors(self, errors):
-        """
-        Returns the first group with errors, otherwise returns the first group
-        """
-        for group in self.fields:
-            errors_here = bool(filter(lambda error: error in group, errors))
-            if errors_here:
-                return group
-
-        return self.fields[0]
 
     def render(self, form, form_style, context, template_pack='bootstrap'):
         content = ''
@@ -298,13 +285,15 @@ class Accordion(Div):
         if not self.css_id:
             self.css_id = "-".join(["accordion", str(randint(1000, 9999))])
 
-        # first group will be visible, others will be collapsed
-        self.first_group_with_errors(form.errors.keys()).active = True
+        # first group with errors or first groupt will be visible, others will be collapsed
+        self.first_container_with_errors(form.errors.keys()).active = True
 
         for group in self.fields:
             group.data_parent = self.css_id
-            content += render_field(group, form, form_style, context,
-                                    template_pack=template_pack)
+            content += render_field(
+                group, form, form_style, context, template_pack=template_pack
+            )
 
-        return render_to_string(self.template,
-                                Context({'accordion': self, 'content': content}))
+        return render_to_string(self.template, Context({
+            'accordion': self, 'content': content
+        }))
