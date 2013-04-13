@@ -2,6 +2,7 @@
 
 ## 1.2.4
 
+ * Added `Accordion` and `AccordionGroup` bootstrap layout objects, see #162.
  * Bug fix in `render_crispy_form` to avoid override existing context, see #153.
  * Use formset iterator instead of `forms` list attribute, see #152.
  * Don't display fieldset legend if empty, see #147 and #155.

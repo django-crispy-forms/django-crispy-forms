@@ -83,3 +83,5 @@ Contributors
 * Evan Borgstrom <borgstrom>
 * Daniel Shapiro <danxshap>
 * <SpazioDati>
+* Stefan "hr" Berder (白峰) <hrbonz>
+* Suleyman Melikoglu <laplacesdemon>
