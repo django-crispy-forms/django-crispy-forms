@@ -109,18 +109,19 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue('email-fields' in html)
 
     def test_crispy_field_and_class_converters(self):
-        template = get_template_from_string(u"""
-            {% load crispy_forms_field %}
-            {% crispy_field testField 'class' 'error' %}
-        """)
-        test_form = TestForm()
-        field_instance = test_form.fields['email']
-        bound_field = BoundField(test_form, field_instance, 'email')
+        if hasattr(settings, 'CRISPY_CLASS_CONVERTERS'):
+            template = get_template_from_string(u"""
+                {% load crispy_forms_field %}
+                {% crispy_field testField 'class' 'error' %}
+            """)
+            test_form = TestForm()
+            field_instance = test_form.fields['email']
+            bound_field = BoundField(test_form, field_instance, 'email')
 
-        c = Context({'testField': bound_field})
-        html = template.render(c)
-        self.assertTrue('error' in html)
-        self.assertTrue('inputtext' in html)
+            c = Context({'testField': bound_field})
+            html = template.render(c)
+            self.assertTrue('error' in html)
+            self.assertTrue('inputtext' in html)
 
 
 class TestFormHelpers(TestCase):
