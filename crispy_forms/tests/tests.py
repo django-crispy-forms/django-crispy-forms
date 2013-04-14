@@ -1535,6 +1535,14 @@ class TestDynamicLayouts(TestCase):
         helper.layout = layout
         helper['email'].wrap(Field, css_class='hero')
         self.assertTrue(isinstance(layout[0][0], Field))
+        self.assertEqual(layout[0][0][0], 'email')
+
+        helper = FormHelper()
+        helper.layout = Layout('password1')
+        helper['password1'].wrap(AppendedText, "extra")
+        self.assertTrue(isinstance(helper.layout[0], AppendedText))
+        self.assertEqual(helper.layout[0][0], 'password1')
+        self.assertEqual(helper.layout[0].text, 'extra')
 
     def test_formhelper__setitem__(self):
         helper = FormHelper()

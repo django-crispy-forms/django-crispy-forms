@@ -1,7 +1,8 @@
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 
-from crispy_forms.layout import Layout, LayoutSlice
+from crispy_forms.layout import Layout
+from crispy_forms.layout_slice import LayoutSlice
 from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK
 from crispy_forms.exceptions import FormHelpersException
 
