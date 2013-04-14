@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.2.4
+## 1.2.4 (2013/4/13)
 
  * Added `wrapper_class` kwarg to `Field` layout object, see #163.
  * Added `Accordion` and `AccordionGroup` bootstrap layout objects, see #162.
