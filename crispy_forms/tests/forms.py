@@ -1,5 +1,6 @@
 from django import forms
 from django.db import models
+
 from crispy_forms.helper import FormHelper
 
 
@@ -69,14 +70,14 @@ class CheckboxesTestForm(forms.Form):
     )
 
 
-class TestModel(models.Model):
+class CrispyTestModel(models.Model):
     email = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
 
 
 class TestForm3(forms.ModelForm):
     class Meta:
-        model = TestModel
+        model = CrispyTestModel
         fields = ['email', 'password']
         exclude = ['password']
 
@@ -87,7 +88,7 @@ class TestForm3(forms.ModelForm):
 
 class TestForm4(forms.ModelForm):
     class Meta:
-        model = TestModel
+        model = CrispyTestModel
 
 
 class ExampleForm(forms.Form):
