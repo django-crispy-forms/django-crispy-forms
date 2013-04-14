@@ -307,10 +307,22 @@ The official layout objects live in ``layout.py`` and ``bootstrap.py``, you may 
 If you come up with a good idea and design a layout object you think others could benefit from, please open an issue or send a pull request, so django-crispy-forms gets better.
 
 
-Inheriting layouts
-~~~~~~~~~~~~~~~~~~
+Composing layouts
+~~~~~~~~~~~~~~~~~
 
-Imagine you have several forms that share a big chunk of the same layout. There is a way you can create a ``Layout``, reuse and extend it in an easy way. You can have a ``Layout`` as a component of another ``Layout``, let's see an example::
+Imagine you have several forms that share a big chunk of the same layout. There is a easy way you can create a ``Layout``, reuse and extend it. You can have a ``Layout`` as a component of another ``Layout``. You can build that common chunk, different ways. As a separate class::
+
+    class CommonLayout(Layout):
+        def __init__(self, *args, **kwargs):
+            super(CommonLayout, self).__init__(
+                MultiField("User data",
+                    'username',
+                    'lastname',
+                    'age'
+                )
+            )
+
+Maybe an object instance is good enough::
 
     common_layout = Layout(
         MultiField("User data",
@@ -320,8 +332,10 @@ Imagine you have several forms that share a big chunk of the same layout. There 
         )
     )
 
-    example_layout = Layout(
-        common_layout,
+Then you can do::
+
+    helper.layout = Layout(
+        CommonLayout(),
         Div(
             'favorite_food',
             'favorite_bread',
@@ -329,7 +343,9 @@ Imagine you have several forms that share a big chunk of the same layout. There 
         )
     )
 
-    example_layout2 = Layout(
+Or::
+
+    helper.layout = Layout(
         common_layout,
         Div(
             'professional_interests',
@@ -337,4 +353,4 @@ Imagine you have several forms that share a big chunk of the same layout. There 
         )
     )
 
-We have defined a ``common_layout`` that is used as a base for two different layouts: ``example_layout`` and ``example_layout2``, which means that those two layouts will start the same way and then extend the layout in different ways.
+We have defined a layout and used it as a chunk of another layout, which means that those two layouts will start the same way and then extend the layout in different ways.

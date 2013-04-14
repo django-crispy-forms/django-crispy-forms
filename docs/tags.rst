@@ -9,7 +9,7 @@ django-crispy-forms implements a class called ``FormHelper`` that defines the fo
 Fundamentals
 ~~~~~~~~~~~~
 
-For the rest of this document we will use the following example form of how to use a helper. This form is in charge of gathering some user information::
+For the rest of this document we will use the following example form for showing how to use a helper. This form is in charge of gathering some user information::
 
     class ExampleForm(forms.Form):
         like_website = forms.TypedChoiceField(
@@ -42,7 +42,7 @@ For the rest of this document we will use the following example form of how to u
             label = "Additional notes or feedback",
             required = False,
         )
-        
+
 Let's see how helpers works step by step, with some examples explained. First you will need to import ``FormHelper``::
 
     from crispy_forms.helper import FormHelper
@@ -194,7 +194,9 @@ By default when crispy-forms encounters errors, it fails silently, logs them and
 Change crispy-forms <input> default classes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Django fields generate default classes, crispy-forms handles these and adds other classes for compatibility with CSS frameworks. For example a ``CharField`` generates an ``<input class="textinput" ...``. But in uni form we need the class to be ``textInput`` (with capital 'I'), so crispy-forms leaves it like ``<input class="textinput textInput"...``. All official template packs are handled automatically, but maybe you are integrating a new CSS framework or your company's custom one with crispy-forms and need to change the default conversions. For this you need to use a settings variable called ``CRISPY_CLASS_CONVERTERS``, expected to be a Python dictionary::
+Django fields generate default classes, crispy-forms handles these and adds other classes for compatibility with CSS frameworks.
+
+For example a ``CharField`` generates an ``<input class="textinput" ...``. But in uni form we need the class to be ``textInput`` (with capital 'I'), so crispy-forms leaves it like ``<input class="textinput textInput"...``. All official template packs are handled automatically, but maybe you are integrating a new CSS framework, or your company's custom one, with crispy-forms and need to change the default conversions. For this you need to use a settings variable called ``CRISPY_CLASS_CONVERTERS``, expected to be a Python dictionary::
 
     CRISPY_CLASS_CONVERTERS = {'textinput': "textinput inputtext"}
 
@@ -284,7 +286,7 @@ Helper attributes you can set
 Bootstrap Helper attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are currently some helper attributes that only have functionality for a specific template pack. These doesn't necessarily mean that they won't be supported for other template packs in the future.
+There are currently some helper attributes that only have functionality for a specific template pack. This doesn't necessarily mean that they won't be supported for other template packs in the future.
 
 **help_text_inline = False**
     Sets whether help texts should be rendered inline or block. If set to ``True`` help texts will be rendered ``help-inline`` class, otherwise using ``help-block``. By default text messages are rendered in block mode.
