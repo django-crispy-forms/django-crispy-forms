@@ -171,7 +171,7 @@ class BaseInput(object):
     def __init__(self, name, value, **kwargs):
         self.name = name
         self.value = value
-        self.id = kwargs.get('css_id', '')
+        self.id = kwargs.pop('css_id', '')
         self.attrs = {}
 
         if 'css_class' in kwargs:
