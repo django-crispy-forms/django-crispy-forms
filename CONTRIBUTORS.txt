@@ -86,4 +86,3 @@ Contributors
 * Stefan "hr" Berder (白峰) <hrbonz>
 * Suleyman Melikoglu <laplacesdemon>
 * Vladislav Mitov <VMitov>
-* Ben Delevingne <rockingskier>
