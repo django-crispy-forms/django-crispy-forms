@@ -1092,7 +1092,8 @@ class TestLayoutObjects(TestCase):
         test_form.helper.layout = Layout(
             TabHolder(
                 Tab('one',
-                    'first_name'
+                    'first_name',
+                    css_id="custom-name"
                 ),
                 Tab('two',
                     'password1',
@@ -1101,12 +1102,13 @@ class TestLayoutObjects(TestCase):
             )
         )
         html = render_crispy_form(test_form)
+        import ipdb; ipdb.set_trace()
 
         self.assertEqual(html.count(
-            '<li class="tab-pane active"><a href="#one" data-toggle="tab">One</a></li>'), 1)
+            '<li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'), 1)
         self.assertEqual(html.count('<li class="tab-pane'), 2)
         self.assertEqual(html.count('tab-pane'), 4)
-        self.assertEqual(html.count('<div id="one"'), 1)
+        self.assertEqual(html.count('<div id="custom-name"'), 1)
         self.assertEqual(html.count('<div id="two"'), 1)
         self.assertEqual(html.count('name="first_name"'), 1)
         self.assertEqual(html.count('name="password1"'), 1)
