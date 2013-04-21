@@ -2,6 +2,7 @@
 
 ## 1.2.5
 
+ * Popping `css_id` to avoid having a css-id attribute, see #167.
  * Fixed a bug in dynamic layout API, when wrapping layout objects that had arguments passed after fields. Moving `LayoutSlice` to `layout_slice` module.
  * Fixed test failing when tests runned from manage.py test.
  * Fixed testing name conflict, see #130.
