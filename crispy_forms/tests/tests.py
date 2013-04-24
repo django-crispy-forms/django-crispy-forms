@@ -1102,7 +1102,7 @@ class TestLayoutObjects(TestCase):
             )
         )
         html = render_crispy_form(test_form)
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
 
         self.assertEqual(html.count(
             '<li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'), 1)
@@ -1114,6 +1114,36 @@ class TestLayoutObjects(TestCase):
         self.assertEqual(html.count('name="password1"'), 1)
         self.assertEqual(html.count('name="password2"'), 1)
 
+    def test_tab_helper_reuse(self):
+        # this is a proper form, according to the docs.
+        # note that the helper is a class property here,
+        # shared between all instances
+        class TestForm(forms.Form):
+            val1 = forms.CharField(required=False)
+            val2 = forms.CharField(required=True)
+            helper = FormHelper()
+            helper.layout = Layout(
+                TabHolder(Tab('one', 'val1',),
+                          Tab('two', 'val2',)))
+                
+        # first render of form => everything is fine
+        test_form = TestForm()
+        html = render_crispy_form(test_form)
+        
+        # second render of form => first tab should be active,
+        # but not duplicate class
+        test_form = TestForm()
+        html = render_crispy_form(test_form)
+        self.assertEqual(html.count('class="tab-pane active active"'), 0)
+        
+        # render a new form, now with errors
+        test_form = TestForm(data={'val1': 'foo'})
+        html = render_crispy_form(test_form)
+        # tab 1 should not be active
+        self.assertEqual(html.count('<div id="one" \n    class="tab-pane active'), 0)
+        # tab 2 should be active
+        self.assertEqual(html.count('<div id="two" \n    class="tab-pane active'), 1)
+        
     def test_html_with_carriage_returns(self):
         test_form = TestForm()
         test_form.helper = FormHelper()
