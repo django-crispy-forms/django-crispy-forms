@@ -1102,7 +1102,6 @@ class TestLayoutObjects(TestCase):
             )
         )
         html = render_crispy_form(test_form)
-        import ipdb; ipdb.set_trace()
 
         self.assertEqual(html.count(
             '<li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'), 1)
