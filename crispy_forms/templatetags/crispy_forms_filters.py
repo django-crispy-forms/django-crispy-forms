@@ -10,6 +10,7 @@ from django import template
 from crispy_forms.exceptions import CrispyError
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+DEBUG = getattr(settings, 'DEBUG', False)
 
 
 def uni_formset_template(template_pack=TEMPLATE_PACK):
@@ -77,7 +78,7 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
         or
         {{ form.field|as_crispy_field:"bootstrap" }}
     """
-    if not isinstance(field, forms.BoundField):
+    if not isinstance(field, forms.BoundField) and DEBUG:
         raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
 
     template = get_template('%s/field.html' % template_pack)
