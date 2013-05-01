@@ -86,3 +86,5 @@ Contributors
 * Stefan "hr" Berder (白峰) <hrbonz>
 * Suleyman Melikoglu <laplacesdemon>
 * Vladislav Mitov <VMitov>
+* Nemesis Fixx <mcnemesis>
+* Chris Vigelius <chrisv2>

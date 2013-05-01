@@ -1,8 +1,13 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.2.6 (2013/5/1)
+
+ * Fixes to `Container` and `TabHolder, affecting class variable helpers with layouts containing `TabHolder` or `AccordionGroup` objects, see #172.
+ * Bug fix for `KeepContext` context manager, see #172.
+
 ## 1.2.5 (2013/4/25)
 
- * Avoid raising Exceptions in |as_crispy_field filter when not in DEBUG mode.
+ * Avoid raising Exceptions in `|as_crispy_field` filter when not in DEBUG mode.
  * Popping `css_id` to avoid having a css-id attribute, see #167.
  * Fixed a bug in dynamic layout API, when wrapping layout objects that had arguments passed after fields. Moving `LayoutSlice` to `layout_slice` module.
  * Fixed test failing when tests runned from manage.py test.
