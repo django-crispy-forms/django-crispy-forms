@@ -234,7 +234,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 
     TabHolder(
         Tab('First Tab',
-            'field_name_1'
+            'field_name_1',
             Div('field_name_2')
         ),
         Tab('Second Tab',
