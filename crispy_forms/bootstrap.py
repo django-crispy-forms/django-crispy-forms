@@ -192,7 +192,10 @@ class Container(Div):
 
     def render(self, form, form_style, context):
         if self.active:
-            self.css_class += ' active'
+            if not 'active' in self.css_class:
+                self.css_class += ' active'
+        else:
+            self.css_class = self.css_class.replace('active', '')
         return super(Container, self).render(form, form_style, context)
 
 
@@ -244,6 +247,8 @@ class TabHolder(ContainerHolder):
 
     def render(self, form, form_style, context, template_pack='bootstrap'):
         links, content = '', ''
+        for tab in self.fields:
+            tab.active = False
 
         # The first tab with errors will be active
         self.first_container_with_errors(form.errors.keys()).active = True
