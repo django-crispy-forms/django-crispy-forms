@@ -2,7 +2,7 @@
 
 ## 1.2.6 (2013/5/1)
 
- * Fixes to `Container` and `TabHolder, affecting class variable helpers with layouts containing `TabHolder` or `AccordionGroup` objects, see #172.
+ * Fixes to `Container` and `TabHolder`, affecting class variable helpers with layouts containing `TabHolder` or `AccordionGroup` objects, see #172.
  * Bug fix for `KeepContext` context manager, see #172.
 
 ## 1.2.5 (2013/4/25)
