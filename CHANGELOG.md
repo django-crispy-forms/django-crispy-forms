@@ -1,5 +1,9 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.2.7
+
+ * Added `render_hidden_fields` attribute to `FormHelper`, see docs.
+
 ## 1.2.6 (2013/5/1)
 
  * Fixes to `Container` and `TabHolder, affecting class variable helpers with layouts containing `TabHolder` or `AccordionGroup` objects, see #172.

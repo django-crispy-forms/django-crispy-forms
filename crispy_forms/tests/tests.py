@@ -524,6 +524,27 @@ class TestFormHelpers(TestCase):
 
         self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html)
 
+    def test_render_hidden_fields(self):
+        test_form = TestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            'email'
+        )
+        test_form.helper.render_hidden_fields = True
+
+        html = render_crispy_form(test_form)
+        self.assertEqual(html.count('<input'), 1)
+
+        # Now hide a couple of fields
+        for field in ('password1', 'password2'):
+            test_form.fields[field].widget = forms.HiddenInput()
+
+        html = render_crispy_form(test_form)
+        self.assertEqual(html.count('<input'), 3)
+        self.assertEqual(html.count('hidden'), 2)
+        self.assertEqual(html.count('name="password1" type="hidden"'), 1)
+        self.assertEqual(html.count('name="password2" type="hidden"'), 1)
+
 
 class TestFormLayout(TestCase):
     urls = 'crispy_forms.tests.urls'

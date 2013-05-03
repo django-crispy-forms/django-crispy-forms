@@ -188,6 +188,7 @@ class FormHelper(DynamicLayoutHandler):
     formset_error_title = None
     form_show_errors = True
     render_unmentioned_fields = False
+    render_hidden_fields = False
     _help_text_inline = False
     _error_text_inline = True
     html5_required = False
@@ -283,6 +284,13 @@ class FormHelper(DynamicLayoutHandler):
             left_fields_to_render = fields - form.rendered_fields
             for field in left_fields_to_render:
                 html += render_field(field, form, self.form_style, context, template_pack=template_pack)
+
+        if self.render_hidden_fields:
+            fields = set(form.fields.keys())
+            left_fields_to_render = fields - form.rendered_fields
+            for field in left_fields_to_render:
+                if form.fields[field].widget.is_hidden:
+                    html += render_field(field, form, self.form_style, context, template_pack=template_pack)
 
         # If the user has Meta.fields defined, not included in the layout
         # we suppose they need to be rendered. Otherwise we render the
