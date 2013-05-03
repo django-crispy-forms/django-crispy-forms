@@ -189,6 +189,7 @@ class FormHelper(DynamicLayoutHandler):
     form_show_errors = True
     render_unmentioned_fields = False
     render_hidden_fields = False
+    render_required_fields = False
     _help_text_inline = False
     _error_text_inline = True
     html5_required = False
@@ -275,26 +276,24 @@ class FormHelper(DynamicLayoutHandler):
         """
         form.rendered_fields = set()
 
-        # This renders the specifed Layout
+        # This renders the specifed Layout strictly
         html = self.layout.render(form, self.form_style, context,
                                   template_pack=template_pack)
 
-        if self.render_unmentioned_fields:
+        # Rendering some extra fields if specified
+        if self.render_unmentioned_fields or self.render_hidden_fields or self.render_required_fields:
             fields = set(form.fields.keys())
             left_fields_to_render = fields - form.rendered_fields
             for field in left_fields_to_render:
-                html += render_field(field, form, self.form_style, context, template_pack=template_pack)
-
-        if self.render_hidden_fields:
-            fields = set(form.fields.keys())
-            left_fields_to_render = fields - form.rendered_fields
-            for field in left_fields_to_render:
-                if form.fields[field].widget.is_hidden:
+                if (
+                    self.render_unmentioned_fields or
+                    self.render_hidden_fields and form.fields[field].widget.is_hidden or
+                    self.render_required_fields and form.fields[field].widget.is_required
+                ):
                     html += render_field(field, form, self.form_style, context, template_pack=template_pack)
 
-        # If the user has Meta.fields defined, not included in the layout
-        # we suppose they need to be rendered. Otherwise we render the
-        # layout fields strictly
+        # If the user has Meta.fields defined, not included in the layout,
+        # we suppose they need to be rendered
         if hasattr(form, 'Meta'):
             if hasattr(form.Meta, 'fields'):
                 current_fields = set(getattr(form, 'fields', []))

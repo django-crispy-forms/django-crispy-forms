@@ -3,6 +3,7 @@
 ## 1.2.7
 
  * Added `render_hidden_fields` attribute to `FormHelper`, see docs.
+ * Added `render_hidden_fields` attribute to `FormHelper`, see docs.
 
 ## 1.2.6 (2013/5/1)
 

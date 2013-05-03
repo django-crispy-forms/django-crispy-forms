@@ -545,6 +545,17 @@ class TestFormHelpers(TestCase):
         self.assertEqual(html.count('name="password1" type="hidden"'), 1)
         self.assertEqual(html.count('name="password2" type="hidden"'), 1)
 
+    def test_render_required_fields(self):
+        test_form = TestForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            'email'
+        )
+        test_form.helper.render_required_fields = True
+
+        html = render_crispy_form(test_form)
+        self.assertEqual(html.count('<input'), 7)
+
 
 class TestFormLayout(TestCase):
     urls = 'crispy_forms.tests.urls'
