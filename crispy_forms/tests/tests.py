@@ -542,8 +542,13 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(test_form)
         self.assertEqual(html.count('<input'), 3)
         self.assertEqual(html.count('hidden'), 2)
-        self.assertEqual(html.count('name="password1" type="hidden"'), 1)
-        self.assertEqual(html.count('name="password2" type="hidden"'), 1)
+
+        if django.get_version() < '1.5':
+            self.assertEqual(html.count('type="hidden" name="password1"'), 1)
+            self.assertEqual(html.count('type="hidden" name="password2"'), 1)
+        else:
+            self.assertEqual(html.count('name="password1" type="hidden"'), 1)
+            self.assertEqual(html.count('name="password2" type="hidden"'), 1)
 
     def test_render_required_fields(self):
         test_form = TestForm()
@@ -893,45 +898,56 @@ class TestFormLayout(TestCase):
         self.assertFalse('email' in html)
 
     def test_formset_layout(self):
-        template = get_template_from_string(u"""
-            {% load crispy_forms_tags %}
-            {% crispy testFormSet formset_helper %}
-        """)
-
-        form_helper = FormHelper()
-        form_helper.form_id = 'thisFormsetRocks'
-        form_helper.form_class = 'formsets-that-rock'
-        form_helper.form_method = 'POST'
-        form_helper.form_action = 'simpleAction'
-        form_helper.add_layout(
-            Layout(
-                Fieldset("Item {{ forloop.counter }}",
-                    'is_company',
-                    'email',
-                ),
-                HTML("{% if forloop.first %}Note for first form only{% endif %}"),
-                Row('password1', 'password2'),
-                Fieldset("",
-                    'first_name',
-                    'last_name'
-                )
+        TestFormSet = formset_factory(TestForm, extra=3)
+        formset = TestFormSet()
+        helper = FormHelper()
+        helper.form_id = 'thisFormsetRocks'
+        helper.form_class = 'formsets-that-rock'
+        helper.form_method = 'POST'
+        helper.form_action = 'simpleAction'
+        helper.layout = Layout(
+            Fieldset("Item {{ forloop.counter }}",
+                'is_company',
+                'email',
+            ),
+            HTML("{% if forloop.first %}Note for first form only{% endif %}"),
+            Row('password1', 'password2'),
+            Fieldset("",
+                'first_name',
+                'last_name'
             )
         )
 
-        TestFormSet = formset_factory(TestForm, extra = 3)
-        testFormSet = TestFormSet()
+        html = render_crispy_form(
+            form=formset, helper=helper, context={'csrf_token': _get_new_csrf_key()}
+        )
 
-        c = Context({
-            'testFormSet': testFormSet,
-            'formset_helper': form_helper,
-            'csrf_token': _get_new_csrf_key()
-        })
-        html = template.render(c)
+        # Check formset fields
+        if django.get_version() < '1.5':
+            self.assertEqual(html.count(
+                'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
+            ), 1)
+            self.assertEqual(html.count(
+                'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
+            ), 1)
+            self.assertEqual(html.count(
+                'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
+            ), 1)
+        else:
+            self.assertEqual(html.count(
+                'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
+            ), 1)
+            self.assertEqual(html.count(
+                'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
+            ), 1)
+            self.assertEqual(html.count(
+                'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
+            ), 1)
+        self.assertEqual(html.count("hidden"), 4)
 
-        # Check form parameters
+        # Check form structure
         self.assertEqual(html.count('<form'), 1)
         self.assertEqual(html.count("<input type='hidden' name='csrfmiddlewaretoken'"), 1)
-
         self.assertTrue('formsets-that-rock' in html)
         self.assertTrue('method="post"' in html)
         self.assertTrue('id="thisFormsetRocks"' in html)
@@ -942,7 +958,6 @@ class TestFormLayout(TestCase):
         self.assertTrue('Item 2' in html)
         self.assertTrue('Item 3' in html)
         self.assertEqual(html.count('Note for first form only'), 1)
-
         if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
             self.assertEqual(html.count('formRow'), 3)
         else:
@@ -960,15 +975,29 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count("id_form-0-id"), 1)
         self.assertEqual(html.count("id_form-1-id"), 1)
         self.assertEqual(html.count("id_form-2-id"), 1)
-        self.assertEqual(html.count(
-            'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-        ), 1)
-        self.assertEqual(html.count(
-            'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-        ), 1)
-        self.assertEqual(html.count(
-            'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-        ), 1)
+
+        if django.get_version() < '1.5':
+            self.assertEqual(html.count(
+                'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
+            ), 1)
+            self.assertEqual(html.count(
+                'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
+            ), 1)
+            self.assertEqual(html.count(
+                'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
+            ), 1)
+
+        else:
+            self.assertEqual(html.count(
+                'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
+            ), 1)
+            self.assertEqual(html.count(
+                'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
+            ), 1)
+            self.assertEqual(html.count(
+                'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
+            ), 1)
+
         self.assertEqual(html.count('name="form-0-email"'), 1)
         self.assertEqual(html.count('name="form-1-email"'), 1)
         self.assertEqual(html.count('name="form-2-email"'), 1)
@@ -1062,7 +1091,6 @@ class TestLayoutObjects(TestCase):
             {% crispy test_form %}
         """)
 
-
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -1087,11 +1115,6 @@ class TestLayoutObjects(TestCase):
             self.assertEqual(html.count('class="control-group testing"'), 1)
 
     def test_appended_prepended_text(self):
-        template = get_template_from_string(u"""
-            {% load crispy_forms_tags %}
-            {% crispy test_form %}
-        """)
-
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -1099,11 +1122,7 @@ class TestLayoutObjects(TestCase):
             AppendedText('password1', '#'),
             PrependedText('password2', '$'),
         )
-
-        c = Context({
-            'test_form': test_form,
-        })
-        html = template.render(c)
+        html = render_crispy_form(test_form)
 
         # Check form parameters
         self.assertEqual(html.count('<span class="add-on">@</span>'), 1)
