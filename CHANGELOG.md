@@ -1,7 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.2.7
+## 1.2.7 (2013/5/6)
 
+ * Bug fix for model formsets and inline formsets, when being rendered with a `FormHelper` with a layout set, where some hidden formset management fields would be missing, breaking saving to database.
  * Added `render_hidden_fields` attribute to `FormHelper`, see docs.
  * Added `render_hidden_fields` attribute to `FormHelper`, see docs.
 
