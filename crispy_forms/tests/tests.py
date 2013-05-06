@@ -6,7 +6,7 @@ from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.forms import BoundField
-from django.forms.models import formset_factory
+from django.forms.models import formset_factory, modelformset_factory
 from django.template import Context, TemplateSyntaxError
 from django.template.loader import get_template_from_string
 from django.middleware.csrf import _get_new_csrf_key
@@ -30,7 +30,7 @@ from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
 from .forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
-    FormWithMeta, TestForm4
+    FormWithMeta, TestForm4, CrispyTestModel
 )
 
 
@@ -947,6 +947,33 @@ class TestFormLayout(TestCase):
             self.assertEqual(html.count('formRow'), 3)
         else:
             self.assertEqual(html.count('row'), 3)
+
+    def test_modelformset_layout(self):
+        CrispyModelFormSet = modelformset_factory(CrispyTestModel, form=TestForm4, extra=3)
+        formset = CrispyModelFormSet(queryset=CrispyTestModel.objects.none())
+        helper = FormHelper()
+        helper.layout = Layout(
+            'email'
+        )
+
+        html = render_crispy_form(form=formset, helper=helper)
+        self.assertEqual(html.count("id_form-0-id"), 1)
+        self.assertEqual(html.count("id_form-1-id"), 1)
+        self.assertEqual(html.count("id_form-2-id"), 1)
+        self.assertEqual(html.count(
+            'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
+        ), 1)
+        self.assertEqual(html.count(
+            'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
+        ), 1)
+        self.assertEqual(html.count(
+            'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
+        ), 1)
+        self.assertEqual(html.count('name="form-0-email"'), 1)
+        self.assertEqual(html.count('name="form-1-email"'), 1)
+        self.assertEqual(html.count('name="form-2-email"'), 1)
+        self.assertEqual(html.count('name="form-3-email"'), 0)
+        self.assertEqual(html.count('password'), 0)
 
     def test_multiwidget_field(self):
         template = get_template_from_string(u"""
