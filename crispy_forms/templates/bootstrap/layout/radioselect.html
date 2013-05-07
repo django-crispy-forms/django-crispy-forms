@@ -2,7 +2,7 @@
     {% include 'bootstrap/layout/field_errors_block.html' %}
 
     {% for choice in field.field.choices %}
-        <label class="radio {{ inline_class }}">
+        <label class="radio{% if inline_class %} {{ inline_class }}{% endif %}">
             <input type="radio"{% if choice.0|stringformat:"s" == field.value|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}">{{ choice.1 }}
         </label>
     {% endfor %}
