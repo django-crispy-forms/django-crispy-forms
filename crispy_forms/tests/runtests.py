@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 
 import os
+import sys
 
-os.system('python runtests_bootstrap.py')
-os.system('python runtests_uniform.py')
+cmds = [
+    'python runtests_bootstrap.py',
+    'python runtests_uniform.py',
+]
+
+for cmd in cmds:
+    retval = os.system(cmd)
+    if retval:
+        sys.exit(retval)
