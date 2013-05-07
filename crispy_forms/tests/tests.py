@@ -28,7 +28,7 @@ from crispy_forms.bootstrap import (
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
-from .forms import (
+from crispy_forms.tests.forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
     FormWithMeta, TestForm4, CrispyTestModel
 )
@@ -923,16 +923,22 @@ class TestFormLayout(TestCase):
         )
 
         # Check formset fields
-        if django.get_version() < '1.5':
+        django_version = django.get_version()
+        if django_version < '1.5':
             self.assertEqual(html.count(
                 'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
             ), 1)
             self.assertEqual(html.count(
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
-            self.assertEqual(html.count(
-                'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
-            ), 1)
+            if django_version < '1.4.4':
+                self.assertEqual(html.count(
+                    'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
+                ), 1)
+            if django_version >= '1.4.4' and django_version < 1.5:
+                self.assertEqual(html.count(
+                    'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
+                ), 1)
         else:
             self.assertEqual(html.count(
                 'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
@@ -976,17 +982,22 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count("id_form-1-id"), 1)
         self.assertEqual(html.count("id_form-2-id"), 1)
 
-        if django.get_version() < '1.5':
+        django_version = django.get_version()
+        if django_version < '1.5':
             self.assertEqual(html.count(
                 'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
             ), 1)
             self.assertEqual(html.count(
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
-            self.assertEqual(html.count(
-                'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
-            ), 1)
-
+            if django_version < '1.4.4':
+                self.assertEqual(html.count(
+                    'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
+                ), 1)
+            if django_version >= '1.4.4' and django_version < 1.5:
+                self.assertEqual(html.count(
+                    'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
+                ), 1)
         else:
             self.assertEqual(html.count(
                 'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
