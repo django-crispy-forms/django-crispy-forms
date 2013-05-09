@@ -22,10 +22,10 @@ class KeepContext(object):
         self.context = context
 
     def __enter__(self):
-        self.old_set_keys = set(from_iterable([d.keys() if isinstance(d,dict) else d.__dict__.keys() for d in self.context.dicts]))
+        self.old_set_keys = set(from_iterable(self.context.dicts))
 
     def __exit__(self, type, value, traceback):
-        current_set_keys = set(from_iterable([d.keys() if isinstance(d,dict) else d.__dict__.keys() for d in self.context.dicts]))
+        current_set_keys = set(from_iterable(self.context.dicts))
         diff_keys = current_set_keys - self.old_set_keys
 
         # We remove added keys for rolling back changes
