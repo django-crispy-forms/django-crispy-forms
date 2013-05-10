@@ -1125,6 +1125,24 @@ class TestLayoutObjects(TestCase):
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
             self.assertEqual(html.count('class="control-group testing"'), 1)
 
+    def test_custom_django_widget(self):
+        class CustomRadioSelect(forms.RadioSelect):
+            pass
+
+        class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+            pass
+
+        # Make sure an inherited RadioSelect gets rendered as it
+        form = CheckboxesTestForm()
+        form.fields['inline_radios'].widget = CustomRadioSelect()
+        html = Field('inline_radios').render(form, "", Context())
+        self.assertTrue('class="radio"' in html)
+
+        # Make sure an inherited CheckboxSelectMultiple gets rendered as it
+        form.fields['checkboxes'].widget = CustomCheckboxSelectMultiple()
+        html = Field('checkboxes').render(form, "", Context())
+        self.assertTrue('class="checkbox"' in html)
+
     def test_appended_prepended_text(self):
         test_form = TestForm()
         test_form.helper = FormHelper()

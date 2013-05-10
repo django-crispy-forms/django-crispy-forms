@@ -10,15 +10,15 @@
 			</label>
 		{% endif %}
 
-        {% if field|css_class == "checkboxselectmultiple" %}
+        {% if field|is_checkboxselectmultiple %}
             {% include 'bootstrap/layout/checkboxselectmultiple.html' %}
         {% endif %}
 
-        {% if field|css_class == "radioselect" %}
+        {% if field|is_radioselect %}
             {% include 'bootstrap/layout/radioselect.html' %}
         {% endif %}
 
-        {% if field|css_class != "checkboxselectmultiple" and field|css_class != "radioselect" %}
+        {% if not field|is_checkboxselectmultiple and not field|is_radioselect %}
             <div class="controls">
                 {% if field|is_checkbox %}
                     <label for="{{ field.id_for_label }}" class="checkbox {% if field.field.required %}requiredField{% endif %}">
