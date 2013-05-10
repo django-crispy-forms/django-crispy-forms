@@ -1,5 +1,10 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.2.8 (2013/5/10)
+
+ * Bug fix for `KeepContext` context manager, when crispy-forms used with Jingo/Jinja2 templates, see #179.
+ * Some formset tests were breaking in some Django versions. Also added a `make test` for easily running project tests, see #178.
+
 ## 1.2.7 (2013/5/6)
 
  * Bug fix for model formsets and inline formsets, when being rendered with a `FormHelper` with a layout set, where some hidden formset management fields would be missing, breaking saving to database.

@@ -88,3 +88,4 @@ Contributors
 * Vladislav Mitov <VMitov>
 * Nemesis Fixx <mcnemesis>
 * Chris Vigelius <chrisv2>
+* David Cramer <dcramer>
