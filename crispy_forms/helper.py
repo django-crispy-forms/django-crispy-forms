@@ -198,6 +198,7 @@ class FormHelper(DynamicLayoutHandler):
     def __init__(self, form=None):
         self.attrs = {}
         self.inputs = []
+        self.template = None
 
         if form is not None:
             self.form = form

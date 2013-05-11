@@ -243,6 +243,9 @@ Basically you can access a ``forloop`` Django node, as if you were rendering you
 Helper attributes you can set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+**template**
+    When set allows you to render a form/formset using a custom template.
+
 **form_method = 'POST'**
     Specifies form method attribute. You can see it to ‘POST’ or ‘GET’. Defaults to ‘POST’
 

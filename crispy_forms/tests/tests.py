@@ -561,6 +561,14 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(test_form)
         self.assertEqual(html.count('<input'), 7)
 
+    def test_helper_custom_template(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.template = 'custom_form_template.html'
+
+        html = render_crispy_form(form)
+        self.assertTrue("<h1>Special custom form</h1>" in html)
+
 
 class TestFormLayout(TestCase):
     urls = 'crispy_forms.tests.urls'
