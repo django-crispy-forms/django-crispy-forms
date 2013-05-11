@@ -193,6 +193,7 @@ class FormHelper(DynamicLayoutHandler):
     _help_text_inline = False
     _error_text_inline = True
     html5_required = False
+    form_show_labels = True
 
     def __init__(self, form=None):
         self.attrs = {}
@@ -319,6 +320,7 @@ class FormHelper(DynamicLayoutHandler):
         items['help_text_inline'] = self.help_text_inline
         items['error_text_inline'] = self.error_text_inline
         items['html5_required'] = self.html5_required
+        items['form_show_labels'] = self.form_show_labels
 
         items['attrs'] = {}
         if self.attrs:
