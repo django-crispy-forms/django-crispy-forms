@@ -1,8 +1,8 @@
 .. _`form helpers`:
 
-================
-{% crispy %} tag
-================
+===========================
+{% crispy %} tag with forms
+===========================
 
 django-crispy-forms implements a class called ``FormHelper`` that defines the form rendering behavior. Helpers give you a way to control form attributes and its layout, doing this in a programatic way using Python. This way you write as little HTML as possible, and all your logic stays in the forms and views files.
 
@@ -183,6 +183,20 @@ Then you will have to write a little of html code surrounding the forms::
 You can read a list of :ref:`helper attributes` and what they are for.
 
 
+Change '*' required fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you don't like the use of ``*`` (asterisk) to denote required fields you have two options:
+
+* Asterisks have an ``asteriskField`` class set. So you can hide it using CSS rule::
+
+    .asteriskField {
+        display: none;
+    }
+
+* Override ``field.html`` template with a custom one.
+
+
 Make crispy-forms fail loud
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -201,41 +215,6 @@ For example a ``CharField`` generates an ``<input class="textinput" ...``. But i
     CRISPY_CLASS_CONVERTERS = {'textinput': "textinput inputtext"}
 
 For example this setting would generate ``<input class"textinput inputtext" ...``. The key of the dictionary ``textinput`` is the Django's default class, the value is what you want it to be substituted with, in this case we are keeping ``textinput``.
-
-
-Rendering formsets
-~~~~~~~~~~~~~~~~~~
-
-``{% crispy %}`` tag supports formsets rendering too. All the previous stated things apply to formsets the same way. Imagine you create a formset using the previous ``ExampleForm`` form::
-
-    from django.forms.models import formset_factory
-
-    ExampleFormset = formset_factory(ExampleForm, extra = 3)
-    example_formset = ExampleFormset()
-
-This is how you would render the formset. Note that this time you need to specify the helper explicitly::
-
-    {% crispy example_formset example_formset.form.helper %}
-
-If your formset's forms have different layouts, because you manipulated them, you will have to do::
-
-    {% for form in example_formset %}
-        {% crispy form %}
-    {% endfor %}
-
-Note, make sure that you have ``form_tag`` attribute set to ``False`` in your formset's forms, otherwise you will get 3 individual forms rendered::
-
-    class ExampleForm(forms.Form):
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        [...]
-
-Note that you can still use a helper (in this case we are using the helper of the form used for building the formset). The main difference here is that helper attributes are applied to the form structure, while the layout is applied to the formset’s forms. Rendering formsets injects some extra context in the layout rendering so that you can do things like::
-
-    HTML("{% if forloop.first %}Message displayed only in the first form of a formset forms list{% endif %}",
-    Fieldset("Item {{ forloop.counter }}", 'field-1', [...])
-
-Basically you can access a ``forloop`` Django node, as if you were rendering your formsets forms using a for loop.
 
 
 .. _`helper attributes`:

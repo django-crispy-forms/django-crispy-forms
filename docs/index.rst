@@ -11,27 +11,27 @@ django-crispy-forms provides you with a ``|crispy`` filter and ``{% crispy %}`` 
 User Guide
 ~~~~~~~~~~
 
-Get the most out django-crispy-forms
+Get the most out of django-crispy-forms
 
 .. toctree::
     :maxdepth: 2
 
     install
-    migration
     filters
-    tags
+    crispy_tag_forms
     layouts
+    crispy_tag_formsets
     dynamic_layouts
 
 .. toctree::
     :maxdepth: 1
 
-    customization
     faq
-    contributors
 
+* See who's contributed to the project at `crispy-forms contributors`_
 * You can find a detailed history of the project in `Github's CHANGELOG`_
 
+.. _`crispy-forms contributors`: https://github.com/maraujop/django-crispy-forms/blob/dev/CONTRIBUTORS.txt
 .. _`Github's CHANGELOG`: https://github.com/maraujop/django-crispy-forms/blob/dev/CHANGELOG.md
 
 API documentation
@@ -41,21 +41,20 @@ If you are looking for information on a specific function, class or method, this
 
 .. toctree::
     :maxdepth: 2
-    
+
     api_helpers
     api_layout
     api_templatetags
-   
+
 Developer Guide
 ~~~~~~~~~~~~~~~
 
-Think this is awesome and want to make it better? Read our contribution_ page, make it better, and we'll add you to the contributors_ list!
+Think this is awesome and want to make it better? Read our contribution page, make it better, and you will be added to the `contributors`_ list!
 
 .. toctree::
     :maxdepth: 2
 
     contributing
 
-.. _contribution: contributing.html
-.. _contributors: contributors.html
+.. _contributors: https://github.com/maraujop/django-crispy-forms/blob/dev/CONTRIBUTORS.txt
 .. _Django: http://djangoproject.com
