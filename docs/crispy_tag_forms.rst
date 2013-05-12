@@ -217,3 +217,59 @@ For example a ``CharField`` generates an ``<input class="textinput" ...``. But i
     CRISPY_CLASS_CONVERTERS = {'textinput': "textinput inputtext"}
 
 For example this setting would generate ``<input class"textinput inputtext" ...``. The key of the dictionary ``textinput`` is the Django's default class, the value is what you want it to be substituted with, in this case we are keeping ``textinput``.
+
+
+Render a form within a view
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes, it might be useful to render a form using crispy-forms within a view, for that there is a nice helper ``render_crispy_form``. The prototype of the method is ``render_crispy_form(form, helper=None, context=None)``. You can use it like this.
+
+
+AJAX validation recipe
+~~~~~~~~~~~~~~~~~~~~~~
+
+One easy way to validate a crispy-form through AJAX and re-render the resulting form errors if any is to set up a view, that validates the form and renders its html using ``render_crispy_form`` to finally return this html to the client AJAX request. Let's see an example.
+
+Our server side code could be::
+
+    @jsonview
+    def save_example_form(request):
+        form = ExampleForm(request.POST or None) 
+        if form.is_valid():
+            # You could actually save through AJAX and return a success code here
+            form.save()
+            return {'success': True}
+
+        form_html = render_crispy_form(form)
+        return {'success': False, 'form_html': form_html}
+
+I'm using a jsonview decorator from `django-jsonview`_. In our client side using jQuery would look like::
+
+    var example_form = '#example-form';
+
+    $.ajax({
+        url: "{% url 'save_example_form' %}",
+        type: "POST",
+        data: $(example_form).serialize(),
+        success: function(data) {
+            if (!(data['success'])) {
+                // Here we replace the form, for the
+                $(example_form).replaceWith(data['form_html']);
+            }
+            else {
+                // Here you can show the user a success message or do whatever you need
+                $(example_form).find('.success-message').show();
+            }
+        },
+        error: function () {
+            $(example_form).find('.error-message').show()
+        }
+    });
+
+Obviously, you can adjust this snippets to your needs, or class based views or favorite frontend library.
+
+.. warning ::
+
+    When replacing form html, you need to bind events using ``live`` or ``on`` jQuery method.
+
+.. _`django-jsonview`: https://github.com/jsocol/django-jsonview
