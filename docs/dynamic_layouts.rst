@@ -94,9 +94,9 @@ wrap_together
 
 We could do::
 
-    form.helper[1:3].wrap_together(Field, css_class="hello")
+    form.helper[0:3].wrap_together(Field, css_class="hello")
 
-We would en up having this layout::
+We would end up having this layout::
 
     Layout(
         Field(
@@ -105,6 +105,30 @@ We would en up having this layout::
             'field_3',
             css_class='hello'
         )
+    )
+
+
+update_attributes
+~~~~~~~~~~~~~~~~~
+
+Updates attributes of every layout object contained in a slice::
+
+    Layout(
+        'field_1',
+        Field('field_2'),
+        Field('field_3')
+    )
+
+We could do::
+
+    form.helper[0:3].update_attributes(Field, css_class="hello")
+
+Layout would turn into::
+
+    Layout(
+        'field_1',
+        Field('field_2', css_class='hello'),
+        Field('field_3', css_class='hello')
     )
 
 
