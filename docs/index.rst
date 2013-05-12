@@ -19,6 +19,7 @@ Get the most out of django-crispy-forms
     install
     filters
     crispy_tag_forms
+    form_helper
     layouts
     crispy_tag_formsets
     dynamic_layouts
