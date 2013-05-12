@@ -33,7 +33,7 @@ Helper attributes you can set
     When set allows you to render a form/formset using a custom template. Default template is at ``{{ TEMPLATE_PACK }}/[whole_uni_form.html|whole_uni_formset.html]``
 
 **field_template**
-    When set allows you to render a form/formset using a custom field template. Default template is at ``{{ TEMPLATE_PACK }}/field.html``
+    When set allows you to render a form/formset using a custom field template. Default template is at ``{{ TEMPLATE_PACK }}/field.html``. Beware that this is only effective when setting a ``FormHelper.layout``.
 
 **form_method = 'POST'**
     Specifies form method attribute. You can see it to ‘POST’ or ‘GET’. Defaults to ‘POST’
