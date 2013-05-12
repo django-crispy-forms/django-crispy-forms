@@ -194,11 +194,12 @@ class FormHelper(DynamicLayoutHandler):
     _error_text_inline = True
     html5_required = False
     form_show_labels = True
+    template = None
+    field_template = None
 
     def __init__(self, form=None):
         self.attrs = {}
         self.inputs = []
-        self.template = None
 
         if form is not None:
             self.form = form
@@ -277,6 +278,7 @@ class FormHelper(DynamicLayoutHandler):
         Returns safe html of the rendering of the layout
         """
         form.rendered_fields = set()
+        form.crispy_field_template = self.field_template
 
         # This renders the specifed Layout strictly
         html = self.layout.render(form, self.form_style, context,

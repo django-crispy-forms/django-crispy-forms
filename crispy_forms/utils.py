@@ -113,7 +113,10 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             bound_field = BoundField(form, field_instance, field)
 
             if template is None:
-                template = default_field_template(template_pack)
+                if form.crispy_field_template is None:
+                    template = default_field_template(template_pack)
+                else:   # FormHelper.field_template set
+                    template = get_template(form.crispy_field_template)
             else:
                 template = get_template(template)
 
