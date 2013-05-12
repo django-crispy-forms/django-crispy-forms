@@ -281,8 +281,12 @@ class FormHelper(DynamicLayoutHandler):
         form.crispy_field_template = self.field_template
 
         # This renders the specifed Layout strictly
-        html = self.layout.render(form, self.form_style, context,
-                                  template_pack=template_pack)
+        html = self.layout.render(
+            form,
+            self.form_style,
+            context,
+            template_pack=template_pack
+        )
 
         # Rendering some extra fields if specified
         if self.render_unmentioned_fields or self.render_hidden_fields or self.render_required_fields:
@@ -294,7 +298,13 @@ class FormHelper(DynamicLayoutHandler):
                     self.render_hidden_fields and form.fields[field].widget.is_hidden or
                     self.render_required_fields and form.fields[field].widget.is_required
                 ):
-                    html += render_field(field, form, self.form_style, context, template_pack=template_pack)
+                    html += render_field(
+                        field,
+                        form,
+                        self.form_style,
+                        context,
+                        template_pack=template_pack
+                    )
 
         # If the user has Meta.fields defined, not included in the layout,
         # we suppose they need to be rendered

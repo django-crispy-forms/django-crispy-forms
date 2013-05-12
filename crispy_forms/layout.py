@@ -126,8 +126,13 @@ class Layout(LayoutObject):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = ""
         for field in self.fields:
-            html += render_field(field, form, form_style,
-                                 context, template_pack=template_pack)
+            html += render_field(
+                field,
+                form,
+                form_style,
+                context,
+                template_pack=template_pack
+            )
         return html
 
 
