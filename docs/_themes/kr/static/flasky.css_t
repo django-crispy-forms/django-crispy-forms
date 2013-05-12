@@ -429,3 +429,8 @@ a:hover tt {
 .revsys-inline {
     display: none!important;
 }
+
+a.toc-backref {
+    color: #3E4349;
+    text-decoration: none;
+}

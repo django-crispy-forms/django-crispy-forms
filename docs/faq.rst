@@ -7,10 +7,35 @@ Frequently Asked Questions
 .. contents::
     :local:
 
+.. _faq-technical:
+
+
+Technical
+=========
+
+.. _faq-columns:
+
+Displaying columns in a boostrap Layout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Of course you can display form fields within columns, the same way you would do it in a standard bootstrap form, you can do it in a bootstrap layout, see an `example`_.
+
+.. _`example`: http://stackoverflow.com/questions/12144475/displaying-multiple-rows-and-columns-in-django-crispy-forms
+
+
 .. _faq-general:
 
 General
 =======
+
+.. _faq-why-use-it:
+
+Why use django-crispy-forms and not other app
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Well, I'm obviously biased for answering this question. But I once `answered it at StackOverflow`_.
+
+.. _`answered it at StackOverflow`: http://stackoverflow.com/questions/11749860/how-to-render-django-forms-choicefield-as-twitter-bootstrap-dropdown
 
 .. _faq-when-started:
 
