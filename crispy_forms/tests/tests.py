@@ -1171,16 +1171,17 @@ class TestLayoutObjects(TestCase):
         class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
             pass
 
-        # Make sure an inherited RadioSelect gets rendered as it
-        form = CheckboxesTestForm()
-        form.fields['inline_radios'].widget = CustomRadioSelect()
-        html = Field('inline_radios').render(form, "", Context())
-        self.assertTrue('class="radio"' in html)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            # Make sure an inherited RadioSelect gets rendered as it
+            form = CheckboxesTestForm()
+            form.fields['inline_radios'].widget = CustomRadioSelect()
+            html = Field('inline_radios').render(form, "", Context())
+            self.assertTrue('class="radio"' in html)
 
-        # Make sure an inherited CheckboxSelectMultiple gets rendered as it
-        form.fields['checkboxes'].widget = CustomCheckboxSelectMultiple()
-        html = Field('checkboxes').render(form, "", Context())
-        self.assertTrue('class="checkbox"' in html)
+            # Make sure an inherited CheckboxSelectMultiple gets rendered as it
+            form.fields['checkboxes'].widget = CustomCheckboxSelectMultiple()
+            html = Field('checkboxes').render(form, "", Context())
+            self.assertTrue('class="checkbox"' in html)
 
     def test_appended_prepended_text(self):
         test_form = TestForm()
