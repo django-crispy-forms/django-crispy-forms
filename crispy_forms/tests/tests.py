@@ -7,10 +7,11 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.forms import BoundField
 from django.forms.models import formset_factory, modelformset_factory
-from django.template import Context, TemplateSyntaxError
+from django.template import Context, TemplateSyntaxError, RequestContext
 from django.template.loader import get_template_from_string
 from django.middleware.csrf import _get_new_csrf_key
-from django.test import TestCase
+from django.shortcuts import render_to_response
+from django.test import TestCase, RequestFactory
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.exceptions import DynamicError
@@ -1113,6 +1114,24 @@ class TestFormLayout(TestCase):
 
         self.assertEqual(html.count('checkbox inline"'), 3)
         self.assertEqual(html.count('inline"'), 3)
+
+    def test_keepcontext_context_manager(self):
+        # Test case for issue #180
+        # Apparently it only manifest when using render_to_response this exact way
+        form = CheckboxesTestForm()
+        form.helper = FormHelper()
+        # We use here InlineCheckboxes as it updates context in an unsafe way
+        form.helper.layout = Layout(
+            'checkboxes',
+            InlineCheckboxes('alphacheckboxes'),
+            'numeric_multiple_checkboxes'
+        )
+        request_factory = RequestFactory()
+        request = request_factory.get('/')
+        context = RequestContext(request, {'form': form})
+
+        response = render_to_response('crispy_render_template.html', context)
+        self.assertEqual(response.content.count('checkbox inline'), 3)
 
 
 class TestLayoutObjects(TestCase):

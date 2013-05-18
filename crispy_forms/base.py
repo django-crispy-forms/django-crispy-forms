@@ -7,7 +7,11 @@ def from_iterable(iterables):
     """
     for it in iterables:
         for element in it:
-            yield element
+            if isinstance(element, dict):
+                for key in element:
+                    yield key
+            else:
+                yield element
 
 
 class KeepContext(object):
