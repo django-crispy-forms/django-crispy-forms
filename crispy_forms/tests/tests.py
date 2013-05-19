@@ -35,13 +35,19 @@ from crispy_forms.tests.forms import (
 )
 
 
-class TestBasicFunctionalityTags(TestCase):
+class CrispyTestCase(TestCase):
     def setUp(self):
         pass
 
     def tearDown(self):
         pass
 
+    @property
+    def current_template_pack(self):
+        return getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+
+
+class TestBasicFunctionalityTags(CrispyTestCase):
     def test_as_crispy_errors_form_without_non_field_errors(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
@@ -125,13 +131,8 @@ class TestBasicFunctionalityTags(TestCase):
             self.assertTrue('inputtext' in html)
 
 
-class TestFormHelpers(TestCase):
+class TestFormHelpers(CrispyTestCase):
     urls = 'crispy_forms.tests.urls'
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
 
     def test_inputs(self):
         form_helper = FormHelper()
@@ -153,7 +154,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('name="my-hidden"' in html)
         self.assertTrue('id="button-id-my-button"' in html)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        if self.current_template_pack == 'uni_form':
             self.assertTrue('submit submitButton' in html)
             self.assertTrue('reset resetButton' in html)
             self.assertTrue('class="button"' in html)
@@ -197,7 +198,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('id="this-form-rocks"' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
 
-        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+        if (self.current_template_pack == 'uni_form'):
             self.assertTrue('class="uniForm' in html)
 
         self.assertTrue("ERRORS" in html)
@@ -338,7 +339,7 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
 
         # Check that help goes before error, otherwise CSS won't work
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             help_position = html.find('<span id="hint_id_email" class="help-inline">')
             error_position = html.find('<p id="error_1_id_email" class="help-block">')
             self.assertTrue(help_position < error_position)
@@ -353,7 +354,7 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
 
         # Check that error goes before help, otherwise CSS won't work
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             error_position = html.find('<span id="error_1_id_email" class="help-inline">')
             help_position = html.find('<p id="hint_id_email" class="help-block">')
             self.assertTrue(error_position < help_position)
@@ -419,11 +420,11 @@ class TestFormHelpers(TestCase):
         self.assertTrue('<form' in html)
         self.assertTrue('method="post"' in html)
         self.assertFalse('action' in html)
-        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+        if (self.current_template_pack == 'uni_form'):
             self.assertTrue('uniForm' in html)
 
     def test_template_pack_override(self):
-        current_pack = settings.CRISPY_TEMPLATE_PACK
+        current_pack = self.current_template_pack
         override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
         # Syntax {% crispy form 'template_pack_name' %}
@@ -494,7 +495,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('method="post"' in html)
         self.assertTrue('id="thisFormsetRocks"' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
-        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+        if (self.current_template_pack == 'uni_form'):
             self.assertTrue('class="uniForm' in html)
 
     def test_CSRF_token_POST_form(self):
@@ -583,7 +584,7 @@ class TestFormHelpers(TestCase):
         self.assertEqual(html.count("<h1>Special custom field</h1>"), 2)
 
 
-class TestFormLayout(TestCase):
+class TestFormLayout(CrispyTestCase):
     urls = 'crispy_forms.tests.urls'
 
     def test_invalid_unicode_characters(self):
@@ -717,7 +718,7 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('name="whatever"'), 1)
         self.assertEqual(html.count('value="something"'), 1)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             # Make sure white spaces between buttons are there in bootstrap
             self.assertEqual(len(re.findall(r'</button> <', html)), 3)
 
@@ -770,7 +771,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('test-fieldset="123"' in html)
         self.assertTrue('id="row_passwords"' in html)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        if self.current_template_pack == 'uni_form':
             self.assertTrue('class="formRow rows"' in html)
         else:
             self.assertTrue('class="row rows"' in html)
@@ -985,7 +986,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('Item 2' in html)
         self.assertTrue('Item 3' in html)
         self.assertEqual(html.count('Note for first form only'), 1)
-        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        if self.current_template_pack == 'uni_form':
             self.assertEqual(html.count('formRow'), 3)
         else:
             self.assertEqual(html.count('row'), 3)
@@ -1134,7 +1135,7 @@ class TestFormLayout(TestCase):
         self.assertEqual(response.content.count('checkbox inline'), 3)
 
 
-class TestLayoutObjects(TestCase):
+class TestLayoutObjects(CrispyTestCase):
     def test_field_type_hidden(self):
         template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
@@ -1161,7 +1162,7 @@ class TestLayoutObjects(TestCase):
 
     def test_field_wrapper_class(self):
         html = Field('email', wrapper_class="testing").render(TestForm(), "", Context())
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             self.assertEqual(html.count('class="control-group testing"'), 1)
 
     def test_custom_django_widget(self):
@@ -1171,7 +1172,7 @@ class TestLayoutObjects(TestCase):
         class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
             pass
 
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             # Make sure an inherited RadioSelect gets rendered as it
             form = CheckboxesTestForm()
             form.fields['inline_radios'].widget = CustomRadioSelect()
@@ -1304,13 +1305,13 @@ class TestLayoutObjects(TestCase):
         )
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        if self.current_template_pack == 'uni_form':
             self.assertEqual(html.count('\n'), 22)
         else:
             self.assertEqual(html.count('\n'), 24)
 
 
-class TestDynamicLayouts(TestCase):
+class TestDynamicLayouts(CrispyTestCase):
     def setUp(self):
         self.advanced_layout = Layout(
             Div(
