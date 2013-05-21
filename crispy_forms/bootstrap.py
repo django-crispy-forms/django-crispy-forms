@@ -307,3 +307,27 @@ class Accordion(ContainerHolder):
             self.template,
             Context({'accordion': self, 'content': content
         }))
+
+class Alert(Div):
+    """
+    `Alert` generates markup in the form of an alert dialog
+
+        Alert(content='<strong>Warning!</strong> Best check yo self, you're not looking too good.')
+    """
+    template = "bootstrap/layout/alert.html"
+    css_class = "alert"
+    
+    def __init__(self, content, dismiss=True, block=False, **kwargs):
+        fields = []
+        if block:
+            self.css_class += ' alert-block'
+        Div.__init__(self, *fields, **kwargs)
+        self.template = kwargs.pop('template', self.template)
+        self.content = content
+        self.dismiss = dismiss
+
+    def render(self, form, form_style, context):
+        return render_to_string(
+            self.template,
+            Context({'alert': self, 'content': self.content, 'dismiss': self.dismiss
+        }))

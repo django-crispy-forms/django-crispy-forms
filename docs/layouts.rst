@@ -283,6 +283,12 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/accordiongroup_and_accordion.jpg
    :align: center
 
+- **Alert**: ``Alert`` generates markup in the form of an alert dialog::
+
+    Alert(content='<strong>Warning!</strong> Best check yo self, you're not looking too good.')
+
+.. image:: images/alert.png
+   :align: center
 
 .. _`override templates`:
 
