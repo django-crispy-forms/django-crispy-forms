@@ -1,4 +1,7 @@
-from itertools import izip
+try:
+    from itertools import izip as zip
+except ImportError:
+    pass
 
 from django import forms
 from django import template
@@ -54,7 +57,7 @@ def css_class(field):
 def pairwise(iterable):
     "s -> (s0,s1), (s2,s3), (s4, s5), ..."
     a = iter(iterable)
-    return izip(a, a)
+    return zip(a, a)
 
 
 class CrispyFieldNode(template.Node):
