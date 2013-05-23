@@ -5,6 +5,7 @@ from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 
+from .compatibility import text_type
 from .layout import LayoutObject, Field, Div
 from .utils import render_field, flatatt
 
@@ -166,7 +167,7 @@ class StrictButton(object):
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context):
-        self.content = Template(unicode(self.content)).render(context)
+        self.content = Template(text_type(self.content)).render(context)
         return render_to_string(self.template, Context({'button': self}))
 
 
@@ -208,7 +209,7 @@ class ContainerHolder(Div):
         Returns the first container with errors, otherwise returns the first one
         """
         for tab in self.fields:
-            errors_here = bool(filter(lambda error: error in tab, errors))
+            errors_here = any(error in tab for error in errors)
             if errors_here:
                 return tab
 
@@ -292,7 +293,7 @@ class Accordion(ContainerHolder):
         # accordion group needs the parent div id to set `data-parent` (I don't
         # know why). This needs to be a unique id
         if not self.css_id:
-            self.css_id = "-".join(["accordion", str(randint(1000, 9999))])
+            self.css_id = "-".join(["accordion", text_type(randint(1000, 9999))])
 
         # first group with errors or first groupt will be visible, others will be collapsed
         self.first_container_with_errors(form.errors.keys()).active = True
