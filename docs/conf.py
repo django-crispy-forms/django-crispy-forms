@@ -47,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'django-crispy-forms'
-copyright = u'2009-2011, Miguel Araujo and Daniel Greenfeld'
+copyright = u'2009-2013, Miguel Araujo and Daniel Greenfeld'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

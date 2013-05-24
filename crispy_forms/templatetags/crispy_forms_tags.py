@@ -111,6 +111,8 @@ class BasicNode(template.Node):
             # This allows us to have simplified tag syntax: {% crispy form %}
             helper = FormHelper() if not hasattr(actual_form, 'helper') else actual_form.helper
 
+        self.actual_helper = helper
+
         # We get the response dictionary
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(helper, context, is_formset)
@@ -165,6 +167,7 @@ class BasicNode(template.Node):
             'form_show_errors': attrs.get("form_show_errors", True),
             'help_text_inline': attrs.get("help_text_inline", False),
             'html5_required': attrs.get("html5_required", False),
+            'form_show_labels': attrs.get("form_show_labels", False),
             'inputs': attrs.get('inputs', []),
             'is_formset': is_formset,
             '%s_attrs' % form_type: attrs.get('attrs', ''),
@@ -197,10 +200,13 @@ class CrispyFormNode(BasicNode):
     def render(self, context):
         c = self.get_render(context)
 
-        if c['is_formset']:
-            template = whole_uni_formset_template(self.template_pack)
+        if self.actual_helper is not None and getattr(self.actual_helper, 'template', False):
+            template = get_template(self.actual_helper.template)
         else:
-            template = whole_uni_form_template(self.template_pack)
+            if c['is_formset']:
+                template = whole_uni_formset_template(self.template_pack)
+            else:
+                template = whole_uni_form_template(self.template_pack)
 
         return template.render(c)
 

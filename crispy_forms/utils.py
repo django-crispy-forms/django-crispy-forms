@@ -9,8 +9,9 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
 from django.utils.functional import memoize
+import six
 
-from base import KeepContext
+from .base import KeepContext
 
 # Global field template, default template used for rendering a field.
 
@@ -56,12 +57,12 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         else:
             # This allows fields to be unicode strings, always they don't use non ASCII
             try:
-                if isinstance(field, unicode):
-                    field = str(field)
+                if isinstance(field, six.text_type):
+                    field = field.encode('ascii').decode()
                 # If `field` is not unicode then we turn it into a unicode string, otherwise doing
                 # str(field) would give no error and the field would not be resolved, causing confusion
                 else:
-                    field = str(unicode(field))
+                    field = six.text_type(field)
 
             except (UnicodeEncodeError, UnicodeDecodeError):
                 raise Exception("Field '%s' is using forbidden unicode characters" % field)
@@ -113,7 +114,10 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             bound_field = BoundField(form, field_instance, field)
 
             if template is None:
-                template = default_field_template(template_pack)
+                if form.crispy_field_template is None:
+                    template = default_field_template(template_pack)
+                else:   # FormHelper.field_template set
+                    template = get_template(form.crispy_field_template)
             else:
                 template = get_template(template)
 

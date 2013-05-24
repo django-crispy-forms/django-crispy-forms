@@ -1,5 +1,9 @@
-from itertools import izip
+try:
+    from itertools import izip as zip
+except ImportError:
+    pass
 
+from django import forms
 from django import template
 from django.conf import settings
 
@@ -16,12 +20,22 @@ class_converter.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
 
 @register.filter
 def is_checkbox(field):
-    return field.field.widget.__class__.__name__.lower() == "checkboxinput"
+    return isinstance(field.field.widget, forms.CheckboxInput)
 
 
 @register.filter
 def is_password(field):
-    return field.field.widget.__class__.__name__.lower() == "passwordinput"
+    return isinstance(field.field.widget, forms.PasswordInput)
+
+
+@register.filter
+def is_radioselect(field):
+    return isinstance(field.field.widget, forms.RadioSelect)
+
+
+@register.filter
+def is_checkboxselectmultiple(field):
+    return isinstance(field.field.widget, forms.CheckboxSelectMultiple)
 
 
 @register.filter
@@ -43,7 +57,7 @@ def css_class(field):
 def pairwise(iterable):
     "s -> (s0,s1), (s2,s3), (s4, s5), ..."
     a = iter(iterable)
-    return izip(a, a)
+    return zip(a, a)
 
 
 class CrispyFieldNode(template.Node):

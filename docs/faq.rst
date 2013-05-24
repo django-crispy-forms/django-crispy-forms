@@ -1,9 +1,46 @@
-===
-FAQ
-===
+.. _faq:
+
+==========================
+Frequently Asked Questions
+==========================
+
+.. contents::
+    :local:
+
+.. _faq-technical:
+
+
+Technical
+=========
+
+.. _faq-columns:
+
+Displaying columns in a boostrap Layout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Of course you can display form fields within columns, the same way you would do it in a standard bootstrap form, you can do it in a bootstrap layout, see an `example`_.
+
+.. _`example`: http://stackoverflow.com/questions/12144475/displaying-multiple-rows-and-columns-in-django-crispy-forms
+
+
+.. _faq-general:
+
+General
+=======
+
+.. _faq-why-use-it:
+
+Why use django-crispy-forms and not other app
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Well, I'm obviously biased for answering this question. But I once `answered it at StackOverflow`_.
+
+.. _`answered it at StackOverflow`: http://stackoverflow.com/questions/11749860/how-to-render-django-forms-choicefield-as-twitter-bootstrap-dropdown
+
+.. _faq-when-started:
 
 How did this all get started?
-=============================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In December 2008, while `Daniel Greenfeld`_ was working for `NASA's Science Mission Directorate`_, his team began to use Django_ and Pinax_. There was a necessity to make all the forms in Pinax `Section 508`_ compatible, and the thought of going through all of forms and rewriting ``{{ form }}`` as a block of ``{% for field in form %}`` with all the template logic seemed like way too much work.
 
@@ -17,9 +54,10 @@ Around January 2011 the project wasn't very active, Github issues and forks were
 
 By the end of 2011, Miguel and Daniel agreed on the necessity of renaming the project. As uni-form CSS framework was not anymore the only option available and the name was confusing the users. Thus django-crispy-forms was borned, named by `Audrey Roy`_. The project is now actively maintained and leaded by `Miguel Araujo`_.
 
+.. _faq-how-fast:
 
 How fast is django-crispy-forms
-===============================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Performance in form rendering is normally a nigh moot issue in Django, because the majority of speed issues are fixable via appropriate use of Django's cache engine. Templates and especially form rendering are usually the last things to worry about when you try to increase performance.
 
@@ -35,15 +73,17 @@ Plain Django                          0.921598911285 sec            0.9154691696
 
 Version 0.9.0 added an important performance boost that makes times with and without caching very close to each other.
 
+.. _faq-python-versions:
 
 Which versions of Python does this support?
-=============================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Versions supported include Python 2.5.4, 2.6.x, and 2.7.x. If you need greater backwards compatibility django-uni-form 0.7.0 supports Python 2.4.x.
 
+.. _faq-django-versions:
 
 Which versions of Django does this support?
-=============================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Versions supported include Django 1.2 or higher and Python 2.5, Python 2.6 and Python 2.7. If you need to support earlier versions of Django or Python you will need to use django-uni-form 0.7.0.
 

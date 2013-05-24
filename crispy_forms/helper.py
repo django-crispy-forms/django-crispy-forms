@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
+import six
 
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
@@ -71,7 +72,7 @@ class DynamicLayoutHandler(object):
         and not a copy.
         """
         # when key is a string containing the field name
-        if isinstance(key, basestring):
+        if isinstance(key, six.string_types):
             # Django templates access FormHelper attributes using dictionary [] operator
             # This could be a helper['form_id'] access, not looking for a field
             if hasattr(self, key):
@@ -193,6 +194,9 @@ class FormHelper(DynamicLayoutHandler):
     _help_text_inline = False
     _error_text_inline = True
     html5_required = False
+    form_show_labels = True
+    template = None
+    field_template = None
 
     def __init__(self, form=None):
         self.attrs = {}
@@ -275,10 +279,15 @@ class FormHelper(DynamicLayoutHandler):
         Returns safe html of the rendering of the layout
         """
         form.rendered_fields = set()
+        form.crispy_field_template = self.field_template
 
         # This renders the specifed Layout strictly
-        html = self.layout.render(form, self.form_style, context,
-                                  template_pack=template_pack)
+        html = self.layout.render(
+            form,
+            self.form_style,
+            context,
+            template_pack=template_pack
+        )
 
         # Rendering some extra fields if specified
         if self.render_unmentioned_fields or self.render_hidden_fields or self.render_required_fields:
@@ -290,7 +299,13 @@ class FormHelper(DynamicLayoutHandler):
                     self.render_hidden_fields and form.fields[field].widget.is_hidden or
                     self.render_required_fields and form.fields[field].widget.is_required
                 ):
-                    html += render_field(field, form, self.form_style, context, template_pack=template_pack)
+                    html += render_field(
+                        field,
+                        form,
+                        self.form_style,
+                        context,
+                        template_pack=template_pack
+                    )
 
         # If the user has Meta.fields defined, not included in the layout,
         # we suppose they need to be rendered
@@ -319,6 +334,7 @@ class FormHelper(DynamicLayoutHandler):
         items['help_text_inline'] = self.help_text_inline
         items['error_text_inline'] = self.error_text_inline
         items['html5_required'] = self.html5_required
+        items['form_show_labels'] = self.form_show_labels
 
         items['attrs'] = {}
         if self.attrs:

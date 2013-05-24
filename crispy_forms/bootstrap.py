@@ -4,6 +4,7 @@ from random import randint
 from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
+import six
 
 from .layout import LayoutObject, Field, Div
 from .utils import render_field, flatatt
@@ -166,7 +167,7 @@ class StrictButton(object):
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context):
-        self.content = Template(unicode(self.content)).render(context)
+        self.content = Template(six.text_type(self.content)).render(context)
         return render_to_string(self.template, Context({'button': self}))
 
 
