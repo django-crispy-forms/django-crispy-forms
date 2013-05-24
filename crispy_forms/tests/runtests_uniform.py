@@ -12,7 +12,7 @@ from django.test.simple import DjangoTestSuiteRunner
 from django.conf import settings
 
 def runtests():
-    DjangoTestSuiteRunner(failfast=False).run_tests([
+    return DjangoTestSuiteRunner(failfast=False).run_tests([
         'crispy_forms.TestBasicFunctionalityTags',
         'crispy_forms.TestFormHelpers',
         'crispy_forms.TestFormLayout',
@@ -21,4 +21,5 @@ def runtests():
     ], verbosity=1, interactive=True)
 
 if __name__ == '__main__':
-    runtests()
+    if runtests():
+        sys.exit(1)
