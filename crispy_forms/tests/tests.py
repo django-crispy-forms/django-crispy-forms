@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import re
 
 import django
@@ -7,11 +8,13 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.forms import BoundField
 from django.forms.models import formset_factory, modelformset_factory
-from django.template import Context, TemplateSyntaxError
+from django.template import Context, TemplateSyntaxError, RequestContext
 from django.template.loader import get_template_from_string
 from django.middleware.csrf import _get_new_csrf_key
-from django.test import TestCase
+from django.shortcuts import render_to_response
+from django.test import TestCase, RequestFactory
 from django.utils.translation import ugettext_lazy as _
+import six
 
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
@@ -228,7 +231,7 @@ class TestFormHelpers(TestCase):
 
         # Ensure those errors were rendered
         self.assertTrue('<li>Passwords dont match</li>' in html)
-        self.assertTrue(unicode(_('This field is required.')) in html)
+        self.assertTrue(six.text_type(_('This field is required.')) in html)
         self.assertTrue('error' in html)
 
         # Now we render without errors
@@ -238,7 +241,7 @@ class TestFormHelpers(TestCase):
 
         # Ensure errors were not rendered
         self.assertFalse('<li>Passwords dont match</li>' in html)
-        self.assertFalse(unicode(_('This field is required.')) in html)
+        self.assertFalse(six.text_type(_('This field is required.')) in html)
         self.assertFalse('error' in html)
 
     def test_form_show_errors(self):
@@ -560,6 +563,26 @@ class TestFormHelpers(TestCase):
 
         html = render_crispy_form(test_form)
         self.assertEqual(html.count('<input'), 7)
+
+    def test_helper_custom_template(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.template = 'custom_form_template.html'
+
+        html = render_crispy_form(form)
+        self.assertTrue("<h1>Special custom form</h1>" in html)
+
+    def test_helper_custom_field_template(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            'password1',
+            'password2',
+        )
+        form.helper.field_template = 'custom_field_template.html'
+
+        html = render_crispy_form(form)
+        self.assertEqual(html.count("<h1>Special custom field</h1>"), 2)
 
 
 class TestFormLayout(TestCase):
@@ -1094,6 +1117,24 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('checkbox inline"'), 3)
         self.assertEqual(html.count('inline"'), 3)
 
+    def test_keepcontext_context_manager(self):
+        # Test case for issue #180
+        # Apparently it only manifest when using render_to_response this exact way
+        form = CheckboxesTestForm()
+        form.helper = FormHelper()
+        # We use here InlineCheckboxes as it updates context in an unsafe way
+        form.helper.layout = Layout(
+            'checkboxes',
+            InlineCheckboxes('alphacheckboxes'),
+            'numeric_multiple_checkboxes'
+        )
+        request_factory = RequestFactory()
+        request = request_factory.get('/')
+        context = RequestContext(request, {'form': form})
+
+        response = render_to_response('crispy_render_template.html', context)
+        self.assertEqual(response.content.count(b'checkbox inline'), 3)
+
 
 class TestLayoutObjects(TestCase):
     def test_field_type_hidden(self):
@@ -1124,6 +1165,25 @@ class TestLayoutObjects(TestCase):
         html = Field('email', wrapper_class="testing").render(TestForm(), "", Context())
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
             self.assertEqual(html.count('class="control-group testing"'), 1)
+
+    def test_custom_django_widget(self):
+        class CustomRadioSelect(forms.RadioSelect):
+            pass
+
+        class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+            pass
+
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            # Make sure an inherited RadioSelect gets rendered as it
+            form = CheckboxesTestForm()
+            form.fields['inline_radios'].widget = CustomRadioSelect()
+            html = Field('inline_radios').render(form, "", Context())
+            self.assertTrue('class="radio"' in html)
+
+            # Make sure an inherited CheckboxSelectMultiple gets rendered as it
+            form.fields['checkboxes'].widget = CustomCheckboxSelectMultiple()
+            html = Field('checkboxes').render(form, "", Context())
+            self.assertTrue('class="checkbox"' in html)
 
     def test_appended_prepended_text(self):
         test_form = TestForm()
@@ -1387,12 +1447,12 @@ class TestDynamicLayouts(TestCase):
         )
         helper.layout = layout
 
-        helper.filter(basestring, greedy=True).wrap_once(Field)
+        helper.filter(six.string_types, greedy=True).wrap_once(Field)
         helper.filter(Field, greedy=True).update_attributes(readonly=True)
 
         self.assertTrue(isinstance(layout[0], Field))
         self.assertTrue(isinstance(layout[1][0], Field))
-        self.assertTrue(isinstance(layout[1][0][0], basestring))
+        self.assertTrue(isinstance(layout[1][0][0], six.string_types))
         self.assertTrue(isinstance(layout[2], Field))
         self.assertEqual(layout[1][0].attrs, {'readonly': True})
         self.assertEqual(layout[0].attrs, {'readonly': True})
@@ -1435,7 +1495,7 @@ class TestDynamicLayouts(TestCase):
             Div('password1'),
             'password2',
         )
-        self.assertEqual(layout_3.get_layout_objects(basestring, max_level=2), [
+        self.assertEqual(layout_3.get_layout_objects(six.string_types, max_level=2), [
             [[0], 'email'],
             [[1, 0], 'password1'],
             [[2], 'password2']
@@ -1491,7 +1551,7 @@ class TestDynamicLayouts(TestCase):
         )
         helper.layout = layout
 
-        helper.filter(basestring).wrap(Field, css_class="test-class")
+        helper.filter(six.string_types).wrap(Field, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[0], Field))
         self.assertTrue(isinstance(layout.fields[1], Div))
         self.assertTrue(isinstance(layout.fields[2], Field))
@@ -1632,8 +1692,8 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(form.helper.layout[1], Field))
         # Check others stay the same
         self.assertTrue(isinstance(form.helper.layout[0][3][1], HTML))
-        self.assertTrue(isinstance(form.helper.layout[0][1][0][0], basestring))
-        self.assertTrue(isinstance(form.helper.layout[0][4][0], basestring))
+        self.assertTrue(isinstance(form.helper.layout[0][1][0][0], six.string_types))
+        self.assertTrue(isinstance(form.helper.layout[0][4][0], six.string_types))
 
     def test_all_without_layout(self):
         form = TestForm()
@@ -1706,8 +1766,8 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(layout[0][0], Div))
         self.assertTrue(isinstance(layout[0][0][0], Div))
         self.assertTrue(isinstance(layout[0][1], Div))
-        self.assertTrue(isinstance(layout[0][1][0], basestring))
-        self.assertTrue(isinstance(layout[0][2], basestring))
+        self.assertTrue(isinstance(layout[0][1][0], six.string_types))
+        self.assertTrue(isinstance(layout[0][2], six.string_types))
 
     def test__getattr__append_layout_object(self):
         layout = Layout(
@@ -1715,8 +1775,8 @@ class TestDynamicLayouts(TestCase):
         )
         layout.append('password1')
         self.assertTrue(isinstance(layout[0], Div))
-        self.assertTrue(isinstance(layout[0][0], basestring))
-        self.assertTrue(isinstance(layout[1], basestring))
+        self.assertTrue(isinstance(layout[0][0], six.string_types))
+        self.assertTrue(isinstance(layout[1], six.string_types))
 
     def test__setitem__layout_object(self):
         layout = Layout(

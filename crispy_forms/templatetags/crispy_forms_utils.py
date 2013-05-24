@@ -2,17 +2,18 @@
 import re
 
 from django import template
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.utils.functional import allow_lazy
+import six
 
 register = template.Library()
 
 
 def selectively_remove_spaces_between_tags(value):
-    html = re.sub(r'>\s+<', '><', force_unicode(value))
-    html = re.sub(r'</button><', '</button> <', force_unicode(html))
-    return re.sub(r'(<input[^>]+>)<', r'\1 <', force_unicode(html))
-selectively_remove_spaces_between_tags = allow_lazy(selectively_remove_spaces_between_tags, unicode)
+    html = re.sub(r'>\s+<', '><', force_text(value))
+    html = re.sub(r'</button><', '</button> <', force_text(html))
+    return re.sub(r'(<input[^>]+>)<', r'\1 <', force_text(html))
+selectively_remove_spaces_between_tags = allow_lazy(selectively_remove_spaces_between_tags, six.text_type)
 
 
 class SpecialSpacelessNode(template.Node):

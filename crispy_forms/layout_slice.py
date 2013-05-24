@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import six
+
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.layout import Fieldset, MultiField
 from crispy_forms.bootstrap import Container
@@ -10,7 +12,7 @@ class LayoutSlice(object):
 
     def __init__(self, layout, key):
         self.layout = layout
-        if isinstance(key, (int, long)):
+        if isinstance(key, six.integer_types):
             self.slice = slice(key, key+1, 1)
         else:
             self.slice = key

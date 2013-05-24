@@ -1,8 +1,8 @@
-.. _`form helpers`:
+.. _`crispy tag forms`:
 
-================
-{% crispy %} tag
-================
+===========================
+{% crispy %} tag with forms
+===========================
 
 django-crispy-forms implements a class called ``FormHelper`` that defines the form rendering behavior. Helpers give you a way to control form attributes and its layout, doing this in a programatic way using Python. This way you write as little HTML as possible, and all your logic stays in the forms and views files.
 
@@ -144,6 +144,8 @@ What you'll get is the form rendered as HTML with awesome bits. Specifically...
         <input type="submit" name="submit" value="Submit" class="submit submitButton" id="submit-id-submit" />
     </div>
 
+.. _`Be careful how you use static variables in forms`: http://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms
+
 
 Manipulating a helper in a view
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -183,6 +185,20 @@ Then you will have to write a little of html code surrounding the forms::
 You can read a list of :ref:`helper attributes` and what they are for.
 
 
+Change '*' required fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you don't like the use of ``*`` (asterisk) to denote required fields you have two options:
+
+* Asterisks have an ``asteriskField`` class set. So you can hide it using CSS rule::
+
+    .asteriskField {
+        display: none;
+    }
+
+* Override ``field.html`` template with a custom one.
+
+
 Make crispy-forms fail loud
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -203,106 +219,57 @@ For example a ``CharField`` generates an ``<input class="textinput" ...``. But i
 For example this setting would generate ``<input class"textinput inputtext" ...``. The key of the dictionary ``textinput`` is the Django's default class, the value is what you want it to be substituted with, in this case we are keeping ``textinput``.
 
 
-Rendering formsets
-~~~~~~~~~~~~~~~~~~
-
-``{% crispy %}`` tag supports formsets rendering too. All the previous stated things apply to formsets the same way. Imagine you create a formset using the previous ``ExampleForm`` form::
-
-    from django.forms.models import formset_factory
-
-    ExampleFormset = formset_factory(ExampleForm, extra = 3)
-    example_formset = ExampleFormset()
-
-This is how you would render the formset. Note that this time you need to specify the helper explicitly::
-
-    {% crispy example_formset example_formset.form.helper %}
-
-If your formset's forms have different layouts, because you manipulated them, you will have to do::
-
-    {% for form in example_formset %}
-        {% crispy form %}
-    {% endfor %}
-
-Note, make sure that you have ``form_tag`` attribute set to ``False`` in your formset's forms, otherwise you will get 3 individual forms rendered::
-
-    class ExampleForm(forms.Form):
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        [...]
-
-Note that you can still use a helper (in this case we are using the helper of the form used for building the formset). The main difference here is that helper attributes are applied to the form structure, while the layout is applied to the formset’s forms. Rendering formsets injects some extra context in the layout rendering so that you can do things like::
-
-    HTML("{% if forloop.first %}Message displayed only in the first form of a formset forms list{% endif %}",
-    Fieldset("Item {{ forloop.counter }}", 'field-1', [...])
-
-Basically you can access a ``forloop`` Django node, as if you were rendering your formsets forms using a for loop.
-
-
-.. _`helper attributes`:
-
-Helper attributes you can set
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**form_method = 'POST'**
-    Specifies form method attribute. You can see it to ‘POST’ or ‘GET’. Defaults to ‘POST’
-
-**form_action**
-    Applied to the form action attribute. Can be a named url in your URLconf that can be executed via the {% url %} template tag. Example: ‘show_my_profile’. In your URLconf you could have something like::
-
-        url(r'^show/profile/$', 'show_my_profile_view', name = 'show_my_profile')
-
-    You can also point it to a URL ‘/whatever/blabla/’.
-
-**attrs**
-    Added in 1.2.0, a dictionary to set any kind of form attributes. Underscores in keys are translated into hyphens. The recommended way when you need to set several form attributes in order to keep your helper tidy::
-
-        ``{'id': 'form-id', 'data_id': '/whatever'}``
-        <form id="form-id" data-id="/whatever" ...>
-
-**form_id**
-    Specifies form DOM id attribute. If no id provided then no id attribute is created on the form.
-
-**form_class**
-    String containing separated CSS clases to be applied to form class attribute. The form will always have by default ‘uniForm’ class.
-
-**form_tag = True**
-    It specifies if ``<form></form>`` tags should be rendered when using a Layout. If set to ``False`` it renders the form without the ``<form></form>`` tags. Defaults to ``True``.
-
-**form_error_title**
-    If you are rendering a form using ``{% crispy %}`` tag and it has ``non_field_errors`` to display, they are rendered in a div. You can set the title of the div with this attribute. Example: “Form Errors”.
-
-**formset_error_title**
-    If you are rendering a formset using ``{% crispy %}`` tag and it has ``non_form_errors`` to display, they are rendered in a div. You can set the title of the div with this attribute. Example: “Formset Errors”.
-
-**form_style = 'default'**
-    Helper attribute for uni_form template pack. Uni-form has two different form styles built-in. You can choose which one to use, setting this variable to ``default`` or ``inline``.
-
-**form_show_errors = True**
-    Default set to ``True``. It decides wether to render or not form errors. If set to ``False``, form.errors will not be visible even if they happen. You have to manually render them customizing your template. This allows you to customize error output.
-
-**render_unmentioned_fields = False**
-    By default django-crispy-forms renders the layout specified if it exists strictly, which means it only renders what the layout mentions, unless your form has ``Meta.fields`` and ``Meta.exclude`` defined, in that case it uses them. If you want to render unmentioned fields (all form fields), for example if you are worried about forgetting mentioning them you have to set this property to ``True``. It defaults to ``False``.
-
-**render_hidden_fields = False**
-    By default django-crispy-forms renders the layout specified if it exists strictly. Sometimes you might be interested in rendering all form's hidden fields no matter if they are mentioned or not. It defaults to ``False``.
-
-**render_required_fields = False**
-    By default django-crispy-forms renders the layout specified if it exists strictly. Sometimes you might be interested in rendering all form's hidden required fields no matter if they are mentioned or not. It defaults to ``False``.
-
-
-Bootstrap Helper attributes
+Render a form within a view
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are currently some helper attributes that only have functionality for a specific template pack. This doesn't necessarily mean that they won't be supported for other template packs in the future.
-
-**help_text_inline = False**
-    Sets whether help texts should be rendered inline or block. If set to ``True`` help texts will be rendered ``help-inline`` class, otherwise using ``help-block``. By default text messages are rendered in block mode.
-
-**error_text_inline = True**
-    Sets whether to render error messages inline or block. If set to ``True`` errors will be rendered using ``help-inline`` class, otherwise using ``help-block``. By default error messages are rendered in inline mode.
-
-**html5_required = False**
-    When set to ``True`` all required fields inputs will be rendered with HTML5 ``required=required`` attribute.
+Sometimes, it might be useful to render a form using crispy-forms within a view, for that there is a nice helper ``render_crispy_form``. The prototype of the method is ``render_crispy_form(form, helper=None, context=None)``. You can use it like this.
 
 
-.. _`Be careful how you use static variables in forms`: http://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms
+AJAX validation recipe
+~~~~~~~~~~~~~~~~~~~~~~
+
+One easy way to validate a crispy-form through AJAX and re-render the resulting form errors if any is to set up a view, that validates the form and renders its html using ``render_crispy_form`` to finally return this html to the client AJAX request. Let's see an example.
+
+Our server side code could be::
+
+    @jsonview
+    def save_example_form(request):
+        form = ExampleForm(request.POST or None) 
+        if form.is_valid():
+            # You could actually save through AJAX and return a success code here
+            form.save()
+            return {'success': True}
+
+        form_html = render_crispy_form(form)
+        return {'success': False, 'form_html': form_html}
+
+I'm using a jsonview decorator from `django-jsonview`_. In our client side using jQuery would look like::
+
+    var example_form = '#example-form';
+
+    $.ajax({
+        url: "{% url 'save_example_form' %}",
+        type: "POST",
+        data: $(example_form).serialize(),
+        success: function(data) {
+            if (!(data['success'])) {
+                // Here we replace the form, for the
+                $(example_form).replaceWith(data['form_html']);
+            }
+            else {
+                // Here you can show the user a success message or do whatever you need
+                $(example_form).find('.success-message').show();
+            }
+        },
+        error: function () {
+            $(example_form).find('.error-message').show()
+        }
+    });
+
+Obviously, you can adjust this snippets to your needs, or class based views or favorite frontend library.
+
+.. warning ::
+
+    When replacing form html, you need to bind events using ``live`` or ``on`` jQuery method.
+
+.. _`django-jsonview`: https://github.com/jsocol/django-jsonview
