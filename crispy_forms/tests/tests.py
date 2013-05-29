@@ -28,6 +28,7 @@ from crispy_forms.bootstrap import (
 )
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
+from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
 from crispy_forms.tests.forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
@@ -124,6 +125,23 @@ class TestBasicFunctionalityTags(TestCase):
             self.assertTrue('error' in html)
             self.assertTrue('inputtext' in html)
 
+    def test_crispy_addon(self):
+        test_form = TestForm()
+        field_instance = test_form.fields['email']
+        bound_field = BoundField(test_form, field_instance, 'email')
+        # prepend tests
+        self.assertIn("input-prepend", crispy_addon(bound_field, prepend="Work"))
+        self.assertNotIn("input-append", crispy_addon(bound_field, prepend="Work"))
+        # append tests
+        self.assertNotIn("input-prepend", crispy_addon(bound_field, append="Primary"))
+        self.assertIn("input-append", crispy_addon(bound_field, append="Secondary"))
+        # prepend and append tests
+        self.assertIn("input-append", crispy_addon(bound_field, prepend="Work", append="Primary"))
+        self.assertIn("input-prepend", crispy_addon(bound_field, prepend="Work", append="Secondary"))
+        # errors
+        with self.assertRaises(TypeError):
+            crispy_addon()
+            crispy_addon(bound_field)
 
 class TestFormHelpers(TestCase):
     urls = 'crispy_forms.tests.urls'
