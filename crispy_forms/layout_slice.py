@@ -101,13 +101,14 @@ class LayoutSlice(object):
         """
         if isinstance(self.slice, slice):
             # The start of the slice is replaced
-            self.layout.fields[self.slice.start] = self.wrapped_object(
+            start = self.slice.start if self.slice.start is not None else 0
+            self.layout.fields[start] = self.wrapped_object(
                 LayoutClass, self.layout.fields[self.slice], *args, **kwargs
             )
 
             # The rest of places of the slice are removed, as they are included in the previous
             for i in reversed(range(*self.slice.indices(len(self.layout.fields)))):
-                if i != self.slice.start:
+                if i != start:
                     del self.layout.fields[i]
 
         elif isinstance(self.slice, list):
