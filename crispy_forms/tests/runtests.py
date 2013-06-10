@@ -11,4 +11,4 @@ cmds = [
 for cmd in cmds:
     retval = os.system(cmd)
     if retval:
-        sys.exit(retval)
+        sys.exit(1)

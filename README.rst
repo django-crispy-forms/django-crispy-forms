@@ -63,6 +63,6 @@ Special thanks
 Note
 ----
 
-django-crispy-forms only supports Django 1.2 or higher and Python 2.5.4, Python 2.6.x and Python 2.7.x. If you need to support earlier versions of Django or Python you will need to use django-uni-form 0.7.0.
+django-crispy-forms only supports Django 1.3 or higher with Python 2.6.x or Python 2.7.x. If you need to support Python 2.5 or Django 1.2 you will need to use a version of django-crispy-forms less than 1.3. For earlier versions of Django or Python you will need to use django-uni-form 0.7.0.
 
 .. _Django: http://djangoproject.com

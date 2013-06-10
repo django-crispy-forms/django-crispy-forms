@@ -78,14 +78,14 @@ Version 0.9.0 added an important performance boost that makes times with and wit
 Which versions of Python does this support?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Versions supported include Python 2.5.4, 2.6.x, and 2.7.x. If you need greater backwards compatibility django-uni-form 0.7.0 supports Python 2.4.x.
+Versions supported include Python 2.6.x and 2.7.x. If you need greater backwards compatibility, django-crispy-forms below 1.3 supports 2.5.x, and django-uni-form 0.7.0 supports Python 2.4.x.
 
 .. _faq-django-versions:
 
 Which versions of Django does this support?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Versions supported include Django 1.2 or higher and Python 2.5, Python 2.6 and Python 2.7. If you need to support earlier versions of Django or Python you will need to use django-uni-form 0.7.0.
+Versions supported include Django 1.3 or higher. Versions of django-crispy-forms below 1.3 support Django 1.2.x. If you need to support earlier versions you will need to use django-uni-form 0.7.0.
 
 .. _`Daniel Greenfeld`: http://twitter.com/pydanny
 .. _`Miguel Araujo`: http://twitter.com/maraujop

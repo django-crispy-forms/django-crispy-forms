@@ -952,11 +952,11 @@ class TestFormLayout(TestCase):
             self.assertEqual(html.count(
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
-            if django_version < '1.4.4':
+            if (django_version >= '1.4' and django_version < '1.4.4') or django_version < '1.3.6':
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
-            if django_version >= '1.4.4' and django_version < 1.5:
+            else:
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
@@ -1011,11 +1011,11 @@ class TestFormLayout(TestCase):
             self.assertEqual(html.count(
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
-            if django_version < '1.4.4':
+            if (django_version >= '1.4' and django_version < '1.4.4') or django_version < '1.3.6':
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
-            if django_version >= '1.4.4' and django_version < 1.5:
+            else:
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
