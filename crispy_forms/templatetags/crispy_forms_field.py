@@ -1,4 +1,7 @@
-from itertools import izip
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
 
 from django import forms
 from django import template
