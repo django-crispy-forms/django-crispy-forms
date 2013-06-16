@@ -15,6 +15,7 @@ register = template.Library()
 from crispy_forms.templatetags.crispy_forms_filters import *
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+ALLOWED_TEMPLATE_PACKS = getattr(settings, 'CRISPY_ALLOWED_TEMPLATE_PACKS', ('bootstrap', 'uni_form'))
 
 
 class ForLoopSimulator(object):
@@ -249,12 +250,14 @@ def do_uni_form(parser, token):
             raise template.TemplateSyntaxError("crispy tag's template_pack argument should be in quotes")
 
         template_pack = template_pack[1:-1]
-        if template_pack not in ['bootstrap', 'uni_form']:
+        if template_pack not in ALLOWED_TEMPLATE_PACKS:
             raise template.TemplateSyntaxError("crispy tag's template_pack argument should be \
-                one of 'bootstrap' or 'uni_form'")
+                in " + str(ALLOWED_TEMPLATE_PACKS))
     except IndexError:
         # {% crispy form 'bootstrap' %}
-        if helper in ("'uni_form'", '"uni_form"', "'bootstrap'", '"bootstrap"'):
+        # ('"'bootstrap'"', '"'uni_form'"','"'"bootstrap'"'", '"'"uni_form"'")
+        if helper in map(lambda x : '\"' + x + '\"', ALLOWED_TEMPLATE_PACKS) + \
+                                                map(lambda x : '\'' + x + '\'', ALLOWED_TEMPLATE_PACKS):
             template_pack = helper[1:-1]
             helper = None
         # {% crispy form helper %} OR {% crispy form %}
