@@ -136,17 +136,20 @@ def crispy_field(parser, token):
 @register.simple_tag()
 def crispy_addon(field, append="", prepend=""):
     """
-    Renders a form field using bootstrap's prepended or appended text:
-        Usage:
+    Renders a form field using bootstrap's prepended or appended text::
+
         {% crispy_addon form.my_field prepend="$" append=".00" %}
-        You can also just prepend or append like so
+
+    You can also just prepend or append like so
+
         {% crispy_addon form.my_field prepend="$" %}
         {% crispy_addon form.my_field append=".00" %}
     """
     if (field):
         context = Context({
             'field': field,
-            'form_show_errors': True })
+            'form_show_errors': True
+        })
 
         if (prepend and append):
             template = loader.get_template('bootstrap/layout/appended_prepended_text.html')
