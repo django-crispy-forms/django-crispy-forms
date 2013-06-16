@@ -12,11 +12,6 @@ django-uni-form Project Founder
 
 * Daniel Greenfeld <pydanny@gmail.com>
 
-Uni-Form Author
-===============
-
-* Dragan Babic
-
 Contributors
 ============
 
@@ -90,3 +85,4 @@ Contributors
 * Chris Vigelius <chrisv2>
 * David Cramer <dcramer>
 * Stas Rudakou <nott>
+* <tepez>

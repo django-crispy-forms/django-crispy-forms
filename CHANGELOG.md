@@ -6,6 +6,8 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
 
  * Travis-ci support thanks to Charlie Denton, see #190.
  * Python 3 compatibility thanks to Charlie Denton, see #189 and #190.
+ * Added a settings variable named `CRISPY_ALLOWED_TEMPLATE_PACKS` for adding easily support for new template packs, see #192.
+ * Added `{% crispy_addon %}` tag, see #195.
  * Make `CRISPY_TEMPLATE_PACK` optional for tests
  * Make tests run the same exacty way with `runtests.py` and `manage.py test`, see #183.
  * Bug fix for `wrap_together` when using it with partial slices.
