@@ -1,9 +1,10 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.3.0
+## 1.3.0 (2013/6/16/6)
 
 Special thanks in this release to **Charlie Denton <a href="https://github.com/meshy">@meshy</a>**, for his amazing support in PRs #189 and #190, long due.
 
+ * Added `disable_csrf` helper attribute, see docs.
  * Travis-ci support thanks to Charlie Denton, see #190.
  * Python 3 compatibility thanks to Charlie Denton, see #189 and #190.
  * Added a settings variable named `CRISPY_ALLOWED_TEMPLATE_PACKS` for adding easily support for new template packs, see #192.
