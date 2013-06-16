@@ -14,6 +14,7 @@ from django.shortcuts import render_to_response
 from django.test import TestCase, RequestFactory
 from django.utils.translation import ugettext_lazy as _
 
+from crispy_forms.compatibility import string_types, text_type
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import Submit, Reset, Hidden, Button
@@ -229,7 +230,7 @@ class TestFormHelpers(TestCase):
 
         # Ensure those errors were rendered
         self.assertTrue('<li>Passwords dont match</li>' in html)
-        self.assertTrue(unicode(_('This field is required.')) in html)
+        self.assertTrue(text_type(_('This field is required.')) in html)
         self.assertTrue('error' in html)
 
         # Now we render without errors
@@ -239,7 +240,7 @@ class TestFormHelpers(TestCase):
 
         # Ensure errors were not rendered
         self.assertFalse('<li>Passwords dont match</li>' in html)
-        self.assertFalse(unicode(_('This field is required.')) in html)
+        self.assertFalse(text_type(_('This field is required.')) in html)
         self.assertFalse('error' in html)
 
     def test_form_show_errors(self):
@@ -1131,7 +1132,7 @@ class TestFormLayout(TestCase):
         context = RequestContext(request, {'form': form})
 
         response = render_to_response('crispy_render_template.html', context)
-        self.assertEqual(response.content.count('checkbox inline'), 3)
+        self.assertEqual(response.content.count(b'checkbox inline'), 3)
 
 
 class TestLayoutObjects(TestCase):
@@ -1474,12 +1475,12 @@ class TestDynamicLayouts(TestCase):
         )
         helper.layout = layout
 
-        helper.filter(basestring, greedy=True).wrap_once(Field)
+        helper.filter(string_types, greedy=True).wrap_once(Field)
         helper.filter(Field, greedy=True).update_attributes(readonly=True)
 
         self.assertTrue(isinstance(layout[0], Field))
         self.assertTrue(isinstance(layout[1][0], Field))
-        self.assertTrue(isinstance(layout[1][0][0], basestring))
+        self.assertTrue(isinstance(layout[1][0][0], string_types))
         self.assertTrue(isinstance(layout[2], Field))
         self.assertEqual(layout[1][0].attrs, {'readonly': True})
         self.assertEqual(layout[0].attrs, {'readonly': True})
@@ -1522,7 +1523,7 @@ class TestDynamicLayouts(TestCase):
             Div('password1'),
             'password2',
         )
-        self.assertEqual(layout_3.get_layout_objects(basestring, max_level=2), [
+        self.assertEqual(layout_3.get_layout_objects(string_types, max_level=2), [
             [[0], 'email'],
             [[1, 0], 'password1'],
             [[2], 'password2']
@@ -1578,7 +1579,7 @@ class TestDynamicLayouts(TestCase):
         )
         helper.layout = layout
 
-        helper.filter(basestring).wrap(Field, css_class="test-class")
+        helper.filter(string_types).wrap(Field, css_class="test-class")
         self.assertTrue(isinstance(layout.fields[0], Field))
         self.assertTrue(isinstance(layout.fields[1], Div))
         self.assertTrue(isinstance(layout.fields[2], Field))
@@ -1719,8 +1720,8 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(form.helper.layout[1], Field))
         # Check others stay the same
         self.assertTrue(isinstance(form.helper.layout[0][3][1], HTML))
-        self.assertTrue(isinstance(form.helper.layout[0][1][0][0], basestring))
-        self.assertTrue(isinstance(form.helper.layout[0][4][0], basestring))
+        self.assertTrue(isinstance(form.helper.layout[0][1][0][0], string_types))
+        self.assertTrue(isinstance(form.helper.layout[0][4][0], string_types))
 
     def test_all_without_layout(self):
         form = TestForm()
@@ -1793,8 +1794,8 @@ class TestDynamicLayouts(TestCase):
         self.assertTrue(isinstance(layout[0][0], Div))
         self.assertTrue(isinstance(layout[0][0][0], Div))
         self.assertTrue(isinstance(layout[0][1], Div))
-        self.assertTrue(isinstance(layout[0][1][0], basestring))
-        self.assertTrue(isinstance(layout[0][2], basestring))
+        self.assertTrue(isinstance(layout[0][1][0], string_types))
+        self.assertTrue(isinstance(layout[0][2], string_types))
 
     def test__getattr__append_layout_object(self):
         layout = Layout(
@@ -1802,8 +1803,8 @@ class TestDynamicLayouts(TestCase):
         )
         layout.append('password1')
         self.assertTrue(isinstance(layout[0], Div))
-        self.assertTrue(isinstance(layout[0][0], basestring))
-        self.assertTrue(isinstance(layout[1], basestring))
+        self.assertTrue(isinstance(layout[0][0], string_types))
+        self.assertTrue(isinstance(layout[1], string_types))
 
     def test__setitem__layout_object(self):
         layout = Layout(

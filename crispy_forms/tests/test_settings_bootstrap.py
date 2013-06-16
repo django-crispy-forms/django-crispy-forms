@@ -1,5 +1,8 @@
 import os
 
+from crispy_forms.compatibility import text_type
+
+
 BASE_DIR = os.path.dirname(__file__)
 
 INSTALLED_APPS = (
@@ -37,7 +40,7 @@ TEMPLATE_DIRS = (
 class InvalidVarException(object):
     def __mod__(self, missing):
         try:
-            missing_str = unicode(missing)
+            missing_str = text_type(missing)
         except:
             missing_str = 'Failed to create string representation'
         raise Exception('Unknown template variable %r %s' % (missing, missing_str))
