@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.3.0 (2013/6/16/6)
+## 1.3.0 (2013/6/16)
 
 Special thanks in this release to **Charlie Denton <a href="https://github.com/meshy">@meshy</a>**, for his amazing support in PRs #189 and #190, long due.
 
