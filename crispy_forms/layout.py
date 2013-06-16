@@ -456,19 +456,3 @@ class UneditableField(Field):
     def __init__(self, field, *args, **kwargs):
         self.attrs = {'class': 'uneditable-input'}
         super(UneditableField, self).__init__(field, *args, **kwargs)
-
-
-def TabHolder(*args, **kwargs):
-    warnings.warn("TabHolder has been moved to crispy_forms.bootstrap. \
-        Use that path instead, this import will be removed in 1.3.0", PendingDeprecationWarning)
-
-    from .bootstrap import TabHolder
-    return TabHolder(*args, **kwargs)
-
-
-def Tab(*args, **kwargs):
-    warnings.warn("Tab has been moved to crispy_forms.bootstrap. \
-        Use that path instead, this import will be removed in 1.3.0", PendingDeprecationWarning)
-
-    from .bootstrap import Tab
-    return Tab(*args, **kwargs)
