@@ -28,9 +28,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap'
 CRISPY_CLASS_CONVERTERS = {"textinput": "textinput textInput inputtext"}
 SECRET_KEY = 'secretkey'
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_DIRS = (
-    os.path.join(SITE_ROOT, 'templates'),
-)
 
 
 # http://djangosnippets.org/snippets/646/
