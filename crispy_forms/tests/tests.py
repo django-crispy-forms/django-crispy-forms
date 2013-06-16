@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os.path
 import re
 
 import django
@@ -8,10 +9,11 @@ from django.core.urlresolvers import reverse
 from django.forms.forms import BoundField
 from django.forms.models import formset_factory, modelformset_factory
 from django.template import Context, TemplateSyntaxError, RequestContext
-from django.template.loader import get_template_from_string
+from django.template import loader
 from django.middleware.csrf import _get_new_csrf_key
 from django.shortcuts import render_to_response
 from django.test import TestCase, RequestFactory
+from django.test.utils import override_settings
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.compatibility import string_types, text_type
@@ -36,15 +38,36 @@ from crispy_forms.tests.forms import (
 )
 
 
-class TestBasicFunctionalityTags(TestCase):
+class CrispyTestCase(TestCase):
     def setUp(self):
-        pass
+        template_dirs = [os.path.join(os.path.dirname(__file__), 'templates')]
+        template_dirs = template_dirs + list(settings.TEMPLATE_DIRS)
+        template_loaders = ['django.template.loaders.filesystem.Loader']
+        template_loaders = template_loaders + list(settings.TEMPLATE_LOADERS)
+
+        # ensuring test templates directory is loaded first
+        self.__overriden_settings = override_settings(**{
+            'TEMPLATE_LOADERS': template_loaders,
+            'TEMPLATE_DIRS': template_dirs,
+        })
+        self.__overriden_settings.enable()
+
+        # resetting template loaders cache
+        self.__template_source_loaders = loader.template_source_loaders
+        loader.template_source_loaders = None
 
     def tearDown(self):
-        pass
+        loader.template_source_loaders = self.__template_source_loaders
+        self.__overriden_settings.disable()
 
+    @property
+    def current_template_pack(self):
+        return getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+
+
+class TestBasicFunctionalityTags(CrispyTestCase):
     def test_as_crispy_errors_form_without_non_field_errors(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {{ form|as_crispy_errors }}
         """)
@@ -56,7 +79,7 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertFalse("errorMsg" in html or "alert" in html)
 
     def test_as_crispy_errors_form_with_non_field_errors(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {{ form|as_crispy_errors }}
         """)
@@ -70,7 +93,7 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertFalse("<h3>" in html)
 
     def test_crispy_filter_with_form(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {{ form|crispy }}
         """)
@@ -81,7 +104,7 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue("id_is_company" in html)
 
     def test_crispy_filter_with_formset(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {{ testFormset|crispy }}
         """)
@@ -99,7 +122,7 @@ class TestBasicFunctionalityTags(TestCase):
         self.assertTrue('form-MAX_NUM_FORMS' in html)
 
     def test_classes_filter(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_field %}
             {{ testField|classes }}
         """)
@@ -112,7 +135,7 @@ class TestBasicFunctionalityTags(TestCase):
 
     def test_crispy_field_and_class_converters(self):
         if hasattr(settings, 'CRISPY_CLASS_CONVERTERS'):
-            template = get_template_from_string(u"""
+            template = loader.get_template_from_string(u"""
                 {% load crispy_forms_field %}
                 {% crispy_field testField 'class' 'error' %}
             """)
@@ -126,13 +149,8 @@ class TestBasicFunctionalityTags(TestCase):
             self.assertTrue('inputtext' in html)
 
 
-class TestFormHelpers(TestCase):
+class TestFormHelpers(CrispyTestCase):
     urls = 'crispy_forms.tests.urls'
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
 
     def test_inputs(self):
         form_helper = FormHelper()
@@ -141,7 +159,7 @@ class TestFormHelpers(TestCase):
         form_helper.add_input(Hidden('my-hidden', 'Hidden'))
         form_helper.add_input(Button('my-button', 'Button'))
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -154,7 +172,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('name="my-hidden"' in html)
         self.assertTrue('id="button-id-my-button"' in html)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        if self.current_template_pack == 'uni_form':
             self.assertTrue('submit submitButton' in html)
             self.assertTrue('reset resetButton' in html)
             self.assertTrue('class="button"' in html)
@@ -180,7 +198,7 @@ class TestFormHelpers(TestCase):
         form_helper.form_action = 'simpleAction'
         form_helper.form_error_title = 'ERRORS'
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testForm form_helper %}
         """)
@@ -198,7 +216,7 @@ class TestFormHelpers(TestCase):
         self.assertTrue('id="this-form-rocks"' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
 
-        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+        if (self.current_template_pack == 'uni_form'):
             self.assertTrue('class="uniForm' in html)
 
         self.assertTrue("ERRORS" in html)
@@ -219,7 +237,7 @@ class TestFormHelpers(TestCase):
         form.helper.form_show_errors = True
         form.is_valid()
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testForm %}
         """)
@@ -339,7 +357,7 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
 
         # Check that help goes before error, otherwise CSS won't work
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             help_position = html.find('<span id="hint_id_email" class="help-inline">')
             error_position = html.find('<p id="error_1_id_email" class="help-block">')
             self.assertTrue(help_position < error_position)
@@ -354,7 +372,7 @@ class TestFormHelpers(TestCase):
         html = render_crispy_form(form)
 
         # Check that error goes before help, otherwise CSS won't work
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             error_position = html.find('<span id="error_1_id_email" class="help-inline">')
             help_position = html.find('<p id="hint_id_email" class="help-block">')
             self.assertTrue(error_position < help_position)
@@ -409,7 +427,7 @@ class TestFormHelpers(TestCase):
         self.assertEqual(helper['form_id'], 'test-form')
 
     def test_without_helper(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form %}
         """)
@@ -420,15 +438,15 @@ class TestFormHelpers(TestCase):
         self.assertTrue('<form' in html)
         self.assertTrue('method="post"' in html)
         self.assertFalse('action' in html)
-        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+        if (self.current_template_pack == 'uni_form'):
             self.assertTrue('uniForm' in html)
 
     def test_template_pack_override(self):
-        current_pack = settings.CRISPY_TEMPLATE_PACK
+        current_pack = self.current_template_pack
         override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
         # Syntax {% crispy form 'template_pack_name' %}
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {%% load crispy_forms_tags %%}
             {%% crispy form "%s" %%}
         """ % override_pack)
@@ -436,7 +454,7 @@ class TestFormHelpers(TestCase):
         html = template.render(c)
 
         # Syntax {% crispy form helper 'template_pack_name' %}
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {%% load crispy_forms_tags %%}
             {%% crispy form form_helper "%s" %%}
         """ % override_pack)
@@ -451,7 +469,7 @@ class TestFormHelpers(TestCase):
             self.assertTrue('uniForm' in html2)
 
     def test_invalid_helper(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -466,7 +484,7 @@ class TestFormHelpers(TestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_formset_with_helper_without_layout(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testFormSet formset_helper %}
         """)
@@ -495,12 +513,12 @@ class TestFormHelpers(TestCase):
         self.assertTrue('method="post"' in html)
         self.assertTrue('id="thisFormsetRocks"' in html)
         self.assertTrue('action="%s"' % reverse('simpleAction') in html)
-        if (settings.CRISPY_TEMPLATE_PACK == 'uni_form'):
+        if (self.current_template_pack == 'uni_form'):
             self.assertTrue('class="uniForm' in html)
 
     def test_CSRF_token_POST_form(self):
         form_helper = FormHelper()
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -516,7 +534,7 @@ class TestFormHelpers(TestCase):
     def test_CSRF_token_GET_form(self):
         form_helper = FormHelper()
         form_helper.form_method = 'GET'
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -584,7 +602,7 @@ class TestFormHelpers(TestCase):
         self.assertEqual(html.count("<h1>Special custom field</h1>"), 2)
 
 
-class TestFormLayout(TestCase):
+class TestFormLayout(CrispyTestCase):
     urls = 'crispy_forms.tests.urls'
 
     def test_invalid_unicode_characters(self):
@@ -596,7 +614,7 @@ class TestFormLayout(TestCase):
             )
         )
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -615,7 +633,7 @@ class TestFormLayout(TestCase):
             'first_name',
         )
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -631,7 +649,7 @@ class TestFormLayout(TestCase):
             )
         )
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -648,7 +666,7 @@ class TestFormLayout(TestCase):
             )
         )
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -661,7 +679,7 @@ class TestFormLayout(TestCase):
         form = ExampleForm()
         form2 = TestForm()
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {{ form.as_ul }}
             {% crispy form2 %}
@@ -718,7 +736,7 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('name="whatever"'), 1)
         self.assertEqual(html.count('value="something"'), 1)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             # Make sure white spaces between buttons are there in bootstrap
             self.assertEqual(len(re.findall(r'</button> <', html)), 3)
 
@@ -753,7 +771,7 @@ class TestFormLayout(TestCase):
             )
         )
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -771,7 +789,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('test-fieldset="123"' in html)
         self.assertTrue('id="row_passwords"' in html)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        if self.current_template_pack == 'uni_form':
             self.assertTrue('class="formRow rows"' in html)
         else:
             self.assertTrue('class="row rows"' in html)
@@ -809,7 +827,7 @@ class TestFormLayout(TestCase):
             )
         )
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -865,7 +883,7 @@ class TestFormLayout(TestCase):
             )
         )
 
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -885,7 +903,7 @@ class TestFormLayout(TestCase):
         self.assertFalse('last_name' in html)
 
     def test_change_layout_dynamically_delete_field(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -986,7 +1004,7 @@ class TestFormLayout(TestCase):
         self.assertTrue('Item 2' in html)
         self.assertTrue('Item 3' in html)
         self.assertEqual(html.count('Note for first form only'), 1)
-        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        if self.current_template_pack == 'uni_form':
             self.assertEqual(html.count('formRow'), 3)
         else:
             self.assertEqual(html.count('row'), 3)
@@ -1038,7 +1056,7 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('password'), 0)
 
     def test_multiwidget_field(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form %}
         """)
@@ -1065,7 +1083,7 @@ class TestFormLayout(TestCase):
         self.assertEqual(html.count('type="hidden"'), 1)
 
     def test_i18n(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form.helper %}
         """)
@@ -1135,9 +1153,9 @@ class TestFormLayout(TestCase):
         self.assertEqual(response.content.count(b'checkbox inline'), 3)
 
 
-class TestLayoutObjects(TestCase):
+class TestLayoutObjects(CrispyTestCase):
     def test_field_type_hidden(self):
-        template = get_template_from_string(u"""
+        template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy test_form %}
         """)
@@ -1162,7 +1180,7 @@ class TestLayoutObjects(TestCase):
 
     def test_field_wrapper_class(self):
         html = Field('email', wrapper_class="testing").render(TestForm(), "", Context())
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             self.assertEqual(html.count('class="control-group testing"'), 1)
 
     def test_custom_django_widget(self):
@@ -1172,7 +1190,7 @@ class TestLayoutObjects(TestCase):
         class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
             pass
 
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        if self.current_template_pack == 'bootstrap':
             # Make sure an inherited RadioSelect gets rendered as it
             form = CheckboxesTestForm()
             form.fields['inline_radios'].widget = CustomRadioSelect()
@@ -1305,14 +1323,16 @@ class TestLayoutObjects(TestCase):
         )
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        if self.current_template_pack == 'uni_form':
             self.assertEqual(html.count('\n'), 22)
         else:
             self.assertEqual(html.count('\n'), 24)
 
 
-class TestDynamicLayouts(TestCase):
+class TestDynamicLayouts(CrispyTestCase):
     def setUp(self):
+        super(TestDynamicLayouts, self).setUp()
+
         self.advanced_layout = Layout(
             Div(
                 Div(Div('email')),
