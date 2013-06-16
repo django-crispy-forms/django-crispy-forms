@@ -562,6 +562,13 @@ class TestFormHelpers(CrispyTestCase):
 
         self.assertFalse("<input type='hidden' name='csrfmiddlewaretoken'" in html)
 
+    def test_disable_csrf(self):
+        form = TestForm()
+        helper = FormHelper()
+        helper.disable_csrf = True
+        html = render_crispy_form(form, helper, {'csrf_token': _get_new_csrf_key()})
+        self.assertFalse('csrf' in html)
+
     def test_render_hidden_fields(self):
         test_form = TestForm()
         test_form.helper = FormHelper()

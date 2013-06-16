@@ -197,6 +197,7 @@ class FormHelper(DynamicLayoutHandler):
     form_show_labels = True
     template = None
     field_template = None
+    disable_csrf = False
 
     def __init__(self, form=None):
         self.attrs = {}
@@ -335,6 +336,7 @@ class FormHelper(DynamicLayoutHandler):
         items['error_text_inline'] = self.error_text_inline
         items['html5_required'] = self.html5_required
         items['form_show_labels'] = self.form_show_labels
+        items['disable_csrf'] = self.disable_csrf
 
         items['attrs'] = {}
         if self.attrs:
