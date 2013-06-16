@@ -10,7 +10,7 @@ The best way to have Django_ DRY forms. Build programmatic reusable layouts out 
 
 The application mainly provides:
 
-* A filter named ``|crispy`` that will render elegant div based forms. Think of it as the built-in methods: ``as_table``, ``as_ul`` and ``as_p``. You cannot tune up the output, but it is easy to start using it. 
+* A filter named ``|crispy`` that will render elegant div based forms. Think of it as the built-in methods: ``as_table``, ``as_ul`` and ``as_p``. You cannot tune up the output, but it is easy to start using it.
 * A tag named ``{% crispy %}`` that will render a form based on your configuration and specific layout setup. This gives you amazing power without much hassle, helping you save tons of time.
 
 Django-crispy-forms 1.1.0 has built-in support for two different CSS frameworks, known as template packs within django-crispy-forms:
@@ -67,6 +67,6 @@ Special thanks
 Note
 ----
 
-django-crispy-forms only supports Django 1.3 or higher with Python 2.6.x or Python 2.7.x. If you need to support Python 2.5 or Django 1.2 you will need to use a version of django-crispy-forms less than 1.3. For earlier versions of Django or Python you will need to use django-uni-form 0.7.0.
+django-crispy-forms supports Django 1.3 or higher with Python 2.6.x, Python 2.7.x and Python 3.3.x. If you need to support Python 2.5 or Django 1.2 you will need to use a version of django-crispy-forms less than 1.3. For earlier versions of Django or Python you will need to use django-uni-form 0.7.0.
 
 .. _Django: http://djangoproject.com
