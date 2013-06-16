@@ -304,7 +304,7 @@ Some advanced users may want to use their own templates, to adapt the layout obj
         Div(
             'field1',
             'field2',
-            template = 'my_div_template.html'
+            template='my_div_template.html'
         )
     )
 
@@ -319,6 +319,8 @@ You need to differentiate between layout objects' templates and django-crispy-fo
 - **template** and **field_template** attributes in ``FormHelper``: Since version 1.3.0 you can override the form/formset template and the field template using helper attributes, see section :ref:`helper attributes`. With this you can change one specific form or all your project forms (creating a custom FormHelper base class for example).
 
 - **Overriding templates directory**: This works the same as explained in section :ref:`override templates`. If you are adapting crispy-forms templates to a popular open source template pack you use, submit it so more people can benefit from it.
+
+- **Creating a TEMPLATE PACK**: You maybe want to use crispy-forms with you favorite CSS framework or your Company's CSS. For doing so, you will need to be quite familiar with crispy-forms, layout objects and their templates. You will probably want to start off with one of the existing template packs, probably ``bootstrap``. Imagine your template pack is named ``chocolate``, that means you probably want your root directory named the same way. For using your template pack, you will have to set ``CRISPY_TEMPLATE_PACK = 'chocolate'`` variable in your settings file and also set ``CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'chocolate')``. This way crispy-forms will know you want to use your own template pack, which is an allowed one and where to look for it.
 
 .. _`django-uni-form-contrib`: https://github.com/kennethlove/django-uni-form-contrib
 .. _`Bootstrap`: https://github.com/twitter/bootstrap
