@@ -5,6 +5,7 @@ except ImportError:
 
 from django import forms
 from django import template
+from django.template import loader, Context
 from django.conf import settings
 
 
@@ -130,3 +131,34 @@ def crispy_field(parser, token):
         attrs[attribute_name] = value
 
     return CrispyFieldNode(field, attrs)
+
+
+@register.simple_tag()
+def crispy_addon(field, append="", prepend=""):
+    """
+    Renders a form field using bootstrap's prepended or appended text:
+        Usage:
+        {% crispy_addon form.my_field prepend="$" append=".00" %}
+        You can also just prepend or append like so
+        {% crispy_addon form.my_field prepend="$" %}
+        {% crispy_addon form.my_field append=".00" %}
+    """
+    if (field):
+        context = Context({
+            'field': field,
+            'form_show_errors': True })
+
+        if (prepend and append):
+            template = loader.get_template('bootstrap/layout/appended_prepended_text.html')
+            context['crispy_prepended_text'] = prepend
+            context['crispy_appended_text'] = append
+        elif prepend:
+            template = loader.get_template('bootstrap/layout/prepended_text.html')
+            context['crispy_prepended_text'] = prepend
+        elif append:
+            template = loader.get_template('bootstrap/layout/appended_text.html')
+            context['crispy_appended_text'] = append
+        else:
+            raise TypeError("Expected a prepend and/or append argument")
+
+    return template.render(context)
