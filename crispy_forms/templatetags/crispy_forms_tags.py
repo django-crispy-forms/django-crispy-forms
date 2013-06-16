@@ -256,8 +256,10 @@ def do_uni_form(parser, token):
     except IndexError:
         # {% crispy form 'bootstrap' %}
         # ('"'bootstrap'"', '"'uni_form'"','"'"bootstrap'"'", '"'"uni_form"'")
-        if helper in map(lambda x : '\"' + x + '\"', ALLOWED_TEMPLATE_PACKS) + \
-                                                map(lambda x : '\'' + x + '\'', ALLOWED_TEMPLATE_PACKS):
+        if (
+            helper in ['"%s"' % x for x in ALLOWED_TEMPLATE_PACKS] + \
+            ["'%s'" % x for x in ALLOWED_TEMPLATE_PACKS]
+        ):
             template_pack = helper[1:-1]
             helper = None
         # {% crispy form helper %} OR {% crispy form %}
