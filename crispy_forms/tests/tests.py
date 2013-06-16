@@ -13,7 +13,6 @@ from django.template import loader
 from django.middleware.csrf import _get_new_csrf_key
 from django.shortcuts import render_to_response
 from django.test import TestCase, RequestFactory
-from django.test.utils import override_settings
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.compatibility import string_types, text_type
@@ -37,6 +36,7 @@ from crispy_forms.tests.forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
     FormWithMeta, TestForm4, CrispyTestModel
 )
+from crispy_forms.tests.utils import override_settings
 
 
 class CrispyTestCase(TestCase):
