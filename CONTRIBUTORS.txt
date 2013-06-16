@@ -89,3 +89,4 @@ Contributors
 * Nemesis Fixx <mcnemesis>
 * Chris Vigelius <chrisv2>
 * David Cramer <dcramer>
+* Stas Rudakou <nott>

@@ -1,5 +1,21 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.3.0
+
+Special thanks in this release to **Charlie Denton <a href="https://github.com/meshy">@meshy</a>**, for his amazing support in PRs #189 and #190, long due.
+
+ * Travis-ci support thanks to Charlie Denton, see #190.
+ * Python 3 compatibility thanks to Charlie Denton, see #189 and #190.
+ * Make `CRISPY_TEMPLATE_PACK` optional for tests
+ * Make tests run the same exacty way with `runtests.py` and `manage.py test`, see #183.
+ * Bug fix for `wrap_together` when using it with partial slices.
+ * Fixes for `KeepContext` context manager, see #180.
+ * Added `FormHelper.field_template` attribute, for easily override field template for a specific form/formset, see docs.
+ * Added a template for rendering formsets inline within tables named `bootstrap/table_inline_formset.html`, that can be easily used in conjunction with `FormHelper.template`.
+ * Added `FormHelper.template` attribute, that easily allows to override form/formset general structure template, see docs.
+ * Added `form_show_labels` helper attribute.
+ * Redoing filters to use `isinstance` instead of hacky internal name checking, this way subclasses of standard fields will work out of the box with crispy-forms, see #176.
+
 ## 1.2.8 (2013/5/10)
 
  * Bug fix for `KeepContext` context manager, when crispy-forms used with Jingo/Jinja2 templates, see #179.
