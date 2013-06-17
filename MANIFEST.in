@@ -4,4 +4,4 @@ include MANIFEST.in
 include README.rst
 recursive-include crispy_forms/static *
 recursive-include crispy_forms/templates *
-recursive-include crispy_forms/tests *
+recursive-include crispy_forms/tests *.py
