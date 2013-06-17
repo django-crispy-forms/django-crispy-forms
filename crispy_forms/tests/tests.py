@@ -733,6 +733,7 @@ class TestFormLayout(CrispyTestCase):
         html = render_crispy_form(form)
         self.assertEqual(html.count("<input"), 5)
         self.assertEqual(html.count('type="hidden"'), 5)
+        self.assertEqual(html.count('<label'), 0)
 
     def test_field_with_buttons(self):
         form = TestForm()
@@ -813,6 +814,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue('title="fieldset_title"' in html)
         self.assertTrue('test-fieldset="123"' in html)
         self.assertTrue('id="row_passwords"' in html)
+        self.assertEqual(html.count('<label'), 6)
 
         if self.current_template_pack == 'uni_form':
             self.assertTrue('class="formRow rows"' in html)
