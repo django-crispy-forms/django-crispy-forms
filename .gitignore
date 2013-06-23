@@ -15,6 +15,7 @@ downloads/*
 #defaults
 *.pyc
 *.pyo
+__pycache__
 
 #temp file
 tempfile
