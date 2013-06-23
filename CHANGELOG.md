@@ -1,5 +1,10 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.3.1 (2013/6/17)
+
+ * Fix default value for `form_show_labels` in case FormHelper doesn't define it, see #199.
+ * Added a backported version of `override_settings` for testing django 1.3.7 and adding it to Travis-ci matrix.
+
 ## 1.3.0 (2013/6/16)
 
 Special thanks in this release to **Charlie Denton <a href="https://github.com/meshy">@meshy</a>**, for his amazing support in PRs #189 and #190, long due.
