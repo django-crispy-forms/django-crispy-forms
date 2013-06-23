@@ -42,10 +42,10 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK):
     """
     if isinstance(form, BaseFormSet):
         template = uni_formset_template(template_pack)
-        c = Context({'formset': form, 'form_show_errors': True})
+        c = Context({'formset': form, 'form_show_errors': True, 'form_show_labels': True})
     else:
         template = uni_form_template(template_pack)
-        c = Context({'form': form, 'form_show_errors': True})
+        c = Context({'form': form, 'form_show_errors': True, 'form_show_labels': True})
     return template.render(c)
 
 

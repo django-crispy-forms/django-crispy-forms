@@ -103,6 +103,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
 
         self.assertTrue("<td>" not in html)
         self.assertTrue("id_is_company" in html)
+        self.assertEqual(html.count('<label'), 7)
 
     def test_crispy_filter_with_formset(self):
         template = loader.get_template_from_string(u"""
