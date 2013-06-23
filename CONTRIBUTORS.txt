@@ -87,3 +87,4 @@ Contributors
 * Stas Rudakou <nott>
 * <tepez>
 * Svyatoslav Bulbakha <ssbb>
+* Andres Vargas <zodman>
