@@ -82,5 +82,5 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
         raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
 
     template = get_template('%s/field.html' % template_pack)
-    c = Context({'field': field, 'form_show_errors': True})
+    c = Context({'field': field, 'form_show_errors': True, 'form_show_labels': True})
     return template.render(c)
