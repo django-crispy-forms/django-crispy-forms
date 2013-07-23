@@ -98,3 +98,18 @@ class ExampleForm(forms.Form):
 class FormWithMeta(TestForm):
     class Meta:
         fields = ('email', 'first_name', 'last_name')
+
+
+class TestForm5(forms.Form):
+    choices = [
+        (1, 1),
+        (2, 2),
+        (1000, 1000),
+    ]
+    checkbox_select_multiple = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple, 
+        choices=choices)
+    radio_select = forms.ChoiceField(
+        widget=forms.RadioSelect, 
+        choices=choices)
+    pk = forms.IntegerField()
