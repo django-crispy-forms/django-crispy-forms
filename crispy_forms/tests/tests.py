@@ -652,8 +652,9 @@ class TestFormHelpers(CrispyTestCase):
         )
         form.helper.form_show_labels = False
 
-        html = render_crispy_form(form)
-        self.assertEqual(html.count("<label"), 0)
+        if self.current_template_pack == 'bootstrap':
+            html = render_crispy_form(form)
+            self.assertEqual(html.count("<label"), 0)
 
 
 class TestFormLayout(CrispyTestCase):
