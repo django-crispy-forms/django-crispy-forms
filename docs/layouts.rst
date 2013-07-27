@@ -120,6 +120,10 @@ These ones live in module ``crispy_forms.layout``. These are layout objects that
 
     HTML("{% if success %} <p>Operation was successful</p> {% endif %}")
 
+ .. warning ::
+
+    Beware that this is rendered in a standalone template, so if you are using custom templatetags or filters, don't forget to add your ``{% load custom_tags %}``
+
 - **Field**: Extremely useful layout object. You can use it to set attributes in a field or render a specific field with a custom template. This way you avoid having to explicitly override the field's widget and pass an ugly ``attrs`` dictionary::
 
     Field('password', id="password-field", css_class="passwordfields", title="Explanation")
