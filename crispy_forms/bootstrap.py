@@ -7,35 +7,12 @@ from django.template.defaultfilters import slugify
 
 from .compatibility import text_type
 from .layout import LayoutObject, Field, Div
-from .utils import render_field, flatatt
+from .utils import render_field, flatatt, TEMPLATE_PACK
 
-
-class AppendedText(Field):
-    template = "bootstrap/layout/appended_text.html"
-
-    def __init__(self, field, text, *args, **kwargs):
-        self.field = field
-        self.text = text
-        if 'active' in kwargs:
-            self.active = kwargs.pop('active')
-
-        super(AppendedText, self).__init__(field, *args, **kwargs)
-
-    def render(self, form, form_style, context, template_pack='bootstrap'):
-        context.update({'crispy_appended_text': self.text, 'active': getattr(self, "active", False)})
-        return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
-
-
-class PrependedText(AppendedText):
-    template = "bootstrap/layout/prepended_text.html"
-
-    def render(self, form, form_style, context, template_pack='bootstrap'):
-        context.update({'crispy_prepended_text': self.text, 'active': getattr(self, "active", False)})
-        return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
 
 
 class PrependedAppendedText(Field):
-    template = "bootstrap/layout/appended_prepended_text.html"
+    template = "%s/layout/prepended_appended_text.html" % TEMPLATE_PACK
 
     def __init__(self, field, prepended_text=None, appended_text=None, *args, **kwargs):
         self.field = field
@@ -44,11 +21,17 @@ class PrependedAppendedText(Field):
         if 'active' in kwargs:
             self.active = kwargs.pop('active')
 
+        self.input_size = None
+        css_class = kwargs.get('css_class', '')
+        if css_class.find('input-large') != -1: self.input_size = 'input-large'
+        if css_class.find('input-small') != -1: self.input_size = 'input-small'
+
         super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
 
-    def render(self, form, form_style, context, template_pack='bootstrap'):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         context.update({'crispy_appended_text': self.appended_text,
                         'crispy_prepended_text': self.prepended_text,
+                        'input_size' : self.input_size,
                         'active': getattr(self, "active", False)})
         return render_field(self.field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
 
@@ -59,6 +42,22 @@ class AppendedPrependedText(PrependedAppendedText):
             it will be removed in 1.3.0", PendingDeprecationWarning)
         super(AppendedPrependedText, self).__init__(*args, **kwargs)
 
+
+class AppendedText(PrependedAppendedText):    
+    def __init__(self, field, text, *args, **kwargs):
+        kwargs.pop('appended_text', None)
+        kwargs.pop('prepended_text', None)
+        self.text = text
+        super(AppendedText, self).__init__(field, appended_text = text, prepended_text = None, **kwargs)
+        
+
+class PrependedText(PrependedAppendedText):
+    def __init__(self, field, text, *args, **kwargs):
+        kwargs.pop('appended_text', None)
+        kwargs.pop('prepended_text', None)
+        self.text = text
+        super(PrependedText, self).__init__(field, appended_text = None, prepended_text = text, **kwargs)
+    
 
 class FormActions(LayoutObject):
     """
@@ -71,7 +70,7 @@ class FormActions(LayoutObject):
             Submit('Save', 'Save', css_class='btn-primary')
         )
     """
-    template = "bootstrap/layout/formactions.html"
+    template = "%s/layout/formactions.html" % TEMPLATE_PACK
 
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
@@ -80,7 +79,7 @@ class FormActions(LayoutObject):
         if 'css_class' in self.attrs:
             self.attrs['class'] = self.attrs.pop('css_class')
 
-    def render(self, form, form_style, context, template_pack='bootstrap'):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         html = u''
         for field in self.fields:
             html += render_field(field, form, form_style, context, template_pack=template_pack)
@@ -97,9 +96,9 @@ class InlineCheckboxes(Field):
 
         InlineCheckboxes('field_name')
     """
-    template = "bootstrap/layout/checkboxselectmultiple_inline.html"
+    template = "%s/layout/checkboxselectmultiple_inline.html" % TEMPLATE_PACK
 
-    def render(self, form, form_style, context, template_pack='bootstrap'):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         context.update({'inline_class': 'inline'})
         return super(InlineCheckboxes, self).render(form, form_style, context)
 
@@ -110,15 +109,15 @@ class InlineRadios(Field):
 
         InlineRadios('field_name')
     """
-    template = "bootstrap/layout/radioselect_inline.html"
+    template = "%s/layout/radioselect_inline.html" % TEMPLATE_PACK
 
-    def render(self, form, form_style, context, template_pack='bootstrap'):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         context.update({'inline_class': 'inline'})
         return super(InlineRadios, self).render(form, form_style, context)
 
 
 class FieldWithButtons(Div):
-    template = 'bootstrap/layout/field_with_buttons.html'
+    template = '%s/layout/field_with_buttons.html' % TEMPLATE_PACK
 
     def render(self, form, form_style, context):
         # We first render the buttons
@@ -126,7 +125,7 @@ class FieldWithButtons(Div):
         for field in self.fields[1:]:
             buttons += render_field(
                 field, form, form_style, context,
-                'bootstrap/layout/field.html', layout_object=self
+                '%s/layout/field.html' % TEMPLATE_PACK, layout_object=self
             )
 
         context.update({'div': self, 'buttons': buttons})
@@ -148,7 +147,7 @@ class StrictButton(object):
 
         Button("button content", css_class="extra")
     """
-    template = 'bootstrap/layout/button.html'
+    template = '%s/layout/button.html' % TEMPLATE_PACK
     field_classes = 'btn'
 
     def __init__(self, content, **kwargs):
@@ -224,7 +223,7 @@ class Tab(Container):
         Tab('tab_name', 'form_field_1', 'form_field_2', 'form_field_3')
     """
     css_class = 'tab-pane'
-    link_template = 'bootstrap/layout/tab-link.html'
+    link_template = '%s/layout/tab-link.html' % TEMPLATE_PACK
 
     def render_link(self):
         """
@@ -243,10 +242,10 @@ class TabHolder(ContainerHolder):
             Tab('form_field_3')
         )
     """
-    template = 'bootstrap/layout/tab.html'
+    template = '%s/layout/tab.html' % TEMPLATE_PACK
     css_class = 'nav nav-tabs'
 
-    def render(self, form, form_style, context, template_pack='bootstrap'):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         links, content = '', ''
         for tab in self.fields:
             tab.active = False
@@ -272,7 +271,7 @@ class AccordionGroup(Container):
 
         AccordionGroup("group name", "form_field_1", "form_field_2")
     """
-    template = "bootstrap/accordion-group.html"
+    template = "%s/accordion-group.html" % TEMPLATE_PACK
     data_parent = ""  # accordion parent div id.
 
 
@@ -285,9 +284,9 @@ class Accordion(ContainerHolder):
             AccordionGroup("another group name", "form_field")
         )
     """
-    template = "bootstrap/accordion.html"
+    template = "%s/accordion.html" % TEMPLATE_PACK
 
-    def render(self, form, form_style, context, template_pack='bootstrap'):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         content = ''
 
         # accordion group needs the parent div id to set `data-parent` (I don't

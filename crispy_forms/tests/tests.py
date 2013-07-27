@@ -24,7 +24,7 @@ from crispy_forms.layout import (
     Div, Field, MultiWidgetField
 )
 from crispy_forms.bootstrap import (
-    AppendedPrependedText, AppendedText, PrependedText, InlineCheckboxes,
+    PrependedAppendedText, AppendedText, PrependedText, InlineCheckboxes,
     FieldWithButtons, StrictButton, InlineRadios, Tab, TabHolder,
     AccordionGroup, Accordion
 )
@@ -154,15 +154,21 @@ class TestBasicFunctionalityTags(CrispyTestCase):
         test_form = TestForm()
         field_instance = test_form.fields['email']
         bound_field = BoundField(test_form, field_instance, 'email')
-        # prepend tests
-        self.assertIn("input-prepend", crispy_addon(bound_field, prepend="Work"))
-        self.assertNotIn("input-append", crispy_addon(bound_field, prepend="Work"))
-        # append tests
-        self.assertNotIn("input-prepend", crispy_addon(bound_field, append="Primary"))
-        self.assertIn("input-append", crispy_addon(bound_field, append="Secondary"))
-        # prepend and append tests
-        self.assertIn("input-append", crispy_addon(bound_field, prepend="Work", append="Primary"))
-        self.assertIn("input-prepend", crispy_addon(bound_field, prepend="Work", append="Secondary"))
+        
+        if self.current_template_pack == 'bootstrap':
+            # prepend tests
+            self.assertIn("input-prepend", crispy_addon(bound_field, prepend="Work"))
+            self.assertNotIn("input-append", crispy_addon(bound_field, prepend="Work"))
+            # append tests
+            self.assertNotIn("input-prepend", crispy_addon(bound_field, append="Primary"))
+            self.assertIn("input-append", crispy_addon(bound_field, append="Secondary"))
+            # prepend and append tests
+            self.assertIn("input-append", crispy_addon(bound_field, prepend="Work", append="Primary"))
+            self.assertIn("input-prepend", crispy_addon(bound_field, prepend="Work", append="Secondary"))
+        elif self.current_template_pack == 'bootsrap3':
+            self.assertIn("input-group-addon", crispy_addon(bound_field, prepend="Work", append="Primary"))
+            self.assertIn("input-group-addon", crispy_addon(bound_field, prepend="Work", append="Secondary"))
+        
         # errors
         with self.assertRaises(TypeError):
             crispy_addon()
@@ -292,7 +298,7 @@ class TestFormHelpers(CrispyTestCase):
         form.helper.layout = Layout(
             AppendedText('email', 'whatever'),
             PrependedText('first_name', 'blabla'),
-            AppendedPrependedText('last_name', 'foo', 'bar'),
+            PrependedAppendedText('last_name', 'foo', 'bar'),
             MultiField('legend', 'password1', 'password2')
         )
         form.is_valid()
@@ -348,13 +354,17 @@ class TestFormHelpers(CrispyTestCase):
         layout = Layout(
             AppendedText('first_name', 'wat'),
             PrependedText('email', '@'),
-            AppendedPrependedText('last_name', '@', 'wat'),
+            PrependedAppendedText('last_name', '@', 'wat'),
         )
         form.helper.layout = layout
         form.is_valid()
         html = render_crispy_form(form)
 
-        matches = re.findall('<span id="error_\d_\w*" class="help-inline"', html, re.MULTILINE)
+        help_class = 'help-inline'
+        if self.current_template_pack == 'bootstrap3':
+            help_class = 'help-block'
+
+        matches = re.findall('<span id="error_\d_\w*" class="%s"' % help_class, html, re.MULTILINE)
         self.assertEqual(len(matches), 3)
 
         form = TestForm({'email': 'invalidemail'})
@@ -727,7 +737,7 @@ class TestFormLayout(CrispyTestCase):
         form.helper.layout = Layout(
             AppendedText('password1', 'foo'),
             PrependedText('password2', 'bar'),
-            AppendedPrependedText('email', 'bar'),
+            PrependedAppendedText('email', 'bar'),
             InlineCheckboxes('first_name'),
             InlineRadios('last_name'),
         )
@@ -750,7 +760,12 @@ class TestFormLayout(CrispyTestCase):
             )
         )
         html = render_crispy_form(form)
-        self.assertEqual(html.count('class="control-group extra"'), 1)
+
+        form_group_class = 'control-group'
+        if self.current_template_pack == 'bootstrap3':
+            form_group_class = 'form-group'
+
+        self.assertEqual(html.count('class="%s extra"' % form_group_class), 1)
         self.assertEqual(html.count('autocomplete="off"'), 1)
         self.assertEqual(html.count('class="input-append"'), 1)
         self.assertEqual(html.count('class="span4'), 1)
@@ -1104,7 +1119,8 @@ class TestFormLayout(CrispyTestCase):
         c = Context({'form': test_form})
 
         html = template.render(c)
-        self.assertEqual(html.count('class="dateinput"'), 1)
+
+        self.assertEqual(html.count('class="dateinput'), 1)
         self.assertEqual(html.count('rel="test_dateinput"'), 1)
         self.assertEqual(html.count('rel="test_timeinput"'), 1)
         self.assertEqual(html.count('style="width: 30px;"'), 1)
@@ -1203,13 +1219,15 @@ class TestLayoutObjects(CrispyTestCase):
         # Check form parameters
         self.assertEqual(html.count('data-test="12"'), 1)
         self.assertEqual(html.count('name="email"'), 1)
-        self.assertEqual(html.count('class="dateinput"'), 1)
-        self.assertEqual(html.count('class="timeinput"'), 1)
+        self.assertEqual(html.count('class="dateinput'), 1)
+        self.assertEqual(html.count('class="timeinput'), 1)
 
     def test_field_wrapper_class(self):
         html = Field('email', wrapper_class="testing").render(TestForm(), "", Context())
         if self.current_template_pack == 'bootstrap':
             self.assertEqual(html.count('class="control-group testing"'), 1)
+        elif self.current_template_pack == 'bootstrap3':
+            self.assertEqual(html.count('class="form-group testing"'), 1)
 
     def test_custom_django_widget(self):
         class CustomRadioSelect(forms.RadioSelect):
@@ -1230,21 +1248,28 @@ class TestLayoutObjects(CrispyTestCase):
             html = Field('checkboxes').render(form, "", Context())
             self.assertTrue('class="checkbox"' in html)
 
-    def test_appended_prepended_text(self):
+    def test_prepended_appended_text(self):
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
-            AppendedPrependedText('email', '@', 'gmail.com'),
+            PrependedAppendedText('email', '@', 'gmail.com'),
             AppendedText('password1', '#'),
             PrependedText('password2', '$'),
         )
         html = render_crispy_form(test_form)
 
         # Check form parameters
-        self.assertEqual(html.count('<span class="add-on">@</span>'), 1)
-        self.assertEqual(html.count('<span class="add-on">gmail.com</span>'), 1)
-        self.assertEqual(html.count('<span class="add-on">#</span>'), 1)
-        self.assertEqual(html.count('<span class="add-on">$</span>'), 1)
+        if self.current_template_pack == 'bootstrap':
+            self.assertEqual(html.count('<span class="add-on">@</span>'), 1)
+            self.assertEqual(html.count('<span class="add-on">gmail.com</span>'), 1)
+            self.assertEqual(html.count('<span class="add-on">#</span>'), 1)
+            self.assertEqual(html.count('<span class="add-on">$</span>'), 1)
+
+        if self.current_template_pack == 'bootstrap3':
+            self.assertEqual(html.count('<span class="input-group-addon">@</span>'), 1)
+            self.assertEqual(html.count('<span class="input-group-addon">gmail.com</span>'), 1)
+            self.assertEqual(html.count('<span class="input-group-addon">#</span>'), 1)
+            self.assertEqual(html.count('<span class="input-group-addon">$</span>'), 1)
 
     def test_inline_radios(self):
         test_form = CheckboxesTestForm()

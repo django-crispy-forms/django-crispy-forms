@@ -8,6 +8,7 @@ from django import template
 from django.template import loader, Context
 from django.conf import settings
 
+from crispy_forms.utils import TEMPLATE_PACK
 
 register = template.Library()
 
@@ -99,6 +100,9 @@ class CrispyFieldNode(template.Node):
             else:
                 css_class = class_name
 
+            if TEMPLATE_PACK == 'bootstrap3':
+                css_class += ' form-control'
+
             widget.attrs['class'] = css_class
 
             # HTML5 required attribute
@@ -126,7 +130,6 @@ def crispy_field(parser, token):
     field = token.pop(1)
     attrs = {}
 
-    tag_name = token.pop(0)
     for attribute_name, value in pairwise(token):
         attrs[attribute_name] = value
 
@@ -151,17 +154,11 @@ def crispy_addon(field, append="", prepend=""):
             'form_show_errors': True
         })
 
-        if (prepend and append):
-            template = loader.get_template('bootstrap/layout/appended_prepended_text.html')
-            context['crispy_prepended_text'] = prepend
-            context['crispy_appended_text'] = append
-        elif prepend:
-            template = loader.get_template('bootstrap/layout/prepended_text.html')
-            context['crispy_prepended_text'] = prepend
-        elif append:
-            template = loader.get_template('bootstrap/layout/appended_text.html')
-            context['crispy_appended_text'] = append
-        else:
+        template = loader.get_template('%s/layout/prepended_appended_text.html' % TEMPLATE_PACK)
+        context['crispy_prepended_text'] = prepend
+        context['crispy_appended_text'] = append
+        
+        if not prepend and not append:
             raise TypeError("Expected a prepend and/or append argument")
 
     return template.render(context)

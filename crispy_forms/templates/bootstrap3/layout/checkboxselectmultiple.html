@@ -1,0 +1,11 @@
+<div class="controls"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
+    {% include 'bootstrap3/layout/field_errors_block.html' %}
+
+    {% for choice in field.field.choices %}
+        <label class="checkbox{% if inline_class %} {{ inline_class }}{% endif %}">
+            <input type="checkbox"{% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0 }}">{{ choice.1 }}
+        </label>
+    {% endfor %}
+
+    {% include 'bootstrap3/layout/help_text.html' %}
+</div>
