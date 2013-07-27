@@ -627,6 +627,34 @@ class TestFormHelpers(CrispyTestCase):
         html = render_crispy_form(form)
         self.assertEqual(html.count("<h1>Special custom field</h1>"), 2)
 
+    def test_form_show_labels(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            'password1',
+            FieldWithButtons(
+                'password2',
+                StrictButton("Confirm")
+            ),
+            PrependedText(
+                'first_name',
+                'Mr.'
+            ),
+            AppendedText(
+                'last_name',
+                '@'
+            ),
+            AppendedPrependedText(
+                'datetime_field',
+                'on',
+                'secs'
+            )
+        )
+        form.helper.form_show_labels = False
+
+        html = render_crispy_form(form)
+        self.assertEqual(html.count("<label"), 0)
+
 
 class TestFormLayout(CrispyTestCase):
     urls = 'crispy_forms.tests.urls'

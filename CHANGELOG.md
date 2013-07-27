@@ -1,5 +1,9 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.3.3
+
+ * `form_show_labels` wasn't working correctly with some layout objects, see #193.
+
 ## 1.3.2 (2013/6/23)
 
  * Labels were not being rendered with `|crispy` filter, see #202.
