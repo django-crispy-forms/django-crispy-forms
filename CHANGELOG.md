@@ -2,6 +2,7 @@
 
 ## 1.3.3
 
+ * If Django widget attrs where set for `RadioSelect` or `CheckboxSelectMultiple` they were not being rendered by crispy-forms, see #206.
  * `form_show_labels` wasn't working correctly with some layout objects, see #193.
 
 ## 1.3.2 (2013/6/23)

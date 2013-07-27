@@ -1385,6 +1385,15 @@ class TestLayoutObjects(CrispyTestCase):
         else:
             self.assertEqual(html.count('\n'), 24)
 
+    def test_radio_attrs(self):
+        if self.current_template_pack == 'bootstrap':
+            form = CheckboxesTestForm()
+            form.fields['inline_radios'].widget.attrs = {'class': "first"}
+            form.fields['checkboxes'].widget.attrs = {'class': "second"}
+            html = render_crispy_form(form)
+            self.assertTrue('class="first"' in html)
+            self.assertTrue('class="second"' in html)
+
 
 class TestDynamicLayouts(CrispyTestCase):
     def setUp(self):

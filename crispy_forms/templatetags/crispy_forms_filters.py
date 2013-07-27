@@ -5,9 +5,11 @@ from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.functional import memoize
+from django.utils.safestring import mark_safe
 from django import template
 
 from crispy_forms.exceptions import CrispyError
+from crispy_forms.utils import flatatt
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 DEBUG = getattr(settings, 'DEBUG', False)
@@ -84,3 +86,8 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
     template = get_template('%s/field.html' % template_pack)
     c = Context({'field': field, 'form_show_errors': True})
     return template.render(c)
+
+
+@register.filter(name='flatatt')
+def flatatt_filter(attrs):
+    return mark_safe(flatatt(attrs))
