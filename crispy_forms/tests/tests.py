@@ -34,7 +34,7 @@ from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
 from crispy_forms.tests.forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
-    FormWithMeta, TestForm4, CrispyTestModel
+    FormWithMeta, TestForm4, CrispyTestModel, TestForm5
 )
 from crispy_forms.tests.utils import override_settings
 
@@ -1158,6 +1158,25 @@ class TestFormLayout(CrispyTestCase):
 
         html = template.render(Context({'form': form}))
         self.assertEqual(html.count('i18n legend'), 1)
+
+    @override_settings(USE_L10N=True, USE_THOUSAND_SEPARATOR=True)
+    def test_l10n(self):
+        form = TestForm5(data={'pk': 1000})
+        form_helper = FormHelper()
+        form.helper = form_helper
+        
+        request_factory = RequestFactory()
+        request = request_factory.get('/')
+        context = RequestContext(request, {'form': form})
+
+        response = render_to_response('crispy_render_template.html', context)
+        html = response.content
+
+        # Make sure values are unlocalized
+        self.assertTrue('value="1,000"' not in html)
+
+        # Make sure label values ARE localized
+        self.assertTrue(html.count('1,000'), 2)
 
     def test_default_layout(self):
         test_form = TestForm2()
