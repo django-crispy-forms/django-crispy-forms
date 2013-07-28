@@ -1162,21 +1162,13 @@ class TestFormLayout(CrispyTestCase):
     @override_settings(USE_L10N=True, USE_THOUSAND_SEPARATOR=True)
     def test_l10n(self):
         form = TestForm5(data={'pk': 1000})
-        form_helper = FormHelper()
-        form.helper = form_helper
-        
-        request_factory = RequestFactory()
-        request = request_factory.get('/')
-        context = RequestContext(request, {'form': form})
-
-        response = render_to_response('crispy_render_template.html', context)
-        html = response.content
+        html = render_crispy_form(form)
 
         # Make sure values are unlocalized
         self.assertTrue('value="1,000"' not in html)
 
-        # Make sure label values ARE localized
-        self.assertTrue(html.count('1,000'), 2)
+        # Make sure label values are NOT localized
+        self.assertTrue(html.count('1000'), 2)
 
     def test_default_layout(self):
         test_form = TestForm2()

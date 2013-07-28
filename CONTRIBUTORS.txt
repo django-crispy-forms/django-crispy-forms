@@ -88,3 +88,4 @@ Contributors
 * <tepez>
 * Svyatoslav Bulbakha <ssbb>
 * Andres Vargas <zodman>
+* Gabe Jackson <gabejackson>
