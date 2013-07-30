@@ -1,5 +1,7 @@
 __all__ = ('override_settings',)
 
+from crispy_forms.compatibility import string_types
+from django.utils.unittest import skipUnless
 
 try:
     from django.test.utils import override_settings
@@ -66,3 +68,25 @@ except ImportError:
 
         def disable(self):
             settings._wrapped = self.wrapped
+
+
+class OnlyIfTemplatePack(object):
+    """
+    This decorated is used to skip tests that are specific for just a specific
+    template pack(s)
+    """
+    def __init__(self,template_pack_or_tuple):
+        if isinstance(template_pack_or_tuple, string_types):
+            self.template_packs = [template_pack_or_tuple,]
+        else:
+            self.template_packs = template_pack_or_tuple
+    def __call__(self, func):
+        decorator_self = self
+        def wrapped( *args, **kwargs):
+            from crispy_forms.layout import TEMPLATE_PACK
+            return skipUnless(
+                TEMPLATE_PACK in decorator_self.template_packs,
+                'template pack is not in ' + repr(decorator_self.template_packs))(func)(*args, **kwargs)
+        return wrapped
+
+
