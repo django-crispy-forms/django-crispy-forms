@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 from copy import copy
 
 from django.conf import settings
@@ -111,6 +111,11 @@ class BasicNode(template.Node):
             # If the user names the helper within the form `helper` (standard), we use it
             # This allows us to have simplified tag syntax: {% crispy form %}
             helper = FormHelper() if not hasattr(actual_form, 'helper') else actual_form.helper
+
+        try:
+            self.template_pack = helper.template_pack
+        except AttributeError:
+            pass
 
         self.actual_helper = helper
 
@@ -258,7 +263,7 @@ def do_uni_form(parser, token):
         # {% crispy form 'bootstrap' %}
         # ('"'bootstrap'"', '"'uni_form'"','"'"bootstrap'"'", '"'"uni_form"'")
         if (
-            helper in ['"%s"' % x for x in ALLOWED_TEMPLATE_PACKS] + \
+            helper in ['"%s"' % x for x in ALLOWED_TEMPLATE_PACKS] +
             ["'%s'" % x for x in ALLOWED_TEMPLATE_PACKS]
         ):
             template_pack = helper[1:-1]

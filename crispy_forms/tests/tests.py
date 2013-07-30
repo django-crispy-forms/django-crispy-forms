@@ -36,7 +36,7 @@ from crispy_forms.tests.forms import (
     TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
     FormWithMeta, TestForm4, CrispyTestModel, TestForm5
 )
-from crispy_forms.tests.utils import override_settings
+from crispy_forms.tests.utils import override_settings, OnlyIfTemplatePack
 
 
 class CrispyTestCase(TestCase):
@@ -280,6 +280,7 @@ class TestFormHelpers(CrispyTestCase):
         self.assertFalse(text_type(_('This field is required.')) in html)
         self.assertFalse('error' in html)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_form_show_errors(self):
         form = TestForm({
             'email': 'invalidemail',
@@ -293,7 +294,8 @@ class TestFormHelpers(CrispyTestCase):
             AppendedText('email', 'whatever'),
             PrependedText('first_name', 'blabla'),
             AppendedPrependedText('last_name', 'foo', 'bar'),
-            MultiField('legend', 'password1', 'password2')
+            AppendedText('password1', 'xxx'),
+            PrependedText('password2', 'yyy'),
         )
         form.is_valid()
 
@@ -305,6 +307,7 @@ class TestFormHelpers(CrispyTestCase):
         html = render_crispy_form(form)
         self.assertEqual(html.count('error'), 0)
 
+    @OnlyIfTemplatePack('uni_form')
     def test_multifield_errors(self):
         form = TestForm({
             'email': 'invalidemail',
@@ -342,6 +345,7 @@ class TestFormHelpers(CrispyTestCase):
         form.helper.html5_required = False
         html = render_crispy_form(form)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_error_text_inline(self):
         form = TestForm({'email': 'invalidemail'})
         form.helper = FormHelper()
@@ -746,6 +750,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count('name="comment"'), 2)
         self.assertEqual(html.count('name="is_company"'), 1)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_hidden_fields(self):
         form = TestForm()
         # All fields hidden
@@ -765,6 +770,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count('type="hidden"'), 5)
         self.assertEqual(html.count('<label'), 0)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_field_with_buttons(self):
         form = TestForm()
         form.helper = FormHelper()
@@ -853,6 +859,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue('Hello!' in html)
         self.assertTrue('testLink' in html)
 
+    @OnlyIfTemplatePack('uni_form')
     def test_second_layout_multifield_column_buttonholder_submit_div(self):
         form_helper = FormHelper()
         form_helper.add_layout(
@@ -911,6 +918,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue('class="customdivs"' in html)
         self.assertTrue('test-markup="123"' in html)
 
+    @OnlyIfTemplatePack('uni_form')
     def test_layout_within_layout(self):
         form_helper = FormHelper()
         form_helper.add_layout(
@@ -1189,6 +1197,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue('email' in html)
         self.assertFalse('password' in html)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_multiplecheckboxes(self):
         test_form = CheckboxesTestForm()
         html = render_crispy_form(test_form)
@@ -1202,6 +1211,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count('checkbox inline"'), 3)
         self.assertEqual(html.count('inline"'), 3)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_keepcontext_context_manager(self):
         # Test case for issue #180
         # Apparently it only manifest when using render_to_response this exact way
@@ -1270,6 +1280,7 @@ class TestLayoutObjects(CrispyTestCase):
             html = Field('checkboxes').render(form, "", Context())
             self.assertTrue('class="checkbox"' in html)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_appended_prepended_text(self):
         test_form = TestForm()
         test_form.helper = FormHelper()
@@ -1286,6 +1297,7 @@ class TestLayoutObjects(CrispyTestCase):
         self.assertEqual(html.count('<span class="add-on">#</span>'), 1)
         self.assertEqual(html.count('<span class="add-on">$</span>'), 1)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_inline_radios(self):
         test_form = CheckboxesTestForm()
         test_form.helper = FormHelper()
@@ -1294,6 +1306,7 @@ class TestLayoutObjects(CrispyTestCase):
 
         self.assertEqual(html.count('radio inline"'), 2)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_accordion_and_accordiongroup(self):
         test_form = TestForm()
         test_form.helper = FormHelper()
@@ -1320,6 +1333,7 @@ class TestLayoutObjects(CrispyTestCase):
         self.assertEqual(html.count('name="password1"'), 1)
         self.assertEqual(html.count('name="password2"'), 1)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_tab_and_tabholder(self):
         test_form = TestForm()
         test_form.helper = FormHelper()
@@ -1347,6 +1361,7 @@ class TestLayoutObjects(CrispyTestCase):
         self.assertEqual(html.count('name="password1"'), 1)
         self.assertEqual(html.count('name="password2"'), 1)
 
+    @OnlyIfTemplatePack('bootstrap')
     def test_tab_helper_reuse(self):
         # this is a proper form, according to the docs.
         # note that the helper is a class property here,
