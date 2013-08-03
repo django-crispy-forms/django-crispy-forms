@@ -331,3 +331,18 @@ class Alert(Div):
             self.template,
             Context({'alert': self, 'content': self.content, 'dismiss': self.dismiss
         }))
+
+
+class UneditableField(Field):
+    """
+    Layout object for rendering fields as uneditable in bootstrap
+
+    Example::
+
+        UneditableField('field_name', css_class="input-xlarge")
+    """
+    template = "%s/layout/uneditable_input.html" % TEMPLATE_PACK
+
+    def __init__(self, field, *args, **kwargs):
+        self.attrs = {'class': 'uneditable-input'}
+        super(UneditableField, self).__init__(field, *args, **kwargs)

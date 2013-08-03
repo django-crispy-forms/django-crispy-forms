@@ -441,18 +441,3 @@ class MultiWidgetField(Field):
         self.fields = list(args)
         self.attrs = kwargs.pop('attrs', {})
         self.template = kwargs.pop('template', self.template)
-
-
-class UneditableField(Field):
-    """
-    Layout object for rendering fields as uneditable in bootstrap
-
-    Example::
-
-        UneditableField('field_name', css_class="input-xlarge")
-    """
-    template = "bootstrap/layout/uneditable_input.html"
-
-    def __init__(self, field, *args, **kwargs):
-        self.attrs = {'class': 'uneditable-input'}
-        super(UneditableField, self).__init__(field, *args, **kwargs)
