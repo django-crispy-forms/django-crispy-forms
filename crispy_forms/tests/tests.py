@@ -154,7 +154,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
         test_form = TestForm()
         field_instance = test_form.fields['email']
         bound_field = BoundField(test_form, field_instance, 'email')
-        
+
         if self.current_template_pack == 'bootstrap':
             # prepend tests
             self.assertIn("input-prepend", crispy_addon(bound_field, prepend="Work"))
@@ -168,7 +168,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
         elif self.current_template_pack == 'bootsrap3':
             self.assertIn("input-group-addon", crispy_addon(bound_field, prepend="Work", append="Primary"))
             self.assertIn("input-group-addon", crispy_addon(bound_field, prepend="Work", append="Secondary"))
-        
+
         # errors
         with self.assertRaises(TypeError):
             crispy_addon()
@@ -654,7 +654,7 @@ class TestFormHelpers(CrispyTestCase):
                 'last_name',
                 '@'
             ),
-            AppendedPrependedText(
+            PrependedAppendedText(
                 'datetime_field',
                 'on',
                 'secs'
@@ -1352,7 +1352,7 @@ class TestLayoutObjects(CrispyTestCase):
             Alert(content='Testing...')
         )
         html = render_crispy_form(test_form)
-        
+
         self.assertEqual(html.count('<div class="alert"'), 1)
         self.assertEqual(html.count('<button type="button" class="close"'), 1)
         self.assertEqual(html.count('Testing...'), 1)
@@ -1364,7 +1364,7 @@ class TestLayoutObjects(CrispyTestCase):
             Alert(content='Testing...', block=True)
         )
         html = render_crispy_form(test_form)
-        
+
         self.assertEqual(html.count('<div class="alert alert-block"'), 1)
         self.assertEqual(html.count('Testing...'), 1)
 
