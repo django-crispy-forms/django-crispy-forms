@@ -8,9 +8,9 @@
     {% endif %}
 
     <div class="controls">
-        <div class="input-append">
+        <div class="input-group">
             {% crispy_field field %}
-            {{ buttons|safe }}
+            <span class="input-group-btn{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ buttons|safe }}</span>
         </div>
         {% include 'bootstrap3/layout/help_text_and_errors.html' %}
     </div>
