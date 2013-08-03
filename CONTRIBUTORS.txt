@@ -52,7 +52,7 @@ Contributors
 * bitrut <bitrut>
 * ximi
 * Christopher Petrilli <petrilli>
-* James <jamesmfriedman>
+* James Friedman <jamesmfriedman>
 * Jeroen Vloothuis <jeroenvloothuis>
 * Daniel Izquierdo <izquierdo>
 * gaftech
