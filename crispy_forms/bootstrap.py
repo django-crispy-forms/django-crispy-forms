@@ -43,21 +43,21 @@ class AppendedPrependedText(PrependedAppendedText):
         super(AppendedPrependedText, self).__init__(*args, **kwargs)
 
 
-class AppendedText(PrependedAppendedText):    
+class AppendedText(PrependedAppendedText):
     def __init__(self, field, text, *args, **kwargs):
         kwargs.pop('appended_text', None)
         kwargs.pop('prepended_text', None)
         self.text = text
-        super(AppendedText, self).__init__(field, appended_text = text, prepended_text = None, **kwargs)
-        
+        super(AppendedText, self).__init__(field, appended_text=text, **kwargs)
+
 
 class PrependedText(PrependedAppendedText):
     def __init__(self, field, text, *args, **kwargs):
         kwargs.pop('appended_text', None)
         kwargs.pop('prepended_text', None)
         self.text = text
-        super(PrependedText, self).__init__(field, appended_text = None, prepended_text = text, **kwargs)
-    
+        super(PrependedText, self).__init__(field, prepended_text=text, **kwargs)
+
 
 class FormActions(LayoutObject):
     """
@@ -308,6 +308,7 @@ class Accordion(ContainerHolder):
             Context({'accordion': self, 'content': content
         }))
 
+
 class Alert(Div):
     """
     `Alert` generates markup in the form of an alert dialog
@@ -316,7 +317,7 @@ class Alert(Div):
     """
     template = "bootstrap/layout/alert.html"
     css_class = "alert"
-    
+
     def __init__(self, content, dismiss=True, block=False, **kwargs):
         fields = []
         if block:
