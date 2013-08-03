@@ -12,7 +12,7 @@
         {% endif %}
 
         <div class="controls">
-            <div class="input-prepend input-append">
+            <div class="{% if crispy_prepended_text %}input-prepend{% endif %} {% if crispy_appended_text %}input-append{% endif %}">
                 {% if crispy_prepended_text %}<span class="add-on{% if active %} active{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
                 {% crispy_field field %}
                 {% if crispy_appended_text %}<span class="add-on{% if active %} active{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}

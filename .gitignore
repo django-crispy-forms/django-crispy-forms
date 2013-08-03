@@ -24,3 +24,6 @@ tempfile
 # coverage 
 .coverage
 _build
+
+# OSX
+*.DS_Store
