@@ -1,4 +1,3 @@
-{% load people_filters %}
 <div {% if buttonholder.css_id %}id="{{ buttonholder.css_id }}"{% endif %} 
     class="navigation buttonHolder{% if buttonholder.css_class %} {{ buttonholder.css_class }}{% endif %}">
     {% if wizard.steps.prev %}
