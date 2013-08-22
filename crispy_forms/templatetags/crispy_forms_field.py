@@ -101,7 +101,8 @@ class CrispyFieldNode(template.Node):
                 css_class = class_name
 
             if TEMPLATE_PACK == 'bootstrap3':
-                css_class += ' form-control'
+                if field.field.widget.__class__.__name__ is not 'CheckboxInput':
+                    css_class += ' form-control'
 
             widget.attrs['class'] = css_class
 
