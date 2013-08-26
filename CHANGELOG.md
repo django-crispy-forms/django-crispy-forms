@@ -4,6 +4,7 @@
 
 Special thanks in this release to **James Friedman <a href="https://github.com/jamesmfriedman">@jamesmfriedman</a>**, for his amazing support in PR #213, adding Bootstrap 3 support.
 
+ * Update accordion markup for bootstrap3 compatibilty, see #229.
  * Moved `UneditableField` to bootstrap module, place where it should live, no backwards compatible import left behind.
  * Added `bootstrap3` template pack thanks to James Friedman, see #213 and #209.
  * `RadioSelect` and `CheckboxSelectMultiple` widget values and texts were being localized, when they shouldn't bee, see #214.
