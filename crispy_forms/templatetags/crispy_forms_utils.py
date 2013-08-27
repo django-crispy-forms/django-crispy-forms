@@ -16,7 +16,7 @@ register = template.Library()
 def selectively_remove_spaces_between_tags(value):
     html = re.sub(r'>\s+<', '><', force_text(value))
     html = re.sub(r'</button><', '</button> <', force_text(html))
-    return re.sub(r'(<input[^>]+>)<', r'\1 <', force_text(html))
+    return re.sub(r'/><', r'/> <', force_text(html))
 selectively_remove_spaces_between_tags = allow_lazy(selectively_remove_spaces_between_tags, text_type)
 
 
