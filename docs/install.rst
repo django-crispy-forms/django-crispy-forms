@@ -11,7 +11,8 @@ Install latest stable version into your python path using pip or easy_install::
 
 If you want to install development version (unstable), you can do so doing::
 
-    pip install django-crispy-forms==dev
+    pip install git+git://github.com/maraujop/django-crispy-forms.git\
+    @dev#egg=django-crispy-forms
 
 Add ``crispy_forms`` to your ``INSTALLED_APPS`` in settings.py::
 
