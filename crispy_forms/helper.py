@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+import re
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 
@@ -198,6 +201,8 @@ class FormHelper(DynamicLayoutHandler):
     template = None
     field_template = None
     disable_csrf = False
+    label_class = ''
+    label_size = ''
 
     def __init__(self, form=None):
         self.attrs = {}
@@ -337,6 +342,14 @@ class FormHelper(DynamicLayoutHandler):
         items['html5_required'] = self.html5_required
         items['form_show_labels'] = self.form_show_labels
         items['disable_csrf'] = self.disable_csrf
+        items['label_class'] = self.label_class
+        items['field_class'] = self.field_class
+        label_size_match = re.match('col-lg-(\d+)', self.label_class)
+        if label_size_match:
+            try:
+                items['label_size'] = int(label_size_match.groups()[0])
+            except:
+                pass
 
         items['attrs'] = {}
         if self.attrs:

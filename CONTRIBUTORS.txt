@@ -91,3 +91,4 @@ Contributors
 * Gabe Jackson <gabejackson>
 * Camilo Nova <camilonova>
 * <mrkre>
+* Daniel Mascarenhas <danielmt>

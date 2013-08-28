@@ -24,7 +24,8 @@
         {% if not field|is_checkboxselectmultiple and not field|is_radioselect %}
             {% if field|is_checkbox and form_show_labels %}
                 {% if label_class %}
-                    <div class="controls col-lg-offset-{{ label_size }} {{ field_class }}">
+                    <label class="{{ label_class }}"></label>
+                    <div class="controls {{ field_class }}">
                 {% endif %}
                 <label for="{{ field.id_for_label }}" class="{% if field.field.required %} requiredField{% endif %}">
                     {% crispy_field field %}
