@@ -219,10 +219,10 @@ For example a ``CharField`` generates an ``<input class="textinput" ...``. But i
 For example this setting would generate ``<input class"textinput inputtext" ...``. The key of the dictionary ``textinput`` is the Django's default class, the value is what you want it to be substituted with, in this case we are keeping ``textinput``.
 
 
-Render a form within a view
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Render a form within Python code
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sometimes, it might be useful to render a form using crispy-forms within a view, for that there is a nice helper ``render_crispy_form``. The prototype of the method is ``render_crispy_form(form, helper=None, context=None)``. You can use it like this.
+Sometimes, it might be useful to render a form using crispy-forms within Python code, like a Django view, for that there is a nice helper ``render_crispy_form``. The prototype of the method is ``render_crispy_form(form, helper=None, context=None)``. You can use it like this.
 
 
 AJAX validation recipe
