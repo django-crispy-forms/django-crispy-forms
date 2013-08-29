@@ -43,11 +43,11 @@ Helper attributes you can set
 
         url(r'^show/profile/$', 'show_my_profile_view', name='show_my_profile')
 
-    You can also point it to a URL ‘/whatever/blabla/’. 
+    You can also point it to a URL ‘/whatever/blabla/’.
 
     Sometimes you may want to add arguments to the URL, for that you will have to do in your view::
 
-        from django.core.urlresolvers import reverse 
+        from django.core.urlresolvers import reverse
         form.helper.form_action = reverse('url_name', args=[event.id])
         form.helper.form_action = reverse('url_name', kwargs={'book_id': book.id})
 
@@ -108,6 +108,17 @@ There are currently some helper attributes that only have functionality for a sp
 **form_show_labels = True**
     Default set to ``True``. It decides wether to render or not form's fields labels.
 
+
+Bootstrap 3 Helper attributes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+All previous, ``bootstrap`` (version 2) attributes are also settable in bootstrap 3 template pack ``FormHelpers``. Here are listed the ones, that are only availble in ``bootstrap3`` template pack:
+
+**label_class = ''**
+    Default set to ``''``. This class will be applied to every label, this is very useful to do horizontal forms. Set it for example like this ``label_class = col-lg-2``.
+
+**field_class = ''**
+    Default set to ``''``. This class will be applied to every div ``controls`` wrapping a field. This is useful for doing horizontal forms. Set it for example like this ``field_class = col-lg-8``.
 
 Custom Helper attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~
