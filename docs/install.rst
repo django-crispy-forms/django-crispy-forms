@@ -2,6 +2,8 @@
 Installation
 ============
 
+.. `install`:
+
 Installing django-crispy-forms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
