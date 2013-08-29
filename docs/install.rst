@@ -11,8 +11,7 @@ Install latest stable version into your python path using pip or easy_install::
 
 If you want to install development version (unstable), you can do so doing::
 
-    pip install git+git://github.com/maraujop/django-crispy-forms.git\
-    @dev#egg=django-crispy-forms
+    pip install git+git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
 
 Add ``crispy_forms`` to your ``INSTALLED_APPS`` in settings.py::
 
@@ -20,36 +19,46 @@ Add ``crispy_forms`` to your ``INSTALLED_APPS`` in settings.py::
         ...
         'crispy_forms',
     )
-    
+
+In production environments, always activate Django template cache loader. This is available since Django 1.2 and what it does is basically load templates once, then cache the result for every subsequent render. This leads to a significant performance improvement. See how to set it up using fabulous `Django docs page`_.
+
+.. _`Django docs page`: https://docs.djangoproject.com/en/1.5/ref/templates/api/#django.template.loaders.cached.Loader
+
 Template packs
 ~~~~~~~~~~~~~~
 
-Since version 1.1.0 of django-crispy-forms has built-in support for two different CSS frameworks, known as template packs within django-crispy-forms:
+Since version 1.1.0 of django-crispy-forms has built-in support for different CSS frameworks, known as template packs within django-crispy-forms:
 
-* `Bootstrap`_ The default template pack. The popular simple and flexible HTML, CSS, and Javascript for user interfaces from Twitter.
-* `Uni-form`_ Nice looking, well structured, highly customizable, accessible and usable forms.
+* ``bootstrap`` `Bootstrap`_ is crispy-forms's default template pack, version 2 of the popular simple and flexible HTML, CSS, and Javascript for user interfaces from Twitter.
+* ``bootstrap3`` Twitter Bootstrap version 3.
+* ``uni-form`` `Uni-form`_ is a nice looking, well structured, highly customizable, accessible and usable forms.
+* ``foundation`` `Foundation`_ In creators words "The most advanced responsive front-end framework in the world". This template pack is externally available through `crispy-forms-foundation`_
 
-If your form CSS framework is not supported, you can create a template pack for it and submit a pull request in github. You can easily switch between both using ``CRISPY_TEMPLATE_PACK`` setting variable, setting it to ``bootstrap`` or ``uni_form``.
+If your form CSS framework is not supported and it's open source, you can create a template pack for it and submit a pull request in Github or create a ``crispy-forms-templatePackName`` project and let me know, so I can link it.
 
-.. _`Uni-form`: http://sprawsm.com/uni-form
+You can set your default template pack for your project using ``CRISPY_TEMPLATE_PACK`` Django settings variable, setting it to one of the previous keywords::
+
+    CRISPY_TEMPLATE_PACK = 'uni_form'
+
 .. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
+.. _`Foundation`: http://foundation.zurb.com/
+.. _`crispy-forms-foundation`: https://github.com/sveetch/crispy-forms-foundation
 
-Setting media files 
+Setting media files
 ~~~~~~~~~~~~~~~~~~~
 
-You will need to include the proper media files, depending on what CSS framework you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
-
+crispy-forms no longer includes static files. You will need to include yourself the proper corresponding media files, depending on what CSS framework (Template pack) you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
 
 Moving from django-uni-form to django-crispy-forms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We are aware that a name change implies some hassle updating imports and templates. This is what you should replace when upgrading:
+django-crispy-forms was started as a friendly fork of django-uni-form. We are aware that a name change implies some hassle updating imports and templates, here is some help mitigating it. This is what you should replace when upgrading:
 
 1. Your ``ÌNSTALLED_APPS`` should point to ``crispy_forms`` instead of ``uni_form``
 
 2. All imports have to be done from crispy forms::
 
-    from uni_form.helper import FormHelper 
+    from uni_form.helper import FormHelper
     from crispy_forms.helper import FormHelper
 
 In Linux You can use `rpl`_ to easily find and update the proper lines. Run in the root of your project the following command. It is strongly recommended that you have your project in a VCS or a backup, so you can rollback if something goes wrong::
@@ -64,7 +73,7 @@ In Linux You can use `rpl`_ to easily find and update the proper lines. Run in t
     {% load crispy_forms_tags %}
 
 Using rpl::
-    
+
     rpl -R "{% load uni_form_tags %}" "{% load crispy_forms_tags %}" .
 
 4. Until version 1.2.0 former tags and filters names worked without changing them, current versions will force updating your filters and tags::
