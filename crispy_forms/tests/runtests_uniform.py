@@ -14,7 +14,7 @@ from django.conf import settings
 def runtests():
     return DjangoTestSuiteRunner(failfast=False).run_tests([
         'crispy_forms.TestBasicFunctionalityTags',
-        'crispy_forms.TestFormHelpers',
+        'crispy_forms.TestFormHelper',
         'crispy_forms.TestFormLayout',
         'crispy_forms.TestLayoutObjects',
         'crispy_forms.TestDynamicLayouts'

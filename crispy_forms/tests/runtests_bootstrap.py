@@ -14,9 +14,12 @@ from django.test.simple import DjangoTestSuiteRunner
 def runtests():
     return DjangoTestSuiteRunner(failfast=False).run_tests([
         'crispy_forms.TestBasicFunctionalityTags',
-        'crispy_forms.TestFormHelpers',
+        'crispy_forms.TestFormHelper',
+        'crispy_forms.TestBootstrapFormHelper',
         'crispy_forms.TestFormLayout',
+        'crispy_forms.TestBootstrapFormLayout',
         'crispy_forms.TestLayoutObjects',
+        'crispy_forms.TestBootstrapLayoutObjects',
         'crispy_forms.TestDynamicLayouts'
     ], verbosity=1, interactive=True)
 
