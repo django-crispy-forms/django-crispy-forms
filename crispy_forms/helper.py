@@ -203,6 +203,7 @@ class FormHelper(DynamicLayoutHandler):
     disable_csrf = False
     label_class = ''
     label_size = ''
+    field_class = ''
 
     def __init__(self, form=None):
         self.attrs = {}
