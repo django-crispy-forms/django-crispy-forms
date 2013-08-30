@@ -3,20 +3,21 @@ import re
 
 from django import forms
 from django.template import loader, Context
+from django.utils.translation import ugettext as _
+from django.utils.translation import activate, deactivate
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (
-    Layout, HTML, Field, MultiWidgetField
-)
+from .base import CrispyTestCase
+from .forms import CheckboxesTestForm, TestForm
 from crispy_forms.bootstrap import (
     PrependedAppendedText, AppendedText, PrependedText, InlineRadios,
     Tab, TabHolder, AccordionGroup, Accordion, Alert, InlineCheckboxes,
     FieldWithButtons, StrictButton
 )
-from .forms import CheckboxesTestForm, TestForm
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import (
+    Layout, HTML, Field, MultiWidgetField
+)
 from crispy_forms.utils import render_crispy_form
-
-from .base import CrispyTestCase
 
 
 class TestLayoutObjects(CrispyTestCase):
@@ -47,7 +48,6 @@ class TestLayoutObjects(CrispyTestCase):
         self.assertEqual(html.count('rel="test_timeinput"'), 1)
         self.assertEqual(html.count('style="width: 30px;"'), 1)
         self.assertEqual(html.count('type="hidden"'), 1)
-
 
     def test_field_type_hidden(self):
         template = loader.get_template_from_string(u"""
@@ -99,6 +99,16 @@ class TestLayoutObjects(CrispyTestCase):
         else:
             self.assertEqual(html.count('\n'), 24)
 
+    def test_i18n(self):
+        activate('es')
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            HTML(_("Email address"))
+        )
+        html = render_crispy_form(form)
+        self.assertTrue(u"dirección de correo electrónico" in html)
+        deactivate()
 
 
 class TestBootstrapLayoutObjects(CrispyTestCase):
