@@ -41,6 +41,11 @@ def is_checkboxselectmultiple(field):
 
 
 @register.filter
+def is_file(field):
+    return isinstance(field.field.widget, forms.ClearableFileInput)
+
+
+@register.filter
 def classes(field):
     """
     Returns CSS classes of a field
@@ -100,7 +105,11 @@ class CrispyFieldNode(template.Node):
             else:
                 css_class = class_name
 
-            if TEMPLATE_PACK == 'bootstrap3' and not is_checkbox(field):
+            if (
+                TEMPLATE_PACK == 'bootstrap3'
+                and not is_checkbox(field)
+                and not is_file(field)
+            ):
                 css_class += ' form-control'
 
             widget.attrs['class'] = css_class
