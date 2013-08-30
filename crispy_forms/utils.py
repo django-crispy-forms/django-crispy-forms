@@ -11,7 +11,7 @@ from django.utils.html import conditional_escape
 from django.utils.functional import memoize
 
 from .base import KeepContext
-from .compatibility import text_type
+from .compatibility import text_type, PY2
 
 # Global field template, default template used for rendering a field.
 
@@ -55,17 +55,19 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
             else:
                 return field.render(form, form_style, context)
         else:
-            # This allows fields to be unicode strings, always they don't use non ASCII
-            try:
-                if isinstance(field, text_type):
-                    field = field.encode('ascii').decode()
-                # If `field` is not unicode then we turn it into a unicode string, otherwise doing
-                # str(field) would give no error and the field would not be resolved, causing confusion
-                else:
-                    field = text_type(field)
+            # In Python 2 form field names cannot contain unicode characters without ASCII mapping
+            if PY2:
+                # This allows fields to be unicode strings, always they don't use non ASCII
+                try:
+                    if isinstance(field, text_type):
+                        field = field.encode('ascii').decode()
+                    # If `field` is not unicode then we turn it into a unicode string, otherwise doing
+                    # str(field) would give no error and the field would not be resolved, causing confusion
+                    else:
+                        field = text_type(field)
 
-            except (UnicodeEncodeError, UnicodeDecodeError):
-                raise Exception("Field '%s' is using forbidden unicode characters" % field)
+                except (UnicodeEncodeError, UnicodeDecodeError):
+                    raise Exception("Field '%s' is using forbidden unicode characters" % field)
 
         try:
             # Injecting HTML attributes into field's widget, Django handles rendering these

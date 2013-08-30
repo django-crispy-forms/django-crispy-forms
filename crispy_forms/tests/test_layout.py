@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import django
+from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
@@ -18,6 +19,7 @@ from .forms import (
 )
 from .utils import override_settings
 from crispy_forms.bootstrap import InlineCheckboxes
+from crispy_forms.compatibility import PY2
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
     Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder,
@@ -44,8 +46,23 @@ class TestFormLayout(CrispyTestCase):
         """)
         c = Context({'form': TestForm(), 'form_helper': form_helper})
         settings.CRISPY_FAIL_SILENTLY = False
-        self.assertRaises(Exception, lambda:template.render(c))
+        self.assertRaises(Exception, lambda: template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
+
+    def test_unicode_form_field(self):
+        class UnicodeForm(forms.Form):
+            def __init__(self, *args, **kwargs):
+                super(UnicodeForm, self).__init__(*args, **kwargs)
+                self.fields['contraseña'] = forms.CharField()
+
+            helper = FormHelper()
+            helper.layout = Layout(u'contraseña')
+
+        if PY2:
+            self.assertRaises(Exception, lambda: render_crispy_form(UnicodeForm()))
+        else:
+            html = render_crispy_form(UnicodeForm())
+            self.assertTrue('id="id_contraseña"' in html)
 
     def test_meta_extra_fields_with_missing_fields(self):
         form = FormWithMeta()
@@ -86,7 +103,8 @@ class TestFormLayout(CrispyTestCase):
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
-                'is_company', 'is_company'
+                'is_company',
+                'is_company',
             )
         )
 
