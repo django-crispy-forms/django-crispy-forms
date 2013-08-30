@@ -15,6 +15,12 @@ If you want to install development version (unstable), you can do so doing::
 
     pip install git+git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
 
+Or, if you'd like to install the development version as a git repository (so
+you can ``git pull`` updates, use the ``-e`` flag with ``pip install``, like
+so:: 
+
+    pip install -e git+git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
+
 Add ``crispy_forms`` to your ``INSTALLED_APPS`` in settings.py::
 
     INSTALLED_APPS = (
