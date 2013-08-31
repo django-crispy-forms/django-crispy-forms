@@ -27,7 +27,7 @@
                     <div class="controls col-lg-offset-{{ label_size }} {{ field_class }}">
                 {% endif %}
                 <label for="{{ field.id_for_label }}" class="{% if field.field.required %} requiredField{% endif %}">
-                    {% crispy_field field %}
+                    {% crispy_field field 'class' 'checkbox' %}
                     {{ field.label|safe }}
                     {% include 'bootstrap3/layout/help_text_and_errors.html' %}
                 </label>
