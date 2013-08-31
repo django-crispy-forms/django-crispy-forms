@@ -243,7 +243,6 @@ class TabHolder(ContainerHolder):
         )
     """
     template = '%s/layout/tab.html' % TEMPLATE_PACK
-    css_class = 'nav nav-tabs'
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         links, content = '', ''

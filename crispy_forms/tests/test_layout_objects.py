@@ -230,14 +230,15 @@ class TestBootstrapLayoutObjects(CrispyTestCase):
         self.assertEqual(html.count('<div class="alert alert-block"'), 1)
         self.assertEqual(html.count('Testing...'), 1)
 
-    def test_tab_and_tabholder(self):
+    def test_tab_and_tab_holder(self):
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             TabHolder(
                 Tab('one',
                     'first_name',
-                    css_id="custom-name"
+                    css_id="custom-name",
+                    css_class="first-tab-class"
                 ),
                 Tab('two',
                     'password1',
@@ -247,8 +248,13 @@ class TestBootstrapLayoutObjects(CrispyTestCase):
         )
         html = render_crispy_form(test_form)
 
-        self.assertEqual(html.count(
-            '<li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'), 1)
+        self.assertEqual(
+            html.count(
+                '<li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'
+            ),
+            1
+        )
+        self.assertEqual(html.count('class="tab-pane first-tab-class active"'), 1)
         self.assertEqual(html.count('<li class="tab-pane'), 2)
         self.assertEqual(html.count('tab-pane'), 4)
         self.assertEqual(html.count('<div id="custom-name"'), 1)
