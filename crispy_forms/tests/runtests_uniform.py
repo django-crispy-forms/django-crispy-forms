@@ -13,6 +13,7 @@ from django.conf import settings
 
 settings.CRISPY_TEMPLATE_PACK = 'uni_form'
 
+
 def runtests():
     return DjangoTestSuiteRunner(failfast=False).run_tests([
         'crispy_forms.TestBasicFunctionalityTags',
@@ -21,6 +22,7 @@ def runtests():
         'crispy_forms.TestLayoutObjects',
         'crispy_forms.TestDynamicLayouts'
     ], verbosity=1, interactive=True)
+
 
 if __name__ == '__main__':
     if runtests():

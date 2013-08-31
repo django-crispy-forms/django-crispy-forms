@@ -55,7 +55,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
             {{ testFormset|crispy }}
         """)
 
-        TestFormset = formset_factory(TestForm, extra = 4)
+        TestFormset = formset_factory(TestForm, extra=4)
         testFormset = TestFormset()
 
         c = Context({'testFormset': testFormset})

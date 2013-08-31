@@ -11,7 +11,7 @@ sys.path.insert(0, parent)
 from django.test.simple import DjangoTestSuiteRunner
 from django.conf import settings
 
-settings.CRISPY_TEMPLATE_PACK = 'bootstrap'
+settings.CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
 def runtests():

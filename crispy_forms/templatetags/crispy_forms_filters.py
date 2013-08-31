@@ -28,7 +28,7 @@ register = template.Library()
 
 
 @register.filter(name='crispy')
-def as_crispy_form(form, template_pack=TEMPLATE_PACK):
+def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_class=""):
     """
     The original and still very useful way to generate a div elegant form/formset::
 
@@ -39,15 +39,32 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK):
             {{ myform|crispy }}
         </form>
 
-        or, if you want to explicitly set the template pack
+    or, if you want to explicitly set the template pack::
+
         {{ myform|crispy:"bootstrap" }}
+
+    In ``bootstrap3`` for horizontal forms you can do::
+
+        {{ myform|label_class:"col-lg-2",field_class:"col-lg-8" }}
     """
     if isinstance(form, BaseFormSet):
         template = uni_formset_template(template_pack)
-        c = Context({'formset': form, 'form_show_errors': True, 'form_show_labels': True})
+        c = Context({
+            'formset': form,
+            'form_show_errors': True,
+            'form_show_labels': True,
+            'label_class': label_class,
+            'field_class': field_class,
+        })
     else:
         template = uni_form_template(template_pack)
-        c = Context({'form': form, 'form_show_errors': True, 'form_show_labels': True})
+        c = Context({
+            'form': form,
+            'form_show_errors': True,
+            'form_show_labels': True,
+            'label_class': label_class,
+            'field_class': field_class,
+        })
     return template.render(c)
 
 
@@ -58,7 +75,9 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
 
         {% load crispy_forms_tags %}
         {{ form|as_crispy_errors }}
-        or
+
+    or::
+
         {{ form|as_crispy_errors:"bootstrap" }}
     """
     if isinstance(form, BaseFormSet):
@@ -77,7 +96,9 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
 
         {% load crispy_forms_tags %}
         {{ form.field|as_crispy_field }}
-        or
+
+    or::
+
         {{ form.field|as_crispy_field:"bootstrap" }}
     """
     if not isinstance(field, forms.BoundField) and DEBUG:

@@ -523,4 +523,3 @@ class TestBootstrapFormHelper(CrispyTestCase):
 
         html = render_crispy_form(form)
         self.assertEqual(html.count("<label"), 0)
-

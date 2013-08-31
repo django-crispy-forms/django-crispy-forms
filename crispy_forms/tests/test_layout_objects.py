@@ -74,7 +74,11 @@ class TestLayoutObjects(CrispyTestCase):
         self.assertEqual(html.count('class="timeinput'), 1)
 
     def test_field_wrapper_class(self):
-        html = Field('email', wrapper_class="testing").render(TestForm(), "", Context())
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(Field('email', wrapper_class="testing"))
+
+        html = render_crispy_form(form)
         if self.current_template_pack == 'bootstrap':
             self.assertEqual(html.count('class="control-group testing"'), 1)
         elif self.current_template_pack == 'bootstrap3':
@@ -122,12 +126,16 @@ class TestBootstrapLayoutObjects(CrispyTestCase):
         # Make sure an inherited RadioSelect gets rendered as it
         form = CheckboxesTestForm()
         form.fields['inline_radios'].widget = CustomRadioSelect()
-        html = Field('inline_radios').render(form, "", Context())
+        form.helper = FormHelper()
+        form.helper.layout = Layout('inline_radios')
+
+        html = render_crispy_form(form)
         self.assertTrue('class="radio"' in html)
 
         # Make sure an inherited CheckboxSelectMultiple gets rendered as it
         form.fields['checkboxes'].widget = CustomCheckboxSelectMultiple()
-        html = Field('checkboxes').render(form, "", Context())
+        form.helper.layout = Layout('checkboxes')
+        html = render_crispy_form(form)
         self.assertTrue('class="checkbox"' in html)
 
     def test_prepended_appended_text(self):
@@ -161,7 +169,10 @@ class TestBootstrapLayoutObjects(CrispyTestCase):
         )
         html = render_crispy_form(test_form)
 
-        self.assertEqual(html.count('radio inline"'), 2)
+        if self.current_template_pack == 'bootstrap':
+            self.assertEqual(html.count('radio inline"'), 2)
+        elif self.current_template_pack == 'bootstrap3':
+            self.assertEqual(html.count('radio-inline"'), 2)
 
     def test_accordion_and_accordiongroup(self):
         test_form = TestForm()
@@ -181,8 +192,15 @@ class TestBootstrapLayoutObjects(CrispyTestCase):
         )
         html = render_crispy_form(test_form)
 
-        self.assertEqual(html.count('<div class="accordion"'), 1)
-        self.assertEqual(html.count('<div class="accordion-group">'), 2)
+        if self.current_template_pack == 'bootstrap':
+            self.assertEqual(html.count('<div class="accordion"'), 1)
+            self.assertEqual(html.count('<div class="accordion-group">'), 2)
+            self.assertEqual(html.count('<div class="accordion-heading">'), 2)
+        else:
+            self.assertEqual(html.count('<div class="panel panel-default"'), 2)
+            self.assertEqual(html.count('<div class="panel-group"'), 1)
+            self.assertEqual(html.count('<div class="panel-heading">'), 2)
+
         self.assertEqual(html.count('<div id="one"'), 1)
         self.assertEqual(html.count('<div id="two"'), 1)
         self.assertEqual(html.count('name="first_name"'), 1)
@@ -301,7 +319,6 @@ class TestBootstrapLayoutObjects(CrispyTestCase):
 
         self.assertEqual(html.count('class="%s extra"' % form_group_class), 1)
         self.assertEqual(html.count('autocomplete="off"'), 1)
-        self.assertEqual(html.count('class="input-append"'), 1)
         self.assertEqual(html.count('class="span4'), 1)
         self.assertEqual(html.count('id="go-button"'), 1)
         self.assertEqual(html.count("Go!"), 1)
@@ -311,6 +328,11 @@ class TestBootstrapLayoutObjects(CrispyTestCase):
         self.assertEqual(html.count('type="submit"'), 1)
         self.assertEqual(html.count('name="whatever"'), 1)
         self.assertEqual(html.count('value="something"'), 1)
+
+        if self.current_template_pack == 'bootstrap':
+            self.assertEqual(html.count('class="input-append"'), 1)
+        elif self.current_template_pack == 'bootstrap3':
+            self.assertEqual(html.count('class="input-group-btn'), 1)
 
         # Make sure white spaces between buttons are there in bootstrap
         self.assertEqual(len(re.findall(r'</button> <', html)), 3)
@@ -344,5 +366,9 @@ class TestBootstrapLayoutObjects(CrispyTestCase):
         test_form.helper[1].wrap(InlineCheckboxes, inline=True)
         html = render_crispy_form(test_form)
 
-        self.assertEqual(html.count('checkbox inline"'), 3)
-        self.assertEqual(html.count('inline"'), 3)
+        if self.current_template_pack == 'bootstrap':
+            self.assertEqual(html.count('checkbox inline"'), 3)
+            self.assertEqual(html.count('inline"'), 3)
+        elif self.current_template_pack == 'bootstrap3':
+            self.assertEqual(html.count('checkbox-inline"'), 3)
+            self.assertEqual(html.count('inline="True"'), 4)

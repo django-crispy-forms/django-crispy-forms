@@ -527,4 +527,8 @@ class TestBootstrapFormLayout(CrispyTestCase):
         context = RequestContext(request, {'form': form})
 
         response = render_to_response('crispy_render_template.html', context)
-        self.assertEqual(response.content.count(b'checkbox inline'), 3)
+
+        if self.current_template_pack == 'bootstrap':
+            self.assertEqual(response.content.count(b'checkbox inline'), 3)
+        elif self.current_template_pack == 'bootstrap3':
+            self.assertEqual(response.content.count(b'checkbox-inline'), 3)
