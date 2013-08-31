@@ -22,12 +22,9 @@ DATABASES = {
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
-CRISPY_TEMPLATE_PACK = 'bootstrap'
 CRISPY_CLASS_CONVERTERS = {"textinput": "textinput textInput inputtext"}
 SECRET_KEY = 'secretkey'
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -46,6 +43,7 @@ class InvalidVarException(object):
         if search == '%s':
             return True
         return False
+
 
 TEMPLATE_DEBUG = True
 TEMPLATE_STRING_IF_INVALID = InvalidVarException()

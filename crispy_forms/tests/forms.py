@@ -91,15 +91,6 @@ class TestForm4(forms.ModelForm):
         model = CrispyTestModel
 
 
-class ExampleForm(forms.Form):
-    comment = forms.CharField()
-
-
-class FormWithMeta(TestForm):
-    class Meta:
-        fields = ('email', 'first_name', 'last_name')
-
-
 class TestForm5(forms.Form):
     choices = [
         (1, 1),
@@ -107,9 +98,11 @@ class TestForm5(forms.Form):
         (1000, 1000),
     ]
     checkbox_select_multiple = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple, 
-        choices=choices)
+        widget=forms.CheckboxSelectMultiple,
+        choices=choices
+    )
     radio_select = forms.ChoiceField(
-        widget=forms.RadioSelect, 
-        choices=choices)
+        widget=forms.RadioSelect,
+        choices=choices
+    )
     pk = forms.IntegerField()

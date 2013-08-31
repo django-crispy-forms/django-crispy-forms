@@ -14,8 +14,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from .base import CrispyTestCase
 from .forms import (
-    TestForm, TestForm2, TestForm3, ExampleForm, CheckboxesTestForm,
-    FormWithMeta, TestForm4, CrispyTestModel, TestForm5
+    TestForm, TestForm2, TestForm3, CheckboxesTestForm,
+    TestForm4, CrispyTestModel, TestForm5
 )
 from .utils import override_settings
 from crispy_forms.bootstrap import InlineCheckboxes
@@ -65,6 +65,10 @@ class TestFormLayout(CrispyTestCase):
             self.assertTrue('id="id_contraseña"' in html)
 
     def test_meta_extra_fields_with_missing_fields(self):
+        class FormWithMeta(TestForm):
+            class Meta:
+                fields = ('email', 'first_name', 'last_name')
+
         form = FormWithMeta()
         # We remove email field on the go
         del form.fields['email']
@@ -118,6 +122,9 @@ class TestFormLayout(CrispyTestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_context_pollution(self):
+        class ExampleForm(forms.Form):
+            comment = forms.CharField()
+
         form = ExampleForm()
         form2 = TestForm()
 

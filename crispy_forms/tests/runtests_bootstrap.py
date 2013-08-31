@@ -2,14 +2,16 @@
 
 import os, sys
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'test_settings_bootstrap'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'test_settings'
 parent = os.path.dirname(os.path.dirname(os.path.dirname(
             os.path.abspath(__file__))))
 
 sys.path.insert(0, parent)
 
 from django.test.simple import DjangoTestSuiteRunner
+from django.conf import settings
 
+settings.CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 def runtests():
     return DjangoTestSuiteRunner(failfast=False).run_tests([
