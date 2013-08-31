@@ -108,10 +108,10 @@ class TestLayoutObjects(CrispyTestCase):
         form = TestForm()
         form.helper = FormHelper()
         form.helper.layout = Layout(
-            HTML(_("Email address"))
+            HTML(_("Enter a valid value."))
         )
         html = render_crispy_form(form)
-        self.assertTrue(u"dirección de correo electrónico" in html)
+        self.assertTrue(u"Introduzca un valor correcto" in html)
         deactivate()
 
 
