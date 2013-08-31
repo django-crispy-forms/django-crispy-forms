@@ -23,8 +23,8 @@ class PrependedAppendedText(Field):
 
         self.input_size = None
         css_class = kwargs.get('css_class', '')
-        if css_class.find('input-large') != -1: self.input_size = 'input-large'
-        if css_class.find('input-small') != -1: self.input_size = 'input-small'
+        if css_class.find('input-lg') != -1: self.input_size = 'input-lg'
+        if css_class.find('input-sm') != -1: self.input_size = 'input-sm'
 
         super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
 
