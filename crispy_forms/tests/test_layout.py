@@ -532,3 +532,26 @@ class TestBootstrapFormLayout(CrispyTestCase):
             self.assertEqual(response.content.count(b'checkbox inline'), 3)
         elif self.current_template_pack == 'bootstrap3':
             self.assertEqual(response.content.count(b'checkbox-inline'), 3)
+
+
+class TestBootstrap3FormLayout(CrispyTestCase):
+    urls = 'crispy_forms.tests.urls'
+
+    def test_form_inline(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.form_class = 'form-inline'
+        form.helper.field_template = 'bootstrap3/layout/inline_field.html'
+        form.helper.layout = Layout(
+            'email',
+            'password1',
+            'last_name',
+        )
+
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('class="form-inline"'), 1)
+        self.assertEqual(html.count('class="form-group"'), 3)
+        self.assertEqual(html.count('<label for="id_email" class="sr-only'), 1)
+        self.assertEqual(html.count('id="div_id_email" class="form-group"'), 1)
+        self.assertEqual(html.count('placeholder="email"'), 1)
+        self.assertEqual(html.count('</label> <input'), 3)

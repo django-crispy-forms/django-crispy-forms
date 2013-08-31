@@ -4,6 +4,7 @@
 
 Special thanks in this release to **James Friedman <a href="https://github.com/jamesmfriedman">@jamesmfriedman</a>**, for his amazing support in PR #213, adding initial Bootstrap 3 support.
 
+ * Bootstrap 3 inline forms support and docs for inline forms with Bootstrap 3, see #233.
  * `update_attributes` can now work with a field name, see docs.
  * Adjusted unicode checkings for Python 3, see #231.
  * Adjusted how bootstrap `Tab` layout object attributes are applied to make sense, see #228.

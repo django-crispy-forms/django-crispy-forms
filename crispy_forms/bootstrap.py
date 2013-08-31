@@ -346,3 +346,7 @@ class UneditableField(Field):
     def __init__(self, field, *args, **kwargs):
         self.attrs = {'class': 'uneditable-input'}
         super(UneditableField, self).__init__(field, *args, **kwargs)
+
+
+class InlineField(Field):
+    template = "%s/layout/inline_field.html" % TEMPLATE_PACK

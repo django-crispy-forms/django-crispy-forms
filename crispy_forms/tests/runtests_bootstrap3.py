@@ -21,6 +21,7 @@ def runtests():
         'crispy_forms.TestBootstrapFormHelper',
         'crispy_forms.TestFormLayout',
         'crispy_forms.TestBootstrapFormLayout',
+        'crispy_forms.TestBootstrap3FormLayout',
         'crispy_forms.TestLayoutObjects',
         'crispy_forms.TestBootstrapLayoutObjects',
         'crispy_forms.TestDynamicLayouts'

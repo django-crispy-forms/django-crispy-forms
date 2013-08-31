@@ -284,3 +284,26 @@ The way you do horizontal forms in Bootstrap version 3 is setting some ``col-lg-
     helper.field_class = 'col-lg-8'
 
 Of course you can set your widths as you like, it doesn't have to be exactly like this.
+
+Bootstrap3 inline forms
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The way you do inline forms in Bootstrap version 3 is::
+
+    helper.form_class = 'form-inline'
+    helper.field_template = 'bootstrap3/layout/inline_field.html'
+    helper.layout = Layout(
+        'last_name',
+        'email',
+        'password',
+    )
+
+If you need to set attributes in a field, you have to use ``InlineField`` instead of ``Field``::
+
+    from crispy_forms.bootstrap import InlineField
+
+    helper.layout = Layout(
+        InlineField('last_name', readonly=True),
+        'email',
+        'password',
+    )
