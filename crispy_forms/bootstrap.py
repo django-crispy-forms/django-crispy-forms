@@ -305,8 +305,8 @@ class Accordion(ContainerHolder):
 
         return render_to_string(
             self.template,
-            Context({'accordion': self, 'content': content
-        }))
+            Context({'accordion': self, 'content': content})
+        )
 
 
 class Alert(Div):
