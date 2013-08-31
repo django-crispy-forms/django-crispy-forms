@@ -2,7 +2,7 @@
 
 ## 1.4.0
 
-Special thanks in this release to **James Friedman <a href="https://github.com/jamesmfriedman">@jamesmfriedman</a>**, for his amazing support in PR #213, adding Bootstrap 3 support.
+Special thanks in this release to **James Friedman <a href="https://github.com/jamesmfriedman">@jamesmfriedman</a>**, for his amazing support in PR #213, adding initial Bootstrap 3 support.
 
  * Major refactor of testing suite architecture, breaking huge `tests.py` file into several and also splitting tests for different template packs into different tests cases, runners for template packs updated.
  * Added support for horizontal forms in bootstrap3, see #209.
