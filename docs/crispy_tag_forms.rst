@@ -273,3 +273,14 @@ Obviously, you can adjust this snippets to your needs, or class based views or f
     When replacing form html, you need to bind events using ``live`` or ``on`` jQuery method.
 
 .. _`django-jsonview`: https://github.com/jsocol/django-jsonview
+
+Bootstrap3 horizontal forms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The way you do horizontal forms in Bootstrap version 3 is setting some ``col-lg-X`` classes in labels and divs wrapping fields. This would mean a lot of hassle updating your layout objects for settings these classes, too much verbosity. Instead some ``FormHelper`` attributes have been added to help you easily achieve this. You will need to set only three attributes::
+
+    helper.form_class = 'form-horizontal'
+    helper.label_class = 'col-lg-2'
+    helper.field_class = 'col-lg-8'
+
+Of course you can set your widths as you like, it doesn't have to be exactly like this.
