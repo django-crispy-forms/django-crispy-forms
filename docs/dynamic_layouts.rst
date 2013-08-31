@@ -121,7 +121,7 @@ Updates attributes of every layout object contained in a slice::
 
 We could do::
 
-    form.helper[0:3].update_attributes(Field, css_class="hello")
+    form.helper[0:3].update_attributes(css_class="hello")
 
 Layout would turn into::
 
@@ -131,6 +131,15 @@ Layout would turn into::
         Field('field_3', css_class='hello')
     )
 
+We can also apply it to a field name wrapped in a layout object::
+
+    form.helper['field_2'].update_attributes(css_class="hello")
+
+However, the following wouldn't be correct::
+
+    form.helper['field_1'].update_attributes(css_class="hello")
+
+Because it would change ``Layout`` attrs. It's your job to have it wrapped correctly.
 
 all
 ~~~

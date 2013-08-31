@@ -4,6 +4,9 @@
 
 Special thanks in this release to **James Friedman <a href="https://github.com/jamesmfriedman">@jamesmfriedman</a>**, for his amazing support in PR #213, adding initial Bootstrap 3 support.
 
+ * `update_attributes` can now work with a field name, see docs.
+ * Adjusted unicode checkings for Python 3, see #231.
+ * Adjusted how bootstrap `Tab` layout object attributes are applied to make sense, see #228.
  * Major refactor of testing suite architecture, breaking huge `tests.py` file into several and also splitting tests for different template packs into different tests cases, runners for template packs updated.
  * Added support for horizontal forms in bootstrap3, see #209.
  * Fixed spaces missing when rendering several submit inputs continued, see #211.

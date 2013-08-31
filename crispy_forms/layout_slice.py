@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from crispy_forms.compatibility import integer_types
+from crispy_forms.compatibility import integer_types, string_types
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.layout import Fieldset, MultiField
 from crispy_forms.bootstrap import Container
@@ -131,9 +131,17 @@ class LayoutSlice(object):
 
                 layout_object = self.layout.fields[position[0]]
                 for i in position[1:]:
+                    previous_layout_object = layout_object
                     layout_object = layout_object.fields[i]
 
-                function(layout_object)
+                # If update_attrs is applied to a string, we call to its wrapping layout object
+                if (
+                    function.__name__ == 'update_attrs'
+                    and isinstance(layout_object, string_types)
+                ):
+                    function(previous_layout_object)
+                else:
+                    function(layout_object)
 
     def update_attributes(self, **kwargs):
         """
