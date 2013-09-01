@@ -277,25 +277,38 @@ Obviously, you can adjust this snippets to your needs, or class based views or f
 Bootstrap3 horizontal forms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. image:: images/bootstrap3_horizontal_form.jpg
+   :align: center
+
 The way you do horizontal forms in Bootstrap version 3 is setting some ``col-lg-X`` classes in labels and divs wrapping fields. This would mean a lot of hassle updating your layout objects for settings these classes, too much verbosity. Instead some ``FormHelper`` attributes have been added to help you easily achieve this. You will need to set only three attributes::
 
     helper.form_class = 'form-horizontal'
     helper.label_class = 'col-lg-2'
     helper.field_class = 'col-lg-8'
+    helper.layout = Layout(
+        'email',
+        'password',
+        'remember_me',
+        StrictButton('Sign in', css_class='btn-default'),
+    )
 
 Of course you can set your widths as you like, it doesn't have to be exactly like this.
 
 Bootstrap3 inline forms
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+.. image:: images/bootstrap3_inline_form.jpg
+   :align: center
+
 The way you do inline forms in Bootstrap version 3 is::
 
     helper.form_class = 'form-inline'
     helper.field_template = 'bootstrap3/layout/inline_field.html'
     helper.layout = Layout(
-        'last_name',
         'email',
         'password',
+        'remember_me',
+        StrictButton('Sign in', css_class='btn-default'),
     )
 
 If you need to set attributes in a field, you have to use ``InlineField`` instead of ``Field``::
@@ -303,7 +316,7 @@ If you need to set attributes in a field, you have to use ``InlineField`` instea
     from crispy_forms.bootstrap import InlineField
 
     helper.layout = Layout(
-        InlineField('last_name', readonly=True),
-        'email',
+        InlineField('email', readonly=True),
         'password',
+        [...]
     )
