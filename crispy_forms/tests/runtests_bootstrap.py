@@ -23,7 +23,7 @@ def runtests():
         'crispy_forms.TestBootstrapFormLayout',
         'crispy_forms.TestLayoutObjects',
         'crispy_forms.TestBootstrapLayoutObjects',
-        'crispy_forms.TestDynamicLayouts'
+        'crispy_forms.TestDynamicLayouts',
     ], verbosity=1, interactive=True)
 
 

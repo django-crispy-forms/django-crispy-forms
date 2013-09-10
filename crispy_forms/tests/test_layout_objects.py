@@ -21,6 +21,7 @@ from crispy_forms.utils import render_crispy_form
 
 
 class TestLayoutObjects(CrispyTestCase):
+
     def test_multiwidget_field(self):
         template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
@@ -115,7 +116,8 @@ class TestLayoutObjects(CrispyTestCase):
         deactivate()
 
 
-class TestBootstrapLayoutObjects(CrispyTestCase):
+class TestBootstrapLayoutObjects(TestLayoutObjects):
+
     def test_custom_django_widget(self):
         class CustomRadioSelect(forms.RadioSelect):
             pass
