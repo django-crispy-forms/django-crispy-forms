@@ -92,3 +92,4 @@ Contributors
 * Camilo Nova <camilonova>
 * <mrkre>
 * Daniel Mascarenhas <danielmt>
+* Christopher Adams <adamsc64>

@@ -180,6 +180,7 @@ class Container(Div):
         super(Container, self).__init__(*fields, **kwargs)
         self.template = kwargs.pop('template', self.template)
         self.name = name
+        self._active_originally_included = "active" in kwargs
         self.active = kwargs.pop("active", False)
         if not self.css_id:
             self.css_id = slugify(self.name)
@@ -205,14 +206,30 @@ class ContainerHolder(Div):
     """
     def first_container_with_errors(self, errors):
         """
-        Returns the first container with errors, otherwise returns the first one
+        Returns the first container with errors, otherwise returns None.
         """
         for tab in self.fields:
             errors_here = any(error in tab for error in errors)
             if errors_here:
                 return tab
+        return None
 
-        return self.fields[0]
+    def open_target_group_for_form(self, form):
+        """
+        Makes sure that the first group that should be open is open.
+        This is either the first group with errors or the first group
+        in the container, unless that first group was originally set to
+        active=False.
+        """
+        target = self.first_container_with_errors(form.errors.keys())
+        if target is None:
+            target = self.fields[0]
+            if not target._active_originally_included:
+                target.active = True
+            return target
+
+        target.active = True
+        return target
 
 
 class Tab(Container):
@@ -249,8 +266,8 @@ class TabHolder(ContainerHolder):
         for tab in self.fields:
             tab.active = False
 
-        # The first tab with errors will be active
-        self.first_container_with_errors(form.errors.keys()).active = True
+        # Open the group that should be open.
+        self.open_target_group_for_form(form)
 
         for tab in self.fields:
             content += render_field(
@@ -293,8 +310,8 @@ class Accordion(ContainerHolder):
         if not self.css_id:
             self.css_id = "-".join(["accordion", text_type(randint(1000, 9999))])
 
-        # first group with errors or first groupt will be visible, others will be collapsed
-        self.first_container_with_errors(form.errors.keys()).active = True
+        # Open the group that should be open.
+        self.open_target_group_for_form(form)
 
         for group in self.fields:
             group.data_parent = self.css_id
