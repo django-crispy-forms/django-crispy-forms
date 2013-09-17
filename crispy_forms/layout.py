@@ -415,9 +415,10 @@ class Field(LayoutObject):
             context['wrapper_class'] = self.wrapper_class
 
         # render template in data_name attributes
-        for k, v in self.attrs.items():
-            if k.startswith("data"):
-                v = HTML(v).render(form, form_style, context, template_pack=template_pack)
+        if type(self.attrs) == dict:
+            for k, v in self.attrs.items():
+                if k.startswith("data"):
+                    v = HTML(v).render(form, form_style, context, template_pack=template_pack)
 
         html = ''
         for field in self.fields:
