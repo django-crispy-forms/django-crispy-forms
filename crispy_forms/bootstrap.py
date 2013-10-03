@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 
 from .compatibility import text_type
-from .layout import LayoutObject, Field, Div
+from .layout import LayoutObject, Field, Div, ButtonHolder
 from .utils import render_field, flatatt, TEMPLATE_PACK
 
 
@@ -170,6 +170,64 @@ class StrictButton(object):
         return render_to_string(self.template, Context({'button': self}))
 
 
+class WizardButton(StrictButton):
+
+    def __init__(self, content, **kwargs):
+        kwargs.setdefault('type', 'submit')
+        super(WizardButton, self).__init__(content, **kwargs)
+
+
+class PrevButton(WizardButton):
+    step = 'prev'
+
+    def __init__(self, content, **kwargs):
+        kwargs['name'] = 'wizard_goto_step'
+        super(PrevButton, self).__init__(content, **kwargs)
+
+
+class NextButton(WizardButton):
+    step = 'next'
+
+
+class FinishButton(WizardButton):
+    step = 'finish'
+
+
+class WizardNavigation(ButtonHolder):
+    """
+    Layout object for rendering form wizard Previous, Next and Finish buttons::
+
+        Button("button content", css_class="extra")
+        WizardNavigation(
+            PrevButton('Previous'), NextButton('Next'), FinishButton('Finish')
+        )
+    """
+    template = '%s/layout/wizard_navigation.html' % TEMPLATE_PACK
+
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+        buttons = {'extra': []} 
+        for field in self.fields:
+            if getattr(field, 'step', None) == 'prev': 
+                buttons['prev'] = field
+            elif getattr(field, 'step', None) == 'next': 
+                buttons['next'] = field
+            elif getattr(field, 'step', None) == 'finish': 
+                buttons['finish'] = field
+            else:
+                buttons['extra'].append(field)
+
+        return render_to_string(
+            self.template, 
+            Context({
+                'buttonholder': self,
+                'buttons': buttons,
+                'wizard': context['wizard'],
+            }),
+        )
+
+
+
+
 class Container(Div):
     """
     Base class used for `Tab` and `AccordionGroup`, represents a basic container concept
@@ -293,8 +351,12 @@ class Accordion(ContainerHolder):
         if not self.css_id:
             self.css_id = "-".join(["accordion", text_type(randint(1000, 9999))])
 
-        # first group with errors or first groupt will be visible, others will be collapsed
-        self.first_container_with_errors(form.errors.keys()).active = True
+        # first group with errors or first group will be visible, others will be collapsed
+        # CHANGE: container visibility should be closed by default, otherwise no
+        # way to specify that the first container is closed
+        first_container = self.first_container_with_errors(form.errors.keys())
+        if form.errors:
+            first_container.active = True
 
         for group in self.fields:
             group.data_parent = self.css_id

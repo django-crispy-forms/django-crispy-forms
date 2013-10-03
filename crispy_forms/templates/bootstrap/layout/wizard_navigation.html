@@ -1,0 +1,14 @@
+<div {% if buttonholder.css_id %}id="{{ buttonholder.css_id }}"{% endif %} 
+    class="navigation buttonHolder{% if buttonholder.css_class %} {{ buttonholder.css_class }}{% endif %}">
+    {% if wizard.steps.prev %}
+        <button {{ buttons.prev.flat_attrs|safe }} value="{{ wizard.steps.prev }}">{{ buttons.prev.content|safe }}</button>
+    {% endif %}
+    {% if wizard.steps.next %}
+        <button {{ buttons.next.flat_attrs|safe }}>{{ buttons.next.content|safe }}</button>
+    {% else %}
+        <button {{ buttons.finish.flat_attrs|safe }}>{{ buttons.finish.content|safe }}</button>
+    {% endif %}
+    {% for button in buttons.extra %}
+        <button {{ button.flat_attrs|safe }}>{{ button.content|safe }}</button>
+    {% endfor %}
+</div>
