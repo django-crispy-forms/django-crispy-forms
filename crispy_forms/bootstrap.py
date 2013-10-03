@@ -352,8 +352,12 @@ class Accordion(ContainerHolder):
         if not self.css_id:
             self.css_id = "-".join(["accordion", text_type(randint(1000, 9999))])
 
-        # first group with errors or first groupt will be visible, others will be collapsed
-        self.first_container_with_errors(form.errors.keys()).active = True
+        # first group with errors or first group will be visible, others will be collapsed
+        # CHANGE: container visibility should be closed by default, otherwise no
+        # way to specify that the first container is closed
+        first_container = self.first_container_with_errors(form.errors.keys())
+        if form.errors:
+            first_container.active = True
 
         for group in self.fields:
             group.data_parent = self.css_id
