@@ -114,7 +114,8 @@ class BasicNode(template.Node):
 
         # use template_pack from helper, if defined
         try:
-            self.template_pack = helper.template_pack
+            if helper.template_pack:
+                self.template_pack = helper.template_pack
         except AttributeError:
             pass
 
