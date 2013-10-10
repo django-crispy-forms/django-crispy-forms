@@ -12,7 +12,7 @@ What is a ``FormHelper`` and how to use it, is throughly explained in a previous
 FormHelper with a form attached (Default layout)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Since version 1.2.0 ``FormHelper`` optinally can be passed an instance of a form. You would do it this way::
+Since version 1.2.0 ``FormHelper`` optionally can be passed an instance of a form. You would do it this way::
 
     class ExampleForm(forms.Form):
         def __init__(self, *args, **kwargs):
@@ -20,7 +20,7 @@ Since version 1.2.0 ``FormHelper`` optinally can be passed an instance of a form
             self.helper = FormHelper(self)
 
 
-When you do this crispy-forms builds a default layout using ``form.fields`` for you, so you don't have to manually list them all if your form is huge. If you later need to manipulate some bits of a big layout, using dynamic layouts it's highly recommended, check :ref:`dynamic layouts`.
+When you do this crispy-forms builds a default layout using ``form.fields`` for you, so you don't have to manually list them all if your form is huge. If you later need to manipulate some bits of a big layout, using dynamic layouts is highly recommended, check :ref:`dynamic layouts`.
 
 Also, now the helper is able to cross match the layout with the form instance, being able to search by widget type if you are using dynamic API.
 
