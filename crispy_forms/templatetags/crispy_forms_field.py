@@ -165,7 +165,6 @@ def crispy_addon(field, append="", prepend="", form_show_labels=False):
             'form_show_errors': True,
             'form_show_labels': False if form_show_labels is False else True
         })
-        print  False if form_show_labels is False else True
         template = loader.get_template('%s/layout/prepended_appended_text.html' % TEMPLATE_PACK)
         context['crispy_prepended_text'] = prepend
         context['crispy_appended_text'] = append
