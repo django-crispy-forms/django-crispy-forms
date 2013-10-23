@@ -47,6 +47,9 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
     :attrs: Attributes for the field's widget
     """
     with KeepContext(context):
+        if field is None:
+            return ''
+
         FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
 
         if hasattr(field, 'render'):
