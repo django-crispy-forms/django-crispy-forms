@@ -78,10 +78,7 @@ class BasicNode(template.Node):
     """
     def __init__(self, form, helper, template_pack=TEMPLATE_PACK):
         self.form = form
-        if helper is not None:
-            self.helper = helper
-        else:
-            self.helper = None
+        self.helper = helper
         self.template_pack = template_pack
 
     def get_render(self, context):
@@ -205,16 +202,41 @@ whole_uni_form_template = memoize(whole_uni_form_template, {}, 1)
 class CrispyFormNode(BasicNode):
     def render(self, context):
         c = self.get_render(context)
-
-        if self.actual_helper is not None and getattr(self.actual_helper, 'template', False):
+        if getattr(self.actual_helper, 'template', None):
             template = get_template(self.actual_helper.template)
+        elif c['is_formset']:
+            template = whole_uni_formset_template(self.template_pack)
         else:
-            if c['is_formset']:
-                template = whole_uni_formset_template(self.template_pack)
-            else:
-                template = whole_uni_form_template(self.template_pack)
-
+            template = whole_uni_form_template(self.template_pack)
         return template.render(c)
+
+
+class InlineFormNode(CrispyFormNode):
+    form = "inline_form"
+    helper = "inline_helper"
+
+    def __init__(self, form, helper, **kwargs):
+        self.inline_form = form
+        self.inline_helper = helper
+        super(InlineFormNode, self).__init__(
+            self.form,
+            self.helper if helper else None,
+             **kwargs)
+
+    def render(self, context):
+        inline_context = {self.form: self.inline_form}
+        if self.helper:
+            inline_context[self.helper] = self.inline_helper
+        context.update(inline_context)
+        try:
+            return super(InlineFormNode, self).render(context)
+        finally:
+            context.pop()
+
+    def get_response_dict(self, *args, **kwargs):
+        response_dict = super(InlineFormNode, self).get_response_dict(*args, **kwargs)
+        response_dict.update(disable_csrf=True, formset_tag=False, form_tag=False)
+        return response_dict
 
 
 # {% crispy %} tag

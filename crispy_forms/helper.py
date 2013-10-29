@@ -281,6 +281,12 @@ class FormHelper(DynamicLayoutHandler):
     def add_layout(self, layout):
         self.layout = layout
 
+    def add_layout_object(self, layout_object):
+        if self.layout is None:
+            self.layout = []
+        self.layout.append(layout_object)
+
+
     def render_layout(self, form, context, template_pack=TEMPLATE_PACK):
         """
         Returns safe html of the rendering of the layout
