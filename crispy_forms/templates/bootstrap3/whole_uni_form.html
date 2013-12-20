@@ -9,11 +9,18 @@
     {% include "bootstrap3/display_form.html" %}
 
     {% if inputs %}
-        <div class="form-actions">
-            {% for input in inputs %}
-                {% include "bootstrap3/layout/baseinput.html" %}
-            {% endfor %}
+        <div class="form-group form-actions">
+            {% if label_class %}
+                <div class="controls col-lg-offset-{{ label_size }} {{ label_class }}"></div>
+            {% endif %}
+
+            <div class="controls {{ field_class }}">
+                {% for input in inputs %}
+                    {% include "bootstrap3/layout/baseinput.html" %}
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
+
 {% if form_tag %}</form>{% endif %}
 {% endspecialspaceless %}
