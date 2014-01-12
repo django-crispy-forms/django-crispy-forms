@@ -88,6 +88,42 @@ class LayoutObject(object):
 
         return pointers
 
+    def remove_layout_object(self, pointer_index):
+        """
+        Remove a children layout object given by its pointer index. 
+        It will remove the parent layout if it gets empty
+
+        :param pointer_index: field accessor
+        """
+
+        if len(pointer_index) > 1:
+            # call children remove_layout_object
+            child_layout = self.fields[pointer_index[0]]
+            child_layout.remove_layout_object(pointer_index[1:])
+            # remove child_layout if it gets empty
+            if not child_layout.fields:
+                self.pop(pointer_index[0])
+
+        else:
+            # remove field
+            self.pop(pointer_index[0])
+
+    def pop_field(self, field_name):
+        """
+        Remove a field from the layout using its name instead of its index. 
+        It will also remove the parent layout object if its the unique field in this layout.  
+
+        :param field_name: the name of the field to be removed.
+        """
+        pointers = self.get_field_names()
+
+        for pointer in pointers:
+            # pointer is like [[0,1,2], 'field_name1']
+            if pointer[1] == field_name:
+                self.remove_layout_object(pointer[0])
+                break
+
+
 
 class Layout(LayoutObject):
     """

@@ -234,6 +234,42 @@ class TestFormLayout(CrispyTestCase):
         html = template.render(c)
         self.assertFalse('email' in html)
 
+    def test_change_layout_dynamically_delete_field_with_pop_field(self):
+        template = loader.get_template_from_string(u"""
+            {% load crispy_forms_tags %}
+            {% crispy form form_helper %}
+        """)
+
+        form = TestForm()
+        form_helper = FormHelper()
+        form_helper.add_layout(
+            Layout(
+                Fieldset(
+                    u'Company Data',
+                    'is_company',
+                    'email',
+                    'password1',
+                    'password2',
+                    css_id = "multifield_info",
+                ),
+                Column(
+                    'first_name',
+                    'last_name',
+                    css_id = "column_name",
+                )
+            )
+        )
+
+        # We remove email field on the go
+        # Layout needs to be adapted for the new form fields
+        del form.fields['email']
+        form_helper.layout.pop_field('email')
+
+        c = Context({'form': form, 'form_helper': form_helper})
+        html = template.render(c)
+        self.assertFalse('email' in html)    
+        self.assertTrue('is_company' in html)    
+
     def test_formset_layout(self):
         TestFormSet = formset_factory(TestForm, extra=3)
         formset = TestFormSet()
