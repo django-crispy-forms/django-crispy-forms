@@ -11,11 +11,16 @@
             </label>
         </div>
     {% else %}
-        <div id="div_{{ field.auto_id }}" class="form-group">
+        <div id="div_{{ field.auto_id }}" class="form-group {% if field.errors %}has-error{% endif %}">
             <label for="{{ field.id_for_label }}" class="sr-only{% if field.field.required %} requiredField{% endif %}">
                 {{ field.label|safe }}
             </label>
             {% crispy_field field 'placeholder' field.label %}
+            {% if field.errors %}
+                <span class="help-block">
+             		{{ field.errors }}
+                </span>
+            {% endif %}
         </div>
     {% endif %}
 {% endif %}
