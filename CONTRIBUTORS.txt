@@ -92,3 +92,6 @@ Contributors
 * Camilo Nova <camilonova>
 * <mrkre>
 * Daniel Mascarenhas <danielmt>
+* Paras Kuhad <pkuhad>
+* Kevin Trad <hekevintran>
+* Steven Klass <rh0dium>

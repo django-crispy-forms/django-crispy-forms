@@ -1,5 +1,16 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.5.0
+
+ * Fixed `PrependedAppendedText` when rendering a select widget, in bootstrap and bootstrap3 template packs, see #258.
+ * Added support to `{% crispy_addon %}` tag for `form_show_labels`, see #256.
+ * Major cleanup and refactor of the template pack system thanks to @tepez, see #217 and #237:
+    - Template packs are now self contained/independent, removing dangerous cross references. If you have a custom template pack this can cause backwards incompatibility, but it will pay in the future to adjust to this changes.
+    - `MultiField` cannot be used with `bootstrap` or `bootstrap3` template packs.
+    - Added `template_pack` `FormHelper` attribute, so that template packs can be specified at form helper level. This changes layout objects `render` behavior.
+ * Default template pack is now `bootstrap3`.
+ * Make `CRISPY_TEMPLATE_PACK` setting optional, see #237 and #244.
+
 ## 1.4.0
 
 Special thanks in this release to **James Friedman <a href="https://github.com/jamesmfriedman">@jamesmfriedman</a>**, for his amazing support in PR #213, adding initial Bootstrap 3 support.
