@@ -95,4 +95,8 @@ Contributors
 * Paras Kuhad <pkuhad>
 * Kevin Trad <hekevintran>
 * Steven Klass <rh0dium>
+* David Fischer <davidfischer-ch>
 * Stefan Tjarks <stj>
+* Jan Dittberner <jandd>
+* Michael Nielsen <K0den>
+* Stephen Mitchell <scuml>

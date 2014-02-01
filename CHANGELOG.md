@@ -2,6 +2,11 @@
 
 ## 1.5.0
 
+ * Fixed inputs rendering for bootstrap3 and redo `FormActions` layout object bootstrap3 template for correct alignment, see #279.
+ * `MultiField` now obeys `form_show_labels`, see #278.
+ * Added `wrapper_class` to `bootstrap.InlineRadios`, see #272.
+ * Render label for checkboxes within `table_inline_formset.html`, see #262.
+ * Removed deprecated layout object `AppendedPrependedText`, replaced by `PrependedAppendedText`.
  * Fixed `PrependedAppendedText` when rendering a select widget, in bootstrap and bootstrap3 template packs, see #258.
  * Added support to `{% crispy_addon %}` tag for `form_show_labels`, see #256.
  * Major cleanup and refactor of the template pack system thanks to @tepez, see #217 and #237:
