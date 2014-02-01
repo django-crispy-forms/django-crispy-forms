@@ -261,29 +261,6 @@ class TestDynamicLayouts(CrispyTestCase):
             [[1], 'div']
         ])
 
-    def test_filter(self):
-        helper = FormHelper()
-        helper.layout = Layout(
-            Div(
-                MultiField('field_name'),
-                'field_name2',
-            ),
-            Div('password'),
-            'extra_field'
-        )
-        self.assertEqual(helper.filter(Div, MultiField).slice, [
-            [[0], 'div'],
-            [[1], 'div']
-        ])
-        self.assertEqual(helper.filter(Div, MultiField, max_level=1).slice, [
-            [[0], 'div'],
-            [[0, 0], 'multifield'],
-            [[1], 'div']
-        ])
-        self.assertEqual(helper.filter(MultiField, max_level=1).slice, [
-            [[0, 0], 'multifield']
-        ])
-
     def test_filter_and_wrap(self):
         helper = FormHelper()
         layout = Layout(
@@ -527,3 +504,28 @@ class TestDynamicLayouts(CrispyTestCase):
         layout[0][0] = 'password1'
         self.assertTrue(isinstance(layout[0], Div))
         self.assertEqual(layout[0][0], 'password1')
+
+
+class TestUniformDynamicLayouts(TestDynamicLayouts):
+    def test_filter(self):
+        helper = FormHelper()
+        helper.layout = Layout(
+            Div(
+                MultiField('field_name'),
+                'field_name2',
+            ),
+            Div('password'),
+            'extra_field'
+        )
+        self.assertEqual(helper.filter(Div, MultiField).slice, [
+            [[0], 'div'],
+            [[1], 'div']
+        ])
+        self.assertEqual(helper.filter(Div, MultiField, max_level=1).slice, [
+            [[0], 'div'],
+            [[0, 0], 'multifield'],
+            [[1], 'div']
+        ])
+        self.assertEqual(helper.filter(MultiField, max_level=1).slice, [
+            [[0, 0], 'multifield']
+        ])
