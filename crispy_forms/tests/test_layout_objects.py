@@ -101,8 +101,10 @@ class TestLayoutObjects(CrispyTestCase):
 
         if self.current_template_pack == 'uni_form':
             self.assertEqual(html.count('\n'), 22)
-        else:
+        elif self.current_template_pack == 'bootstrap':
             self.assertEqual(html.count('\n'), 24)
+        else:
+            self.assertEqual(html.count('\n'), 25)
 
     def test_i18n(self):
         activate('es')

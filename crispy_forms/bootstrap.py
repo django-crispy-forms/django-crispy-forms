@@ -78,7 +78,8 @@ class FormActions(LayoutObject):
         for field in self.fields:
             html += render_field(field, form, form_style, context, template_pack=template_pack)
         template = self.template % template_pack
-        return render_to_string(template, Context({'formactions': self, 'fields_output': html}))
+        context.update({'formactions': self, 'fields_output': html})
+        return render_to_string(template, context)
 
     def flat_attrs(self):
         return flatatt(self.attrs)
