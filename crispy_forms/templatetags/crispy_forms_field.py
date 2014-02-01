@@ -148,7 +148,7 @@ def crispy_field(parser, token):
 
 
 @register.simple_tag()
-def crispy_addon(field, append="", prepend=""):
+def crispy_addon(field, append="", prepend="", form_show_labels=False):
     """
     Renders a form field using bootstrap's prepended or appended text::
 
@@ -162,9 +162,9 @@ def crispy_addon(field, append="", prepend=""):
     if (field):
         context = Context({
             'field': field,
-            'form_show_errors': True
+            'form_show_errors': True,
+            'form_show_labels': False if form_show_labels is False else True
         })
-
         template = loader.get_template('%s/layout/prepended_appended_text.html' % TEMPLATE_PACK)
         context['crispy_prepended_text'] = prepend
         context['crispy_appended_text'] = append
@@ -173,3 +173,4 @@ def crispy_addon(field, append="", prepend=""):
             raise TypeError("Expected a prepend and/or append argument")
 
     return template.render(context)
+
