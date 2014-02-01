@@ -112,6 +112,13 @@ class BasicNode(template.Node):
             # This allows us to have simplified tag syntax: {% crispy form %}
             helper = FormHelper() if not hasattr(actual_form, 'helper') else actual_form.helper
 
+        # use template_pack from helper, if defined
+        try:
+            if helper.template_pack:
+                self.template_pack = helper.template_pack
+        except AttributeError:
+            pass
+
         self.actual_helper = helper
 
         # We get the response dictionary
@@ -157,7 +164,7 @@ class BasicNode(template.Node):
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
         response_dict = {
-            'template_pack': TEMPLATE_PACK,
+            'template_pack': self.template_pack,
             '%s_action' % form_type: attrs['attrs'].get("action", ''),
             '%s_method' % form_type: attrs.get("form_method", 'post'),
             '%s_tag' % form_type: attrs.get("form_tag", True),

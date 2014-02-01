@@ -151,7 +151,7 @@ class ButtonHolder(LayoutObject):
             Submit('Save', 'Save')
         )
     """
-    template = "uni_form/layout/buttonholder.html"
+    template = "%s/layout/buttonholder.html"
 
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
@@ -165,14 +165,15 @@ class ButtonHolder(LayoutObject):
             html += render_field(field, form, form_style,
                                  context, template_pack=template_pack)
 
-        return render_to_string(self.template, Context({'buttonholder': self, 'fields_output': html}))
+        template = self.template % template_pack
+        return render_to_string(template, Context({'buttonholder': self, 'fields_output': html}))
 
 
 class BaseInput(object):
     """
     A base class to reduce the amount of code in the Input classes.
     """
-    template = "%s/layout/baseinput.html" % TEMPLATE_PACK
+    template = "%s/layout/baseinput.html"
 
     def __init__(self, name, value, **kwargs):
         self.name = name
@@ -192,7 +193,8 @@ class BaseInput(object):
         Input button value can be a variable in context.
         """
         self.value = Template(text_type(self.value)).render(context)
-        return render_to_string(self.template, Context({'input': self}))
+        template = self.template % template_pack
+        return render_to_string(template, Context({'input': self}))
 
 
 class Submit(BaseInput):
@@ -258,7 +260,7 @@ class Fieldset(LayoutObject):
             'form_field_2'
         )
     """
-    template = "uni_form/layout/fieldset.html"
+    template = "%s/layout/fieldset.html"
 
     def __init__(self, legend, *fields, **kwargs):
         self.fields = list(fields)
@@ -278,13 +280,14 @@ class Fieldset(LayoutObject):
         legend = ''
         if self.legend:
             legend = u'%s' % Template(text_type(self.legend)).render(context)
-        return render_to_string(self.template, Context({'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style}))
+        template = self.template % template_pack
+        return render_to_string(template, Context({'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style}))
 
 
 class MultiField(LayoutObject):
     """ MultiField container. Renders to a MultiField <div> """
-    template = "uni_form/layout/multifield.html"
-    field_template = "uni_form/multifield.html"
+    template = "%s/layout/multifield.html"
+    field_template = "%s/multifield.html"
 
     def __init__(self, label, *fields, **kwargs):
         self.fields = list(fields)
@@ -304,15 +307,17 @@ class MultiField(LayoutObject):
                     self.css_class += " error"
 
         fields_output = u''
+        field_template = self.field_template % template_pack
         for field in self.fields:
             fields_output += render_field(
                 field, form, form_style, context,
-                self.field_template, self.label_class, layout_object=self,
+                field_template, self.label_class, layout_object=self,
                 template_pack=template_pack
             )
 
         context.update({'multifield': self, 'fields_output': fields_output})
-        return render_to_string(self.template, context)
+        template = self.template % template_pack
+        return render_to_string(template, context)
 
 
 class Div(LayoutObject):
@@ -323,7 +328,7 @@ class Div(LayoutObject):
 
         Div('form_field_1', 'form_field_2', css_id='div-example', css_class='divs')
     """
-    template = "uni_form/layout/div.html"
+    template = "%s/layout/div.html"
 
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
@@ -342,7 +347,8 @@ class Div(LayoutObject):
         for field in self.fields:
             fields += render_field(field, form, form_style, context, template_pack=template_pack)
 
-        return render_to_string(self.template, Context({'div': self, 'fields': fields}))
+        template = self.template % template_pack
+        return render_to_string(template, Context({'div': self, 'fields': fields}))
 
 
 class Row(Div):
@@ -390,7 +396,7 @@ class Field(LayoutObject):
 
         Field('field_name', style="color: #333;", css_class="whatever", id="field_name")
     """
-    template = "%s/field.html" % TEMPLATE_PACK
+    template = "%s/field.html"
 
     def __init__(self, *args, **kwargs):
         self.fields = list(args)
@@ -415,8 +421,10 @@ class Field(LayoutObject):
             context['wrapper_class'] = self.wrapper_class
 
         html = ''
+        template = self.template % template_pack
         for field in self.fields:
-            html += render_field(field, form, form_style, context, template=self.template, attrs=self.attrs, template_pack=template_pack)
+            html += render_field(field, form, form_style, context,
+                template=template, attrs=self.attrs, template_pack=template_pack)
         return html
 
 

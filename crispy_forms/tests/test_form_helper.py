@@ -21,7 +21,7 @@ from crispy_forms.bootstrap import (
 from crispy_forms.compatibility import text_type
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import (
-    Layout, Submit, Reset, Hidden, Button, MultiField,
+    Layout, Submit, Reset, Hidden, Button, MultiField, Field
 )
 from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
@@ -138,30 +138,6 @@ class TestFormHelper(CrispyTestCase):
         self.assertFalse('<li>Passwords dont match</li>' in html)
         self.assertFalse(text_type(_('This field is required.')) in html)
         self.assertFalse('error' in html)
-
-    def test_multifield_errors(self):
-        form = TestForm({
-            'email': 'invalidemail',
-            'password1': 'yes',
-            'password2': 'yes',
-        })
-        form.helper = FormHelper()
-        form.helper.layout = Layout(
-            MultiField('legend', 'email')
-        )
-        form.is_valid()
-
-        form.helper.form_show_errors = True
-        html = render_crispy_form(form)
-        self.assertEqual(html.count('error'), 3)
-
-        # Reset layout for avoiding side effects
-        form.helper.layout = Layout(
-            MultiField('legend', 'email')
-        )
-        form.helper.form_show_errors = False
-        html = render_crispy_form(form)
-        self.assertEqual(html.count('error'), 0)
 
     def test_html5_required(self):
         form = TestForm()
@@ -409,9 +385,7 @@ class TestFormHelper(CrispyTestCase):
         self.assertEqual(html.count("<h1>Special custom field</h1>"), 2)
 
 
-
-class TestBootstrapFormHelper(CrispyTestCase):
-    urls = 'crispy_forms.tests.urls'
+class TestUniformFormHelper(TestFormHelper):
 
     def test_form_show_errors(self):
         form = TestForm({
@@ -420,13 +394,67 @@ class TestBootstrapFormHelper(CrispyTestCase):
             'last_name': 'last_name_too_long',
             'password1': 'yes',
             'password2': 'yes',
-        })
+            })
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            Field('email'),
+            Field('first_name'),
+            Field('last_name'),
+            Field('password1'),
+            Field('password2'),
+        )
+        form.is_valid()
+
+        form.helper.form_show_errors = True
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('error'), 9)
+
+        form.helper.form_show_errors = False
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('error'), 0)
+
+    def test_multifield_errors(self):
+        form = TestForm({
+            'email': 'invalidemail',
+            'password1': 'yes',
+            'password2': 'yes',
+            })
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            MultiField('legend', 'email')
+        )
+        form.is_valid()
+
+        form.helper.form_show_errors = True
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('error'), 3)
+
+        # Reset layout for avoiding side effects
+        form.helper.layout = Layout(
+            MultiField('legend', 'email')
+        )
+        form.helper.form_show_errors = False
+        html = render_crispy_form(form)
+        self.assertEqual(html.count('error'), 0)
+
+
+class TestBootstrapFormHelper(TestFormHelper):
+
+    def test_form_show_errors(self):
+        form = TestForm({
+                'email': 'invalidemail',
+                'first_name': 'first_name_too_long',
+                'last_name': 'last_name_too_long',
+                'password1': 'yes',
+                'password2': 'yes',
+                })
         form.helper = FormHelper()
         form.helper.layout = Layout(
             AppendedText('email', 'whatever'),
             PrependedText('first_name', 'blabla'),
             PrependedAppendedText('last_name', 'foo', 'bar'),
-            MultiField('legend', 'password1', 'password2')
+            AppendedText('password1', 'whatever'),
+            PrependedText('password2', 'blabla'),
         )
         form.is_valid()
 
@@ -523,3 +551,4 @@ class TestBootstrapFormHelper(CrispyTestCase):
 
         html = render_crispy_form(form)
         self.assertEqual(html.count("<label"), 0)
+
