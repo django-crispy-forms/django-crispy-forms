@@ -36,6 +36,11 @@ def is_radioselect(field):
 
 
 @register.filter
+def is_select(field):
+    return isinstance(field.field.widget, forms.Select)
+
+
+@register.filter
 def is_checkboxselectmultiple(field):
     return isinstance(field.field.widget, forms.CheckboxSelectMultiple)
 
