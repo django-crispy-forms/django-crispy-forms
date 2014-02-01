@@ -1,4 +1,3 @@
-import warnings
 from random import randint
 
 from django.template import Context, Template
@@ -36,13 +35,6 @@ class PrependedAppendedText(Field):
         template = self.template % template_pack
         return render_field(self.field, form, form_style, context,
             template=template, attrs=self.attrs, template_pack=template_pack)
-
-
-class AppendedPrependedText(PrependedAppendedText):
-    def __init__(self, *args, **kwargs):
-        warnings.warn("AppendedPrependedText has been renamed to PrependedAppendedText, \
-            it will be removed in 1.3.0", PendingDeprecationWarning)
-        super(AppendedPrependedText, self).__init__(*args, **kwargs)
 
 
 class AppendedText(PrependedAppendedText):
