@@ -1,7 +1,7 @@
 {% if field.is_hidden %}
     {{ field }}
 {% else %}
-    <div id="div_{{ field.auto_id }}" class="form-group{% if form_show_errors and field.errors %} has-error{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+    <div id="div_{{ field.auto_id }}" class="form-group{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_show_errors and field.errors %} has-error{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
 
         {% if field.label %}
             <label for="{{ field.auto_id }}"  class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">

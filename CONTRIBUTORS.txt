@@ -95,3 +95,4 @@ Contributors
 * Paras Kuhad <pkuhad>
 * Kevin Trad <hekevintran>
 * Steven Klass <rh0dium>
+* Stefan Tjarks <stj>
