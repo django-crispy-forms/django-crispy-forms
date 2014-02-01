@@ -153,7 +153,7 @@ def crispy_field(parser, token):
 
 
 @register.simple_tag()
-def crispy_addon(field, append="", prepend="", form_show_labels=False):
+def crispy_addon(field, append="", prepend="", form_show_labels=True):
     """
     Renders a form field using bootstrap's prepended or appended text::
 
