@@ -2,6 +2,7 @@
 
 ## 1.5.0
 
+ * First `AccordionGroup` can now be set to `active=False`, see #246.
  * Fixed Bootstrap3 checkbox alignment issues for all device sizes, see #225 and #267.
  * All forms are now rendered with {{ form.media }}, this makes forms containing widgets with `Media` meta class work, see #263.
  * Adjusted `{% specialspaceless %}` to avoid breaking intended spaces and be less agressive, see #250.
