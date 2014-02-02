@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 import django
 from django import forms
 from django.conf import settings
@@ -401,6 +403,19 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue('email' in html)
         self.assertFalse('password' in html)
 
+    def test_specialspaceless_not_screwing_intended_spaces(self):
+        # see issue #250
+        test_form = TestForm()
+        test_form.fields['email'].widget = forms.Textarea()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            'email',
+            HTML("<span>first span</span> <span>second span</span>")
+        )
+        html = render_crispy_form(test_form)
+        self.assertTrue('<span>first span</span> <span>second span</span>' in html)
+        self.assertTrue(re.search('<textarea[^>]*>[\r\n]+</textarea>', html))
+
 
 class TestUniformFormLayout(TestFormLayout):
 
@@ -556,5 +571,3 @@ class TestBootstrap3FormLayout(TestFormLayout):
         self.assertEqual(html.count('id="div_id_email" class="form-group"'), 1)
         self.assertEqual(html.count('placeholder="email"'), 1)
         self.assertEqual(html.count('</label> <input'), 3)
-
-

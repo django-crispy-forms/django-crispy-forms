@@ -344,9 +344,6 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         elif self.current_template_pack == 'bootstrap3':
             self.assertEqual(html.count('class="input-group-btn'), 1)
 
-        # Make sure white spaces between buttons are there in bootstrap
-        self.assertEqual(len(re.findall(r'</button> <', html)), 3)
-
     def test_hidden_fields(self):
         form = TestForm()
         # All fields hidden
