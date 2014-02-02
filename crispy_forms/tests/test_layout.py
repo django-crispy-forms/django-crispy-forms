@@ -414,7 +414,6 @@ class TestFormLayout(CrispyTestCase):
         )
         html = render_crispy_form(test_form)
         self.assertTrue('<span>first span</span> <span>second span</span>' in html)
-        self.assertTrue(re.search('<textarea[^>]*>[\r\n]+</textarea>', html))
 
 
 class TestUniformFormLayout(TestFormLayout):
