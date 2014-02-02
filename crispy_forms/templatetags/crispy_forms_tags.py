@@ -86,7 +86,7 @@ class BasicNode(template.Node):
 
     def get_render(self, context):
         """
-        Returns a `Context` object with all the necesarry stuff for rendering the form
+        Returns a `Context` object with all the necessary stuff for rendering the form
 
         :param context: `django.template.Context` variable holding the context for the node
 
