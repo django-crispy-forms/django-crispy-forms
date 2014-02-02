@@ -152,7 +152,6 @@ class TestFormHelper(CrispyTestCase):
         form.helper.html5_required = False
         html = render_crispy_form(form)
 
-
     def test_attrs(self):
         form = TestForm()
         form.helper = FormHelper()
@@ -386,7 +385,6 @@ class TestFormHelper(CrispyTestCase):
 
 
 class TestUniformFormHelper(TestFormHelper):
-
     def test_form_show_errors(self):
         form = TestForm({
             'email': 'invalidemail',
@@ -439,7 +437,6 @@ class TestUniformFormHelper(TestFormHelper):
 
 
 class TestBootstrapFormHelper(TestFormHelper):
-
     def test_form_show_errors(self):
         form = TestForm({
                 'email': 'invalidemail',
@@ -552,3 +549,21 @@ class TestBootstrapFormHelper(TestFormHelper):
         html = render_crispy_form(form)
         self.assertEqual(html.count("<label"), 0)
 
+
+class TestBootstrap3FormHelper(TestFormHelper):
+    def test_label_class_and_field_class(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.label_class = 'col-lg-2'
+        form.helper.field_class = 'col-lg-8'
+        html = render_crispy_form(form)
+
+        self.assertTrue('<div class="form-group"> <div class="controls col-lg-offset-2 col-lg-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput checkbox" id="id_is_company" name="is_company" type="checkbox" />')
+        self.assertEqual(html.count('col-lg-8'), 7)
+
+        form.helper.label_class = 'col-sm-3'
+        form.helper.field_class = 'col-sm-8'
+        html = render_crispy_form(form)
+
+        self.assertTrue('<div class="form-group"> <div class="controls col-sm-offset-3 col-sm-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput checkbox" id="id_is_company" name="is_company" type="checkbox" />')
+        self.assertEqual(html.count('col-sm-8'), 7)
