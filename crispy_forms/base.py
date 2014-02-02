@@ -29,10 +29,5 @@ class KeepContext(object):
         pass
 
     def __exit__(self, type, value, traceback):
-        for key in self.keys:
-            self._delete_key_from_context(key)
-
-    def _delete_key_from_context(self, key):
-        for d in self.context.dicts:
-            if key in d:
-                del d[key]
+        for key in list(self.keys):
+            del self.context[key]
