@@ -2,6 +2,9 @@
 
 ## 1.5.0
 
+ * Fixed Bootstrap3 checkbox alignment issues for all device sizes, see #225 and #267.
+ * All forms are now rendered with {{ form.media }}, this makes forms containing widgets with `Media` meta class work, see #263.
+ * Adjusted `{% specialspaceless %}` to avoid breaking intended spaces and be less agressive, see #250.
  * Fixed inputs rendering for bootstrap3 and redo `FormActions` layout object bootstrap3 template for correct alignment, see #279.
  * `MultiField` now obeys `form_show_labels`, see #278.
  * Added `wrapper_class` to `bootstrap.InlineRadios`, see #272.
