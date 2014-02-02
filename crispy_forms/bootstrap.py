@@ -27,14 +27,19 @@ class PrependedAppendedText(Field):
 
         super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
-        context.update({'crispy_appended_text': self.appended_text,
-                        'crispy_prepended_text': self.prepended_text,
-                        'input_size' : self.input_size,
-                        'active': getattr(self, "active", False)})
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
+        extra_context = {
+            'crispy_appended_text': self.appended_text,
+            'crispy_prepended_text': self.prepended_text,
+            'input_size' : self.input_size,
+            'active': getattr(self, "active", False)
+        }
         template = self.template % template_pack
-        return render_field(self.field, form, form_style, context,
-            template=template, attrs=self.attrs, template_pack=template_pack)
+        return render_field(
+            self.field, form, form_style, context,
+            template=template, attrs=self.attrs,
+            template_pack=template_pack, extra_context=extra_context, **kwargs
+        )
 
 
 class AppendedText(PrependedAppendedText):
@@ -73,13 +78,16 @@ class FormActions(LayoutObject):
         if 'css_class' in self.attrs:
             self.attrs['class'] = self.attrs.pop('css_class')
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = u''
         for field in self.fields:
-            html += render_field(field, form, form_style, context, template_pack=template_pack)
+            html += render_field(field, form, form_style, context, template_pack=template_pack, **kwargs)
+        extra_context = {
+            'formactions': self,
+            'fields_output': html
+        }
         template = self.template % template_pack
-        context.update({'formactions': self, 'fields_output': html})
-        return render_to_string(template, context)
+        return render_to_string(template, extra_context, context)
 
     def flat_attrs(self):
         return flatatt(self.attrs)
@@ -93,9 +101,11 @@ class InlineCheckboxes(Field):
     """
     template = "%s/layout/checkboxselectmultiple_inline.html"
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
-        context.update({'inline_class': 'inline'})
-        return super(InlineCheckboxes, self).render(form, form_style, context, template_pack)
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+        return super(InlineCheckboxes, self).render(
+            form, form_style, context, template_pack=template_pack,
+            extra_context={'inline_class': 'inline'}
+        )
 
 
 class InlineRadios(Field):
@@ -106,16 +116,18 @@ class InlineRadios(Field):
     """
     template = "%s/layout/radioselect_inline.html"
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
-        context.update({'inline_class': 'inline'})
-        return super(InlineRadios, self).render(form, form_style, context, template_pack)
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+        return super(InlineRadios, self).render(
+            form, form_style, context, template_pack=template_pack,
+            extra_context={'inline_class': 'inline'}
+        )
 
 
 class FieldWithButtons(Div):
     template = '%s/layout/field_with_buttons.html'
     field_template = '%s/layout/field.html'
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
         buttons = ''
         field_template = self.field_template % template_pack
@@ -123,22 +135,25 @@ class FieldWithButtons(Div):
             buttons += render_field(
                 field, form, form_style, context,
                 field_template, layout_object=self,
-                template_pack = template_pack,
+                template_pack=template_pack, **kwargs
             )
 
-        context.update({'div': self, 'buttons': buttons})
-
+        extra_context = {'div': self, 'buttons': buttons}
         template = self.template % template_pack
+
         if isinstance(self.fields[0], Field):
             # FieldWithButtons(Field('field_name'), StrictButton("go"))
             # We render the field passing its name and attributes
             return render_field(
                 self.fields[0][0], form, form_style, context,
                 template, attrs=self.fields[0].attrs,
-                template_pack = template_pack,
+                template_pack=template_pack, extra_context=extra_context, **kwargs
             )
         else:
-            return render_field(self.fields[0], form, form_style, context, template)
+            return render_field(
+                self.fields[0], form, form_style, context, template,
+                extra_context=extra_context, **kwargs
+            )
 
 
 class StrictButton(object):
@@ -165,10 +180,10 @@ class StrictButton(object):
 
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         self.content = Template(text_type(self.content)).render(context)
         template = self.template % template_pack
-        return render_to_string(template, Context({'button': self}))
+        return render_to_string(template, {'button': self}, context)
 
 
 class Container(Div):
@@ -191,7 +206,7 @@ class Container(Div):
         """
         return field_name in map(lambda pointer: pointer[1], self.get_field_names())
 
-    def render(self, form, form_style, context, template_pack = TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         if self.active:
             if not 'active' in self.css_class:
                 self.css_class += ' active'
@@ -226,13 +241,13 @@ class Tab(Container):
     css_class = 'tab-pane'
     link_template = '%s/layout/tab-link.html'
 
-    def render_link(self, template_pack = TEMPLATE_PACK):
+    def render_link(self, template_pack=TEMPLATE_PACK, **kwargs):
         """
         Render the link for the tab-pane. It must be called after render so css_class is updated
         with active if needed.
         """
         link_template = self.link_template % template_pack
-        return render_to_string(link_template, Context({'link': self}))
+        return render_to_string(link_template, {'link': self})
 
 
 class TabHolder(ContainerHolder):
@@ -246,7 +261,7 @@ class TabHolder(ContainerHolder):
     """
     template = '%s/layout/tab.html'
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         links, content = '', ''
         for tab in self.fields:
             tab.active = False
@@ -256,14 +271,17 @@ class TabHolder(ContainerHolder):
 
         for tab in self.fields:
             content += render_field(
-                tab, form, form_style, context, template_pack=template_pack
+                tab, form, form_style, context, template_pack=template_pack, **kwargs
             )
             links += tab.render_link(template_pack)
 
+        extra_context = {
+            'tabs': self,
+            'links': links,
+            'content': content
+        }
         template = self.template % template_pack
-        return render_to_string(template, Context({
-            'tabs': self, 'links': links, 'content': content
-        }))
+        return render_to_string(template, extra_context, context)
 
 
 class AccordionGroup(Container):
@@ -288,7 +306,7 @@ class Accordion(ContainerHolder):
     """
     template = "%s/accordion.html"
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         content = ''
 
         # accordion group needs the parent div id to set `data-parent` (I don't
@@ -302,13 +320,14 @@ class Accordion(ContainerHolder):
         for group in self.fields:
             group.data_parent = self.css_id
             content += render_field(
-                group, form, form_style, context, template_pack=template_pack
+                group, form, form_style, context, template_pack=template_pack, **kwargs
             )
 
         template = self.template % template_pack
         return render_to_string(
             template,
-            Context({'accordion': self, 'content': content})
+            {'accordion': self, 'content': content},
+            context
         )
 
 
@@ -330,12 +349,13 @@ class Alert(Div):
         self.content = content
         self.dismiss = dismiss
 
-    def render(self, form, form_style, context, template_pack = TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         template = self.template % template_pack
         return render_to_string(
             template,
-            Context({'alert': self, 'content': self.content, 'dismiss': self.dismiss
-        }))
+            {'alert': self, 'content': self.content, 'dismiss': self.dismiss},
+            context
+        )
 
 
 class UneditableField(Field):

@@ -25,7 +25,11 @@ def default_field_template(template_pack=TEMPLATE_PACK):
 default_field_template = memoize(default_field_template, {}, 1)
 
 
-def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None, template_pack=TEMPLATE_PACK):
+def render_field(
+    field, form, form_style, context, template=None, labelclass=None,
+    layout_object=None, attrs=None, template_pack=TEMPLATE_PACK,
+    extra_context=None, **kwargs
+):
     """
     Renders a django-crispy-forms field
 
@@ -34,29 +38,26 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         and render it using default template 'CRISPY_TEMPLATE_PACK/field.html'
         The field is added to a list that the form holds called `rendered_fields`
         to avoid double rendering fields.
-
     :param form: The form/formset to which that field belongs to.
-
     :param form_style: A way to pass style name to the CSS framework used.
-
     :template: Template used for rendering the field.
-
     :layout_object: If passed, it points to the Layout object that is being rendered.
         We use it to store its bound fields in a list called `layout_object.bound_fields`
-
     :attrs: Attributes for the field's widget
+    :template_pack: Name of the template pack to be used for rendering `field`
+    :extra_context: Dictionary to be added to context, added variables by the layout object
     """
-    with KeepContext(context):
+    added_keys = [] if extra_context is None else extra_context.keys()
+    with KeepContext(context, added_keys):
         if field is None:
             return ''
 
         FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
 
         if hasattr(field, 'render'):
-            if 'template_pack' in inspect.getargspec(field.render)[0]:
-                return field.render(form, form_style, context, template_pack=template_pack)
-            else:
-                return field.render(form, form_style, context)
+            return field.render(
+                form, form_style, context, template_pack=template_pack,
+            )
         else:
             # In Python 2 form field names cannot contain unicode characters without ASCII mapping
             if PY2:
@@ -138,6 +139,8 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
                 'labelclass': labelclass,
                 'flat_attrs': flatatt(attrs if isinstance(attrs, dict) else {}),
             })
+            if extra_context is not None:
+                context.update(extra_context)
             html = template.render(context)
 
         return html
