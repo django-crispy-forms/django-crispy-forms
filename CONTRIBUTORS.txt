@@ -101,3 +101,4 @@ Contributors
 * Michael Nielsen <K0den>
 * Stephen Mitchell <scuml>
 * <pySilver>
+* Christopher Adams <adamsc64>
