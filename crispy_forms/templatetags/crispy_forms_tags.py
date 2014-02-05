@@ -140,11 +140,11 @@ class BasicNode(template.Node):
                     forloop.iterate()
 
         if is_formset:
-            response_dict.update({'formset': actual_form})
+            node_context.update({'formset': actual_form})
         else:
-            response_dict.update({'form': actual_form})
+            node_context.update({'form': actual_form})
 
-        return Context(response_dict)
+        return Context(node_context)
 
     def get_response_dict(self, helper, context, is_formset):
         """
