@@ -37,7 +37,7 @@ This would be part of an hipothetic function view::
 
     formset = ExampleFormSet()
     helper = ExampleFormSetHelper()
-    return render(request, 'template.html', {formset: formset, helper: helper})
+    return render(request, 'template.html', {'formset': formset, 'helper': helper})
 
 Then in **template.html** you would have to do::
 
