@@ -27,7 +27,7 @@
         {% if not field|is_checkboxselectmultiple and not field|is_radioselect %}
             {% if field|is_checkbox and form_show_labels %}
                 <label for="{{ field.id_for_label }}" class="{% if field.field.required %} requiredField{% endif %}">
-                    {% crispy_field field 'class' 'checkbox' %}
+                    {% crispy_field field %}
                     {{ field.label|safe }}
                     {% include 'bootstrap3/layout/help_text_and_errors.html' %}
                 </label>
