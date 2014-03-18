@@ -2,6 +2,8 @@
 
 ## 1.5.0
 
+ * New doc section for creating custom template packs.
+ * Fixed Bootstrap3 checkbox alignment issues with label texts, see #275.
  * First `AccordionGroup` can now be set to `active=False`, see #246.
  * Fixed Bootstrap3 checkbox alignment issues for all device sizes, see #225 and #267.
  * All forms are now rendered with {{ form.media }}, this makes forms containing widgets with `Media` meta class work, see #263.
