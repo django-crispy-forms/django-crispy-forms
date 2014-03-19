@@ -29,6 +29,9 @@ Also, now the helper is able to cross match the layout with the form instance, b
 Helper attributes you can set
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+**template_pack**
+    Allows you to set what template pack you want to use at ``FormHelper`` level. This is useful for example when a website needs to render different styling forms for different use cases, like desktop website vs smarphone website.
+
 **template**
     When set allows you to render a form/formset using a custom template. Default template is at ``{{ TEMPLATE_PACK }}/[whole_uni_form.html|whole_uni_formset.html]``
 
