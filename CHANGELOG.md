@@ -2,6 +2,9 @@
 
 ## 1.5.0
 
+Special thanks in this release for all the **<a href="http://flattr.com/thing/512037/django-crispy-forms">supporters and donators</a>**.
+
+ * Bug fix for specifying `template_pack` in `{% crispy %}` tag, `bootstrap3` couldn't be set that way.
  * New doc section for creating custom template packs.
  * Fixed Bootstrap3 checkbox alignment issues with label texts, see #275.
  * First `AccordionGroup` can now be set to `active=False`, see #246.
