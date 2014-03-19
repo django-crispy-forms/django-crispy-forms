@@ -216,11 +216,11 @@ class TestFormHelper(CrispyTestCase):
         if (self.current_template_pack == 'uni_form'):
             self.assertTrue('uniForm' in html)
 
-    def test_template_pack_override(self):
+    def test_template_pack_override_compact(self):
         current_pack = self.current_template_pack
         override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
-        # Syntax {% crispy form 'template_pack_name' %}
+        # {% crispy form 'template_pack_name' %}
         template = loader.get_template_from_string(u"""
             {%% load crispy_forms_tags %%}
             {%% crispy form "%s" %%}
@@ -228,20 +228,36 @@ class TestFormHelper(CrispyTestCase):
         c = Context({'form': TestForm()})
         html = template.render(c)
 
-        # Syntax {% crispy form helper 'template_pack_name' %}
+        if (current_pack == 'uni_form'):
+            self.assertTrue('control-group' in html)
+        else:
+            self.assertTrue('uniForm' in html)
+
+    def test_template_pack_override_verbose(self):
+        current_pack = self.current_template_pack
+        override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
+
+        # {% crispy form helper 'template_pack_name' %}
         template = loader.get_template_from_string(u"""
             {%% load crispy_forms_tags %%}
             {%% crispy form form_helper "%s" %%}
         """ % override_pack)
         c = Context({'form': TestForm(), 'form_helper': FormHelper()})
-        html2 = template.render(c)
+        html = template.render(c)
 
         if (current_pack == 'uni_form'):
             self.assertTrue('control-group' in html)
-            self.assertTrue('control-group' in html2)
         else:
             self.assertTrue('uniForm' in html)
-            self.assertTrue('uniForm' in html2)
+
+    def test_template_pack_override_wrong(self):
+        try:
+            loader.get_template_from_string(u"""
+                {% load crispy_forms_tags %}
+                {% crispy form 'foo' %}
+            """)
+        except TemplateSyntaxError:
+            pass
 
     def test_invalid_helper(self):
         template = loader.get_template_from_string(u"""
