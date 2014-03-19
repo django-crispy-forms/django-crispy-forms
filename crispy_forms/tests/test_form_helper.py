@@ -583,3 +583,11 @@ class TestBootstrap3FormHelper(TestFormHelper):
 
         self.assertTrue('<div class="form-group"> <div class="controls col-sm-offset-3 col-sm-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput checkbox" id="id_is_company" name="is_company" type="checkbox" />')
         self.assertEqual(html.count('col-sm-8'), 7)
+
+    def test_template_pack(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.template_pack = 'uni_form'
+        html = render_crispy_form(form)
+        self.assertFalse('form-control' in html)
+        self.assertTrue('ctrlHolder' in html)

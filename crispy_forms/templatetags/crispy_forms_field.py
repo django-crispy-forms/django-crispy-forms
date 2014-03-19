@@ -95,6 +95,9 @@ class CrispyFieldNode(template.Node):
         except template.VariableDoesNotExist:
             html5_required = False
 
+        # If template pack has been overriden in FormHelper we can pick it from context
+        template_pack = context.get('template_pack', TEMPLATE_PACK)
+
         widgets = getattr(field.field.widget, 'widgets', [field.field.widget])
 
         if isinstance(attrs, dict):
@@ -111,7 +114,7 @@ class CrispyFieldNode(template.Node):
                 css_class = class_name
 
             if (
-                TEMPLATE_PACK == 'bootstrap3'
+                template_pack == 'bootstrap3'
                 and not is_checkbox(field)
                 and not is_file(field)
             ):
