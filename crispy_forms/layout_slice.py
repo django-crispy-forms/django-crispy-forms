@@ -23,7 +23,7 @@ class LayoutSlice(object):
         """
         if args:
             if isinstance(fields, list):
-                fields= tuple(fields)
+                fields = tuple(fields)
             else:
                 fields = (fields,)
 

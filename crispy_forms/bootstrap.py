@@ -1,13 +1,12 @@
 from random import randint
 
-from django.template import Context, Template
+from django.template import Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 
 from .compatibility import text_type
 from .layout import LayoutObject, Field, Div
 from .utils import render_field, flatatt, TEMPLATE_PACK
-
 
 
 class PrependedAppendedText(Field):
@@ -31,7 +30,7 @@ class PrependedAppendedText(Field):
         extra_context = {
             'crispy_appended_text': self.appended_text,
             'crispy_prepended_text': self.prepended_text,
-            'input_size' : self.input_size,
+            'input_size': self.input_size,
             'active': getattr(self, "active", False)
         }
         template = self.template % template_pack
