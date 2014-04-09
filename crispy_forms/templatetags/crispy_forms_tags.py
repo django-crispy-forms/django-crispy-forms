@@ -9,6 +9,7 @@ from django.utils.functional import memoize
 from django import template
 
 from crispy_forms.helper import FormHelper
+from crispy_forms.compatibility import string_types
 
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
@@ -272,7 +273,7 @@ def do_uni_form(parser, token):
     # {% crispy form 'bootstrap' %}
     if (
         helper is not None and
-        isinstance(helper, basestring) and
+        isinstance(helper, string_types) and
         ("'" in helper or '"' in helper)
     ):
         template_pack = helper
