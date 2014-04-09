@@ -399,6 +399,18 @@ class TestFormHelper(CrispyTestCase):
         html = render_crispy_form(form)
         self.assertEqual(html.count("<h1>Special custom field</h1>"), 2)
 
+    def test_helper_custom_field_template_with_explicit_fields(self):
+        form = TestForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            Field('password1'),
+            Field('password2'),
+        )
+        form.helper.field_template = 'custom_field_template.html'
+
+        html = render_crispy_form(form)
+        self.assertEqual(html.count("<h1>Special custom field</h1>"), 2)
+
 
 class TestUniformFormHelper(TestFormHelper):
     def test_form_show_errors(self):
