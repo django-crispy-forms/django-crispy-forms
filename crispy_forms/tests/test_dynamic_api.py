@@ -7,7 +7,7 @@ from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import Submit
 from crispy_forms.layout import (
-    Layout, Fieldset, MultiField, HTML, Div, Field
+    Layout, Fieldset, MultiField, HTML, Div, Field, Column
 )
 from crispy_forms.bootstrap import AppendedText
 from crispy_forms.tests.forms import TestForm
@@ -504,6 +504,28 @@ class TestDynamicLayouts(CrispyTestCase):
         layout[0][0] = 'password1'
         self.assertTrue(isinstance(layout[0], Div))
         self.assertEqual(layout[0][0], 'password1')
+
+    def test_remove_layout_field(self):
+        layout = Layout(
+            Fieldset(
+                u'Company Data',
+                'is_company',
+                'email',
+                'password1',
+                'password2',
+                css_id="multifield_info",
+            ),
+            Column(
+                'first_name',
+                'last_name',
+                css_id="column_name",
+            )
+        )
+
+        # Remove email field on the go
+        self.assertEqual(layout.fields[0].fields[1], 'email')
+        layout.remove_by_fieldname('email')
+        self.assertEqual(layout.fields[0].fields[1], 'password1')
 
 
 class TestUniformDynamicLayouts(TestDynamicLayouts):

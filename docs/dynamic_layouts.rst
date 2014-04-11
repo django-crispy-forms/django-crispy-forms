@@ -330,6 +330,40 @@ This is how you would insert a layout object in the second position of the secon
 
     layout[1].insert(1, HTML("<p>whatever</p>"))
 
+
+Removing field by name
+~~~~~~~~~~~~~~~~~~~~~~
+
+Layout can be also maniputated to remove a field using ``remove_by_fieldname`` method, instead using ``pop(index)``. This method removes the parent layout if it gets empty.
+
+Consider this layout::
+
+    Layout(
+        Fieldset(
+            u'Company Data',
+            'company_name',
+            Div(Field('email', css_class="hero")),
+            'password1',
+            'password2',
+        )
+    )
+
+Remove ``email`` and ``password2``::
+
+    layout.remove_by_fieldname('email')
+    layout.remove_by_fieldname('password2')
+
+Layout would turn into::
+
+    Layout(
+        Fieldset(
+            u'Company Data',
+            'company_name',
+            'password1',
+        )
+    )
+
+
 .. Warning ::
 
     Remember always that if you are going to manipulate a helper or layout in a view or any part of your code, you better use an instance level variable.
