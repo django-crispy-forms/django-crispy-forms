@@ -90,7 +90,7 @@ class LayoutObject(object):
 
     def remove_layout_object(self, pointer_index):
         """
-        Remove a children layout object given by its pointer index. 
+        Remove a children layout object given by its pointer index.
         It will remove the parent layout if it gets empty
 
         :param pointer_index: field accessor
@@ -108,10 +108,10 @@ class LayoutObject(object):
             # remove field
             self.pop(pointer_index[0])
 
-    def pop_field(self, field_name):
+    def remove_by_fieldname(self, field_name):
         """
-        Remove a field from the layout using its name instead of its index. 
-        It will also remove the parent layout object if its the unique field in this layout.  
+        Remove a field from the layout using its name instead of its index.
+        It will also remove the parent layout object if its the unique field in this layout.
 
         :param field_name: the name of the field to be removed.
         """
@@ -122,7 +122,6 @@ class LayoutObject(object):
             if pointer[1] == field_name:
                 self.remove_layout_object(pointer[0])
                 break
-
 
 
 class Layout(LayoutObject):
