@@ -222,7 +222,7 @@ For example this setting would generate ``<input class"textinput inputtext" ...`
 Render a form within Python code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sometimes, it might be useful to render a form using crispy-forms within Python code, like a Django view, for that there is a nice helper ``render_crispy_form``. The prototype of the method is ``render_crispy_form(form, helper=None, context=None)``. You can use it like this.
+Sometimes, it might be useful to render a form using crispy-forms within Python code, like a Django view, for that there is a nice helper ``render_crispy_form``. The prototype of the method is ``render_crispy_form(form, helper=None, context=None)``. You can use it like this. Remember to pass your CSRF token to the helper method using the context dictionary if you want the rendered form to be able to submit.
 
 
 AJAX validation recipe
@@ -242,7 +242,9 @@ Our server side code could be::
             form.save()
             return {'success': True}
 
-        form_html = render_crispy_form(form)
+        # RequestContext ensures CSRF token is placed in newly rendered form_html
+        request_context = RequestContext(request)
+        form_html = render_crispy_form(form, context=request_context)
         return {'success': False, 'form_html': form_html}
 
 I'm using a jsonview decorator from `django-jsonview`_. In our client side using jQuery would look like::
