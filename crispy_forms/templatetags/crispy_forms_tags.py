@@ -239,7 +239,7 @@ def do_uni_form(parser, token):
 
     Usage::
 
-        {% include crispy_tags %}
+        {% load crispy_forms_tags %}
         {% crispy form form.helper %}
 
     You can also provide the template pack as the third argument::
