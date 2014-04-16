@@ -48,7 +48,7 @@ You can set your default template pack for your project using ``CRISPY_TEMPLATE_
 
     CRISPY_TEMPLATE_PACK = 'uni_form'
 
-.. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
+.. _`Bootstrap`: http://getbootstrap.com/
 .. _`Foundation`: http://foundation.zurb.com/
 .. _`crispy-forms-foundation`: https://github.com/sveetch/crispy-forms-foundation
 

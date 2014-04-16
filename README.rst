@@ -16,7 +16,7 @@ The application mainly provides:
 Django-crispy-forms supports several frontend frameworks, such as Twitter `Bootstrap`_ (versions 2 and 3), `Uni-form`_ and Foundation. You can also easily adapt your custom company's one, creating your own, `see the docs`_ for more information. You can easily switch among them using ``CRISPY_TEMPLATE_PACK`` setting variable.
 
 .. _`Uni-form`: http://sprawsm.com/uni-form
-.. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
+.. _`Bootstrap`: http://getbootstrap.com/
 .. _`see the docs`: http://django-crispy-forms.rtfd.org
 
 Authors
