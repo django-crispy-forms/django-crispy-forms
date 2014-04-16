@@ -333,7 +333,7 @@ You need to differentiate between layout objects' templates and django-crispy-fo
 - **Creating a TEMPLATE PACK**: You maybe want to use crispy-forms with you favorite CSS framework or your Company's CSS. For doing so, you will need to be quite familiar with crispy-forms, layout objects and their templates. You will probably want to start off with one of the existing template packs, probably ``bootstrap``. Imagine your template pack is named ``chocolate``, that means you probably want your root directory named the same way. For using your template pack, you will have to set ``CRISPY_TEMPLATE_PACK = 'chocolate'`` variable in your settings file and also set ``CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'chocolate')``. This way crispy-forms will know you want to use your own template pack, which is an allowed one and where to look for it.
 
 .. _`django-uni-form-contrib`: https://github.com/kennethlove/django-uni-form-contrib
-.. _`Bootstrap`: https://github.com/twitter/bootstrap
+.. _`Bootstrap`: http://getbootstrap.com
 
 
 Creating your own layout objects
