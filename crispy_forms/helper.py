@@ -205,7 +205,6 @@ class FormHelper(DynamicLayoutHandler):
     field_class = ''
 
     def __init__(self, form=None):
-        self.attrs = {}
         self.inputs = []
 
         if form is not None:
@@ -355,7 +354,7 @@ class FormHelper(DynamicLayoutHandler):
                 pass
 
         items['attrs'] = {}
-        if self.attrs:
+        if getattr(self, 'attrs', None):
             items['attrs'] = self.attrs.copy()
         if self.form_action:
             items['attrs']['action'] = self.form_action.strip()
