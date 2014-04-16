@@ -390,5 +390,25 @@ class UneditableField(Field):
         super(UneditableField, self).__init__(field, *args, **kwargs)
 
 
+class StaticField(Field):
+    """
+    Layout object for rendering fields as static (paragraphs) in bootstrap3
+    Can also add a hidden field to store the value
+
+    Example::
+
+        StaticField('field_name', add_hidden_field=True)
+    """
+    template = "bootstrap3/layout/static_input.html"
+
+    def __init__(self, field, add_hidden_field=False, *args, **kwargs):
+        self.add_hidden_field = add_hidden_field
+        super(StaticField, self).__init__(field, *args, **kwargs)
+
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+        context['add_hidden_field'] = self.add_hidden_field
+        return super(StaticField, self).render(form, form_style, context, template_pack)
+
+
 class InlineField(Field):
     template = "%s/layout/inline_field.html"
