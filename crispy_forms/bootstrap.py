@@ -79,7 +79,7 @@ class FormActions(LayoutObject):
             self.attrs['class'] = self.attrs.pop('css_class')
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        html = u''
+        html = ''
         for field in self.fields:
             html += render_field(field, form, form_style, context, template_pack=template_pack, **kwargs)
         extra_context = {
@@ -352,7 +352,7 @@ class Alert(Div):
     """
     `Alert` generates markup in the form of an alert dialog
 
-        Alert(content='<strong>Warning!</strong> Best check yo self, you're not looking too good.')
+        Alert(content='<strong>Warning!</strong> Best check yo self, yo're not looking too good.')
     """
     template = "%s/layout/alert.html"
     css_class = "alert"
