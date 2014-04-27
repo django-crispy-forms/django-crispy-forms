@@ -1,4 +1,5 @@
-from __future__ import with_statement
+from __future__ import with_statement, unicode_literals
+
 import inspect
 import logging
 import sys

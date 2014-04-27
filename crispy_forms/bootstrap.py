@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from random import randint
 
 from django.template import Context, Template
