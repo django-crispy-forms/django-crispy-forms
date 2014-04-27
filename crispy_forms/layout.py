@@ -436,7 +436,13 @@ class Field(LayoutObject):
             extra_context['wrapper_class'] = self.wrapper_class
 
         html = ''
-        template = self.template % template_pack
+        try:
+            template = self.template % template_pack
+        except TypeError:
+            # Could be the case that a field is extended from Layout and
+            # this provide full path to the template name.
+            template = self.template
+
         for field in self.fields:
             html += render_field(
                 field, form, form_style, context,
