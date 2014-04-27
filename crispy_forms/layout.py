@@ -440,7 +440,7 @@ class Field(LayoutObject):
             template = self.template % template_pack
         except TypeError:
             # Could be the case that a field is extended from Layout and
-            # this provide full path to the template name.
+            # this declare the template name without the `%s` string argument.
             template = self.template
 
         for field in self.fields:
