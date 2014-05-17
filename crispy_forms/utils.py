@@ -100,7 +100,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
                 raise Exception("Could not resolve form field '%s'." % field)
             else:
                 field_instance = None
-                _logger.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
+                _logger.warning("Could not resolve form field '%s'.", field, exc_info=sys.exc_info())
 
         if hasattr(form, 'rendered_fields'):
             if not field in form.rendered_fields:
@@ -109,7 +109,7 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
                 if not FAIL_SILENTLY:
                     raise Exception("A field should only be rendered once: %s" % field)
                 else:
-                    _logger.warning("A field should only be rendered once: %s" % field, exc_info=sys.exc_info())
+                    _logger.warning("A field should only be rendered once: %s", field, exc_info=sys.exc_info())
 
         if field_instance is None:
             html = ''
