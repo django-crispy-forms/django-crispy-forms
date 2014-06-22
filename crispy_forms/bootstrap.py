@@ -158,7 +158,7 @@ class FieldWithButtons(Div):
 
 class StrictButton(object):
     """
-    Layout oject for rendering an HTML button::
+    Layout object for rendering an HTML button::
 
         Button("button content", css_class="extra")
     """

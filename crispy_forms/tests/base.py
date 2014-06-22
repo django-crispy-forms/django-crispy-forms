@@ -16,11 +16,11 @@ class CrispyTestCase(TestCase):
         template_loaders = template_loaders + list(settings.TEMPLATE_LOADERS)
 
         # ensuring test templates directory is loaded first
-        self.__overriden_settings = override_settings(**{
+        self.__overridden_settings = override_settings(**{
             'TEMPLATE_LOADERS': template_loaders,
             'TEMPLATE_DIRS': template_dirs,
         })
-        self.__overriden_settings.enable()
+        self.__overridden_settings.enable()
 
         # resetting template loaders cache
         self.__template_source_loaders = loader.template_source_loaders
@@ -28,7 +28,7 @@ class CrispyTestCase(TestCase):
 
     def tearDown(self):
         loader.template_source_loaders = self.__template_source_loaders
-        self.__overriden_settings.disable()
+        self.__overridden_settings.disable()
 
     @property
     def current_template_pack(self):

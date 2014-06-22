@@ -109,7 +109,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
             # prepend and append tests
             self.assertIn("input-append", crispy_addon(bound_field, prepend="Work", append="Primary"))
             self.assertIn("input-prepend", crispy_addon(bound_field, prepend="Work", append="Secondary"))
-        elif self.current_template_pack == 'bootsrap3':
+        elif self.current_template_pack == 'bootstrap3':
             self.assertIn("input-group-addon", crispy_addon(bound_field, prepend="Work", append="Primary"))
             self.assertIn("input-group-addon", crispy_addon(bound_field, prepend="Work", append="Secondary"))
 

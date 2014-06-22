@@ -10,7 +10,7 @@ Special thanks in this release for all the **<a href="http://flattr.com/thing/51
  * First `AccordionGroup` can now be set to `active=False`, see #246.
  * Fixed Bootstrap3 checkbox alignment issues for all device sizes, see #225 and #267.
  * All forms are now rendered with {{ form.media }}, this makes forms containing widgets with `Media` meta class work, see #263.
- * Adjusted `{% specialspaceless %}` to avoid breaking intended spaces and be less agressive, see #250.
+ * Adjusted `{% specialspaceless %}` to avoid breaking intended spaces and be less aggressive, see #250.
  * Fixed inputs rendering for bootstrap3 and redo `FormActions` layout object bootstrap3 template for correct alignment, see #279.
  * `MultiField` now obeys `form_show_labels`, see #278.
  * Added `wrapper_class` to `bootstrap.InlineRadios`, see #272.
@@ -37,7 +37,7 @@ Special thanks in this release to **James Friedman <a href="https://github.com/j
  * Added support for horizontal forms in bootstrap3, see #209.
  * Fixed spaces missing when rendering several submit inputs continued, see #211.
  * Fixed checkboxes and radios for Bootstrap3, adjusted multiple inline radios and checkboxes, see #225.
- * Update accordion markup for bootstrap3 compatibilty, see #229.
+ * Update accordion markup for bootstrap3 compatibility, see #229.
  * Moved `UneditableField` to bootstrap module, place where it should live, no backwards compatible import left behind.
  * Added `bootstrap3` template pack thanks to James Friedman, see #213 and #209.
  * `RadioSelect` and `CheckboxSelectMultiple` widget values and texts were being localized, when they shouldn't bee, see #214.
@@ -65,7 +65,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Added a settings variable named `CRISPY_ALLOWED_TEMPLATE_PACKS` for adding easily support for new template packs, see #192.
  * Added `{% crispy_addon %}` tag, see #195.
  * Make `CRISPY_TEMPLATE_PACK` optional for tests
- * Make tests run the same exacty way with `runtests.py` and `manage.py test`, see #183.
+ * Make tests run the same exactly way with `runtests.py` and `manage.py test`, see #183.
  * Bug fix for `wrap_together` when using it with partial slices.
  * Fixes for `KeepContext` context manager, see #180.
  * Added `FormHelper.field_template` attribute, for easily override field template for a specific form/formset, see docs.
@@ -219,7 +219,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
 ## 1.1.0
 
  * Fixing produced html by a checkbox field, closing label the right way and rendering checkbox in the right place.
- * Passing full context to field rendering, to be consistent and having acess in `field.html` template to helper attributes.
+ * Passing full context to field rendering, to be consistent and having access in `field.html` template to helper attributes.
  * Custom helper attributes can now be set and will be part of templates context, this way you can define custom specific behavior.
  * Adding @kennethlove bootstrap template pack into django-crispy-forms core.
  * Adding `CRISPY_TEMPLATE_PACK` setting variable to easily switch between different template packs. Default template pack is now bootstrap.
@@ -239,7 +239,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
 ## 1.0.0
 
  * Using `baseinput.html` template within `whole_uni_form.html`, to be DRY and consistent.
- * `BaseInput` subclasses like `Submit` can now have ids set, ussing `css_id`
+ * `BaseInput` subclasses like `Submit` can now have ids set, using `css_id`
  * Adding a simplified alternative syntax for `{% uni_form %}` tag. We can now do `{% uni_form form %}` for rendering a form using a helper, instead of `{% uni_form form form.helper %}`, if the `FormHelper` attribute attached to the form is named `helper`.
  * Improving `rendered_fields` checking performance.
  * Layouts are now rendered strictly. We don't render fields missed in the layout. If the form has a Meta class with `fields` or `exclude`, then we follow Django standards.

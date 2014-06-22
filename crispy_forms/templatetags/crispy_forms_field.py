@@ -95,7 +95,7 @@ class CrispyFieldNode(template.Node):
         except template.VariableDoesNotExist:
             html5_required = False
 
-        # If template pack has been overriden in FormHelper we can pick it from context
+        # If template pack has been overridden in FormHelper we can pick it from context
         template_pack = context.get('template_pack', TEMPLATE_PACK)
 
         widgets = getattr(field.field.widget, 'widgets', [field.field.widget])
