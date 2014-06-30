@@ -3,7 +3,6 @@ import logging
 import sys
 
 from django.conf import settings
-from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
@@ -41,7 +40,7 @@ def render_field(
     Renders a django-crispy-forms field
 
     :param field: Can be a string or a Layout object like `Row`. If it's a layout
-        object, we call its render method, otherwise we instantiate a BoundField
+        object, we call its render method, otherwise we retrieve the BoundField
         and render it using default template 'CRISPY_TEMPLATE_PACK/field.html'
         The field is added to a list that the form holds called `rendered_fields`
         to avoid double rendering fields.
@@ -124,7 +123,7 @@ def render_field(
         if field_instance is None:
             html = ''
         else:
-            bound_field = BoundField(form, field_instance, field)
+            bound_field = form[field]
 
             if template is None:
                 if form.crispy_field_template is None:
