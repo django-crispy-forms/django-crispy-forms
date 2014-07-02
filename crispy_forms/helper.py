@@ -368,7 +368,7 @@ class FormHelper(DynamicLayoutHandler):
                 items['attrs']['class'] = self.form_class.strip()
         else:
             if template_pack == 'uni_form':
-                items['attrs']['class'] = self.attrs.get('class', '') + " uniForm"
+                items['attrs']['class'] = getattr(self, 'attrs', {}).get('class', '') + " uniForm"
 
         items['flat_attrs'] = flatatt(items['attrs'])
 
