@@ -93,7 +93,7 @@ def render_field(
                         field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
-                            field_instance.widget.is_hidden = True
+                            field_instance.is_hidden = True
                             field_instance.widget = field_instance.hidden_widget()
 
                         field_instance.widget.attrs.update(attr)
