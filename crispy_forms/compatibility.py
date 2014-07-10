@@ -14,6 +14,6 @@ else:
     integer_types = (int, long)
 
 try:
-    from django.utils import lru_cache
+    from django.utils.lru_cache import lru_cache
 except ImportError:
     from django.utils.functional import memoize as lru_cache
