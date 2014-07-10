@@ -12,3 +12,8 @@ else:
     binary_type = str
     string_types = basestring
     integer_types = (int, long)
+
+try:
+    from django.utils import lru_cache
+except ImportError:
+    from django.utils.functional import memoize as lru_cache

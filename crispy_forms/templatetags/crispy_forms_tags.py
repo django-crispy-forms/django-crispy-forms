@@ -5,11 +5,10 @@ from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.functional import memoize
 from django import template
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.compatibility import string_types
+from crispy_forms.compatibility import lru_cache, string_types
 
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
@@ -206,12 +205,12 @@ class BasicNode(template.Node):
 
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_formset.html' % template_pack)
-whole_uni_formset_template = memoize(whole_uni_formset_template, {}, 1)
+whole_uni_formset_template = lru_cache(whole_uni_formset_template, {}, 1)
 
 
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_form.html' % template_pack)
-whole_uni_form_template = memoize(whole_uni_form_template, {}, 1)
+whole_uni_form_template = lru_cache(whole_uni_form_template, {}, 1)
 
 
 class CrispyFormNode(BasicNode):
