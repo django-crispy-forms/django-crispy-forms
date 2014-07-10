@@ -203,14 +203,14 @@ class BasicNode(template.Node):
         return response_dict
 
 
+@lru_cache()
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_formset.html' % template_pack)
-whole_uni_formset_template = lru_cache(whole_uni_formset_template, {}, 1)
 
 
+@lru_cache()
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_form.html' % template_pack)
-whole_uni_form_template = lru_cache(whole_uni_form_template, {}, 1)
 
 
 class CrispyFormNode(BasicNode):

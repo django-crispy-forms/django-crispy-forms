@@ -18,9 +18,9 @@ TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
 # By caching we avoid loading the template every time render_field
 # is called without a template
+@lru_cache()
 def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
-default_field_template = lru_cache(default_field_template, {}, 1)
 
 
 def render_field(
