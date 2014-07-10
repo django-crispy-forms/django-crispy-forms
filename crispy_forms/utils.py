@@ -1,5 +1,4 @@
 from __future__ import with_statement
-import inspect
 import logging
 import sys
 
@@ -8,21 +7,20 @@ from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
-from django.utils.functional import memoize
 
 from .base import KeepContext
-from .compatibility import text_type, PY2
+from .compatibility import lru_cache, text_type, PY2
 
 # Global field template, default template used for rendering a field.
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
 
-# By memoizeing we avoid loading the template every time render_field
+# By caching we avoid loading the template every time render_field
 # is called without a template
+@lru_cache()
 def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
-default_field_template = memoize(default_field_template, {}, 1)
 
 
 def render_field(
