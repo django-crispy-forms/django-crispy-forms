@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from random import randint
 
 from django.template import Context, Template
@@ -79,7 +80,7 @@ class FormActions(LayoutObject):
             self.attrs['class'] = self.attrs.pop('css_class')
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        html = u''
+        html = ''
         for field in self.fields:
             html += render_field(field, form, form_style, context, template_pack=template_pack, **kwargs)
         extra_context = {
