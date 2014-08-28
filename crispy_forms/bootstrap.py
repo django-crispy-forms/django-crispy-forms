@@ -243,6 +243,11 @@ class TabHolder(ContainerHolder):
         )
     """
     template = '%s/layout/tab.html' % TEMPLATE_PACK
+    
+    def __init__(self, *args, **kwargs):
+        self.css_class_add = kwargs.pop('css_class',"")
+        super(TabHolder, self).__init__(*args, **kwargs)
+
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         links, content = '', ''
@@ -259,7 +264,7 @@ class TabHolder(ContainerHolder):
             links += tab.render_link()
 
         return render_to_string(self.template, Context({
-            'tabs': self, 'links': links, 'content': content
+            'tabs': self, 'links': links, 'content': content, 'css_class_add':self.css_class_add
         }))
 
 
