@@ -8,6 +8,7 @@ from django.template.loader import get_template
 from django.utils.functional import memoize
 from django import template
 
+from crispy_forms.compatibility import string_types
 from crispy_forms.helper import FormHelper
 
 register = template.Library()
@@ -272,7 +273,7 @@ def do_uni_form(parser, token):
     # {% crispy form 'bootstrap' %}
     if (
         helper is not None and
-        isinstance(helper, basestring) and
+        isinstance(helper, string_types) and
         ("'" in helper or '"' in helper)
     ):
         template_pack = helper
