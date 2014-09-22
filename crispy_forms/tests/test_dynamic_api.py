@@ -184,7 +184,7 @@ class TestDynamicLayouts(CrispyTestCase):
         helper.layout = layout
         helper.filter(Field).update_attributes(readonly=True)
         self.assertTrue(isinstance(layout[1], Field))
-        self.assertEqual(layout[1].attrs, {'readonly': True})
+        self.assertEqual(layout[1].attrs, {'readonly': 'True'})
 
         layout = Layout(
             'email',
@@ -194,7 +194,7 @@ class TestDynamicLayouts(CrispyTestCase):
         helper.layout = layout
         helper.filter(Field, max_level=2).update_attributes(readonly=True)
         self.assertTrue(isinstance(layout[1][0], Field))
-        self.assertEqual(layout[1][0].attrs, {'readonly': True})
+        self.assertEqual(layout[1][0].attrs, {'readonly': 'True'})
 
         layout = Layout(
             'email',
@@ -210,9 +210,9 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertTrue(isinstance(layout[1][0], Field))
         self.assertTrue(isinstance(layout[1][0][0], string_types))
         self.assertTrue(isinstance(layout[2], Field))
-        self.assertEqual(layout[1][0].attrs, {'readonly': True})
-        self.assertEqual(layout[0].attrs, {'readonly': True})
-        self.assertEqual(layout[2].attrs, {'readonly': True})
+        self.assertEqual(layout[1][0].attrs, {'readonly': 'True'})
+        self.assertEqual(layout[0].attrs, {'readonly': 'True'})
+        self.assertEqual(layout[2].attrs, {'readonly': 'True'})
 
     def test_get_layout_objects(self):
         layout_1 = Layout(
