@@ -151,14 +151,28 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout.fields[1][1], 'password2')
 
     def test_update_attributes(self):
-        helper = FormHelper()
-        helper.layout = Layout(
-            'email',
-            Field('password1'),
-            'password2',
+        attrs = {
+            'readonly': True,
+            'css_class': 'test-css-class',
+        }
+
+        def get_helper(**kwargs):
+            helper = FormHelper()
+            helper.layout = Layout(
+                'email',
+                Field('password1', **kwargs),
+                'password2',
+            )
+            return helper
+
+        helper1 = get_helper()
+        helper2 = get_helper(**attrs)
+
+        helper1['password1'].update_attributes(**attrs)
+        self.assertEqual(
+            helper1.layout[1].attrs,
+            helper2.layout[1].attrs,
         )
-        helper['password1'].update_attributes(readonly=True)
-        self.assertTrue('readonly' in helper.layout[1].attrs)
 
     def test_update_attributes_and_wrap_once(self):
         helper = FormHelper()
