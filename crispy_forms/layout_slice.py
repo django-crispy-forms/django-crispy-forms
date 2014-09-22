@@ -149,6 +149,6 @@ class LayoutSlice(object):
         """
         def update_attrs(layout_object):
             if hasattr(layout_object, 'attrs'):
-                layout_object.attrs.update(kwargs)
+                layout_object.update_attributes(**kwargs)
 
         self.map(update_attrs)

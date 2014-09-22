@@ -415,15 +415,16 @@ class Field(LayoutObject):
         if not hasattr(self, 'attrs'):
             self.attrs = {}
 
-        if 'css_class' in kwargs:
-            if 'class' in self.attrs:
-                self.attrs['class'] += " %s" % kwargs.pop('css_class')
-            else:
-                self.attrs['class'] = kwargs.pop('css_class')
+        if 'css_class' in kwargs and 'class' in self.attrs:
+            kwargs['css_class'] = self.attrs['class'] + " %s" % kwargs['css_class']
 
         self.wrapper_class = kwargs.pop('wrapper_class', None)
         self.template = kwargs.pop('template', self.template)
+        self.update_attributes(**kwargs)
 
+    def update_attributes(self, **kwargs):
+        if 'css_class' in kwargs:
+            kwargs['class'] = kwargs.pop('css_class')
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k, v in kwargs.items()]))
 
