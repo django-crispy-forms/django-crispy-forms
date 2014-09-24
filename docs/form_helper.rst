@@ -82,7 +82,7 @@ Helper attributes you can set
     Helper attribute for uni_form template pack. Uni-form has two different form styles built-in. You can choose which one to use, setting this variable to ``default`` or ``inline``.
 
 **form_show_errors = True**
-    Default set to ``True``. It decides wether to render or not form errors. If set to ``False``, form.errors will not be visible even if they happen. You have to manually render them customizing your template. This allows you to customize error output.
+    Default set to ``True``. It decides whether to render or not form errors. If set to ``False``, form.errors will not be visible even if they happen. You have to manually render them customizing your template. This allows you to customize error output.
 
 **render_unmentioned_fields = False**
     By default django-crispy-forms renders the layout specified if it exists strictly, which means it only renders what the layout mentions, unless your form has ``Meta.fields`` and ``Meta.exclude`` defined, in that case it uses them. If you want to render unmentioned fields (all form fields), for example if you are worried about forgetting mentioning them you have to set this property to ``True``. It defaults to ``False``.
@@ -109,7 +109,7 @@ There are currently some helper attributes that only have functionality for a sp
     When set to ``True`` all required fields inputs will be rendered with HTML5 ``required=required`` attribute.
 
 **form_show_labels = True**
-    Default set to ``True``. It decides wether to render or not form's fields labels.
+    Default set to ``True``. It decides whether to render or not form's fields labels.
 
 
 Bootstrap 3 Helper attributes
