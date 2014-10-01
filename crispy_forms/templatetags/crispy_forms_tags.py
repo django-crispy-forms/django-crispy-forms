@@ -200,6 +200,9 @@ class BasicNode(template.Node):
         if 'csrf_token' in context:
             response_dict['csrf_token'] = context['csrf_token']
 
+        if 'request' in context:
+            response_dict['request'] = context['request']
+
         return response_dict
 
 
