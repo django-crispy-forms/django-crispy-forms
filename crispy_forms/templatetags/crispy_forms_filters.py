@@ -8,6 +8,7 @@ from django.utils.functional import memoize
 from django.utils.safestring import mark_safe
 from django import template
 
+from crispy_forms.compatibility import string_types
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import flatatt
 
@@ -90,7 +91,7 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
 
 
 @register.filter(name='as_crispy_field')
-def as_crispy_field(field, template_pack=TEMPLATE_PACK):
+def as_crispy_field(field, template_pack_or_form=TEMPLATE_PACK):
     """
     Renders a form field like a django-crispy-forms field::
 
@@ -100,12 +101,24 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
     or::
 
         {{ form.field|as_crispy_field:"bootstrap" }}
+
+    or if you need to use ``form.label_suffix``::
+
+        {{ form.field|as_crispy_field:form }}
+
     """
     if not isinstance(field, forms.BoundField) and DEBUG:
         raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
 
+    if not isinstance(template_pack_or_form, string_types):
+        form = template_pack_or_form
+        template_pack = TEMPLATE_PACK
+    else:
+        template_pack = template_pack_or_form
+        form = None
+
     template = get_template('%s/field.html' % template_pack)
-    c = Context({'field': field, 'form_show_errors': True, 'form_show_labels': True})
+    c = Context({'field': field, 'form_show_errors': True, 'form_show_labels': True, 'form': form})
     return template.render(c)
 
 
