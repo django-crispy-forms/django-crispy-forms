@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-
+from distutils.version import StrictVersion
 import django
 from django import forms
 from django.conf import settings
@@ -260,15 +260,15 @@ class TestFormLayout(CrispyTestCase):
         )
 
         # Check formset fields
-        django_version = django.get_version()
-        if django_version < '1.5':
+        django_version = StrictVersion(django.get_version())
+        if django_version < StrictVersion('1.5'):
             self.assertEqual(html.count(
                 'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
             ), 1)
             self.assertEqual(html.count(
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
-            if (django_version >= '1.4' and django_version < '1.4.4') or django_version < '1.3.6':
+            if (django_version >= StrictVersion('1.4') and django_version < StrictVersion('1.4.4')) or django_version < StrictVersion('1.3.6'):
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
@@ -319,15 +319,15 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count("id_form-1-id"), 1)
         self.assertEqual(html.count("id_form-2-id"), 1)
 
-        django_version = django.get_version()
-        if django_version < '1.5':
+        django_version = StrictVersion(django.get_version())
+        if django_version < StrictVersion('1.5'):
             self.assertEqual(html.count(
                 'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
             ), 1)
             self.assertEqual(html.count(
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
-            if (django_version >= '1.4' and django_version < '1.4.4') or django_version < '1.3.6':
+            if (django_version >= StrictVersion('1.4') and django_version < StrictVersion('1.4.4')) or django_version < StrictVersion('1.3.6'):
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
