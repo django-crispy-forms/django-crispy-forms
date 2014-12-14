@@ -240,7 +240,9 @@ class Reset(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the reset.
     """
     input_type = 'reset'
-    field_classes = 'reset resetButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-inverse'
+    field_classes = 'reset resetButton' if TEMPLATE_PACK == 'uni_form'\
+        else 'btn btn-default' if TEMPLATE_PACK == 'bootstrap3'\
+        else 'btn btn-inverse'
 
 
 class Fieldset(LayoutObject):
