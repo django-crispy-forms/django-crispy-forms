@@ -30,7 +30,7 @@ Add ``crispy_forms`` to your ``INSTALLED_APPS`` in settings.py::
 
 In production environments, always activate Django template cache loader. This is available since Django 1.2 and what it does is basically load templates once, then cache the result for every subsequent render. This leads to a significant performance improvement. See how to set it up using fabulous `Django docs page`_.
 
-.. _`Django docs page`: https://docs.djangoproject.com/en/1.5/ref/templates/api/#django.template.loaders.cached.Loader
+.. _`Django docs page`: https://docs.djangoproject.com/en/1.7/ref/templates/api/#django.template.loaders.cached.Loader
 
 Template packs
 ~~~~~~~~~~~~~~
