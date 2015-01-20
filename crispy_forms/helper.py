@@ -324,7 +324,16 @@ class FormHelper(DynamicLayoutHandler):
                 left_fields_to_render = fields_to_render - form.rendered_fields
 
                 for field in left_fields_to_render:
-                    html += render_field(field, form, self.form_style, context)
+                    # We still respect the configuration of the helper
+                    # regarding which fields to render
+                    if (
+                        self.render_unmentioned_fields or
+                        (self.render_hidden_fields and
+                         form.fields[field].widget.is_hidden) or
+                        (self.render_required_fields and
+                         form.fields[field].widget.is_required)
+                    ):
+                        html += render_field(field, form, self.form_style, context)
 
         return mark_safe(html)
 
