@@ -44,7 +44,7 @@ We could do::
 
     form.helper[1:3].wrap(Field, css_class="hello")
 
-We would en up having this layout::
+We would end up having this layout::
 
     Layout(
         'field_1',
