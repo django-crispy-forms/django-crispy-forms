@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from copy import copy
+import six
 
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
@@ -272,7 +273,7 @@ def do_uni_form(parser, token):
     # {% crispy form 'bootstrap' %}
     if (
         helper is not None and
-        isinstance(helper, basestring) and
+        isinstance(helper, six.string_types) and
         ("'" in helper or '"' in helper)
     ):
         template_pack = helper
