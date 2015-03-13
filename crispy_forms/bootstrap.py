@@ -311,6 +311,9 @@ class AccordionGroup(Container):
     template = "%s/accordion-group.html"
     data_parent = ""  # accordion parent div id.
 
+    def __init__(self, name, *fields, **kwargs):
+        super(AccordionGroup, self).__init__(*fields, **kwargs)
+        self.css_id = "-".join([self.name, text_type(randint(1000, 9999))])
 
 class Accordion(ContainerHolder):
     """
