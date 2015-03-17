@@ -291,6 +291,7 @@ class MultiField(LayoutObject):
         self.label_class = kwargs.pop('label_class', u'blockLabel')
         self.css_class = kwargs.pop('css_class', u'ctrlHolder')
         self.css_id = kwargs.pop('css_id', None)
+        self.help_text = kwargs.pop('help_text', None)
         self.template = kwargs.pop('template', self.template)
         self.field_template = kwargs.pop('field_template', self.field_template)
         self.flat_attrs = flatatt(kwargs)
