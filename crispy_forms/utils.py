@@ -17,6 +17,15 @@ from .compatibility import text_type, PY2
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
+def version_tuple(version_string):
+    '''
+    convert a version string to a tuple for more accurate comparisons
+
+    >>> version_tuple('1.7.3.final.0')
+    (1, 7, 3, 'final', 0)
+    '''
+    return tuple([int(p) for p in version_string.split('.')
+        if p.isdigit() else p])
 
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template
