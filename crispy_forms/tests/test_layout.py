@@ -27,7 +27,7 @@ from crispy_forms.layout import (
     Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder,
     Div, Submit
 )
-from crispy_forms.utils import render_crispy_form, version_tuple, logging
+from crispy_forms.utils import render_crispy_form, version_tuple
 
 
 class TestFormLayout(CrispyTestCase):
@@ -262,7 +262,7 @@ class TestFormLayout(CrispyTestCase):
         # Check formset fields
         django_version = version_tuple(django.get_version())
         if django_version < version_tuple('1.5'):
-            logging.info('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
+            version_tuple.debug('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count(
                 'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
             ), 1)
@@ -270,17 +270,17 @@ class TestFormLayout(CrispyTestCase):
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
             if (django_version >= version_tuple('1.4') and django_version < version_tuple('1.4.4')) or django_version < version_tuple('1.3.6'):
-                logging.info('Django version %s >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
+                version_tuple.debug('Django version %s >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
             else:
-                logging.info('Django version %s not >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
+                version_tuple.debug('Django version %s not >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
         else:
-            logging.info('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
+            version_tuple.debug('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count(
                 'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
             ), 1)
@@ -325,7 +325,7 @@ class TestFormLayout(CrispyTestCase):
 
         django_version = version_tuple(django.get_version())
         if django_version < version_tuple('1.5'):
-            logging.info('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
+            version_tuple.debug('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count(
                 'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
             ), 1)
@@ -333,17 +333,17 @@ class TestFormLayout(CrispyTestCase):
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
             if (django_version >= version_tuple('1.4') and django_version < version_tuple('1.4.4')) or django_version < version_tuple('1.3.6'):
-                logging.info('Django version %s >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
+                version_tuple.debug('Django version %s >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
             else:
-                logging.info('Django version %s not >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
+                version_tuple.debug('Django version %s not >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
         else:
-            logging.info('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
+            version_tuple.debug('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count(
                 'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
             ), 1)

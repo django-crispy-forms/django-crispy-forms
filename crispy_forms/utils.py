@@ -25,6 +25,10 @@ def version_tuple(version):
     (1, 7, 3, 'final', 0)
     '''
     return tuple([int(p) if p.isdigit() else p for p in version.split('.')])
+if True:  # set to True when debugging version_tuple()
+    version_tuple.debug = logging.info
+else:
+    version_tuple.debug = lambda *args: None
 
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template
