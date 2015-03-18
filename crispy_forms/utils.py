@@ -24,6 +24,10 @@ def version_tuple(version):
 
     >>> version_tuple('1.7.3.final.0')
     (1, 7, 3, 'final', 0)
+    >>> '11.2.3' > '2.3.4'
+    False
+    >>> version_tuple('11.2.3') > version_tuple('2.3.4')
+    True
     '''
     return tuple([int(p) if p.isdigit() else p for p in version.split('.')])
 if DEBUG_VERSION_TUPLE:
