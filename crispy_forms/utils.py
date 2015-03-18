@@ -17,6 +17,7 @@ from .compatibility import text_type, PY2
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
+DEBUG_VERSION_TUPLE = False  # False when production-ready
 def version_tuple(version):
     '''
     convert a version string to a tuple for more accurate comparisons
@@ -25,7 +26,7 @@ def version_tuple(version):
     (1, 7, 3, 'final', 0)
     '''
     return tuple([int(p) if p.isdigit() else p for p in version.split('.')])
-if True:  # set to True when debugging version_tuple()
+if DEBUG_VERSION_TUPLE:
     version_tuple.debug = logging.info
 else:
     version_tuple.debug = lambda *args: None
