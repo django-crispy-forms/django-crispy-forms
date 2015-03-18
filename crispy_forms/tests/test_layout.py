@@ -323,7 +323,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count("id_form-1-id"), 1)
         self.assertEqual(html.count("id_form-2-id"), 1)
 
-        django_version = django.get_version()
+        django_version = version_tuple(django.get_version())
         if django_version < version_tuple('1.5'):
             logging.info('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count(

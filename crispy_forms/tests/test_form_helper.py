@@ -272,7 +272,7 @@ class TestFormHelper(CrispyTestCase):
             logging.info('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4'))))
             self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
         else:
-            logging.info('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4'))))
+            logging.info('settings.TEMPLATE_DEBUG not set or Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4'))))
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
 
