@@ -23,7 +23,7 @@ from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import (
     Layout, Submit, Reset, Hidden, Button, MultiField, Field
 )
-from crispy_forms.utils import render_crispy_form, version_tuple
+from crispy_forms.utils import render_crispy_form, version_tuple, logging
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
 
@@ -269,8 +269,10 @@ class TestFormHelper(CrispyTestCase):
         settings.CRISPY_FAIL_SILENTLY = False
         # Django >= 1.4 is not wrapping exceptions in TEMPLATE_DEBUG mode
         if settings.TEMPLATE_DEBUG and version_tuple(django.get_version()) < version_tuple('1.4'):
+            logging.info('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4'))))
             self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
         else:
+            logging.info('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4'))))
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
 
@@ -362,9 +364,11 @@ class TestFormHelper(CrispyTestCase):
         self.assertEqual(html.count('hidden'), 2)
 
         if version_tuple(django.get_version()) < version_tuple('1.5'):
+            logging.info('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count('type="hidden" name="password1"'), 1)
             self.assertEqual(html.count('type="hidden" name="password2"'), 1)
         else:
+            logging.info('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count('name="password1" type="hidden"'), 1)
             self.assertEqual(html.count('name="password2" type="hidden"'), 1)
 
