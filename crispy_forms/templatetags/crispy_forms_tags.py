@@ -5,7 +5,7 @@ from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.functional import memoize
+from django.utils.lru_cache import lru_cache
 from django import template
 
 from crispy_forms.helper import FormHelper
@@ -202,15 +202,13 @@ class BasicNode(template.Node):
 
         return response_dict
 
-
+@lru_cache()
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_formset.html' % template_pack)
-whole_uni_formset_template = memoize(whole_uni_formset_template, {}, 1)
 
-
+@lru_cache()
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_form.html' % template_pack)
-whole_uni_form_template = memoize(whole_uni_form_template, {}, 1)
 
 
 class CrispyFormNode(BasicNode):
