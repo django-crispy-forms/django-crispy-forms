@@ -89,6 +89,7 @@ class TestForm3(forms.ModelForm):
 class TestForm4(forms.ModelForm):
     class Meta:
         model = CrispyTestModel
+        fields = '__all__'  # eliminate RemovedInDjango18Warning
 
 
 class TestForm5(forms.Form):
