@@ -104,12 +104,14 @@ def render_field(
                 for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
                     if hasattr(field_instance.widget, 'widgets'):
                         if 'type' in attr and attr['type'] == "hidden":
+                            logging.debug('subwidget %s.is_hidden = %s' % (field_instance.widget.widgets[index], field_instance.widget.widgets[index].is_hidden))
                             field_instance.widget.widgets[index].is_hidden = True
                             field_instance.widget.widgets[index] = field_instance.hidden_widget()
 
                         field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
+                            logging.debug('widget %s.is_hidden = %s' % (field_instance.widget, field_instance.widget.is_hidden))
                             field_instance.widget.is_hidden = True
                             field_instance.widget = field_instance.hidden_widget()
 
