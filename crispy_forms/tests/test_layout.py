@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-import django
+import django, logging
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -34,6 +34,7 @@ class TestFormLayout(CrispyTestCase):
     urls = 'crispy_forms.tests.urls'
 
     def test_invalid_unicode_characters(self):
+        logging.debug('TestFormLayout.test_invalid_unicode_characters')
         # Adds a BooleanField that uses non valid unicode characters "ñ"
         form_helper = FormHelper()
         form_helper.add_layout(
@@ -52,6 +53,7 @@ class TestFormLayout(CrispyTestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_unicode_form_field(self):
+        logging.debug('TestFormLayout.test_unicode_form_field')
         class UnicodeForm(forms.Form):
             def __init__(self, *args, **kwargs):
                 super(UnicodeForm, self).__init__(*args, **kwargs)
@@ -67,6 +69,7 @@ class TestFormLayout(CrispyTestCase):
             self.assertTrue('id="id_contraseña"' in html)
 
     def test_meta_extra_fields_with_missing_fields(self):
+        logging.debug('TestFormLayout.test_meta_extra_fields_with_missing_fields')
         class FormWithMeta(TestForm):
             class Meta:
                 fields = ('email', 'first_name', 'last_name')
@@ -89,6 +92,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertFalse('email' in html)
 
     def test_layout_unresolved_field(self):
+        logging.debug('TestFormLayout.test_layout_unresolved_field')
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -106,6 +110,7 @@ class TestFormLayout(CrispyTestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_double_rendered_field(self):
+        logging.debug('TestFormLayout.test_double_rendered_field')
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -124,6 +129,7 @@ class TestFormLayout(CrispyTestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_context_pollution(self):
+        logging.debug('TestFormLayout.test_context_pollution')
         class ExampleForm(forms.Form):
             comment = forms.CharField()
 
@@ -143,6 +149,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count('name="is_company"'), 1)
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
+        logging.debug('TestFormLayout.test_row_html_with_unicode_fieldnames')
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -200,6 +207,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue('testLink' in html)
 
     def test_change_layout_dynamically_delete_field(self):
+        logging.debug('TestFormLayout.test_layout_dynamically_delete_field')
         template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
@@ -235,6 +243,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertFalse('email' in html)
 
     def test_formset_layout(self):
+        logging.debug('TestFormLayout.test_formset_layout')
         TestFormSet = formset_factory(TestForm, extra=3)
         formset = TestFormSet()
         helper = FormHelper()
@@ -311,6 +320,7 @@ class TestFormLayout(CrispyTestCase):
             self.assertEqual(html.count('row'), 3)
 
     def test_modelformset_layout(self):
+        logging.debug('TestFormLayout.test_modelformset_layout')
         CrispyModelFormSet = modelformset_factory(CrispyTestModel, form=TestForm4, extra=3)
         formset = CrispyModelFormSet(queryset=CrispyTestModel.objects.none())
         helper = FormHelper()
@@ -361,6 +371,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count('password'), 0)
 
     def test_i18n(self):
+        logging.debug('TestFormLayout.test_invalid_unicode_characters')
         template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form.helper %}
@@ -382,6 +393,7 @@ class TestFormLayout(CrispyTestCase):
 
     @override_settings(USE_L10N=True, USE_THOUSAND_SEPARATOR=True)
     def test_l10n(self):
+        logging.debug('TestFormLayout.test_l10n')
         form = TestForm5(data={'pk': 1000})
         html = render_crispy_form(form)
 
@@ -392,6 +404,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue(html.count('1000'), 2)
 
     def test_default_layout(self):
+        logging.debug('TestFormLayout.test_default_layout')
         test_form = TestForm2()
         self.assertEqual(test_form.helper.layout.fields, [
             'is_company', 'email', 'password1', 'password2',
@@ -399,10 +412,12 @@ class TestFormLayout(CrispyTestCase):
         ])
 
     def test_default_layout_two(self):
+        logging.debug('TestFormLayout.test_default_layout_two')
         test_form = TestForm3()
         self.assertEqual(test_form.helper.layout.fields, ['email'])
 
     def test_modelform_layout_without_meta(self):
+        logging.debug('TestFormLayout.test_modelform_layout_without_meta')
         test_form = TestForm4()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout('email')
@@ -412,6 +427,7 @@ class TestFormLayout(CrispyTestCase):
         self.assertFalse('password' in html)
 
     def test_specialspaceless_not_screwing_intended_spaces(self):
+        logging.debug('TestFormLayout.test_specialspaceless_not_screwing_intended_spaces')
         # see issue #250
         test_form = TestForm()
         test_form.fields['email'].widget = forms.Textarea()
@@ -427,6 +443,7 @@ class TestFormLayout(CrispyTestCase):
 class TestUniformFormLayout(TestFormLayout):
 
     def test_layout_composition(self):
+        logging.debug('TestUniformFormLayout.test_layout_composition')
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -475,6 +492,7 @@ class TestUniformFormLayout(TestFormLayout):
         self.assertFalse('last_name' in html)
 
     def test_second_layout_multifield_column_buttonholder_submit_div(self):
+        logging.debug('TestUniformFormLayout.test_second_layout_multifield_column_buttonholder_submit_div')
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -536,6 +554,7 @@ class TestUniformFormLayout(TestFormLayout):
 class TestBootstrapFormLayout(TestFormLayout):
 
     def test_keepcontext_context_manager(self):
+        logging.debug('TestBootstrapFormLayout.test_keepcontext_context_manager')
         # Test case for issue #180
         # Apparently it only manifest when using render_to_response this exact way
         form = CheckboxesTestForm()
@@ -561,6 +580,7 @@ class TestBootstrapFormLayout(TestFormLayout):
 class TestBootstrap3FormLayout(TestFormLayout):
 
     def test_form_inline(self):
+        logging.debug('TestBootstrap3FormLayout.test_form_inline()')
         form = TestForm()
         form.helper = FormHelper()
         form.helper.form_class = 'form-inline'
