@@ -8,7 +8,7 @@ from django.template.loader import get_template
 try:
     from django.utils.lru_cache import lru_cache
     def memoize(function, *args):
-        return lru_cache(function)
+        return lru_cache()(function)
 except:
     from django.utils.functional import memoize
 from django import template

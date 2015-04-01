@@ -11,7 +11,7 @@ from django.utils.html import conditional_escape
 try:
     from django.utils.lru_cache import lru_cache
     def memoize(function, *args):
-        return lru_cache(function)
+        return lru_cache()(function)
 except:
     from django.utils.functional import memoize
 

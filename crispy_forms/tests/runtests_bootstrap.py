@@ -8,6 +8,7 @@ parent = os.path.dirname(os.path.dirname(os.path.dirname(
 
 sys.path.insert(0, parent)
 
+import django
 from django.test.simple import DjangoTestSuiteRunner
 from django.conf import settings
 
@@ -15,6 +16,8 @@ settings.CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 
 def runtests():
+    if hasattr(django, 'setup'):
+        django.setup()
     return DjangoTestSuiteRunner(failfast=False).run_tests([
         'crispy_forms.TestBasicFunctionalityTags',
         'crispy_forms.TestFormHelper',
