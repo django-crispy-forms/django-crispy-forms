@@ -4,7 +4,12 @@ from django.forms import forms
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.lru_cache import lru_cache
+try:
+    from django.utils.lru_cache import lru_cache
+    def memoize(function, *args):
+        return lru_cache(function)
+except:
+    from django.utils.functional import memoize
 from django.utils.safestring import mark_safe
 from django import template
 
@@ -14,13 +19,13 @@ from crispy_forms.utils import flatatt
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 DEBUG = getattr(settings, 'DEBUG', False)
 
-@lru_cache()
 def uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_formset.html' % template_pack)
+uni_formset_template = memoize(uni_formset_template, {}, 1)
 
-@lru_cache()
 def uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_form.html' % template_pack)
+uni_form_template = memoize(uni_form_template, {}, 1)
 
 register = template.Library()
 
