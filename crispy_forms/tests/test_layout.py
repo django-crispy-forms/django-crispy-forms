@@ -302,6 +302,7 @@ class TestFormLayout(CrispyTestCase):
             self.assertEqual(html.count(
                 'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
             ), 1)
+        logging.debug('html: "%s"' % html)
         self.assertEqual(html.count("hidden"), 4)
 
         # Check form structure
