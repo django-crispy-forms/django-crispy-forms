@@ -273,6 +273,7 @@ class TestFormLayout(CrispyTestCase):
 
         # Check formset fields
         django_version = version_tuple(django.get_version())
+        hidden_count = 4  # before Django 1.7 added MIN_NUM_FORM_COUNT
         if django_version < version_tuple('1.5'):
             version_tuple.debug('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count(
@@ -302,8 +303,13 @@ class TestFormLayout(CrispyTestCase):
             self.assertEqual(html.count(
                 'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
             ), 1)
+            if hasattr(forms.formsets, 'MIN_NUM_FORM_COUNT'):
+                self.assertEqual(html.count(
+                    'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
+                ), 1)
+                hidden_count += 1
         logging.debug('html: "%s"' % html)
-        self.assertEqual(html.count("hidden"), 4)
+        self.assertEqual(html.count("hidden"), hidden_count)
 
         # Check form structure
         self.assertEqual(html.count('<form'), 1)
