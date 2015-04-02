@@ -1,5 +1,5 @@
 from __future__ import with_statement
-import inspect
+import inspect, traceback
 import logging
 import sys
 
@@ -46,6 +46,17 @@ def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
 default_field_template = memoize(default_field_template, {}, 1)
 
+def set_hidden(widget):
+    '''
+    set widget to hidden
+
+    different starting in Django 1.7, when is_hidden ceases to be an
+    attribute and is determined by the input_type attribute
+    '''
+    if not callable(widget.is_hidden):
+        widget.is_hidden = True
+    elif hasattr(widget, 'input_type'):
+        widget.input_type = 'hidden'
 
 def render_field(
     field, form, form_style, context, template=None, labelclass=None,
@@ -111,14 +122,20 @@ def render_field(
                     if hasattr(field_instance.widget, 'widgets'):
                         if 'type' in attr and attr['type'] == "hidden":
                             logging.debug('subwidget %s.is_hidden = %s' % (field_instance.widget.widgets[index], field_instance.widget.widgets[index].is_hidden))
-                            field_instance.widget.widgets[index].is_hidden = True
+                            if False:
+                                for line in traceback.format_stack():
+                                    logging.debug(line.rstrip())
+                            set_hidden(field_instance.widget.widgets[index])
                             field_instance.widget.widgets[index] = field_instance.hidden_widget()
 
                         field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
                             logging.debug('widget %s.is_hidden = %s' % (field_instance.widget, field_instance.widget.is_hidden))
-                            field_instance.widget.is_hidden = True
+                            if False:
+                                for line in traceback.format_stack():
+                                    logging.debug(line.rstrip())
+                            set_hidden(field_instance.widget)
                             field_instance.widget = field_instance.hidden_widget()
 
                         field_instance.widget.attrs.update(attr)

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from django import forms
 from .base import CrispyTestCase
 from crispy_forms.compatibility import string_types
