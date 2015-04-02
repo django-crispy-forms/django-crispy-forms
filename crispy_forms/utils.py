@@ -50,13 +50,13 @@ def set_hidden(widget):
     '''
     set widget to hidden
 
-    different starting in Django 1.7, when is_hidden ceases to be an
-    attribute and is determined by the input_type attribute
+    different starting in Django 1.7, when is_hidden ceases to be a
+    true attribute and is determined by the input_type attribute
     '''
-    if not callable(widget.is_hidden):
-        widget.is_hidden = True
-    elif hasattr(widget, 'input_type'):
+    if hasattr(widget, 'input_type'):
         widget.input_type = 'hidden'
+    if not widget.is_hidden:
+        widget.is_hidden = True
 
 def render_field(
     field, form, form_style, context, template=None, labelclass=None,
