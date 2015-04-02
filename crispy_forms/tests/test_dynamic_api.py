@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django import forms
-
 from .base import CrispyTestCase
 from crispy_forms.compatibility import string_types
 from crispy_forms.exceptions import DynamicError

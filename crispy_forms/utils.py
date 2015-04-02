@@ -150,6 +150,7 @@ def render_field(
                 else:   # FormHelper.field_template set
                     template = get_template(form.crispy_field_template)
             else:
+                logging.debug('fetching template %s' % template)
                 template = get_template(template)
 
             # We save the Layout object's bound fields in the layout object's `bound_fields` list
