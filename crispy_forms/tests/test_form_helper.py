@@ -580,6 +580,10 @@ class TestBootstrapFormHelper(TestFormHelper):
 
 class TestBootstrap3FormHelper(TestFormHelper):
     def test_label_class_and_field_class(self):
+        logging.debug('TestBootstrap3FormHelper.test_label_class_and_field_class')
+        if settings.CRISPY_TEMPLATE_PACK != 'bootstrap3':
+            warnings.warn('skipping bootstrap3 tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
+            return
         form = TestForm()
         form.helper = FormHelper()
         form.helper.label_class = 'col-lg-2'
@@ -597,6 +601,10 @@ class TestBootstrap3FormHelper(TestFormHelper):
         self.assertEqual(html.count('col-sm-8'), 7)
 
     def test_template_pack(self):
+        logging.debug('TestBootstrap3FormHelper.test_template_pack')
+        if settings.CRISPY_TEMPLATE_PACK != 'bootstrap3':
+            warnings.warn('skipping bootstrap3 tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
+            return
         form = TestForm()
         form.helper = FormHelper()
         form.helper.template_pack = 'uni_form'
