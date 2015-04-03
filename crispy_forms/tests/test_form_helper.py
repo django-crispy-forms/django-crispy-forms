@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-import django
+import django, logging, warnings
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -406,6 +406,10 @@ class TestFormHelper(CrispyTestCase):
 
 class TestUniformFormHelper(TestFormHelper):
     def test_form_show_errors(self):
+        logging.debug('TestUniformFormHelper.test_form_show_errors')
+        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
+            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
+            return
         form = TestForm({
             'email': 'invalidemail',
             'first_name': 'first_name_too_long',
@@ -432,6 +436,10 @@ class TestUniformFormHelper(TestFormHelper):
         self.assertEqual(html.count('error'), 0)
 
     def test_multifield_errors(self):
+        logging.debug('TestUniformFormHelper.test_multifield_errors')
+        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
+            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
+            return
         form = TestForm({
             'email': 'invalidemail',
             'password1': 'yes',

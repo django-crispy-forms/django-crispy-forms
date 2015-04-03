@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-import django, logging
+import django, logging, warnings
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -454,6 +454,9 @@ class TestUniformFormLayout(TestFormLayout):
 
     def test_layout_composition(self):
         logging.debug('TestUniformFormLayout.test_layout_composition')
+        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
+            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
+            return
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -503,6 +506,9 @@ class TestUniformFormLayout(TestFormLayout):
 
     def test_second_layout_multifield_column_buttonholder_submit_div(self):
         logging.debug('TestUniformFormLayout.test_second_layout_multifield_column_buttonholder_submit_div')
+        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
+            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
+            return
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(

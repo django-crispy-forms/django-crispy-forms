@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, sys
+import os, sys, logging, warnings
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'test_settings'
 parent = os.path.dirname(os.path.dirname(os.path.dirname(
@@ -11,7 +11,6 @@ sys.path.insert(0, parent)
 import django
 from django.test.simple import DjangoTestSuiteRunner
 from django.conf import settings
-
 settings.CRISPY_TEMPLATE_PACK = 'uni_form'
 
 
