@@ -4,7 +4,7 @@
 {% crispy %} tag with forms
 ===========================
 
-django-crispy-forms implements a class called ``FormHelper`` that defines the form rendering behavior. Helpers give you a way to control form attributes and its layout, doing this in a programatic way using Python. This way you write as little HTML as possible, and all your logic stays in the forms and views files.
+django-crispy-forms implements a class called ``FormHelper`` that defines the form rendering behavior. Helpers give you a way to control form attributes and its layout, doing this in a programmatic way using Python. This way you write as little HTML as possible, and all your logic stays in the forms and views files.
 
 Fundamentals
 ~~~~~~~~~~~~
