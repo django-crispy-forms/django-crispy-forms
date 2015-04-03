@@ -14,6 +14,10 @@ except:
 from django import template
 
 from crispy_forms.helper import FormHelper
+try:
+    basestring
+except:
+    basestring = str  # Python3
 
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags

@@ -1,5 +1,8 @@
 import sys
-
+try:
+    basestring
+except:
+    basestring = str  # Python3
 
 PY2 = sys.version_info[0] == 2
 if not PY2:
