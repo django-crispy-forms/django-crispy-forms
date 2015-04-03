@@ -80,7 +80,6 @@ def render_field(
     :template_pack: Name of the template pack to be used for rendering `field`
     :extra_context: Dictionary to be added to context, added variables by the layout object
     """
-    logging.debug('rendering field %s from form %s' % (field, repr(form)))
     added_keys = [] if extra_context is None else extra_context.keys()
     with KeepContext(context, added_keys):
         if field is None:
@@ -121,20 +120,12 @@ def render_field(
                 for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
                     if hasattr(field_instance.widget, 'widgets'):
                         if 'type' in attr and attr['type'] == "hidden":
-                            logging.debug('subwidget %s.is_hidden = %s' % (field_instance.widget.widgets[index], field_instance.widget.widgets[index].is_hidden))
-                            if False:
-                                for line in traceback.format_stack():
-                                    logging.debug(line.rstrip())
                             set_hidden(field_instance.widget.widgets[index])
                             field_instance.widget.widgets[index] = field_instance.hidden_widget()
 
                         field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
-                            logging.debug('widget %s.is_hidden = %s' % (field_instance.widget, field_instance.widget.is_hidden))
-                            if False:
-                                for line in traceback.format_stack():
-                                    logging.debug(line.rstrip())
                             set_hidden(field_instance.widget)
                             field_instance.widget = field_instance.hidden_widget()
 
@@ -167,7 +158,6 @@ def render_field(
                 else:   # FormHelper.field_template set
                     template = get_template(form.crispy_field_template)
             else:
-                logging.debug('fetching template %s' % template)
                 template = get_template(template)
 
             # We save the Layout object's bound fields in the layout object's `bound_fields` list

@@ -28,7 +28,7 @@ from crispy_forms.layout import (
     Div, Submit
 )
 from crispy_forms.utils import render_crispy_form, version_tuple
-
+CHECK_HTML_OUT = False  # debug failure in HTML in newer versions of Django
 
 class TestFormLayout(CrispyTestCase):
     urls = 'crispy_forms.tests.urls'
@@ -63,13 +63,10 @@ class TestFormLayout(CrispyTestCase):
             helper.layout = Layout(u'contraseña')
 
         if PY2:
-            logging.debug('checking that PY2 raises exception')
             self.assertRaises(Exception, lambda: render_crispy_form(UnicodeForm()))
-            logging.debug('end PY2 exception check')
         else:
             html = render_crispy_form(UnicodeForm())
             self.assertTrue('id="id_contraseña"' in html)
-        logging.debug('end TestFormLayout.test_unicode_form_field')
 
     def test_meta_extra_fields_with_missing_fields(self):
         logging.debug('TestFormLayout.test_meta_extra_fields_with_missing_fields')
@@ -308,7 +305,8 @@ class TestFormLayout(CrispyTestCase):
                     'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
                 ), 1)
                 hidden_count += 1
-        logging.debug('html: "%s"' % html)
+        if CHECK_HTML_OUT:
+            logging.debug('html: "%s"' % html)
         self.assertEqual(html.count("hidden"), hidden_count)
 
         # Check form structure
