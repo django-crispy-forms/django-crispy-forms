@@ -8,7 +8,7 @@ from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
-try:
+try:  # avoid RemovedInDjango19Warning by using lru_cache where available
     from django.utils.lru_cache import lru_cache
     def memoize(function, *args):
         return lru_cache()(function)
@@ -21,25 +21,6 @@ from .compatibility import text_type, PY2
 # Global field template, default template used for rendering a field.
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
-
-DEBUG_VERSION_TUPLE = False  # False when production-ready
-def version_tuple(version):
-    '''
-    convert a version string to a tuple for more accurate comparisons
-
-    actually cleaner to just use django.VERSION and compare tuples directly
-    >>> version_tuple('1.7.3.final.0')
-    (1, 7, 3, 'final', 0)
-    >>> '11.2.3' > '2.3.4'
-    False
-    >>> version_tuple('11.2.3') > version_tuple('2.3.4')
-    True
-    '''
-    return tuple([int(p) if p.isdigit() else p for p in version.split('.')])
-if DEBUG_VERSION_TUPLE:
-    version_tuple.debug = logging.info
-else:
-    version_tuple.debug = lambda *args: None
 
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template
