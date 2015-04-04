@@ -27,6 +27,7 @@ def version_tuple(version):
     '''
     convert a version string to a tuple for more accurate comparisons
 
+    actually cleaner to just use django.VERSION and compare tuples directly
     >>> version_tuple('1.7.3.final.0')
     (1, 7, 3, 'final', 0)
     >>> '11.2.3' > '2.3.4'

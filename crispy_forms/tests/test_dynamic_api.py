@@ -36,7 +36,6 @@ class TestDynamicLayouts(CrispyTestCase):
         )
 
     def test_wrap_all_fields(self):
-        logging.debug('TestDynamicLayouts.test_wrap_all_fields')
         helper = FormHelper()
         layout = Layout(
             'email',
@@ -55,7 +54,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout[2][0], 'password2')
 
     def test_wrap_selected_fields(self):
-        logging.debug('TestDynamicLayouts.test_wrap_selected_fields')
         helper = FormHelper()
         layout = Layout(
             'email',
@@ -75,7 +73,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout[0][0], 'email')
 
     def test_wrap_together_with_slices(self):
-        logging.debug('TestDynamicLayouts.test_wrap_together_with_slices')
         helper = FormHelper()
         layout = Layout(
             'email',
@@ -126,7 +123,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout.fields[2], 'password2')
 
     def test_wrap_together_partial_slices(self):
-        logging.debug('TestDynamicLayouts.test_wrap_together_partial_slices')
         helper = FormHelper()
         layout = Layout(
             'email',
@@ -156,7 +152,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout.fields[1][1], 'password2')
 
     def test_update_attributes(self):
-        logging.debug('TestDynamicLayouts.test_update_attributes')
         helper = FormHelper()
         helper.layout = Layout(
             'email',
@@ -167,7 +162,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertTrue('readonly' in helper.layout[1].attrs)
 
     def test_update_attributes_and_wrap_once(self):
-        logging.debug('TestDynamicLayouts.test_update_attributes_and_wrap_once')
         helper = FormHelper()
         layout = Layout(
             'email',
@@ -208,7 +202,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout[2].attrs, {'readonly': True})
 
     def test_get_layout_objects(self):
-        logging.debug('TestDynamicLayouts.test_get_layout_objects')
         layout_1 = Layout(
             Div()
         )
@@ -270,7 +263,6 @@ class TestDynamicLayouts(CrispyTestCase):
         ])
 
     def test_filter_and_wrap(self):
-        logging.debug('TestDynamicLayouts.test_filter_and_wrap')
         helper = FormHelper()
         layout = Layout(
             'email',
@@ -292,7 +284,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout[1][0][0], 'password1')
 
     def test_filter_and_wrap_side_effects(self):
-        logging.debug('TestDynamicLayouts.test_filter_and_wrap_side_effects')
         helper = FormHelper()
         layout = Layout(
             Div(
@@ -304,7 +295,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertRaises(DynamicError, lambda: helper.filter(Div, max_level=2).wrap(Div, css_class="test-class"))
 
     def test_get_field_names(self):
-        logging.debug('TestDynamicLayouts.test_get_field_names')
         layout_1 = Div(
             'field_name'
         )
@@ -357,7 +347,6 @@ class TestDynamicLayouts(CrispyTestCase):
         ])
 
     def test_layout_get_field_names(self):
-        logging.debug('TestDynamicLayouts.test_layout_get_field_names')
         layout_1 = Layout(
             Div('field_name'),
             'password'
@@ -394,7 +383,6 @@ class TestDynamicLayouts(CrispyTestCase):
         ])
 
     def test_filter_by_widget(self):
-        logging.debug('TestDynamicLayouts.test_filter_by_widget')
         form = TestForm()
         form.helper = FormHelper(form)
         form.helper.layout = self.advanced_layout
@@ -404,7 +392,6 @@ class TestDynamicLayouts(CrispyTestCase):
         ])
 
     def test_exclude_by_widget(self):
-        logging.debug('TestDynamicLayouts.test_exclude_by_widget')
         form = TestForm()
         form.helper = FormHelper(form)
         form.helper.layout = self.advanced_layout
@@ -415,7 +402,6 @@ class TestDynamicLayouts(CrispyTestCase):
         ])
 
     def test_exclude_by_widget_and_wrap(self):
-        logging.debug('TestDynamicLayouts.test_exclude_by_widget_and_wrap')
         form = TestForm()
         form.helper = FormHelper(form)
         form.helper.layout = self.advanced_layout
@@ -430,20 +416,17 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertTrue(isinstance(form.helper.layout[0][4][0], string_types))
 
     def test_all_without_layout(self):
-        logging.debug('TestDynamicLayouts.test_all_without_layout')
         form = TestForm()
         form.helper = FormHelper()
         self.assertRaises(FormHelpersException, lambda: form.helper.all().wrap(Div))
 
     def test_filter_by_widget_without_form(self):
-        logging.debug('TestDynamicLayouts.test_filter_by_widget_without_form')
         form = TestForm()
         form.helper = FormHelper()
         form.helper.layout = self.advanced_layout
         self.assertRaises(FormHelpersException, lambda: form.helper.filter_by_widget(forms.PasswordInput))
 
     def test_formhelper__getitem__(self):
-        logging.debug('TestDynamicLayouts.test_formhelper__getitem__')
         helper = FormHelper()
         layout = Layout(
             Div('email'),
@@ -462,7 +445,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(helper.layout[0].text, 'extra')
 
     def test_formhelper__setitem__(self):
-        logging.debug('TestDynamicLayouts.test_formhelper__setitem__')
         helper = FormHelper()
         layout = Layout(
             'first_field',
@@ -473,7 +455,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout[0], 'replaced')
 
     def test_formhelper__delitem__and__len__(self):
-        logging.debug('TestDynamicLayouts.test_formhelper__delitem__and__len__')
         helper = FormHelper()
         layout = Layout(
             'first_field',
@@ -484,7 +465,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(len(helper), 1)
 
     def test__delitem__and__len__layout_object(self):
-        logging.debug('TestDynamicLayouts.test__delitem__and__len__layout_object')
         layout = Layout(
             'first_field',
             Div('email')
@@ -493,7 +473,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(len(layout), 1)
 
     def test__getitem__layout_object(self):
-        logging.debug('TestDynamicLayouts.test__getitem__layout_object')
         layout = Layout(
             Div(
                 Div(
@@ -511,7 +490,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertTrue(isinstance(layout[0][2], string_types))
 
     def test__getattr__append_layout_object(self):
-        logging.debug('TestDynamicLayouts.test__getattr__append_layout_object')
         layout = Layout(
             Div('email')
         )
@@ -521,7 +499,6 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertTrue(isinstance(layout[1], string_types))
 
     def test__setitem__layout_object(self):
-        logging.debug('TestDynamicLayouts.test__setitem__layout_object')
         layout = Layout(
             Div('email')
         )
@@ -532,7 +509,6 @@ class TestDynamicLayouts(CrispyTestCase):
 
 class TestUniformDynamicLayouts(TestDynamicLayouts):
     def test_filter(self):
-        logging.debug('TestUniformDynamicLayouts.test_filter')
         if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
             warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
             return

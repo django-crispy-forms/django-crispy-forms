@@ -27,14 +27,12 @@ from crispy_forms.layout import (
     Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder,
     Div, Submit
 )
-from crispy_forms.utils import render_crispy_form, version_tuple
-CHECK_HTML_OUT = False  # debug failure in HTML in newer versions of Django
+from crispy_forms.utils import render_crispy_form
 
 class TestFormLayout(CrispyTestCase):
     urls = 'crispy_forms.tests.urls'
 
     def test_invalid_unicode_characters(self):
-        logging.debug('TestFormLayout.test_invalid_unicode_characters')
         # Adds a BooleanField that uses non valid unicode characters "ñ"
         form_helper = FormHelper()
         form_helper.add_layout(
@@ -53,7 +51,6 @@ class TestFormLayout(CrispyTestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_unicode_form_field(self):
-        logging.debug('TestFormLayout.test_unicode_form_field')
         class UnicodeForm(forms.Form):
             def __init__(self, *args, **kwargs):
                 super(UnicodeForm, self).__init__(*args, **kwargs)
@@ -69,7 +66,6 @@ class TestFormLayout(CrispyTestCase):
             self.assertTrue('id="id_contraseña"' in html)
 
     def test_meta_extra_fields_with_missing_fields(self):
-        logging.debug('TestFormLayout.test_meta_extra_fields_with_missing_fields')
         class FormWithMeta(TestForm):
             class Meta:
                 fields = ('email', 'first_name', 'last_name')
@@ -92,7 +88,6 @@ class TestFormLayout(CrispyTestCase):
         self.assertFalse('email' in html)
 
     def test_layout_unresolved_field(self):
-        logging.debug('TestFormLayout.test_layout_unresolved_field')
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -110,7 +105,6 @@ class TestFormLayout(CrispyTestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_double_rendered_field(self):
-        logging.debug('TestFormLayout.test_double_rendered_field')
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -129,7 +123,6 @@ class TestFormLayout(CrispyTestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_context_pollution(self):
-        logging.debug('TestFormLayout.test_context_pollution')
         class ExampleForm(forms.Form):
             comment = forms.CharField()
 
@@ -149,7 +142,6 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count('name="is_company"'), 1)
 
     def test_layout_fieldset_row_html_with_unicode_fieldnames(self):
-        logging.debug('TestFormLayout.test_row_html_with_unicode_fieldnames')
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -207,7 +199,6 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue('testLink' in html)
 
     def test_change_layout_dynamically_delete_field(self):
-        logging.debug('TestFormLayout.test_layout_dynamically_delete_field')
         template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
@@ -243,7 +234,6 @@ class TestFormLayout(CrispyTestCase):
         self.assertFalse('email' in html)
 
     def test_formset_layout(self):
-        logging.debug('TestFormLayout.test_formset_layout')
         TestFormSet = formset_factory(TestForm, extra=3)
         formset = TestFormSet()
         helper = FormHelper()
@@ -269,28 +259,24 @@ class TestFormLayout(CrispyTestCase):
         )
 
         # Check formset fields
-        django_version = version_tuple(django.get_version())
+        django_version = django.VERSION[:3]
         hidden_count = 4  # before Django 1.7 added MIN_NUM_FORM_COUNT
-        if django_version < version_tuple('1.5'):
-            version_tuple.debug('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
+        if django_version < (1, 5):
             self.assertEqual(html.count(
                 'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
             ), 1)
             self.assertEqual(html.count(
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
-            if (django_version >= version_tuple('1.4') and django_version < version_tuple('1.4.4')) or django_version < version_tuple('1.3.6'):
-                version_tuple.debug('Django version %s >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
+            if (django_version >= (1, 4) and django_version < (1, 4, 4)) or django_version < (1, 3, 6):
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
             else:
-                version_tuple.debug('Django version %s not >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
         else:
-            version_tuple.debug('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count(
                 'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
             ), 1)
@@ -305,8 +291,6 @@ class TestFormLayout(CrispyTestCase):
                     'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
                 ), 1)
                 hidden_count += 1
-        if CHECK_HTML_OUT:
-            logging.debug('html: "%s"' % html)
         self.assertEqual(html.count("hidden"), hidden_count)
 
         # Check form structure
@@ -328,7 +312,6 @@ class TestFormLayout(CrispyTestCase):
             self.assertEqual(html.count('row'), 3)
 
     def test_modelformset_layout(self):
-        logging.debug('TestFormLayout.test_modelformset_layout')
         CrispyModelFormSet = modelformset_factory(CrispyTestModel, form=TestForm4, extra=3)
         formset = CrispyModelFormSet(queryset=CrispyTestModel.objects.none())
         helper = FormHelper()
@@ -341,27 +324,23 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count("id_form-1-id"), 1)
         self.assertEqual(html.count("id_form-2-id"), 1)
 
-        django_version = version_tuple(django.get_version())
-        if django_version < version_tuple('1.5'):
-            version_tuple.debug('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
+        django_version = django.VERSION[:3]
+        if django_version < (1, 5):
             self.assertEqual(html.count(
                 'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
             ), 1)
             self.assertEqual(html.count(
                 'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
             ), 1)
-            if (django_version >= version_tuple('1.4') and django_version < version_tuple('1.4.4')) or django_version < version_tuple('1.3.6'):
-                version_tuple.debug('Django version %s >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
+            if (django_version >= (1, 4) and django_version < (1, 4, 4)) or django_version < (1, 3, 6):
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
             else:
-                version_tuple.debug('Django version %s not >= %s and < %s, or < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4')), repr(version_tuple('1.4.4')), repr(version_tuple('1.3.6'))))
                 self.assertEqual(html.count(
                     'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
                 ), 1)
         else:
-            version_tuple.debug('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count(
                 'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
             ), 1)
@@ -379,7 +358,6 @@ class TestFormLayout(CrispyTestCase):
         self.assertEqual(html.count('password'), 0)
 
     def test_i18n(self):
-        logging.debug('TestFormLayout.test_invalid_unicode_characters')
         template = loader.get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form.helper %}
@@ -401,7 +379,6 @@ class TestFormLayout(CrispyTestCase):
 
     @override_settings(USE_L10N=True, USE_THOUSAND_SEPARATOR=True)
     def test_l10n(self):
-        logging.debug('TestFormLayout.test_l10n')
         form = TestForm5(data={'pk': 1000})
         html = render_crispy_form(form)
 
@@ -412,7 +389,6 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue(html.count('1000'), 2)
 
     def test_default_layout(self):
-        logging.debug('TestFormLayout.test_default_layout')
         test_form = TestForm2()
         self.assertEqual(test_form.helper.layout.fields, [
             'is_company', 'email', 'password1', 'password2',
@@ -420,12 +396,10 @@ class TestFormLayout(CrispyTestCase):
         ])
 
     def test_default_layout_two(self):
-        logging.debug('TestFormLayout.test_default_layout_two')
         test_form = TestForm3()
         self.assertEqual(test_form.helper.layout.fields, ['email'])
 
     def test_modelform_layout_without_meta(self):
-        logging.debug('TestFormLayout.test_modelform_layout_without_meta')
         test_form = TestForm4()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout('email')
@@ -435,7 +409,6 @@ class TestFormLayout(CrispyTestCase):
         self.assertFalse('password' in html)
 
     def test_specialspaceless_not_screwing_intended_spaces(self):
-        logging.debug('TestFormLayout.test_specialspaceless_not_screwing_intended_spaces')
         # see issue #250
         test_form = TestForm()
         test_form.fields['email'].widget = forms.Textarea()
@@ -451,7 +424,6 @@ class TestFormLayout(CrispyTestCase):
 class TestUniformFormLayout(TestFormLayout):
 
     def test_layout_composition(self):
-        logging.debug('TestUniformFormLayout.test_layout_composition')
         if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
             warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
             return
@@ -503,7 +475,6 @@ class TestUniformFormLayout(TestFormLayout):
         self.assertFalse('last_name' in html)
 
     def test_second_layout_multifield_column_buttonholder_submit_div(self):
-        logging.debug('TestUniformFormLayout.test_second_layout_multifield_column_buttonholder_submit_div')
         if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
             warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
             return
@@ -568,7 +539,6 @@ class TestUniformFormLayout(TestFormLayout):
 class TestBootstrapFormLayout(TestFormLayout):
 
     def test_keepcontext_context_manager(self):
-        logging.debug('TestBootstrapFormLayout.test_keepcontext_context_manager')
         # Test case for issue #180
         # Apparently it only manifest when using render_to_response this exact way
         form = CheckboxesTestForm()
@@ -594,7 +564,6 @@ class TestBootstrapFormLayout(TestFormLayout):
 class TestBootstrap3FormLayout(TestFormLayout):
 
     def test_form_inline(self):
-        logging.debug('TestBootstrap3FormLayout.test_form_inline()')
         form = TestForm()
         form.helper = FormHelper()
         form.helper.form_class = 'form-inline'

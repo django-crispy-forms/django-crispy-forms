@@ -96,7 +96,7 @@ class TestForm4(forms.ModelForm):
         because obviously it casts the string to a set
         '''
         model = CrispyTestModel
-        if not django.VERSION < (1, 6, 0):
+        if django.VERSION >= (1, 6):
             fields = '__all__'  # eliminate RemovedInDjango18Warning
 
 

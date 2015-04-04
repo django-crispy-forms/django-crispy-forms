@@ -23,7 +23,7 @@ from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import (
     Layout, Submit, Reset, Hidden, Button, MultiField, Field
 )
-from crispy_forms.utils import render_crispy_form, version_tuple
+from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
 
@@ -268,11 +268,8 @@ class TestFormHelper(CrispyTestCase):
 
         settings.CRISPY_FAIL_SILENTLY = False
         # Django >= 1.4 is not wrapping exceptions in TEMPLATE_DEBUG mode
-        if settings.TEMPLATE_DEBUG and version_tuple(django.get_version()) < version_tuple('1.4'):
-            version_tuple.debug('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4'))))
+        if settings.TEMPLATE_DEBUG and django.VERSION < (1, 4):
             self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
-        else:
-            version_tuple.debug('settings.TEMPLATE_DEBUG not set or Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.4'))))
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
 
@@ -363,12 +360,10 @@ class TestFormHelper(CrispyTestCase):
         self.assertEqual(html.count('<input'), 3)
         self.assertEqual(html.count('hidden'), 2)
 
-        if version_tuple(django.get_version()) < version_tuple('1.5'):
-            version_tuple.debug('Django version %s < %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
+        if django.VERSION < (1, 5):
             self.assertEqual(html.count('type="hidden" name="password1"'), 1)
             self.assertEqual(html.count('type="hidden" name="password2"'), 1)
         else:
-            version_tuple.debug('Django version %s >= %s' % (repr(version_tuple(django.get_version())), repr(version_tuple('1.5'))))
             self.assertEqual(html.count('name="password1" type="hidden"'), 1)
             self.assertEqual(html.count('name="password2" type="hidden"'), 1)
 
@@ -406,7 +401,6 @@ class TestFormHelper(CrispyTestCase):
 
 class TestUniformFormHelper(TestFormHelper):
     def test_form_show_errors(self):
-        logging.debug('TestUniformFormHelper.test_form_show_errors')
         if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
             warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
             return
@@ -436,7 +430,6 @@ class TestUniformFormHelper(TestFormHelper):
         self.assertEqual(html.count('error'), 0)
 
     def test_multifield_errors(self):
-        logging.debug('TestUniformFormHelper.test_multifield_errors')
         if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
             warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
             return
@@ -580,7 +573,6 @@ class TestBootstrapFormHelper(TestFormHelper):
 
 class TestBootstrap3FormHelper(TestFormHelper):
     def test_label_class_and_field_class(self):
-        logging.debug('TestBootstrap3FormHelper.test_label_class_and_field_class')
         if settings.CRISPY_TEMPLATE_PACK != 'bootstrap3':
             warnings.warn('skipping bootstrap3 tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
             return
@@ -601,7 +593,6 @@ class TestBootstrap3FormHelper(TestFormHelper):
         self.assertEqual(html.count('col-sm-8'), 7)
 
     def test_template_pack(self):
-        logging.debug('TestBootstrap3FormHelper.test_template_pack')
         if settings.CRISPY_TEMPLATE_PACK != 'bootstrap3':
             warnings.warn('skipping bootstrap3 tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
             return
