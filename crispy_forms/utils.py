@@ -35,8 +35,7 @@ def set_hidden(widget):
     different starting in Django 1.7, when is_hidden ceases to be a
     true attribute and is determined by the input_type attribute
     '''
-    if hasattr(widget, 'input_type'):
-        widget.input_type = 'hidden'
+    widget.input_type = 'hidden'
     if not widget.is_hidden:
         widget.is_hidden = True
 
