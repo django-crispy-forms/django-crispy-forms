@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import platform
 from copy import copy
 
 from django.conf import settings
@@ -10,6 +11,10 @@ from django import template
 from crispy_forms.helper import FormHelper
 from crispy_forms.compatibility import memoize, string_types
 
+
+py_majversion, py_minversion, py_revversion = platform.python_version_tuple()
+if py_majversion != '2':
+    basestring = (str, bytes)
 
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
