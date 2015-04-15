@@ -102,3 +102,4 @@ Contributors
 * Stephen Mitchell <scuml>
 * <pySilver>
 * Christopher Adams <adamsc64>
+* John Comeau <jcomeauictx>
