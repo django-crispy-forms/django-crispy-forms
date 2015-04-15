@@ -18,6 +18,8 @@ else:
 
 try:
     # avoid RemovedInDjango19Warning by using lru_cache where available
-    from django.utils.lru_cache import lru_cache as memoize
+    from django.utils.lru_cache import lru_cache
+    def memoize(function, *args):
+        return lru_cache()(function)
 except:
     from django.utils.functional import memoize
