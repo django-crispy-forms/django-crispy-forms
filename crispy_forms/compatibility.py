@@ -15,3 +15,9 @@ else:
     binary_type = str
     string_types = basestring
     integer_types = (int, long)
+
+try:
+    # avoid RemovedInDjango19Warning by using lru_cache where available
+    from django.utils.lru_cache import lru_cache as memoize
+except:
+    from django.utils.functional import memoize

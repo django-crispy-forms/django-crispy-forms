@@ -1,5 +1,4 @@
 from __future__ import with_statement
-import inspect, traceback
 import logging
 import sys
 
@@ -8,15 +7,9 @@ from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
-try:  # avoid RemovedInDjango19Warning by using lru_cache where available
-    from django.utils.lru_cache import lru_cache
-    def memoize(function, *args):
-        return lru_cache()(function)
-except:
-    from django.utils.functional import memoize
 
 from .base import KeepContext
-from .compatibility import text_type, PY2
+from .compatibility import text_type, PY2, memoize
 
 # Global field template, default template used for rendering a field.
 

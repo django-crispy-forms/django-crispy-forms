@@ -5,19 +5,11 @@ from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
-try:
-    from django.utils.lru_cache import lru_cache
-    def memoize(function, *args):
-        return lru_cache()(function)
-except:
-    from django.utils.functional import memoize
 from django import template
 
 from crispy_forms.helper import FormHelper
-try:
-    basestring
-except:
-    basestring = str  # Python3
+from crispy_forms.compatibility import memoize, string_types
+
 
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
@@ -279,7 +271,7 @@ def do_uni_form(parser, token):
     # {% crispy form 'bootstrap' %}
     if (
         helper is not None and
-        isinstance(helper, basestring) and
+        isinstance(helper, string_types) and
         ("'" in helper or '"' in helper)
     ):
         template_pack = helper

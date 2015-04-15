@@ -4,15 +4,10 @@ from django.forms import forms
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
-try:
-    from django.utils.lru_cache import lru_cache
-    def memoize(function, *args):
-        return lru_cache()(function)
-except:
-    from django.utils.functional import memoize
 from django.utils.safestring import mark_safe
 from django import template
 
+from crispy_forms.compatibility import memoize
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import flatatt
 
