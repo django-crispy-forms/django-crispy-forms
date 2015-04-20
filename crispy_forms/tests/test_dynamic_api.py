@@ -152,14 +152,28 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout.fields[1][1], 'password2')
 
     def test_update_attributes(self):
-        helper = FormHelper()
-        helper.layout = Layout(
-            'email',
-            Field('password1'),
-            'password2',
+        attrs = {
+            'readonly': True,
+            'css_class': 'test-css-class',
+        }
+
+        def get_helper(**kwargs):
+            helper = FormHelper()
+            helper.layout = Layout(
+                'email',
+                Field('password1', **kwargs),
+                'password2',
+            )
+            return helper
+
+        helper1 = get_helper()
+        helper2 = get_helper(**attrs)
+
+        helper1['password1'].update_attributes(**attrs)
+        self.assertEqual(
+            helper1.layout[1].attrs,
+            helper2.layout[1].attrs,
         )
-        helper['password1'].update_attributes(readonly=True)
-        self.assertTrue('readonly' in helper.layout[1].attrs)
 
     def test_update_attributes_and_wrap_once(self):
         helper = FormHelper()
@@ -171,7 +185,7 @@ class TestDynamicLayouts(CrispyTestCase):
         helper.layout = layout
         helper.filter(Field).update_attributes(readonly=True)
         self.assertTrue(isinstance(layout[1], Field))
-        self.assertEqual(layout[1].attrs, {'readonly': True})
+        self.assertEqual(layout[1].attrs, {'readonly': 'True'})
 
         layout = Layout(
             'email',
@@ -181,7 +195,7 @@ class TestDynamicLayouts(CrispyTestCase):
         helper.layout = layout
         helper.filter(Field, max_level=2).update_attributes(readonly=True)
         self.assertTrue(isinstance(layout[1][0], Field))
-        self.assertEqual(layout[1][0].attrs, {'readonly': True})
+        self.assertEqual(layout[1][0].attrs, {'readonly': 'True'})
 
         layout = Layout(
             'email',
@@ -197,9 +211,9 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertTrue(isinstance(layout[1][0], Field))
         self.assertTrue(isinstance(layout[1][0][0], string_types))
         self.assertTrue(isinstance(layout[2], Field))
-        self.assertEqual(layout[1][0].attrs, {'readonly': True})
-        self.assertEqual(layout[0].attrs, {'readonly': True})
-        self.assertEqual(layout[2].attrs, {'readonly': True})
+        self.assertEqual(layout[1][0].attrs, {'readonly': 'True'})
+        self.assertEqual(layout[0].attrs, {'readonly': 'True'})
+        self.assertEqual(layout[2].attrs, {'readonly': 'True'})
 
     def test_get_layout_objects(self):
         layout_1 = Layout(
