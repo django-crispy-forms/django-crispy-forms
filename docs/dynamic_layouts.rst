@@ -284,7 +284,7 @@ Supposing ``password1`` and ``password2`` fields are using widget ``PasswordInpu
 Manipulating a layout
 ~~~~~~~~~~~~~~~~~~~~~
 
-Besides selecting layout objects and applying actions to them, you can also manipulate layouts themselves and layout obejcts easily, like if they were lists. We won't do this from the helper, but the layout and layout objects themselves. Consider this a lower level API.
+Besides selecting layout objects and applying actions to them, you can also manipulate layouts themselves and layout objects easily, like if they were lists. We won't do this from the helper, but the layout and layout objects themselves. Consider this a lower level API.
 
 All layout objects that can wrap others, contain a inner attribute ``fields`` which is a list, not a dictionary as in Django forms. You can apply any list methods on them easily. Beware that a ``Layout`` behaves itself like other layout objects such as ``Div``, the only difference is that it is the root of the tree.
 
