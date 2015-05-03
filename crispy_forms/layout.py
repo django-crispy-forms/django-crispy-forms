@@ -433,6 +433,12 @@ class Field(LayoutObject):
         if hasattr(self, 'wrapper_class'):
             extra_context['wrapper_class'] = self.wrapper_class
 
+        # render template in data_name attributes
+        if type(self.attrs) == dict:
+            for k, v in self.attrs.items():
+                if k.startswith("data"):
+                    v = HTML(v).render(form, form_style, context, template_pack=template_pack)
+
         html = ''
         template = self.template % template_pack
         for field in self.fields:
