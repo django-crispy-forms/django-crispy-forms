@@ -181,4 +181,3 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
             raise TypeError("Expected a prepend and/or append argument")
 
     return template.render(context)
-

@@ -14,9 +14,11 @@ from crispy_forms.utils import flatatt
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 DEBUG = getattr(settings, 'DEBUG', False)
 
+
 def uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_formset.html' % template_pack)
 uni_formset_template = memoize(uni_formset_template, {}, 1)
+
 
 def uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_form.html' % template_pack)

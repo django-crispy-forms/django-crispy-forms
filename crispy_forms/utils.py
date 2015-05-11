@@ -15,11 +15,13 @@ from .compatibility import text_type, PY2, memoize
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
+
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template
 def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
 default_field_template = memoize(default_field_template, {}, 1)
+
 
 def set_hidden(widget):
     '''
@@ -31,6 +33,7 @@ def set_hidden(widget):
     widget.input_type = 'hidden'
     if not widget.is_hidden:
         widget.is_hidden = True
+
 
 def render_field(
     field, form, form_style, context, template=None, labelclass=None,
