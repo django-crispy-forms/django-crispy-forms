@@ -20,4 +20,6 @@ try:
     # avoid RemovedInDjango19Warning by using lru_cache where available
     from django.utils.lru_cache import lru_cache
 except ImportError:
-    from django.utils.functional import memoize as lru_cache
+    import functools
+    from django.utils.functional import memoize
+    lru_cache = functools.partial(memoize, cache={}, num_args=1)
