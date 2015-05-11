@@ -7,19 +7,19 @@ from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 from django import template
 
-from crispy_forms.compatibility import memoize
+from crispy_forms.compatibility import lru_cache
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import flatatt, TEMPLATE_PACK
 
 
+@lru_cache()
 def uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_formset.html' % template_pack)
-uni_formset_template = memoize(uni_formset_template, {}, 1)
 
 
+@lru_cache()
 def uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_form.html' % template_pack)
-uni_form_template = memoize(uni_form_template, {}, 1)
 
 register = template.Library()
 
