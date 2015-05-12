@@ -15,12 +15,12 @@ TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 DEBUG = getattr(settings, 'DEBUG', False)
 
 
-@lru_cache
+@lru_cache()
 def uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_formset.html' % template_pack)
 
 
-@lru_cache
+@lru_cache()
 def uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_form.html' % template_pack)
 

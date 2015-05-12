@@ -22,5 +22,7 @@ try:
 except ImportError:
     from django.utils.functional import memoize
 
-    def lru_cache(function):
-        return memoize({}, 1)(function)
+    def lru_cache():
+        def decorator(function, cache_dict={}):
+            return memoize(function, cache_dict, 1)
+        return decorator
