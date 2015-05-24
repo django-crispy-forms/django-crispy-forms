@@ -2,17 +2,16 @@
 from django.conf import settings
 from django.forms.forms import BoundField
 from django.forms.models import formset_factory
-from django.template import loader, Context
+from django.template import Context, Engine
 
 from .base import CrispyTestCase
 from .forms import TestForm
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
 
-
 class TestBasicFunctionalityTags(CrispyTestCase):
     def test_as_crispy_errors_form_without_non_field_errors(self):
-        template = loader.get_template_from_string(u"""
+        template = Engine().from_string(u"""
             {% load crispy_forms_tags %}
             {{ form|as_crispy_errors }}
         """)
@@ -24,7 +23,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
         self.assertFalse("errorMsg" in html or "alert" in html)
 
     def test_as_crispy_errors_form_with_non_field_errors(self):
-        template = loader.get_template_from_string(u"""
+        template = Engine().from_string(u"""
             {% load crispy_forms_tags %}
             {{ form|as_crispy_errors }}
         """)
@@ -38,7 +37,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
         self.assertFalse("<h3>" in html)
 
     def test_crispy_filter_with_form(self):
-        template = loader.get_template_from_string(u"""
+        template = Engine().from_string(u"""
             {% load crispy_forms_tags %}
             {{ form|crispy }}
         """)
@@ -50,7 +49,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
         self.assertEqual(html.count('<label'), 7)
 
     def test_crispy_filter_with_formset(self):
-        template = loader.get_template_from_string(u"""
+        template = Engine().from_string(u"""
             {% load crispy_forms_tags %}
             {{ testFormset|crispy }}
         """)
@@ -68,7 +67,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
         self.assertTrue('form-MAX_NUM_FORMS' in html)
 
     def test_classes_filter(self):
-        template = loader.get_template_from_string(u"""
+        template = Engine().from_string(u"""
             {% load crispy_forms_field %}
             {{ testField|classes }}
         """)
@@ -81,7 +80,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
 
     def test_crispy_field_and_class_converters(self):
         if hasattr(settings, 'CRISPY_CLASS_CONVERTERS'):
-            template = loader.get_template_from_string(u"""
+            template = Engine().from_string(u"""
                 {% load crispy_forms_field %}
                 {% crispy_field testField 'class' 'error' %}
             """)

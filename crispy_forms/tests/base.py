@@ -22,13 +22,9 @@ class CrispyTestCase(TestCase):
         })
         self.__overriden_settings.enable()
 
-        # resetting template loaders cache
-        self.__template_source_loaders = loader.template_source_loaders
-        loader.template_source_loaders = None
 
     def tearDown(self):
-        loader.template_source_loaders = self.__template_source_loaders
-        self.__overriden_settings.disable()
+        pass
 
     @property
     def current_template_pack(self):

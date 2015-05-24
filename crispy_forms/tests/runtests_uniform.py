@@ -9,7 +9,7 @@ parent = os.path.dirname(os.path.dirname(os.path.dirname(
 sys.path.insert(0, parent)
 
 import django
-from django.test.simple import DjangoTestSuiteRunner
+from django.test.runner import DiscoverRunner
 from django.conf import settings
 settings.CRISPY_TEMPLATE_PACK = 'uni_form'
 
@@ -17,15 +17,15 @@ settings.CRISPY_TEMPLATE_PACK = 'uni_form'
 def runtests():
     if hasattr(django, 'setup'):
         django.setup()
-    return DjangoTestSuiteRunner(failfast=False).run_tests([
-        'crispy_forms.TestBasicFunctionalityTags',
-        'crispy_forms.TestFormHelper',
-        'crispy_forms.TestUniformFormHelper',
-        'crispy_forms.TestFormLayout',
-        'crispy_forms.TestUniformFormLayout',
-        'crispy_forms.TestLayoutObjects',
-        'crispy_forms.TestDynamicLayouts',
-        'crispy_forms.TestUniformDynamicLayouts',
+    return DiscoverRunner(failfast=False).run_tests([
+        'crispy_forms.tests.TestBasicFunctionalityTags',
+        'crispy_forms.tests.TestFormHelper',
+        'crispy_forms.tests.TestUniformFormHelper',
+        'crispy_forms.tests.TestFormLayout',
+        'crispy_forms.tests.TestUniformFormLayout',
+        'crispy_forms.tests.TestLayoutObjects',
+        'crispy_forms.tests.TestDynamicLayouts',
+        'crispy_forms.tests.TestUniformDynamicLayouts',
     ], verbosity=1, interactive=True)
 
 
