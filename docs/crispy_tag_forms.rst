@@ -177,7 +177,7 @@ Often we get asked: "How do you render two or more forms, with their respective 
 
 Then you will have to write a little of html code surrounding the forms::
 
-    <form action="{% url submit_survey %}" class="uniForm" method="post">
+    <form action="{% url 'submit_survey' %}" class="uniForm" method="post">
         {% crispy first_form %}
         {% crispy second_form %}
     </form>
