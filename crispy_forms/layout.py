@@ -407,7 +407,7 @@ class Field(LayoutObject):
 
         Field('field_name', style="color: #333;", css_class="whatever", id="field_name")
     """
-    template = "%s/field.html"
+    template = None
 
     def __init__(self, *args, **kwargs):
         self.fields = list(args)
@@ -434,7 +434,10 @@ class Field(LayoutObject):
             extra_context['wrapper_class'] = self.wrapper_class
 
         html = ''
-        template = self.template % template_pack
+        if self.template:
+            template = self.template % template_pack
+        else:
+            template = None
         for field in self.fields:
             html += render_field(
                 field, form, form_style, context,
