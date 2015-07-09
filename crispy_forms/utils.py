@@ -2,6 +2,7 @@ from __future__ import with_statement
 import inspect
 import logging
 import sys
+from thread import _local
 
 from django.conf import settings
 from django.forms.forms import BoundField
@@ -15,7 +16,20 @@ from .compatibility import text_type, PY2
 
 # Global field template, default template used for rendering a field.
 
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+# Due to the fact that Crispy Forms only partially allows the override of the
+# CRISPY_TEMPLATE_PACK setting, and we are trying to use two different template
+# packs (one for Bootstrap 2 and the other for Bootstrap 3), we must set the
+# template pack as a variable in the local thread which can be overridden during
+# runtime.
+# TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+
+
+def set_template_pack(value):
+    """Allows setting of template pack variable in thread local"""
+    _local.TEMPLATE_PACK = value
+
+def get_template_pack():
+    return _local.TEMPLATE_PACK
 
 
 # By memoizeing we avoid loading the template every time render_field
