@@ -7,17 +7,20 @@ from django.template.defaultfilters import slugify
 
 from .compatibility import text_type
 from .layout import LayoutObject, Field, Div
-from .utils import render_field, flatatt, TEMPLATE_PACK
+from .utils import render_field, flatatt, get_template_pack
 
 
 
 class PrependedAppendedText(Field):
-    template = "%s/layout/prepended_appended_text.html" % TEMPLATE_PACK
 
     def __init__(self, field, prepended_text=None, appended_text=None, *args, **kwargs):
         self.field = field
         self.appended_text = appended_text
         self.prepended_text = prepended_text
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/prepend_appended_text.html" % get_template_pack()
+        )
         if 'active' in kwargs:
             self.active = kwargs.pop('active')
 
@@ -28,7 +31,8 @@ class PrependedAppendedText(Field):
 
         super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         context.update({'crispy_appended_text': self.appended_text,
                         'crispy_prepended_text': self.prepended_text,
                         'input_size' : self.input_size,
@@ -70,16 +74,18 @@ class FormActions(LayoutObject):
             Submit('Save', 'Save', css_class='btn-primary')
         )
     """
-    template = "%s/layout/formactions.html" % TEMPLATE_PACK
 
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop(
+            'template', "%s/layout/formactions.html" % get_template_pack()
+        )
         self.attrs = kwargs
         if 'css_class' in self.attrs:
             self.attrs['class'] = self.attrs.pop('css_class')
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         html = u''
         for field in self.fields:
             html += render_field(field, form, form_style, context, template_pack=template_pack)
@@ -96,9 +102,16 @@ class InlineCheckboxes(Field):
 
         InlineCheckboxes('field_name')
     """
-    template = "%s/layout/checkboxselectmultiple_inline.html" % TEMPLATE_PACK
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/checkboxselectmultiple_inline.html" % get_template_pack()
+        )
+        super(InlineCheckboxes, self).__init__(*args, **kwargs)
+
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         context.update({'inline_class': 'inline'})
         return super(InlineCheckboxes, self).render(form, form_style, context)
 
@@ -109,23 +122,37 @@ class InlineRadios(Field):
 
         InlineRadios('field_name')
     """
-    template = "%s/layout/radioselect_inline.html" % TEMPLATE_PACK
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/radioselect_inline.html" % get_template_pack()
+        )
+        super(InlineRadios, self).__init__(*args, **kwargs)
+
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         context.update({'inline_class': 'inline'})
         return super(InlineRadios, self).render(form, form_style, context)
 
 
 class FieldWithButtons(Div):
-    template = '%s/layout/field_with_buttons.html' % TEMPLATE_PACK
 
-    def render(self, form, form_style, context):
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/field_with_buttons.html" % get_template_pack()
+        )
+        super(FieldWithButtons, self).__init__(*args, **kwargs)
+
+    def render(self, form, form_style, context, template_pack=None):
         # We first render the buttons
+        template_pack = template_pack or get_template_pack()
         buttons = ''
         for field in self.fields[1:]:
             buttons += render_field(
                 field, form, form_style, context,
-                '%s/layout/field.html' % TEMPLATE_PACK, layout_object=self
+                '%s/layout/field.html' % template_pack, layout_object=self
             )
 
         context.update({'div': self, 'buttons': buttons})
@@ -147,12 +174,14 @@ class StrictButton(object):
 
         Button("button content", css_class="extra")
     """
-    template = '%s/layout/button.html' % TEMPLATE_PACK
     field_classes = 'btn'
 
     def __init__(self, content, **kwargs):
         self.content = content
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop(
+            'template',
+            '%s/layout/button.html' % get_template_pack()
+        )
 
         kwargs.setdefault('type', 'button')
 
@@ -190,7 +219,8 @@ class Container(Div):
         """
         return field_name in map(lambda pointer: pointer[1], self.get_field_names())
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         if self.active:
             if not 'active' in self.css_class:
                 self.css_class += ' active'
@@ -223,7 +253,13 @@ class Tab(Container):
         Tab('tab_name', 'form_field_1', 'form_field_2', 'form_field_3')
     """
     css_class = 'tab-pane'
-    link_template = '%s/layout/tab-link.html' % TEMPLATE_PACK
+
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/tab-link.html" % get_template_pack()
+        )
+        super(Tab, self).__init__(*args, **kwargs)
 
     def render_link(self):
         """
@@ -242,9 +278,16 @@ class TabHolder(ContainerHolder):
             Tab('form_field_3')
         )
     """
-    template = '%s/layout/tab.html' % TEMPLATE_PACK
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/tab.html" % get_template_pack()
+        )
+        super(TabHolder, self).__init__(*args, **kwargs)
+
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         links, content = '', ''
         for tab in self.fields:
             tab.active = False
@@ -270,8 +313,14 @@ class AccordionGroup(Container):
 
         AccordionGroup("group name", "form_field_1", "form_field_2")
     """
-    template = "%s/accordion-group.html" % TEMPLATE_PACK
     data_parent = ""  # accordion parent div id.
+
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/accordion-group.html" % get_template_pack()
+        )
+        super(AccordionGroup, self).__init__(*args, **kwargs)
 
 
 class Accordion(ContainerHolder):
@@ -283,9 +332,16 @@ class Accordion(ContainerHolder):
             AccordionGroup("another group name", "form_field")
         )
     """
-    template = "%s/accordion.html" % TEMPLATE_PACK
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/accordion.html" % get_template_pack()
+        )
+        super(Accordion, self).__init__(*args, **kwargs)
+
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         content = ''
 
         # accordion group needs the parent div id to set `data-parent` (I don't
@@ -314,7 +370,6 @@ class Alert(Div):
 
         Alert(content='<strong>Warning!</strong> Best check yo self, you're not looking too good.')
     """
-    template = "bootstrap/layout/alert.html"
     css_class = "alert"
 
     def __init__(self, content, dismiss=True, block=False, **kwargs):
@@ -322,11 +377,15 @@ class Alert(Div):
         if block:
             self.css_class += ' alert-block'
         Div.__init__(self, *fields, **kwargs)
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/alert.html" % get_template_pack()
+        )
         self.content = content
         self.dismiss = dismiss
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         return render_to_string(
             self.template,
             Context({'alert': self, 'content': self.content, 'dismiss': self.dismiss
@@ -341,12 +400,21 @@ class UneditableField(Field):
 
         UneditableField('field_name', css_class="input-xlarge")
     """
-    template = "%s/layout/uneditable_input.html" % TEMPLATE_PACK
 
     def __init__(self, field, *args, **kwargs):
         self.attrs = {'class': 'uneditable-input'}
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/uneditable_input.html" % get_template_pack()
+        )
         super(UneditableField, self).__init__(field, *args, **kwargs)
 
 
 class InlineField(Field):
-    template = "%s/layout/inline_field.html" % TEMPLATE_PACK
+
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs.pop(
+            'template',
+            "%s/layout/inline_field.html" % get_template_pack()
+        )
+        super(InlineField, self).__init__(*args, **kwargs)

@@ -6,9 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
 from crispy_forms.compatibility import string_types, text_type
-from crispy_forms.utils import render_field, flatatt
-
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+from crispy_forms.utils import render_field, flatatt, get_template_pack
 
 
 class LayoutObject(object):
@@ -124,7 +122,8 @@ class Layout(LayoutObject):
     def __init__(self, *fields):
         self.fields = list(fields)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         html = ""
         for field in self.fields:
             html += render_field(
@@ -159,7 +158,8 @@ class ButtonHolder(LayoutObject):
         self.css_id = kwargs.get('css_id', None)
         self.template = kwargs.get('template', self.template)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         html = u''
         for field in self.fields:
             html += render_field(field, form, form_style,
@@ -172,7 +172,6 @@ class BaseInput(object):
     """
     A base class to reduce the amount of code in the Input classes.
     """
-    template = "%s/layout/baseinput.html" % TEMPLATE_PACK
 
     def __init__(self, name, value, **kwargs):
         self.name = name
@@ -183,14 +182,18 @@ class BaseInput(object):
         if 'css_class' in kwargs:
             self.field_classes += ' %s' % kwargs.pop('css_class')
 
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop(
+            'template',
+            "%s/baseinput.html" % get_template_pack()
+        )
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
         """
         Renders an `<input />` if container is used as a Layout object.
         Input button value can be a variable in context.
         """
+        template_pack = template_pack or get_template_pack()
         self.value = Template(text_type(self.value)).render(context)
         return render_to_string(self.template, Context({'input': self}))
 
@@ -204,7 +207,14 @@ class Submit(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the submit button.
     """
     input_type = 'submit'
-    field_classes = 'submit submitButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-primary'
+
+    def __init__(self, *args, **kwargs):
+        self.field_classes = kwargs.pop(
+            'field_classes',
+            'submit submitButton' if get_template_pack() == 'uni_form'
+            else 'btn btn-primary'
+        )
+        super(Submit, self).__init__(*args, **kwargs)
 
 
 class Button(BaseInput):
@@ -216,7 +226,14 @@ class Button(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the button.
     """
     input_type = 'button'
-    field_classes = 'button' if TEMPLATE_PACK == 'uni_form' else 'btn'
+
+    def __init__(self, *args, **kwargs):
+        self.field_classes = kwargs.pop(
+            'field_classes',
+            'button' if get_template_pack() == 'uni_form'
+            else 'btn'
+        )
+        super(Button, self).__init__(*args, **kwargs)
 
 
 class Hidden(BaseInput):
@@ -236,7 +253,14 @@ class Reset(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the reset.
     """
     input_type = 'reset'
-    field_classes = 'reset resetButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-inverse'
+
+    def __init__(self, *args, **kwargs):
+        self.field_classes = kwargs.pop(
+            'field_classes',
+            'reset resetButton' if get_template_pack() == 'uni_form'
+            else 'btn btn-inverse'
+        )
+        super(Reset, self).__init__(*args, **kwargs)
 
 
 class Fieldset(LayoutObject):
@@ -269,7 +293,8 @@ class Fieldset(LayoutObject):
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         fields = ''
         for field in self.fields:
             fields += render_field(field, form, form_style, context,
@@ -296,8 +321,9 @@ class MultiField(LayoutObject):
         self.field_template = kwargs.pop('field_template', self.field_template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
         # If a field within MultiField contains errors
+        template_pack = template_pack or get_template_pack()
         if context['form_show_errors']:
             for field in map(lambda pointer: pointer[1], self.get_field_names()):
                 if field in form.errors:
@@ -337,7 +363,8 @@ class Div(LayoutObject):
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         fields = ''
         for field in self.fields:
             fields += render_field(field, form, form_style, context, template_pack=template_pack)
@@ -351,7 +378,14 @@ class Row(Div):
 
         Row('form_field_1', 'form_field_2', 'form_field_3')
     """
-    css_class = 'formRow' if TEMPLATE_PACK == 'uni_form' else 'row'
+
+    def __init__(self, *args, **kwargs):
+        self.css_class = kwargs.pop(
+            'field_classes',
+            'formRow' if get_template_pack() == 'uni_form'
+            else 'row'
+        )
+        super(Row, self).__init__(*args, **kwargs)
 
 
 class Column(Div):
@@ -377,7 +411,8 @@ class HTML(object):
     def __init__(self, html):
         self.html = html
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         return Template(text_type(self.html)).render(context)
 
 
@@ -390,7 +425,6 @@ class Field(LayoutObject):
 
         Field('field_name', style="color: #333;", css_class="whatever", id="field_name")
     """
-    template = "%s/field.html" % TEMPLATE_PACK
 
     def __init__(self, *args, **kwargs):
         self.fields = list(args)
@@ -405,12 +439,15 @@ class Field(LayoutObject):
                 self.attrs['class'] = kwargs.pop('css_class')
 
         self.wrapper_class = kwargs.pop('wrapper_class', None)
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop(
+            'template', "%s/field.html" % get_template_pack()
+        )
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k, v in kwargs.items()]))
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+    def render(self, form, form_style, context, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         if hasattr(self, 'wrapper_class'):
             context['wrapper_class'] = self.wrapper_class
 

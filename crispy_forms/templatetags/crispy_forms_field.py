@@ -8,7 +8,7 @@ from django import template
 from django.template import loader, Context
 from django.conf import settings
 
-from crispy_forms.utils import TEMPLATE_PACK
+from crispy_forms.utils import get_template_pack
 
 register = template.Library()
 
@@ -106,7 +106,7 @@ class CrispyFieldNode(template.Node):
                 css_class = class_name
 
             if (
-                TEMPLATE_PACK == 'bootstrap3'
+                get_template_pack() == 'bootstrap3'
                 and not is_checkbox(field)
                 and not is_file(field)
             ):
@@ -165,7 +165,7 @@ def crispy_addon(field, append="", prepend=""):
             'form_show_errors': True
         })
 
-        template = loader.get_template('%s/layout/prepended_appended_text.html' % TEMPLATE_PACK)
+        template = loader.get_template('%s/layout/prepended_appended_text.html' % get_template_pack())
         context['crispy_prepended_text'] = prepend
         context['crispy_appended_text'] = append
 

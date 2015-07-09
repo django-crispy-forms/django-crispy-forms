@@ -10,9 +10,9 @@ except ImportError:
 from django.utils.functional import allow_lazy
 
 from crispy_forms.compatibility import text_type
+from crispy_forms.utils import get_template_pack
 
 register = template.Library()
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
 
 def selectively_remove_spaces_between_tags(value, template_pack, form_class):
@@ -42,7 +42,7 @@ class SpecialSpacelessNode(template.Node):
         try:
             template_pack = template.Variable('template_pack').resolve(context)
         except:
-            template_pack = TEMPLATE_PACK
+            template_pack = get_template_pack()
 
         try:
             form_attrs = template.Variable('form_attrs').resolve(context)

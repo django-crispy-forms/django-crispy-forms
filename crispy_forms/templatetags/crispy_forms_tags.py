@@ -9,12 +9,12 @@ from django.utils.functional import memoize
 from django import template
 
 from crispy_forms.helper import FormHelper
+from crispy_forms.utils import get_template_pack
 
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
 from crispy_forms.templatetags.crispy_forms_filters import *
 
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 ALLOWED_TEMPLATE_PACKS = getattr(settings, 'CRISPY_ALLOWED_TEMPLATE_PACKS', ('bootstrap', 'uni_form'))
 
 
@@ -76,7 +76,8 @@ class BasicNode(template.Node):
     both the form object and parses out the helper string into attributes
     that templates can easily handle.
     """
-    def __init__(self, form, helper, template_pack=TEMPLATE_PACK):
+    def __init__(self, form, helper, template_pack=None):
+        template_pack = template_pack or get_template_pack()
         self.form = form
         if helper is not None:
             self.helper = helper
@@ -157,7 +158,7 @@ class BasicNode(template.Node):
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
         response_dict = {
-            'template_pack': settings.CRISPY_TEMPLATE_PACK,
+            'template_pack': get_template_pack(),
             '%s_action' % form_type: attrs['attrs'].get("action", ''),
             '%s_method' % form_type: attrs.get("form_method", 'post'),
             '%s_tag' % form_type: attrs.get("form_tag", True),
@@ -192,12 +193,14 @@ class BasicNode(template.Node):
         return response_dict
 
 
-def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
+def whole_uni_formset_template(template_pack=None):
+    template_pack = template_pack or get_template_pack()
     return get_template('%s/whole_uni_formset.html' % template_pack)
 whole_uni_formset_template = memoize(whole_uni_formset_template, {}, 1)
 
 
-def whole_uni_form_template(template_pack=TEMPLATE_PACK):
+def whole_uni_form_template(template_pack=None):
+    template_pack = template_pack or get_template_pack()
     return get_template('%s/whole_uni_form.html' % template_pack)
 whole_uni_form_template = memoize(whole_uni_form_template, {}, 1)
 
@@ -269,6 +272,6 @@ def do_uni_form(parser, token):
             helper = None
         # {% crispy form helper %} OR {% crispy form %}
         else:
-            template_pack = TEMPLATE_PACK
+            template_pack = get_template_pack()
 
     return CrispyFormNode(form, helper, template_pack=template_pack)

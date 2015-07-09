@@ -34,12 +34,13 @@ def get_template_pack():
 
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template
-def default_field_template(template_pack=TEMPLATE_PACK):
+def default_field_template(template_pack=None):
+    template_pack = template_pack or get_template_pack()
     return get_template("%s/field.html" % template_pack)
 default_field_template = memoize(default_field_template, {}, 1)
 
 
-def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None, template_pack=TEMPLATE_PACK):
+def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None, template_pack=None):
     """
     Renders a django-crispy-forms field
 
@@ -60,6 +61,8 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
 
     :attrs: Attributes for the field's widget
     """
+    template_pack = template_pack or get_template_pack()
+
     with KeepContext(context):
         FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
 

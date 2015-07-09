@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from crispy_forms.compatibility import string_types
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
-from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK
+from crispy_forms.utils import render_field, flatatt, get_template_pack
 from crispy_forms.exceptions import FormHelpersException
 
 
@@ -281,10 +281,11 @@ class FormHelper(DynamicLayoutHandler):
     def add_layout(self, layout):
         self.layout = layout
 
-    def render_layout(self, form, context, template_pack=TEMPLATE_PACK):
+    def render_layout(self, form, context, template_pack=None):
         """
         Returns safe html of the rendering of the layout
         """
+        template_pack = template_pack or get_template_pack()
         form.rendered_fields = set()
         form.crispy_field_template = self.field_template
 
@@ -329,10 +330,11 @@ class FormHelper(DynamicLayoutHandler):
 
         return mark_safe(html)
 
-    def get_attributes(self, template_pack=TEMPLATE_PACK):
+    def get_attributes(self, template_pack=None):
         """
         Used by crispy_forms_tags to get helper attributes
         """
+        template_pack = template_pack or get_template_pack()
         items = {}
         items['form_method'] = self.form_method.strip()
         items['form_tag'] = self.form_tag

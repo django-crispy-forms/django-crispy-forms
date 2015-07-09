@@ -9,18 +9,19 @@ from django.utils.safestring import mark_safe
 from django import template
 
 from crispy_forms.exceptions import CrispyError
-from crispy_forms.utils import flatatt
+from crispy_forms.utils import flatatt, get_template_pack
 
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 DEBUG = getattr(settings, 'DEBUG', False)
 
 
-def uni_formset_template(template_pack=TEMPLATE_PACK):
+def uni_formset_template(template_pack=None):
+    template_pack = template_pack or get_template_pack()
     return get_template('%s/uni_formset.html' % template_pack)
 uni_formset_template = memoize(uni_formset_template, {}, 1)
 
 
-def uni_form_template(template_pack=TEMPLATE_PACK):
+def uni_form_template(template_pack=None):
+    template_pack = template_pack or get_template_pack()
     return get_template('%s/uni_form.html' % template_pack)
 uni_form_template = memoize(uni_form_template, {}, 1)
 
@@ -28,7 +29,7 @@ register = template.Library()
 
 
 @register.filter(name='crispy')
-def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_class=""):
+def as_crispy_form(form, template_pack=None, label_class="", field_class=""):
     """
     The original and still very useful way to generate a div elegant form/formset::
 
@@ -47,6 +48,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
 
         {{ myform|label_class:"col-lg-2",field_class:"col-lg-8" }}
     """
+    template_pack = template_pack or get_template_pack()
     if isinstance(form, BaseFormSet):
         template = uni_formset_template(template_pack)
         c = Context({
@@ -69,7 +71,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
 
 
 @register.filter(name='as_crispy_errors')
-def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
+def as_crispy_errors(form, template_pack=None):
     """
     Renders only form errors the same way as django-crispy-forms::
 
@@ -80,6 +82,7 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
 
         {{ form|as_crispy_errors:"bootstrap" }}
     """
+    template_pack = template_pack or get_template_pack()
     if isinstance(form, BaseFormSet):
         template = get_template('%s/errors_formset.html' % template_pack)
         c = Context({'formset': form})
@@ -90,7 +93,7 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
 
 
 @register.filter(name='as_crispy_field')
-def as_crispy_field(field, template_pack=TEMPLATE_PACK):
+def as_crispy_field(field, template_pack=None):
     """
     Renders a form field like a django-crispy-forms field::
 
@@ -101,6 +104,7 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
 
         {{ form.field|as_crispy_field:"bootstrap" }}
     """
+    template_pack = template_pack or get_template_pack()
     if not isinstance(field, forms.BoundField) and DEBUG:
         raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
 
