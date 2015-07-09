@@ -28,8 +28,12 @@ def set_template_pack(value):
     """Allows setting of template pack variable in thread local"""
     _local.TEMPLATE_PACK = value
 
+
 def get_template_pack():
-    return _local.TEMPLATE_PACK
+    template_pack = _local.TEMPLATE_PACK
+    if template_pack is None:
+        template_pack = settings.CRISPY_TEMPLATE_PACK
+    return template_pack
 
 
 # By memoizeing we avoid loading the template every time render_field
