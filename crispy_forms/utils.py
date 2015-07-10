@@ -37,7 +37,6 @@ def get_template_pack():
         template_pack = _thread_local.TEMPLATE_PACK
     except AttributeError:
         template_pack = settings.CRISPY_TEMPLATE_PACK
-    print "using template", template_pack
     return template_pack
 
 
