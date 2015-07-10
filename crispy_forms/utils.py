@@ -2,7 +2,6 @@ from __future__ import with_statement
 import inspect
 import logging
 import sys
-from thread import _local
 
 from django.conf import settings
 from django.forms.forms import BoundField
@@ -13,6 +12,10 @@ from django.utils.functional import memoize
 
 from .base import KeepContext
 from .compatibility import text_type, PY2
+
+import threading
+
+_thread_local = threading.local()
 
 # Global field template, default template used for rendering a field.
 
@@ -26,13 +29,15 @@ from .compatibility import text_type, PY2
 
 def set_template_pack(value):
     """Allows setting of template pack variable in thread local"""
-    _local.TEMPLATE_PACK = value
+    _thread_local.TEMPLATE_PACK = value
 
 
 def get_template_pack():
-    template_pack = _local.TEMPLATE_PACK
-    if template_pack is None:
+    try:
+        template_pack = _thread_local.TEMPLATE_PACK
+    except AttributeError:
         template_pack = settings.CRISPY_TEMPLATE_PACK
+    print "using template", template_pack
     return template_pack
 
 
