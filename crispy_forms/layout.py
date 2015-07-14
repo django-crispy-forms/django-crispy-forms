@@ -184,7 +184,7 @@ class BaseInput(object):
 
         self.template = kwargs.pop(
             'template',
-            "%s/baseinput.html" % get_template_pack()
+            "%s/layout/baseinput.html" % get_template_pack()
         )
         self.flat_attrs = flatatt(kwargs)
 
