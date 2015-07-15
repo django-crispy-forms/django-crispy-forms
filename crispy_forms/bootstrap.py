@@ -318,7 +318,7 @@ class AccordionGroup(Container):
     def __init__(self, *args, **kwargs):
         self.template = kwargs.pop(
             'template',
-            "%s/layout/accordion-group.html" % get_template_pack()
+            "%s/accordion-group.html" % get_template_pack()
         )
         super(AccordionGroup, self).__init__(*args, **kwargs)
 
@@ -336,7 +336,7 @@ class Accordion(ContainerHolder):
     def __init__(self, *args, **kwargs):
         self.template = kwargs.pop(
             'template',
-            "%s/layout/accordion.html" % get_template_pack()
+            "%s/accordion.html" % get_template_pack()
         )
         super(Accordion, self).__init__(*args, **kwargs)
 
