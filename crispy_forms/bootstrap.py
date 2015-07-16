@@ -77,9 +77,10 @@ class FormActions(LayoutObject):
 
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
-        self.template = kwargs.pop(
-            'template', "%s/layout/formactions.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template', "%s/layout/formactions.html" % get_template_pack()
+            )
         self.attrs = kwargs
         if 'css_class' in self.attrs:
             self.attrs['class'] = self.attrs.pop('css_class')
@@ -104,10 +105,11 @@ class InlineCheckboxes(Field):
     """
 
     def __init__(self, *args, **kwargs):
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/checkboxselectmultiple_inline.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/checkboxselectmultiple_inline.html" % get_template_pack()
+            )
         super(InlineCheckboxes, self).__init__(*args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=None):
@@ -124,10 +126,11 @@ class InlineRadios(Field):
     """
 
     def __init__(self, *args, **kwargs):
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/radioselect_inline.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/radioselect_inline.html" % get_template_pack()
+            )
         super(InlineRadios, self).__init__(*args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=None):
@@ -139,10 +142,11 @@ class InlineRadios(Field):
 class FieldWithButtons(Div):
 
     def __init__(self, *args, **kwargs):
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/field_with_buttons.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/field_with_buttons.html" % get_template_pack()
+            )
         super(FieldWithButtons, self).__init__(*args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=None):
@@ -178,10 +182,11 @@ class StrictButton(object):
 
     def __init__(self, content, **kwargs):
         self.content = content
-        self.template = kwargs.pop(
-            'template',
-            '%s/layout/button.html' % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                '%s/layout/button.html' % get_template_pack()
+            )
 
         kwargs.setdefault('type', 'button')
 
@@ -255,10 +260,11 @@ class Tab(Container):
     css_class = 'tab-pane'
 
     def __init__(self, *args, **kwargs):
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/tab-link.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/tab-link.html" % get_template_pack()
+            )
         super(Tab, self).__init__(*args, **kwargs)
 
     def render_link(self):
@@ -280,10 +286,11 @@ class TabHolder(ContainerHolder):
     """
 
     def __init__(self, *args, **kwargs):
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/tab.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/tab.html" % get_template_pack()
+            )
         super(TabHolder, self).__init__(*args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=None):
@@ -316,10 +323,11 @@ class AccordionGroup(Container):
     data_parent = ""  # accordion parent div id.
 
     def __init__(self, *args, **kwargs):
-        self.template = kwargs.pop(
-            'template',
-            "%s/accordion-group.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/accordion-group.html" % get_template_pack()
+            )
         super(AccordionGroup, self).__init__(*args, **kwargs)
 
 
@@ -334,10 +342,11 @@ class Accordion(ContainerHolder):
     """
 
     def __init__(self, *args, **kwargs):
-        self.template = kwargs.pop(
-            'template',
-            "%s/accordion.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/accordion.html" % get_template_pack()
+            )
         super(Accordion, self).__init__(*args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=None):
@@ -377,10 +386,11 @@ class Alert(Div):
         if block:
             self.css_class += ' alert-block'
         Div.__init__(self, *fields, **kwargs)
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/alert.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/alert.html" % get_template_pack()
+            )
         self.content = content
         self.dismiss = dismiss
 
@@ -403,18 +413,20 @@ class UneditableField(Field):
 
     def __init__(self, field, *args, **kwargs):
         self.attrs = {'class': 'uneditable-input'}
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/uneditable_input.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/uneditable_input.html" % get_template_pack()
+            )
         super(UneditableField, self).__init__(field, *args, **kwargs)
 
 
 class InlineField(Field):
 
     def __init__(self, *args, **kwargs):
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/inline_field.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/inline_field.html" % get_template_pack()
+            )
         super(InlineField, self).__init__(*args, **kwargs)

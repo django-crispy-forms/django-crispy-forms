@@ -181,11 +181,11 @@ class BaseInput(object):
 
         if 'css_class' in kwargs:
             self.field_classes += ' %s' % kwargs.pop('css_class')
-
-        self.template = kwargs.pop(
-            'template',
-            "%s/layout/baseinput.html" % get_template_pack()
-        )
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template',
+                "%s/layout/baseinput.html" % get_template_pack()
+            )
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=None):
@@ -439,9 +439,11 @@ class Field(LayoutObject):
                 self.attrs['class'] = kwargs.pop('css_class')
 
         self.wrapper_class = kwargs.pop('wrapper_class', None)
-        self.template = kwargs.pop(
-            'template', "%s/field.html" % get_template_pack()
-        )
+
+        if not hasattr(self, 'template') or not self.template:
+            self.template = kwargs.pop(
+                'template', "%s/field.html" % get_template_pack()
+            )
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k, v in kwargs.items()]))
