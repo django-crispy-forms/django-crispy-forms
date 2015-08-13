@@ -4,21 +4,19 @@ from django.forms import forms
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.functional import memoize
 from django.utils.safestring import mark_safe
 from django import template
 
+from crispy_forms.compatibility import memoize
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import flatatt
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 DEBUG = getattr(settings, 'DEBUG', False)
 
-
 def uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_formset.html' % template_pack)
 uni_formset_template = memoize(uni_formset_template, {}, 1)
-
 
 def uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_form.html' % template_pack)

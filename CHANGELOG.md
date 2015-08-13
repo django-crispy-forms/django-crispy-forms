@@ -1,5 +1,34 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.5.0
+
+Special thanks in this release for all the **<a href="http://flattr.com/thing/512037/django-crispy-forms">supporters and donators</a>**.
+
+ * Fixed compatibilty with: Python 3, Django 1.7, Django 1.8 and Django 1.4.16. Merged PR #417, but thanks to PRs #369, #368 and #310. Closes also #383.
+
+This release had a development stop of more than a year. Basically this was due to a burnout of the maintainer after more than 3 years of continuous development, having less free time to do open source and some personal issues along the way. I'm putting a 1.5.0 release back on track as soon as possible and I'm trying to prevent neglecting development again. I'm sorry to all of you that haven't received an answer in a timely fashion or were frustrated because of your dependence on crispy-forms.
+
+ * Bug fix for specifying `template_pack` in `{% crispy %}` tag, `bootstrap3` couldn't be set that way.
+ * New doc section for creating custom template packs.
+ * Fixed Bootstrap3 checkbox alignment issues with label texts, see #275.
+ * First `AccordionGroup` can now be set to `active=False`, see #246.
+ * Fixed Bootstrap3 checkbox alignment issues for all device sizes, see #225 and #267.
+ * All forms are now rendered with {{ form.media }}, this makes forms containing widgets with `Media` meta class work, see #263.
+ * Adjusted `{% specialspaceless %}` to avoid breaking intended spaces and be less agressive, see #250.
+ * Fixed inputs rendering for bootstrap3 and redo `FormActions` layout object bootstrap3 template for correct alignment, see #279.
+ * `MultiField` now obeys `form_show_labels`, see #278.
+ * Added `wrapper_class` to `bootstrap.InlineRadios`, see #272.
+ * Render label for checkboxes within `table_inline_formset.html`, see #262.
+ * Removed deprecated layout object `AppendedPrependedText`, replaced by `PrependedAppendedText`.
+ * Fixed `PrependedAppendedText` when rendering a select widget, in bootstrap and bootstrap3 template packs, see #258.
+ * Added support to `{% crispy_addon %}` tag for `form_show_labels`, see #256.
+ * Major cleanup and refactor of the template pack system thanks to @tepez, see #217 and #237:
+    - Template packs are now self contained/independent, removing dangerous cross references. If you have a custom template pack this can cause backwards incompatibility, but it will pay in the future to adjust to this changes.
+    - `MultiField` cannot be used with `bootstrap` or `bootstrap3` template packs.
+    - Added `template_pack` `FormHelper` attribute, so that template packs can be specified at form helper level. This changes layout objects `render` behavior.
+ * Default template pack is now `bootstrap3`.
+ * Make `CRISPY_TEMPLATE_PACK` setting optional, see #237 and #244.
+
 ## 1.4.0
 
 Special thanks in this release to **James Friedman <a href="https://github.com/jamesmfriedman">@jamesmfriedman</a>**, for his amazing support in PR #213, adding initial Bootstrap 3 support.

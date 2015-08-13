@@ -202,7 +202,6 @@ class FormHelper(DynamicLayoutHandler):
     field_template = None
     disable_csrf = False
     label_class = ''
-    label_size = ''
     field_class = ''
 
     def __init__(self, form=None):
@@ -345,10 +344,13 @@ class FormHelper(DynamicLayoutHandler):
         items['disable_csrf'] = self.disable_csrf
         items['label_class'] = self.label_class
         items['field_class'] = self.field_class
-        label_size_match = re.match('col-lg-(\d+)', self.label_class)
-        if label_size_match:
+        # col-[lg|md|sm|xs]-<number>
+        label_size_match = re.search('(\d+)', self.label_class)
+        device_type_match = re.search('(lg|md|sm|xs)', self.label_class)
+        if label_size_match and device_type_match:
             try:
                 items['label_size'] = int(label_size_match.groups()[0])
+                items['bootstrap_device_type'] = device_type_match.groups()[0]
             except:
                 pass
 

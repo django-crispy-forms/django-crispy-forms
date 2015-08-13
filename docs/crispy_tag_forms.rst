@@ -76,7 +76,7 @@ As you can see you need to call the base class constructor using ``super`` and o
 
 Note that we are importing a class called ``Submit`` that is a layout object. We will see what layout objects are in detail later on, for now on let's just say that this adds a submit button to our form, so people can send their survey.
 
-We've also done some helper magic. ``FormHelper`` has a list of attributes that can be set, that effect mainly form attributes. Our form will have as DOM id ``id-exampleForm``, it will have as DOM CSS class ``blueForms``, it will use http ``POST`` to send information and its action will be set to ``reverse(submit_survey)``. 
+We've also done some helper magic. ``FormHelper`` has a list of attributes that can be set, that affect mainly form attributes. Our form will have as DOM id ``id-exampleForm``, it will have as DOM CSS class ``blueForms``, it will use http ``POST`` to send information and its action will be set to ``reverse(submit_survey)``. 
 
 Let's see how to render the form in a template. Supposing we have the form in the template context as ``example_form``, we would render it doing::
 

@@ -1,9 +1,9 @@
 <input type="{{ input.input_type }}"
-    name="{% if input.name|wordcount > 1 %}{{ input.name|slugify }}{% else %}{{ input.name }}{% endif %}"
-    value="{{ input.value }}"
-    {% if input.input_type != "hidden" %}
-        class="{{ input.field_classes }}"
-        id="{% if input.id %}{{ input.id }}{% else %}{{ input.input_type }}-id-{{ input.name|slugify }}{% endif %}"
-    {% endif %}
-    {{ input.flat_attrs|safe }}
-    />
+       name="{% if input.name|wordcount > 1 %}{{ input.name|slugify }}{% else %}{{ input.name }}{% endif %}"
+       value="{{ input.value }}"
+        {% if input.input_type != "hidden" %}
+       class="{{ input.field_classes }}"
+       id="{% if input.id %}{{ input.id }}{% else %}{{ input.input_type }}-id-{{ input.name|slugify }}{% endif %}"
+        {% endif %}
+        {{ input.flat_attrs|safe }}
+        />
