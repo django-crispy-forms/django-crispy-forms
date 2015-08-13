@@ -3,10 +3,14 @@ python:
   - "2.6"
   - "2.7"
   - "3.3"
+  - "3.4"
 env:
-  - DJANGO=1.3.7
   - DJANGO=1.4.5
   - DJANGO=1.5.1
+  - DJANGO='django>=1.6.0,<1.7.0'
+  - DJANGO='django>=1.7.0,<1.8.0'
+  - DJANGO='django>=1.8.0,<1.9.0'
+  - DJANGO='https://github.com/django/django/archive/master.tar.gz'
 install:
   - pip install Django==$DJANGO
   - pip install "file://`pwd`#egg=django-crispy-forms[tests]"
@@ -19,5 +23,13 @@ matrix:
   exclude:
     - python: "3.3"
       env: DJANGO=1.4.5
-    - python: "3.3"
-      env: DJANGO=1.3.7
+    - python: "3.4"
+      env: DJANGO=1.4.5
+    - python: "2.6"
+      env: DJANGO='django>=1.7.0,<1.8.0'
+    - python: "2.6"
+      env: DJANGO='django>=1.8.0,<1.9.0'
+    - python: "2.6"
+      env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
+  allow_failures:
+    - env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
