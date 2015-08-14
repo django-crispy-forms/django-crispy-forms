@@ -2,7 +2,7 @@ import warnings
 
 from django.conf import settings
 from django.template import Context, Template
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string, get_template
 from django.utils.html import conditional_escape
 
 from crispy_forms.compatibility import string_types, text_type
@@ -396,6 +396,23 @@ class HTML(object):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         return Template(text_type(self.html)).render(context)
+
+
+class HTMLTemplate(object):
+    """
+    Layout object with template path.
+    It can contain pure HTML and it has access to the whole
+    context of the page where the form is being rendered.
+
+    Examples::
+
+        HTMLTemplate("mytemplate.html")
+    """
+    def __init__(self, template):
+        self.template = template
+
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+        return get_template(self.template).render(context)
 
 
 class Field(LayoutObject):
