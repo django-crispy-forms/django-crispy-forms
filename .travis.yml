@@ -17,8 +17,9 @@ env:
   - DJANGO='https://github.com/django/django/archive/master.tar.gz'
 install:
   - pip install $DJANGO
-  - pip install -e . --use-mirrors
+  - pip install -e .
 script:
+  - pip freeze | grep Django
   - make test
 notifications:
   email: false
