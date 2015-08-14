@@ -5,8 +5,10 @@ from django.conf import settings
 from django.template import loader
 from django.test import TestCase
 
-from crispy_forms.tests.utils import override_settings
-
+try:
+    from django.test import override_settings
+except ImportError:
+    from django.test.utils import override_settings
 
 class CrispyTestCase(TestCase):
     def setUp(self):
