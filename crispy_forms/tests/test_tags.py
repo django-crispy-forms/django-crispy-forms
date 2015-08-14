@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.forms.forms import BoundField
 from django.forms.models import formset_factory
 from django.template import loader, Context
 
@@ -87,7 +86,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
             """)
             test_form = TestForm()
             field_instance = test_form.fields['email']
-            bound_field = BoundField(test_form, field_instance, 'email')
+            bound_field = test_form['email']
 
             c = Context({'testField': bound_field})
             html = template.render(c)
@@ -97,7 +96,7 @@ class TestBasicFunctionalityTags(CrispyTestCase):
     def test_crispy_addon(self):
         test_form = TestForm()
         field_instance = test_form.fields['email']
-        bound_field = BoundField(test_form, field_instance, 'email')
+        bound_field = test_form['email']
 
         if self.current_template_pack == 'bootstrap':
             # prepend tests
