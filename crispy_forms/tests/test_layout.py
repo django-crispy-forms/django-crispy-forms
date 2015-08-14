@@ -13,13 +13,16 @@ from django.template import (
 )
 from django.test import RequestFactory
 from django.utils.translation import ugettext_lazy as _
+try:
+    from django.test import override_settings
+except ImportError:
+    from django.test.utils import override_settings
 
 from .base import CrispyTestCase
 from .forms import (
     TestForm, TestForm2, TestForm3, CheckboxesTestForm,
     TestForm4, CrispyTestModel, TestForm5
 )
-from .utils import override_settings
 from crispy_forms.bootstrap import InlineCheckboxes
 from crispy_forms.compatibility import PY2
 from crispy_forms.helper import FormHelper
