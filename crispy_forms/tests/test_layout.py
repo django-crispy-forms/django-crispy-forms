@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import re
 
 import django, logging, warnings
@@ -57,7 +58,7 @@ class TestFormLayout(CrispyTestCase):
                 self.fields['contraseña'] = forms.CharField()
 
             helper = FormHelper()
-            helper.layout = Layout(u'contraseña')
+            helper.layout = Layout('contraseña')
 
         if PY2:
             self.assertRaises(Exception, lambda: render_crispy_form(UnicodeForm()))
@@ -146,19 +147,19 @@ class TestFormLayout(CrispyTestCase):
         form_helper.add_layout(
             Layout(
                 Fieldset(
-                    u'Company Data',
-                    u'is_company',
+                    'Company Data',
+                    'is_company',
                     css_id = "fieldset_company_data",
                     css_class = "fieldsets",
                     title = "fieldset_title",
                     test_fieldset = "123"
                 ),
                 Fieldset(
-                    u'User Data',
-                    u'email',
+                    'User Data',
+                    'email',
                     Row(
-                        u'password1',
-                        u'password2',
+                        'password1',
+                        'password2',
                         css_id = "row_passwords",
                         css_class = "rows",
                     ),
@@ -166,8 +167,8 @@ class TestFormLayout(CrispyTestCase):
                     HTML(u"""
                         {% if flag %}{{ message }}{% endif %}
                     """),
-                    u'first_name',
-                    u'last_name',
+                    'first_name',
+                    'last_name',
                 )
             )
         )
@@ -209,7 +210,7 @@ class TestFormLayout(CrispyTestCase):
         form_helper.add_layout(
             Layout(
                 Fieldset(
-                    u'Company Data',
+                    'Company Data',
                     'is_company',
                     'email',
                     'password1',
