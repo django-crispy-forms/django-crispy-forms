@@ -25,13 +25,13 @@ class CrispyTestCase(TestCase):
         })
         self.__overriden_settings.enable()
 
-        if django.VERSION < 1.8:
+        if django.VERSION < (1,8):
             # resetting template loaders cache
             self.__template_source_loaders = loader.template_source_loaders
             loader.template_source_loaders = None
 
     def tearDown(self):
-        if django.VERSION < 1.8:
+        if django.VERSION < (1,8):
             loader.template_source_loaders = self.__template_source_loaders
             self.__overriden_settings.disable()
 
