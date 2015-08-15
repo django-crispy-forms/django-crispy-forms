@@ -1,10 +1,17 @@
-import django
+from django.http import HttpResponse
 
-if django.get_version() >= '1.5':
+
+try:
     from django.conf.urls import patterns, url
-else:
+except ImportError:
     from django.conf.urls.defaults import patterns, url
 
+
+
+def simpleAction(request):
+    return HttpResponse()
+
+
 urlpatterns = patterns('',
-    url(r'^simple/action/$', 'simpleAction', name = 'simpleAction'),
+    url(r'^simple/action/$', simpleAction, name = 'simpleAction'),
 )
