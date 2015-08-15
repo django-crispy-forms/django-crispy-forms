@@ -1,2 +1,2 @@
 -i http://simple.crate.io/
-django
+Django

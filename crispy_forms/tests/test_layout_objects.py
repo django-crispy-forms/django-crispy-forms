@@ -2,7 +2,15 @@
 import re
 
 from django import forms
-from django.template import loader, Context
+from django.template import Context
+try:
+    from django.template.loader import get_template_from_string
+except ImportError:
+    from django.template import Engine
+
+    def get_template_from_string(s):
+        return Engine().from_string(s)
+
 from django.utils.translation import ugettext as _
 from django.utils.translation import activate, deactivate
 
@@ -23,7 +31,7 @@ from crispy_forms.utils import render_crispy_form
 class TestLayoutObjects(CrispyTestCase):
 
     def test_multiwidget_field(self):
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form %}
         """)
@@ -51,7 +59,7 @@ class TestLayoutObjects(CrispyTestCase):
         self.assertEqual(html.count('type="hidden"'), 1)
 
     def test_field_type_hidden(self):
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy test_form %}
         """)

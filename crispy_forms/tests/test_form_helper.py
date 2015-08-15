@@ -8,8 +8,17 @@ from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
 from django.middleware.csrf import _get_new_csrf_key
 from django.template import (
-    loader, TemplateSyntaxError, Context
+    TemplateSyntaxError, Context
 )
+
+try:
+    from django.template.loader import get_template_from_string
+except ImportError:
+    from django.template import Engine
+
+    def get_template_from_string(s):
+        return Engine().from_string(s)
+
 from django.utils.translation import ugettext_lazy as _
 
 from .base import CrispyTestCase
@@ -37,7 +46,7 @@ class TestFormHelper(CrispyTestCase):
         form_helper.add_input(Hidden('my-hidden', 'Hidden'))
         form_helper.add_input(Button('my-button', 'Button'))
 
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -76,7 +85,7 @@ class TestFormHelper(CrispyTestCase):
         form_helper.form_action = 'simpleAction'
         form_helper.form_error_title = 'ERRORS'
 
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testForm form_helper %}
         """)
@@ -115,7 +124,7 @@ class TestFormHelper(CrispyTestCase):
         form.helper.form_show_errors = True
         form.is_valid()
 
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testForm %}
         """)
@@ -202,7 +211,7 @@ class TestFormHelper(CrispyTestCase):
         self.assertEqual(helper['form_id'], 'test-form')
 
     def test_without_helper(self):
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form %}
         """)
@@ -221,7 +230,7 @@ class TestFormHelper(CrispyTestCase):
         override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
         # {% crispy form 'template_pack_name' %}
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {%% load crispy_forms_tags %%}
             {%% crispy form "%s" %%}
         """ % override_pack)
@@ -238,7 +247,7 @@ class TestFormHelper(CrispyTestCase):
         override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
         # {% crispy form helper 'template_pack_name' %}
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {%% load crispy_forms_tags %%}
             {%% crispy form form_helper "%s" %%}
         """ % override_pack)
@@ -252,7 +261,7 @@ class TestFormHelper(CrispyTestCase):
 
     def test_template_pack_override_wrong(self):
         try:
-            loader.get_template_from_string(u"""
+            get_template_from_string(u"""
                 {% load crispy_forms_tags %}
                 {% crispy form 'foo' %}
             """)
@@ -260,7 +269,7 @@ class TestFormHelper(CrispyTestCase):
             pass
 
     def test_invalid_helper(self):
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -275,7 +284,7 @@ class TestFormHelper(CrispyTestCase):
         del settings.CRISPY_FAIL_SILENTLY
 
     def test_formset_with_helper_without_layout(self):
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy testFormSet formset_helper %}
         """)
@@ -309,7 +318,7 @@ class TestFormHelper(CrispyTestCase):
 
     def test_CSRF_token_POST_form(self):
         form_helper = FormHelper()
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -325,7 +334,7 @@ class TestFormHelper(CrispyTestCase):
     def test_CSRF_token_GET_form(self):
         form_helper = FormHelper()
         form_helper.form_method = 'GET'
-        template = loader.get_template_from_string(u"""
+        template = get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
