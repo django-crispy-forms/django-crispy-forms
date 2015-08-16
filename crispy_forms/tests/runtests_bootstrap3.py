@@ -8,23 +8,27 @@ parent = os.path.dirname(os.path.dirname(os.path.dirname(
 
 sys.path.insert(0, parent)
 
-from django.test.simple import DjangoTestSuiteRunner
+import django
+from django.test.runner import DiscoverRunner
 from django.conf import settings
 
 settings.CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
 def runtests():
-    return DjangoTestSuiteRunner(failfast=False).run_tests([
-        'crispy_forms.TestBasicFunctionalityTags',
-        'crispy_forms.TestFormHelper',
-        'crispy_forms.TestBootstrapFormHelper',
-        'crispy_forms.TestFormLayout',
-        'crispy_forms.TestBootstrapFormLayout',
-        'crispy_forms.TestBootstrap3FormLayout',
-        'crispy_forms.TestLayoutObjects',
-        'crispy_forms.TestBootstrapLayoutObjects',
-        'crispy_forms.TestDynamicLayouts'
+    if hasattr(django, 'setup'):
+        django.setup()
+    return DiscoverRunner(failfast=False).run_tests([
+        'crispy_forms.tests.TestBasicFunctionalityTags',
+        'crispy_forms.tests.TestFormHelper',
+        'crispy_forms.tests.TestBootstrapFormHelper',
+        'crispy_forms.tests.TestBootstrap3FormHelper',
+        'crispy_forms.tests.TestFormLayout',
+        'crispy_forms.tests.TestBootstrapFormLayout',
+        'crispy_forms.tests.TestBootstrap3FormLayout',
+        'crispy_forms.tests.TestLayoutObjects',
+        'crispy_forms.tests.TestBootstrapLayoutObjects',
+        'crispy_forms.tests.TestDynamicLayouts',
     ], verbosity=1, interactive=True)
 
 

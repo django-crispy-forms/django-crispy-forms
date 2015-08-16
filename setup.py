@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 
 tests_require = [
-    'Django>=1.3,<1.6',
+    'Django',
 ]
 
 setup(
@@ -16,7 +16,7 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Django",
-        "License :: OSI Approved :: BSD License",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: JavaScript",
         "Programming Language :: Python :: 2.6",

@@ -2,10 +2,11 @@
 Contributors
 ============
 
-django-crispy-forms Project Lead
-================================
+django-crispy-forms Project Maintainers
+=======================================
 
 * Miguel Araujo <miguel.araujo.perez@gmail.com>
+* Carlton Gibson <carlton.gibson@noumenal.es>
 
 django-uni-form Project Founder
 ===============================
@@ -85,10 +86,22 @@ Contributors
 * Chris Vigelius <chrisv2>
 * David Cramer <dcramer>
 * Stas Rudakou <nott>
-* <tepez>
+* Tom Yam <tepez>
 * Svyatoslav Bulbakha <ssbb>
 * Andres Vargas <zodman>
 * Gabe Jackson <gabejackson>
 * Camilo Nova <camilonova>
 * <mrkre>
 * Daniel Mascarenhas <danielmt>
+* Paras Kuhad <pkuhad>
+* Kevin Trad <hekevintran>
+* Steven Klass <rh0dium>
+* David Fischer <davidfischer-ch>
+* Stefan Tjarks <stj>
+* Jan Dittberner <jandd>
+* Michael Nielsen <K0den>
+* Stephen Mitchell <scuml>
+* <pySilver>
+* Christopher Adams <adamsc64>
+* John Comeau <jcomeauictx>
+* Yoong Kang Lim <yoongkang>

@@ -36,6 +36,11 @@ def is_radioselect(field):
 
 
 @register.filter
+def is_select(field):
+    return isinstance(field.field.widget, forms.Select)
+
+
+@register.filter
 def is_checkboxselectmultiple(field):
     return isinstance(field.field.widget, forms.CheckboxSelectMultiple)
 
@@ -90,6 +95,9 @@ class CrispyFieldNode(template.Node):
         except template.VariableDoesNotExist:
             html5_required = False
 
+        # If template pack has been overriden in FormHelper we can pick it from context
+        template_pack = context.get('template_pack', TEMPLATE_PACK)
+
         widgets = getattr(field.field.widget, 'widgets', [field.field.widget])
 
         if isinstance(attrs, dict):
@@ -106,7 +114,7 @@ class CrispyFieldNode(template.Node):
                 css_class = class_name
 
             if (
-                TEMPLATE_PACK == 'bootstrap3'
+                template_pack == 'bootstrap3'
                 and not is_checkbox(field)
                 and not is_file(field)
             ):
@@ -148,7 +156,7 @@ def crispy_field(parser, token):
 
 
 @register.simple_tag()
-def crispy_addon(field, append="", prepend=""):
+def crispy_addon(field, append="", prepend="", form_show_labels=True):
     """
     Renders a form field using bootstrap's prepended or appended text::
 
@@ -162,9 +170,9 @@ def crispy_addon(field, append="", prepend=""):
     if (field):
         context = Context({
             'field': field,
-            'form_show_errors': True
+            'form_show_errors': True,
+            'form_show_labels': form_show_labels,
         })
-
         template = loader.get_template('%s/layout/prepended_appended_text.html' % TEMPLATE_PACK)
         context['crispy_prepended_text'] = prepend
         context['crispy_appended_text'] = append
@@ -173,3 +181,4 @@ def crispy_addon(field, append="", prepend=""):
             raise TypeError("Expected a prepend and/or append argument")
 
     return template.render(context)
+

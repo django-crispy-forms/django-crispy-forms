@@ -21,6 +21,7 @@ Get the most out of django-crispy-forms
     crispy_tag_forms
     form_helper
     layouts
+    template_packs
     crispy_tag_formsets
     dynamic_layouts
 

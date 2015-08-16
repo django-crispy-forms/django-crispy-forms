@@ -1,5 +1,4 @@
 from __future__ import with_statement
-import inspect
 import logging
 import sys
 
@@ -8,15 +7,13 @@ from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape
-from django.utils.functional import memoize
 
 from .base import KeepContext
-from .compatibility import text_type, PY2
+from .compatibility import text_type, PY2, memoize
 
 # Global field template, default template used for rendering a field.
 
 TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
-
 
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template
@@ -24,8 +21,22 @@ def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
 default_field_template = memoize(default_field_template, {}, 1)
 
+def set_hidden(widget):
+    '''
+    set widget to hidden
 
-def render_field(field, form, form_style, context, template=None, labelclass=None, layout_object=None, attrs=None, template_pack=TEMPLATE_PACK):
+    different starting in Django 1.7, when is_hidden ceases to be a
+    true attribute and is determined by the input_type attribute
+    '''
+    widget.input_type = 'hidden'
+    if not widget.is_hidden:
+        widget.is_hidden = True
+
+def render_field(
+    field, form, form_style, context, template=None, labelclass=None,
+    layout_object=None, attrs=None, template_pack=TEMPLATE_PACK,
+    extra_context=None, **kwargs
+):
     """
     Renders a django-crispy-forms field
 
@@ -34,26 +45,26 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
         and render it using default template 'CRISPY_TEMPLATE_PACK/field.html'
         The field is added to a list that the form holds called `rendered_fields`
         to avoid double rendering fields.
-
     :param form: The form/formset to which that field belongs to.
-
     :param form_style: A way to pass style name to the CSS framework used.
-
     :template: Template used for rendering the field.
-
     :layout_object: If passed, it points to the Layout object that is being rendered.
         We use it to store its bound fields in a list called `layout_object.bound_fields`
-
     :attrs: Attributes for the field's widget
+    :template_pack: Name of the template pack to be used for rendering `field`
+    :extra_context: Dictionary to be added to context, added variables by the layout object
     """
-    with KeepContext(context):
+    added_keys = [] if extra_context is None else extra_context.keys()
+    with KeepContext(context, added_keys):
+        if field is None:
+            return ''
+
         FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
 
         if hasattr(field, 'render'):
-            if 'template_pack' in inspect.getargspec(field.render)[0]:
-                return field.render(form, form_style, context, template_pack=template_pack)
-            else:
-                return field.render(form, form_style, context)
+            return field.render(
+                form, form_style, context, template_pack=template_pack,
+            )
         else:
             # In Python 2 form field names cannot contain unicode characters without ASCII mapping
             if PY2:
@@ -83,13 +94,13 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
                 for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
                     if hasattr(field_instance.widget, 'widgets'):
                         if 'type' in attr and attr['type'] == "hidden":
-                            field_instance.widget.widgets[index].is_hidden = True
+                            set_hidden(field_instance.widget.widgets[index])
                             field_instance.widget.widgets[index] = field_instance.hidden_widget()
 
                         field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
-                            field_instance.widget.is_hidden = True
+                            set_hidden(field_instance.widget)
                             field_instance.widget = field_instance.hidden_widget()
 
                         field_instance.widget.attrs.update(attr)
@@ -135,6 +146,8 @@ def render_field(field, form, form_style, context, template=None, labelclass=Non
                 'labelclass': labelclass,
                 'flat_attrs': flatatt(attrs if isinstance(attrs, dict) else {}),
             })
+            if extra_context is not None:
+                context.update(extra_context)
             html = template.render(context)
 
         return html
