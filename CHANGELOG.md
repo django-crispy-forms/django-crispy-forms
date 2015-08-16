@@ -1,13 +1,11 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.5.0
+## 1.5.0 (2015/8/16)
 
 Special thanks in this release for all the **<a href="http://flattr.com/thing/512037/django-crispy-forms">supporters and donators</a>**.
 
  * Fixed compatibilty with: Python 3, Django 1.7, Django 1.8 and Django 1.4.16. Merged PR #417, but thanks to PRs #369, #368 and #310. Closes also #383.
-
-This release had a development stop of more than a year. Basically this was due to a burnout of the maintainer after more than 3 years of continuous development, having less free time to do open source and some personal issues along the way. I'm putting a 1.5.0 release back on track as soon as possible and I'm trying to prevent neglecting development again. I'm sorry to all of you that haven't received an answer in a timely fashion or were frustrated because of your dependence on crispy-forms.
-
+ * Updated test suite to for compatibility with all supported Django versions 1.4, 1.7, 1.8 and run CI against these and Django `master`. See #451, #455.
  * Bug fix for specifying `template_pack` in `{% crispy %}` tag, `bootstrap3` couldn't be set that way.
  * New doc section for creating custom template packs.
  * Fixed Bootstrap3 checkbox alignment issues with label texts, see #275.
@@ -29,7 +27,7 @@ This release had a development stop of more than a year. Basically this was due 
  * Default template pack is now `bootstrap3`.
  * Make `CRISPY_TEMPLATE_PACK` setting optional, see #237 and #244.
 
-## 1.4.0
+## 1.4.0 (2013/9/1)
 
 Special thanks in this release to **James Friedman <a href="https://github.com/jamesmfriedman">@jamesmfriedman</a>**, for his amazing support in PR #213, adding initial Bootstrap 3 support.
 
@@ -228,7 +226,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Adding @kennethlove bootstrap template pack into django-crispy-forms core.
  * Adding `CRISPY_TEMPLATE_PACK` setting variable to easily switch between different template packs. Default template pack is now bootstrap.
  * Upgrading bootstrap templates, fixing some bugs and redoing the hierarchy.
- * Upgrading tests for multiple template packs. 
+ * Upgrading tests for multiple template packs.
  * Renaming `UNIFORM_FAIL_SILENTLY` setting variable to `CRISPY_FAIL_SILENTLY`, upgrading migration instructions.
  * Redoing bootstrap `field.html` template to render `radioselect` and `checkboxselectmultiple` Django widgets a la bootstrap.
  * Adding a `render_unmentioned_fields` helper attribute, that renders all fields in a form, no matter what the layout is. Default is `False`.
@@ -265,7 +263,7 @@ http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-sec
  * Fixed a problem on Fieldset's legends internationalization. Thanks to Bojan Mihelac, see #GH-90.
  * Fixed XSS bug thanks to Charlie Denton, see #GH-98. Errors cannot be rendered safe, because field's input can be part of the error message, that would mean XSS.
  * Updating and improving docs, adding more use case examples.
- * Split `helpers.py` file into `helper.py`, `layout.py` and `utils.py`. Added a deprecation warning. 
+ * Split `helpers.py` file into `helper.py`, `layout.py` and `utils.py`. Added a deprecation warning.
  * Improved testing coverage, specially for formsets and i18n.
  * Improved rendering performance of `{% uni_form %}` tag and `|as_uni_form` filter avoiding reloading templates every time, see #GH-81.
  * Added support for Django `Form.error_css_class` and `Form.required_css_class` custom CSS classes, see #GH-87.
@@ -278,7 +276,7 @@ http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-sec
  * Improved `MultiField` performance avoiding instantiating BoundFields twice.
  * Fixed a bug in `MultiField` that raised an exception when internal fields had errors, because of `self.css` not existing.
  * Added an extra optional parameter to `render_field` called `layout_object`, used for storing in it a list of bound fields.
- * Refactor all Layout objects to use templates and not having hardcoded HTML in the code, based on Jonas Obrist work. Resolves Issue #GH-37 
+ * Refactor all Layout objects to use templates and not having hardcoded HTML in the code, based on Jonas Obrist work. Resolves Issue #GH-37
  * Added a Layout object called `Div`. `Row` and `Column` both inherit from `Div`
  * `Layout` can now be a child of `Layout`, see issue #GH-76.
 
@@ -307,13 +305,13 @@ http://tothinkornottothink.com/post/7339670508/new-kung-fu-in-django-uni-form-0-
  * Turning `Layout` and `Fieldset` fields attributes into lists, so that they can be changed dynamically.
  * Changing formHints from paragraphs to divs, so ul or ol can be placed within.
  * Removing slugify filter from form ids, so they can be set as user's preferences.
- * Added CSS class 'asteriskField' for asterisks. Added CSS class 'fieldRequired' for required input labels. 
+ * Added CSS class 'asteriskField' for asterisks. Added CSS class 'fieldRequired' for required input labels.
  * `UNIFORM_FAIL_SILENTLY` variable setting has been added for making django-uni-form log errors and fail silently, based on Adam Cupiał's work.
  * Several bug fixes in `MultiField`.
  * Added unicode support for layout field names and improved error handling.
  * Refactored testing system and raised testing coverage.
  * Clean part of the code base and comments. All old CSRF code for supporting old versions of Django has been removed.
- * Refactored BasicNode for better readability and reducing lines of code. 
+ * Refactored BasicNode for better readability and reducing lines of code.
  * Added formsets support based on Victor Nagy's (nagyv) and Antti Kaihola's (akahiola) work.
  * Bug fix in `{% uni_form %}` tag that didn't work without a helper and it was meant to be optional.
  * CSS classes can be set in Submit buttons.

@@ -2,10 +2,11 @@
 Contributors
 ============
 
-django-crispy-forms Project Lead
-================================
+django-crispy-forms Project Maintainers
+=======================================
 
 * Miguel Araujo <miguel.araujo.perez@gmail.com>
+* Carlton Gibson <carlton.gibson@noumenal.es>
 
 django-uni-form Project Founder
 ===============================
