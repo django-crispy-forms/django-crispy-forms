@@ -1,1 +1,2 @@
 Django
+wheel==0.24.0
