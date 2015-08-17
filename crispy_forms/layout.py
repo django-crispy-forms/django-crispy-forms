@@ -465,3 +465,29 @@ class MultiWidgetField(Field):
         self.fields = list(args)
         self.attrs = kwargs.pop('attrs', {})
         self.template = kwargs.pop('template', self.template)
+
+
+class Inline(object):
+    """
+    Layout object. It can contain pure HTML and it has access to the whole
+    context of the page where the form is being rendered.
+
+    Examples::
+
+        HTML("{% if saved %}Data saved{% endif %}")
+        HTML('<input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />')
+    """
+
+    def __init__(self, inline, helper=None, template_pack=None):
+        self.inline = inline
+        self.helper = helper
+        self.template_pack = template_pack
+
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+        from crispy_forms.templatetags.crispy_forms_tags import InlineFormNode
+
+        kwargs = {}
+        if self.template_pack:
+            kwargs['template_pack'] = self.template_pack
+
+        return InlineFormNode(self.inline, self.helper, **kwargs).render(context)

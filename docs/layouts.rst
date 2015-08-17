@@ -170,6 +170,26 @@ Renders to::
         'form_field_2'
     )
 
+- **Inline**: It allows a crispy form or formset to be rendered inside a crispy form. The signature of the object is::
+
+    Inline(form, helper=None, template_pack=None)
+
+If a ``template_pack`` is defined, it is used in preference to the form's ``tempate_pack``. The ``helper`` is derived from the ``form/formset`` if not specified.  For an example, consider a situation where personal information form requires a home and work address::
+
+    PersonForm = modelform_factory('Person')
+    AddressForm = modelform_factory('Address')
+
+    person_form = PersonForm()
+    home_address = AddressForm(prefix='home')
+    work_address = AddressForm(prefix='work')
+
+    person_form.helper = FormHelper(person_form)
+    person_form.helper.layout_object_append(Fieldset('Home Address', Inline(home_address)))
+    person_form.helper.layout_object_append(Fieldset('Work Address', Inline(work_address)))
+
+It should be noted that the ``Inline`` forms are always rendered without CSRF fields and without form tags. These are the responsibilty of the base form.
+
+
 
 Uni-form layout objects
 ~~~~~~~~~~~~~~~~~~~~~~~
