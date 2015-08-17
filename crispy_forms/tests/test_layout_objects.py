@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
-
 from django import forms
 from django.template import Context
 try:
@@ -8,8 +6,7 @@ try:
 except ImportError:
     from django.template import Engine
 
-    def get_template_from_string(s):
-        return Engine().from_string(s)
+    get_template_from_string = Engine().from_string
 
 from django.utils.translation import ugettext as _
 from django.utils.translation import activate, deactivate

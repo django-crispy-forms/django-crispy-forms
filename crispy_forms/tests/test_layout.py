@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-import re
-
-import django, logging, warnings
+import django, warnings
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -17,8 +15,7 @@ try:
 except ImportError:
     from django.template import Engine
 
-    def get_template_from_string(s):
-        return Engine().from_string(s)
+    get_template_from_string = Engine().from_string
 
 from django.test import RequestFactory
 from django.utils.translation import ugettext_lazy as _

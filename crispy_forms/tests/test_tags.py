@@ -9,9 +9,7 @@ try:
 except ImportError:
     from django.template import Engine
 
-    def get_template_from_string(s):
-        return Engine().from_string(s)
-
+    get_template_from_string = Engine().from_string
 
 
 from .base import CrispyTestCase
