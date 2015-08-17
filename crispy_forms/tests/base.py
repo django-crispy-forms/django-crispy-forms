@@ -17,6 +17,7 @@ template_loaders = ['django.template.loaders.filesystem.Loader'] + list(settings
 
 
 class CrispyTestCase(TestCase):
+
     def setUp(self):
         # ensuring test templates directory is loaded first
         self.__overriden_settings = override_settings(**{
@@ -38,3 +39,7 @@ class CrispyTestCase(TestCase):
     @property
     def current_template_pack(self):
         return getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+
+
+class CustomUrlsTestCase(CrispyTestCase):
+    urls = 'crispy_forms.tests.urls'

@@ -12,6 +12,7 @@ from django.utils.translation import ugettext as _
 from django.utils.translation import activate, deactivate
 
 from .base import CrispyTestCase
+from .conftest import only_bootstrap
 from .forms import CheckboxesTestForm, TestForm
 from crispy_forms.bootstrap import (
     PrependedAppendedText, AppendedText, PrependedText, InlineRadios,
@@ -123,7 +124,8 @@ class TestLayoutObjects(CrispyTestCase):
         deactivate()
 
 
-class TestBootstrapLayoutObjects(TestLayoutObjects):
+@only_bootstrap
+class TestBootstrapLayoutObjects(CrispyTestCase):
 
     def test_custom_django_widget(self):
         class CustomRadioSelect(forms.RadioSelect):
