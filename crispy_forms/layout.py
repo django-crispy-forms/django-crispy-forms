@@ -88,6 +88,12 @@ class LayoutObject(object):
 
         return pointers
 
+    def get_rendered_fields(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+        return ''.join(
+            render_field(field, form, form_style, context, template_pack=template_pack, **kwargs)
+            for field in self.fields
+        )
+
 
 class Layout(LayoutObject):
     """
@@ -121,17 +127,7 @@ class Layout(LayoutObject):
         self.fields = list(fields)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        html = ""
-        for field in self.fields:
-            html += render_field(
-                field,
-                form,
-                form_style,
-                context,
-                template_pack=template_pack,
-                **kwargs
-            )
-        return html
+        return self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
 
 
 class ButtonHolder(LayoutObject):
@@ -157,11 +153,7 @@ class ButtonHolder(LayoutObject):
         self.template = kwargs.get('template', self.template)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        html = u''
-        for field in self.fields:
-            html += render_field(
-                field, form, form_style, context, template_pack=template_pack, **kwargs
-            )
+        html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
 
         template = self.template % template_pack
         return render_to_string(
@@ -273,11 +265,7 @@ class Fieldset(LayoutObject):
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        fields = ''
-        for field in self.fields:
-            fields += render_field(
-                field, form, form_style, context, template_pack=template_pack, **kwargs
-            )
+        fields = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
 
         legend = ''
         if self.legend:
@@ -312,14 +300,11 @@ class MultiField(LayoutObject):
                 if field in form.errors:
                     self.css_class += " error"
 
-        fields_output = u''
         field_template = self.field_template % template_pack
-        for field in self.fields:
-            fields_output += render_field(
-                field, form, form_style, context,
-                field_template, self.label_class, layout_object=self,
-                template_pack=template_pack, **kwargs
-            )
+        fields_output = self.get_rendered_fields(
+            form, form_style, context, template_pack, template=field_template,
+            labelclass=self.label_class, layout_object=self, **kwargs
+        )
 
         extra_context = {
             'multifield': self,
@@ -352,11 +337,7 @@ class Div(LayoutObject):
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        fields = ''
-        for field in self.fields:
-            fields += render_field(
-                field, form, form_style, context, template_pack=template_pack, **kwargs
-            )
+        fields = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
 
         template = self.template % template_pack
         return render_to_string(template, {'div': self, 'fields': fields})
@@ -433,15 +414,12 @@ class Field(LayoutObject):
         if hasattr(self, 'wrapper_class'):
             extra_context['wrapper_class'] = self.wrapper_class
 
-        html = ''
         template = self.template % template_pack
-        for field in self.fields:
-            html += render_field(
-                field, form, form_style, context,
-                template=template, attrs=self.attrs, template_pack=template_pack,
-                extra_context=extra_context, **kwargs
-            )
-        return html
+        return self.get_rendered_fields(
+            form, form_style, context, template_pack,
+            template=template, attrs=self.attrs, extra_context=extra_context,
+            **kwargs
+        )
 
 
 class MultiWidgetField(Field):
