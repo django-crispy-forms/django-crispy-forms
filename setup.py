@@ -5,6 +5,8 @@ from setuptools import setup, find_packages
 
 tests_require = [
     'Django',
+    'pytest',
+    'pytest-django'
 ]
 
 setup(
