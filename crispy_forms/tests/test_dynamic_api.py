@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import logging, warnings
+import warnings
 from django import forms
 from django.conf import settings
 from .base import CrispyTestCase

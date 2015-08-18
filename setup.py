@@ -5,10 +5,6 @@ import crispy_forms
 from setuptools import setup, find_packages
 
 
-tests_require = [
-    'Django',
-]
-
 if sys.argv[-1] == 'publish':
     if os.system("pip freeze | grep wheel"):
         print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
@@ -43,9 +39,6 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    extras_require={
-        'tests': tests_require,
-    },
     keywords=['forms', 'django', 'crispy', 'DRY'],
     author='Miguel Araujo',
     author_email='miguel.araujo.perez@gmail.com',

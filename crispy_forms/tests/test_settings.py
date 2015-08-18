@@ -16,6 +16,7 @@ INSTALLED_APPS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:'
     }
 }
 
@@ -24,7 +25,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'crispy_forms.tests.urls'
 CRISPY_CLASS_CONVERTERS = {"textinput": "textinput textInput inputtext"}
 SECRET_KEY = 'secretkey'
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -47,3 +48,4 @@ class InvalidVarException(object):
 
 TEMPLATE_DEBUG = True
 TEMPLATE_STRING_IF_INVALID = InvalidVarException()
+CRISPY_TEMPLATE_PACK = os.environ['CRISPY_TEMPLATE_PACK']
