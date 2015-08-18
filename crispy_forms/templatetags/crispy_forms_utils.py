@@ -2,14 +2,14 @@
 import re
 
 from django import template
-from django.conf import settings
 from django.utils.encoding import force_text
 from django.utils.functional import allow_lazy
 
 from crispy_forms.compatibility import text_type
+from crispy_forms.utils import TEMPLATE_PACK
+
 
 register = template.Library()
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
 
 def selectively_remove_spaces_between_tags(value, template_pack, form_class):

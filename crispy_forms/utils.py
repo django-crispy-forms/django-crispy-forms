@@ -9,11 +9,11 @@ from django.template.loader import get_template
 from django.utils.html import conditional_escape
 
 from .base import KeepContext
-from .compatibility import text_type, PY2, memoize
+from .compatibility import text_type, PY2, memoize, SimpleLazyObject
 
-# Global field template, default template used for rendering a field.
 
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+TEMPLATE_PACK = SimpleLazyObject(lambda: getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap'))
+
 
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template

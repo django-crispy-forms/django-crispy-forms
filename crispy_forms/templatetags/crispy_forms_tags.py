@@ -15,12 +15,7 @@ register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
 from crispy_forms.templatetags.crispy_forms_filters import *
 
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
-ALLOWED_TEMPLATE_PACKS = getattr(
-    settings,
-    'CRISPY_ALLOWED_TEMPLATE_PACKS',
-    ('bootstrap', 'uni_form', 'bootstrap3')
-)
+from crispy_forms.utils import TEMPLATE_PACK
 
 
 class ForLoopSimulator(object):
@@ -279,6 +274,11 @@ def do_uni_form(parser, token):
 
     if template_pack is not None:
         template_pack = template_pack[1:-1]
+        ALLOWED_TEMPLATE_PACKS = getattr(
+            settings,
+            'CRISPY_ALLOWED_TEMPLATE_PACKS',
+            ('bootstrap', 'uni_form', 'bootstrap3')
+        )
         if template_pack not in ALLOWED_TEMPLATE_PACKS:
             raise template.TemplateSyntaxError(
                 "crispy tag's template_pack argument should be in %s" %
