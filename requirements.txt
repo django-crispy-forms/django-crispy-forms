@@ -1,1 +1,3 @@
 Django
+pytest
+pytest-django
