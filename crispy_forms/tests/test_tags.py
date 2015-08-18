@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 from django.forms.forms import BoundField
 from django.forms.models import formset_factory
 from django.template import Context
@@ -94,7 +93,7 @@ def test_classes_filter():
     assert 'email-fields' in html
 
 
-def test_crispy_field_and_class_converters():
+def test_crispy_field_and_class_converters(settings):
     if hasattr(settings, 'CRISPY_CLASS_CONVERTERS'):
         template = get_template_from_string(u"""
             {% load crispy_forms_field %}
