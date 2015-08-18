@@ -17,9 +17,6 @@ from .forms import TestForm
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
 
-pytestmark = pytest.mark.usefixtures('setup_templates')
-
-
 def test_as_crispy_errors_form_without_non_field_errors():
     template = get_template_from_string(u"""
         {% load crispy_forms_tags %}
