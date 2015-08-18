@@ -19,7 +19,10 @@ else:
 try:
     # avoid RemovedInDjango19Warning by using lru_cache where available
     from django.utils.lru_cache import lru_cache
-    def memoize(function, *args):
-        return lru_cache()(function)
-except:
+except ImportError:
     from django.utils.functional import memoize
+
+    def lru_cache():
+        def decorator(function, cache_dict={}):
+            return memoize(function, cache_dict, 1)
+        return decorator

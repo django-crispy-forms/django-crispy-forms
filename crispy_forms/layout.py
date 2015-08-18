@@ -1,7 +1,5 @@
-import warnings
-
 from django.conf import settings
-from django.template import Context, Template
+from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
