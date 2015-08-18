@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import django, warnings
+import django
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -24,7 +24,8 @@ try:
 except ImportError:
     from django.test.utils import override_settings
 
-from .base import CrispyTestCase
+from .base import CustomUrlsTestCase
+from .conftest import only_uni_form, only_bootstrap3, only_bootstrap
 from .forms import (
     TestForm, TestForm2, TestForm3, CheckboxesTestForm,
     TestForm4, CrispyTestModel, TestForm5
@@ -38,8 +39,8 @@ from crispy_forms.layout import (
 )
 from crispy_forms.utils import render_crispy_form
 
-class TestFormLayout(CrispyTestCase):
-    urls = 'crispy_forms.tests.urls'
+
+class TestFormLayout(CustomUrlsTestCase):
 
     def test_invalid_unicode_characters(self):
         # Adds a BooleanField that uses non valid unicode characters "ñ"
@@ -430,12 +431,10 @@ class TestFormLayout(CrispyTestCase):
         self.assertTrue('<span>first span</span> <span>second span</span>' in html)
 
 
-class TestUniformFormLayout(TestFormLayout):
+@only_uni_form
+class TestUniformFormLayout(CustomUrlsTestCase):
 
     def test_layout_composition(self):
-        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
-            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
-            return
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -484,9 +483,6 @@ class TestUniformFormLayout(TestFormLayout):
         self.assertFalse('last_name' in html)
 
     def test_second_layout_multifield_column_buttonholder_submit_div(self):
-        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
-            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
-            return
         form_helper = FormHelper()
         form_helper.add_layout(
             Layout(
@@ -545,7 +541,8 @@ class TestUniformFormLayout(TestFormLayout):
         self.assertTrue('test-markup="123"' in html)
 
 
-class TestBootstrapFormLayout(TestFormLayout):
+@only_bootstrap
+class TestBootstrapFormLayout(CustomUrlsTestCase):
 
     def test_keepcontext_context_manager(self):
         # Test case for issue #180
@@ -570,7 +567,8 @@ class TestBootstrapFormLayout(TestFormLayout):
             self.assertEqual(response.content.count(b'checkbox-inline'), 3)
 
 
-class TestBootstrap3FormLayout(TestFormLayout):
+@only_bootstrap3
+class TestBootstrap3FormLayout(CustomUrlsTestCase):
 
     def test_form_inline(self):
         form = TestForm()
