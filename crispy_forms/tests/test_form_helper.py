@@ -275,10 +275,7 @@ class TestFormHelper(CustomUrlsTestCase):
         c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
         settings.CRISPY_FAIL_SILENTLY = False
-        # Django >= 1.4 is not wrapping exceptions in TEMPLATE_DEBUG mode
-        if settings.TEMPLATE_DEBUG and django.VERSION < (1, 4):
-            self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
-        else:
+        if not settings.TEMPLATE_DEBUG:
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
 
