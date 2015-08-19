@@ -287,7 +287,7 @@ class FormHelper(DynamicLayoutHandler):
         form.rendered_fields = set()
         form.crispy_field_template = self.field_template
 
-        # This renders the specifed Layout strictly
+        # This renders the specified Layout strictly
         html = self.layout.render(
             form,
             self.form_style,
@@ -332,18 +332,19 @@ class FormHelper(DynamicLayoutHandler):
         """
         Used by crispy_forms_tags to get helper attributes
         """
-        items = {}
-        items['form_method'] = self.form_method.strip()
-        items['form_tag'] = self.form_tag
-        items['form_style'] = self.form_style.strip()
-        items['form_show_errors'] = self.form_show_errors
-        items['help_text_inline'] = self.help_text_inline
-        items['error_text_inline'] = self.error_text_inline
-        items['html5_required'] = self.html5_required
-        items['form_show_labels'] = self.form_show_labels
-        items['disable_csrf'] = self.disable_csrf
-        items['label_class'] = self.label_class
-        items['field_class'] = self.field_class
+        items = {
+            'form_method': self.form_method.strip(),
+            'form_tag': self.form_tag,
+            'form_style': self.form_style.strip(),
+            'form_show_errors': self.form_show_errors,
+            'help_text_inline': self.help_text_inline,
+            'error_text_inline': self.error_text_inline,
+            'html5_required': self.html5_required,
+            'form_show_labels': self.form_show_labels,
+            'disable_csrf': self.disable_csrf,
+            'label_class': self.label_class,
+            'field_class': self.field_class
+        }
         # col-[lg|md|sm|xs]-<number>
         label_size_match = re.search('(\d+)', self.label_class)
         device_type_match = re.search('(lg|md|sm|xs)', self.label_class)

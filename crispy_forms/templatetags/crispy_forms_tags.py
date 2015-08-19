@@ -150,7 +150,6 @@ class BasicNode(template.Node):
         """
         Returns a dictionary with all the parameters necessary to render the form/formset in a template.
 
-        :param attrs: Dictionary with the helper's attributes used for rendering the form/formset
         :param context: `django.template.Context` for the node
         :param is_formset: Boolean value. If set to True, indicates we are working with a formset.
         """
@@ -198,9 +197,11 @@ class BasicNode(template.Node):
 
         return response_dict
 
+
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_formset.html' % template_pack)
 whole_uni_formset_template = memoize(whole_uni_formset_template, {}, 1)
+
 
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_form.html' % template_pack)
@@ -233,7 +234,7 @@ def do_uni_form(parser, token):
 
     Usage::
 
-        {% include crispy_tags %}
+        {% load crispy_tags %}
         {% crispy form form.helper %}
 
     You can also provide the template pack as the third argument::

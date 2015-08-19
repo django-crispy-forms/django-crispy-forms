@@ -23,7 +23,8 @@ def selectively_remove_spaces_between_tags(value, template_pack, form_class):
     else:
         html = re.sub(r'>\s{3,}<', '> <', force_text(value))
         return re.sub(r'/><', r'/> <', force_text(html))
-    return value
+
+
 selectively_remove_spaces_between_tags = allow_lazy(
     selectively_remove_spaces_between_tags, text_type
 )

@@ -22,7 +22,7 @@ class LayoutObject(object):
     def __getattr__(self, name):
         """
         This allows us to access self.fields list methods like append or insert, without
-        having to declaee them one by one
+        having to declare them one by one
         """
         # Check necessary for unpickling, see #107
         if 'fields' in self.__dict__ and hasattr(self.fields, name):

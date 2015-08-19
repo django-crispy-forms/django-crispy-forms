@@ -60,7 +60,7 @@ def css_class(field):
 
 
 def pairwise(iterable):
-    "s -> (s0,s1), (s2,s3), (s4, s5), ..."
+    """s -> (s0,s1), (s2,s3), (s4, s5), ..."""
     a = iter(iterable)
     return izip(a, a)
 
@@ -88,7 +88,7 @@ class CrispyFieldNode(template.Node):
         except template.VariableDoesNotExist:
             html5_required = False
 
-        # If template pack has been overriden in FormHelper we can pick it from context
+        # If template pack has been overridden in FormHelper we can pick it from context
         template_pack = context.get('template_pack', TEMPLATE_PACK)
 
         widgets = getattr(field.field.widget, 'widgets', [field.field.widget])
@@ -181,4 +181,3 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
             raise TypeError("Expected a prepend and/or append argument")
 
     return template.render(context)
-
