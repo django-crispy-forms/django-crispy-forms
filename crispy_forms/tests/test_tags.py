@@ -127,5 +127,6 @@ def test_crispy_addon(settings):
     # errors
     with pytest.raises(TypeError):
         crispy_addon()
-    with pytest.raises(TypeError):
-        crispy_addon(bound_field)
+    if settings.CRISPY_TEMPLATE_PACK in ('bootstrap', 'bootstrap3'):
+        with pytest.raises(TypeError):
+            crispy_addon(bound_field)
