@@ -15,8 +15,8 @@ Technical
 
 .. _faq-columns:
 
-Displaying columns in a boostrap Layout
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Displaying columns in a bootstrap Layout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Of course you can display form fields within columns, the same way you would do it in a standard bootstrap form, you can do it in a bootstrap layout, see an `example`_.
 
@@ -52,7 +52,7 @@ At PyCon 2009 Jannis Leidel helped Daniel through releasing the 0.3 release of d
 
 Around January 2011 the project wasn't very active, Github issues and forks were stacking up. At that time `Miguel Araujo`_ found django-uni-form and loved the concept behind its architecture. He started working in a fork of the project, trying to gather some old submitted patches. Around march of 2011, after conversations with Daniel, he got commit powers in the project's repository, reactivating dev branch. Releases 0.8.0, 0.9.0 followed and the project more than doubled its watchers in Github.
 
-By the end of 2011, Miguel and Daniel agreed on the necessity of renaming the project. As uni-form CSS framework was not anymore the only option available and the name was confusing the users. Thus django-crispy-forms was borned, named by `Audrey Roy`_. The project is now actively maintained and leaded by `Miguel Araujo`_.
+By the end of 2011, Miguel and Daniel agreed on the necessity of renaming the project. As uni-form CSS framework was not anymore the only option available and the name was confusing the users. Thus django-crispy-forms was born, named by `Audrey Roy`_. The project is now actively maintained and leaded by `Miguel Araujo`_.
 
 .. _faq-how-fast:
 

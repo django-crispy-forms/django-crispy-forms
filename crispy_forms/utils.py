@@ -25,16 +25,18 @@ def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
 default_field_template = memoize(default_field_template, {}, 1)
 
+
 def set_hidden(widget):
-    '''
+    """
     set widget to hidden
 
     different starting in Django 1.7, when is_hidden ceases to be a
     true attribute and is determined by the input_type attribute
-    '''
+    """
     widget.input_type = 'hidden'
     if not widget.is_hidden:
         widget.is_hidden = True
+
 
 def render_field(
     field, form, form_style, context, template=None, labelclass=None,
