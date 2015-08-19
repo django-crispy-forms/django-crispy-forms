@@ -69,11 +69,8 @@ def test_inputs(settings):
 
 def test_invalid_form_method():
     form_helper = FormHelper()
-    try:
+    with pytest.raises(FormHelpersException):
         form_helper.form_method = "superPost"
-        pytest.fail("Setting an invalid form_method within the helper should raise an Exception")
-    except FormHelpersException:
-        pass
 
 
 def test_form_with_helper_without_layout(settings):
@@ -269,13 +266,11 @@ def test_template_pack_override_verbose(settings):
 
 
 def test_template_pack_override_wrong():
-    try:
+    with pytest.raises(TemplateSyntaxError):
         get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form 'foo' %}
         """)
-    except TemplateSyntaxError:
-        pass
 
 
 def test_invalid_helper(settings):
@@ -285,10 +280,9 @@ def test_invalid_helper(settings):
     """)
     c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
-    settings.CRISPY_FAIL_SILENTLY = False
-    if not settings.TEMPLATE_DEBUG:
-        with pytest.raises(TypeError):
-            template.render(c)
+    settings.CRISPY_FAIL_SILENTLY = settings.TEMPLATE_DEBUG = False
+    with pytest.raises(TypeError):
+        template.render(c)
 
 
 def test_formset_with_helper_without_layout(settings):

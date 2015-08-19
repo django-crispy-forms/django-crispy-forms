@@ -19,10 +19,6 @@ except ImportError:
 
 from django.test import RequestFactory
 from django.utils.translation import ugettext_lazy as _
-try:
-    from django.test import override_settings
-except ImportError:
-    from django.test.utils import override_settings
 
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap
 from .forms import (
