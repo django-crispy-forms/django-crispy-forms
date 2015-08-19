@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pytest
 from django import forms
 from django.template import Context
 
@@ -25,6 +26,20 @@ from crispy_forms.layout import (
 )
 from crispy_forms.utils import render_crispy_form
 
+def test_field_with_custom_template():
+    template = get_template_from_string(u"""
+        {% load crispy_forms_tags %}
+        {% crispy form %}
+    """)
+
+    test_form = TestForm()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        Field('email',template='custom_field_template.html')
+    )
+
+    html = render_crispy_form(test_form)
+    assert '<h1>Special custom field</h1>' in html
 
 def test_multiwidget_field():
     template = get_template_from_string(u"""

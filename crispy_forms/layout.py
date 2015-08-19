@@ -5,8 +5,17 @@ from django.utils.html import conditional_escape
 from crispy_forms.compatibility import string_types, text_type
 from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, get_template_pack
 
+class TemplateNameMixin(object):
 
-class LayoutObject(object):
+    def get_template_name(self, template_pack):
+        if '%s' in self.template:
+            template = self.template % template_pack
+        else:
+            template = self.template
+
+        return template
+
+class LayoutObject(TemplateNameMixin):
     def __getitem__(self, slice):
         return self.fields[slice]
 
@@ -150,7 +159,7 @@ class ButtonHolder(LayoutObject):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
 
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(
             template,
             {'buttonholder': self, 'fields_output': html},
@@ -158,7 +167,7 @@ class ButtonHolder(LayoutObject):
         )
 
 
-class BaseInput(object):
+class BaseInput(TemplateNameMixin):
     """
     A base class to reduce the amount of code in the Input classes.
     """
@@ -182,7 +191,7 @@ class BaseInput(object):
         Input button value can be a variable in context.
         """
         self.value = Template(text_type(self.value)).render(context)
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(template, {'input': self}, context)
 
 
@@ -275,7 +284,7 @@ class Fieldset(LayoutObject):
         if self.legend:
             legend = u'%s' % Template(text_type(self.legend)).render(context)
 
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(
             template,
             {'fieldset': self, 'legend': legend, 'fields': fields, 'form_style': form_style}
@@ -314,7 +323,7 @@ class MultiField(LayoutObject):
             'multifield': self,
             'fields_output': fields_output
         }
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(template, extra_context, context)
 
 
@@ -343,7 +352,7 @@ class Div(LayoutObject):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         fields = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
 
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(template, {'div': self, 'fields': fields})
 
 
@@ -421,7 +430,8 @@ class Field(LayoutObject):
         if hasattr(self, 'wrapper_class'):
             extra_context['wrapper_class'] = self.wrapper_class
 
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
+
         return self.get_rendered_fields(
             form, form_style, context, template_pack,
             template=template, attrs=self.attrs, extra_context=extra_context,
