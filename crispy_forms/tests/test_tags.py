@@ -90,20 +90,19 @@ def test_classes_filter():
     assert 'email-fields' in html
 
 
-def test_crispy_field_and_class_converters(settings):
-    if hasattr(settings, 'CRISPY_CLASS_CONVERTERS'):
-        template = get_template_from_string(u"""
-            {% load crispy_forms_field %}
-            {% crispy_field testField 'class' 'error' %}
-        """)
-        test_form = TestForm()
-        field_instance = test_form.fields['email']
-        bound_field = BoundField(test_form, field_instance, 'email')
+def test_crispy_field_and_class_converters():
+    template = get_template_from_string(u"""
+        {% load crispy_forms_field %}
+        {% crispy_field testField 'class' 'error' %}
+    """)
+    test_form = TestForm()
+    field_instance = test_form.fields['email']
+    bound_field = BoundField(test_form, field_instance, 'email')
 
-        c = Context({'testField': bound_field})
-        html = template.render(c)
-        assert 'error' in html
-        assert 'inputtext' in html
+    c = Context({'testField': bound_field})
+    html = template.render(c)
+    assert 'error' in html
+    assert 'inputtext' in html
 
 
 def test_crispy_addon(settings):
@@ -121,11 +120,12 @@ def test_crispy_addon(settings):
         # prepend and append tests
         assert "input-append" in crispy_addon(bound_field, prepend="Work", append="Primary")
         assert "input-prepend" in crispy_addon(bound_field, prepend="Work", append="Secondary")
-    elif settings.CRISPY_TEMPLATE_PACK == 'bootsrap3':
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Primary")
         assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Secondary")
 
     # errors
     with pytest.raises(TypeError):
         crispy_addon()
+    with pytest.raises(TypeError):
         crispy_addon(bound_field)

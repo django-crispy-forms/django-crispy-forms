@@ -69,11 +69,8 @@ def test_inputs(settings):
 
 def test_invalid_form_method():
     form_helper = FormHelper()
-    try:
+    with pytest.raises(FormHelpersException):
         form_helper.form_method = "superPost"
-        pytest.fail("Setting an invalid form_method within the helper should raise an Exception")
-    except FormHelpersException:
-        pass
 
 
 def test_form_with_helper_without_layout(settings):
@@ -285,10 +282,9 @@ def test_invalid_helper(settings):
     """)
     c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
-    settings.CRISPY_FAIL_SILENTLY = False
-    if not settings.TEMPLATE_DEBUG:
-        with pytest.raises(TypeError):
-            template.render(c)
+    settings.CRISPY_FAIL_SILENTLY = settings.TEMPLATE_DEBUG = False
+    with pytest.raises(TypeError):
+        template.render(c)
 
 
 def test_formset_with_helper_without_layout(settings):
