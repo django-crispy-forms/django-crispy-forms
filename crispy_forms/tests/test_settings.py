@@ -48,5 +48,4 @@ class InvalidVarException(object):
 
 TEMPLATE_DEBUG = True
 TEMPLATE_STRING_IF_INVALID = InvalidVarException()
-CRISPY_TEMPLATE_PACK = os.environ['CRISPY_TEMPLATE_PACK']
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'), )
