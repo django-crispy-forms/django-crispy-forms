@@ -286,14 +286,9 @@ def test_invalid_helper(settings):
     c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
     settings.CRISPY_FAIL_SILENTLY = False
-    # Django >= 1.4 is not wrapping exceptions in TEMPLATE_DEBUG mode
-    if settings.TEMPLATE_DEBUG and django.VERSION < (1, 4):
-        with pytest.raises(TemplateSyntaxError):
-            template.render(c)
-    else:
+    if not settings.TEMPLATE_DEBUG:
         with pytest.raises(TypeError):
             template.render(c)
-    del settings.CRISPY_FAIL_SILENTLY
 
 
 def test_formset_with_helper_without_layout(settings):
