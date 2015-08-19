@@ -99,7 +99,6 @@ Run the tests!
 
 Before you submit a pull request, please run the entire django-crispy-forms test suite via::
 
-    cd crispy_forms/tests
     ./runtests.py
 
 The first thing the core committers will do is run this command. Any pull request that fails this test suite will be **rejected**.
