@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
-import re
-
 from django import forms
 from django.template import Context
+
 try:
     from django.template.loader import get_template_from_string
 except ImportError:
     from django.template import Engine
 
-    def get_template_from_string(s):
-        return Engine().from_string(s)
+    get_template_from_string = Engine().from_string
 
 from django.utils.translation import ugettext as _
 from django.utils.translation import activate, deactivate
 
-from .base import CrispyTestCase
+from .conftest import only_bootstrap
 from .forms import CheckboxesTestForm, TestForm
 from crispy_forms.bootstrap import (
     PrependedAppendedText, AppendedText, PrependedText, InlineRadios,
@@ -28,105 +26,108 @@ from crispy_forms.layout import (
 from crispy_forms.utils import render_crispy_form
 
 
-class TestLayoutObjects(CrispyTestCase):
+def test_multiwidget_field():
+    template = get_template_from_string(u"""
+        {% load crispy_forms_tags %}
+        {% crispy form %}
+    """)
 
-    def test_multiwidget_field(self):
-        template = get_template_from_string(u"""
-            {% load crispy_forms_tags %}
-            {% crispy form %}
-        """)
-
-        test_form = TestForm()
-        test_form.helper = FormHelper()
-        test_form.helper.layout = Layout(
-            MultiWidgetField(
-                'datetime_field',
-                attrs=(
-                    {'rel': 'test_dateinput'},
-                    {'rel': 'test_timeinput', 'style': 'width: 30px;', 'type': "hidden"}
-                )
+    test_form = TestForm()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        MultiWidgetField(
+            'datetime_field',
+            attrs=(
+                {'rel': 'test_dateinput'},
+                {'rel': 'test_timeinput', 'style': 'width: 30px;', 'type': "hidden"}
             )
         )
+    )
 
-        c = Context({'form': test_form})
+    c = Context({'form': test_form})
 
-        html = template.render(c)
+    html = template.render(c)
 
-        self.assertEqual(html.count('class="dateinput'), 1)
-        self.assertEqual(html.count('rel="test_dateinput"'), 1)
-        self.assertEqual(html.count('rel="test_timeinput"'), 1)
-        self.assertEqual(html.count('style="width: 30px;"'), 1)
-        self.assertEqual(html.count('type="hidden"'), 1)
+    assert html.count('class="dateinput') == 1
+    assert html.count('rel="test_dateinput"') == 1
+    assert html.count('rel="test_timeinput"') == 1
+    assert html.count('style="width: 30px;"') == 1
+    assert html.count('type="hidden"') == 1
 
-    def test_field_type_hidden(self):
-        template = get_template_from_string(u"""
-            {% load crispy_forms_tags %}
-            {% crispy test_form %}
+
+def test_field_type_hidden():
+    template = get_template_from_string(u"""
+        {% load crispy_forms_tags %}
+        {% crispy test_form %}
+    """)
+
+    test_form = TestForm()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        Field('email', type="hidden", data_test=12),
+        Field('datetime_field'),
+    )
+
+    c = Context({
+        'test_form': test_form,
+    })
+    html = template.render(c)
+
+    # Check form parameters
+    assert html.count('data-test="12"') == 1
+    assert html.count('name="email"') == 1
+    assert html.count('class="dateinput') == 1
+    assert html.count('class="timeinput') == 1
+
+
+def test_field_wrapper_class(settings):
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(Field('email', wrapper_class="testing"))
+
+    html = render_crispy_form(form)
+    if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        assert html.count('class="control-group testing"') == 1
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+        assert html.count('class="form-group testing"') == 1
+
+
+def test_html_with_carriage_returns(settings):
+    test_form = TestForm()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        HTML("""
+            if (a==b){
+                // some comment
+                a+1;
+                foo();
+            }
         """)
+    )
+    html = render_crispy_form(test_form)
 
-        test_form = TestForm()
-        test_form.helper = FormHelper()
-        test_form.helper.layout = Layout(
-            Field('email', type="hidden", data_test=12),
-            Field('datetime_field'),
-        )
-
-        c = Context({
-            'test_form': test_form,
-        })
-        html = template.render(c)
-
-        # Check form parameters
-        self.assertEqual(html.count('data-test="12"'), 1)
-        self.assertEqual(html.count('name="email"'), 1)
-        self.assertEqual(html.count('class="dateinput'), 1)
-        self.assertEqual(html.count('class="timeinput'), 1)
-
-    def test_field_wrapper_class(self):
-        form = TestForm()
-        form.helper = FormHelper()
-        form.helper.layout = Layout(Field('email', wrapper_class="testing"))
-
-        html = render_crispy_form(form)
-        if self.current_template_pack == 'bootstrap':
-            self.assertEqual(html.count('class="control-group testing"'), 1)
-        elif self.current_template_pack == 'bootstrap3':
-            self.assertEqual(html.count('class="form-group testing"'), 1)
-
-    def test_html_with_carriage_returns(self):
-        test_form = TestForm()
-        test_form.helper = FormHelper()
-        test_form.helper.layout = Layout(
-            HTML("""
-                if (a==b){
-                    // some comment
-                    a+1;
-                    foo();
-                }
-            """)
-        )
-        html = render_crispy_form(test_form)
-
-        if self.current_template_pack == 'uni_form':
-            self.assertEqual(html.count('\n'), 23)
-        elif self.current_template_pack == 'bootstrap':
-            self.assertEqual(html.count('\n'), 25)
-        else:
-            self.assertEqual(html.count('\n'), 27)
-
-    def test_i18n(self):
-        activate('es')
-        form = TestForm()
-        form.helper = FormHelper()
-        form.helper.layout = Layout(
-            HTML(_("Enter a valid value."))
-        )
-        html = render_crispy_form(form)
-        self.assertTrue(u"Introduzca un valor correcto" in html)
-        deactivate()
+    if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        assert html.count('\n') == 23
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+        assert html.count('\n') == 25
+    else:
+        assert html.count('\n') == 27
 
 
-class TestBootstrapLayoutObjects(TestLayoutObjects):
+def test_i18n():
+    activate('es')
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        HTML(_("Enter a valid value."))
+    )
+    html = render_crispy_form(form)
+    assert u"Introduzca un valor correcto" in html
+    deactivate()
+
+
+@only_bootstrap
+class TestBootstrapLayoutObjects(object):
 
     def test_custom_django_widget(self):
         class CustomRadioSelect(forms.RadioSelect):
@@ -142,15 +143,15 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         form.helper.layout = Layout('inline_radios')
 
         html = render_crispy_form(form)
-        self.assertTrue('class="radio"' in html)
+        assert 'class="radio"' in html
 
         # Make sure an inherited CheckboxSelectMultiple gets rendered as it
         form.fields['checkboxes'].widget = CustomCheckboxSelectMultiple()
         form.helper.layout = Layout('checkboxes')
         html = render_crispy_form(form)
-        self.assertTrue('class="checkbox"' in html)
+        assert 'class="checkbox"' in html
 
-    def test_prepended_appended_text(self):
+    def test_prepended_appended_text(self, settings):
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -161,19 +162,19 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         html = render_crispy_form(test_form)
 
         # Check form parameters
-        if self.current_template_pack == 'bootstrap':
-            self.assertEqual(html.count('<span class="add-on">@</span>'), 1)
-            self.assertEqual(html.count('<span class="add-on">gmail.com</span>'), 1)
-            self.assertEqual(html.count('<span class="add-on">#</span>'), 1)
-            self.assertEqual(html.count('<span class="add-on">$</span>'), 1)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            assert html.count('<span class="add-on">@</span>') == 1
+            assert html.count('<span class="add-on">gmail.com</span>') == 1
+            assert html.count('<span class="add-on">#</span>') == 1
+            assert html.count('<span class="add-on">$</span>') == 1
 
-        if self.current_template_pack == 'bootstrap3':
-            self.assertEqual(html.count('<span class="input-group-addon">@</span>'), 1)
-            self.assertEqual(html.count('<span class="input-group-addon">gmail.com</span>'), 1)
-            self.assertEqual(html.count('<span class="input-group-addon">#</span>'), 1)
-            self.assertEqual(html.count('<span class="input-group-addon">$</span>'), 1)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+            assert html.count('<span class="input-group-addon">@</span>') == 1
+            assert html.count('<span class="input-group-addon">gmail.com</span>') == 1
+            assert html.count('<span class="input-group-addon">#</span>') == 1
+            assert html.count('<span class="input-group-addon">$</span>') == 1
 
-    def test_inline_radios(self):
+    def test_inline_radios(self, settings):
         test_form = CheckboxesTestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -181,12 +182,12 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         )
         html = render_crispy_form(test_form)
 
-        if self.current_template_pack == 'bootstrap':
-            self.assertEqual(html.count('radio inline"'), 2)
-        elif self.current_template_pack == 'bootstrap3':
-            self.assertEqual(html.count('radio-inline"'), 2)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            assert html.count('radio inline"') == 2
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+            assert html.count('radio-inline"') == 2
 
-    def test_accordion_and_accordiongroup(self):
+    def test_accordion_and_accordiongroup(self, settings):
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -204,22 +205,22 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         )
         html = render_crispy_form(test_form)
 
-        if self.current_template_pack == 'bootstrap':
-            self.assertEqual(html.count('<div class="accordion"'), 1)
-            self.assertEqual(html.count('<div class="accordion-group">'), 2)
-            self.assertEqual(html.count('<div class="accordion-heading">'), 2)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            assert html.count('<div class="accordion"') == 1
+            assert html.count('<div class="accordion-group">') == 2
+            assert html.count('<div class="accordion-heading">') == 2
         else:
-            self.assertEqual(html.count('<div class="panel panel-default"'), 2)
-            self.assertEqual(html.count('<div class="panel-group"'), 1)
-            self.assertEqual(html.count('<div class="panel-heading">'), 2)
+            assert html.count('<div class="panel panel-default"') == 2
+            assert html.count('<div class="panel-group"') == 1
+            assert html.count('<div class="panel-heading">') == 2
 
-        self.assertEqual(html.count('<div id="one"'), 1)
-        self.assertEqual(html.count('<div id="two"'), 1)
-        self.assertEqual(html.count('name="first_name"'), 1)
-        self.assertEqual(html.count('name="password1"'), 1)
-        self.assertEqual(html.count('name="password2"'), 1)
+        assert html.count('<div id="one"') == 1
+        assert html.count('<div id="two"') == 1
+        assert html.count('name="first_name"') == 1
+        assert html.count('name="password1"') == 1
+        assert html.count('name="password2"') == 1
 
-    def test_accordion_active_false_not_rendered(self):
+    def test_accordion_active_false_not_rendered(self, settings):
         test_form = TestForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -235,12 +236,12 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         # The first time, there should be one of them there.
         html = render_crispy_form(test_form)
 
-        if self.current_template_pack == 'bootstrap':
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
             accordion_class = "accordion-body"
         else:
             accordion_class = "panel-collapse"
 
-        self.assertEqual(html.count('<div id="one" class="%s collapse in"' % accordion_class), 1)
+        assert html.count('<div id="one" class="%s collapse in"' % accordion_class) == 1
 
         test_form.helper.layout = Layout(
             Accordion(
@@ -254,7 +255,7 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
 
         # This time, it shouldn't be there at all.
         html = render_crispy_form(test_form)
-        self.assertEqual(html.count('<div id="one" class="%s collapse in"' % accordion_class), 0)
+        assert html.count('<div id="one" class="%s collapse in"' % accordion_class) == 0
 
     def test_alert(self):
         test_form = TestForm()
@@ -264,9 +265,9 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         )
         html = render_crispy_form(test_form)
 
-        self.assertEqual(html.count('<div class="alert"'), 1)
-        self.assertEqual(html.count('<button type="button" class="close"'), 1)
-        self.assertEqual(html.count('Testing...'), 1)
+        assert html.count('<div class="alert"') == 1
+        assert html.count('<button type="button" class="close"') == 1
+        assert html.count('Testing...') == 1
 
     def test_alert_block(self):
         test_form = TestForm()
@@ -276,8 +277,8 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         )
         html = render_crispy_form(test_form)
 
-        self.assertEqual(html.count('<div class="alert alert-block"'), 1)
-        self.assertEqual(html.count('Testing...'), 1)
+        assert html.count('<div class="alert alert-block"') == 1
+        assert html.count('Testing...') == 1
 
     def test_tab_and_tab_holder(self):
         test_form = TestForm()
@@ -297,20 +298,17 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         )
         html = render_crispy_form(test_form)
 
-        self.assertEqual(
-            html.count(
-                '<li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'
-            ),
-            1
-        )
-        self.assertEqual(html.count('class="tab-pane first-tab-class active"'), 1)
-        self.assertEqual(html.count('<li class="tab-pane'), 2)
-        self.assertEqual(html.count('tab-pane'), 4)
-        self.assertEqual(html.count('<div id="custom-name"'), 1)
-        self.assertEqual(html.count('<div id="two"'), 1)
-        self.assertEqual(html.count('name="first_name"'), 1)
-        self.assertEqual(html.count('name="password1"'), 1)
-        self.assertEqual(html.count('name="password2"'), 1)
+        assert html.count(
+            '<li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'
+        ) == 1
+        assert html.count('class="tab-pane first-tab-class active"') == 1
+        assert html.count('<li class="tab-pane') == 2
+        assert html.count('tab-pane') == 4
+        assert html.count('<div id="custom-name"') == 1
+        assert html.count('<div id="two"') == 1
+        assert html.count('name="first_name"') == 1
+        assert html.count('name="password1"') == 1
+        assert html.count('name="password2"') == 1
 
     def test_tab_helper_reuse(self):
         # this is a proper form, according to the docs.
@@ -335,25 +333,25 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         # but not duplicate class
         test_form = TestForm()
         html = render_crispy_form(test_form)
-        self.assertEqual(html.count('class="tab-pane active active"'), 0)
+        assert html.count('class="tab-pane active active"') == 0
 
         # render a new form, now with errors
         test_form = TestForm(data={'val1': 'foo'})
         html = render_crispy_form(test_form)
         # tab 1 should not be active
-        self.assertEqual(html.count('<div id="one" \n    class="tab-pane active'), 0)
+        assert html.count('<div id="one" \n    class="tab-pane active') == 0
         # tab 2 should be active
-        self.assertEqual(html.count('<div id="two" \n    class="tab-pane active'), 1)
+        assert html.count('<div id="two" \n    class="tab-pane active') == 1
 
     def test_radio_attrs(self):
         form = CheckboxesTestForm()
         form.fields['inline_radios'].widget.attrs = {'class': "first"}
         form.fields['checkboxes'].widget.attrs = {'class': "second"}
         html = render_crispy_form(form)
-        self.assertTrue('class="first"' in html)
-        self.assertTrue('class="second"' in html)
+        assert 'class="first"' in html
+        assert 'class="second"' in html
 
-    def test_field_with_buttons(self):
+    def test_field_with_buttons(self, settings):
         form = TestForm()
         form.helper = FormHelper()
         form.helper.layout = Layout(
@@ -369,25 +367,25 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
         html = render_crispy_form(form)
 
         form_group_class = 'control-group'
-        if self.current_template_pack == 'bootstrap3':
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             form_group_class = 'form-group'
 
-        self.assertEqual(html.count('class="%s extra"' % form_group_class), 1)
-        self.assertEqual(html.count('autocomplete="off"'), 1)
-        self.assertEqual(html.count('class="span4'), 1)
-        self.assertEqual(html.count('id="go-button"'), 1)
-        self.assertEqual(html.count("Go!"), 1)
-        self.assertEqual(html.count("No!"), 1)
-        self.assertEqual(html.count('class="btn"'), 2)
-        self.assertEqual(html.count('class="btn extra"'), 1)
-        self.assertEqual(html.count('type="submit"'), 1)
-        self.assertEqual(html.count('name="whatever"'), 1)
-        self.assertEqual(html.count('value="something"'), 1)
+        assert html.count('class="%s extra"' % form_group_class) == 1
+        assert html.count('autocomplete="off"') == 1
+        assert html.count('class="span4') == 1
+        assert html.count('id="go-button"') == 1
+        assert html.count("Go!") == 1
+        assert html.count("No!") == 1
+        assert html.count('class="btn"') == 2
+        assert html.count('class="btn extra"') == 1
+        assert html.count('type="submit"') == 1
+        assert html.count('name="whatever"') == 1
+        assert html.count('value="something"') == 1
 
-        if self.current_template_pack == 'bootstrap':
-            self.assertEqual(html.count('class="input-append"'), 1)
-        elif self.current_template_pack == 'bootstrap3':
-            self.assertEqual(html.count('class="input-group-btn'), 1)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            assert html.count('class="input-append"') == 1
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+            assert html.count('class="input-group-btn') == 1
 
     def test_hidden_fields(self):
         form = TestForm()
@@ -404,23 +402,23 @@ class TestBootstrapLayoutObjects(TestLayoutObjects):
             InlineRadios('last_name'),
         )
         html = render_crispy_form(form)
-        self.assertEqual(html.count("<input"), 5)
-        self.assertEqual(html.count('type="hidden"'), 5)
-        self.assertEqual(html.count('<label'), 0)
+        assert html.count("<input") == 5
+        assert html.count('type="hidden"') == 5
+        assert html.count('<label') == 0
 
-    def test_multiplecheckboxes(self):
+    def test_multiplecheckboxes(self, settings):
         test_form = CheckboxesTestForm()
         html = render_crispy_form(test_form)
 
-        self.assertEqual(html.count('checked="checked"'), 6)
+        assert html.count('checked="checked"') == 6
 
         test_form.helper = FormHelper(test_form)
         test_form.helper[1].wrap(InlineCheckboxes, inline=True)
         html = render_crispy_form(test_form)
 
-        if self.current_template_pack == 'bootstrap':
-            self.assertEqual(html.count('checkbox inline"'), 3)
-            self.assertEqual(html.count('inline"'), 3)
-        elif self.current_template_pack == 'bootstrap3':
-            self.assertEqual(html.count('checkbox-inline"'), 3)
-            self.assertEqual(html.count('inline="True"'), 4)
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
+            assert html.count('checkbox inline"') == 3
+            assert html.count('inline"') == 3
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+            assert html.count('checkbox-inline"') == 3
+            assert html.count('inline="True"') == 4

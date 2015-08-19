@@ -105,3 +105,4 @@ Contributors
 * Christopher Adams <adamsc64>
 * John Comeau <jcomeauictx>
 * Yoong Kang Lim <yoongkang>
+* Dmitry Dygalo <Stranger6667>

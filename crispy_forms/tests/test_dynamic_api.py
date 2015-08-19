@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
-import logging, warnings
 from django import forms
-from django.conf import settings
 from .base import CrispyTestCase
+from .conftest import only_uni_form
 from crispy_forms.compatibility import string_types
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
-from crispy_forms.layout import Submit
 from crispy_forms.layout import (
-    Layout, Fieldset, MultiField, HTML, Div, Field
+    Submit, Layout, Fieldset, MultiField, HTML, Div, Field
 )
 from crispy_forms.bootstrap import AppendedText
 from crispy_forms.tests.forms import TestForm
 
 
-class TestDynamicLayouts(CrispyTestCase):
+class AdvancedLayoutTestCase(CrispyTestCase):
+
     def setUp(self):
-        super(TestDynamicLayouts, self).setUp()
+        super(AdvancedLayoutTestCase, self).setUp()
 
         self.advanced_layout = Layout(
             Div(
@@ -34,6 +33,9 @@ class TestDynamicLayouts(CrispyTestCase):
             ),
             'last_name',
         )
+
+
+class TestDynamicLayouts(AdvancedLayoutTestCase):
 
     def test_wrap_all_fields(self):
         helper = FormHelper()
@@ -507,11 +509,10 @@ class TestDynamicLayouts(CrispyTestCase):
         self.assertEqual(layout[0][0], 'password1')
 
 
-class TestUniformDynamicLayouts(TestDynamicLayouts):
+@only_uni_form
+class TestUniformDynamicLayouts(AdvancedLayoutTestCase):
+
     def test_filter(self):
-        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
-            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
-            return
         helper = FormHelper()
         helper.layout = Layout(
             Div(

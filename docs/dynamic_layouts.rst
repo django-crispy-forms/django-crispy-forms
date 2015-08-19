@@ -35,9 +35,9 @@ wrap
 One useful action you can apply on a slice is ``wrap``, which wraps every selected field using a layout object type and parameters passed. Let's see an example. If We had this layout::
 
     Layout(
-       'field_1',
-       'field_2',
-       'field_3'
+        'field_1',
+        'field_2',
+        'field_3'
     )
 
 We could do::

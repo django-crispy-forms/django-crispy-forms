@@ -16,18 +16,18 @@
 
     <table{% if form_id %} id="{{ form_id }}_table"{% endif%} class="table table-striped table-condensed">
         <thead>
-          {% if formset.readonly and not formset.queryset.exists %}
-          {% else %}
-              <tr>
-                  {% for field in formset.forms.0 %}
-                      {% if field.label and not field.is_hidden %}
-                          <th for="{{ field.auto_id }}" class="control-label {% if field.field.required and not field|is_checkbox %}requiredField{% endif %}">
-                              {{ field.label|safe }}{% if field.field.required and not field|is_checkbox %}<span class="asteriskField">*</span>{% endif %}
-                          </th>
-                      {% endif %}
-                  {% endfor %}
-              </tr>
-          {% endif %}
+            {% if formset.readonly and not formset.queryset.exists %}
+            {% else %}
+                <tr>
+                    {% for field in formset.forms.0 %}
+                        {% if field.label and not field.is_hidden %}
+                            <th for="{{ field.auto_id }}" class="control-label {% if field.field.required and not field|is_checkbox %}requiredField{% endif %}">
+                                {{ field.label|safe }}{% if field.field.required and not field|is_checkbox %}<span class="asteriskField">*</span>{% endif %}
+                            </th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endif %}
         </thead>
 
         <tbody>

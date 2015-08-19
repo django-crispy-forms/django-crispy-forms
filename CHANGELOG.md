@@ -5,7 +5,7 @@
 Special thanks in this release for all the **<a href="http://flattr.com/thing/512037/django-crispy-forms">supporters and donators</a>**.
 
  * Fixed compatibilty with: Python 3, Django 1.7, Django 1.8 and Django 1.4.16. Merged PR #417, but thanks to PRs #369, #368 and #310. Closes also #383.
- * Updated test suite to for compatibility with all supported Django versions 1.4, 1.7, 1.8 and run CI against these and Django `master`. See #451, #455.
+ * Updated test suite for compatibility with all supported Django versions 1.4, 1.7, 1.8 and run CI against these and Django `master`. See #451, #455.
  * Bug fix for specifying `template_pack` in `{% crispy %}` tag, `bootstrap3` couldn't be set that way.
  * New doc section for creating custom template packs.
  * Fixed Bootstrap3 checkbox alignment issues with label texts, see #275.

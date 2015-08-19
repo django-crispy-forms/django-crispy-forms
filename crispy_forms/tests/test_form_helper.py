@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-import django, logging, warnings
+import django
 from django import forms
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -16,12 +16,12 @@ try:
 except ImportError:
     from django.template import Engine
 
-    def get_template_from_string(s):
-        return Engine().from_string(s)
+    get_template_from_string = Engine().from_string
 
 from django.utils.translation import ugettext_lazy as _
 
-from .base import CrispyTestCase
+from .base import CustomUrlsTestCase
+from .conftest import only_uni_form, only_bootstrap3, only_bootstrap
 from .forms import TestForm
 from crispy_forms.bootstrap import (
     FieldWithButtons, PrependedAppendedText, AppendedText, PrependedText,
@@ -36,8 +36,7 @@ from crispy_forms.utils import render_crispy_form
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
 
-class TestFormHelper(CrispyTestCase):
-    urls = 'crispy_forms.tests.urls'
+class TestFormHelper(CustomUrlsTestCase):
 
     def test_inputs(self):
         form_helper = FormHelper()
@@ -276,10 +275,7 @@ class TestFormHelper(CrispyTestCase):
         c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
         settings.CRISPY_FAIL_SILENTLY = False
-        # Django >= 1.4 is not wrapping exceptions in TEMPLATE_DEBUG mode
-        if settings.TEMPLATE_DEBUG and django.VERSION < (1, 4):
-            self.assertRaises(TemplateSyntaxError, lambda:template.render(c))
-        else:
+        if not settings.TEMPLATE_DEBUG:
             self.assertRaises(TypeError, lambda:template.render(c))
         del settings.CRISPY_FAIL_SILENTLY
 
@@ -409,11 +405,10 @@ class TestFormHelper(CrispyTestCase):
         self.assertEqual(html.count("<h1>Special custom field</h1>"), 2)
 
 
-class TestUniformFormHelper(TestFormHelper):
+@only_uni_form
+class TestUniformFormHelper(CustomUrlsTestCase):
+
     def test_form_show_errors(self):
-        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
-            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
-            return
         form = TestForm({
             'email': 'invalidemail',
             'first_name': 'first_name_too_long',
@@ -440,9 +435,6 @@ class TestUniformFormHelper(TestFormHelper):
         self.assertEqual(html.count('error'), 0)
 
     def test_multifield_errors(self):
-        if settings.CRISPY_TEMPLATE_PACK != 'uni_form':
-            warnings.warn('skipping uniform tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
-            return
         form = TestForm({
             'email': 'invalidemail',
             'password1': 'yes',
@@ -467,7 +459,9 @@ class TestUniformFormHelper(TestFormHelper):
         self.assertEqual(html.count('error'), 0)
 
 
-class TestBootstrapFormHelper(TestFormHelper):
+@only_bootstrap
+class TestBootstrapFormHelper(CustomUrlsTestCase):
+
     def test_form_show_errors(self):
         form = TestForm({
                 'email': 'invalidemail',
@@ -581,11 +575,10 @@ class TestBootstrapFormHelper(TestFormHelper):
         self.assertEqual(html.count("<label"), 0)
 
 
-class TestBootstrap3FormHelper(TestFormHelper):
+@only_bootstrap3
+class TestBootstrap3FormHelper(CustomUrlsTestCase):
+
     def test_label_class_and_field_class(self):
-        if settings.CRISPY_TEMPLATE_PACK != 'bootstrap3':
-            warnings.warn('skipping bootstrap3 tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
-            return
         form = TestForm()
         form.helper = FormHelper()
         form.helper.label_class = 'col-lg-2'
@@ -603,9 +596,6 @@ class TestBootstrap3FormHelper(TestFormHelper):
         self.assertEqual(html.count('col-sm-8'), 7)
 
     def test_template_pack(self):
-        if settings.CRISPY_TEMPLATE_PACK != 'bootstrap3':
-            warnings.warn('skipping bootstrap3 tests with CRISPY_TEMPLATE_PACK=%s' % settings.CRISPY_TEMPLATE_PACK)
-            return
         form = TestForm()
         form.helper = FormHelper()
         form.helper.template_pack = 'uni_form'

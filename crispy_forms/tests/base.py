@@ -11,13 +11,14 @@ try:
 except ImportError:
     from django.test.utils import override_settings
 
-class CrispyTestCase(TestCase):
-    def setUp(self):
-        template_dirs = [os.path.join(os.path.dirname(__file__), 'templates')]
-        template_dirs = template_dirs + list(settings.TEMPLATE_DIRS)
-        template_loaders = ['django.template.loaders.filesystem.Loader']
-        template_loaders = template_loaders + list(settings.TEMPLATE_LOADERS)
 
+template_dirs = [os.path.join(os.path.dirname(__file__), 'templates')] + list(settings.TEMPLATE_DIRS)
+template_loaders = ['django.template.loaders.filesystem.Loader'] + list(settings.TEMPLATE_LOADERS)
+
+
+class CrispyTestCase(TestCase):
+
+    def setUp(self):
         # ensuring test templates directory is loaded first
         self.__overriden_settings = override_settings(**{
             'TEMPLATE_LOADERS': template_loaders,
@@ -38,3 +39,7 @@ class CrispyTestCase(TestCase):
     @property
     def current_template_pack(self):
         return getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+
+
+class CustomUrlsTestCase(CrispyTestCase):
+    urls = 'crispy_forms.tests.urls'
