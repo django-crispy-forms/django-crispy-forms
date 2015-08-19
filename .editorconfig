@@ -1,0 +1,18 @@
+# http://editorconfig.org
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{html,py,rst}]
+indent_style = space
+indent_size = 4
+
+[*.{html,rst}]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab
+insert_final_newline = false

@@ -36,8 +36,8 @@ class LayoutObject(object):
         is the location of the field, second one the name of the field. Example::
 
             [
-               [[0,1,2], 'field_name1'],
-               [[0,3], 'field_name2']
+                [[0,1,2], 'field_name1'],
+                [[0,3], 'field_name2']
             ]
         """
         return self.get_layout_objects(string_types, greedy=True)
@@ -48,8 +48,8 @@ class LayoutObject(object):
         `LayoutClasses`::
 
             [
-               [[0,1,2], 'div'],
-               [[0,3], 'field_name']
+                [[0,1,2], 'div'],
+                [[0,3], 'field_name']
             ]
 
         :param max_level: An integer that indicates max level depth to reach when
