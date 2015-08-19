@@ -1,7 +1,5 @@
 import os
 
-from django.conf import global_settings
-
 from crispy_forms.compatibility import text_type
 
 
@@ -51,5 +49,4 @@ class InvalidVarException(object):
 TEMPLATE_DEBUG = True
 TEMPLATE_STRING_IF_INVALID = InvalidVarException()
 CRISPY_TEMPLATE_PACK = os.environ['CRISPY_TEMPLATE_PACK']
-TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'), ) + global_settings.TEMPLATE_DIRS
-TEMPLATE_LOADERS = ('django.template.loaders.filesystem.Loader', ) + global_settings.TEMPLATE_LOADERS
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'), )
