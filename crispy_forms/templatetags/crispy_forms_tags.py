@@ -15,7 +15,7 @@ register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
 from crispy_forms.templatetags.crispy_forms_filters import *
 
-from crispy_forms.utils import TEMPLATE_PACK
+from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 
 
 class ForLoopSimulator(object):
@@ -76,13 +76,13 @@ class BasicNode(template.Node):
     both the form object and parses out the helper string into attributes
     that templates can easily handle.
     """
-    def __init__(self, form, helper, template_pack=TEMPLATE_PACK):
+    def __init__(self, form, helper, template_pack=None):
         self.form = form
         if helper is not None:
             self.helper = helper
         else:
             self.helper = None
-        self.template_pack = template_pack
+        self.template_pack = template_pack or get_template_pack()
 
     def get_render(self, context):
         """
@@ -249,7 +249,7 @@ def do_uni_form(parser, token):
     form = token.pop(1)
 
     helper = None
-    template_pack = "'%s'" % TEMPLATE_PACK
+    template_pack = "'%s'" % get_template_pack()
 
     # {% crispy form helper %}
     try:
