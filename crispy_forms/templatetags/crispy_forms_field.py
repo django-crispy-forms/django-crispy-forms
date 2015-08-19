@@ -12,13 +12,6 @@ from crispy_forms.utils import TEMPLATE_PACK
 
 register = template.Library()
 
-class_converter = {
-    "textinput": "textinput textInput",
-    "fileinput": "fileinput fileUpload",
-    "passwordinput": "textinput textInput",
-}
-class_converter.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
-
 
 @register.filter
 def is_checkbox(field):
@@ -103,9 +96,16 @@ class CrispyFieldNode(template.Node):
         if isinstance(attrs, dict):
             attrs = [attrs] * len(widgets)
 
+        converters = {
+            'textinput': 'textinput textInput',
+            'fileinput': 'fileinput fileUpload',
+            'passwordinput': 'textinput textInput',
+        }
+        converters.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
+
         for widget, attr in zip(widgets, attrs):
             class_name = widget.__class__.__name__.lower()
-            class_name = class_converter.get(class_name, class_name)
+            class_name = converters.get(class_name, class_name)
             css_class = widget.attrs.get('class', '')
             if css_class:
                 if css_class.find(class_name) == -1:
@@ -167,7 +167,7 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
         {% crispy_addon form.my_field prepend="$" %}
         {% crispy_addon form.my_field append=".00" %}
     """
-    if (field):
+    if field:
         context = Context({
             'field': field,
             'form_show_errors': True,

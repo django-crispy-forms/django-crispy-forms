@@ -1,14 +1,9 @@
-import warnings
-
-from django.conf import settings
-from django.template import Context, Template
+from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
 from crispy_forms.compatibility import string_types, text_type
-from crispy_forms.utils import render_field, flatatt
-
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK
 
 
 class LayoutObject(object):
@@ -200,7 +195,10 @@ class Submit(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the submit button.
     """
     input_type = 'submit'
-    field_classes = 'submit submitButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-primary'
+
+    def __init__(self, *args, **kwargs):
+        self.field_classes = 'submit submitButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-primary'
+        super(Submit, self).__init__(*args, **kwargs)
 
 
 class Button(BaseInput):
@@ -212,7 +210,10 @@ class Button(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the button.
     """
     input_type = 'button'
-    field_classes = 'button' if TEMPLATE_PACK == 'uni_form' else 'btn'
+
+    def __init__(self, *args, **kwargs):
+        self.field_classes = 'button' if TEMPLATE_PACK == 'uni_form' else 'btn'
+        super(Button, self).__init__(*args, **kwargs)
 
 
 class Hidden(BaseInput):
@@ -232,7 +233,10 @@ class Reset(BaseInput):
     .. note:: The first argument is also slugified and turned into the id for the reset.
     """
     input_type = 'reset'
-    field_classes = 'reset resetButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-inverse'
+
+    def __init__(self, *args, **kwargs):
+        self.field_classes = 'reset resetButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-inverse'
+        super(Reset, self).__init__(*args, **kwargs)
 
 
 class Fieldset(LayoutObject):
@@ -349,7 +353,10 @@ class Row(Div):
 
         Row('form_field_1', 'form_field_2', 'form_field_3')
     """
-    css_class = 'formRow' if TEMPLATE_PACK == 'uni_form' else 'row'
+
+    def __init__(self, *args, **kwargs):
+        self.css_class = 'formRow' if TEMPLATE_PACK == 'uni_form' else 'row'
+        super(Row, self).__init__(*args, **kwargs)
 
 
 class Column(Div):
