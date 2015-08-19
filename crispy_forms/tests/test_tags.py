@@ -13,6 +13,7 @@ except ImportError:
     get_template_from_string = Engine().from_string
 
 
+from .conftest import only_bootstrap
 from .forms import TestForm
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
@@ -105,6 +106,7 @@ def test_crispy_field_and_class_converters():
     assert 'inputtext' in html
 
 
+@only_bootstrap
 def test_crispy_addon(settings):
     test_form = TestForm()
     field_instance = test_form.fields['email']
@@ -127,6 +129,5 @@ def test_crispy_addon(settings):
     # errors
     with pytest.raises(TypeError):
         crispy_addon()
-    if settings.CRISPY_TEMPLATE_PACK in ('bootstrap', 'bootstrap3'):
-        with pytest.raises(TypeError):
-            crispy_addon(bound_field)
+    with pytest.raises(TypeError):
+        crispy_addon(bound_field)
