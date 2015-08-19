@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
 from crispy_forms.compatibility import string_types, text_type
-from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK
+from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, get_template_pack
 
 
 class LayoutObject(object):
@@ -36,8 +36,8 @@ class LayoutObject(object):
         is the location of the field, second one the name of the field. Example::
 
             [
-               [[0,1,2], 'field_name1'],
-               [[0,3], 'field_name2']
+                [[0,1,2], 'field_name1'],
+                [[0,3], 'field_name2']
             ]
         """
         return self.get_layout_objects(string_types, greedy=True)
@@ -48,8 +48,8 @@ class LayoutObject(object):
         `LayoutClasses`::
 
             [
-               [[0,1,2], 'div'],
-               [[0,3], 'field_name']
+                [[0,1,2], 'div'],
+                [[0,3], 'field_name']
             ]
 
         :param max_level: An integer that indicates max level depth to reach when
@@ -197,7 +197,7 @@ class Submit(BaseInput):
     input_type = 'submit'
 
     def __init__(self, *args, **kwargs):
-        self.field_classes = 'submit submitButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-primary'
+        self.field_classes = 'submit submitButton' if get_template_pack() == 'uni_form' else 'btn btn-primary'
         super(Submit, self).__init__(*args, **kwargs)
 
 
@@ -212,7 +212,7 @@ class Button(BaseInput):
     input_type = 'button'
 
     def __init__(self, *args, **kwargs):
-        self.field_classes = 'button' if TEMPLATE_PACK == 'uni_form' else 'btn'
+        self.field_classes = 'button' if get_template_pack() == 'uni_form' else 'btn'
         super(Button, self).__init__(*args, **kwargs)
 
 
@@ -235,7 +235,7 @@ class Reset(BaseInput):
     input_type = 'reset'
 
     def __init__(self, *args, **kwargs):
-        self.field_classes = 'reset resetButton' if TEMPLATE_PACK == 'uni_form' else 'btn btn-inverse'
+        self.field_classes = 'reset resetButton' if get_template_pack() == 'uni_form' else 'btn btn-inverse'
         super(Reset, self).__init__(*args, **kwargs)
 
 
@@ -355,7 +355,7 @@ class Row(Div):
     """
 
     def __init__(self, *args, **kwargs):
-        self.css_class = 'formRow' if TEMPLATE_PACK == 'uni_form' else 'row'
+        self.css_class = 'formRow' if get_template_pack() == 'uni_form' else 'row'
         super(Row, self).__init__(*args, **kwargs)
 
 

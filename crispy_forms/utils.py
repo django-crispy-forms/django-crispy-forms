@@ -12,7 +12,11 @@ from .base import KeepContext
 from .compatibility import text_type, PY2, memoize, SimpleLazyObject
 
 
-TEMPLATE_PACK = SimpleLazyObject(lambda: getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap'))
+def get_template_pack():
+    return getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+
+
+TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
 
 
 # By memoizeing we avoid loading the template every time render_field

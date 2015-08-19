@@ -1,7 +1,7 @@
 {% load crispy_forms_field %}
 
 {% if field.is_hidden %}
-	{{ field }}
+    {{ field }}
 {% else %}
     {% if field|is_checkbox %}
         <div class="form-group">
@@ -9,12 +9,12 @@
             <div class="controls col-{{ bootstrap_device_type }}-offset-{{ label_size }} {{ field_class }}">
         {% endif %}
     {% endif %}
-	<{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" {% if not field|is_checkbox %}class="form-group{% else %}class="checkbox{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_show_errors%}{% if field.errors %} has-error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
-		{% if field.label and not field|is_checkbox and form_show_labels %}
-			<label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
-				{{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
-			</label>
-		{% endif %}
+    <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" {% if not field|is_checkbox %}class="form-group{% else %}class="checkbox{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_show_errors%}{% if field.errors %} has-error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+        {% if field.label and not field|is_checkbox and form_show_labels %}
+            <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+            </label>
+        {% endif %}
 
         {% if field|is_checkboxselectmultiple %}
             {% include 'bootstrap3/layout/checkboxselectmultiple.html' %}
@@ -38,7 +38,7 @@
                 </div>
             {% endif %}
         {% endif %}
-	</{% if tag %}{{ tag }}{% else %}div{% endif %}>
+    </{% if tag %}{{ tag }}{% else %}div{% endif %}>
     {% if field|is_checkbox %}
         {% if label_class %}
             </div>

@@ -6,28 +6,17 @@ from django.utils.encoding import force_text
 from django.utils.functional import allow_lazy
 
 from crispy_forms.compatibility import text_type
-from crispy_forms.utils import TEMPLATE_PACK
 
 
 register = template.Library()
 
 
-def selectively_remove_spaces_between_tags(value, template_pack, form_class):
-    if (
-        'bootstrap' in template_pack
-        and 'form-inline' in form_class
-    ):
-        # More than 3 strict whitespaces, see issue #250
-        html = re.sub(r'>\s{3,}<', '> <', force_text(value))
-        return re.sub(r'/><', r'/> <', force_text(html))
-    else:
-        html = re.sub(r'>\s{3,}<', '> <', force_text(value))
-        return re.sub(r'/><', r'/> <', force_text(html))
+def remove_spaces(value):
+    html = re.sub(r'>\s{3,}<', '> <', force_text(value))
+    return re.sub(r'/><', r'/> <', force_text(html))
 
 
-selectively_remove_spaces_between_tags = allow_lazy(
-    selectively_remove_spaces_between_tags, text_type
-)
+remove_spaces = allow_lazy(remove_spaces, text_type)
 
 
 class SpecialSpacelessNode(template.Node):
@@ -35,21 +24,7 @@ class SpecialSpacelessNode(template.Node):
         self.nodelist = nodelist
 
     def render(self, context):
-        try:
-            template_pack = template.Variable('template_pack').resolve(context)
-        except:
-            template_pack = TEMPLATE_PACK
-
-        try:
-            form_attrs = template.Variable('form_attrs').resolve(context)
-        except:
-            form_attrs = {}
-
-        return selectively_remove_spaces_between_tags(
-            self.nodelist.render(context).strip(),
-            template_pack,
-            form_attrs.get('class', ''),
-        )
+        return remove_spaces(self.nodelist.render(context).strip())
 
 
 @register.tag
