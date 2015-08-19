@@ -266,13 +266,11 @@ def test_template_pack_override_verbose(settings):
 
 
 def test_template_pack_override_wrong():
-    try:
+    with pytest.raises(TemplateSyntaxError):
         get_template_from_string(u"""
             {% load crispy_forms_tags %}
             {% crispy form 'foo' %}
         """)
-    except TemplateSyntaxError:
-        pass
 
 
 def test_invalid_helper(settings):
