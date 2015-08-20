@@ -179,6 +179,8 @@ class BaseInput(TemplateNameMixin):
         self.name = name
         self.value = value
         self.id = kwargs.pop('css_id', '')
+        self.icon_left = kwargs.pop('icon_left', '')
+        self.icon_right = kwargs.pop('icon_right', '')
         self.attrs = {}
 
         if 'css_class' in kwargs:
