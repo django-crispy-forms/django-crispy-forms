@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from django import template
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.compatibility import memoize, string_types
+from crispy_forms.compatibility import lru_cache, string_types
 
 
 register = template.Library()
@@ -198,14 +198,14 @@ class BasicNode(template.Node):
         return response_dict
 
 
+@lru_cache()
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_formset.html' % template_pack)
-whole_uni_formset_template = memoize(whole_uni_formset_template, {}, 1)
 
 
+@lru_cache()
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/whole_uni_form.html' % template_pack)
-whole_uni_form_template = memoize(whole_uni_form_template, {}, 1)
 
 
 class CrispyFormNode(BasicNode):

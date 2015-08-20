@@ -9,7 +9,7 @@ from django.template.loader import get_template
 from django.utils.html import conditional_escape
 
 from .base import KeepContext
-from .compatibility import text_type, PY2, memoize, SimpleLazyObject
+from .compatibility import text_type, PY2, lru_cache, SimpleLazyObject
 
 
 def get_template_pack():
@@ -21,9 +21,9 @@ TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
 
 # By memoizeing we avoid loading the template every time render_field
 # is called without a template
+@lru_cache()
 def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
-default_field_template = memoize(default_field_template, {}, 1)
 
 
 def set_hidden(widget):
