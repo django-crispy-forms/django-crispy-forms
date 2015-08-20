@@ -38,6 +38,10 @@ except ImportError:
     from django.utils.functional import memoize
 
     def lru_cache():
-        def decorator(function, cache_dict={}):
+
+        def decorator(function, cache_dict=None):
+            if cache_dict is None:
+                cache_dict = {}
             return memoize(function, cache_dict, 1)
+
         return decorator
