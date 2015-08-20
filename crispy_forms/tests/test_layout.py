@@ -271,23 +271,17 @@ def test_formset_layout(settings):
     )
 
     # Check formset fields
-    django_version = django.VERSION[:3]
     hidden_count = 4  # before Django 1.7 added MIN_NUM_FORM_COUNT
-    if django_version < (1, 5):
+    if django.VERSION < (1, 5):
         assert html.count(
             'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
         ) == 1
         assert html.count(
             'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
         ) == 1
-        if (1, 4) <= django_version < (1, 4, 4):
-            assert html.count(
-                'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
-            ) == 1
-        else:
-            assert html.count(
-                'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
-            ) == 1
+        assert html.count(
+            'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
+        ) == 1
     else:
         assert html.count(
             'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
@@ -337,22 +331,16 @@ def test_modelformset_layout():
     assert html.count("id_form-1-id") == 1
     assert html.count("id_form-2-id") == 1
 
-    django_version = django.VERSION[:3]
-    if django_version < (1, 5):
+    if django.VERSION < (1, 5):
         assert html.count(
             'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
         ) == 1
         assert html.count(
             'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
         ) == 1
-        if (1, 4) <= django_version < (1, 4, 4):
-            assert html.count(
-                'type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS"'
-            ) == 1
-        else:
-            assert html.count(
-                'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
-            ) == 1
+        assert html.count(
+            'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
+        ) == 1
     else:
         assert html.count(
             'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
