@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import django
 from django import forms
 from django.core.urlresolvers import reverse
@@ -44,7 +46,7 @@ def test_invalid_unicode_characters(settings):
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -61,7 +63,7 @@ def test_unicode_form_field():
             self.fields['contraseña'] = forms.CharField()
 
         helper = FormHelper()
-        helper.layout = Layout(u'contraseña')
+        helper.layout = Layout('contraseña')
 
     if PY2:
         with pytest.raises(Exception):
@@ -85,7 +87,7 @@ def test_meta_extra_fields_with_missing_fields():
         'first_name',
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -102,7 +104,7 @@ def test_layout_unresolved_field(settings):
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -121,7 +123,7 @@ def test_double_rendered_field(settings):
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -138,7 +140,7 @@ def test_context_pollution():
     form = ExampleForm()
     form2 = TestForm()
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {{ form.as_ul }}
         {% crispy form2 %}
@@ -156,33 +158,33 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
     form_helper.add_layout(
         Layout(
             Fieldset(
-                u'Company Data',
-                u'is_company',
+                'Company Data',
+                'is_company',
                 css_id = "fieldset_company_data",
                 css_class = "fieldsets",
                 title = "fieldset_title",
                 test_fieldset = "123"
             ),
             Fieldset(
-                u'User Data',
-                u'email',
+                'User Data',
+                'email',
                 Row(
-                    u'password1',
-                    u'password2',
+                    'password1',
+                    'password2',
                     css_id = "row_passwords",
                     css_class = "rows",
                 ),
                 HTML('<a href="#" id="testLink">test link</a>'),
-                HTML(u"""
+                HTML("""
                     {% if flag %}{{ message }}{% endif %}
                 """),
-                u'first_name',
-                u'last_name',
+                'first_name',
+                'last_name',
             )
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -210,7 +212,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
 
 
 def test_change_layout_dynamically_delete_field():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -220,7 +222,7 @@ def test_change_layout_dynamically_delete_field():
     form_helper.add_layout(
         Layout(
             Fieldset(
-                u'Company Data',
+                'Company Data',
                 'is_company',
                 'email',
                 'password1',
@@ -360,7 +362,7 @@ def test_modelformset_layout():
 
 
 def test_i18n():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form.helper %}
     """)
@@ -465,7 +467,7 @@ def test_layout_composition():
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -517,7 +519,7 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)

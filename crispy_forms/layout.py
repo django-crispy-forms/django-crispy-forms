@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
@@ -282,7 +284,7 @@ class Fieldset(LayoutObject):
 
         legend = ''
         if self.legend:
-            legend = u'%s' % Template(text_type(self.legend)).render(context)
+            legend = '%s' % Template(text_type(self.legend)).render(context)
 
         template = self.get_template_name(template_pack)
         return render_to_string(
@@ -299,8 +301,8 @@ class MultiField(LayoutObject):
     def __init__(self, label, *fields, **kwargs):
         self.fields = list(fields)
         self.label_html = label
-        self.label_class = kwargs.pop('label_class', u'blockLabel')
-        self.css_class = kwargs.pop('css_class', u'ctrlHolder')
+        self.label_class = kwargs.pop('label_class', 'blockLabel')
+        self.css_class = kwargs.pop('css_class', 'ctrlHolder')
         self.css_id = kwargs.pop('css_id', None)
         self.template = kwargs.pop('template', self.template)
         self.field_template = kwargs.pop('field_template', self.field_template)
