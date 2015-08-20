@@ -12,16 +12,10 @@ from django.template import (
 )
 import pytest
 
-try:
-    from django.template.loader import get_template_from_string
-except ImportError:
-    from django.template import Engine
-
-    get_template_from_string = Engine().from_string
-
 from django.test import RequestFactory
 from django.utils.translation import ugettext_lazy as _
 
+from .compatibility import get_template_from_string
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap
 from .forms import (
     TestForm, TestForm2, TestForm3, CheckboxesTestForm,
