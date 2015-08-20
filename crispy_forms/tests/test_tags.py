@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.forms.forms import BoundField
 from django.forms.models import formset_factory
 from django.template import Context
@@ -19,7 +21,7 @@ from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
 
 def test_as_crispy_errors_form_without_non_field_errors():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {{ form|as_crispy_errors }}
     """)
@@ -32,7 +34,7 @@ def test_as_crispy_errors_form_without_non_field_errors():
 
 
 def test_as_crispy_errors_form_with_non_field_errors():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {{ form|as_crispy_errors }}
     """)
@@ -47,7 +49,7 @@ def test_as_crispy_errors_form_with_non_field_errors():
 
 
 def test_crispy_filter_with_form():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {{ form|crispy }}
     """)
@@ -60,7 +62,7 @@ def test_crispy_filter_with_form():
 
 
 def test_crispy_filter_with_formset():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {{ testFormset|crispy }}
     """)
@@ -79,7 +81,7 @@ def test_crispy_filter_with_formset():
 
 
 def test_classes_filter():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_field %}
         {{ testField|classes }}
     """)
@@ -92,7 +94,7 @@ def test_classes_filter():
 
 
 def test_crispy_field_and_class_converters():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_field %}
         {% crispy_field testField 'class' 'error' %}
     """)

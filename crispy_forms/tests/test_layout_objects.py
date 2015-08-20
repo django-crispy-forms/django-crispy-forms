@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django import forms
 from django.template import Context
 
@@ -26,7 +28,7 @@ from crispy_forms.layout import (
 from crispy_forms.utils import render_crispy_form
 
 def test_field_with_custom_template():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form %}
     """)
@@ -41,7 +43,7 @@ def test_field_with_custom_template():
     assert '<h1>Special custom field</h1>' in html
 
 def test_multiwidget_field():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form %}
     """)
@@ -70,7 +72,7 @@ def test_multiwidget_field():
 
 
 def test_field_type_hidden():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy test_form %}
     """)
@@ -136,7 +138,7 @@ def test_i18n():
         HTML(_("Enter a valid value."))
     )
     html = render_crispy_form(form)
-    assert u"Introduzca un valor correcto" in html
+    assert "Introduzca un valor correcto" in html
     deactivate()
 
 

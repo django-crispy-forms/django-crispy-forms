@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 import django
 from django import forms
 from django.core.urlresolvers import reverse
@@ -45,7 +46,7 @@ def test_invalid_unicode_characters(settings):
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -86,7 +87,7 @@ def test_meta_extra_fields_with_missing_fields():
         'first_name',
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -103,7 +104,7 @@ def test_layout_unresolved_field(settings):
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -122,7 +123,7 @@ def test_double_rendered_field(settings):
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -139,7 +140,7 @@ def test_context_pollution():
     form = ExampleForm()
     form2 = TestForm()
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {{ form.as_ul }}
         {% crispy form2 %}
@@ -174,7 +175,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
                     css_class = "rows",
                 ),
                 HTML('<a href="#" id="testLink">test link</a>'),
-                HTML(u"""
+                HTML("""
                     {% if flag %}{{ message }}{% endif %}
                 """),
                 'first_name',
@@ -183,7 +184,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -211,7 +212,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
 
 
 def test_change_layout_dynamically_delete_field():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -361,7 +362,7 @@ def test_modelformset_layout():
 
 
 def test_i18n():
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {% crispy form form.helper %}
     """)
@@ -466,7 +467,7 @@ def test_layout_composition():
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -518,7 +519,7 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
         )
     )
 
-    template = get_template_from_string(u"""
+    template = get_template_from_string("""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
