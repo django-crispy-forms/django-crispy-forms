@@ -154,10 +154,10 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
             Fieldset(
                 'Company Data',
                 'is_company',
-                css_id = "fieldset_company_data",
-                css_class = "fieldsets",
-                title = "fieldset_title",
-                test_fieldset = "123"
+                css_id="fieldset_company_data",
+                css_class="fieldsets",
+                title="fieldset_title",
+                test_fieldset="123"
             ),
             Fieldset(
                 'User Data',
@@ -165,8 +165,8 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
                 Row(
                     'password1',
                     'password2',
-                    css_id = "row_passwords",
-                    css_class = "rows",
+                    css_id="row_passwords",
+                    css_class="rows",
                 ),
                 HTML('<a href="#" id="testLink">test link</a>'),
                 HTML("""
@@ -221,12 +221,12 @@ def test_change_layout_dynamically_delete_field():
                 'email',
                 'password1',
                 'password2',
-                css_id = "multifield_info",
+                css_id="multifield_info",
             ),
             Column(
                 'first_name',
                 'last_name',
-                css_id = "column_name",
+                css_id="column_name",
             )
         )
     )
@@ -250,13 +250,15 @@ def test_formset_layout(settings):
     helper.form_method = 'POST'
     helper.form_action = 'simpleAction'
     helper.layout = Layout(
-        Fieldset("Item {{ forloop.counter }}",
+        Fieldset(
+            "Item {{ forloop.counter }}",
             'is_company',
             'email',
         ),
         HTML("{% if forloop.first %}Note for first form only{% endif %}"),
         Row('password1', 'password2'),
-        Fieldset("",
+        Fieldset(
+            "",
             'first_name',
             'last_name'
         )
@@ -437,17 +439,18 @@ def test_layout_composition():
     form_helper.add_layout(
         Layout(
             Layout(
-                MultiField("Some company data",
+                MultiField(
+                    "Some company data",
                     'is_company',
                     'email',
-                    css_id = "multifield_info",
+                    css_id="multifield_info",
                 ),
             ),
             Column(
                 'first_name',
                 # 'last_name', Missing a field on purpose
-                css_id = "column_name",
-                css_class = "columns",
+                css_id="column_name",
+                css_class="columns",
             ),
             ButtonHolder(
                 Submit('Save', 'Save', css_class='button white'),
@@ -486,18 +489,19 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
-            MultiField("Some company data",
+            MultiField(
+                "Some company data",
                 'is_company',
                 'email',
-                css_id = "multifield_info",
-                title = "multifield_title",
-                multifield_test = "123"
+                css_id="multifield_info",
+                title="multifield_title",
+                multifield_test="123"
             ),
             Column(
                 'first_name',
                 'last_name',
-                css_id = "column_name",
-                css_class = "columns",
+                css_id="column_name",
+                css_class="columns",
             ),
             ButtonHolder(
                 Submit('Save the world', '{{ value_var }}', css_class='button white', data_id='test', data_name='test'),

@@ -1,4 +1,4 @@
-from __future__ import with_statement, unicode_literals
+from __future__ import unicode_literals
 import logging
 import sys
 

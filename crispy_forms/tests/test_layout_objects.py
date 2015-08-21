@@ -21,20 +21,17 @@ from crispy_forms.layout import (
 )
 from crispy_forms.utils import render_crispy_form
 
-def test_field_with_custom_template():
-    template = get_template_from_string("""
-        {% load crispy_forms_tags %}
-        {% crispy form %}
-    """)
 
+def test_field_with_custom_template():
     test_form = TestForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
-        Field('email',template='custom_field_template.html')
+        Field('email', template='custom_field_template.html')
     )
 
     html = render_crispy_form(test_form)
     assert '<h1>Special custom field</h1>' in html
+
 
 def test_multiwidget_field():
     template = get_template_from_string("""
@@ -295,12 +292,14 @@ class TestBootstrapLayoutObjects(object):
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             TabHolder(
-                Tab('one',
+                Tab(
+                    'one',
                     'first_name',
                     css_id="custom-name",
                     css_class="first-tab-class"
                 ),
-                Tab('two',
+                Tab(
+                    'two',
                     'password1',
                     'password2'
                 )

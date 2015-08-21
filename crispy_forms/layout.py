@@ -7,6 +7,7 @@ from django.utils.html import conditional_escape
 from crispy_forms.compatibility import string_types, text_type
 from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, get_template_pack
 
+
 class TemplateNameMixin(object):
 
     def get_template_name(self, template_pack):
@@ -16,6 +17,7 @@ class TemplateNameMixin(object):
             template = self.template
 
         return template
+
 
 class LayoutObject(TemplateNameMixin):
     def __getitem__(self, slice):
