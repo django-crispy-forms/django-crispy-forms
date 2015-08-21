@@ -7,14 +7,7 @@ from django.template import Context
 
 import pytest
 
-try:
-    from django.template.loader import get_template_from_string
-except ImportError:
-    from django.template import Engine
-
-    get_template_from_string = Engine().from_string
-
-
+from .compatibility import get_template_from_string
 from .conftest import only_bootstrap
 from .forms import TestForm
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon

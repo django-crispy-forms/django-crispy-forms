@@ -4,16 +4,10 @@ from __future__ import unicode_literals
 from django import forms
 from django.template import Context
 
-try:
-    from django.template.loader import get_template_from_string
-except ImportError:
-    from django.template import Engine
-
-    get_template_from_string = Engine().from_string
-
 from django.utils.translation import ugettext as _
 from django.utils.translation import activate, deactivate
 
+from .compatibility import get_template_from_string
 from .conftest import only_bootstrap
 from .forms import CheckboxesTestForm, TestForm
 from crispy_forms.bootstrap import (
