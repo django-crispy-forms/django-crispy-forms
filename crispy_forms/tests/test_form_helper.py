@@ -82,7 +82,7 @@ def test_form_with_helper_without_layout(settings):
     """)
 
     # now we render it, with errors
-    form = TestForm({'password1': 'wargame','password2': 'god'})
+    form = TestForm({'password1': 'wargame', 'password2': 'god'})
     form.is_valid()
     c = Context({'testForm': form, 'form_helper': form_helper})
     html = template.render(c)
@@ -292,7 +292,7 @@ def test_formset_with_helper_without_layout(settings):
     form_helper.form_method = 'POST'
     form_helper.form_action = 'simpleAction'
 
-    TestFormSet = formset_factory(TestForm, extra = 3)
+    TestFormSet = formset_factory(TestForm, extra=3)
     testFormSet = TestFormSet()
 
     c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
@@ -447,7 +447,7 @@ def test_multifield_errors():
         'email': 'invalidemail',
         'password1': 'yes',
         'password2': 'yes',
-        })
+    })
     form.helper = FormHelper()
     form.helper.layout = Layout(
         MultiField('legend', 'email')
@@ -470,12 +470,12 @@ def test_multifield_errors():
 @only_bootstrap
 def test_bootstrap_form_show_errors():
     form = TestForm({
-            'email': 'invalidemail',
-            'first_name': 'first_name_too_long',
-            'last_name': 'last_name_too_long',
-            'password1': 'yes',
-            'password2': 'yes',
-            })
+        'email': 'invalidemail',
+        'first_name': 'first_name_too_long',
+        'last_name': 'last_name_too_long',
+        'password1': 'yes',
+        'password2': 'yes',
+    })
     form.helper = FormHelper()
     form.helper.layout = Layout(
         AppendedText('email', 'whatever'),
