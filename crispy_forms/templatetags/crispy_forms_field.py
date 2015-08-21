@@ -8,16 +8,9 @@ from django import template
 from django.template import loader, Context
 from django.conf import settings
 
-from crispy_forms.utils import TEMPLATE_PACK
+from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 
 register = template.Library()
-
-class_converter = {
-    "textinput": "textinput textInput",
-    "fileinput": "fileinput fileUpload",
-    "passwordinput": "textinput textInput",
-}
-class_converter.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
 
 
 @register.filter
@@ -67,7 +60,7 @@ def css_class(field):
 
 
 def pairwise(iterable):
-    "s -> (s0,s1), (s2,s3), (s4, s5), ..."
+    """s -> (s0,s1), (s2,s3), (s4, s5), ..."""
     a = iter(iterable)
     return izip(a, a)
 
@@ -95,7 +88,7 @@ class CrispyFieldNode(template.Node):
         except template.VariableDoesNotExist:
             html5_required = False
 
-        # If template pack has been overriden in FormHelper we can pick it from context
+        # If template pack has been overridden in FormHelper we can pick it from context
         template_pack = context.get('template_pack', TEMPLATE_PACK)
 
         widgets = getattr(field.field.widget, 'widgets', [field.field.widget])
@@ -103,9 +96,16 @@ class CrispyFieldNode(template.Node):
         if isinstance(attrs, dict):
             attrs = [attrs] * len(widgets)
 
+        converters = {
+            'textinput': 'textinput textInput',
+            'fileinput': 'fileinput fileUpload',
+            'passwordinput': 'textinput textInput',
+        }
+        converters.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
+
         for widget, attr in zip(widgets, attrs):
             class_name = widget.__class__.__name__.lower()
-            class_name = class_converter.get(class_name, class_name)
+            class_name = converters.get(class_name, class_name)
             css_class = widget.attrs.get('class', '')
             if css_class:
                 if css_class.find(class_name) == -1:
@@ -167,13 +167,13 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
         {% crispy_addon form.my_field prepend="$" %}
         {% crispy_addon form.my_field append=".00" %}
     """
-    if (field):
+    if field:
         context = Context({
             'field': field,
             'form_show_errors': True,
             'form_show_labels': form_show_labels,
         })
-        template = loader.get_template('%s/layout/prepended_appended_text.html' % TEMPLATE_PACK)
+        template = loader.get_template('%s/layout/prepended_appended_text.html' % get_template_pack())
         context['crispy_prepended_text'] = prepend
         context['crispy_appended_text'] = append
 
@@ -181,4 +181,3 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
             raise TypeError("Expected a prepend and/or append argument")
 
     return template.render(context)
-

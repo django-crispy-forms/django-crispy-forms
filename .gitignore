@@ -23,6 +23,7 @@ tempfile
 
 # coverage 
 .coverage
+htmlcov
 _build
 
 # OSX

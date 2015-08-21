@@ -99,8 +99,7 @@ Run the tests!
 
 Before you submit a pull request, please run the entire django-crispy-forms test suite via::
 
-    cd crispy_forms/tests
-    ./runtests.py
+    make test
 
 The first thing the core committers will do is run this command. Any pull request that fails this test suite will be **rejected**.
 
@@ -109,7 +108,7 @@ It's always good to add tests!
 
 We've learned the hard way that code without tests is undependable. If your pull request comes with tests, it's got a greater chance to be included. Otherwise the lead will ask you to code them or will help you doing so.
 
-We use the Django Test framework (based on unittest).
+We use the py.test.
 
 Also, keep your tests as simple as possible. Complex tests end up requiring their own tests. We would rather see duplicated assertions across test methods then cunning utility methods that magically determine which assertions are needed at a particular stage. Remember: `Explicit is better than implicit`.
 

@@ -1,18 +1,29 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.5.1 (2015/8/21)
+
+Special thanks in this release to Dmitry Dygalo @Stranger6667 for a marathon effort updating the
+test suite and code base.
+
+  * Switched to py.test. Modernised test suite. Enabled tox, code coverage and Travis for all
+    supported Python/Django versions. [See list of Merged "Testing/Process" PRs here](https://github.com/maraujop/django-crispy-forms/pulls?q=is%3Apr+is%3Amerged+milestone%3A1.5.1+label%3ATesting%2FProcess)
+  * Added compatibility with Python 3.2
+  * Fix: Allow LayoutObject & BaseInputs to accept custom template #493
+
+
 ## 1.5.0 (2015/8/16)
 
 Special thanks in this release for all the **<a href="http://flattr.com/thing/512037/django-crispy-forms">supporters and donators</a>**.
 
- * Fixed compatibilty with: Python 3, Django 1.7, Django 1.8 and Django 1.4.16. Merged PR #417, but thanks to PRs #369, #368 and #310. Closes also #383.
- * Updated test suite to for compatibility with all supported Django versions 1.4, 1.7, 1.8 and run CI against these and Django `master`. See #451, #455.
+ * Fixed compatibility with: Python 3, Django 1.7, Django 1.8 and Django 1.4.16. Merged PR #417, but thanks to PRs #369, #368 and #310. Closes also #383.
+ * Updated test suite for compatibility with all supported Django versions 1.4, 1.7, 1.8 and run CI against these and Django `master`. See #451, #455.
  * Bug fix for specifying `template_pack` in `{% crispy %}` tag, `bootstrap3` couldn't be set that way.
  * New doc section for creating custom template packs.
  * Fixed Bootstrap3 checkbox alignment issues with label texts, see #275.
  * First `AccordionGroup` can now be set to `active=False`, see #246.
  * Fixed Bootstrap3 checkbox alignment issues for all device sizes, see #225 and #267.
  * All forms are now rendered with {{ form.media }}, this makes forms containing widgets with `Media` meta class work, see #263.
- * Adjusted `{% specialspaceless %}` to avoid breaking intended spaces and be less agressive, see #250.
+ * Adjusted `{% specialspaceless %}` to avoid breaking intended spaces and be less aggressive, see #250.
  * Fixed inputs rendering for bootstrap3 and redo `FormActions` layout object bootstrap3 template for correct alignment, see #279.
  * `MultiField` now obeys `form_show_labels`, see #278.
  * Added `wrapper_class` to `bootstrap.InlineRadios`, see #272.
@@ -39,7 +50,7 @@ Special thanks in this release to **James Friedman <a href="https://github.com/j
  * Added support for horizontal forms in bootstrap3, see #209.
  * Fixed spaces missing when rendering several submit inputs continued, see #211.
  * Fixed checkboxes and radios for Bootstrap3, adjusted multiple inline radios and checkboxes, see #225.
- * Update accordion markup for bootstrap3 compatibilty, see #229.
+ * Update accordion markup for bootstrap3 compatibility, see #229.
  * Moved `UneditableField` to bootstrap module, place where it should live, no backwards compatible import left behind.
  * Added `bootstrap3` template pack thanks to James Friedman, see #213 and #209.
  * `RadioSelect` and `CheckboxSelectMultiple` widget values and texts were being localized, when they shouldn't bee, see #214.
@@ -67,7 +78,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Added a settings variable named `CRISPY_ALLOWED_TEMPLATE_PACKS` for adding easily support for new template packs, see #192.
  * Added `{% crispy_addon %}` tag, see #195.
  * Make `CRISPY_TEMPLATE_PACK` optional for tests
- * Make tests run the same exacty way with `runtests.py` and `manage.py test`, see #183.
+ * Make tests run the same exactly way with `runtests.py` and `manage.py test`, see #183.
  * Bug fix for `wrap_together` when using it with partial slices.
  * Fixes for `KeepContext` context manager, see #180.
  * Added `FormHelper.field_template` attribute, for easily override field template for a specific form/formset, see docs.
@@ -160,7 +171,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Fixed some flaws in new testing structure by Markus Hametner.
  * Added helper attribute `error_text_inline` thanks to Lee Semel for controlling how to render form errors, as a block or inline, see #GH-87.
  * Support `ModelMultipleChoiceField` on `checkboxselectmultiple`, see #GH-86.
- * Redoing testing structure a litte bit, to run uni_form and bootstrap tests separately. They share most of the code base, but templates pack are separate and we need to care both have the same quality assurance.
+ * Redoing testing structure a little bit, to run uni_form and bootstrap tests separately. They share most of the code base, but templates pack are separate and we need to care both have the same quality assurance.
  * `AppendedText`, `PrependedText` and `AppendedPrependedText` were not respecting `form_show_errors` helper attribute, see #GH-77.
  * Added a version string to the app under root __init__, see #GH-76.
  * Added `html5_required` helper attribute for rendering required fields using HTML5 required attribute within the input, see #GH-72. Thanks to Lloyd Philbrook.
@@ -221,7 +232,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
 ## 1.1.0
 
  * Fixing produced html by a checkbox field, closing label the right way and rendering checkbox in the right place.
- * Passing full context to field rendering, to be consistent and having acess in `field.html` template to helper attributes.
+ * Passing full context to field rendering, to be consistent and having access in `field.html` template to helper attributes.
  * Custom helper attributes can now be set and will be part of templates context, this way you can define custom specific behavior.
  * Adding @kennethlove bootstrap template pack into django-crispy-forms core.
  * Adding `CRISPY_TEMPLATE_PACK` setting variable to easily switch between different template packs. Default template pack is now bootstrap.
@@ -232,7 +243,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Adding a `render_unmentioned_fields` helper attribute, that renders all fields in a form, no matter what the layout is. Default is `False`.
  * Adding a `|css_class` filter that renders field classes in an elegant way.
  * Turning `|with_class` filter into `{% crispy_field %}` tag, so that parameters for rendering the field can be passed.
- * Adding a `help_text_inline` helper attribute, that controls wether to render help texts in bootstrap with "help-inline" or "help-block".
+ * Adding a `help_text_inline` helper attribute, that controls whether to render help texts in bootstrap with "help-inline" or "help-block".
  * Adding a `flat_attrs` variable to the context passed to `field.html` to be able to do all kind of html attributes when rendering a field, using `Field` layout object.
  * Adding a `template` kwarg to `Field` layout object that allows to override template used for rendering a field.
  * Adding a `bootstrap.py` module that holds bootstrap specific layout objects, for higher bootstrap integration.
@@ -241,7 +252,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
 ## 1.0.0
 
  * Using `baseinput.html` template within `whole_uni_form.html`, to be DRY and consistent.
- * `BaseInput` subclasses like `Submit` can now have ids set, ussing `css_id`
+ * `BaseInput` subclasses like `Submit` can now have ids set, using `css_id`
  * Adding a simplified alternative syntax for `{% uni_form %}` tag. We can now do `{% uni_form form %}` for rendering a form using a helper, instead of `{% uni_form form form.helper %}`, if the `FormHelper` attribute attached to the form is named `helper`.
  * Improving `rendered_fields` checking performance.
  * Layouts are now rendered strictly. We don't render fields missed in the layout. If the form has a Meta class with `fields` or `exclude`, then we follow Django standards.
@@ -249,7 +260,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Fixed #GH-111 we were not rendering all the classes in `|with_class` filter
  * Moving django-uni-form to django-crispy-forms. Renaming tags, filters and modules. Updating tests and so on. Adding migration instructions.
  * More work on simpler and easier docs.
- * Adding `form_show_errors` helper attribute, that controls wether to render or not `form.errors`
+ * Adding `form_show_errors` helper attribute, that controls whether to render or not `form.errors`
  * Improving template hierarchy for more template code reusability.
 
 # CHANGELOG for django-uni-form
@@ -267,7 +278,7 @@ http://tothinkornottothink.com/post/10398684502/django-uni-form-0-9-0-is-out-sec
  * Improved testing coverage, specially for formsets and i18n.
  * Improved rendering performance of `{% uni_form %}` tag and `|as_uni_form` filter avoiding reloading templates every time, see #GH-81.
  * Added support for Django `Form.error_css_class` and `Form.required_css_class` custom CSS classes, see #GH-87.
- * Moved template code in Layout objects into separate files in `uni_form/layout` directory. Layout objects templates can now be easily overriden, see #GH-37.
+ * Moved template code in Layout objects into separate files in `uni_form/layout` directory. Layout objects templates can now be easily overridden, see #GH-37.
  * `form_style` can now be used without having to set a helper Layout, see #GH-85.
  * `form_action` is not lowered anymore and `form_action` is set to "" by default instead of "." thanks to Jianbo Guo, see #GH-84.
  * `Multifield` field template `multifield.html` markup fixed, adding `help_text` support and removing `labelclass` from labels.

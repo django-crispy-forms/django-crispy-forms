@@ -29,11 +29,11 @@ Of course, you can still use a helper, otherwise there would be nothing crispy i
                 'favorite_color',
                 'favorite_food',
             )
-            self.render_required_fields = True,
+            self.render_required_fields = True
 
 This helper is quite easy to follow. We want our form to use ``POST`` method, and we want ``favorite_color`` to be the first field, then ``favorite_food`` and finally we tell crispy to render all required fields after. Let's go and use it, when using ``{% crispy %}`` tag in a template there is one main difference when rendering formsets vs forms, in this case you need to specify the helper explicitly.
 
-This would be part of an hipothetic function view::
+This would be part of an hypothetic function view::
 
     formset = ExampleFormSet()
     helper = ExampleFormSetHelper()
@@ -47,7 +47,7 @@ There are two ways you can add submit buttons to a formset. Using ``FormHelper.a
 
     helper.add_input(Submit("submit", "Save"))
 
-Or you can set ``FormHelper.form_tag`` to ``False`` and control the formset outter structure at your will writing boring HTML::
+Or you can set ``FormHelper.form_tag`` to ``False`` and control the formset outer structure at your will writing boring HTML::
 
     <form action="{% url 'save_formset' %}" method="POST">
         {% crispy formset helper %}
@@ -74,7 +74,7 @@ Basically you can access a ``forloop`` Django node, as if you were rendering you
 Custom templates and table inline formsets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Default formset template will render your formset's form using divs, but many times people prefer tables for formsets. Don't worry, crispy-forms's got you covered. ``FormHelper`` has an attribute named ``template`` that can be used to specify a custom template for rendering a form or formset, in this case a formset. Obviously when we specify a ``template`` attribute, we are making that helper only usuable with forms or formsets.
+Default formset template will render your formset's form using divs, but many times people prefer tables for formsets. Don't worry, crispy-forms's got you covered. ``FormHelper`` has an attribute named ``template`` that can be used to specify a custom template for rendering a form or formset, in this case a formset. Obviously when we specify a ``template`` attribute, we are making that helper only usable with forms or formsets.
 
 The name of the template to use is **table_inline_formset.html** and you use it doing::
 

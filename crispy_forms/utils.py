@@ -1,4 +1,4 @@
-from __future__ import with_statement
+from __future__ import unicode_literals
 import logging
 import sys
 
@@ -9,28 +9,34 @@ from django.template.loader import get_template
 from django.utils.html import conditional_escape
 
 from .base import KeepContext
-from .compatibility import text_type, PY2, memoize
+from .compatibility import lru_cache, text_type, PY2, SimpleLazyObject
 
-# Global field template, default template used for rendering a field.
 
-TEMPLATE_PACK = getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+def get_template_pack():
+    return getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
 
-# By memoizeing we avoid loading the template every time render_field
+
+TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
+
+
+# By caching we avoid loading the template every time render_field
 # is called without a template
+@lru_cache()
 def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
-default_field_template = memoize(default_field_template, {}, 1)
+
 
 def set_hidden(widget):
-    '''
+    """
     set widget to hidden
 
     different starting in Django 1.7, when is_hidden ceases to be a
     true attribute and is determined by the input_type attribute
-    '''
+    """
     widget.input_type = 'hidden'
     if not widget.is_hidden:
         widget.is_hidden = True
+
 
 def render_field(
     field, form, form_style, context, template=None, labelclass=None,
@@ -161,7 +167,7 @@ def flatatt(attrs):
     XML-style pairs.  It is assumed that the keys do not need to be XML-escaped.
     If the passed dictionary is empty, then return an empty string.
     """
-    return u''.join([u' %s="%s"' % (k.replace('_', '-'), conditional_escape(v)) for k, v in attrs.items()])
+    return ''.join([' %s="%s"' % (k.replace('_', '-'), conditional_escape(v)) for k, v in attrs.items()])
 
 
 def render_crispy_form(form, helper=None, context=None):

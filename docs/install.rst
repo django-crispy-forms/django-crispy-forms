@@ -62,7 +62,7 @@ Moving from django-uni-form to django-crispy-forms
 
 django-crispy-forms was started as a friendly fork of django-uni-form. We are aware that a name change implies some hassle updating imports and templates, here is some help mitigating it. This is what you should replace when upgrading:
 
-1. Your ``ÌNSTALLED_APPS`` should point to ``crispy_forms`` instead of ``uni_form``
+1. Your ``INSTALLED_APPS`` should point to ``crispy_forms`` instead of ``uni_form``
 
 2. All imports have to be done from crispy forms::
 
@@ -98,7 +98,7 @@ Using rpl::
     rpl -R "|as_uni_errors" "|as_crispy_errors" .
     rpl -R "|as_uni_field" "|as_crispy_field" .
 
-There is one filter that has been turned into a tag for extra layout power, so former filter name will not work. You will only need to update this if you have custom or overriden templates in your project::
+There is one filter that has been turned into a tag for extra layout power, so former filter name will not work. You will only need to update this if you have custom or overridden templates in your project::
 
     field|with_class ------> {% crispy_field field %}
 

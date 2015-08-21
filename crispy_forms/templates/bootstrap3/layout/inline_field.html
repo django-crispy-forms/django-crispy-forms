@@ -1,7 +1,7 @@
 {% load crispy_forms_field %}
 
 {% if field.is_hidden %}
-	{{ field }}
+    {{ field }}
 {% else %}
     {% if field|is_checkbox %}
         <div id="div_{{ field.auto_id }}" class="checkbox">

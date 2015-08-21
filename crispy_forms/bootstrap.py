@@ -1,13 +1,13 @@
+from __future__ import unicode_literals
 from random import randint
 
-from django.template import Context, Template
+from django.template import Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 
 from .compatibility import text_type
 from .layout import LayoutObject, Field, Div
 from .utils import render_field, flatatt, TEMPLATE_PACK
-
 
 
 class PrependedAppendedText(Field):
@@ -22,8 +22,10 @@ class PrependedAppendedText(Field):
 
         self.input_size = None
         css_class = kwargs.get('css_class', '')
-        if css_class.find('input-lg') != -1: self.input_size = 'input-lg'
-        if css_class.find('input-sm') != -1: self.input_size = 'input-sm'
+        if 'input-lg' in css_class:
+            self.input_size = 'input-lg'
+        if 'input-sm' in css_class:
+            self.input_size = 'input-sm'
 
         super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
 
@@ -31,7 +33,7 @@ class PrependedAppendedText(Field):
         extra_context = {
             'crispy_appended_text': self.appended_text,
             'crispy_prepended_text': self.prepended_text,
-            'input_size' : self.input_size,
+            'input_size': self.input_size,
             'active': getattr(self, "active", False)
         }
         template = self.template % template_pack
@@ -79,9 +81,7 @@ class FormActions(LayoutObject):
             self.attrs['class'] = self.attrs.pop('css_class')
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        html = u''
-        for field in self.fields:
-            html += render_field(field, form, form_style, context, template_pack=template_pack, **kwargs)
+        html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
         extra_context = {
             'formactions': self,
             'fields_output': html
@@ -129,14 +129,14 @@ class FieldWithButtons(Div):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
-        buttons = ''
         field_template = self.field_template % template_pack
-        for field in self.fields[1:]:
-            buttons += render_field(
+        buttons = ''.join(
+            render_field(
                 field, form, form_style, context,
                 field_template, layout_object=self,
                 template_pack=template_pack, **kwargs
-            )
+            ) for field in self.fields[1:]
+        )
 
         extra_context = {'div': self, 'buttons': buttons}
         template = self.template % template_pack
@@ -158,7 +158,7 @@ class FieldWithButtons(Div):
 
 class StrictButton(object):
     """
-    Layout oject for rendering an HTML button::
+    Layout object for rendering an HTML button::
 
         Button("button content", css_class="extra")
     """
@@ -279,18 +279,13 @@ class TabHolder(ContainerHolder):
     template = '%s/layout/tab.html'
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        links, content = '', ''
         for tab in self.fields:
             tab.active = False
 
         # Open the group that should be open.
         self.open_target_group_for_form(form)
-
-        for tab in self.fields:
-            content += render_field(
-                tab, form, form_style, context, template_pack=template_pack, **kwargs
-            )
-            links += tab.render_link(template_pack)
+        content = self.get_rendered_fields(form, form_style, context, template_pack)
+        links = ''.join(tab.render_link(template_pack) for tab in self.fields)
 
         extra_context = {
             'tabs': self,
