@@ -1,5 +1,16 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.5.1 (2015/8/21)
+
+Special thanks in this release to Dmitry Dygalo @Stranger6667 for a marathon effort updating the
+test suite and code base.
+
+  * Switched to py.test. Modernised test suite. Enabled tox, code coverage and Travis for all
+    supported Python/Django versions. [See list of Merged "Testing/Process" PRs here](https://github.com/maraujop/django-crispy-forms/pulls?q=is%3Apr+is%3Amerged+milestone%3A1.5.1+label%3ATesting%2FProcess)
+  * Added compatibility with Python 3.2
+  * Fix: Allow LayoutObject & BaseInputs to accept custom template #493
+
+
 ## 1.5.0 (2015/8/16)
 
 Special thanks in this release for all the **<a href="http://flattr.com/thing/512037/django-crispy-forms">supporters and donators</a>**.
