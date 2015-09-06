@@ -232,7 +232,7 @@ One easy way to validate a crispy-form through AJAX and re-render the resulting 
 
 Our server side code could be::
 
-    @jsonview
+    @json_view
     def save_example_form(request):
         form = ExampleForm(request.POST or None) 
         if form.is_valid():
