@@ -232,6 +232,8 @@ One easy way to validate a crispy-form through AJAX and re-render the resulting 
 
 Our server side code could be::
 
+    from crispy_forms.utils import render_crispy_form
+    
     @jsonview
     def save_example_form(request):
         form = ExampleForm(request.POST or None) 
