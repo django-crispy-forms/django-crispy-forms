@@ -1,5 +1,13 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.5.2 (2015/9/10)
+
+  * Fix: KeyError: u'wrapper_class' when clearing template context. #511, #512
+  * Fix: Alignment of stacked checkboxes and radio buttons in Bootstrap 3 #358
+
+See [1.5.2 Milestone](https://github.com/maraujop/django-crispy-forms/issues?utf8=✓&q=milestone%3A1.5.2+) for full issue list.
+
+
 ## 1.5.1 (2015/8/21)
 
 Special thanks in this release to Dmitry Dygalo @Stranger6667 for a marathon effort updating the
