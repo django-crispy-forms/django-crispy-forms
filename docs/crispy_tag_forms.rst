@@ -247,7 +247,16 @@ Our server side code could be::
         form_html = render_crispy_form(form, context=request_context)
         return {'success': False, 'form_html': form_html}
 
-I'm using a jsonview decorator from `django-jsonview`_. In our client side using jQuery would look like::
+I'm using a jsonview decorator from `django-jsonview`_.
+
+Note that in Django versions 1.8 and onwards, using ``RequestContext`` in this way will not work. Instead you can provide ``render_crispy_form`` with the necessary CSRF token with the following code
+
+    from django.core.context_processors import csrf
+    ctx = {}
+    ctx.update(csrf(request))
+    form_html = render_crispy_form(form, context=ctx)
+
+In our client side using jQuery would look like::
 
     var example_form = '#example-form';
 
