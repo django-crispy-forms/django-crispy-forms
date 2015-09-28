@@ -369,7 +369,7 @@ def test_render_hidden_fields():
 
     html = render_crispy_form(test_form)
     assert html.count('<input') == 3
-    assert html.count('hidden') == 2
+    assert html.count('type="hidden"') == 2
 
     if django.VERSION < (1, 5):
         assert html.count('type="hidden" name="password1"') == 1

@@ -126,6 +126,13 @@ class CrispyFieldNode(template.Node):
             if html5_required and field.field.required and 'required' not in widget.attrs:
                 if field.field.widget.__class__.__name__ is not 'RadioSelect':
                     widget.attrs['required'] = 'required'
+            if 'aria-required' not in widget.attrs:
+                # RadioSelect and CheckboxInput do not support aria-required according to spec
+                if field.field.widget.__class__.__name__ not in ('RadioSelect', 'CheckboxInput'):
+                    if field.field.required:
+                        widget.attrs['aria-required'] = 'true'
+                    else:
+                        widget.attrs['aria-required'] = 'false'
 
             for attribute_name, attribute in attr.items():
                 attribute_name = template.Variable(attribute_name).resolve(context)

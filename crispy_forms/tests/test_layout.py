@@ -295,7 +295,7 @@ def test_formset_layout(settings):
                 'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
             ) == 1
             hidden_count += 1
-    assert html.count("hidden") == hidden_count
+    assert html.count('type="hidden"') + html.count("type='hidden'") == hidden_count
 
     # Check form structure
     assert html.count('<form') == 1
