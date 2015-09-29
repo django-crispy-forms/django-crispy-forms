@@ -58,6 +58,12 @@ def css_class(field):
     """
     return field.field.widget.__class__.__name__.lower()
 
+@register.filter
+def aria_describedby(field):
+    """
+    Returns id of description tag
+    """
+    return "hints_for_%s" % field.auto_id
 
 def pairwise(iterable):
     """s -> (s0,s1), (s2,s3), (s4, s5), ..."""
@@ -159,6 +165,7 @@ def crispy_field(parser, token):
     for attribute_name, value in pairwise(token):
         attrs[attribute_name] = value
 
+    print attrs
     return CrispyFieldNode(field, attrs)
 
 

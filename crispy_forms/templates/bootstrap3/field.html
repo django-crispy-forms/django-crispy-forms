@@ -1,5 +1,4 @@
 {% load crispy_forms_field %}
-
 {% if field.is_hidden %}
     {{ field }}
 {% else %}
@@ -25,18 +24,24 @@
         {% endif %}
 
         {% if not field|is_checkboxselectmultiple and not field|is_radioselect %}
+            {% with aria_describedby=field|aria_describedby %}
             {% if field|is_checkbox and form_show_labels %}
                 <label for="{{ field.id_for_label }}" class="{% if field.field.required %} requiredField{% endif %}">
-                    {% crispy_field field %}
+                    {% crispy_field field "aria-describedby" aria_describedby %}
                     {{ field.label|safe }}
+                    <span id="{{ field|aria_describedby }}">
                     {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                    </span>
                 </label>
             {% else %}
                 <div class="controls {{ field_class }}">
-                    {% crispy_field field %}
+                    {% crispy_field field "aria-describedby" aria_describedby %}
+                    <div id="{{ field|aria_describedby }}">
                     {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                    </div>
                 </div>
             {% endif %}
+            {% endwith %}
         {% endif %}
     </{% if tag %}{{ tag }}{% else %}div{% endif %}>
     {% if field|is_checkbox %}
