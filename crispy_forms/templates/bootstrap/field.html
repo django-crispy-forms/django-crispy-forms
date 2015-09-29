@@ -20,16 +20,22 @@
 
         {% if not field|is_checkboxselectmultiple and not field|is_radioselect %}
             <div class="controls">
+            {% with aria_describedby=field|aria_describedby %}
                 {% if field|is_checkbox and form_show_labels %}
                     <label for="{{ field.id_for_label }}" class="checkbox {% if field.field.required %}requiredField{% endif %}">
                         {% crispy_field field %}
                         {{ field.label|safe }}
+                        <span id="{{ field|aria_describedby }}">
                         {% include 'bootstrap/layout/help_text_and_errors.html' %}
+                        </span>
                     </label>
                 {% else %}
-                    {% crispy_field field %}
+                    {% crispy_field field "aria-describedby" aria_describedby %}
+                    <div id="{{ field|aria_describedby }}">
                     {% include 'bootstrap/layout/help_text_and_errors.html' %}
+                    </div>
                 {% endif %}
+            {% endwith %}
             </div>
         {% endif %}
     </{% if tag %}{{ tag }}{% else %}div{% endif %}>
