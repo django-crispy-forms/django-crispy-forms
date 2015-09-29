@@ -165,7 +165,6 @@ def crispy_field(parser, token):
     for attribute_name, value in pairwise(token):
         attrs[attribute_name] = value
 
-    print attrs
     return CrispyFieldNode(field, attrs)
 
 
