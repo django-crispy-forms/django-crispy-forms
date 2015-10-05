@@ -40,7 +40,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
 
         {{ myform|crispy:"bootstrap" }}
 
-    In ``bootstrap3`` for horizontal forms you can do::
+    In ``bootstrap3`` or ``bootstrap4`` for horizontal forms you can do::
 
         {{ myform|label_class:"col-lg-2",field_class:"col-lg-8" }}
     """

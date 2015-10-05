@@ -114,7 +114,7 @@ class CrispyFieldNode(template.Node):
                 css_class = class_name
 
             if (
-                template_pack == 'bootstrap3'
+                template_pack in ['bootstrap3', 'bootstrap4']
                 and not is_checkbox(field)
                 and not is_file(field)
             ):

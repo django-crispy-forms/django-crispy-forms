@@ -16,7 +16,7 @@ from django.test import RequestFactory
 from django.utils.translation import ugettext_lazy as _
 
 from .compatibility import get_template_from_string
-from .conftest import only_uni_form, only_bootstrap3, only_bootstrap
+from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
 from .forms import (
     TestForm, TestForm2, TestForm3, CheckboxesTestForm,
     TestForm4, CrispyTestModel, TestForm5
@@ -565,11 +565,32 @@ def test_keepcontext_context_manager(settings):
 
     if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
         assert response.content.count(b'checkbox inline') == 3
-    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+    elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
         assert response.content.count(b'checkbox-inline') == 3
 
 
 @only_bootstrap3
+def test_form_inline():
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.form_class = 'form-inline'
+    form.helper.field_template = 'bootstrap3/layout/inline_field.html'
+    form.helper.layout = Layout(
+        'email',
+        'password1',
+        'last_name',
+    )
+
+    html = render_crispy_form(form)
+    assert html.count('class="form-inline"') == 1
+    assert html.count('class="form-group"') == 3
+    assert html.count('<label for="id_email" class="sr-only') == 1
+    assert html.count('id="div_id_email" class="form-group"') == 1
+    assert html.count('placeholder="email"') == 1
+    assert html.count('</label> <input') == 3
+
+
+@only_bootstrap4
 def test_form_inline():
     form = TestForm()
     form.helper = FormHelper()

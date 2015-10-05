@@ -16,7 +16,7 @@ import pytest
 from django.utils.translation import ugettext_lazy as _
 
 from .compatibility import get_template_from_string
-from .conftest import only_uni_form, only_bootstrap3, only_bootstrap
+from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
 from .forms import TestForm
 from crispy_forms.bootstrap import (
     FieldWithButtons, PrependedAppendedText, AppendedText, PrependedText,
@@ -509,7 +509,7 @@ def test_error_text_inline(settings):
     html = render_crispy_form(form)
 
     help_class = 'help-inline'
-    if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+    if settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
         help_class = 'help-block'
 
     matches = re.findall(
@@ -607,6 +607,35 @@ def test_label_class_and_field_class():
 
 
 @only_bootstrap3
+def test_template_pack():
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'uni_form'
+    html = render_crispy_form(form)
+    assert 'form-control' not in html
+    assert 'ctrlHolder' in html
+
+
+@only_bootstrap4
+def test_label_class_and_field_class():
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.label_class = 'col-lg-2'
+    form.helper.field_class = 'col-lg-8'
+    html = render_crispy_form(form)
+
+    assert '<div class="form-group row"> <div class="controls col-lg-offset-2 col-lg-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput checkbox" id="id_is_company" name="is_company" type="checkbox" />'
+    assert html.count('col-lg-8') == 7
+
+    form.helper.label_class = 'col-sm-3'
+    form.helper.field_class = 'col-sm-8'
+    html = render_crispy_form(form)
+
+    assert '<div class="form-group row"> <div class="controls col-sm-offset-3 col-sm-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput checkbox" id="id_is_company" name="is_company" type="checkbox" />'
+    assert html.count('col-sm-8') == 7
+
+
+@only_bootstrap4
 def test_template_pack():
     form = TestForm()
     form.helper = FormHelper()

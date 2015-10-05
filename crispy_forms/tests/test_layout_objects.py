@@ -97,6 +97,8 @@ def test_field_wrapper_class(settings):
         assert html.count('class="control-group testing"') == 1
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         assert html.count('class="form-group testing"') == 1
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert html.count('class="form-group testing"') == 1
 
 
 def test_html_with_carriage_returns(settings):
@@ -175,7 +177,7 @@ class TestBootstrapLayoutObjects(object):
             assert html.count('<span class="add-on">#</span>') == 1
             assert html.count('<span class="add-on">$</span>') == 1
 
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+        if settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
             assert html.count('<span class="input-group-addon">@</span>') == 1
             assert html.count('<span class="input-group-addon">gmail.com</span>') == 1
             assert html.count('<span class="input-group-addon">#</span>') == 1
@@ -191,7 +193,7 @@ class TestBootstrapLayoutObjects(object):
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
             assert html.count('radio inline"') == 2
-        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+        elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
             assert html.count('radio-inline"') == 2
 
     def test_accordion_and_accordiongroup(self, settings):
@@ -378,6 +380,8 @@ class TestBootstrapLayoutObjects(object):
         form_group_class = 'control-group'
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             form_group_class = 'form-group'
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            form_group_class = 'form-group'
 
         assert html.count('class="%s extra"' % form_group_class) == 1
         assert html.count('autocomplete="off"') == 1
@@ -393,7 +397,7 @@ class TestBootstrapLayoutObjects(object):
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
             assert html.count('class="input-append"') == 1
-        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+        elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
             assert html.count('class="input-group-btn') == 1
 
     def test_hidden_fields(self):
@@ -428,6 +432,6 @@ class TestBootstrapLayoutObjects(object):
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
             assert html.count('checkbox inline"') == 3
             assert html.count('inline"') == 3
-        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+        elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
             assert html.count('checkbox-inline"') == 3
             assert html.count('inline="True"') == 4

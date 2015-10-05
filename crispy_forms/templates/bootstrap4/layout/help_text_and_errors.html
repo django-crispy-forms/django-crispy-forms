@@ -1,0 +1,13 @@
+{% if help_text_inline and not error_text_inline %}
+    {% include 'bootstrap4/layout/help_text.html' %}
+{% endif %}
+
+{% if error_text_inline %}
+    {% include 'bootstrap4/layout/field_errors.html' %}
+{% else %}
+    {% include 'bootstrap4/layout/field_errors_block.html' %}
+{% endif %}
+
+{% if not help_text_inline %}
+    {% include 'bootstrap4/layout/help_text.html' %}
+{% endif %}
