@@ -1,5 +1,5 @@
 {% if form.form_html %}
-    {{ form.media }}
+    {% if include_media %}{{ form.media }}{% endif %}
     {% if form_show_errors %}
         {% include "bootstrap/errors.html" %}
     {% endif %}

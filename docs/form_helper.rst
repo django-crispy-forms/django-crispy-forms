@@ -93,6 +93,9 @@ Helper attributes you can set
 **render_required_fields = False**
     By default django-crispy-forms renders the layout specified if it exists strictly. Sometimes you might be interested in rendering all form's hidden required fields no matter if they are mentioned or not. It defaults to ``False``.
 
+**include_media = True**
+    By default django-crispy-forms renders all form media for you within the form. If you want to render form media yourself manually outside the form, set this to ``False``. If you want to globally prevent rendering of form media, override the FormHelper class with this setting modified. It defaults to ``False``.
+
 
 Bootstrap Helper attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

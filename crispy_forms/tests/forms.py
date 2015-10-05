@@ -115,3 +115,9 @@ class TestForm5(forms.Form):
         choices=choices
     )
     pk = forms.IntegerField()
+
+
+class TestFormWithMedia(forms.Form):
+    class Media:
+        css = {'all': ('test.css',)}
+        js = ('test.js',)

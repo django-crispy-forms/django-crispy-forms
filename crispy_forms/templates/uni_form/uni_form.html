@@ -1,4 +1,4 @@
-{{ form.media }}
+{% if include_media %}{{ form.media }}{% endif %}
 {% if form_show_errors %}
     {% include "uni_form/errors.html" %}
 {% endif %}
