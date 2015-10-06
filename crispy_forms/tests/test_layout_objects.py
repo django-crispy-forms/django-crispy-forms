@@ -179,9 +179,26 @@ class TestBootstrapLayoutObjects(object):
 
         if settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
             assert html.count('<span class="input-group-addon">@</span>') == 1
-            assert html.count('<span class="input-group-addon">gmail.com</span>') == 1
+            assert html.count(
+                '<span class="input-group-addon">gmail.com</span>') == 1
             assert html.count('<span class="input-group-addon">#</span>') == 1
             assert html.count('<span class="input-group-addon">$</span>') == 1
+
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+            test_form.helper.layout = Layout(
+                PrependedAppendedText('email', '@', 'gmail.com',
+                                      css_class='input-lg'), )
+            html = render_crispy_form(test_form)
+
+            assert '<span class="input-group-addon input-lg' in html
+
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            test_form.helper.layout = Layout(
+                PrependedAppendedText('email', '@', 'gmail.com',
+                                      css_class='form-control-lg'), )
+            html = render_crispy_form(test_form)
+
+            assert '<span class="input-group-addon form-control-lg' in html
 
     def test_inline_radios(self, settings):
         test_form = CheckboxesTestForm()
