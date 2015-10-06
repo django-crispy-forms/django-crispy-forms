@@ -624,16 +624,16 @@ def test_bootstrap4_label_class_and_field_class():
     form.helper.field_class = 'col-lg-8'
     html = render_crispy_form(form)
 
-    assert html.count('<div class="form-group row">')
-    assert html.count('<div class="controls col-lg-offset-2 col-lg-8">')
+    assert '<div class="form-group row">' in html
+    assert '<div class="controls col-lg-offset-2 col-lg-8">' in html
     assert html.count('col-lg-8') == 7
 
     form.helper.label_class = 'col-sm-3'
     form.helper.field_class = 'col-sm-8'
     html = render_crispy_form(form)
 
-    assert html.count('<div class="form-group row">')
-    assert html.count('<div class="controls col-sm-offset-3 col-sm-8">')
+    assert '<div class="form-group row">' in html
+    assert '<div class="controls col-sm-offset-3 col-sm-8">' in html
     assert html.count('col-sm-8') == 7
 
 
