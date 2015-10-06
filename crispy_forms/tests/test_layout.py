@@ -312,6 +312,8 @@ def test_formset_layout(settings):
     assert html.count('Note for first form only') == 1
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         assert html.count('formRow') == 3
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert html.count('row') == 21
     else:
         assert html.count('row') == 3
 
@@ -591,11 +593,11 @@ def test_form_inline():
 
 
 @only_bootstrap4
-def test_form_inline():
+def test_bootstrap4_form_inline():
     form = TestForm()
     form.helper = FormHelper()
     form.helper.form_class = 'form-inline'
-    form.helper.field_template = 'bootstrap3/layout/inline_field.html'
+    form.helper.field_template = 'bootstrap4/layout/inline_field.html'
     form.helper.layout = Layout(
         'email',
         'password1',
