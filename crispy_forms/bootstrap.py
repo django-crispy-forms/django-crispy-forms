@@ -26,6 +26,11 @@ class PrependedAppendedText(Field):
             self.input_size = 'input-lg'
         if 'input-sm' in css_class:
             self.input_size = 'input-sm'
+        # bootstrap 4
+        if 'form-control-lg' in css_class:
+            self.input_size = 'form-control-lg'
+        if 'form-control-sm' in css_class:
+            self.input_size = 'form-control-sm'
 
         super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
 

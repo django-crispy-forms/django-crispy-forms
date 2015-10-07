@@ -1,0 +1,10 @@
+{% load crispy_forms_field %}
+
+
+<div id="div_{{ field.auto_id }}" class="form-group row{% if form_show_errors and field.errors %} error{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+    <label class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">{{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}</label>
+    <div class="controls {{ field_class }}">
+        {% crispy_field field 'disabled' 'disabled' %}
+        {% include 'bootstrap4/layout/help_text.html' %}
+    </div>
+</div>

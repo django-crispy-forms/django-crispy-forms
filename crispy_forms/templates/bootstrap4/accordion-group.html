@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{ div.data_parent }}" href="#{{ div.css_id }}">{{ div.name }}</a>
+        </h4>
+    </div>
+    <div id="{{ div.css_id }}" class="panel-collapse collapse{% if div.active %} in{% endif %}" >
+        <div class="panel-body">
+            {{ fields|safe }}
+        </div>
+    </div>
+</div>
