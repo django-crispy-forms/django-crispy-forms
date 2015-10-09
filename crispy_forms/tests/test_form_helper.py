@@ -182,6 +182,15 @@ def test_media_is_included_by_default_with_bootstrap3():
     assert 'test.js' in html
 
 
+def test_media_is_included_by_default_with_bootstrap4():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap4'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
 def test_media_removed_when_include_media_is_false_with_uniform():
     form = TestFormWithMedia()
     form.helper = FormHelper()
@@ -206,6 +215,16 @@ def test_media_removed_when_include_media_is_false_with_bootstrap3():
     form = TestFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'bootstrap3'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
+
+
+def test_media_removed_when_include_media_is_false_with_bootstrap4():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap4'
     form.helper.include_media = False
     html = render_crispy_form(form)
     assert 'test.css' not in html
