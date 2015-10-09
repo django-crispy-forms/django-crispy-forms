@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .compatibility import get_template_from_string
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
-from .forms import TestForm
+from .forms import TestForm, TestFormWithMedia
 from crispy_forms.bootstrap import (
     FieldWithButtons, PrependedAppendedText, AppendedText, PrependedText,
     StrictButton
@@ -153,6 +153,82 @@ def test_html5_required():
     form.helper = FormHelper()
     form.helper.html5_required = False
     html = render_crispy_form(form)
+
+
+def test_media_is_included_by_default_with_uniform():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'uni_form'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
+def test_media_is_included_by_default_with_bootstrap():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
+def test_media_is_included_by_default_with_bootstrap3():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap3'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
+def test_media_is_included_by_default_with_bootstrap4():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap4'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
+def test_media_removed_when_include_media_is_false_with_uniform():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'uni_form'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
+
+
+def test_media_removed_when_include_media_is_false_with_bootstrap():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
+
+
+def test_media_removed_when_include_media_is_false_with_bootstrap3():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap3'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
+
+
+def test_media_removed_when_include_media_is_false_with_bootstrap4():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap4'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
 
 
 def test_attrs():
