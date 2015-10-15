@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 import re
 
+import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
@@ -527,7 +529,10 @@ def test_multifield_errors():
 
     form.helper.form_show_errors = True
     html = render_crispy_form(form)
-    assert html.count('error') == 3
+    if django.VERSION < (1, 9):
+        assert html.count('error') == 3
+    else:
+        assert html.count('error') == 1
 
     # Reset layout for avoiding side effects
     form.helper.layout = Layout(
