@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 import re
 
-import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
@@ -447,12 +446,8 @@ def test_render_hidden_fields():
     assert html.count('<input') == 3
     assert html.count('hidden') == 2
 
-    if django.VERSION < (1, 5):
-        assert html.count('type="hidden" name="password1"') == 1
-        assert html.count('type="hidden" name="password2"') == 1
-    else:
-        assert html.count('name="password1" type="hidden"') == 1
-        assert html.count('name="password2" type="hidden"') == 1
+    assert html.count('name="password1" type="hidden"') == 1
+    assert html.count('name="password2" type="hidden"') == 1
 
 
 def test_render_required_fields():
