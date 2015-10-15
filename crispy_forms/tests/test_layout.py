@@ -392,10 +392,11 @@ def test_l10n(settings):
 
     # Make sure label values are NOT localized.
     # Dirty check, which relates on HTML structure
+    label_text = '>1000'
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         label_text = '/> 1000<'
-    else:
-        label_text = '>1000'
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        label_text = '>\n            1000'
     assert html.count(label_text) == 2
 
 
