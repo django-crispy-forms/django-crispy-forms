@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 import re
 
 import django
@@ -447,12 +448,8 @@ def test_render_hidden_fields():
     assert html.count('<input') == 3
     assert html.count('hidden') == 2
 
-    if django.VERSION < (1, 5):
-        assert html.count('type="hidden" name="password1"') == 1
-        assert html.count('type="hidden" name="password2"') == 1
-    else:
-        assert html.count('name="password1" type="hidden"') == 1
-        assert html.count('name="password2" type="hidden"') == 1
+    assert html.count('name="password1" type="hidden"') == 1
+    assert html.count('name="password2" type="hidden"') == 1
 
 
 def test_render_required_fields():
@@ -532,7 +529,10 @@ def test_multifield_errors():
 
     form.helper.form_show_errors = True
     html = render_crispy_form(form)
-    assert html.count('error') == 3
+    if django.VERSION < (1, 9):
+        assert html.count('error') == 3
+    else:
+        assert html.count('error') == 1
 
     # Reset layout for avoiding side effects
     form.helper.layout = Layout(

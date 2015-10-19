@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
@@ -270,31 +269,20 @@ def test_formset_layout(settings):
 
     # Check formset fields
     hidden_count = 4  # before Django 1.7 added MIN_NUM_FORM_COUNT
-    if django.VERSION < (1, 5):
+    assert html.count(
+        'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
+    ) == 1
+    assert html.count(
+        'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
+    ) == 1
+    assert html.count(
+        'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
+    ) == 1
+    if hasattr(forms.formsets, 'MIN_NUM_FORM_COUNT'):
         assert html.count(
-            'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
+            'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
         ) == 1
-        assert html.count(
-            'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
-        ) == 1
-        assert html.count(
-            'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
-        ) == 1
-    else:
-        assert html.count(
-            'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-        ) == 1
-        assert html.count(
-            'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-        ) == 1
-        assert html.count(
-            'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-        ) == 1
-        if hasattr(forms.formsets, 'MIN_NUM_FORM_COUNT'):
-            assert html.count(
-                'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
-            ) == 1
-            hidden_count += 1
+        hidden_count += 1
     assert html.count("hidden") == hidden_count
 
     # Check form structure
@@ -331,26 +319,15 @@ def test_modelformset_layout():
     assert html.count("id_form-1-id") == 1
     assert html.count("id_form-2-id") == 1
 
-    if django.VERSION < (1, 5):
-        assert html.count(
-            'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
-        ) == 1
-        assert html.count(
-            'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
-        ) == 1
-        assert html.count(
-            'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
-        ) == 1
-    else:
-        assert html.count(
-            'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-        ) == 1
-        assert html.count(
-            'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-        ) == 1
-        assert html.count(
-            'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-        ) == 1
+    assert html.count(
+        'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
+    ) == 1
+    assert html.count(
+        'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
+    ) == 1
+    assert html.count(
+        'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
+    ) == 1
 
     assert html.count('name="form-0-email"') == 1
     assert html.count('name="form-1-email"') == 1
@@ -392,10 +369,11 @@ def test_l10n(settings):
 
     # Make sure label values are NOT localized.
     # Dirty check, which relates on HTML structure
+    label_text = '>1000'
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         label_text = '/> 1000<'
-    else:
-        label_text = '>1000'
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        label_text = '>\n            1000'
     assert html.count(label_text) == 2
 
 

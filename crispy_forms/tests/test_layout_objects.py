@@ -190,6 +190,7 @@ class TestBootstrapLayoutObjects(object):
                                       css_class='input-lg'), )
             html = render_crispy_form(test_form)
 
+            assert '<input class="input-lg' in html
             assert '<span class="input-group-addon input-lg' in html
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
@@ -198,7 +199,8 @@ class TestBootstrapLayoutObjects(object):
                                       css_class='form-control-lg'), )
             html = render_crispy_form(test_form)
 
-            assert '<span class="input-group-addon form-control-lg' in html
+            assert '<input class="form-control-lg' in html
+            assert '<span class="input-group-addon' in html
 
     def test_inline_radios(self, settings):
         test_form = CheckboxesTestForm()
