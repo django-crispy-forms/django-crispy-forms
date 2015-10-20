@@ -3,7 +3,14 @@ import logging
 import sys
 
 from django.conf import settings
-from django.forms.forms import BoundField
+
+try:
+    # django < 1.9
+    from django.forms.forms import BoundField
+except ImportError:
+    # django 1.9
+    from django.forms import BoundField
+
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import conditional_escape

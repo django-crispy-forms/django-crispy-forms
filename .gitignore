@@ -28,3 +28,4 @@ _build
 
 # OSX
 *.DS_Store
+/.cache

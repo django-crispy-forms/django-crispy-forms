@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.forms.forms import BoundField
+try:
+    # django < 1.9
+    from django.forms.forms import BoundField
+except ImportError:
+    # django 1.9
+    from django.forms import BoundField
+
 from django.forms.models import formset_factory
 from django.template import Context
 
