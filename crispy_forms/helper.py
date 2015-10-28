@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from crispy_forms.compatibility import string_types
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
-from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK
+from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, list_intersection, list_difference
 from crispy_forms.exceptions import FormHelpersException
 
 
@@ -319,11 +319,11 @@ class FormHelper(DynamicLayoutHandler):
         # we suppose they need to be rendered
         if hasattr(form, 'Meta'):
             if hasattr(form.Meta, 'fields'):
-                current_fields = set(getattr(form, 'fields', []))
-                meta_fields = set(getattr(form.Meta, 'fields'))
+                current_fields = tuple(getattr(form, 'fields', {}).keys())
+                meta_fields = getattr(form.Meta, 'fields')
 
-                fields_to_render = current_fields & meta_fields
-                left_fields_to_render = fields_to_render - form.rendered_fields
+                fields_to_render = list_intersection(current_fields, meta_fields)
+                left_fields_to_render = list_difference(fields_to_render, form.rendered_fields)
 
                 for field in left_fields_to_render:
                     html += render_field(field, form, self.form_style, context)
