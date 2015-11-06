@@ -182,7 +182,7 @@ class StrictButton(object):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         self.content = Template(text_type(self.content)).render(context)
-        template = self.get_template_name(template_pack)
+        template = self.template % template_pack
         return render_to_string(template, {'button': self}, context)
 
 
