@@ -190,3 +190,42 @@ def render_crispy_form(form, helper=None, context=None):
     })
 
     return node.render(node_context)
+
+
+def list_intersection(list1, list2):
+    """
+    Take the not-in-place intersection of two lists, similar to sets but preserving order.
+    Does not check unicity of list1.
+    """
+    intersection = []
+    for item in list1:
+        if item in list2:
+            intersection.append(item)
+    return intersection
+
+
+def list_union(*lists):
+    """
+    Take the not-in-place union of two or more lists, similar to sets but preserving order.
+    """
+    union = []
+    for li in lists:
+        for item in li:
+            if item not in union:
+                union.append(item)
+    return union
+
+
+def list_difference(left, right):
+    """
+    Take the not-in-place difference of two lists (left - right), similar to sets but preserving order.
+    """
+    blocked = set(right)
+    difference = []
+    for item in left:
+        if item not in blocked:
+            blocked.add(item)
+            difference.append(item)
+    return difference
+
+
