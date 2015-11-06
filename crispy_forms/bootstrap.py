@@ -36,7 +36,7 @@ class PrependedAppendedText(Field):
             'input_size': self.input_size,
             'active': getattr(self, "active", False)
         }
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_field(
             self.field, form, form_style, context,
             template=template, attrs=self.attrs,
@@ -86,7 +86,7 @@ class FormActions(LayoutObject):
             'formactions': self,
             'fields_output': html
         }
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(template, extra_context, context)
 
     def flat_attrs(self):
@@ -139,7 +139,7 @@ class FieldWithButtons(Div):
         )
 
         extra_context = {'div': self, 'buttons': buttons}
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
 
         if isinstance(self.fields[0], Field):
             # FieldWithButtons(Field('field_name'), StrictButton("go"))
@@ -292,7 +292,7 @@ class TabHolder(ContainerHolder):
             'links': links,
             'content': content
         }
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(template, extra_context, context)
 
 
@@ -335,7 +335,7 @@ class Accordion(ContainerHolder):
                 group, form, form_style, context, template_pack=template_pack, **kwargs
             )
 
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(
             template,
             {'accordion': self, 'content': content},
@@ -362,7 +362,7 @@ class Alert(Div):
         self.dismiss = dismiss
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_to_string(
             template,
             {'alert': self, 'content': self.content, 'dismiss': self.dismiss},
