@@ -87,7 +87,7 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
 
 
 @register.filter(name='as_crispy_field')
-def as_crispy_field(field, template_pack=TEMPLATE_PACK):
+def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_class=""):
     """
     Renders a form field like a django-crispy-forms field::
 
@@ -102,7 +102,13 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
         raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
 
     template = get_template('%s/field.html' % template_pack)
-    c = Context({'field': field, 'form_show_errors': True, 'form_show_labels': True})
+    c = Context({
+        'field': field,
+        'form_show_errors': True,
+        'form_show_labels': True,
+        'label_class': label_class,
+        'field_class': field_class,
+        })
     return template.render(c)
 
 
