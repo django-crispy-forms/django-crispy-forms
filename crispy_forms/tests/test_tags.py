@@ -11,6 +11,7 @@ from .compatibility import get_template_from_string
 from .conftest import only_bootstrap
 from .forms import TestForm
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
+from crispy_forms.exceptions import CrispyError
 
 
 def test_as_crispy_errors_form_without_non_field_errors():
@@ -41,7 +42,22 @@ def test_as_crispy_errors_form_with_non_field_errors():
     assert "<h3>" not in html
 
 
-def test_as_crispy_errors_form_with_formset_non_form_errors():
+def test_as_crispy_errors_formset_without_non_form_errors():
+    template = get_template_from_string("""
+        {% load crispy_forms_tags %}
+        {{ formset|as_crispy_errors }}
+    """)
+
+    TestFormset = formset_factory(TestForm, max_num=1, validate_max=True)
+    formset = TestFormset()
+    formset.is_valid()
+
+    c = Context({'formset': formset})
+    html = template.render(c)
+    assert not ("errorMsg" in html or "alert" in html)
+
+
+def test_as_crispy_errors_formset_with_non_form_errors():
     template = get_template_from_string("""
         {% load crispy_forms_tags %}
         {{ formset|as_crispy_errors }}
@@ -62,6 +78,39 @@ def test_as_crispy_errors_form_with_formset_non_form_errors():
     assert "errorMsg" in html or "alert" in html
     assert "<li>Please submit 1 or fewer forms.</li>" in html
     assert "<h3>" not in html
+
+
+def test_as_crispy_field_non_field(settings):
+    template = get_template_from_string("""
+        {% load crispy_forms_tags %}
+        {{ field|as_crispy_field }}
+    """)
+
+    c = Context({'field': "notafield"})
+
+    # Raises an AttributeError when tring to figure out how to render it
+    # Not sure if this is exoected behavior -- @kavdev
+    error_class = CrispyError if settings.DEBUG else AttributeError
+
+    with pytest.raises(error_class):
+        template.render(c)
+
+
+def test_as_crispy_field_bound_field():
+    template = get_template_from_string("""
+        {% load crispy_forms_tags %}
+        {{ field|as_crispy_field }}
+    """)
+
+    form = TestForm({'password1': "god", 'password2': "god"})
+    form.is_valid()
+
+    c = Context({'field': form["password1"]})
+
+    # Would raise exception if not a field
+    html = template.render(c)
+    assert "id_password1" in html
+    assert "id_password2" not in html
 
 
 def test_crispy_filter_with_form():
