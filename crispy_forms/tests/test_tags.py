@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import django
 from django.forms.forms import BoundField
 from django.forms.models import formset_factory
 from django.template import Context
@@ -23,10 +22,6 @@ def test_as_crispy_errors_form_without_non_field_errors():
     form.is_valid()
 
     c = Context({'form': form})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
     assert not ("errorMsg" in html or "alert" in html)
 
@@ -40,10 +35,6 @@ def test_as_crispy_errors_form_with_non_field_errors():
     form.is_valid()
 
     c = Context({'form': form})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
     assert "errorMsg" in html or "alert" in html
     assert "<li>Passwords dont match</li>" in html
@@ -56,10 +47,6 @@ def test_crispy_filter_with_form():
         {{ form|crispy }}
     """)
     c = Context({'form': TestForm()})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert "<td>" not in html
@@ -77,10 +64,6 @@ def test_crispy_filter_with_formset():
     testFormset = TestFormset()
 
     c = Context({'testFormset': testFormset})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert html.count('<form') == 0
@@ -99,10 +82,6 @@ def test_classes_filter():
     test_form = TestForm()
     test_form.fields['email'].widget.attrs.update({'class': 'email-fields'})
     c = Context({'testField': test_form.fields['email']})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
     assert 'email-fields' in html
 
@@ -117,10 +96,6 @@ def test_crispy_field_and_class_converters():
     bound_field = BoundField(test_form, field_instance, 'email')
 
     c = Context({'testField': bound_field})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
     assert 'error' in html
     assert 'inputtext' in html

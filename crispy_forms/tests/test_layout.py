@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
@@ -45,10 +44,6 @@ def test_invalid_unicode_characters(settings):
         {% crispy form form_helper %}
     """)
     c = Context({'form': TestForm(), 'form_helper': form_helper})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     settings.CRISPY_FAIL_SILENTLY = False
     with pytest.raises(Exception):
         template.render(c)
@@ -126,10 +121,6 @@ def test_double_rendered_field(settings):
         {% crispy form form_helper %}
     """)
     c = Context({'form': TestForm(), 'form_helper': form_helper})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     settings.CRISPY_FAIL_SILENTLY = False
     with pytest.raises(Exception):
         template.render(c)
@@ -149,10 +140,6 @@ def test_context_pollution():
         {{ form.as_ul }}
     """)
     c = Context({'form': form, 'form2': form2})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert html.count('name="comment"') == 2
@@ -200,10 +187,6 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
         'flag': True,
         'message': "Hello!",
     })
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert 'id="fieldset_company_data"' in html
@@ -253,10 +236,6 @@ def test_change_layout_dynamically_delete_field():
     del form_helper.layout.fields[0].fields[1]
 
     c = Context({'form': form, 'form_helper': form_helper})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
     assert 'email' not in html
 
@@ -373,12 +352,8 @@ def test_i18n():
         )
     )
     form.helper = form_helper
-    context = Context({'form': form})
 
-    if django.VERSION >= (1, 8):
-        context = context.flatten()
-
-    html = template.render(context)
+    html = template.render(Context({'form': form}))
     assert html.count('i18n legend') == 1
 
 
@@ -474,10 +449,6 @@ def test_layout_composition():
             {% crispy form form_helper %}
         """)
     c = Context({'form': TestForm(), 'form_helper': form_helper})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert 'multiField' in html
@@ -531,10 +502,6 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
             {% crispy form form_helper %}
         """)
     c = Context({'form': TestForm(), 'form_helper': form_helper, 'value_var': "Save"})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert 'multiField' in html

@@ -86,10 +86,6 @@ def test_form_with_helper_without_layout(settings):
     form = TestForm({'password1': 'wargame', 'password2': 'god'})
     form.is_valid()
     c = Context({'testForm': form, 'form_helper': form_helper})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     # Lets make sure everything loads right
@@ -128,10 +124,6 @@ def test_form_show_errors_non_field_errors():
 
     # First we render with errors
     c = Context({'testForm': form})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     # Ensure those errors were rendered
@@ -142,10 +134,6 @@ def test_form_show_errors_non_field_errors():
     # Now we render without errors
     form.helper.form_show_errors = False
     c = Context({'testForm': form})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     # Ensure errors were not rendered
@@ -303,10 +291,6 @@ def test_without_helper(settings):
         {% crispy form %}
     """)
     c = Context({'form': TestForm()})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     # Lets make sure everything loads right
@@ -327,10 +311,6 @@ def test_template_pack_override_compact(settings):
         {%% crispy form "%s" %%}
     """ % override_pack)
     c = Context({'form': TestForm()})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     if current_pack == 'uni_form':
@@ -349,10 +329,6 @@ def test_template_pack_override_verbose(settings):
         {%% crispy form form_helper "%s" %%}
     """ % override_pack)
     c = Context({'form': TestForm(), 'form_helper': FormHelper()})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     if current_pack == 'uni_form':
@@ -376,9 +352,6 @@ def test_invalid_helper(settings):
     """)
     c = Context({'form': TestForm(), 'form_helper': "invalid"})
 
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     settings.CRISPY_FAIL_SILENTLY = settings.TEMPLATE_DEBUG = False
     with pytest.raises(TypeError):
         template.render(c)
@@ -400,10 +373,6 @@ def test_formset_with_helper_without_layout(settings):
     testFormSet = TestFormSet()
 
     c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert html.count('<form') == 1
@@ -433,10 +402,6 @@ def test_CSRF_token_POST_form():
     # So using RequestContext or csrf(request) here does not work.
     # Instead I set the key `csrf_token` to a CSRF token manually, which `csrf_token` tag uses
     c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert "<input type='hidden' name='csrfmiddlewaretoken'" in html
@@ -451,10 +416,6 @@ def test_CSRF_token_GET_form():
     """)
 
     c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
-
     html = template.render(c)
 
     assert "<input type='hidden' name='csrfmiddlewaretoken'" not in html
