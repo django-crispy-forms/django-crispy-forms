@@ -41,6 +41,29 @@ def test_as_crispy_errors_form_with_non_field_errors():
     assert "<h3>" not in html
 
 
+def test_as_crispy_errors_form_with_formset_non_form_errors():
+    template = get_template_from_string("""
+        {% load crispy_forms_tags %}
+        {{ formset|as_crispy_errors }}
+    """)
+
+    TestFormset = formset_factory(TestForm, max_num=1, validate_max=True)
+    formset = TestFormset({
+        'form-TOTAL_FORMS': '2',
+        'form-INITIAL_FORMS': '0',
+        'form-MAX_NUM_FORMS': '',
+        'form-0-password1': 'god',
+        'form-0-password2': 'wargame',
+    })
+    formset.is_valid()
+
+    c = Context({'formset': formset})
+    html = template.render(c)
+    assert "errorMsg" in html or "alert" in html
+    assert "<li>Please submit 1 or fewer forms.</li>" in html
+    assert "<h3>" not in html
+
+
 def test_crispy_filter_with_form():
     template = get_template_from_string("""
         {% load crispy_forms_tags %}
