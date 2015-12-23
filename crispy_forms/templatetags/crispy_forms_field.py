@@ -3,6 +3,7 @@ try:
 except ImportError:
     izip = zip
 
+import django
 from django import forms
 from django import template
 from django.template import loader, Context
@@ -179,5 +180,8 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
 
         if not prepend and not append:
             raise TypeError("Expected a prepend and/or append argument")
+
+        if django.VERSION >= (1, 8):
+            context = context.flatten()
 
     return template.render(context)
