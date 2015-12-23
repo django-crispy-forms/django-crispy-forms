@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import django
 from django import forms
 from django.template import Context
 
@@ -53,6 +54,9 @@ def test_multiwidget_field():
 
     c = Context({'form': test_form})
 
+    if django.VERSION >= (1, 8):
+        c = c.flatten()
+
     html = template.render(c)
 
     assert html.count('class="dateinput') == 1
@@ -78,6 +82,10 @@ def test_field_type_hidden():
     c = Context({
         'test_form': test_form,
     })
+
+    if django.VERSION >= (1, 8):
+        c = c.flatten()
+
     html = template.render(c)
 
     # Check form parameters

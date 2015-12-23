@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import logging
 import sys
 
+import django
 from django.conf import settings
 from django.forms.forms import BoundField
 from django.template import Context
@@ -154,6 +155,10 @@ def render_field(
             })
             if extra_context is not None:
                 context.update(extra_context)
+
+            if django.VERSION >= (1, 8):
+                context = context.flatten()
+
             html = template.render(context)
 
         return html
