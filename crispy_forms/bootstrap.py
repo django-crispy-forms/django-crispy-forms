@@ -82,12 +82,13 @@ class FormActions(LayoutObject):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
-        extra_context = {
+        template = self.get_template_name(template_pack)
+        context.update({
             'formactions': self,
             'fields_output': html
-        }
-        template = self.get_template_name(template_pack)
-        return render_to_string(template, extra_context, context)
+        })
+
+        return render_to_string(template, context.flatten())
 
     def flat_attrs(self):
         return flatatt(self.attrs)
@@ -183,7 +184,9 @@ class StrictButton(object):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         self.content = Template(text_type(self.content)).render(context)
         template = self.template % template_pack
-        return render_to_string(template, {'button': self}, context)
+        context.update({'button': self})
+
+        return render_to_string(template, context.flatten())
 
 
 class Container(Div):
@@ -287,13 +290,13 @@ class TabHolder(ContainerHolder):
         content = self.get_rendered_fields(form, form_style, context, template_pack)
         links = ''.join(tab.render_link(template_pack) for tab in self.fields)
 
-        extra_context = {
+        context.update({
             'tabs': self,
             'links': links,
             'content': content
-        }
+        })
         template = self.get_template_name(template_pack)
-        return render_to_string(template, extra_context, context)
+        return render_to_string(template, context.flatten())
 
 
 class AccordionGroup(Container):
@@ -336,11 +339,9 @@ class Accordion(ContainerHolder):
             )
 
         template = self.get_template_name(template_pack)
-        return render_to_string(
-            template,
-            {'accordion': self, 'content': content},
-            context
-        )
+        context.update({'accordion': self, 'content': content})
+
+        return render_to_string(template, context.flatten())
 
 
 class Alert(Div):
@@ -363,11 +364,9 @@ class Alert(Div):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         template = self.get_template_name(template_pack)
-        return render_to_string(
-            template,
-            {'alert': self, 'content': self.content, 'dismiss': self.dismiss},
-            context
-        )
+        context.update({'alert': self, 'content': self.content, 'dismiss': self.dismiss})
+
+        return render_to_string(template, context.flatten())
 
 
 class UneditableField(Field):
