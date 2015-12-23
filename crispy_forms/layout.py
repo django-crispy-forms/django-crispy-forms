@@ -164,11 +164,9 @@ class ButtonHolder(LayoutObject):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
 
         template = self.get_template_name(template_pack)
-        return render_to_string(
-            template,
-            {'buttonholder': self, 'fields_output': html},
-            context
-        )
+        context.update({'buttonholder': self, 'fields_output': html})
+
+        return render_to_string(template, context.flatten())
 
 
 class BaseInput(TemplateNameMixin):
@@ -196,7 +194,9 @@ class BaseInput(TemplateNameMixin):
         """
         self.value = Template(text_type(self.value)).render(context)
         template = self.get_template_name(template_pack)
-        return render_to_string(template, {'input': self}, context)
+        context.update({'input': self})
+
+        return render_to_string(template, context.flatten())
 
 
 class Submit(BaseInput):
@@ -323,12 +323,13 @@ class MultiField(LayoutObject):
             labelclass=self.label_class, layout_object=self, **kwargs
         )
 
-        extra_context = {
+        template = self.get_template_name(template_pack)
+        context.update({
             'multifield': self,
             'fields_output': fields_output
-        }
-        template = self.get_template_name(template_pack)
-        return render_to_string(template, extra_context, context)
+        })
+
+        return render_to_string(template, context.flatten())
 
 
 class Div(LayoutObject):
