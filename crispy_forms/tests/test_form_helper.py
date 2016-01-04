@@ -18,7 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .compatibility import get_template_from_string
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
-from .forms import TestForm, TestFormWithMedia
+from .forms import TestForm, TestFormWithMedia, TestFormWithMultiValueField
 from crispy_forms.bootstrap import (
     FieldWithButtons, PrependedAppendedText, AppendedText, PrependedText,
     StrictButton
@@ -721,3 +721,21 @@ def test_bootstrap4_template_pack():
     html = render_crispy_form(form)
     assert 'form-control' not in html
     assert 'ctrlHolder' in html
+
+
+@only_bootstrap3
+def test_bootstrap3_does_add_form_control_class_to_non_multivaluefield():
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap3'
+    html = render_crispy_form(form)
+    assert 'form-control' in html
+
+
+@only_bootstrap3
+def test_bootstrap3_does_not_add_form_control_class_to_multivaluefield():
+    form = TestFormWithMultiValueField()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap3'
+    html = render_crispy_form(form)
+    assert 'form-control' not in html

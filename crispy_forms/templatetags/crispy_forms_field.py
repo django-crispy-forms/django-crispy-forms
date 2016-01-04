@@ -45,6 +45,11 @@ def is_file(field):
 
 
 @register.filter
+def is_multivalue(field):
+    return isinstance(field.field.widget, forms.MultiWidget)
+
+
+@register.filter
 def classes(field):
     """
     Returns CSS classes of a field
@@ -118,6 +123,7 @@ class CrispyFieldNode(template.Node):
                 template_pack in ['bootstrap3', 'bootstrap4']
                 and not is_checkbox(field)
                 and not is_file(field)
+                and not is_multivalue(field)
             ):
                 css_class += ' form-control'
 
