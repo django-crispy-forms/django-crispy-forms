@@ -1,18 +1,6 @@
 import sys
 
-import django
-
-if (1, 4) <= django.VERSION <= (1, 5):
-    from django.utils.functional import SimpleLazyObject as DefaultSimpleLazyObject
-
-    class SimpleLazyObject(DefaultSimpleLazyObject):
-
-        def __contains__(self, item):
-            if self._wrapped is None:
-                self._setup()
-            return self._wrapped.__contains__(item)
-else:
-    from django.utils.functional import SimpleLazyObject
+from django.utils.functional import SimpleLazyObject
 
 try:
     basestring

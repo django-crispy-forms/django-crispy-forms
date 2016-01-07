@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from copy import copy
 
+import django
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import Context
@@ -184,6 +185,7 @@ class BasicNode(template.Node):
             'label_class': attrs.get('label_class', ''),
             'label_size': attrs.get('label_size', 0),
             'field_class': attrs.get('field_class', ''),
+            'include_media': attrs.get('include_media', True),
         }
 
         # Handles custom attributes added to helpers
@@ -218,6 +220,9 @@ class CrispyFormNode(BasicNode):
                 template = whole_uni_formset_template(self.template_pack)
             else:
                 template = whole_uni_form_template(self.template_pack)
+
+        if django.VERSION >= (1, 8):
+            c = c.flatten()
 
         return template.render(c)
 
@@ -277,7 +282,7 @@ def do_uni_form(parser, token):
         ALLOWED_TEMPLATE_PACKS = getattr(
             settings,
             'CRISPY_ALLOWED_TEMPLATE_PACKS',
-            ('bootstrap', 'uni_form', 'bootstrap3')
+            ('bootstrap', 'uni_form', 'bootstrap3', 'bootstrap4')
         )
         if template_pack not in ALLOWED_TEMPLATE_PACKS:
             raise template.TemplateSyntaxError(

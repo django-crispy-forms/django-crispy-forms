@@ -1,7 +1,7 @@
 {% load crispy_forms_utils %}
 
 {% specialspaceless %}
-    {{ form.media }}
+    {% if include_media %}{{ form.media }}{% endif %}
     {% if form_show_errors %}
         {% include "bootstrap/errors.html" %}
     {% endif %}

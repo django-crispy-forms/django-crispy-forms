@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 import re
 
 import django
@@ -16,8 +17,8 @@ import pytest
 from django.utils.translation import ugettext_lazy as _
 
 from .compatibility import get_template_from_string
-from .conftest import only_uni_form, only_bootstrap3, only_bootstrap
-from .forms import TestForm
+from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
+from .forms import TestForm, TestFormWithMedia
 from crispy_forms.bootstrap import (
     FieldWithButtons, PrependedAppendedText, AppendedText, PrependedText,
     StrictButton
@@ -153,6 +154,82 @@ def test_html5_required():
     form.helper = FormHelper()
     form.helper.html5_required = False
     html = render_crispy_form(form)
+
+
+def test_media_is_included_by_default_with_uniform():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'uni_form'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
+def test_media_is_included_by_default_with_bootstrap():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
+def test_media_is_included_by_default_with_bootstrap3():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap3'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
+def test_media_is_included_by_default_with_bootstrap4():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap4'
+    html = render_crispy_form(form)
+    assert 'test.css' in html
+    assert 'test.js' in html
+
+
+def test_media_removed_when_include_media_is_false_with_uniform():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'uni_form'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
+
+
+def test_media_removed_when_include_media_is_false_with_bootstrap():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
+
+
+def test_media_removed_when_include_media_is_false_with_bootstrap3():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap3'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
+
+
+def test_media_removed_when_include_media_is_false_with_bootstrap4():
+    form = TestFormWithMedia()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap4'
+    form.helper.include_media = False
+    html = render_crispy_form(form)
+    assert 'test.css' not in html
+    assert 'test.js' not in html
 
 
 def test_attrs():
@@ -371,12 +448,8 @@ def test_render_hidden_fields():
     assert html.count('<input') == 3
     assert html.count('hidden') == 2
 
-    if django.VERSION < (1, 5):
-        assert html.count('type="hidden" name="password1"') == 1
-        assert html.count('type="hidden" name="password2"') == 1
-    else:
-        assert html.count('name="password1" type="hidden"') == 1
-        assert html.count('name="password2" type="hidden"') == 1
+    assert html.count('name="password1" type="hidden"') == 1
+    assert html.count('name="password2" type="hidden"') == 1
 
 
 def test_render_required_fields():
@@ -509,7 +582,7 @@ def test_error_text_inline(settings):
     html = render_crispy_form(form)
 
     help_class = 'help-inline'
-    if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+    if settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
         help_class = 'help-block'
 
     matches = re.findall(
@@ -608,6 +681,37 @@ def test_label_class_and_field_class():
 
 @only_bootstrap3
 def test_template_pack():
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'uni_form'
+    html = render_crispy_form(form)
+    assert 'form-control' not in html
+    assert 'ctrlHolder' in html
+
+
+@only_bootstrap4
+def test_bootstrap4_label_class_and_field_class():
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.label_class = 'col-lg-2'
+    form.helper.field_class = 'col-lg-8'
+    html = render_crispy_form(form)
+
+    assert '<div class="form-group row">' in html
+    assert '<div class="controls col-lg-offset-2 col-lg-8">' in html
+    assert html.count('col-lg-8') == 7
+
+    form.helper.label_class = 'col-sm-3'
+    form.helper.field_class = 'col-sm-8'
+    html = render_crispy_form(form)
+
+    assert '<div class="form-group row">' in html
+    assert '<div class="controls col-sm-offset-3 col-sm-8">' in html
+    assert html.count('col-sm-8') == 7
+
+
+@only_bootstrap4
+def test_bootstrap4_template_pack():
     form = TestForm()
     form.helper = FormHelper()
     form.helper.template_pack = 'uni_form'

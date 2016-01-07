@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from crispy_forms.compatibility import string_types
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
-from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK
+from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, list_intersection, list_difference
 from crispy_forms.exceptions import FormHelpersException
 
 
@@ -148,6 +148,9 @@ class FormHelper(DynamicLayoutHandler):
         **form_style**: Uni-form has two built in different form styles. You can choose
             your favorite. This can be set to "default" or "inline". Defaults to "default".
 
+        **include_media**: Whether to automatically include form media. Set to False if
+            you want to manually include form media outside the form. Defaults to True.
+
     Public Methods:
 
         **add_input(input)**: You can add input buttons using this method. Inputs
@@ -203,6 +206,7 @@ class FormHelper(DynamicLayoutHandler):
     disable_csrf = False
     label_class = ''
     field_class = ''
+    include_media = True
 
     def __init__(self, form=None):
         self.attrs = {}
@@ -315,11 +319,11 @@ class FormHelper(DynamicLayoutHandler):
         # we suppose they need to be rendered
         if hasattr(form, 'Meta'):
             if hasattr(form.Meta, 'fields'):
-                current_fields = set(getattr(form, 'fields', []))
-                meta_fields = set(getattr(form.Meta, 'fields'))
+                current_fields = tuple(getattr(form, 'fields', {}).keys())
+                meta_fields = getattr(form.Meta, 'fields')
 
-                fields_to_render = current_fields & meta_fields
-                left_fields_to_render = fields_to_render - form.rendered_fields
+                fields_to_render = list_intersection(current_fields, meta_fields)
+                left_fields_to_render = list_difference(fields_to_render, form.rendered_fields)
 
                 for field in left_fields_to_render:
                     html += render_field(field, form, self.form_style, context)
@@ -341,7 +345,8 @@ class FormHelper(DynamicLayoutHandler):
             'form_show_labels': self.form_show_labels,
             'disable_csrf': self.disable_csrf,
             'label_class': self.label_class,
-            'field_class': self.field_class
+            'field_class': self.field_class,
+            'include_media': self.include_media
         }
         # col-[lg|md|sm|xs]-<number>
         label_size_match = re.search('(\d+)', self.label_class)

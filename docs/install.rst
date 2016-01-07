@@ -44,9 +44,11 @@ Since version 1.1.0, django-crispy-forms has built-in support for different CSS 
 
 If your form CSS framework is not supported and it's open source, you can create a template pack for it and submit a pull request in Github or create a ``crispy-forms-templatePackName`` project and let me know, so I can link it.
 
-You can set your default template pack for your project using ``CRISPY_TEMPLATE_PACK`` Django settings variable, setting it to one of the previous keywords::
+You can set your default template pack for your project using the ``CRISPY_TEMPLATE_PACK`` Django settings variable::
 
     CRISPY_TEMPLATE_PACK = 'uni_form'
+
+Please check the documentation of your template pack package for the correct value of the ``CRISPY_TEMPLATE_PACK`` setting (there are packages which provide more than one template pack).
 
 .. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
 .. _`Foundation`: http://foundation.zurb.com/

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
@@ -16,7 +15,7 @@ from django.test import RequestFactory
 from django.utils.translation import ugettext_lazy as _
 
 from .compatibility import get_template_from_string
-from .conftest import only_uni_form, only_bootstrap3, only_bootstrap
+from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
 from .forms import (
     TestForm, TestForm2, TestForm3, CheckboxesTestForm,
     TestForm4, CrispyTestModel, TestForm5
@@ -270,31 +269,20 @@ def test_formset_layout(settings):
 
     # Check formset fields
     hidden_count = 4  # before Django 1.7 added MIN_NUM_FORM_COUNT
-    if django.VERSION < (1, 5):
+    assert html.count(
+        'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
+    ) == 1
+    assert html.count(
+        'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
+    ) == 1
+    assert html.count(
+        'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
+    ) == 1
+    if hasattr(forms.formsets, 'MIN_NUM_FORM_COUNT'):
         assert html.count(
-            'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
+            'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
         ) == 1
-        assert html.count(
-            'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
-        ) == 1
-        assert html.count(
-            'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
-        ) == 1
-    else:
-        assert html.count(
-            'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-        ) == 1
-        assert html.count(
-            'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-        ) == 1
-        assert html.count(
-            'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-        ) == 1
-        if hasattr(forms.formsets, 'MIN_NUM_FORM_COUNT'):
-            assert html.count(
-                'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
-            ) == 1
-            hidden_count += 1
+        hidden_count += 1
     assert html.count("hidden") == hidden_count
 
     # Check form structure
@@ -312,6 +300,8 @@ def test_formset_layout(settings):
     assert html.count('Note for first form only') == 1
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         assert html.count('formRow') == 3
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert html.count('row') == 21
     else:
         assert html.count('row') == 3
 
@@ -329,26 +319,15 @@ def test_modelformset_layout():
     assert html.count("id_form-1-id") == 1
     assert html.count("id_form-2-id") == 1
 
-    if django.VERSION < (1, 5):
-        assert html.count(
-            'type="hidden" name="form-TOTAL_FORMS" value="3" id="id_form-TOTAL_FORMS"'
-        ) == 1
-        assert html.count(
-            'type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS"'
-        ) == 1
-        assert html.count(
-            'type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS"'
-        ) == 1
-    else:
-        assert html.count(
-            'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-        ) == 1
-        assert html.count(
-            'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-        ) == 1
-        assert html.count(
-            'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-        ) == 1
+    assert html.count(
+        'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
+    ) == 1
+    assert html.count(
+        'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
+    ) == 1
+    assert html.count(
+        'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
+    ) == 1
 
     assert html.count('name="form-0-email"') == 1
     assert html.count('name="form-1-email"') == 1
@@ -390,10 +369,11 @@ def test_l10n(settings):
 
     # Make sure label values are NOT localized.
     # Dirty check, which relates on HTML structure
+    label_text = '>1000'
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         label_text = '/> 1000<'
-    else:
-        label_text = '>1000'
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        label_text = '>\n            1000'
     assert html.count(label_text) == 2
 
 
@@ -565,7 +545,7 @@ def test_keepcontext_context_manager(settings):
 
     if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
         assert response.content.count(b'checkbox inline') == 3
-    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+    elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
         assert response.content.count(b'checkbox-inline') == 3
 
 
@@ -575,6 +555,27 @@ def test_form_inline():
     form.helper = FormHelper()
     form.helper.form_class = 'form-inline'
     form.helper.field_template = 'bootstrap3/layout/inline_field.html'
+    form.helper.layout = Layout(
+        'email',
+        'password1',
+        'last_name',
+    )
+
+    html = render_crispy_form(form)
+    assert html.count('class="form-inline"') == 1
+    assert html.count('class="form-group"') == 3
+    assert html.count('<label for="id_email" class="sr-only') == 1
+    assert html.count('id="div_id_email" class="form-group"') == 1
+    assert html.count('placeholder="email"') == 1
+    assert html.count('</label> <input') == 3
+
+
+@only_bootstrap4
+def test_bootstrap4_form_inline():
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.form_class = 'form-inline'
+    form.helper.field_template = 'bootstrap4/layout/inline_field.html'
     form.helper.layout = Layout(
         'email',
         'password1',

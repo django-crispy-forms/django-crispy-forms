@@ -1,0 +1,14 @@
+{% load crispy_forms_utils %}
+
+{% specialspaceless %}
+{% if form_tag %}<form {{ flat_attrs|safe }} method="{{ form_method }}" {% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>{% endif %}
+    {% if form_method|lower == 'post' and not disable_csrf %}
+        {% csrf_token %}
+    {% endif %}
+
+    {% include "bootstrap4/display_form.html" %}
+
+    {% include "bootstrap4/inputs.html" %}
+
+{% if form_tag %}</form>{% endif %}
+{% endspecialspaceless %}

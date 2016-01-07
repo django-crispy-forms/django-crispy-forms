@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import django
 from django.conf import settings
 from django.forms import forms
 from django.forms.formsets import BaseFormSet
@@ -40,7 +41,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
 
         {{ myform|crispy:"bootstrap" }}
 
-    In ``bootstrap3`` for horizontal forms you can do::
+    In ``bootstrap3`` or ``bootstrap4`` for horizontal forms you can do::
 
         {{ myform|label_class:"col-lg-2",field_class:"col-lg-8" }}
     """
@@ -62,6 +63,10 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
             'label_class': label_class,
             'field_class': field_class,
         })
+
+    if django.VERSION >= (1, 8):
+        c = c.flatten()
+
     return template.render(c)
 
 
@@ -83,6 +88,10 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
     else:
         template = get_template('%s/errors.html' % template_pack)
         c = Context({'form': form})
+
+    if django.VERSION >= (1, 8):
+        c = c.flatten()
+
     return template.render(c)
 
 
@@ -103,6 +112,10 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
 
     template = get_template('%s/field.html' % template_pack)
     c = Context({'field': field, 'form_show_errors': True, 'form_show_labels': True})
+
+    if django.VERSION >= (1, 8):
+        c = c.flatten()
+
     return template.render(c)
 
 

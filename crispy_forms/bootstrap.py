@@ -36,7 +36,7 @@ class PrependedAppendedText(Field):
             'input_size': self.input_size,
             'active': getattr(self, "active", False)
         }
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         return render_field(
             self.field, form, form_style, context,
             template=template, attrs=self.attrs,
@@ -82,12 +82,13 @@ class FormActions(LayoutObject):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
-        extra_context = {
+        template = self.get_template_name(template_pack)
+        context.update({
             'formactions': self,
             'fields_output': html
-        }
-        template = self.template % template_pack
-        return render_to_string(template, extra_context, context)
+        })
+
+        return render_to_string(template, context.flatten())
 
     def flat_attrs(self):
         return flatatt(self.attrs)
@@ -139,7 +140,7 @@ class FieldWithButtons(Div):
         )
 
         extra_context = {'div': self, 'buttons': buttons}
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
 
         if isinstance(self.fields[0], Field):
             # FieldWithButtons(Field('field_name'), StrictButton("go"))
@@ -183,7 +184,9 @@ class StrictButton(object):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         self.content = Template(text_type(self.content)).render(context)
         template = self.template % template_pack
-        return render_to_string(template, {'button': self}, context)
+        context.update({'button': self})
+
+        return render_to_string(template, context.flatten())
 
 
 class Container(Div):
@@ -287,13 +290,13 @@ class TabHolder(ContainerHolder):
         content = self.get_rendered_fields(form, form_style, context, template_pack)
         links = ''.join(tab.render_link(template_pack) for tab in self.fields)
 
-        extra_context = {
+        context.update({
             'tabs': self,
             'links': links,
             'content': content
-        }
-        template = self.template % template_pack
-        return render_to_string(template, extra_context, context)
+        })
+        template = self.get_template_name(template_pack)
+        return render_to_string(template, context.flatten())
 
 
 class AccordionGroup(Container):
@@ -335,12 +338,10 @@ class Accordion(ContainerHolder):
                 group, form, form_style, context, template_pack=template_pack, **kwargs
             )
 
-        template = self.template % template_pack
-        return render_to_string(
-            template,
-            {'accordion': self, 'content': content},
-            context
-        )
+        template = self.get_template_name(template_pack)
+        context.update({'accordion': self, 'content': content})
+
+        return render_to_string(template, context.flatten())
 
 
 class Alert(Div):
@@ -362,12 +363,10 @@ class Alert(Div):
         self.dismiss = dismiss
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        template = self.template % template_pack
-        return render_to_string(
-            template,
-            {'alert': self, 'content': self.content, 'dismiss': self.dismiss},
-            context
-        )
+        template = self.get_template_name(template_pack)
+        context.update({'alert': self, 'content': self.content, 'dismiss': self.dismiss})
+
+        return render_to_string(template, context.flatten())
 
 
 class UneditableField(Field):
