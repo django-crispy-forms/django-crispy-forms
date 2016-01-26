@@ -1,5 +1,13 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.6.0 (2016/1/7)
+
+  * Fixed compatibility with Django 1.9
+  * Added Bootstrap 4 template pack
+  * Other small fixes.
+
+See [1.6.0 Milestone](https://github.com/maraujop/django-crispy-forms/issues?q=milestone%3A1.6.0+is%3Aclosed) for full issue list.
+
 ## 1.5.2 (2015/9/10)
 
   * Fix: KeyError: u'wrapper_class' when clearing template context. #511, #512

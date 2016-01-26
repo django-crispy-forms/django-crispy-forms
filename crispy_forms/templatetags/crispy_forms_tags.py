@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from copy import copy
 
+import django
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import Context
@@ -219,6 +220,9 @@ class CrispyFormNode(BasicNode):
                 template = whole_uni_formset_template(self.template_pack)
             else:
                 template = whole_uni_form_template(self.template_pack)
+
+        if django.VERSION >= (1, 8):
+            c = c.flatten()
 
         return template.render(c)
 

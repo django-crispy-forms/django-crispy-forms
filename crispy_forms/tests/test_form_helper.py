@@ -529,10 +529,7 @@ def test_multifield_errors():
 
     form.helper.form_show_errors = True
     html = render_crispy_form(form)
-    if django.VERSION < (1, 9):
-        assert html.count('error') == 3
-    else:
-        assert html.count('error') == 1
+    assert html.count('error') == 3
 
     # Reset layout for avoiding side effects
     form.helper.layout = Layout(
