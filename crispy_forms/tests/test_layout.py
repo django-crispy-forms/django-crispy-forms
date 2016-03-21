@@ -569,11 +569,11 @@ def test_form_inline():
 
 
 @only_bootstrap4
-def test_form_inline():
+def test_bootstrap4_form_inline():
     form = TestForm()
     form.helper = FormHelper()
     form.helper.form_class = 'form-inline'
-    form.helper.field_template = 'bootstrap3/layout/inline_field.html'
+    form.helper.field_template = 'bootstrap4/layout/inline_field.html'
     form.helper.layout = Layout(
         'email',
         'password1',
