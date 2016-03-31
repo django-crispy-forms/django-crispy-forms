@@ -9,6 +9,8 @@ from .compatibility import text_type
 from .layout import LayoutObject, Field, Div
 from .utils import render_field, flatatt, TEMPLATE_PACK
 
+import django
+
 
 class PrependedAppendedText(Field):
     template = "%s/layout/prepended_appended_text.html"
@@ -387,8 +389,8 @@ class UneditableField(Field):
 class InlineField(Field):
     template = "%s/layout/inline_field.html"
 
-
-class ReadOnlyField(Field):
-    def __init__(self, *args, **kwargs):
-        self.attrs = {'readonly': 'readonly'}
-        super(ReadOnlyField, self).__init__(*args, **kwargs)
+if django.VERSION < (1, 9):
+    class ReadOnlyField(Field):
+        def __init__(self, *args, **kwargs):
+            self.attrs = {'readonly': 'readonly'}
+            super(ReadOnlyField, self).__init__(*args, **kwargs)
