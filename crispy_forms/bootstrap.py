@@ -36,6 +36,8 @@ class PrependedAppendedText(Field):
             'input_size': self.input_size,
             'active': getattr(self, "active", False)
         }
+        if hasattr(self, 'wrapper_class'):
+            extra_context['wrapper_class'] = self.wrapper_class
         template = self.get_template_name(template_pack)
         return render_field(
             self.field, form, form_style, context,
