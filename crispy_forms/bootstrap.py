@@ -386,3 +386,9 @@ class UneditableField(Field):
 
 class InlineField(Field):
     template = "%s/layout/inline_field.html"
+
+
+class ReadOnlyField(Field):
+    def __init__(self, *args, **kwargs):
+        self.attrs = {'readonly': 'readonly'}
+        super(ReadOnlyField, self).__init__(*args, **kwargs)
