@@ -300,8 +300,6 @@ def test_formset_layout(settings):
     assert html.count('Note for first form only') == 1
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         assert html.count('formRow') == 3
-    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-        assert html.count('row') == 21
     else:
         assert html.count('row') == 3
 

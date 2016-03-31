@@ -693,6 +693,10 @@ def test_template_pack():
 def test_bootstrap4_label_class_and_field_class():
     form = TestForm()
     form.helper = FormHelper()
+    html = render_crispy_form(form)
+
+    assert '<div class="form-group">' in html
+
     form.helper.label_class = 'col-lg-2'
     form.helper.field_class = 'col-lg-8'
     html = render_crispy_form(form)

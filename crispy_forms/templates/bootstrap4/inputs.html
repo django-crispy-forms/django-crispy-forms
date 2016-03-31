@@ -1,5 +1,5 @@
 {% if inputs %}
-    <div class="form-group row">
+    <div class="form-group{% if using_grid_layout %} row{% endif %}">
         {% if label_class %}
             <div class="aab controls {{ label_class }}"></div>
         {% endif %}

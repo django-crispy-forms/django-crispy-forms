@@ -358,6 +358,13 @@ class FormHelper(DynamicLayoutHandler):
             except:
                 pass
 
+        if template_pack == 'bootstrap4':
+            grid_colum_matcher = re.compile('\w*col-(xs|sm|md|lg|xl)-\d+\w*')
+            using_grid_layout = (grid_colum_matcher.match(self.label_class) or
+                                 grid_colum_matcher.match(self.field_class))
+            if using_grid_layout:
+                items['using_grid_layout'] = True
+
         items['attrs'] = {}
         if self.attrs:
             items['attrs'] = self.attrs.copy()

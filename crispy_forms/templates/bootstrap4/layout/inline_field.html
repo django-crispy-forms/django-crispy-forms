@@ -11,7 +11,7 @@
             </label>
         </div>
     {% else %}
-        <div id="div_{{ field.auto_id }}" class="form-group">
+        <div id="div_{{ field.auto_id }}" class="form-group{% if using_grid_layout %} row{% endif %}">
             <label for="{{ field.id_for_label }}" class="sr-only{% if field.field.required %} requiredField{% endif %}">
                 {{ field.label|safe }}
             </label>
