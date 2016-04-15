@@ -722,3 +722,22 @@ def test_bootstrap4_template_pack():
     html = render_crispy_form(form)
     assert 'form-control' not in html
     assert 'ctrlHolder' in html
+
+
+def test_passthrough_context():
+    """
+    Test to ensure that context is passed through implicitly from outside of
+    the crispy form into the crispy form templates.
+    """
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.template = 'custom_form_template_with_context.html'
+
+    c = {
+        'prefix': 'foo',
+        'suffix': 'bar'
+    }
+
+    html = render_crispy_form(form, helper=form.helper, context=c)
+    assert "Got prefix: foo" in html
+    assert "Got suffix: bar" in html
