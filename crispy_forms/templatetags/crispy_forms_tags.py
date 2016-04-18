@@ -126,6 +126,7 @@ class BasicNode(template.Node):
         response_dict = self.get_response_dict(helper, context, is_formset)
         node_context = copy_context(context)
         node_context.update(response_dict)
+        final_context = copy_context(node_context)
 
         # If we have a helper's layout we use it, for the form or the formset's forms
         if helper and helper.layout:
@@ -140,11 +141,11 @@ class BasicNode(template.Node):
                     forloop.iterate()
 
         if is_formset:
-            response_dict.update({'formset': actual_form})
+            final_context['formset'] = actual_form
         else:
-            response_dict.update({'form': actual_form})
+            final_context['form'] = actual_form
 
-        return Context(response_dict)
+        return final_context
 
     def get_response_dict(self, helper, context, is_formset):
         """
