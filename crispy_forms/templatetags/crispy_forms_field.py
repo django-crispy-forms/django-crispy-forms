@@ -120,6 +120,8 @@ class CrispyFieldNode(template.Node):
                 and not is_file(field)
             ):
                 css_class += ' form-control'
+                if field.errors:
+                    css_class += ' form-control-danger'
 
             widget.attrs['class'] = css_class
 
