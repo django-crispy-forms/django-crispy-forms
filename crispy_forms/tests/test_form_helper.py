@@ -540,7 +540,7 @@ def test_multifield_errors():
     assert html.count('error') == 0
 
 
-@only_bootstrap
+@only_bootstrap3
 def test_bootstrap_form_show_errors():
     form = TestForm({
         'email': 'invalidemail',
@@ -562,6 +562,34 @@ def test_bootstrap_form_show_errors():
     form.helper.form_show_errors = True
     html = render_crispy_form(form)
     assert html.count('error') == 6
+
+    form.helper.form_show_errors = False
+    html = render_crispy_form(form)
+    assert html.count('error') == 0
+
+
+@only_bootstrap4
+def test_bootstrap_form_show_errors():
+    form = TestForm({
+        'email': 'invalidemail',
+        'first_name': 'first_name_too_long',
+        'last_name': 'last_name_too_long',
+        'password1': 'yes',
+        'password2': 'yes',
+    })
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        AppendedText('email', 'whatever'),
+        PrependedText('first_name', 'blabla'),
+        PrependedAppendedText('last_name', 'foo', 'bar'),
+        AppendedText('password1', 'whatever'),
+        PrependedText('password2', 'blabla'),
+    )
+    form.is_valid()
+
+    form.helper.form_show_errors = True
+    html = render_crispy_form(form)
+    assert html.count('error') == 3
 
     form.helper.form_show_errors = False
     html = render_crispy_form(form)
