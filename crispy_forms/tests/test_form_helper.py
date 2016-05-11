@@ -628,7 +628,7 @@ def test_error_text_inline(settings):
     assert len(matches) == 3
 
 
-@only_bootstrap
+@only_bootstrap3
 def test_error_and_help_inline():
     form = TestForm({'email': 'invalidemail'})
     form.helper = FormHelper()
