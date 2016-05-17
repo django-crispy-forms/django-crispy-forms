@@ -628,7 +628,7 @@ def test_error_text_inline(settings):
     assert len(matches) == 3
 
 
-@only_bootstrap
+@only_bootstrap3
 def test_error_and_help_inline():
     form = TestForm({'email': 'invalidemail'})
     form.helper = FormHelper()
@@ -655,6 +655,36 @@ def test_error_and_help_inline():
     # Check that error goes before help, otherwise CSS won't work
     error_position = html.find('<span id="error_1_id_email" class="help-inline">')
     help_position = html.find('<p id="hint_id_email" class="help-block">')
+    assert error_position < help_position
+
+
+@only_bootstrap4
+def test_error_and_help_inline():
+    form = TestForm({'email': 'invalidemail'})
+    form.helper = FormHelper()
+    form.helper.error_text_inline = False
+    form.helper.help_text_inline = True
+    form.helper.layout = Layout('email')
+    form.is_valid()
+    html = render_crispy_form(form)
+
+    # Check that help goes before error, otherwise CSS won't work
+    help_position = html.find('<span id="hint_id_email" class="help-inline">')
+    error_position = html.find('<p id="error_1_id_email" class="help-block">')
+    assert help_position < error_position
+
+    # Viceversa
+    form = TestForm({'email': 'invalidemail'})
+    form.helper = FormHelper()
+    form.helper.error_text_inline = True
+    form.helper.help_text_inline = False
+    form.helper.layout = Layout('email')
+    form.is_valid()
+    html = render_crispy_form(form)
+
+    # Check that error goes before help, otherwise CSS won't work
+    error_position = html.find('<span id="error_1_id_email" class="help-inline">')
+    help_position = html.find('<small id="hint_id_email" class="text-muted">')
     assert error_position < help_position
 
 
