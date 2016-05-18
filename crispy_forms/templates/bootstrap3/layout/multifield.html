@@ -1,27 +1,25 @@
-{% load crispy_forms_field %}
+<div {% if multifield.css_id or errors %}id="{{ multifield.css_id }}"{% endif %}
+    {% if multifield.css_class %}class="{{ multifield.css_class }}"{% endif %}
+    {{ multifield.flat_attrs|safe }}>
 
-{% if field.is_hidden %}
-    {{ field }}
-{% else %}
-
-    {% if field.label %}
-        <label for="{{ field.id_for_label }}"{% if labelclass %} class="{{ labelclass }}"{% endif %}>
+    {% if form_show_errors %}
+        <div class="alert alert-danger" role="alert">
+        {% for field in multifield.bound_fields %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <p id="error_{{ forloop.counter }}_{{ field.auto_id }}">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </div>
     {% endif %}
 
-    {% if field|is_checkbox %}
-        {% crispy_field field %}
+    {% if multifield.label_html %}
+        <p {% if multifield.label_class %}class="{{ multifield.label_class }}"{% endif %}>{{ multifield.label_html|safe }}</p>
     {% endif %}
 
-    {% if field.label %}
-        {{ field.label }}
-    {% endif %}
+    <div class="multiField">
+        {{ fields_output|safe }}
+    </div>
 
-    {% if not field|is_checkbox %}
-        {% crispy_field field %}
-    {% endif %}
-
-    {% if field.label %}
-        </label>
-    {% endif %}
-
-{% endif %}
+</div>

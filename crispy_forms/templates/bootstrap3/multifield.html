@@ -1,0 +1,39 @@
+{% load crispy_forms_field %}
+
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+
+    {% if field|is_checkbox %}
+        {% if field.errors %}<div class="has-error">{% endif %}
+        <div class="checkbox">
+            {% if field.label %}
+                <label for="{{ field.id_for_label }}"{% if labelclass %} class="{{ labelclass }}"{% endif %}>
+            {% endif %}
+            
+            {% crispy_field field %}
+            {{ field.label }}
+            
+            {% if field.label %}
+                </label>
+            {% endif %}
+            {% if field.help_text %}
+                <p id="help_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</span>
+            {% endif %}
+        </div>
+        {% if field.errors %}</div>{% endif %}
+    {% else %}
+        <div class="form-group {% if field.errors %}has-error{% endif %}">
+            {% if field.label %}
+                <label class="control-label" for="{{ field.id_for_label }}"{% if labelclass %} class="{{ labelclass }}"{% endif %}>
+                {{ field.label }}
+                </label>
+            {% endif %}
+            {% crispy_field field %}
+            {% if field.help_text %}
+                <span id="help_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</span>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% endif %}
