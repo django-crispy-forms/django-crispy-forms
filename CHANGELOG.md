@@ -3,6 +3,7 @@
 ## 1.6.0 (2016/1/7)
 
   * Fixed compatibility with Django 1.9
+  * Dropped support for Django 1.7
   * Added Bootstrap 4 template pack
   * Other small fixes.
 
