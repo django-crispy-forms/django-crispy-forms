@@ -35,7 +35,7 @@ If you are upgrading from django-uni-form, we have `instructions`_ for helping y
 
 .. _`Daniel Greenfeld`: https://github.com/pydanny
 .. _`Miguel Araujo`: https://github.com/maraujop
-.. _`instructions`: http://django-crispy-forms.readthedocs.org/en/1.1.1/migration.html
+.. _`instructions`: http://django-crispy-forms.readthedocs.io/en/latest/install.html#moving-from-django-uni-form-to-django-crispy-forms
 
 Example
 =======
