@@ -22,7 +22,7 @@ Django-crispy-forms supports several frontend frameworks, such as Twitter `Boots
 
 .. _`Uni-form`: http://sprawsm.com/uni-form
 .. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
-.. _`see the docs`: http://django-crispy-forms.rtfd.org
+.. _`see the docs`: https://django-crispy-forms.readthedocs.io
 
 Authors
 =======
@@ -35,7 +35,7 @@ If you are upgrading from django-uni-form, we have `instructions`_ for helping y
 
 .. _`Daniel Greenfeld`: https://github.com/pydanny
 .. _`Miguel Araujo`: https://github.com/maraujop
-.. _`instructions`: http://django-crispy-forms.readthedocs.io/en/latest/install.html#moving-from-django-uni-form-to-django-crispy-forms
+.. _`instructions`: https://django-crispy-forms.readthedocs.io/en/latest/install.html#moving-from-django-uni-form-to-django-crispy-forms
 
 Example
 =======
@@ -51,7 +51,7 @@ Documentation
 
 For extensive documentation see the ``docs`` folder or `read it on readthedocs`_
 
-.. _`read it on readthedocs`: http://django-crispy-forms.readthedocs.org/en/latest/index.html
+.. _`read it on readthedocs`: https://django-crispy-forms.readthedocs.io/en/latest/index.html
 
 Special thanks
 ==============
