@@ -41,7 +41,7 @@ def is_checkboxselectmultiple(field):
 
 @register.filter
 def is_file(field):
-    return isinstance(field.field.widget, forms.ClearableFileInput)
+    return isinstance(field.field.widget, forms.FileInput)
 
 
 @register.filter
