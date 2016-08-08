@@ -540,9 +540,7 @@ def test_keepcontext_context_manager(settings):
         InlineCheckboxes('alphacheckboxes'),
         'numeric_multiple_checkboxes'
     )
-    request_factory = RequestFactory()
-    request = request_factory.get('/')
-    context = RequestContext(request, {'form': form})
+    context = {'form': form}
 
     response = render_to_response('crispy_render_template.html', context)
 
