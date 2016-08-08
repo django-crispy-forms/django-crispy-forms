@@ -7,7 +7,10 @@ import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
-from django.middleware.csrf import _get_new_csrf_key
+try:
+    from django.middleware.csrf import _get_new_csrf_key
+except ImportError:
+    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
 from django.template import (
     TemplateSyntaxError, Context
 )
