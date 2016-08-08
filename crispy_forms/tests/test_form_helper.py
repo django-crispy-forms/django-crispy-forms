@@ -151,7 +151,11 @@ def test_html5_required():
     form.helper.html5_required = True
     html = render_crispy_form(form)
     # 6 out of 7 fields are required and an extra one for the SplitDateTimeWidget makes 7.
-    assert html.count('required="required"') == 7
+    if django.VERSION < (1, 10):
+        assert html.count('required="required"') == 7
+    else:
+        assert len(re.findall(r'\brequired\b', text)) == 7
+
 
     form = TestForm()
     form.helper = FormHelper()
