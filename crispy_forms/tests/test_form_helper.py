@@ -154,7 +154,7 @@ def test_html5_required():
     if django.VERSION < (1, 10):
         assert html.count('required="required"') == 7
     else:
-        assert len(re.findall(r'\brequired\b', text)) == 7
+        assert len(re.findall(r'\brequired\b', html)) == 7
 
 
     form = TestForm()
