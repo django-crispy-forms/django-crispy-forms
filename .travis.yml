@@ -11,6 +11,7 @@ python:
 env:
   - DJANGO='django>=1.8.0,<1.9.0'
   - DJANGO='django>=1.9.0,<1.10.0'
+  - DJANGO='django>=1.10.0,<1.11.0'
   - DJANGO='https://github.com/django/django/archive/master.tar.gz'
 install:
   - pip install $DJANGO
@@ -24,9 +25,13 @@ matrix:
     - python: "3.2"
       env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
     - python: "3.2"
+      env: DJANGO='django>=1.10.0,<1.11.0'
+    - python: "3.2"
       env: DJANGO='django>=1.9.0,<1.10.0'
     - python: "3.3"
       env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
+    - python: "3.3"
+      env: DJANGO='django>=1.10.0,<1.11.0'
     - python: "3.3"
       env: DJANGO='django>=1.9.0,<1.10.0'
     - python: "3.4"

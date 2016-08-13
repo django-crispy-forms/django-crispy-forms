@@ -7,7 +7,10 @@ import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
-from django.middleware.csrf import _get_new_csrf_key
+try:
+    from django.middleware.csrf import _get_new_csrf_key
+except ImportError:
+    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
 from django.template import (
     TemplateSyntaxError, Context
 )
@@ -148,7 +151,11 @@ def test_html5_required():
     form.helper.html5_required = True
     html = render_crispy_form(form)
     # 6 out of 7 fields are required and an extra one for the SplitDateTimeWidget makes 7.
-    assert html.count('required="required"') == 7
+    if django.VERSION < (1, 10):
+        assert html.count('required="required"') == 7
+    else:
+        assert len(re.findall(r'\brequired\b', html)) == 7
+
 
     form = TestForm()
     form.helper = FormHelper()
