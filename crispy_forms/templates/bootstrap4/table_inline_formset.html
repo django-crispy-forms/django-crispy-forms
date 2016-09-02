@@ -1,0 +1,51 @@
+{% load crispy_forms_tags %}
+{% load crispy_forms_utils %}
+{% load crispy_forms_field %}
+
+{% specialspaceless %}
+{% if formset_tag %}
+<form {{ flat_attrs|safe }} method="{{ form_method }}" {% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
+{% endif %}
+    {% if formset_method|lower == 'post' and not disable_csrf %}
+        {% csrf_token %}
+    {% endif %}
+
+    <div>
+        {{ formset.management_form|crispy }}
+    </div>
+
+    <table{% if form_id %} id="{{ form_id }}_table"{% endif%} class="table table-striped table-sm">
+        <thead>
+            {% if formset.readonly and not formset.queryset.exists %}
+            {% else %}
+                <tr>
+                    {% for field in formset.forms.0 %}
+                        {% if field.label and not field|is_checkbox and not field.is_hidden %}
+                            <th for="{{ field.auto_id }}" class="form-control-label {% if field.field.required %}requiredField{% endif %}">
+                                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                            </th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endif %}
+        </thead>
+
+        <tbody>
+            {% for form in formset %}
+                {% if form_show_errors and not form.is_extra %}
+                    {% include "bootstrap4/errors.html" %}
+                {% endif %}
+
+                <tr>
+                    {% for field in form %}
+                        {% include 'bootstrap4/field.html' with tag="td" form_show_labels=False %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "bootstrap4/inputs.html" %}
+
+{% if formset_tag %}</form>{% endif %}
+{% endspecialspaceless %}

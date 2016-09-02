@@ -1,0 +1,109 @@
+============
+Contributors
+============
+
+django-crispy-forms Project Maintainers
+=======================================
+
+* Miguel Araujo <miguel.araujo.perez@gmail.com>
+* Carlton Gibson <carlton.gibson@noumenal.es>
+
+django-uni-form Project Founder
+===============================
+
+* Daniel Greenfeld <pydanny@gmail.com>
+
+Contributors
+============
+
+* Alison Rowland <arowla>
+* Bojan Mihelac <bmihelac>
+* bjunix
+* Casper S. Jensen <semadk>
+* Chris Adams <acdha>
+* Eddy Mulyono <eddymul>
+* j0hnsmith
+* James Pic <jamespic.com>
+* James Tauber <jtauber>
+* Karl Bowden <agentk>
+* Marcin Grzybowski <marcin.grzybowski@gildia.info>
+* Michael Lind Mortensen <illio>
+* mirumee
+* mvaerle
+* Nagy Viktor <nagyv>
+* Patrick Lauber <digi604>
+* Patryk Zawadzki <patrys>
+* Skylar Saveland <skyl>
+* Stepan Rakhimov
+* John Maxwell <astrofinch>
+* Richard Marko <sorki>
+* Victor Nagy <nagyv>
+* Antti Kaihola <akaihola>
+* J. Javier Maestro <jjmaestro>
+* Issac Kelly <issackelly>
+* John Debs <johnthedebs>
+* Adam Cupiał <adamcupial>
+* Nicolas Patry <narsil>
+* Jonas Obrist <ojii>
+* Charlie Denton <meshy>
+* Jason Culverhouse <jasonculverhouse>
+* James Turnbull <hturnbull>
+* Patrick Toal <ptoal>
+* David Bennett <dbinit>
+* bitrut <bitrut>
+* ximi
+* Christopher Petrilli <petrilli>
+* James Friedman <jamesmfriedman>
+* Jeroen Vloothuis <jeroenvloothuis>
+* Daniel Izquierdo <izquierdo>
+* gaftech
+* Michal Kuffa <beezz>
+* Paul Oswald <poswald>
+* Rudy Mutter <rmutter>
+* Samuel Goldszmidt <ouhouhsami>
+* Andrei Antoukh <niwibe>
+* <clairetheyers>
+* Rivo Laks <rivol>
+* Lloyd Philbrook <phoolish>
+* Piet Delport <pjdelport>
+* <lmoppert>
+* Markus Hametner <fin>
+* Thomas Grainger <graingert>
+* Lee Semel <lsemel>
+* <david-e>
+* Alex Yakovlev <libraM>
+* Si Feng <devfeng>
+* Igor Katson <ikatson>
+* Ben Delevingne <rockingskier>
+* <powderflask>
+* Evan Borgstrom <borgstrom>
+* Daniel Shapiro <danxshap>
+* <SpazioDati>
+* Stefan "hr" Berder (白峰) <hrbonz>
+* Suleyman Melikoglu <laplacesdemon>
+* Vladislav Mitov <VMitov>
+* Nemesis Fixx <mcnemesis>
+* Chris Vigelius <chrisv2>
+* David Cramer <dcramer>
+* Stas Rudakou <nott>
+* Tom Yam <tepez>
+* Svyatoslav Bulbakha <ssbb>
+* Andres Vargas <zodman>
+* Gabe Jackson <gabejackson>
+* Camilo Nova <camilonova>
+* <mrkre>
+* Daniel Mascarenhas <danielmt>
+* Paras Kuhad <pkuhad>
+* Kevin Trad <hekevintran>
+* Steven Klass <rh0dium>
+* David Fischer <davidfischer-ch>
+* Stefan Tjarks <stj>
+* Jan Dittberner <jandd>
+* Michael Nielsen <K0den>
+* Stephen Mitchell <scuml>
+* <pySilver>
+* Christopher Adams <adamsc64>
+* John Comeau <jcomeauictx>
+* Yoong Kang Lim <yoongkang>
+* Dmitry Dygalo <Stranger6667>
+* Lee Skillen <lskillen>

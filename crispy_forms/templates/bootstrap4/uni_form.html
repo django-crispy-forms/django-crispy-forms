@@ -1,0 +1,11 @@
+{% load crispy_forms_utils %}
+
+{% specialspaceless %}
+    {% if include_media %}{{ form.media }}{% endif %}
+    {% if form_show_errors %}
+        {% include "bootstrap4/errors.html" %}
+    {% endif %}
+    {% for field in form %}
+        {% include "bootstrap4/field.html" %}
+    {% endfor %}
+{% endspecialspaceless %}

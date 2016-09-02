@@ -1,0 +1,35 @@
+setuptools_git-0.3.4-py2.6.egg
+#buildout's specific
+.installed.cfg
+eggs/*
+bin/*
+build/*
+dist/*
+develop-eggs/*
+parts/*
+downloads/*
+
+#egg's specific
+*.egg-info
+
+#defaults
+*.pyc
+*.pyo
+__pycache__
+
+#temp file
+tempfile
+*.swp
+
+# coverage 
+.coverage
+htmlcov
+_build
+
+# OSX
+*.DS_Store
+
+# editors
+.project
+.pydevproject
+.settings/
