@@ -11,7 +11,7 @@
             </label>
         {% endif %}
 
-        <div class="controls {{ field_class }}">
+        <div class="{{ field_class }}">
             {% if field|is_select %}
                 {% if crispy_prepended_text %}<span class="input-group{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
                 {% crispy_field field %}

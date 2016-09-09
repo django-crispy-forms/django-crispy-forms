@@ -7,7 +7,7 @@
         </label>
     {% endif %}
 
-    <div class="controls {{ field_class }}">
+    <div class="{{ field_class }}">
         <div class="input-group">
             {% crispy_field field %}
             <span class="input-group-btn{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ buttons|safe }}</span>
