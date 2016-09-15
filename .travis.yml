@@ -14,7 +14,7 @@ env:
   - DJANGO='django>=1.10.0,<1.11.0'
   - DJANGO='https://github.com/django/django/archive/master.tar.gz'
 before_install:
-  - pip install --upgrade pytest
+  - pip install --upgrade 'pytest<3.0.0'
 install:
   - pip install $DJANGO
   - pip install -e .
