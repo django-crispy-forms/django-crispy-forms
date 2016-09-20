@@ -755,32 +755,28 @@ def test_template_pack():
 
 
 @only_bootstrap4
-def test_bootstrap4_label_class_and_field_class():
+def test_label_class_and_field_class():
     form = TestForm()
     form.helper = FormHelper()
-    html = render_crispy_form(form)
-
-    assert '<div class="form-group">' in html
-
     form.helper.label_class = 'col-lg-2'
     form.helper.field_class = 'col-lg-8'
     html = render_crispy_form(form)
 
-    assert '<div class="form-group row">' in html
-    assert '<div class="controls col-lg-offset-2 col-lg-8">' in html
+    assert '<div class="form-group">' in html
+    assert '<div class="col-lg-offset-2 col-lg-8">' in html
     assert html.count('col-lg-8') == 7
 
     form.helper.label_class = 'col-sm-3'
     form.helper.field_class = 'col-sm-8'
     html = render_crispy_form(form)
 
-    assert '<div class="form-group row">' in html
-    assert '<div class="controls col-sm-offset-3 col-sm-8">' in html
+    assert '<div class="form-group">' in html
+    assert '<div class="col-sm-offset-3 col-sm-8">' in html
     assert html.count('col-sm-8') == 7
 
 
 @only_bootstrap4
-def test_bootstrap4_template_pack():
+def test_template_pack():
     form = TestForm()
     form.helper = FormHelper()
     form.helper.template_pack = 'uni_form'
