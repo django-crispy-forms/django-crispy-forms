@@ -31,6 +31,12 @@
         </thead>
 
         <tbody>
+            <tr class="hidden empty-form">
+                {% for field in formset.empty_form %}
+                    {% include 'bootstrap/field.html' with tag="td" form_show_labels=False %}
+                {% endfor %}
+            </tr>
+
             {% for form in formset %}
                 {% if form_show_errors and not form.is_extra %}
                     {% include "bootstrap/errors.html" %}
