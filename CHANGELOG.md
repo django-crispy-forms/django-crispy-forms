@@ -1,5 +1,13 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.6.1 (2016/10/17)
+
+  * Updates compatibility for Django 1.10
+  * A number of small Bootstrap 4 fixes.
+
+See [1.6.1 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/3?closed=1)
+for full issue list.
+
 ## 1.6.0 (2016/1/7)
 
   * Fixed compatibility with Django 1.9
