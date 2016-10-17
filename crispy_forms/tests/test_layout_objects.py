@@ -98,7 +98,7 @@ def test_field_wrapper_class(settings):
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         assert html.count('class="form-group testing"') == 1
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-        assert html.count('class="form-group row testing"') == 1
+        assert html.count('class="form-group testing"') == 1
 
 
 def test_html_with_carriage_returns(settings):
@@ -400,7 +400,7 @@ class TestBootstrapLayoutObjects(object):
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             form_group_class = 'form-group'
         elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-            form_group_class = 'form-group row'
+            form_group_class = 'form-group'
 
         assert html.count('class="%s extra"' % form_group_class) == 1
         assert html.count('autocomplete="off"') == 1

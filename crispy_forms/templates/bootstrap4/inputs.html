@@ -1,10 +1,10 @@
 {% if inputs %}
-    <div class="form-group row">
+    <div class="form-group">
         {% if label_class %}
-            <div class="aab controls {{ label_class }}"></div>
+            <div class="aab {{ label_class }}"></div>
         {% endif %}
 
-        <div class="controls {{ field_class }}">
+        <div class="{{ field_class }}">
             {% for input in inputs %}
                 {% include "bootstrap4/layout/baseinput.html" %}
             {% endfor %}

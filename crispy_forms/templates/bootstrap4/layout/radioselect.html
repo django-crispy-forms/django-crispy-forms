@@ -1,7 +1,7 @@
 {% load crispy_forms_filters %}
 {% load l10n %}
 
-<div class="controls {{ field_class }}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
+<div class="{{ field_class }}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
     {% include 'bootstrap4/layout/field_errors_block.html' %}
 
     {% for choice in field.field.choices %}

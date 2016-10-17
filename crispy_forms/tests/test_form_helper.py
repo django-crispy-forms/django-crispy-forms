@@ -7,7 +7,10 @@ import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
-from django.middleware.csrf import _get_new_csrf_key
+try:
+    from django.middleware.csrf import _get_new_csrf_key
+except ImportError:
+    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
 from django.template import (
     TemplateSyntaxError, Context
 )
@@ -148,7 +151,11 @@ def test_html5_required():
     form.helper.html5_required = True
     html = render_crispy_form(form)
     # 6 out of 7 fields are required and an extra one for the SplitDateTimeWidget makes 7.
-    assert html.count('required="required"') == 7
+    if django.VERSION < (1, 10):
+        assert html.count('required="required"') == 7
+    else:
+        assert len(re.findall(r'\brequired\b', html)) == 7
+
 
     form = TestForm()
     form.helper = FormHelper()
@@ -540,7 +547,7 @@ def test_multifield_errors():
     assert html.count('error') == 0
 
 
-@only_bootstrap
+@only_bootstrap3
 def test_bootstrap_form_show_errors():
     form = TestForm({
         'email': 'invalidemail',
@@ -562,6 +569,34 @@ def test_bootstrap_form_show_errors():
     form.helper.form_show_errors = True
     html = render_crispy_form(form)
     assert html.count('error') == 6
+
+    form.helper.form_show_errors = False
+    html = render_crispy_form(form)
+    assert html.count('error') == 0
+
+
+@only_bootstrap4
+def test_bootstrap_form_show_errors():
+    form = TestForm({
+        'email': 'invalidemail',
+        'first_name': 'first_name_too_long',
+        'last_name': 'last_name_too_long',
+        'password1': 'yes',
+        'password2': 'yes',
+    })
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        AppendedText('email', 'whatever'),
+        PrependedText('first_name', 'blabla'),
+        PrependedAppendedText('last_name', 'foo', 'bar'),
+        AppendedText('password1', 'whatever'),
+        PrependedText('password2', 'blabla'),
+    )
+    form.is_valid()
+
+    form.helper.form_show_errors = True
+    html = render_crispy_form(form)
+    assert html.count('error') == 3
 
     form.helper.form_show_errors = False
     html = render_crispy_form(form)
@@ -600,7 +635,7 @@ def test_error_text_inline(settings):
     assert len(matches) == 3
 
 
-@only_bootstrap
+@only_bootstrap3
 def test_error_and_help_inline():
     form = TestForm({'email': 'invalidemail'})
     form.helper = FormHelper()
@@ -627,6 +662,36 @@ def test_error_and_help_inline():
     # Check that error goes before help, otherwise CSS won't work
     error_position = html.find('<span id="error_1_id_email" class="help-inline">')
     help_position = html.find('<p id="hint_id_email" class="help-block">')
+    assert error_position < help_position
+
+
+@only_bootstrap4
+def test_error_and_help_inline():
+    form = TestForm({'email': 'invalidemail'})
+    form.helper = FormHelper()
+    form.helper.error_text_inline = False
+    form.helper.help_text_inline = True
+    form.helper.layout = Layout('email')
+    form.is_valid()
+    html = render_crispy_form(form)
+
+    # Check that help goes before error, otherwise CSS won't work
+    help_position = html.find('<span id="hint_id_email" class="help-inline">')
+    error_position = html.find('<p id="error_1_id_email" class="help-block">')
+    assert help_position < error_position
+
+    # Viceversa
+    form = TestForm({'email': 'invalidemail'})
+    form.helper = FormHelper()
+    form.helper.error_text_inline = True
+    form.helper.help_text_inline = False
+    form.helper.layout = Layout('email')
+    form.is_valid()
+    html = render_crispy_form(form)
+
+    # Check that error goes before help, otherwise CSS won't work
+    error_position = html.find('<span id="error_1_id_email" class="help-inline">')
+    help_position = html.find('<small id="hint_id_email" class="text-muted">')
     assert error_position < help_position
 
 
@@ -690,31 +755,50 @@ def test_template_pack():
 
 
 @only_bootstrap4
-def test_bootstrap4_label_class_and_field_class():
+def test_label_class_and_field_class():
     form = TestForm()
     form.helper = FormHelper()
     form.helper.label_class = 'col-lg-2'
     form.helper.field_class = 'col-lg-8'
     html = render_crispy_form(form)
 
-    assert '<div class="form-group row">' in html
-    assert '<div class="controls col-lg-offset-2 col-lg-8">' in html
+    assert '<div class="form-group">' in html
+    assert '<div class="col-lg-offset-2 col-lg-8">' in html
     assert html.count('col-lg-8') == 7
 
     form.helper.label_class = 'col-sm-3'
     form.helper.field_class = 'col-sm-8'
     html = render_crispy_form(form)
 
-    assert '<div class="form-group row">' in html
-    assert '<div class="controls col-sm-offset-3 col-sm-8">' in html
+    assert '<div class="form-group">' in html
+    assert '<div class="col-sm-offset-3 col-sm-8">' in html
     assert html.count('col-sm-8') == 7
 
 
 @only_bootstrap4
-def test_bootstrap4_template_pack():
+def test_template_pack():
     form = TestForm()
     form.helper = FormHelper()
     form.helper.template_pack = 'uni_form'
     html = render_crispy_form(form)
     assert 'form-control' not in html
     assert 'ctrlHolder' in html
+
+
+def test_passthrough_context():
+    """
+    Test to ensure that context is passed through implicitly from outside of
+    the crispy form into the crispy form templates.
+    """
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.template = 'custom_form_template_with_context.html'
+
+    c = {
+        'prefix': 'foo',
+        'suffix': 'bar'
+    }
+
+    html = render_crispy_form(form, helper=form.helper, context=c)
+    assert "Got prefix: foo" in html
+    assert "Got suffix: bar" in html

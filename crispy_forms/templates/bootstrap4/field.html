@@ -4,14 +4,14 @@
     {{ field }}
 {% else %}
     {% if field|is_checkbox %}
-        <div class="form-group row">
+        <div class="form-group">
         {% if label_class %}
-            <div class="controls col-{{ bootstrap_device_type }}-offset-{{ label_size }} {{ field_class }}">
+            <div class="col-{{ bootstrap_device_type }}-offset-{{ label_size }} {{ field_class }}">
         {% endif %}
     {% endif %}
-    <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" {% if not field|is_checkbox %}class="form-group row{% else %}class="checkbox{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_show_errors%}{% if field.errors %} has-error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+    <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" {% if not field|is_checkbox %}class="form-group{% else %}class="checkbox{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_show_errors%}{% if field.errors %} has-danger{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
         {% if field.label and not field|is_checkbox and form_show_labels %}
-            <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+            <label for="{{ field.id_for_label }}" class="form-control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
                 {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
             </label>
         {% endif %}
@@ -29,10 +29,10 @@
                 <label for="{{ field.id_for_label }}" class="{% if field.field.required %} requiredField{% endif %}">
                     {% crispy_field field %}
                     {{ field.label|safe }}
-                    {% include 'bootstrap4/layout/help_text_and_errors.html' %}
                 </label>
+                {% include 'bootstrap4/layout/help_text_and_errors.html' %}
             {% else %}
-                <div class="controls {{ field_class }}">
+                <div class="{{ field_class }}">
                     {% crispy_field field %}
                     {% include 'bootstrap4/layout/help_text_and_errors.html' %}
                 </div>

@@ -36,6 +36,8 @@ class PrependedAppendedText(Field):
             'input_size': self.input_size,
             'active': getattr(self, "active", False)
         }
+        if hasattr(self, 'wrapper_class'):
+            extra_context['wrapper_class'] = self.wrapper_class
         template = self.get_template_name(template_pack)
         return render_field(
             self.field, form, form_style, context,
@@ -243,7 +245,7 @@ class ContainerHolder(Div):
         target = self.first_container_with_errors(form.errors.keys())
         if target is None:
             target = self.fields[0]
-            if not target._active_originally_included:
+            if not getattr(target, '_active_originally_included', None):
                 target.active = True
             return target
 

@@ -21,7 +21,7 @@
                 <tr>
                     {% for field in formset.forms.0 %}
                         {% if field.label and not field|is_checkbox and not field.is_hidden %}
-                            <th for="{{ field.auto_id }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
+                            <th for="{{ field.auto_id }}" class="form-control-label {% if field.field.required %}requiredField{% endif %}">
                                 {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                             </th>
                         {% endif %}
@@ -38,7 +38,7 @@
 
                 <tr>
                     {% for field in form %}
-                        {% include 'bootstrap4/field.html' with tag="th" form_show_labels=False %}
+                        {% include 'bootstrap4/field.html' with tag="td" form_show_labels=False %}
                     {% endfor %}
                 </tr>
             {% endfor %}

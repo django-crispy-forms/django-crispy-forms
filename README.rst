@@ -11,6 +11,8 @@ django-crispy-forms
 
 The best way to have Django_ DRY forms. Build programmatic reusable layouts out of components, having full control of the rendered HTML without writing HTML in templates. All this without breaking the standard way of doing things in Django, so it plays nice with any other form application.
 
+`django-crispy-forms` supports Python 2.7/Python 3.2+ and Django 1.8+
+
 The application mainly provides:
 
 * A filter named ``|crispy`` that will render elegant div based forms. Think of it as the built-in methods: ``as_table``, ``as_ul`` and ``as_p``. You cannot tune up the output, but it is easy to start using it.
@@ -20,7 +22,7 @@ Django-crispy-forms supports several frontend frameworks, such as Twitter `Boots
 
 .. _`Uni-form`: http://sprawsm.com/uni-form
 .. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
-.. _`see the docs`: http://django-crispy-forms.rtfd.org
+.. _`see the docs`: https://django-crispy-forms.readthedocs.io
 
 Authors
 =======
@@ -33,7 +35,7 @@ If you are upgrading from django-uni-form, we have `instructions`_ for helping y
 
 .. _`Daniel Greenfeld`: https://github.com/pydanny
 .. _`Miguel Araujo`: https://github.com/maraujop
-.. _`instructions`: http://django-crispy-forms.readthedocs.org/en/1.1.1/migration.html
+.. _`instructions`: https://django-crispy-forms.readthedocs.io/en/latest/install.html#moving-from-django-uni-form-to-django-crispy-forms
 
 Example
 =======
@@ -49,7 +51,7 @@ Documentation
 
 For extensive documentation see the ``docs`` folder or `read it on readthedocs`_
 
-.. _`read it on readthedocs`: http://django-crispy-forms.readthedocs.org/en/latest/index.html
+.. _`read it on readthedocs`: https://django-crispy-forms.readthedocs.io/en/latest/index.html
 
 Special thanks
 ==============
@@ -62,9 +64,5 @@ Special thanks
 .. _`@pydanny`: https://github.com/pydanny
 .. _`@kennethlove`: https://github.com/kennethlove
 
-Note
-----
-
-django-crispy-forms supports Django 1.3 or higher with Python 2.6.x, Python 2.7.x and Python 3.3.x. If you need to support Python 2.5 or Django 1.2 you will need to use a version of django-crispy-forms less than 1.3. For earlier versions of Django or Python you will need to use django-uni-form 0.7.0.
 
 .. _Django: http://djangoproject.com
