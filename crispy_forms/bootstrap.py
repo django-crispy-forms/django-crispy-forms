@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 
 from .compatibility import text_type
-from .layout import LayoutObject, Field, Div
+from .layout import LayoutObject, Field, Div, TemplateNameMixin
 from .utils import render_field, flatatt, TEMPLATE_PACK
 
 
@@ -159,7 +159,7 @@ class FieldWithButtons(Div):
             )
 
 
-class StrictButton(object):
+class StrictButton(TemplateNameMixin):
     """
     Layout object for rendering an HTML button::
 
@@ -185,7 +185,7 @@ class StrictButton(object):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         self.content = Template(text_type(self.content)).render(context)
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         context.update({'button': self})
 
         return render_to_string(template, context.flatten())
