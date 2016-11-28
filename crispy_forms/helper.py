@@ -131,7 +131,7 @@ class FormHelper(DynamicLayoutHandler):
         **form_id**: Generates a form id for dom identification.
             If no id provided then no id attribute is created on the form.
 
-        **form_class**: String containing separated CSS clases to be applied
+        **form_class**: String containing separated CSS classes to be applied
             to form class attribute. The form will always have by default
             'uniForm' class.
 
