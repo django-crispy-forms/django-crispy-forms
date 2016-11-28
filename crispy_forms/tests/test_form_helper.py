@@ -617,8 +617,10 @@ def test_error_text_inline(settings):
     html = render_crispy_form(form)
 
     help_class = 'help-inline'
-    if settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
+    if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         help_class = 'help-block'
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        help_class = 'form-control-feedback'
 
     matches = re.findall(
         '<span id="error_\d_\w*" class="%s"' % help_class, html, re.MULTILINE
@@ -631,7 +633,16 @@ def test_error_text_inline(settings):
     form.helper.error_text_inline = False
     html = render_crispy_form(form)
 
-    matches = re.findall('<p id="error_\d_\w*" class="help-block"', html, re.MULTILINE)
+    if settings.CRISPY_TEMPLATE_PACK in ['bootstrap', 'bootstrap3']:
+        help_class = 'help-block'
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        help_class = 'form-control-feedback'
+
+    matches = re.findall(
+        '<p id="error_\d_\w*" class="%s"' % help_class,
+        html,
+        re.MULTILINE
+    )
     assert len(matches) == 3
 
 
