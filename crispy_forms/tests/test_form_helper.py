@@ -747,11 +747,11 @@ def test_label_class_and_field_class():
     assert '<div class="form-group"> <div class="controls col-lg-offset-2 col-lg-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />' in html
     assert html.count('col-lg-8') == 7
 
-    form.helper.label_class = 'col-sm-3'
-    form.helper.field_class = 'col-sm-8'
+    form.helper.label_class = 'col-sm-3 col-md-4'
+    form.helper.field_class = 'col-sm-8 col-md-6'
     html = render_crispy_form(form)
 
-    assert '<div class="form-group"> <div class="controls col-sm-offset-3 col-sm-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />' in html
+    assert '<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />' in html
     assert html.count('col-sm-8') == 7
 
 
@@ -777,12 +777,12 @@ def test_label_class_and_field_class_bs4():
     assert '<div class="col-lg-offset-2 col-lg-8">' in html
     assert html.count('col-lg-8') == 7
 
-    form.helper.label_class = 'col-sm-3'
-    form.helper.field_class = 'col-sm-8'
+    form.helper.label_class = 'col-sm-3 col-md-4'
+    form.helper.field_class = 'col-sm-8 col-md-6'
     html = render_crispy_form(form)
 
     assert '<div class="form-group">' in html
-    assert '<div class="col-sm-offset-3 col-sm-8">' in html
+    assert '<div class="col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6">' in html
     assert html.count('col-sm-8') == 7
 
 

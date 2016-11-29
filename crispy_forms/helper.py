@@ -348,15 +348,9 @@ class FormHelper(DynamicLayoutHandler):
             'field_class': self.field_class,
             'include_media': self.include_media
         }
-        # col-[lg|md|sm|xs]-<number>
-        label_size_match = re.search('(\d+)', self.label_class)
-        device_type_match = re.search('(lg|md|sm|xs)', self.label_class)
-        if label_size_match and device_type_match:
-            try:
-                items['label_size'] = int(label_size_match.groups()[0])
-                items['bootstrap_device_type'] = device_type_match.groups()[0]
-            except:
-                pass
+        bootstrap_size_match = re.findall('col-(lg|md|sm|xs)-(\d+)', self.label_class)
+        if bootstrap_size_match:
+            items['bootstrap_checkbox_offsets'] = ['col-%s-offset-%s' % m for m in bootstrap_size_match]
 
         items['attrs'] = {}
         if self.attrs:
