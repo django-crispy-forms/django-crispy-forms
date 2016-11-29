@@ -89,7 +89,8 @@ def render_field(
 
         try:
             # Injecting HTML attributes into field's widget, Django handles rendering these
-            field_instance = form.fields[field]
+            bound_field = form[field]
+            field_instance = bound_field.field
             if attrs is not None:
                 widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget])
 
@@ -131,8 +132,6 @@ def render_field(
         if field_instance is None:
             html = ''
         else:
-            bound_field = BoundField(form, field_instance, field)
-
             if template is None:
                 if form.crispy_field_template is None:
                     template = default_field_template(template_pack)
