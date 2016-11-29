@@ -7,6 +7,8 @@
         <div class="form-group">
         {% if label_class %}
             <div class="controls col-{{ bootstrap_device_type }}-offset-{{ label_size }} {{ field_class }}">
+        {% else %}
+            <div class="controls {{ field_class }}">
         {% endif %}
     {% endif %}
     <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" {% if not field|is_checkbox %}class="form-group{% else %}class="checkbox{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_show_errors%}{% if field.errors %} has-error{% endif %}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
@@ -40,9 +42,7 @@
         {% endif %}
     </{% if tag %}{{ tag }}{% else %}div{% endif %}>
     {% if field|is_checkbox %}
-        {% if label_class %}
             </div>
-        {% endif %}
         </div>
     {% endif %}
 {% endif %}
