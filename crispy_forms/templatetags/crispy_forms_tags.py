@@ -184,7 +184,6 @@ class BasicNode(template.Node):
             'flat_attrs': attrs.get('flat_attrs', ''),
             'error_text_inline': attrs.get('error_text_inline', True),
             'label_class': attrs.get('label_class', ''),
-            'label_size': attrs.get('label_size', 0),
             'field_class': attrs.get('field_class', ''),
             'include_media': attrs.get('include_media', True),
         }
