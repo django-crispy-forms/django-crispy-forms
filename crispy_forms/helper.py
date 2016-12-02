@@ -350,7 +350,11 @@ class FormHelper(DynamicLayoutHandler):
         }
         bootstrap_size_match = re.findall('col-(lg|md|sm|xs)-(\d+)', self.label_class)
         if bootstrap_size_match:
-            items['bootstrap_checkbox_offsets'] = ['col-%s-offset-%s' % m for m in bootstrap_size_match]
+            if template_pack == 'bootstrap4':
+                offset_pattern = 'offset-%s-%s'
+            else:
+                offset_pattern = 'col-%s-offset-%s'
+            items['bootstrap_checkbox_offsets'] = [offset_pattern % m for m in bootstrap_size_match]
 
         items['attrs'] = {}
         if self.attrs:

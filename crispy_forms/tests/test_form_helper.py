@@ -774,7 +774,7 @@ def test_label_class_and_field_class_bs4():
     html = render_crispy_form(form)
 
     assert '<div class="form-group">' in html
-    assert '<div class="col-lg-offset-2 col-lg-8">' in html
+    assert '<div class="offset-lg-2 col-lg-8">' in html
     assert html.count('col-lg-8') == 7
 
     form.helper.label_class = 'col-sm-3 col-md-4'
@@ -782,7 +782,7 @@ def test_label_class_and_field_class_bs4():
     html = render_crispy_form(form)
 
     assert '<div class="form-group">' in html
-    assert '<div class="col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6">' in html
+    assert '<div class="offset-sm-3 offset-md-4 col-sm-8 col-md-6">' in html
     assert html.count('col-sm-8') == 7
 
 
