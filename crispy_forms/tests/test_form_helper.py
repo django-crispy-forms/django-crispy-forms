@@ -775,7 +775,7 @@ def test_label_class_and_field_class_bs4():
     form.helper.field_class = 'col-lg-8'
     html = render_crispy_form(form)
 
-    assert '<div class="form-group">' in html
+    assert '<div class="form-group row">' in html
     assert '<div class="offset-lg-2 col-lg-8">' in html
     assert html.count('col-lg-8') == 7
 
@@ -783,9 +783,25 @@ def test_label_class_and_field_class_bs4():
     form.helper.field_class = 'col-sm-8 col-md-6'
     html = render_crispy_form(form)
 
-    assert '<div class="form-group">' in html
+    assert '<div class="form-group row">' in html
     assert '<div class="offset-sm-3 offset-md-4 col-sm-8 col-md-6">' in html
     assert html.count('col-sm-8') == 7
+
+
+@only_bootstrap4
+def test_form_group_with_form_inline_bs4():
+    form = TestForm()
+    form.helper = FormHelper()
+    html = render_crispy_form(form)
+    assert '<div class="form-group row">' in html
+
+    # .row class shouldn't be together with .form-group in inline forms
+    form = TestForm()
+    form.helper = FormHelper()
+    form.helper.form_class = 'form-inline'
+    form.helper.field_template = 'bootstrap4/layout/inline_field.html'
+    html = render_crispy_form(form)
+    assert '<div class="form-group row">' not in html
 
 
 @only_bootstrap4
