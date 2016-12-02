@@ -4,9 +4,9 @@
     {{ field }}
 {% else %}
     {% if field|is_checkbox %}
-        <div id="div_{{ field.auto_id }}" class="checkbox{% if wrapper_class %} {{ wrapper_class }}{% endif %}">
-            <label for="{{ field.id_for_label }}" class="{% if field.field.required %} requiredField{% endif %}">
-                {% crispy_field field 'class' 'checkbox' %}
+        <div id="div_{{ field.auto_id }}" class="form-check{% if wrapper_class %} {{ wrapper_class }}{% endif %}">
+            <label for="{{ field.id_for_label }}" class="form-check-label{% if field.field.required %} requiredField{% endif %}">
+                {% crispy_field field 'class' 'form-check-input' %}
                 {{ field.label|safe }}
             </label>
         </div>

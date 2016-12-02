@@ -138,7 +138,7 @@ def test_i18n():
 @only_bootstrap
 class TestBootstrapLayoutObjects(object):
 
-    def test_custom_django_widget(self):
+    def test_custom_django_widget(self, settings):
         class CustomRadioSelect(forms.RadioSelect):
             pass
 
@@ -152,13 +152,20 @@ class TestBootstrapLayoutObjects(object):
         form.helper.layout = Layout('inline_radios')
 
         html = render_crispy_form(form)
-        assert 'class="radio"' in html
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            assert 'class="form-check"' in html
+        else:
+            assert 'class="radio"' in html
 
         # Make sure an inherited CheckboxSelectMultiple gets rendered as it
         form.fields['checkboxes'].widget = CustomCheckboxSelectMultiple()
         form.helper.layout = Layout('checkboxes')
         html = render_crispy_form(form)
-        assert 'class="checkbox"' in html
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            assert 'class="form-check"' in html
+        else:
+            assert 'class="checkbox"' in html
+
 
     def test_prepended_appended_text(self, settings):
         test_form = TestForm()
@@ -212,8 +219,10 @@ class TestBootstrapLayoutObjects(object):
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
             assert html.count('radio inline"') == 2
-        elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             assert html.count('radio-inline"') == 2
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            assert html.count('form-check-inline"') == 2
 
     def test_accordion_and_accordiongroup(self, settings):
         test_form = TestForm()
@@ -452,5 +461,8 @@ class TestBootstrapLayoutObjects(object):
             assert html.count('checkbox inline"') == 3
             assert html.count('inline"') == 3
         elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
-            assert html.count('checkbox-inline"') == 3
             assert html.count('inline="True"') == 4
+            if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+                assert html.count('checkbox-inline"') == 3
+            elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+                assert html.count('form-check-inline"') == 3
