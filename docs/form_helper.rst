@@ -14,6 +14,8 @@ FormHelper with a form attached (Default layout)
 
 Since version 1.2.0 ``FormHelper`` optionally can be passed an instance of a form. You would do it this way::
 
+    from crispy_forms.helper import FormHelper
+
     class ExampleForm(forms.Form):
         def __init__(self, *args, **kwargs):
             super(ExampleForm, self).__init__(*args, **kwargs)
