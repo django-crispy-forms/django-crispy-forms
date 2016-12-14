@@ -435,6 +435,7 @@ def test_layout_composition():
             ),
             ButtonHolder(
                 Submit('Save', 'Save', css_class='button white'),
+                Submit(None, 'Submit'),
             ),
             Div(
                 'password1',
@@ -463,6 +464,7 @@ def test_layout_composition():
     assert 'id="custom-div"' in html
     assert 'class="customdivs"' in html
     assert 'last_name' not in html
+    assert 'name="None"' not in html
 
 
 @only_uni_form
