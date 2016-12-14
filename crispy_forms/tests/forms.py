@@ -1,4 +1,3 @@
-import django
 from django import forms
 from django.db import models
 
@@ -96,8 +95,7 @@ class TestForm4(forms.ModelForm):
         because obviously it casts the string to a set
         """
         model = CrispyTestModel
-        if django.VERSION >= (1, 6):
-            fields = '__all__'  # eliminate RemovedInDjango18Warning
+        fields = '__all__'  # eliminate RemovedInDjango18Warning
 
 
 class TestForm5(forms.Form):

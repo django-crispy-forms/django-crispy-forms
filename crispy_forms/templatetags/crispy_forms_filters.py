@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import django
 from django.conf import settings
 from django.forms import forms
 from django.forms.formsets import BaseFormSet
@@ -53,7 +52,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
             'form_show_labels': True,
             'label_class': label_class,
             'field_class': field_class,
-        })
+        }).flatten()
     else:
         template = uni_form_template(template_pack)
         c = Context({
@@ -62,10 +61,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
             'form_show_labels': True,
             'label_class': label_class,
             'field_class': field_class,
-        })
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
+        }).flatten()
 
     return template.render(c)
 
@@ -84,13 +80,10 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
     """
     if isinstance(form, BaseFormSet):
         template = get_template('%s/errors_formset.html' % template_pack)
-        c = Context({'formset': form})
+        c = Context({'formset': form}).flatten()
     else:
         template = get_template('%s/errors.html' % template_pack)
-        c = Context({'form': form})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
+        c = Context({'form': form}).flatten()
 
     return template.render(c)
 
@@ -111,10 +104,7 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK):
         raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
 
     template = get_template('%s/field.html' % template_pack)
-    c = Context({'field': field, 'form_show_errors': True, 'form_show_labels': True})
-
-    if django.VERSION >= (1, 8):
-        c = c.flatten()
+    c = Context({'field': field, 'form_show_errors': True, 'form_show_labels': True}).flatten()
 
     return template.render(c)
 
