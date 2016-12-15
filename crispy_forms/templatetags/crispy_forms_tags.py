@@ -6,10 +6,11 @@ from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
+from django.utils.lru_cache import lru_cache
 from django import template
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.compatibility import lru_cache, string_types
+from crispy_forms.compatibility import string_types
 
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
