@@ -3,11 +3,10 @@ from __future__ import unicode_literals
 
 from django.forms.forms import BoundField
 from django.forms.models import formset_factory
-from django.template import Context
+from django.template import Context, Template
 
 import pytest
 
-from .compatibility import get_template_from_string
 from .conftest import only_bootstrap
 from .forms import TestForm
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
@@ -15,7 +14,7 @@ from crispy_forms.exceptions import CrispyError
 
 
 def test_as_crispy_errors_form_without_non_field_errors():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ form|as_crispy_errors }}
     """)
@@ -28,7 +27,7 @@ def test_as_crispy_errors_form_without_non_field_errors():
 
 
 def test_as_crispy_errors_form_with_non_field_errors():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ form|as_crispy_errors }}
     """)
@@ -43,7 +42,7 @@ def test_as_crispy_errors_form_with_non_field_errors():
 
 
 def test_as_crispy_errors_formset_without_non_form_errors():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ formset|as_crispy_errors }}
     """)
@@ -58,7 +57,7 @@ def test_as_crispy_errors_formset_without_non_form_errors():
 
 
 def test_as_crispy_errors_formset_with_non_form_errors():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ formset|as_crispy_errors }}
     """)
@@ -81,7 +80,7 @@ def test_as_crispy_errors_formset_with_non_form_errors():
 
 
 def test_as_crispy_field_non_field(settings):
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ field|as_crispy_field }}
     """)
@@ -97,7 +96,7 @@ def test_as_crispy_field_non_field(settings):
 
 
 def test_as_crispy_field_bound_field():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ field|as_crispy_field }}
     """)
@@ -114,7 +113,7 @@ def test_as_crispy_field_bound_field():
 
 
 def test_crispy_filter_with_form():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ form|crispy }}
     """)
@@ -127,7 +126,7 @@ def test_crispy_filter_with_form():
 
 
 def test_crispy_filter_with_formset():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ testFormset|crispy }}
     """)
@@ -146,7 +145,7 @@ def test_crispy_filter_with_formset():
 
 
 def test_classes_filter():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_field %}
         {{ testField|classes }}
     """)
@@ -159,7 +158,7 @@ def test_classes_filter():
 
 
 def test_crispy_field_and_class_converters():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_field %}
         {% crispy_field testField 'class' 'error' %}
     """)
