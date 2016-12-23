@@ -7,10 +7,12 @@ from django.conf import settings
 from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
+from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
+from django.utils.lru_cache import lru_cache
 
 from .base import KeepContext
-from .compatibility import lru_cache, text_type, PY2, SimpleLazyObject
+from .compatibility import text_type, PY2
 
 
 def get_template_pack():
@@ -231,5 +233,3 @@ def list_difference(left, right):
             blocked.add(item)
             difference.append(item)
     return difference
-
-

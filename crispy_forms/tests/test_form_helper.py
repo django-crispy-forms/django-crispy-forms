@@ -12,14 +12,13 @@ try:
 except ImportError:
     from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
 from django.template import (
-    TemplateSyntaxError, Context
+    Template, TemplateSyntaxError, Context
 )
 
 import pytest
 
 from django.utils.translation import ugettext_lazy as _
 
-from .compatibility import get_template_from_string
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
 from .forms import TestForm, TestFormWithMedia
 from crispy_forms.bootstrap import (
@@ -42,7 +41,7 @@ def test_inputs(settings):
     form_helper.add_input(Hidden('my-hidden', 'Hidden'))
     form_helper.add_input(Button('my-button', 'Button'))
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -80,7 +79,7 @@ def test_form_with_helper_without_layout(settings):
     form_helper.form_action = 'simpleAction'
     form_helper.form_error_title = 'ERRORS'
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy testForm form_helper %}
     """)
@@ -120,7 +119,7 @@ def test_form_show_errors_non_field_errors():
     form.helper.form_show_errors = True
     form.is_valid()
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy testForm %}
     """)
@@ -293,7 +292,7 @@ def test_template_helper_access():
 
 
 def test_without_helper(settings):
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form %}
     """)
@@ -313,7 +312,7 @@ def test_template_pack_override_compact(settings):
     override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
     # {% crispy form 'template_pack_name' %}
-    template = get_template_from_string("""
+    template = Template("""
         {%% load crispy_forms_tags %%}
         {%% crispy form "%s" %%}
     """ % override_pack)
@@ -331,7 +330,7 @@ def test_template_pack_override_verbose(settings):
     override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
     # {% crispy form helper 'template_pack_name' %}
-    template = get_template_from_string("""
+    template = Template("""
         {%% load crispy_forms_tags %%}
         {%% crispy form form_helper "%s" %%}
     """ % override_pack)
@@ -346,14 +345,14 @@ def test_template_pack_override_verbose(settings):
 
 def test_template_pack_override_wrong():
     with pytest.raises(TemplateSyntaxError):
-        get_template_from_string("""
+        Template("""
             {% load crispy_forms_tags %}
             {% crispy form 'foo' %}
         """)
 
 
 def test_invalid_helper(settings):
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -365,7 +364,7 @@ def test_invalid_helper(settings):
 
 
 def test_formset_with_helper_without_layout(settings):
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy testFormSet formset_helper %}
     """)
@@ -400,7 +399,7 @@ def test_formset_with_helper_without_layout(settings):
 
 def test_CSRF_token_POST_form():
     form_helper = FormHelper()
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -417,7 +416,7 @@ def test_CSRF_token_POST_form():
 def test_CSRF_token_GET_form():
     form_helper = FormHelper()
     form_helper.form_method = 'GET'
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)

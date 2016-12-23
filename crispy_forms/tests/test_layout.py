@@ -10,14 +10,13 @@ except ImportError:
     from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
 from django.shortcuts import render_to_response
 from django.template import (
-    Context, RequestContext
+    Context, RequestContext, Template
 )
 import pytest
 
 from django.test import RequestFactory
 from django.utils.translation import ugettext_lazy as _
 
-from .compatibility import get_template_from_string
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
 from .forms import (
     TestForm, TestForm2, TestForm3, CheckboxesTestForm,
@@ -42,7 +41,7 @@ def test_invalid_unicode_characters(settings):
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -83,7 +82,7 @@ def test_meta_extra_fields_with_missing_fields():
         'first_name',
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -100,7 +99,7 @@ def test_layout_unresolved_field(settings):
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -119,7 +118,7 @@ def test_double_rendered_field(settings):
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -136,7 +135,7 @@ def test_context_pollution():
     form = ExampleForm()
     form2 = TestForm()
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ form.as_ul }}
         {% crispy form2 %}
@@ -180,7 +179,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -208,7 +207,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
 
 
 def test_change_layout_dynamically_delete_field():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -338,7 +337,7 @@ def test_modelformset_layout():
 
 
 def test_i18n():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form.helper %}
     """)
@@ -445,7 +444,7 @@ def test_layout_composition():
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
@@ -498,7 +497,7 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)

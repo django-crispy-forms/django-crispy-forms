@@ -2,12 +2,11 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.template import Context
+from django.template import Context, Template
 
 from django.utils.translation import ugettext as _
 from django.utils.translation import activate, deactivate
 
-from .compatibility import get_template_from_string
 from .conftest import only_bootstrap
 from .forms import CheckboxesTestForm, TestForm
 from crispy_forms.bootstrap import (
@@ -34,7 +33,7 @@ def test_field_with_custom_template():
 
 
 def test_multiwidget_field():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form %}
     """)
@@ -63,7 +62,7 @@ def test_multiwidget_field():
 
 
 def test_field_type_hidden():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy test_form %}
     """)
