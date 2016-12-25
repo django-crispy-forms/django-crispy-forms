@@ -203,11 +203,7 @@ def list_intersection(list1, list2):
     Take the not-in-place intersection of two lists, similar to sets but preserving order.
     Does not check unicity of list1.
     """
-    intersection = []
-    for item in list1:
-        if item in list2:
-            intersection.append(item)
-    return intersection
+    return [item for item in list1 if item in list2]
 
 
 def list_union(*lists):
