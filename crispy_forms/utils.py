@@ -210,18 +210,6 @@ def list_intersection(list1, list2):
     return intersection
 
 
-def list_union(*lists):
-    """
-    Take the not-in-place union of two or more lists, similar to sets but preserving order.
-    """
-    union = []
-    for li in lists:
-        for item in li:
-            if item not in union:
-                union.append(item)
-    return union
-
-
 def list_difference(left, right):
     """
     Take the not-in-place difference of two lists (left - right), similar to sets but preserving order.
