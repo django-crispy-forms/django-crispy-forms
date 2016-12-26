@@ -209,7 +209,6 @@ class FormHelper(DynamicLayoutHandler):
     include_media = True
 
     def __init__(self, form=None):
-        self.attrs = {}
         self.inputs = []
 
         if form is not None:
@@ -353,7 +352,7 @@ class FormHelper(DynamicLayoutHandler):
             items['bootstrap_checkbox_offsets'] = ['col-%s-offset-%s' % m for m in bootstrap_size_match]
 
         items['attrs'] = {}
-        if self.attrs:
+        if getattr(self, 'attrs', None):
             items['attrs'] = self.attrs.copy()
         if self.form_action:
             items['attrs']['action'] = self.form_action.strip()
@@ -367,7 +366,7 @@ class FormHelper(DynamicLayoutHandler):
                 items['attrs']['class'] = self.form_class.strip()
         else:
             if template_pack == 'uni_form':
-                items['attrs']['class'] = self.attrs.get('class', '') + " uniForm"
+                items['attrs']['class'] = getattr(self, 'attrs', {}).get('class', '') + " uniForm"
 
         items['flat_attrs'] = flatatt(items['attrs'])
 
