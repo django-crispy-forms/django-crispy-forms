@@ -3,7 +3,12 @@ import re
 
 from django import template
 from django.utils.encoding import force_text
-from django.utils.functional import allow_lazy
+
+try:
+    from django.utils.functional import keep_lazy
+except ImportError:
+    # Django < 1.10
+    from django.utils.functional import allow_lazy as keep_lazy
 
 from crispy_forms.compatibility import text_type
 
@@ -16,7 +21,7 @@ def remove_spaces(value):
     return re.sub(r'/><', r'/> <', force_text(html))
 
 
-remove_spaces = allow_lazy(remove_spaces, text_type)
+remove_spaces = keep_lazy(remove_spaces, text_type)
 
 
 class SpecialSpacelessNode(template.Node):
