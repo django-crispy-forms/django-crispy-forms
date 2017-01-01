@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
+from django.utils.six import string_types, text_type
 
-from crispy_forms.compatibility import string_types, text_type
 from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, get_template_pack
 
 

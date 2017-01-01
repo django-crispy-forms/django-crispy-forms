@@ -18,6 +18,7 @@ from django.template import (
 import pytest
 
 from django.utils.translation import ugettext_lazy as _
+from django.utils.six import text_type
 
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
 from .forms import TestForm, TestFormWithMedia
@@ -25,7 +26,6 @@ from crispy_forms.bootstrap import (
     FieldWithButtons, PrependedAppendedText, AppendedText, PrependedText,
     StrictButton
 )
-from crispy_forms.compatibility import text_type
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import (
     Layout, Submit, Reset, Hidden, Button, MultiField, Field

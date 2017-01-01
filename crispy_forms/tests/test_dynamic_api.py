@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.utils.six import string_types
 
 import pytest
 
 from .conftest import only_uni_form
-from crispy_forms.compatibility import string_types
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import (

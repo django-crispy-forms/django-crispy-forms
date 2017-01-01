@@ -16,6 +16,7 @@ import pytest
 
 from django.test import RequestFactory
 from django.utils.translation import ugettext_lazy as _
+from django.utils.six import PY2
 
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
 from .forms import (
@@ -23,7 +24,6 @@ from .forms import (
     TestForm4, CrispyTestModel, TestForm5
 )
 from crispy_forms.bootstrap import InlineCheckboxes
-from crispy_forms.compatibility import PY2
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
     Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder,
