@@ -10,9 +10,9 @@ from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.lru_cache import lru_cache
+from django.utils.six import text_type, PY2
 
 from .base import KeepContext
-from .compatibility import text_type, PY2
 
 
 def get_template_pack():
