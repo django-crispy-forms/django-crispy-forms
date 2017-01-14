@@ -11,7 +11,7 @@ from crispy_forms.layout import (
     Layout, Fieldset, MultiField, HTML, Div, Field
 )
 from crispy_forms.bootstrap import AppendedText
-from crispy_forms.tests.forms import TestForm
+from crispy_forms.tests.forms import SampleForm
 
 
 def test_wrap_all_fields():
@@ -370,7 +370,7 @@ def test_layout_get_field_names():
 
 
 def test_filter_by_widget(advanced_layout):
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper(form)
     form.helper.layout = advanced_layout
     assert form.helper.filter_by_widget(forms.PasswordInput).slice == [
@@ -380,7 +380,7 @@ def test_filter_by_widget(advanced_layout):
 
 
 def test_exclude_by_widget(advanced_layout):
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper(form)
     form.helper.layout = advanced_layout
     assert form.helper.exclude_by_widget(forms.PasswordInput).slice == [
@@ -391,7 +391,7 @@ def test_exclude_by_widget(advanced_layout):
 
 
 def test_exclude_by_widget_and_wrap(advanced_layout):
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper(form)
     form.helper.layout = advanced_layout
     form.helper.exclude_by_widget(forms.PasswordInput).wrap(Field, css_class='hero')
@@ -406,14 +406,14 @@ def test_exclude_by_widget_and_wrap(advanced_layout):
 
 
 def test_all_without_layout():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     with pytest.raises(FormHelpersException):
         form.helper.all().wrap(Div)
 
 
 def test_filter_by_widget_without_form(advanced_layout):
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.layout = advanced_layout
     with pytest.raises(FormHelpersException):

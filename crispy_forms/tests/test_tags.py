@@ -8,7 +8,7 @@ from django.template import Context, Template
 import pytest
 
 from .conftest import only_bootstrap
-from .forms import TestForm
+from .forms import SampleForm
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 from crispy_forms.exceptions import CrispyError
 
@@ -18,7 +18,7 @@ def test_as_crispy_errors_form_without_non_field_errors():
         {% load crispy_forms_tags %}
         {{ form|as_crispy_errors }}
     """)
-    form = TestForm({'password1': "god", 'password2': "god"})
+    form = SampleForm({'password1': "god", 'password2': "god"})
     form.is_valid()
 
     c = Context({'form': form})
@@ -31,7 +31,7 @@ def test_as_crispy_errors_form_with_non_field_errors():
         {% load crispy_forms_tags %}
         {{ form|as_crispy_errors }}
     """)
-    form = TestForm({'password1': "god", 'password2': "wargame"})
+    form = SampleForm({'password1': "god", 'password2': "wargame"})
     form.is_valid()
 
     c = Context({'form': form})
@@ -47,8 +47,8 @@ def test_as_crispy_errors_formset_without_non_form_errors():
         {{ formset|as_crispy_errors }}
     """)
 
-    TestFormset = formset_factory(TestForm, max_num=1, validate_max=True)
-    formset = TestFormset()
+    SampleFormset = formset_factory(SampleForm, max_num=1, validate_max=True)
+    formset = SampleFormset()
     formset.is_valid()
 
     c = Context({'formset': formset})
@@ -62,8 +62,8 @@ def test_as_crispy_errors_formset_with_non_form_errors():
         {{ formset|as_crispy_errors }}
     """)
 
-    TestFormset = formset_factory(TestForm, max_num=1, validate_max=True)
-    formset = TestFormset({
+    SampleFormset = formset_factory(SampleForm, max_num=1, validate_max=True)
+    formset = SampleFormset({
         'form-TOTAL_FORMS': '2',
         'form-INITIAL_FORMS': '0',
         'form-MAX_NUM_FORMS': '',
@@ -101,7 +101,7 @@ def test_as_crispy_field_bound_field():
         {{ field|as_crispy_field }}
     """)
 
-    form = TestForm({'password1': "god", 'password2': "god"})
+    form = SampleForm({'password1': "god", 'password2': "god"})
     form.is_valid()
 
     c = Context({'field': form["password1"]})
@@ -117,7 +117,7 @@ def test_crispy_filter_with_form():
         {% load crispy_forms_tags %}
         {{ form|crispy }}
     """)
-    c = Context({'form': TestForm()})
+    c = Context({'form': SampleForm()})
     html = template.render(c)
 
     assert "<td>" not in html
@@ -131,8 +131,8 @@ def test_crispy_filter_with_formset():
         {{ testFormset|crispy }}
     """)
 
-    TestFormset = formset_factory(TestForm, extra=4)
-    testFormset = TestFormset()
+    SampleFormset = formset_factory(SampleForm, extra=4)
+    testFormset = SampleFormset()
 
     c = Context({'testFormset': testFormset})
     html = template.render(c)
@@ -150,7 +150,7 @@ def test_classes_filter():
         {{ testField|classes }}
     """)
 
-    test_form = TestForm()
+    test_form = SampleForm()
     test_form.fields['email'].widget.attrs.update({'class': 'email-fields'})
     c = Context({'testField': test_form.fields['email']})
     html = template.render(c)
@@ -162,7 +162,7 @@ def test_crispy_field_and_class_converters():
         {% load crispy_forms_field %}
         {% crispy_field testField 'class' 'error' %}
     """)
-    test_form = TestForm()
+    test_form = SampleForm()
     field_instance = test_form.fields['email']
     bound_field = BoundField(test_form, field_instance, 'email')
 
@@ -174,7 +174,7 @@ def test_crispy_field_and_class_converters():
 
 @only_bootstrap
 def test_crispy_addon(settings):
-    test_form = TestForm()
+    test_form = SampleForm()
     field_instance = test_form.fields['email']
     bound_field = BoundField(test_form, field_instance, 'email')
 
