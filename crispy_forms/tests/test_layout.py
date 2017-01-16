@@ -270,7 +270,7 @@ def test_formset_layout(settings):
     )
 
     # Check formset fields
-    hidden_count = 4  # before Django 1.7 added MIN_NUM_FORM_COUNT
+    hidden_count = 5
     assert html.count(
         'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
     ) == 1
@@ -280,11 +280,9 @@ def test_formset_layout(settings):
     assert html.count(
         'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
     ) == 1
-    if hasattr(forms.formsets, 'MIN_NUM_FORM_COUNT'):
-        assert html.count(
-            'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
-        ) == 1
-        hidden_count += 1
+    assert html.count(
+        'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
+    ) == 1
     assert html.count("hidden") == hidden_count
 
     # Check form structure
