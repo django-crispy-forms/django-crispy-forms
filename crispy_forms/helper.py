@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
 
-from django.core.urlresolvers import reverse, NoReverseMatch
+try:
+    from django.urls import reverse, NoReverseMatch
+except ImportError:
+    # Django < 1.10
+    from django.core.urlresolvers import reverse, NoReverseMatch
+
 from django.utils.safestring import mark_safe
 
 from crispy_forms.compatibility import string_types
