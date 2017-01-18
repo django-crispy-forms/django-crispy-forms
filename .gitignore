@@ -21,6 +21,9 @@ __pycache__
 tempfile
 *.swp
 
+# testing
+.tox/
+
 # coverage 
 .coverage
 htmlcov
