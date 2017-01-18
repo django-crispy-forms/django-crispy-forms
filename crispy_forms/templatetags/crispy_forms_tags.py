@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from copy import copy
-
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template.loader import get_template
@@ -52,19 +50,6 @@ class ForLoopSimulator(object):
         self.revcounter0 -= 1
         self.first = False
         self.last = (self.revcounter0 == self.len_values - 1)
-
-
-def copy_context(context):
-    """
-    Copies a `Context` variable. It uses `Context.__copy__` if available
-    (introduced in Django 1.3) or copy otherwise.
-    """
-    if hasattr(context, "__copy__"):
-        return context.__copy__()
-
-    duplicate = copy(context)
-    duplicate.dicts = context.dicts[:]
-    return duplicate
 
 
 class BasicNode(template.Node):
@@ -123,9 +108,9 @@ class BasicNode(template.Node):
         # We get the response dictionary
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(helper, context, is_formset)
-        node_context = copy_context(context)
+        node_context = context.__copy__()
         node_context.update(response_dict)
-        final_context = copy_context(node_context)
+        final_context = node_context.__copy__()
 
         # If we have a helper's layout we use it, for the form or the formset's forms
         if helper and helper.layout:
