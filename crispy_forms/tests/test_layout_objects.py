@@ -2,14 +2,13 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.template import Context
+from django.template import Context, Template
 
 from django.utils.translation import ugettext as _
 from django.utils.translation import activate, deactivate
 
-from .compatibility import get_template_from_string
 from .conftest import only_bootstrap
-from .forms import CheckboxesTestForm, TestForm
+from .forms import CheckboxesSampleForm, SampleForm
 from crispy_forms.bootstrap import (
     PrependedAppendedText, AppendedText, PrependedText, InlineRadios,
     Tab, TabHolder, AccordionGroup, Accordion, Alert, InlineCheckboxes,
@@ -23,7 +22,7 @@ from crispy_forms.utils import render_crispy_form
 
 
 def test_field_with_custom_template():
-    test_form = TestForm()
+    test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         Field('email', template='custom_field_template.html')
@@ -34,12 +33,12 @@ def test_field_with_custom_template():
 
 
 def test_multiwidget_field():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form %}
     """)
 
-    test_form = TestForm()
+    test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         MultiWidgetField(
@@ -63,12 +62,12 @@ def test_multiwidget_field():
 
 
 def test_field_type_hidden():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy test_form %}
     """)
 
-    test_form = TestForm()
+    test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         Field('email', type="hidden", data_test=12),
@@ -88,7 +87,7 @@ def test_field_type_hidden():
 
 
 def test_field_wrapper_class(settings):
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout(Field('email', wrapper_class="testing"))
 
@@ -102,7 +101,7 @@ def test_field_wrapper_class(settings):
 
 
 def test_html_with_carriage_returns(settings):
-    test_form = TestForm()
+    test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         HTML("""
@@ -125,7 +124,7 @@ def test_html_with_carriage_returns(settings):
 
 def test_i18n():
     activate('es')
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout(
         HTML(_("Enter a valid value."))
@@ -146,7 +145,7 @@ class TestBootstrapLayoutObjects(object):
             pass
 
         # Make sure an inherited RadioSelect gets rendered as it
-        form = CheckboxesTestForm()
+        form = CheckboxesSampleForm()
         form.fields['inline_radios'].widget = CustomRadioSelect()
         form.helper = FormHelper()
         form.helper.layout = Layout('inline_radios')
@@ -161,7 +160,7 @@ class TestBootstrapLayoutObjects(object):
         assert 'class="checkbox"' in html
 
     def test_prepended_appended_text(self, settings):
-        test_form = TestForm()
+        test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             PrependedAppendedText('email', '@', 'gmail.com'),
@@ -203,7 +202,7 @@ class TestBootstrapLayoutObjects(object):
             assert '<span class="input-group-addon' in html
 
     def test_inline_radios(self, settings):
-        test_form = CheckboxesTestForm()
+        test_form = CheckboxesSampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             InlineRadios('inline_radios')
@@ -216,7 +215,7 @@ class TestBootstrapLayoutObjects(object):
             assert html.count('radio-inline"') == 2
 
     def test_accordion_and_accordiongroup(self, settings):
-        test_form = TestForm()
+        test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Accordion(
@@ -249,7 +248,7 @@ class TestBootstrapLayoutObjects(object):
         assert html.count('name="password2"') == 1
 
     def test_accordion_active_false_not_rendered(self, settings):
-        test_form = TestForm()
+        test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Accordion(
@@ -286,7 +285,7 @@ class TestBootstrapLayoutObjects(object):
         assert html.count('<div id="one" class="%s collapse in"' % accordion_class) == 0
 
     def test_alert(self):
-        test_form = TestForm()
+        test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Alert(content='Testing...')
@@ -298,7 +297,7 @@ class TestBootstrapLayoutObjects(object):
         assert html.count('Testing...') == 1
 
     def test_alert_block(self):
-        test_form = TestForm()
+        test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Alert(content='Testing...', block=True)
@@ -309,7 +308,7 @@ class TestBootstrapLayoutObjects(object):
         assert html.count('Testing...') == 1
 
     def test_tab_and_tab_holder(self):
-        test_form = TestForm()
+        test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             TabHolder(
@@ -344,7 +343,7 @@ class TestBootstrapLayoutObjects(object):
         # this is a proper form, according to the docs.
         # note that the helper is a class property here,
         # shared between all instances
-        class TestForm(forms.Form):
+        class SampleForm(forms.Form):
             val1 = forms.CharField(required=False)
             val2 = forms.CharField(required=True)
             helper = FormHelper()
@@ -356,17 +355,17 @@ class TestBootstrapLayoutObjects(object):
             )
 
         # first render of form => everything is fine
-        test_form = TestForm()
+        test_form = SampleForm()
         html = render_crispy_form(test_form)
 
         # second render of form => first tab should be active,
         # but not duplicate class
-        test_form = TestForm()
+        test_form = SampleForm()
         html = render_crispy_form(test_form)
         assert html.count('class="tab-pane active active"') == 0
 
         # render a new form, now with errors
-        test_form = TestForm(data={'val1': 'foo'})
+        test_form = SampleForm(data={'val1': 'foo'})
         html = render_crispy_form(test_form)
         # tab 1 should not be active
         assert html.count('<div id="one" \n    class="tab-pane active') == 0
@@ -374,7 +373,7 @@ class TestBootstrapLayoutObjects(object):
         assert html.count('<div id="two" \n    class="tab-pane active') == 1
 
     def test_radio_attrs(self):
-        form = CheckboxesTestForm()
+        form = CheckboxesSampleForm()
         form.fields['inline_radios'].widget.attrs = {'class': "first"}
         form.fields['checkboxes'].widget.attrs = {'class': "second"}
         html = render_crispy_form(form)
@@ -382,7 +381,7 @@ class TestBootstrapLayoutObjects(object):
         assert 'class="second"' in html
 
     def test_field_with_buttons(self, settings):
-        form = TestForm()
+        form = SampleForm()
         form.helper = FormHelper()
         form.helper.layout = Layout(
             FieldWithButtons(
@@ -420,7 +419,7 @@ class TestBootstrapLayoutObjects(object):
             assert html.count('class="input-group-btn') == 1
 
     def test_hidden_fields(self):
-        form = TestForm()
+        form = SampleForm()
         # All fields hidden
         for field in form.fields:
             form.fields[field].widget = forms.HiddenInput()
@@ -439,7 +438,7 @@ class TestBootstrapLayoutObjects(object):
         assert html.count('<label') == 0
 
     def test_multiplecheckboxes(self, settings):
-        test_form = CheckboxesTestForm()
+        test_form = CheckboxesSampleForm()
         html = render_crispy_form(test_form)
 
         assert html.count('checked="checked"') == 6

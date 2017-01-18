@@ -2,15 +2,15 @@ from __future__ import unicode_literals
 import logging
 import sys
 
-import django
 from django.conf import settings
-from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
+from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
+from django.utils.lru_cache import lru_cache
 
 from .base import KeepContext
-from .compatibility import lru_cache, text_type, PY2, SimpleLazyObject
+from .compatibility import text_type, PY2
 
 
 def get_template_pack():
@@ -155,9 +155,7 @@ def render_field(
             if extra_context is not None:
                 context.update(extra_context)
 
-            if django.VERSION >= (1, 8):
-                context = context.flatten()
-
+            context = context.flatten()
             html = template.render(context)
 
         return html
@@ -201,23 +199,7 @@ def list_intersection(list1, list2):
     Take the not-in-place intersection of two lists, similar to sets but preserving order.
     Does not check unicity of list1.
     """
-    intersection = []
-    for item in list1:
-        if item in list2:
-            intersection.append(item)
-    return intersection
-
-
-def list_union(*lists):
-    """
-    Take the not-in-place union of two or more lists, similar to sets but preserving order.
-    """
-    union = []
-    for li in lists:
-        for item in li:
-            if item not in union:
-                union.append(item)
-    return union
+    return [item for item in list1 if item in list2]
 
 
 def list_difference(left, right):
@@ -231,5 +213,3 @@ def list_difference(left, right):
             blocked.add(item)
             difference.append(item)
     return difference
-
-

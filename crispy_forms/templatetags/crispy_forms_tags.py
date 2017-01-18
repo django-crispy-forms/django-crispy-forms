@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import django
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
-from django.template import Context
 from django.template.loader import get_template
+from django.utils.lru_cache import lru_cache
 from django import template
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.compatibility import lru_cache, string_types
+from crispy_forms.compatibility import string_types
 
 register = template.Library()
 # We import the filters, so they are available when doing load crispy_forms_tags
@@ -196,7 +195,7 @@ def whole_uni_form_template(template_pack=TEMPLATE_PACK):
 
 class CrispyFormNode(BasicNode):
     def render(self, context):
-        c = self.get_render(context)
+        c = self.get_render(context).flatten()
 
         if self.actual_helper is not None and getattr(self.actual_helper, 'template', False):
             template = get_template(self.actual_helper.template)
@@ -205,10 +204,6 @@ class CrispyFormNode(BasicNode):
                 template = whole_uni_formset_template(self.template_pack)
             else:
                 template = whole_uni_form_template(self.template_pack)
-
-        if django.VERSION >= (1, 8):
-            c = c.flatten()
-
         return template.render(c)
 
 

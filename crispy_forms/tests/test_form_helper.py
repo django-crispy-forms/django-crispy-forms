@@ -12,16 +12,15 @@ try:
 except ImportError:
     from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
 from django.template import (
-    TemplateSyntaxError, Context
+    Template, TemplateSyntaxError, Context
 )
 
 import pytest
 
 from django.utils.translation import ugettext_lazy as _
 
-from .compatibility import get_template_from_string
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
-from .forms import TestForm, TestFormWithMedia
+from .forms import SampleForm, SampleFormWithMedia
 from crispy_forms.bootstrap import (
     FieldWithButtons, PrependedAppendedText, AppendedText, PrependedText,
     StrictButton
@@ -42,11 +41,11 @@ def test_inputs(settings):
     form_helper.add_input(Hidden('my-hidden', 'Hidden'))
     form_helper.add_input(Button('my-button', 'Button'))
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
-    c = Context({'form': TestForm(), 'form_helper': form_helper})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper})
     html = template.render(c)
 
     assert 'button white' in html
@@ -80,13 +79,13 @@ def test_form_with_helper_without_layout(settings):
     form_helper.form_action = 'simpleAction'
     form_helper.form_error_title = 'ERRORS'
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy testForm form_helper %}
     """)
 
     # now we render it, with errors
-    form = TestForm({'password1': 'wargame', 'password2': 'god'})
+    form = SampleForm({'password1': 'wargame', 'password2': 'god'})
     form.is_valid()
     c = Context({'testForm': form, 'form_helper': form_helper})
     html = template.render(c)
@@ -115,12 +114,12 @@ def test_form_with_helper_without_layout(settings):
 
 
 def test_form_show_errors_non_field_errors():
-    form = TestForm({'password1': 'wargame', 'password2': 'god'})
+    form = SampleForm({'password1': 'wargame', 'password2': 'god'})
     form.helper = FormHelper()
     form.helper.form_show_errors = True
     form.is_valid()
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy testForm %}
     """)
@@ -146,7 +145,7 @@ def test_form_show_errors_non_field_errors():
 
 
 def test_html5_required():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.html5_required = True
     html = render_crispy_form(form)
@@ -157,14 +156,14 @@ def test_html5_required():
         assert len(re.findall(r'\brequired\b', html)) == 7
 
 
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.html5_required = False
     html = render_crispy_form(form)
 
 
 def test_media_is_included_by_default_with_uniform():
-    form = TestFormWithMedia()
+    form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'uni_form'
     html = render_crispy_form(form)
@@ -173,7 +172,7 @@ def test_media_is_included_by_default_with_uniform():
 
 
 def test_media_is_included_by_default_with_bootstrap():
-    form = TestFormWithMedia()
+    form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'bootstrap'
     html = render_crispy_form(form)
@@ -182,7 +181,7 @@ def test_media_is_included_by_default_with_bootstrap():
 
 
 def test_media_is_included_by_default_with_bootstrap3():
-    form = TestFormWithMedia()
+    form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'bootstrap3'
     html = render_crispy_form(form)
@@ -191,7 +190,7 @@ def test_media_is_included_by_default_with_bootstrap3():
 
 
 def test_media_is_included_by_default_with_bootstrap4():
-    form = TestFormWithMedia()
+    form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'bootstrap4'
     html = render_crispy_form(form)
@@ -200,7 +199,7 @@ def test_media_is_included_by_default_with_bootstrap4():
 
 
 def test_media_removed_when_include_media_is_false_with_uniform():
-    form = TestFormWithMedia()
+    form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'uni_form'
     form.helper.include_media = False
@@ -210,7 +209,7 @@ def test_media_removed_when_include_media_is_false_with_uniform():
 
 
 def test_media_removed_when_include_media_is_false_with_bootstrap():
-    form = TestFormWithMedia()
+    form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'bootstrap'
     form.helper.include_media = False
@@ -220,7 +219,7 @@ def test_media_removed_when_include_media_is_false_with_bootstrap():
 
 
 def test_media_removed_when_include_media_is_false_with_bootstrap3():
-    form = TestFormWithMedia()
+    form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'bootstrap3'
     form.helper.include_media = False
@@ -230,7 +229,7 @@ def test_media_removed_when_include_media_is_false_with_bootstrap3():
 
 
 def test_media_removed_when_include_media_is_false_with_bootstrap4():
-    form = TestFormWithMedia()
+    form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = 'bootstrap4'
     form.helper.include_media = False
@@ -240,7 +239,7 @@ def test_media_removed_when_include_media_is_false_with_bootstrap4():
 
 
 def test_attrs():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.attrs = {'id': 'TestIdForm', 'autocomplete': "off"}
     html = render_crispy_form(form)
@@ -293,11 +292,11 @@ def test_template_helper_access():
 
 
 def test_without_helper(settings):
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form %}
     """)
-    c = Context({'form': TestForm()})
+    c = Context({'form': SampleForm()})
     html = template.render(c)
 
     # Lets make sure everything loads right
@@ -313,11 +312,11 @@ def test_template_pack_override_compact(settings):
     override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
     # {% crispy form 'template_pack_name' %}
-    template = get_template_from_string("""
+    template = Template("""
         {%% load crispy_forms_tags %%}
         {%% crispy form "%s" %%}
     """ % override_pack)
-    c = Context({'form': TestForm()})
+    c = Context({'form': SampleForm()})
     html = template.render(c)
 
     if current_pack == 'uni_form':
@@ -331,11 +330,11 @@ def test_template_pack_override_verbose(settings):
     override_pack = current_pack == 'uni_form' and 'bootstrap' or 'uni_form'
 
     # {% crispy form helper 'template_pack_name' %}
-    template = get_template_from_string("""
+    template = Template("""
         {%% load crispy_forms_tags %%}
         {%% crispy form form_helper "%s" %%}
     """ % override_pack)
-    c = Context({'form': TestForm(), 'form_helper': FormHelper()})
+    c = Context({'form': SampleForm(), 'form_helper': FormHelper()})
     html = template.render(c)
 
     if current_pack == 'uni_form':
@@ -346,18 +345,18 @@ def test_template_pack_override_verbose(settings):
 
 def test_template_pack_override_wrong():
     with pytest.raises(TemplateSyntaxError):
-        get_template_from_string("""
+        Template("""
             {% load crispy_forms_tags %}
             {% crispy form 'foo' %}
         """)
 
 
 def test_invalid_helper(settings):
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
-    c = Context({'form': TestForm(), 'form_helper': "invalid"})
+    c = Context({'form': SampleForm(), 'form_helper': "invalid"})
 
     settings.CRISPY_FAIL_SILENTLY = settings.TEMPLATE_DEBUG = False
     with pytest.raises(TypeError):
@@ -365,7 +364,7 @@ def test_invalid_helper(settings):
 
 
 def test_formset_with_helper_without_layout(settings):
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy testFormSet formset_helper %}
     """)
@@ -376,8 +375,8 @@ def test_formset_with_helper_without_layout(settings):
     form_helper.form_method = 'POST'
     form_helper.form_action = 'simpleAction'
 
-    TestFormSet = formset_factory(TestForm, extra=3)
-    testFormSet = TestFormSet()
+    SampleFormSet = formset_factory(SampleForm, extra=3)
+    testFormSet = SampleFormSet()
 
     c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
     html = template.render(c)
@@ -400,7 +399,7 @@ def test_formset_with_helper_without_layout(settings):
 
 def test_CSRF_token_POST_form():
     form_helper = FormHelper()
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -408,7 +407,7 @@ def test_CSRF_token_POST_form():
     # The middleware only initializes the CSRF token when processing a real request
     # So using RequestContext or csrf(request) here does not work.
     # Instead I set the key `csrf_token` to a CSRF token manually, which `csrf_token` tag uses
-    c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
     html = template.render(c)
 
     assert "<input type='hidden' name='csrfmiddlewaretoken'" in html
@@ -417,19 +416,19 @@ def test_CSRF_token_POST_form():
 def test_CSRF_token_GET_form():
     form_helper = FormHelper()
     form_helper.form_method = 'GET'
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
 
-    c = Context({'form': TestForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
     html = template.render(c)
 
     assert "<input type='hidden' name='csrfmiddlewaretoken'" not in html
 
 
 def test_disable_csrf():
-    form = TestForm()
+    form = SampleForm()
     helper = FormHelper()
     helper.disable_csrf = True
     html = render_crispy_form(form, helper, {'csrf_token': _get_new_csrf_key()})
@@ -437,7 +436,7 @@ def test_disable_csrf():
 
 
 def test_render_hidden_fields():
-    test_form = TestForm()
+    test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         'email'
@@ -460,7 +459,7 @@ def test_render_hidden_fields():
 
 
 def test_render_required_fields():
-    test_form = TestForm()
+    test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         'email'
@@ -472,7 +471,7 @@ def test_render_required_fields():
 
 
 def test_helper_custom_template():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.template = 'custom_form_template.html'
 
@@ -481,7 +480,7 @@ def test_helper_custom_template():
 
 
 def test_helper_custom_field_template():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout(
         'password1',
@@ -495,7 +494,7 @@ def test_helper_custom_field_template():
 
 @only_uni_form
 def test_form_show_errors():
-    form = TestForm({
+    form = SampleForm({
         'email': 'invalidemail',
         'first_name': 'first_name_too_long',
         'last_name': 'last_name_too_long',
@@ -523,7 +522,7 @@ def test_form_show_errors():
 
 @only_uni_form
 def test_multifield_errors():
-    form = TestForm({
+    form = SampleForm({
         'email': 'invalidemail',
         'password1': 'yes',
         'password2': 'yes',
@@ -549,7 +548,7 @@ def test_multifield_errors():
 
 @only_bootstrap3
 def test_bootstrap_form_show_errors():
-    form = TestForm({
+    form = SampleForm({
         'email': 'invalidemail',
         'first_name': 'first_name_too_long',
         'last_name': 'last_name_too_long',
@@ -577,7 +576,7 @@ def test_bootstrap_form_show_errors():
 
 @only_bootstrap4
 def test_bootstrap_form_show_errors():
-    form = TestForm({
+    form = SampleForm({
         'email': 'invalidemail',
         'first_name': 'first_name_too_long',
         'last_name': 'last_name_too_long',
@@ -605,7 +604,7 @@ def test_bootstrap_form_show_errors():
 
 @only_bootstrap
 def test_error_text_inline(settings):
-    form = TestForm({'email': 'invalidemail'})
+    form = SampleForm({'email': 'invalidemail'})
     form.helper = FormHelper()
     layout = Layout(
         AppendedText('first_name', 'wat'),
@@ -627,7 +626,7 @@ def test_error_text_inline(settings):
     )
     assert len(matches) == 3
 
-    form = TestForm({'email': 'invalidemail'})
+    form = SampleForm({'email': 'invalidemail'})
     form.helper = FormHelper()
     form.helper.layout = layout
     form.helper.error_text_inline = False
@@ -648,7 +647,7 @@ def test_error_text_inline(settings):
 
 @only_bootstrap3
 def test_error_and_help_inline():
-    form = TestForm({'email': 'invalidemail'})
+    form = SampleForm({'email': 'invalidemail'})
     form.helper = FormHelper()
     form.helper.error_text_inline = False
     form.helper.help_text_inline = True
@@ -662,7 +661,7 @@ def test_error_and_help_inline():
     assert help_position < error_position
 
     # Viceversa
-    form = TestForm({'email': 'invalidemail'})
+    form = SampleForm({'email': 'invalidemail'})
     form.helper = FormHelper()
     form.helper.error_text_inline = True
     form.helper.help_text_inline = False
@@ -678,7 +677,7 @@ def test_error_and_help_inline():
 
 @only_bootstrap4
 def test_error_and_help_inline():
-    form = TestForm({'email': 'invalidemail'})
+    form = SampleForm({'email': 'invalidemail'})
     form.helper = FormHelper()
     form.helper.error_text_inline = False
     form.helper.help_text_inline = True
@@ -692,7 +691,7 @@ def test_error_and_help_inline():
     assert help_position < error_position
 
     # Viceversa
-    form = TestForm({'email': 'invalidemail'})
+    form = SampleForm({'email': 'invalidemail'})
     form.helper = FormHelper()
     form.helper.error_text_inline = True
     form.helper.help_text_inline = False
@@ -708,7 +707,7 @@ def test_error_and_help_inline():
 
 @only_bootstrap
 def test_form_show_labels():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout(
         'password1',
@@ -738,7 +737,7 @@ def test_form_show_labels():
 
 @only_bootstrap3
 def test_label_class_and_field_class():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.label_class = 'col-lg-2'
     form.helper.field_class = 'col-lg-8'
@@ -757,7 +756,7 @@ def test_label_class_and_field_class():
 
 @only_bootstrap3
 def test_template_pack():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.template_pack = 'uni_form'
     html = render_crispy_form(form)
@@ -767,7 +766,7 @@ def test_template_pack():
 
 @only_bootstrap4
 def test_label_class_and_field_class_bs4():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.label_class = 'col-lg-2'
     form.helper.field_class = 'col-lg-8'
@@ -788,7 +787,7 @@ def test_label_class_and_field_class_bs4():
 
 @only_bootstrap4
 def test_template_pack_bs4():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.template_pack = 'uni_form'
     html = render_crispy_form(form)
@@ -801,7 +800,7 @@ def test_passthrough_context():
     Test to ensure that context is passed through implicitly from outside of
     the crispy form into the crispy form templates.
     """
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.template = 'custom_form_template_with_context.html'
 
