@@ -4,7 +4,7 @@ from django.forms.formsets import BaseFormSet
 from django.template.loader import get_template
 from django.utils.lru_cache import lru_cache
 from django import template
-
+from crispy_forms.compatibility import string_types
 from crispy_forms.helper import FormHelper
 from crispy_forms.compatibility import string_types
 
