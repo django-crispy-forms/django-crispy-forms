@@ -12,6 +12,7 @@ env:
   - DJANGO='django>=1.8.0,<1.9.0'
   - DJANGO='django>=1.9.0,<1.10.0'
   - DJANGO='django>=1.10.0,<1.11.0'
+  - DJANGO='django==1.11a1'
   - DJANGO='https://github.com/django/django/archive/master.tar.gz'
 before_install:
   - pip install --upgrade 'pytest<3.0.0'
@@ -42,5 +43,6 @@ matrix:
       env: DJANGO='django>=1.7.0,<1.8.0'
   allow_failures:
     - env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
+    - env: DJANGO='django==1.11a1'
 after_success:
   - bash <(curl -s https://codecov.io/bash)
