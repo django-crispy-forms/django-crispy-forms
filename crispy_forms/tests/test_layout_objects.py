@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.template import Context, Template
-
+from django.test.html import parse_html
 from django.utils.translation import ugettext as _
 from django.utils.translation import activate, deactivate
 
@@ -18,6 +18,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
     Layout, HTML, Field, MultiWidgetField
 )
+from crispy_forms.tests.utils import contains_partial
+
 from crispy_forms.utils import render_crispy_form
 
 
@@ -168,13 +170,14 @@ class TestBootstrapLayoutObjects(object):
             PrependedText('password2', '$'),
         )
         html = render_crispy_form(test_form)
+        dom = parse_html(html)
 
         # Check form parameters
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
-            assert html.count('<span class="add-on">@</span>') == 1
-            assert html.count('<span class="add-on">gmail.com</span>') == 1
-            assert html.count('<span class="add-on">#</span>') == 1
-            assert html.count('<span class="add-on">$</span>') == 1
+            assert dom.count(parse_html('<span class="add-on">@</span>')) == 1
+            assert dom.count(parse_html('<span class="add-on">gmail.com</span>')) == 1
+            assert dom.count(parse_html('<span class="add-on">#</span>')) == 1
+            assert dom.count(parse_html('<span class="add-on">$</span>')) == 1
 
         if settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
             assert html.count('<span class="input-group-addon">@</span>') == 1
@@ -189,8 +192,8 @@ class TestBootstrapLayoutObjects(object):
                                       css_class='input-lg'), )
             html = render_crispy_form(test_form)
 
-            assert '<input class="input-lg' in html
-            assert '<span class="input-group-addon input-lg' in html
+            assert 'class="input-lg' in html
+            assert contains_partial(html, '<span class="input-group-addon input-lg"/>' )
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
             test_form.helper.layout = Layout(
@@ -198,8 +201,8 @@ class TestBootstrapLayoutObjects(object):
                                       css_class='form-control-lg'), )
             html = render_crispy_form(test_form)
 
-            assert '<input class="form-control-lg' in html
-            assert '<span class="input-group-addon' in html
+            assert 'class="form-control-lg' in html
+            assert contains_partial(html, '<span class="input-group-addon"/>')
 
     def test_inline_radios(self, settings):
         test_form = CheckboxesSampleForm()

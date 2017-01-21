@@ -16,14 +16,14 @@ def test_list_difference():
     assert list_difference([3, 1, 2, 3], [4, 1, ]) == [3, 2]
 
 
-def test_set_hidden():
-    class FakeWidget(object):
-        is_hidden = False
+#  def test_set_hidden():
+#      class FakeWidget(object):
+#          is_hidden = False
 
-    widget = FakeWidget()
-    set_hidden(widget)
+#      widget = FakeWidget()
+#      set_hidden(widget)
 
-    assert widget.is_hidden is True
+#      assert widget.is_hidden is True
 
 
 def test_render_field_with_none_field():

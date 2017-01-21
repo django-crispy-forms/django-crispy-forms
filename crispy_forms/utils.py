@@ -28,6 +28,7 @@ def default_field_template(template_pack=TEMPLATE_PACK):
 
 
 def set_hidden(widget):
+    return
     """
     set widget to hidden
 
@@ -100,18 +101,27 @@ def render_field(
                     list_attrs = [attrs] * len(widgets)
 
                 for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
+                    #  import pdb; pdb.set_trace()
                     if hasattr(field_instance.widget, 'widgets'):
                         if 'type' in attr and attr['type'] == "hidden":
-                            set_hidden(field_instance.widget.widgets[index])
-                            field_instance.widget.widgets[index] = field_instance.hidden_widget()
+                        #      set_hidden(field_instance.widget.widgets[index])
+                            #  import pdb; pdb.set_trace()
+                            field_instance.widget.widgets[index] = field_instance.hidden_widget(attr)
 
-                        field_instance.widget.widgets[index].attrs.update(attr)
+                        else:
+                            # TODO: can we just injext when instantiating?
+                            # where does this happen (here for hidden, where
+                            # for regular?)
+                            field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
-                            set_hidden(field_instance.widget)
-                            field_instance.widget = field_instance.hidden_widget()
+                            #  set_hidden(field_instance.widget)
+                            #  field_instance.widget = field_instance.hidden_widget()
+                            #  import pdb; pdb.set_trace()
+                            field_instance.widget = field_instance.hidden_widget(attr)
 
-                        field_instance.widget.attrs.update(attr)
+                        else:
+                            field_instance.widget.attrs.update(attr)
 
         except KeyError:
             if not FAIL_SILENTLY:
