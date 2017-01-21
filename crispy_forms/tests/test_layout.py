@@ -359,7 +359,6 @@ def test_i18n():
     assert html.count('i18n legend') == 1
 
 
-@pytest.mark.xfail
 def test_l10n(settings):
     settings.USE_L10N = True
     settings.USE_THOUSAND_SEPARATOR = True
