@@ -27,19 +27,6 @@ def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
 
 
-def set_hidden(widget):
-    return
-    """
-    set widget to hidden
-
-    different starting in Django 1.7, when is_hidden ceases to be a
-    true attribute and is determined by the input_type attribute
-    """
-    widget.input_type = 'hidden'
-    if not widget.is_hidden:
-        widget.is_hidden = True
-
-
 def render_field(
     field, form, form_style, context, template=None, labelclass=None,
     layout_object=None, attrs=None, template_pack=TEMPLATE_PACK,
@@ -101,11 +88,8 @@ def render_field(
                     list_attrs = [attrs] * len(widgets)
 
                 for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
-                    #  import pdb; pdb.set_trace()
                     if hasattr(field_instance.widget, 'widgets'):
                         if 'type' in attr and attr['type'] == "hidden":
-                        #      set_hidden(field_instance.widget.widgets[index])
-                            #  import pdb; pdb.set_trace()
                             field_instance.widget.widgets[index] = field_instance.hidden_widget(attr)
 
                         else:
@@ -115,9 +99,6 @@ def render_field(
                             field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
-                            #  set_hidden(field_instance.widget)
-                            #  field_instance.widget = field_instance.hidden_widget()
-                            #  import pdb; pdb.set_trace()
                             field_instance.widget = field_instance.hidden_widget(attr)
 
                         else:
