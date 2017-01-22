@@ -93,9 +93,6 @@ def render_field(
                             field_instance.widget.widgets[index] = field_instance.hidden_widget(attr)
 
                         else:
-                            # TODO: can we just injext when instantiating?
-                            # where does this happen (here for hidden, where
-                            # for regular?)
                             field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
