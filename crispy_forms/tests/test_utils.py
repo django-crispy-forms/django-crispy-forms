@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from crispy_forms.utils import list_difference, list_intersection, set_hidden, render_field
+from crispy_forms.utils import list_difference, list_intersection, render_field
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 import django
@@ -14,16 +14,6 @@ def test_list_intersection():
 
 def test_list_difference():
     assert list_difference([3, 1, 2, 3], [4, 1, ]) == [3, 2]
-
-
-def test_set_hidden():
-    class FakeWidget(object):
-        is_hidden = False
-
-    widget = FakeWidget()
-    set_hidden(widget)
-
-    assert widget.is_hidden is True
 
 
 def test_render_field_with_none_field():

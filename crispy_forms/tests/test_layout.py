@@ -30,6 +30,7 @@ from crispy_forms.layout import (
     Div, Submit
 )
 from crispy_forms.utils import render_crispy_form
+from .utils import contains_partial
 
 
 def test_invalid_unicode_characters(settings):
@@ -270,20 +271,19 @@ def test_formset_layout(settings):
     )
 
     # Check formset fields
-    hidden_count = 5
-    assert html.count(
-        'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-    ) == 1
-    assert html.count(
-        'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-    ) == 1
-    assert html.count(
-        'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-    ) == 1
-    assert html.count(
-        'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
-    ) == 1
-    assert html.count("hidden") == hidden_count
+    assert contains_partial(html,
+        '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"/>'
+    )
+    assert html.count("hidden") == 5
 
     # Check form structure
     assert html.count('<form') == 1
@@ -313,19 +313,20 @@ def test_modelformset_layout():
     )
 
     html = render_crispy_form(form=formset, helper=helper)
+
     assert html.count("id_form-0-id") == 1
     assert html.count("id_form-1-id") == 1
     assert html.count("id_form-2-id") == 1
 
-    assert html.count(
-        'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-    ) == 1
-    assert html.count(
-        'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-    ) == 1
-    assert html.count(
-        'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-    ) == 1
+    assert contains_partial(html,
+        '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
+    )
 
     assert html.count('name="form-0-email"') == 1
     assert html.count('name="form-1-email"') == 1

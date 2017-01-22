@@ -14,10 +14,10 @@ except ImportError:
 from django.template import (
     Template, TemplateSyntaxError, Context
 )
+from django.test.html import parse_html
+from django.utils.translation import ugettext_lazy as _
 
 import pytest
-
-from django.utils.translation import ugettext_lazy as _
 
 from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
 from .forms import SampleForm, SampleFormWithMedia
@@ -436,6 +436,7 @@ def test_disable_csrf():
 
 
 def test_render_hidden_fields():
+    from .utils import contains_partial
     test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
@@ -454,8 +455,8 @@ def test_render_hidden_fields():
     assert html.count('<input') == 3
     assert html.count('hidden') == 2
 
-    assert html.count('name="password1" type="hidden"') == 1
-    assert html.count('name="password2" type="hidden"') == 1
+    assert contains_partial(html, '<input name="password1" type="hidden"/>')
+    assert contains_partial(html, '<input name="password2" type="hidden"/>')
 
 
 def test_render_required_fields():
@@ -742,15 +743,19 @@ def test_label_class_and_field_class():
     form.helper.label_class = 'col-lg-2'
     form.helper.field_class = 'col-lg-8'
     html = render_crispy_form(form)
+    dom = parse_html(html)
 
-    assert '<div class="form-group"> <div class="controls col-lg-offset-2 col-lg-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />' in html
+    snippet = parse_html('<div class="form-group"> <div class="controls col-lg-offset-2 col-lg-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company')
+    assert dom.count(snippet)
     assert html.count('col-lg-8') == 7
 
     form.helper.label_class = 'col-sm-3 col-md-4'
     form.helper.field_class = 'col-sm-8 col-md-6'
     html = render_crispy_form(form)
+    dom = parse_html(html)
 
-    assert '<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />' in html
+    snippet = parse_html('<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company' )
+    assert dom.count(snippet)
     assert html.count('col-sm-8') == 7
 
 
