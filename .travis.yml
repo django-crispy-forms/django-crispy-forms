@@ -25,6 +25,8 @@ notifications:
   email: false
 matrix:
   exclude:
+    - python: "2.7"
+      env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
     - python: "3.2"
       env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
     - python: "3.2"
