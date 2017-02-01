@@ -5,7 +5,9 @@ from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
 from crispy_forms.compatibility import string_types, text_type
-from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, get_template_pack
+from crispy_forms.utils import (
+    TEMPLATE_PACK, flatatt, get_template_pack, render_field,
+)
 
 
 class TemplateNameMixin(object):

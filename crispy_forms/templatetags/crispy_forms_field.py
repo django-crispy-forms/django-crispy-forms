@@ -3,10 +3,9 @@ try:
 except ImportError:
     izip = zip
 
-from django import forms
-from django import template
-from django.template import loader, Context
+from django import forms, template
 from django.conf import settings
+from django.template import Context, loader
 
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 

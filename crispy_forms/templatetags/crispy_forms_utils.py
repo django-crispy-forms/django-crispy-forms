@@ -3,6 +3,9 @@ import re
 
 from django import template
 from django.utils.encoding import force_text
+
+from crispy_forms.compatibility import text_type
+
 try:
     from django.utils.functional import keep_lazy
 except ImportError:
@@ -13,9 +16,6 @@ except ImportError:
         def decorator(func):
             return allow_lazy(func, *args)
         return decorator
-
-from crispy_forms.compatibility import text_type
-
 
 register = template.Library()
 
