@@ -11,4 +11,4 @@
 -[ ] Example Django Crispy Forms code
 -[ ] Screenshots
 -[ ] Actual HTML generated
--[ ] Exepcted HTML
+-[ ] Expected HTML
