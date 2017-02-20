@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-from django import forms
-
 import pytest
 
-from .conftest import only_uni_form
+from django import forms
+
+from crispy_forms.bootstrap import AppendedText
 from crispy_forms.compatibility import string_types
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
-from crispy_forms.layout import (
-    Layout, Fieldset, MultiField, HTML, Div, Field
-)
-from crispy_forms.bootstrap import AppendedText
+from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, MultiField
 from crispy_forms.tests.forms import SampleForm
+
+from .conftest import only_uni_form
 
 
 def test_wrap_all_fields():

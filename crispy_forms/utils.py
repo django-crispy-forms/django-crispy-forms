@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+
 import logging
 import sys
 
@@ -10,7 +11,7 @@ from django.utils.html import conditional_escape
 from django.utils.lru_cache import lru_cache
 
 from .base import KeepContext
-from .compatibility import text_type, PY2
+from .compatibility import PY2, text_type
 
 
 def get_template_pack():

@@ -4,23 +4,20 @@ from __future__ import unicode_literals
 from django import forms
 from django.template import Context, Template
 from django.test.html import parse_html
-from django.utils.translation import ugettext as _
-from django.utils.translation import activate, deactivate
+from django.utils.translation import activate, deactivate, ugettext as _
+
+from crispy_forms.bootstrap import (
+    Accordion, AccordionGroup, Alert, AppendedText, FieldWithButtons,
+    InlineCheckboxes, InlineRadios, PrependedAppendedText, PrependedText,
+    StrictButton, Tab, TabHolder,
+)
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
+from crispy_forms.tests.utils import contains_partial
+from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap
 from .forms import CheckboxesSampleForm, SampleForm
-from crispy_forms.bootstrap import (
-    PrependedAppendedText, AppendedText, PrependedText, InlineRadios,
-    Tab, TabHolder, AccordionGroup, Accordion, Alert, InlineCheckboxes,
-    FieldWithButtons, StrictButton
-)
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (
-    Layout, HTML, Field, MultiWidgetField
-)
-from crispy_forms.tests.utils import contains_partial
-
-from crispy_forms.utils import render_crispy_form
 
 
 def test_field_with_custom_template():

@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from crispy_forms.utils import list_difference, list_intersection, render_field
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout
+
+import pytest
+
 import django
 from django import forms
 from django.template.base import Context, Template
-import pytest
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
+from crispy_forms.utils import list_difference, list_intersection, render_field
+
 
 def test_list_intersection():
     assert list_intersection([1, 3], [2, 3]) == [3]

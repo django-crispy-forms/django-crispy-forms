@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 import re
 
+from django.utils.safestring import mark_safe
+
+from crispy_forms.compatibility import string_types
+from crispy_forms.exceptions import FormHelpersException
+from crispy_forms.layout import Layout
+from crispy_forms.layout_slice import LayoutSlice
+from crispy_forms.utils import (
+    TEMPLATE_PACK, flatatt, list_difference, list_intersection, render_field,
+)
+
 try:
     from django.urls import reverse, NoReverseMatch
 except ImportError:
     # Django < 1.10
     from django.core.urlresolvers import reverse, NoReverseMatch
-
-from django.utils.safestring import mark_safe
-
-from crispy_forms.compatibility import string_types
-from crispy_forms.layout import Layout
-from crispy_forms.layout_slice import LayoutSlice
-from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, list_intersection, list_difference
-from crispy_forms.exceptions import FormHelpersException
 
 
 class DynamicLayoutHandler(object):
