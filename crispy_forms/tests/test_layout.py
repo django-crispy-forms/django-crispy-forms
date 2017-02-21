@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import pytest
 
+import django
 from django import forms
 from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
@@ -355,7 +356,8 @@ def test_i18n():
     html = template.render(Context({'form': form}))
     assert html.count('i18n legend') == 1
 
-
+@pytest.mark.skipif(django.VERSION >= (1,11),
+                    reason="See #683: Not localising labels/values changed in 1.11")
 def test_l10n(settings):
     settings.USE_L10N = True
     settings.USE_THOUSAND_SEPARATOR = True
