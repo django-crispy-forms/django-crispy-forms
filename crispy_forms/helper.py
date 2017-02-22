@@ -142,6 +142,9 @@ class FormHelper(DynamicLayoutHandler):
             to form class attribute. The form will always have by default
             'uniForm' class.
 
+        **form_group_wrapper_class**: String containing separated CSS classes to be applied
+            to each row of inputs.
+
         **form_tag**: It specifies if <form></form> tags should be rendered when using a Layout.
             If set to False it renders the form without the <form></form> tags. Defaults to True.
 
@@ -196,6 +199,7 @@ class FormHelper(DynamicLayoutHandler):
     form = None
     form_id = ''
     form_class = ''
+    form_group_wrapper_class = ''
     layout = None
     form_tag = True
     form_error_title = None
@@ -384,6 +388,8 @@ class FormHelper(DynamicLayoutHandler):
         else:
             if template_pack == 'uni_form':
                 items['attrs']['class'] = self.attrs.get('class', '') + " uniForm"
+        if self.form_group_wrapper_class:
+            items['attrs']['form_group_wrapper_class'] = self.form_group_wrapper_class
 
         items['flat_attrs'] = flatatt(items['attrs'])
 
