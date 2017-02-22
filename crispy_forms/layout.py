@@ -419,6 +419,9 @@ class Field(LayoutObject):
 
         if not hasattr(self, 'attrs'):
             self.attrs = {}
+        else:
+            # Make sure shared state is not edited.
+            self.attrs = self.attrs.copy()
 
         if 'css_class' in kwargs:
             if 'class' in self.attrs:
