@@ -121,5 +121,5 @@ class SampleFormWithMedia(forms.Form):
         js = ('test.js',)
 
 
-class TestFormWithMultiValueField(forms.Form):
+class SampleFormWithMultiValueField(forms.Form):
     multi = forms.SplitDateTimeField()

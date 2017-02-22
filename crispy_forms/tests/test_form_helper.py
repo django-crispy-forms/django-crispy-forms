@@ -28,7 +28,7 @@ from crispy_forms.utils import render_crispy_form
 from .conftest import (
     only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
 )
-from .forms import SampleForm, SampleFormWithMedia, TestFormWithMultiValueField
+from .forms import SampleForm, SampleFormWithMedia, SampleFormWithMultiValueField
 
 try:
     from django.middleware.csrf import _get_new_csrf_key
@@ -837,7 +837,7 @@ def test_bootstrap3_does_add_form_control_class_to_non_multivaluefield():
 
 @only_bootstrap3
 def test_bootstrap3_does_not_add_form_control_class_to_multivaluefield():
-    form = TestFormWithMultiValueField()
+    form = SampleFormWithMultiValueField()
     form.helper = FormHelper()
     form.helper.template_pack = 'bootstrap3'
     html = render_crispy_form(form)
