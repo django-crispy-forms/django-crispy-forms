@@ -55,7 +55,7 @@ class LayoutObject(TemplateNameMixin):
                 [[0,3], 'field_name2']
             ]
         """
-        return self.get_layout_objects(string_types, greedy=True)
+        return self.get_layout_objects(string_types, index=None, greedy=True)
 
     def get_layout_objects(self, *LayoutClasses, **kwargs):
         """
