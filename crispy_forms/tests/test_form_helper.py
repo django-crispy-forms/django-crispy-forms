@@ -28,7 +28,7 @@ from crispy_forms.utils import render_crispy_form
 from .conftest import (
     only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
 )
-from .forms import SampleForm, SampleFormWithMedia
+from .forms import SampleForm, SampleFormWithMedia, SampleFormWithMultiValueField
 
 try:
     from django.middleware.csrf import _get_new_csrf_key
@@ -821,3 +821,24 @@ def test_passthrough_context():
     html = render_crispy_form(form, helper=form.helper, context=c)
     assert "Got prefix: foo" in html
     assert "Got suffix: bar" in html
+
+
+
+
+
+@only_bootstrap3
+def test_bootstrap3_does_add_form_control_class_to_non_multivaluefield():
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap3'
+    html = render_crispy_form(form)
+    assert 'form-control' in html
+
+
+@only_bootstrap3
+def test_bootstrap3_does_not_add_form_control_class_to_multivaluefield():
+    form = SampleFormWithMultiValueField()
+    form.helper = FormHelper()
+    form.helper.template_pack = 'bootstrap3'
+    html = render_crispy_form(form)
+    assert 'form-control' not in html
