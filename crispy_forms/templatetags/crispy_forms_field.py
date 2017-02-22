@@ -95,7 +95,9 @@ class CrispyFieldNode(template.Node):
         # If template pack has been overridden in FormHelper we can pick it from context
         template_pack = context.get('template_pack', TEMPLATE_PACK)
 
-        widgets = getattr(field.field.widget, 'widgets', [field.field.widget])
+        # There are special django widgets that wrap actual widgets,
+        # such as forms.widgets.MultiWidget, admin.widgets.RelatedFieldWidgetWrapper
+        widgets = getattr(field.field.widget, 'widgets', [getattr(field.field.widget, 'widget', field.field.widget)])
 
         if isinstance(attrs, dict):
             attrs = [attrs] * len(widgets)
