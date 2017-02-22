@@ -279,7 +279,7 @@ These ones live under module ``crispy_forms.bootstrap``.
         AccordionGroup('First Group',
             'radio_buttons'
         ),
-        Tab('Second Group',
+        AccordionGroup('Second Group',
             Field('field_name_3', css_class="extra")
         )
     )
