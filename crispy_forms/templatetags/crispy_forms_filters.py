@@ -103,14 +103,24 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
     if not isinstance(field, forms.BoundField) and settings.DEBUG:
         raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
 
-    template = get_template('%s/field.html' % template_pack)
-    c = Context({
+    attributes = {
         'field': field,
         'form_show_errors': True,
         'form_show_labels': True,
         'label_class': label_class,
         'field_class': field_class,
-        }).flatten()
+    }
+    helper = getattr(field.form, 'helper', None)
+
+    template_path = None
+    if helper is not None:
+        attributes.update(helper.get_attributes(template_pack))
+        template_path = helper.field_template
+    if not template_path:
+        template_path = '%s/field.html' % template_pack
+    template = get_template(template_path)
+
+    c = Context(attributes).flatten()
     return template.render(c)
 
 
