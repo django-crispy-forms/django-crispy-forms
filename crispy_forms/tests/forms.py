@@ -119,3 +119,7 @@ class SampleFormWithMedia(forms.Form):
     class Media:
         css = {'all': ('test.css',)}
         js = ('test.js',)
+
+
+class TestFormWithMultiValueField(forms.Form):
+    multi = forms.SplitDateTimeField()
