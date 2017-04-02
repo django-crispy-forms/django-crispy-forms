@@ -419,7 +419,7 @@ def test_choice_with_none_is_selected():
     model_instance.fruit = None
     test_form = SampleForm6(instance=model_instance)
     html = render_crispy_form(test_form)
-    assert 'checked="checked"' in html
+    assert 'checked' in html
 
 @only_uni_form
 def test_layout_composition():
