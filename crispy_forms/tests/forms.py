@@ -123,3 +123,28 @@ class SampleFormWithMedia(forms.Form):
 
 class SampleFormWithMultiValueField(forms.Form):
     multi = forms.SplitDateTimeField()
+
+class CrispyEmptyChoiceTestModel(models.Model):
+    fruit = models.CharField(
+        choices=[
+        ('apple','Apple'),
+        ('pear','Pear')],
+        null=True,
+        blank=True,
+    )
+
+class SampleForm6(forms.ModelForm):
+    class Meta:
+        """
+        When allowing null=True in a model field,
+        the corresponding field will have a choice
+        for the empty value.
+
+        When the form is initialized by an instance
+        with initial value None, this choice should
+        be selected.
+        """
+        model = CrispyEmptyChoiceTestModel
+        fields = ['fruit']
+        widgets = {'fruit': forms.RadioSelect() }
+

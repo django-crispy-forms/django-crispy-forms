@@ -23,8 +23,8 @@ from .conftest import (
     only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
 )
 from .forms import (
-    CheckboxesSampleForm, CrispyTestModel, SampleForm, SampleForm2,
-    SampleForm3, SampleForm4, SampleForm5,
+    CheckboxesSampleForm, CrispyTestModel, CrispyEmptyChoiceTestModel,
+    SampleForm, SampleForm2, SampleForm3, SampleForm4, SampleForm5, SampleForm6,
 )
 from .utils import contains_partial
 
@@ -413,6 +413,13 @@ def test_specialspaceless_not_screwing_intended_spaces():
     html = render_crispy_form(test_form)
     assert '<span>first span</span> <span>second span</span>' in html
 
+def test_choice_with_none_is_selected():
+    # see issue #701
+    model_instance = CrispyEmptyChoiceTestModel()
+    model_instance.fruit = None
+    test_form = SampleForm6(instance=model_instance)
+    html = render_crispy_form(test_form)
+    assert 'checked="checked"' in html
 
 @only_uni_form
 def test_layout_composition():
@@ -588,3 +595,4 @@ def test_bootstrap4_form_inline():
     assert html.count('id="div_id_email" class="form-group"') == 1
     assert html.count('placeholder="email"') == 1
     assert html.count('</label> <input') == 3
+
