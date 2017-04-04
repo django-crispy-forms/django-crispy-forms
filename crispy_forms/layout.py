@@ -178,7 +178,8 @@ class BaseInput(TemplateNameMixin):
     template = "%s/layout/baseinput.html"
 
     def __init__(self, name, value, **kwargs):
-        self.name = name
+        if name is not None:
+            self.name = name
         self.value = value
         self.id = kwargs.pop('css_id', '')
         self.attrs = {}
