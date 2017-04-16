@@ -49,7 +49,7 @@ class ForLoopSimulator(object):
         self.revcounter -= 1
         self.revcounter0 -= 1
         self.first = False
-        self.last = (self.revcounter0 == self.len_values - 1)
+        self.last = (self.revcounter0 == 0)
 
 
 class BasicNode(template.Node):
