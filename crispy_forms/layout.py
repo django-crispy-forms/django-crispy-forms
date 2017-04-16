@@ -212,7 +212,7 @@ class Submit(BaseInput):
     input_type = 'submit'
 
     def __init__(self, *args, **kwargs):
-        self.field_classes = 'submit submitButton' if get_template_pack() == 'uni_form' else 'btn btn-primary'
+        self.field_classes = 'submit submitButton' if get_template_pack() == 'uni_form' else 'btn btn-default'
         super(Submit, self).__init__(*args, **kwargs)
 
 
