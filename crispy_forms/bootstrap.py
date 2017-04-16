@@ -206,7 +206,7 @@ class Container(Div):
         self._active_originally_included = "active" in kwargs
         self.active = kwargs.pop("active", False)
         if not self.css_id:
-            self.css_id = slugify(self.name)
+            self.css_id = "-".join([slugify(self.name), text_type(randint(1000, 9999))])
 
     def __contains__(self, field_name):
         """
@@ -313,6 +313,9 @@ class AccordionGroup(Container):
     template = "%s/accordion-group.html"
     data_parent = ""  # accordion parent div id.
 
+    def __init__(self, name, *fields, **kwargs):
+        super(AccordionGroup, self).__init__(*fields, **kwargs)
+        self.css_id = "-".join([self.name, text_type(randint(1000, 9999))])
 
 class Accordion(ContainerHolder):
     """
