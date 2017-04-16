@@ -18,6 +18,10 @@ def is_checkbox(field):
 
 
 @register.filter
+def is_select(field):
+    return field.field.widget.__class__.__name__.lower() == "selectinput"
+
+@register.filter
 def is_password(field):
     return isinstance(field.field.widget, forms.PasswordInput)
 
@@ -46,6 +50,10 @@ def is_file(field):
 def is_multivalue(field):
     return isinstance(field.field.widget, forms.MultiWidget)
 
+
+@register.filter
+def input_type(field):
+    return field.field.widget.__class__.__name__.lower()[:-5]
 
 @register.filter
 def classes(field):
