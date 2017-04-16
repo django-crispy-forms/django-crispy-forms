@@ -147,6 +147,8 @@ class FormHelper(DynamicLayoutHandler):
 
         **form_tag**: It specifies if <form></form> tags should be rendered when using a Layout.
             If set to False it renders the form without the <form></form> tags. Defaults to True.
+            
+        **form_target**: Specifies a target for the response returning from the submission of the form.
 
         **form_error_title**: If a form has `non_field_errors` to display, they
             are rendered in a div. You can set title's div with this attribute.
@@ -202,6 +204,7 @@ class FormHelper(DynamicLayoutHandler):
     form_group_wrapper_class = ''
     layout = None
     form_tag = True
+    form_target = '_self'
     form_error_title = None
     formset_error_title = None
     form_show_errors = True
@@ -379,6 +382,8 @@ class FormHelper(DynamicLayoutHandler):
             items['attrs']['action'] = self.form_action.strip()
         if self.form_id:
             items['attrs']['id'] = self.form_id.strip()
+        if self.form_target != '_self':
+            items['attrs']['target'] = self.form_target
         if self.form_class:
             # uni_form TEMPLATE PACK has a uniForm class by default
             if template_pack == 'uni_form':
