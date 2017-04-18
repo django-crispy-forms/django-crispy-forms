@@ -4,10 +4,10 @@ import logging
 import sys
 
 from django.conf import settings
+from django.forms.utils import flatatt as _flatatt
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
-from django.utils.html import conditional_escape
 from django.utils.lru_cache import lru_cache
 
 from .base import KeepContext
@@ -152,13 +152,12 @@ def render_field(
 
 def flatatt(attrs):
     """
-    Taken from django.core.utils
     Convert a dictionary of attributes to a single string.
-    The returned string will contain a leading space followed by key="value",
-    XML-style pairs.  It is assumed that the keys do not need to be XML-escaped.
-    If the passed dictionary is empty, then return an empty string.
+
+    Passed attributes are redirected to `django.forms.utils.flatatt()`
+    with replaced "_" (underscores) by "-" (dashes) in their names.
     """
-    return ''.join([' %s="%s"' % (k.replace('_', '-'), conditional_escape(v)) for k, v in attrs.items()])
+    return _flatatt({k.replace('_', '-'): v for k, v in attrs.items()})
 
 
 def render_crispy_form(form, helper=None, context=None):
