@@ -121,7 +121,8 @@ class BasicNode(template.Node):
                 helper.render_hidden_fields = True
                 for form in actual_form:
                     node_context.update({'forloop': forloop})
-                    form.form_html = helper.render_layout(form, node_context, template_pack=self.template_pack)
+                    form.form_html = getattr(form, 'helper', helper).render_layout(form, node_context,
+                                                                                   template_pack=self.template_pack)
                     forloop.iterate()
 
         if is_formset:
