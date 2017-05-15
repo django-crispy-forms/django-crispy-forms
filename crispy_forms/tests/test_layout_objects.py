@@ -328,7 +328,7 @@ class TestBootstrapLayoutObjects(object):
         html = render_crispy_form(test_form)
 
         assert html.count(
-            '<li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'
+            '<li class="tab-pane{% if 'active' in link.css_class %} active{% endif %}"><a href="#custom" data-toggle="tab">One</a></li>'
         ) == 1
         assert html.count('class="tab-pane first-tab-class active"') == 1
         assert html.count('<li class="tab-pane') == 2
