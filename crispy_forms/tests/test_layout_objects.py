@@ -328,11 +328,11 @@ class TestBootstrapLayoutObjects(object):
         html = render_crispy_form(test_form)
 
         assert html.count(
-            '<li class="tab-pane{% if 'active' in link.css_class %} active{% endif %}"><a href="#custom-name" data-toggle="tab">One</a></li>'
+            '<li class="nav-item"><a class="nav-link active" href="#custom-name" data-toggle="tab">One</a></li>'
         ) == 1
-        assert html.count('class="tab-pane first-tab-class active"') == 1
-        assert html.count('<li class="tab-pane') == 2
-        assert html.count('tab-pane') == 4
+        assert html.count('class="nav-item first-tab-class active"') == 1
+        assert html.count('<li class="nav-item') == 2
+        assert html.count('nav-item') == 4
         assert html.count('<div id="custom-name"') == 1
         assert html.count('<div id="two"') == 1
         assert html.count('name="first_name"') == 1
@@ -362,15 +362,15 @@ class TestBootstrapLayoutObjects(object):
         # but not duplicate class
         test_form = SampleForm()
         html = render_crispy_form(test_form)
-        assert html.count('class="tab-pane active active"') == 0
+        assert html.count('class="nav-item active active"') == 0
 
         # render a new form, now with errors
         test_form = SampleForm(data={'val1': 'foo'})
         html = render_crispy_form(test_form)
         # tab 1 should not be active
-        assert html.count('<div id="one" \n    class="tab-pane active') == 0
+        assert html.count('<div id="one" \n    class="nav-item active') == 0
         # tab 2 should be active
-        assert html.count('<div id="two" \n    class="tab-pane active') == 1
+        assert html.count('<div id="two" \n    class="nav-item active') == 1
 
     def test_radio_attrs(self):
         form = CheckboxesSampleForm()
