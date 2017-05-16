@@ -316,7 +316,7 @@ class TestBootstrapLayoutObjects(object):
                     'one',
                     'first_name',
                     css_id="custom-name",
-                    css_class="first-tab-class"
+                    css_class="first-tab-class active"
                 ),
                 Tab(
                     'two',
