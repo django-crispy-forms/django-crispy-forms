@@ -7,7 +7,6 @@ import pytest
 
 import django
 from django import forms
-from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
 from django.template import Context, Template, TemplateSyntaxError
 from django.test.html import parse_html
@@ -35,7 +34,11 @@ try:
 except ImportError:
     from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
 
-
+try:
+    from django.urls import reverse
+except ImportError:
+    # Django < 1.10
+    from django.core.urlresolvers import reverse
 
 
 def test_inputs(settings):

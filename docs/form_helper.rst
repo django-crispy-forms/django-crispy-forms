@@ -50,7 +50,7 @@ Helper attributes you can set
 
     Sometimes you may want to add arguments to the URL, for that you will have to do in your view::
 
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         form.helper.form_action = reverse('url_name', args=[event.id])
         form.helper.form_action = reverse('url_name', kwargs={'book_id': book.id})
 
