@@ -55,9 +55,9 @@ def test_multiwidget_field():
 
     assert html.count('class="dateinput') == 1
     assert html.count('rel="test_dateinput"') == 1
-    assert html.count('rel="test_timeinput"') == 1
-    assert html.count('style="width: 30px;"') == 1
-    assert html.count('type="hidden"') == 1
+    assert html.count('rel="test_timeinput"') == 2
+    assert html.count('style="width: 30px;"') == 2
+    assert html.count('type="hidden"') == 2
 
 
 def test_field_type_hidden():
