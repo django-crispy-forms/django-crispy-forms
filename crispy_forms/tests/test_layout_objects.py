@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django import forms
+from django import forms, VERSION as DJANGO_VERSION
 from django.template import Context, Template
 from django.test.html import parse_html
 from django.utils.translation import activate, deactivate, ugettext as _
@@ -129,7 +129,10 @@ def test_i18n():
         HTML(_("Enter a valid value."))
     )
     html = render_crispy_form(form)
-    assert "Introduzca un valor correcto" in html
+    if DJANGO_VERSION >= (1, 11):
+        assert "Introduzca un valor válido" in html
+    else:
+        assert "Introduzca un valor correcto" in html
     deactivate()
 
 

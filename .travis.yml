@@ -8,11 +8,12 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
+  - "3.6"
 env:
   - DJANGO='django>=1.8.0,<1.9.0'
   - DJANGO='django>=1.9.0,<1.10.0'
   - DJANGO='django>=1.10.0,<1.11.0'
-  - DJANGO='django==1.11b1'
+  - DJANGO='django>=1.11.0,<2.0'
   - DJANGO='https://github.com/django/django/archive/master.tar.gz'
 before_install:
   - pip install --upgrade 'pytest<3.0.0'
@@ -30,7 +31,7 @@ matrix:
     - python: "3.2"
       env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
     - python: "3.2"
-      env: DJANGO='django==1.11b1'
+      env: DJANGO='django>=1.11.0,<2.0'
     - python: "3.2"
       env: DJANGO='django>=1.10.0,<1.11.0'
     - python: "3.2"
@@ -38,15 +39,13 @@ matrix:
     - python: "3.3"
       env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
     - python: "3.3"
-      env: DJANGO='django==1.11b1'
+      env: DJANGO='django>=1.11.0,<2.0'
     - python: "3.3"
       env: DJANGO='django>=1.10.0,<1.11.0'
     - python: "3.3"
       env: DJANGO='django>=1.9.0,<1.10.0'
     - python: "3.4"
       env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
-    - python: "3.5"
-      env: DJANGO='django>=1.7.0,<1.8.0'
   allow_failures:
     - env: DJANGO='https://github.com/django/django/archive/master.tar.gz'
 after_success:
