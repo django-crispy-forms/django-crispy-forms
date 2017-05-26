@@ -206,7 +206,7 @@ class Container(Div):
         self._active_originally_included = "active" in kwargs
         self.active = kwargs.pop("active", False)
         if not self.css_id:
-            self.css_id = slugify(self.name)
+            self.css_id = "-".join([slugify(self.name), text_type(randint(1000, 9999))])
 
     def __contains__(self, field_name):
         """
