@@ -1,0 +1,32 @@
+{% load crispy_forms_field %}
+
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+    <div id="div_{{ field.auto_id }}" class="{% if field.required %}required {% endif %}field{% if field.errors and form_show_errors %} error{% endif %}{% if field|is_checkbox %} checkbox{% endif %}">
+
+        {% if form_show_errors %}
+            {% for error in field.errors %}
+                <div id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="ui small negative message">
+                    <div class="header">Error in {{ field.name }}</div>
+                    {{ error }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if field.label %}
+            <label for="{{ field.id_for_label }}" {% if field.field.required %}class="requiredField"{% endif %}>
+                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                {% if field.help_text %}
+                    <i id="hint_{{ field.auto_id }}" class="small info icon formhelptext" data-title="Info" data-content="{{ field.help_text|safe }}" data-position="right center"></i>
+                {% endif %}
+            </label>
+        {% endif %}
+
+        {% crispy_field field %}
+
+
+
+
+    </div>
+{% endif %}
