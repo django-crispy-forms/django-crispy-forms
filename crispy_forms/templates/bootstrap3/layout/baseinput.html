@@ -1,9 +1,27 @@
-<input type="{{ input.input_type }}"
-    name="{% if input.name|wordcount > 1 %}{{ input.name|slugify }}{% else %}{{ input.name }}{% endif %}"
-    value="{{ input.value }}"
-    {% if input.input_type != "hidden" %}
-        class="{{ input.field_classes }}"
-        id="{% if input.id %}{{ input.id }}{% else %}{{ input.input_type }}-id-{{ input.name|slugify }}{% endif %}"
-    {% endif %}
-    {{ input.flat_attrs|safe }}
-    />
+{% if input.icon_left != "" or input.icon_right != "" and input.input_type != "hidden" %}
+    <label for="{% if input.id %}{{ input.id }}{% else %}{{ input.input_type }}-id-{{ input.name|slugify }}{% endif %}"
+           class="{{ input.field_classes }}">
+        {% if input.icon_left %}
+            <i class="{{ input.icon_left }}"></i> {{ input.value }}
+        {% else %}
+            {{ input.value }} <i class="{{ input.icon_right }}"></i>
+        {% endif %}
+    </label>
+    <input type="{{ input.input_type }}"
+           name="{% if input.name|wordcount > 1 %}{{ input.name|slugify }}{% else %}{{ input.name }}{% endif %}"
+           value="{{ input.value }}"
+           class="hidden btn-block"
+           id="{% if input.id %}{{ input.id }}{% else %}{{ input.input_type }}-id-{{ input.name|slugify }}{% endif %}"
+            {{ input.flat_attrs|safe }}
+            />
+{% else %}
+    <input type="{{ input.input_type }}"
+           name="{% if input.name|wordcount > 1 %}{{ input.name|slugify }}{% else %}{{ input.name }}{% endif %}"
+           value="{{ input.value }}"
+            {% if input.input_type != "hidden" %}
+           class="{{ input.field_classes }}"
+           id="{% if input.id %}{{ input.id }}{% else %}{{ input.input_type }}-id-{{ input.name|slugify }}{% endif %}"
+            {% endif %}
+            {{ input.flat_attrs|safe }}
+            />
+{% endif %}
