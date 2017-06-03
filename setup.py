@@ -47,4 +47,5 @@ setup(
     packages=find_packages(exclude=['docs']),
     include_package_data=True,
     zip_safe=False,
+    requires=['Django(>=1.8)'],
 )
