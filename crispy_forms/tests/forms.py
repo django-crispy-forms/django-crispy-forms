@@ -11,7 +11,7 @@ class SampleForm(forms.Form):
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
     first_name = forms.CharField(label="first name", max_length=5, required=True, widget=forms.TextInput())
     last_name = forms.CharField(label="last name", max_length=5, required=True, widget=forms.TextInput())
-    datetime_field = forms.DateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
+    datetime_field = forms.SplitDateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
 
     def clean(self):
         super(SampleForm, self).clean()
@@ -147,4 +147,3 @@ class SampleForm6(forms.ModelForm):
         model = CrispyEmptyChoiceTestModel
         fields = ['fruit']
         widgets = {'fruit': forms.RadioSelect() }
-
