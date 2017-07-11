@@ -292,3 +292,78 @@ def do_uni_form(parser, token):
             )
 
     return CrispyFormNode(form, helper, template_pack=template_pack)
+
+
+class OverrideCrispyFormHelperNode(template.Node):
+    def __init__(self, nodelist, form_var, overrides_dict=None):
+        self.nodelist = nodelist
+        self.form = template.Variable(form_var)
+        self.overrides_dict = overrides_dict or {}
+
+    def __repr__(self):
+        return "<OverrideCrispyFormHelperNode>"
+
+    def render(self, context):
+        form = self.form.resolve(context)
+        # Remember original form helper, if one is set
+        original_helper = getattr(form, 'helper', None)
+        # Make copy of existing helper, or set a new one
+        if original_helper:
+            form.helper = copy(original_helper)
+        else:
+            form.helper = FormHelper(form)
+        # Apply override values in helper
+        for attr_name, value_var in self.overrides_dict.items():
+            value = value_var.resolve(context)
+            setattr(form.helper, attr_name, value)
+        result = self.nodelist.render(context)
+        # Un-apply overridden helper
+        if original_helper:
+            form.helper = original_helper
+        else:
+            delattr(form, 'helper')
+        return result
+
+
+@register.tag('override_crispy_form_helper')
+def override_crispy_form_helper(parser, token):
+    """
+    Override the form helper values applied when a form is rendered by the
+    Crispy forms library directly within a template, without the need to
+    bother with helper assignment or customisation in view code.
+
+    The override applies only within this tag block, so it can be applied
+    to only one form on a page which may contain multiple other Crispy
+    rendered forms.
+
+    For example::
+
+        {% override_crispy_form_helper form form_tag=False %}
+            {% crispy form %}
+        {% end_override_crispy_form_helper %}
+
+    Multiple values can be overridden::
+
+        {% override_crispy_form_helper form form_tag=False form_style='xyz' %}
+            ...
+        {% end_override_crispy_form_helper %}
+    """
+    bits = token.split_contents()
+    tag_name = bits[0]
+    if len(bits) < 1:
+        raise template.TemplateSyntaxError(
+            "%r requires exactly one variable " % tag_name)
+    bits = bits[1:]
+    form_var = bits[0]
+    remaining_bits = bits[1:]
+    overrides_dict = template.token_kwargs(remaining_bits, parser)
+    if not overrides_dict:
+        raise template.TemplateSyntaxError(
+            "%r expected at least one variable assignment" % tag_name)
+    if remaining_bits:
+        raise template.TemplateSyntaxError(
+            "%r received an invalid token: %r" % (tag_name, remaining_bits[0]))
+    nodelist = parser.parse(('end_override_crispy_form_helper',))
+    parser.delete_first_token()
+    return OverrideCrispyFormHelperNode(
+        nodelist, form_var, overrides_dict=overrides_dict)
