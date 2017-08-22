@@ -1,6 +1,7 @@
 * Package version:
 * Django version:
 * Python version:
+* Template pack: (Optional)
 
 ### Description:
 
