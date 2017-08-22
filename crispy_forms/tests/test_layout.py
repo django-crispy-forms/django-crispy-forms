@@ -5,7 +5,6 @@ import pytest
 
 import django
 from django import forms
-from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory, modelformset_factory
 from django.shortcuts import render_to_response
 from django.template import Context, Template
@@ -23,8 +22,8 @@ from .conftest import (
     only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
 )
 from .forms import (
-    CheckboxesSampleForm, CrispyTestModel, SampleForm, SampleForm2,
-    SampleForm3, SampleForm4, SampleForm5,
+    CheckboxesSampleForm, CrispyTestModel, CrispyEmptyChoiceTestModel,
+    SampleForm, SampleForm2, SampleForm3, SampleForm4, SampleForm5, SampleForm6,
 )
 from .utils import contains_partial
 
@@ -32,6 +31,12 @@ try:
     from django.middleware.csrf import _get_new_csrf_key
 except ImportError:
     from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
+
+try:
+    from django.urls import reverse
+except ImportError:
+    # Django < 1.10
+    from django.core.urlresolvers import reverse
 
 
 def test_invalid_unicode_characters(settings):
@@ -413,6 +418,13 @@ def test_specialspaceless_not_screwing_intended_spaces():
     html = render_crispy_form(test_form)
     assert '<span>first span</span> <span>second span</span>' in html
 
+def test_choice_with_none_is_selected():
+    # see issue #701
+    model_instance = CrispyEmptyChoiceTestModel()
+    model_instance.fruit = None
+    test_form = SampleForm6(instance=model_instance)
+    html = render_crispy_form(test_form)
+    assert 'checked' in html
 
 @only_uni_form
 def test_layout_composition():

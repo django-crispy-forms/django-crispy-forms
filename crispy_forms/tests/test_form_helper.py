@@ -7,7 +7,6 @@ import pytest
 
 import django
 from django import forms
-from django.core.urlresolvers import reverse
 from django.forms.models import formset_factory
 from django.template import Context, Template, TemplateSyntaxError
 from django.test.html import parse_html
@@ -35,7 +34,11 @@ try:
 except ImportError:
     from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
 
-
+try:
+    from django.urls import reverse
+except ImportError:
+    # Django < 1.10
+    from django.core.urlresolvers import reverse
 
 
 def test_inputs(settings):
@@ -624,7 +627,7 @@ def test_error_text_inline(settings):
     if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         help_class = 'help-block'
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-        help_class = 'form-control-feedback'
+        help_class = 'invalid-feedback'
 
     matches = re.findall(
         '<span id="error_\d_\w*" class="%s"' % help_class, html, re.MULTILINE
@@ -640,7 +643,7 @@ def test_error_text_inline(settings):
     if settings.CRISPY_TEMPLATE_PACK in ['bootstrap', 'bootstrap3']:
         help_class = 'help-block'
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-        help_class = 'form-control-feedback'
+        help_class = 'invalid-feedback'
 
     matches = re.findall(
         '<p id="error_\d_\w*" class="%s"' % help_class,
@@ -692,7 +695,7 @@ def test_error_and_help_inline():
 
     # Check that help goes before error, otherwise CSS won't work
     help_position = html.find('<span id="hint_id_email" class="help-inline">')
-    error_position = html.find('<p id="error_1_id_email" class="form-control-feedback">')
+    error_position = html.find('<p id="error_1_id_email" class="invalid-feedback">')
     assert help_position < error_position
 
     # Viceversa
