@@ -9,7 +9,7 @@
 
 ### Preferably also include:
 
--[ ] Example Django Crispy Forms code
--[ ] Screenshots
--[ ] Actual HTML generated
--[ ] Expected HTML
+- [ ] Example Django Crispy Forms code
+- [ ] Screenshots
+- [ ] Actual HTML generated
+- [ ] Expected HTML
