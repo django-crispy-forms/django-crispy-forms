@@ -306,8 +306,11 @@ def test_formset_layout(settings):
     assert html.count('Note for first form only') == 1
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         assert html.count('formRow') == 3
-    else:
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         assert html.count('row') == 3
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert html.count('row') == 21
+        assert html.count('form-group') == 21 - 3
 
 
 def test_modelformset_layout():
@@ -556,8 +559,10 @@ def test_keepcontext_context_manager(settings):
 
     if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
         assert response.content.count(b'checkbox inline') == 3
-    elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         assert response.content.count(b'checkbox-inline') == 3
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert response.content.count(b'form-check-inline') == 3
 
 
 @only_bootstrap3
