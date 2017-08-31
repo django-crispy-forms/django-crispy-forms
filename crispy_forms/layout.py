@@ -471,3 +471,4 @@ class MultiWidgetField(Field):
         self.fields = list(args)
         self.attrs = kwargs.pop('attrs', {})
         self.template = kwargs.pop('template', self.template)
+        self.wrapper_class = kwargs.pop('wrapper_class', None)
