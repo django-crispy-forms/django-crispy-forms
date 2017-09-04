@@ -1,5 +1,5 @@
 {% if inputs %}
-    <div class="form-group{% if not form_class or 'form-inline' not in form_class %} row{% endif %}">
+    <div class="form-group{% if 'form-horizontal' in form_class %} row{% endif %}">
         {% if label_class %}
             <div class="aab {{ label_class }}"></div>
         {% endif %}
