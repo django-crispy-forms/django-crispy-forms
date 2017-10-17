@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 import re
 
-from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.safestring import mark_safe
 
 from crispy_forms.compatibility import string_types
+from crispy_forms.exceptions import FormHelpersException
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
-from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, list_intersection, list_difference
-from crispy_forms.exceptions import FormHelpersException
+from crispy_forms.utils import (
+    TEMPLATE_PACK, flatatt, list_difference, list_intersection, render_field,
+)
+
+try:
+    from django.urls import reverse, NoReverseMatch
+except ImportError:
+    # Django < 1.10
+    from django.core.urlresolvers import reverse, NoReverseMatch
 
 
 class DynamicLayoutHandler(object):
@@ -131,9 +138,12 @@ class FormHelper(DynamicLayoutHandler):
         **form_id**: Generates a form id for dom identification.
             If no id provided then no id attribute is created on the form.
 
-        **form_class**: String containing separated CSS clases to be applied
+        **form_class**: String containing separated CSS classes to be applied
             to form class attribute. The form will always have by default
             'uniForm' class.
+
+        **form_group_wrapper_class**: String containing separated CSS classes to be applied
+            to each row of inputs.
 
         **form_tag**: It specifies if <form></form> tags should be rendered when using a Layout.
             If set to False it renders the form without the <form></form> tags. Defaults to True.
@@ -189,6 +199,7 @@ class FormHelper(DynamicLayoutHandler):
     form = None
     form_id = ''
     form_class = ''
+    form_group_wrapper_class = ''
     layout = None
     form_tag = True
     form_error_title = None
@@ -326,7 +337,16 @@ class FormHelper(DynamicLayoutHandler):
                 left_fields_to_render = list_difference(fields_to_render, form.rendered_fields)
 
                 for field in left_fields_to_render:
-                    html += render_field(field, form, self.form_style, context)
+                    # We still respect the configuration of the helper
+                    # regarding which fields to render
+                    if (
+                        self.render_unmentioned_fields or
+                        (self.render_hidden_fields and
+                         form.fields[field].widget.is_hidden) or
+                        (self.render_required_fields and
+                         form.fields[field].widget.is_required)
+                    ):
+                        html += render_field(field, form, self.form_style, context)
 
         return mark_safe(html)
 
@@ -348,15 +368,9 @@ class FormHelper(DynamicLayoutHandler):
             'field_class': self.field_class,
             'include_media': self.include_media
         }
-        # col-[lg|md|sm|xs]-<number>
-        label_size_match = re.search('(\d+)', self.label_class)
-        device_type_match = re.search('(lg|md|sm|xs)', self.label_class)
-        if label_size_match and device_type_match:
-            try:
-                items['label_size'] = int(label_size_match.groups()[0])
-                items['bootstrap_device_type'] = device_type_match.groups()[0]
-            except:
-                pass
+        bootstrap_size_match = re.findall('col-(lg|md|sm|xs)-(\d+)', self.label_class)
+        if bootstrap_size_match:
+            items['bootstrap_checkbox_offsets'] = ['col-%s-offset-%s' % m for m in bootstrap_size_match]
 
         items['attrs'] = {}
         if self.attrs:
@@ -374,6 +388,8 @@ class FormHelper(DynamicLayoutHandler):
         else:
             if template_pack == 'uni_form':
                 items['attrs']['class'] = self.attrs.get('class', '') + " uniForm"
+        if self.form_group_wrapper_class:
+            items['attrs']['form_group_wrapper_class'] = self.form_group_wrapper_class
 
         items['flat_attrs'] = flatatt(items['attrs'])
 

@@ -5,7 +5,9 @@ from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
 from crispy_forms.compatibility import string_types, text_type
-from crispy_forms.utils import render_field, flatatt, TEMPLATE_PACK, get_template_pack
+from crispy_forms.utils import (
+    TEMPLATE_PACK, flatatt, get_template_pack, render_field,
+)
 
 
 class TemplateNameMixin(object):
@@ -53,7 +55,7 @@ class LayoutObject(TemplateNameMixin):
                 [[0,3], 'field_name2']
             ]
         """
-        return self.get_layout_objects(string_types, greedy=True)
+        return self.get_layout_objects(string_types, index=None, greedy=True)
 
     def get_layout_objects(self, *LayoutClasses, **kwargs):
         """
@@ -306,6 +308,7 @@ class MultiField(LayoutObject):
         self.label_class = kwargs.pop('label_class', 'blockLabel')
         self.css_class = kwargs.pop('css_class', 'ctrlHolder')
         self.css_id = kwargs.pop('css_id', None)
+        self.help_text = kwargs.pop('help_text', None)
         self.template = kwargs.pop('template', self.template)
         self.field_template = kwargs.pop('field_template', self.field_template)
         self.flat_attrs = flatatt(kwargs)
@@ -416,6 +419,9 @@ class Field(LayoutObject):
 
         if not hasattr(self, 'attrs'):
             self.attrs = {}
+        else:
+            # Make sure shared state is not edited.
+            self.attrs = self.attrs.copy()
 
         if 'css_class' in kwargs:
             if 'class' in self.attrs:
@@ -465,3 +471,4 @@ class MultiWidgetField(Field):
         self.fields = list(args)
         self.attrs = kwargs.pop('attrs', {})
         self.template = kwargs.pop('template', self.template)
+        self.wrapper_class = kwargs.pop('wrapper_class', None)

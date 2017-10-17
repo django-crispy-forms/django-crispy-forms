@@ -245,7 +245,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 
 - **StrictButton**: It renders a button using ``<button>`` html, not ``input``. By default ``type`` is set to ``button`` and ``class`` is set to ``btn``::
 
-    StrictButton('Button's content', name="go", value="go", css_class="extra")
+    StrictButton("Button's content", name="go", value="go", css_class="extra")
     StrictButton('Success', css_class="btn-success")
 
 .. image:: images/strict_button.png
@@ -279,7 +279,7 @@ These ones live under module ``crispy_forms.bootstrap``.
         AccordionGroup('First Group',
             'radio_buttons'
         ),
-        Tab('Second Group',
+        AccordionGroup('Second Group',
             Field('field_name_3', css_class="extra")
         )
     )

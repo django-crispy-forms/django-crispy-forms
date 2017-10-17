@@ -2,16 +2,16 @@
 django-crispy-forms
 ===================
 
-.. image:: https://travis-ci.org/maraujop/django-crispy-forms.png?branch=dev
+.. image:: https://travis-ci.org/django-crispy-forms/django-crispy-forms.png?branch=dev
    :alt: Build Status
-   :target: https://travis-ci.org/maraujop/django-crispy-forms
+   :target: https://travis-ci.org/django-crispy-forms/django-crispy-forms
 
-.. image:: http://codecov.io/github/maraujop/django-crispy-forms/coverage.svg?branch=master
-   :target: http://codecov.io/github/maraujop/django-crispy-forms?branch=master
+.. image:: http://codecov.io/github/django-crispy-forms/django-crispy-forms/coverage.svg?branch=master
+   :target: http://codecov.io/github/django-crispy-forms/django-crispy-forms?branch=master
 
 The best way to have Django_ DRY forms. Build programmatic reusable layouts out of components, having full control of the rendered HTML without writing HTML in templates. All this without breaking the standard way of doing things in Django, so it plays nice with any other form application.
 
-`django-crispy-forms` supports Python 2.7/Python 3.2+ and Django 1.8+
+`django-crispy-forms` supports Python 2.7/Python 3.3+ and Django 1.8/Django 1.10+
 
 The application mainly provides:
 
@@ -27,7 +27,7 @@ Django-crispy-forms supports several frontend frameworks, such as Twitter `Boots
 Authors
 =======
 
-django-crispy-forms is the new django-uni-form. django-uni-form was an application created by `Daniel Greenfeld`_ that I leaded since version 0.8.0. The name change tries to better explain the purpose of the application, which changed in a significant way since its birth.
+django-crispy-forms is the new django-uni-form. django-uni-form was an application created by `Daniel Greenfeld`_ that I led since version 0.8.0. The name change tries to better explain the purpose of the application, which changed in a significant way since its birth.
 
 If you are upgrading from django-uni-form, we have `instructions`_ for helping you.
 

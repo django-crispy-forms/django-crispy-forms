@@ -1,36 +1,42 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django import forms
-from django.core.urlresolvers import reverse
-from django.forms.models import formset_factory, modelformset_factory
-try:
-    from django.middleware.csrf import _get_new_csrf_key
-except ImportError:
-    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
-from django.shortcuts import render_to_response
-from django.template import (
-    Context, RequestContext
-)
 import pytest
 
-from django.test import RequestFactory
+import django
+from django import forms
+from django.forms.models import formset_factory, modelformset_factory
+from django.shortcuts import render_to_response
+from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
 
-from .compatibility import get_template_from_string
-from .conftest import only_uni_form, only_bootstrap3, only_bootstrap4, only_bootstrap
-from .forms import (
-    TestForm, TestForm2, TestForm3, CheckboxesTestForm,
-    TestForm4, CrispyTestModel, TestForm5
-)
 from crispy_forms.bootstrap import InlineCheckboxes
 from crispy_forms.compatibility import PY2
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
-    Layout, Fieldset, MultiField, Row, Column, HTML, ButtonHolder,
-    Div, Submit
+    HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit,
 )
 from crispy_forms.utils import render_crispy_form
+
+from .conftest import (
+    only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
+)
+from .forms import (
+    CheckboxesSampleForm, CrispyTestModel, CrispyEmptyChoiceTestModel,
+    SampleForm, SampleForm2, SampleForm3, SampleForm4, SampleForm5, SampleForm6,
+)
+from .utils import contains_partial
+
+try:
+    from django.middleware.csrf import _get_new_csrf_key
+except ImportError:
+    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
+
+try:
+    from django.urls import reverse
+except ImportError:
+    # Django < 1.10
+    from django.core.urlresolvers import reverse
 
 
 def test_invalid_unicode_characters(settings):
@@ -42,11 +48,11 @@ def test_invalid_unicode_characters(settings):
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
-    c = Context({'form': TestForm(), 'form_helper': form_helper})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper})
     settings.CRISPY_FAIL_SILENTLY = False
     with pytest.raises(Exception):
         template.render(c)
@@ -70,7 +76,7 @@ def test_unicode_form_field():
 
 
 def test_meta_extra_fields_with_missing_fields():
-    class FormWithMeta(TestForm):
+    class FormWithMeta(SampleForm):
         class Meta:
             fields = ('email', 'first_name', 'last_name')
 
@@ -83,7 +89,7 @@ def test_meta_extra_fields_with_missing_fields():
         'first_name',
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
@@ -100,11 +106,11 @@ def test_layout_unresolved_field(settings):
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
-    c = Context({'form': TestForm(), 'form_helper': form_helper})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper})
     settings.CRISPY_FAIL_SILENTLY = False
     with pytest.raises(Exception):
         template.render(c)
@@ -119,11 +125,11 @@ def test_double_rendered_field(settings):
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
-    c = Context({'form': TestForm(), 'form_helper': form_helper})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper})
     settings.CRISPY_FAIL_SILENTLY = False
     with pytest.raises(Exception):
         template.render(c)
@@ -134,9 +140,9 @@ def test_context_pollution():
         comment = forms.CharField()
 
     form = ExampleForm()
-    form2 = TestForm()
+    form2 = SampleForm()
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {{ form.as_ul }}
         {% crispy form2 %}
@@ -180,12 +186,12 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
     c = Context({
-        'form': TestForm(),
+        'form': SampleForm(),
         'form_helper': form_helper,
         'flag': True,
         'message': "Hello!",
@@ -208,12 +214,12 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
 
 
 def test_change_layout_dynamically_delete_field():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form_helper %}
     """)
 
-    form = TestForm()
+    form = SampleForm()
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
@@ -244,8 +250,8 @@ def test_change_layout_dynamically_delete_field():
 
 
 def test_formset_layout(settings):
-    TestFormSet = formset_factory(TestForm, extra=3)
-    formset = TestFormSet()
+    SampleFormSet = formset_factory(SampleForm, extra=3)
+    formset = SampleFormSet()
     helper = FormHelper()
     helper.form_id = 'thisFormsetRocks'
     helper.form_class = 'formsets-that-rock'
@@ -271,22 +277,19 @@ def test_formset_layout(settings):
     )
 
     # Check formset fields
-    hidden_count = 4  # before Django 1.7 added MIN_NUM_FORM_COUNT
-    assert html.count(
-        'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-    ) == 1
-    assert html.count(
-        'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-    ) == 1
-    assert html.count(
-        'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-    ) == 1
-    if hasattr(forms.formsets, 'MIN_NUM_FORM_COUNT'):
-        assert html.count(
-            'id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"'
-        ) == 1
-        hidden_count += 1
-    assert html.count("hidden") == hidden_count
+    assert contains_partial(html,
+        '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"/>'
+    )
+    assert html.count("hidden") == 5
 
     # Check form structure
     assert html.count('<form') == 1
@@ -308,7 +311,7 @@ def test_formset_layout(settings):
 
 
 def test_modelformset_layout():
-    CrispyModelFormSet = modelformset_factory(CrispyTestModel, form=TestForm4, extra=3)
+    CrispyModelFormSet = modelformset_factory(CrispyTestModel, form=SampleForm4, extra=3)
     formset = CrispyModelFormSet(queryset=CrispyTestModel.objects.none())
     helper = FormHelper()
     helper.layout = Layout(
@@ -316,19 +319,20 @@ def test_modelformset_layout():
     )
 
     html = render_crispy_form(form=formset, helper=helper)
+
     assert html.count("id_form-0-id") == 1
     assert html.count("id_form-1-id") == 1
     assert html.count("id_form-2-id") == 1
 
-    assert html.count(
-        'id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"'
-    ) == 1
-    assert html.count(
-        'id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"'
-    ) == 1
-    assert html.count(
-        'id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"'
-    ) == 1
+    assert contains_partial(html,
+        '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
+    )
+    assert contains_partial(html,
+        '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
+    )
 
     assert html.count('name="form-0-email"') == 1
     assert html.count('name="form-1-email"') == 1
@@ -338,11 +342,11 @@ def test_modelformset_layout():
 
 
 def test_i18n():
-    template = get_template_from_string("""
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form form.helper %}
     """)
-    form = TestForm()
+    form = SampleForm()
     form_helper = FormHelper()
     form_helper.layout = Layout(
         HTML(_("i18n text")),
@@ -357,12 +361,13 @@ def test_i18n():
     html = template.render(Context({'form': form}))
     assert html.count('i18n legend') == 1
 
-
+@pytest.mark.skipif(django.VERSION >= (1,11),
+                    reason="See #683: Not localising labels/values changed in 1.11")
 def test_l10n(settings):
     settings.USE_L10N = True
     settings.USE_THOUSAND_SEPARATOR = True
 
-    form = TestForm5(data={'pk': 1000})
+    form = SampleForm5(data={'pk': 1000})
     html = render_crispy_form(form)
 
     # Make sure values are unlocalized
@@ -379,7 +384,7 @@ def test_l10n(settings):
 
 
 def test_default_layout():
-    test_form = TestForm2()
+    test_form = SampleForm2()
     assert test_form.helper.layout.fields == [
         'is_company', 'email', 'password1', 'password2',
         'first_name', 'last_name', 'datetime_field',
@@ -387,12 +392,12 @@ def test_default_layout():
 
 
 def test_default_layout_two():
-    test_form = TestForm3()
+    test_form = SampleForm3()
     assert test_form.helper.layout.fields == ['email']
 
 
 def test_modelform_layout_without_meta():
-    test_form = TestForm4()
+    test_form = SampleForm4()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout('email')
     html = render_crispy_form(test_form)
@@ -403,7 +408,7 @@ def test_modelform_layout_without_meta():
 
 def test_specialspaceless_not_screwing_intended_spaces():
     # see issue #250
-    test_form = TestForm()
+    test_form = SampleForm()
     test_form.fields['email'].widget = forms.Textarea()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
@@ -413,6 +418,13 @@ def test_specialspaceless_not_screwing_intended_spaces():
     html = render_crispy_form(test_form)
     assert '<span>first span</span> <span>second span</span>' in html
 
+def test_choice_with_none_is_selected():
+    # see issue #701
+    model_instance = CrispyEmptyChoiceTestModel()
+    model_instance.fruit = None
+    test_form = SampleForm6(instance=model_instance)
+    html = render_crispy_form(test_form)
+    assert 'checked' in html
 
 @only_uni_form
 def test_layout_composition():
@@ -445,11 +457,11 @@ def test_layout_composition():
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
-    c = Context({'form': TestForm(), 'form_helper': form_helper})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper})
     html = template.render(c)
 
     assert 'multiField' in html
@@ -498,11 +510,11 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
         )
     )
 
-    template = get_template_from_string("""
+    template = Template("""
             {% load crispy_forms_tags %}
             {% crispy form form_helper %}
         """)
-    c = Context({'form': TestForm(), 'form_helper': form_helper, 'value_var': "Save"})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'value_var': "Save"})
     html = template.render(c)
 
     assert 'multiField' in html
@@ -530,7 +542,7 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
 def test_keepcontext_context_manager(settings):
     # Test case for issue #180
     # Apparently it only manifest when using render_to_response this exact way
-    form = CheckboxesTestForm()
+    form = CheckboxesSampleForm()
     form.helper = FormHelper()
     # We use here InlineCheckboxes as it updates context in an unsafe way
     form.helper.layout = Layout(
@@ -550,7 +562,7 @@ def test_keepcontext_context_manager(settings):
 
 @only_bootstrap3
 def test_form_inline():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.form_class = 'form-inline'
     form.helper.field_template = 'bootstrap3/layout/inline_field.html'
@@ -571,7 +583,7 @@ def test_form_inline():
 
 @only_bootstrap4
 def test_bootstrap4_form_inline():
-    form = TestForm()
+    form = SampleForm()
     form.helper = FormHelper()
     form.helper.form_class = 'form-inline'
     form.helper.field_template = 'bootstrap4/layout/inline_field.html'

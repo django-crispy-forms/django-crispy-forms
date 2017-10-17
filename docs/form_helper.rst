@@ -38,7 +38,7 @@ Helper attributes you can set
     When set allows you to render a form/formset using a custom template. Default template is at ``{{ TEMPLATE_PACK }}/[whole_uni_form.html|whole_uni_formset.html]``
 
 **field_template**
-    When set allows you to render a form/formset using a custom field template. Default template is at ``{{ TEMPLATE_PACK }}/field.html``. Beware that this is only effective when setting a ``FormHelper.layout``.
+    When set allows you to render a form/formset using a custom field template. Default template is at ``{{ TEMPLATE_PACK }}/field.html``.
 
 **form_method = 'POST'**
     Specifies form method attribute. You can see it to ‘POST’ or ‘GET’. Defaults to ‘POST’
@@ -52,7 +52,7 @@ Helper attributes you can set
 
     Sometimes you may want to add arguments to the URL, for that you will have to do in your view::
 
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         form.helper.form_action = reverse('url_name', args=[event.id])
         form.helper.form_action = reverse('url_name', kwargs={'book_id': book.id})
 

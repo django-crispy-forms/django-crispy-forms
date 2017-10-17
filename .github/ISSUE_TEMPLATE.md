@@ -1,6 +1,7 @@
 * Package version:
 * Django version:
 * Python version:
+* Template pack: (Optional)
 
 ### Description:
 
@@ -8,7 +9,7 @@
 
 ### Preferably also include:
 
--[ ] Example Django Crispy Forms code
--[ ] Screenshots
--[ ] Actual HTML generated
--[ ] Exepcted HTML
+- [ ] Example Django Crispy Forms code
+- [ ] Screenshots
+- [ ] Actual HTML generated
+- [ ] Expected HTML

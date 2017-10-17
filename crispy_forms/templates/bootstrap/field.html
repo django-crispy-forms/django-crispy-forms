@@ -23,7 +23,7 @@
                 {% if field|is_checkbox and form_show_labels %}
                     <label for="{{ field.id_for_label }}" class="checkbox {% if field.field.required %}requiredField{% endif %}">
                         {% crispy_field field %}
-                        {{ field.label|safe }}
+                        {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                     </label>
                     {% include 'bootstrap/layout/help_text_and_errors.html' %}
                 {% else %}

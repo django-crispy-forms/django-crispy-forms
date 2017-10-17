@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
-from copy import copy
-
-import django
+from django import template
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
-from django.template import Context
 from django.template.loader import get_template
-from django import template
+from django.utils.lru_cache import lru_cache
 
+from crispy_forms.compatibility import string_types
 from crispy_forms.helper import FormHelper
-from crispy_forms.compatibility import lru_cache, string_types
+from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 
 register = template.Library()
-# We import the filters, so they are available when doing load crispy_forms_tags
-from crispy_forms.templatetags.crispy_forms_filters import *
 
-from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
+# We import the filters, so they are available when doing load crispy_forms_tags
+from crispy_forms.templatetags.crispy_forms_filters import *  # isort:skip
 
 
 class ForLoopSimulator(object):
@@ -53,19 +50,6 @@ class ForLoopSimulator(object):
         self.revcounter0 -= 1
         self.first = False
         self.last = (self.revcounter0 == self.len_values - 1)
-
-
-def copy_context(context):
-    """
-    Copies a `Context` variable. It uses `Context.__copy__` if available
-    (introduced in Django 1.3) or copy otherwise.
-    """
-    if hasattr(context, "__copy__"):
-        return context.__copy__()
-
-    duplicate = copy(context)
-    duplicate.dicts = context.dicts[:]
-    return duplicate
 
 
 class BasicNode(template.Node):
@@ -124,9 +108,9 @@ class BasicNode(template.Node):
         # We get the response dictionary
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(helper, context, is_formset)
-        node_context = copy_context(context)
+        node_context = context.__copy__()
         node_context.update(response_dict)
-        final_context = copy_context(node_context)
+        final_context = node_context.__copy__()
 
         # If we have a helper's layout we use it, for the form or the formset's forms
         if helper and helper.layout:
@@ -137,6 +121,7 @@ class BasicNode(template.Node):
                 helper.render_hidden_fields = True
                 for form in actual_form:
                     node_context.update({'forloop': forloop})
+                    node_context.update({'formset_form': form})
                     form.form_html = helper.render_layout(form, node_context, template_pack=self.template_pack)
                     forloop.iterate()
 
@@ -184,7 +169,6 @@ class BasicNode(template.Node):
             'flat_attrs': attrs.get('flat_attrs', ''),
             'error_text_inline': attrs.get('error_text_inline', True),
             'label_class': attrs.get('label_class', ''),
-            'label_size': attrs.get('label_size', 0),
             'field_class': attrs.get('field_class', ''),
             'include_media': attrs.get('include_media', True),
         }
@@ -212,7 +196,7 @@ def whole_uni_form_template(template_pack=TEMPLATE_PACK):
 
 class CrispyFormNode(BasicNode):
     def render(self, context):
-        c = self.get_render(context)
+        c = self.get_render(context).flatten()
 
         if self.actual_helper is not None and getattr(self.actual_helper, 'template', False):
             template = get_template(self.actual_helper.template)
@@ -221,10 +205,6 @@ class CrispyFormNode(BasicNode):
                 template = whole_uni_formset_template(self.template_pack)
             else:
                 template = whole_uni_form_template(self.template_pack)
-
-        if django.VERSION >= (1, 8):
-            c = c.flatten()
-
         return template.render(c)
 
 

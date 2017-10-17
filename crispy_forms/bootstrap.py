@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
+
 from random import randint
 
 from django.template import Template
-from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
+from django.template.loader import render_to_string
 
 from .compatibility import text_type
-from .layout import LayoutObject, Field, Div
-from .utils import render_field, flatatt, TEMPLATE_PACK
+from .layout import Div, Field, LayoutObject, TemplateNameMixin
+from .utils import TEMPLATE_PACK, flatatt, render_field
 
 
 class PrependedAppendedText(Field):
@@ -30,12 +31,13 @@ class PrependedAppendedText(Field):
         super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
-        extra_context = {
+        extra_context = extra_context.copy() if extra_context is not None else {}
+        extra_context.update({
             'crispy_appended_text': self.appended_text,
             'crispy_prepended_text': self.prepended_text,
             'input_size': self.input_size,
             'active': getattr(self, "active", False)
-        }
+        })
         if hasattr(self, 'wrapper_class'):
             extra_context['wrapper_class'] = self.wrapper_class
         template = self.get_template_name(template_pack)
@@ -159,7 +161,7 @@ class FieldWithButtons(Div):
             )
 
 
-class StrictButton(object):
+class StrictButton(TemplateNameMixin):
     """
     Layout object for rendering an HTML button::
 
@@ -185,7 +187,7 @@ class StrictButton(object):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         self.content = Template(text_type(self.content)).render(context)
-        template = self.template % template_pack
+        template = self.get_template_name(template_pack)
         context.update({'button': self})
 
         return render_to_string(template, context.flatten())

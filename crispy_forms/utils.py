@@ -1,16 +1,17 @@
 from __future__ import unicode_literals
+
 import logging
 import sys
 
-import django
 from django.conf import settings
-from django.forms.forms import BoundField
+from django.forms.utils import flatatt as _flatatt
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.html import conditional_escape
+from django.utils.functional import SimpleLazyObject
+from django.utils.lru_cache import lru_cache
 
 from .base import KeepContext
-from .compatibility import lru_cache, text_type, PY2, SimpleLazyObject
+from .compatibility import PY2, text_type
 
 
 def get_template_pack():
@@ -25,18 +26,6 @@ TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
 @lru_cache()
 def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
-
-
-def set_hidden(widget):
-    """
-    set widget to hidden
-
-    different starting in Django 1.7, when is_hidden ceases to be a
-    true attribute and is determined by the input_type attribute
-    """
-    widget.input_type = 'hidden'
-    if not widget.is_hidden:
-        widget.is_hidden = True
 
 
 def render_field(
@@ -89,7 +78,8 @@ def render_field(
 
         try:
             # Injecting HTML attributes into field's widget, Django handles rendering these
-            field_instance = form.fields[field]
+            bound_field = form[field]
+            field_instance = bound_field.field
             if attrs is not None:
                 widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget])
 
@@ -101,16 +91,16 @@ def render_field(
                 for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
                     if hasattr(field_instance.widget, 'widgets'):
                         if 'type' in attr and attr['type'] == "hidden":
-                            set_hidden(field_instance.widget.widgets[index])
-                            field_instance.widget.widgets[index] = field_instance.hidden_widget()
+                            field_instance.widget.widgets[index] = field_instance.hidden_widget(attr)
 
-                        field_instance.widget.widgets[index].attrs.update(attr)
+                        else:
+                            field_instance.widget.widgets[index].attrs.update(attr)
                     else:
                         if 'type' in attr and attr['type'] == "hidden":
-                            set_hidden(field_instance.widget)
-                            field_instance.widget = field_instance.hidden_widget()
+                            field_instance.widget = field_instance.hidden_widget(attr)
 
-                        field_instance.widget.attrs.update(attr)
+                        else:
+                            field_instance.widget.attrs.update(attr)
 
         except KeyError:
             if not FAIL_SILENTLY:
@@ -131,8 +121,6 @@ def render_field(
         if field_instance is None:
             html = ''
         else:
-            bound_field = BoundField(form, field_instance, field)
-
             if template is None:
                 if form.crispy_field_template is None:
                     template = default_field_template(template_pack)
@@ -156,9 +144,7 @@ def render_field(
             if extra_context is not None:
                 context.update(extra_context)
 
-            if django.VERSION >= (1, 8):
-                context = context.flatten()
-
+            context = context.flatten()
             html = template.render(context)
 
         return html
@@ -166,13 +152,12 @@ def render_field(
 
 def flatatt(attrs):
     """
-    Taken from django.core.utils
     Convert a dictionary of attributes to a single string.
-    The returned string will contain a leading space followed by key="value",
-    XML-style pairs.  It is assumed that the keys do not need to be XML-escaped.
-    If the passed dictionary is empty, then return an empty string.
+
+    Passed attributes are redirected to `django.forms.utils.flatatt()`
+    with replaced "_" (underscores) by "-" (dashes) in their names.
     """
-    return ''.join([' %s="%s"' % (k.replace('_', '-'), conditional_escape(v)) for k, v in attrs.items()])
+    return _flatatt({k.replace('_', '-'): v for k, v in attrs.items()})
 
 
 def render_crispy_form(form, helper=None, context=None):
@@ -202,23 +187,7 @@ def list_intersection(list1, list2):
     Take the not-in-place intersection of two lists, similar to sets but preserving order.
     Does not check unicity of list1.
     """
-    intersection = []
-    for item in list1:
-        if item in list2:
-            intersection.append(item)
-    return intersection
-
-
-def list_union(*lists):
-    """
-    Take the not-in-place union of two or more lists, similar to sets but preserving order.
-    """
-    union = []
-    for li in lists:
-        for item in li:
-            if item not in union:
-                union.append(item)
-    return union
+    return [item for item in list1 if item in list2]
 
 
 def list_difference(left, right):
@@ -232,5 +201,3 @@ def list_difference(left, right):
             blocked.add(item)
             difference.append(item)
     return difference
-
-

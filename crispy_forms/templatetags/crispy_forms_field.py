@@ -3,11 +3,9 @@ try:
 except ImportError:
     izip = zip
 
-import django
-from django import forms
-from django import template
-from django.template import loader, Context
+from django import forms, template
 from django.conf import settings
+from django.template import Context, loader
 
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 
@@ -41,7 +39,12 @@ def is_checkboxselectmultiple(field):
 
 @register.filter
 def is_file(field):
-    return isinstance(field.field.widget, forms.ClearableFileInput)
+    return isinstance(field.field.widget, forms.FileInput)
+
+
+@register.filter
+def is_multivalue(field):
+    return isinstance(field.field.widget, forms.MultiWidget)
 
 
 @register.filter
@@ -92,7 +95,9 @@ class CrispyFieldNode(template.Node):
         # If template pack has been overridden in FormHelper we can pick it from context
         template_pack = context.get('template_pack', TEMPLATE_PACK)
 
-        widgets = getattr(field.field.widget, 'widgets', [field.field.widget])
+        # There are special django widgets that wrap actual widgets,
+        # such as forms.widgets.MultiWidget, admin.widgets.RelatedFieldWidgetWrapper
+        widgets = getattr(field.field.widget, 'widgets', [getattr(field.field.widget, 'widget', field.field.widget)])
 
         if isinstance(attrs, dict):
             attrs = [attrs] * len(widgets)
@@ -115,13 +120,24 @@ class CrispyFieldNode(template.Node):
                 css_class = class_name
 
             if (
-                template_pack in ['bootstrap3', 'bootstrap4']
+                template_pack in ['bootstrap3']
                 and not is_checkbox(field)
                 and not is_file(field)
+                and not is_multivalue(field)
             ):
                 css_class += ' form-control'
                 if field.errors:
                     css_class += ' form-control-danger'
+            
+            if (
+                template_pack in ['bootstrap4']
+                and not is_checkbox(field)
+                and not is_file(field)
+                and not is_multivalue(field)
+            ):
+                css_class += ' form-control'
+                if field.errors:
+                    css_class += ' is-invalid'
 
             widget.attrs['class'] = css_class
 
@@ -183,7 +199,6 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
         if not prepend and not append:
             raise TypeError("Expected a prepend and/or append argument")
 
-        if django.VERSION >= (1, 8):
-            context = context.flatten()
+        context = context.flatten()
 
     return template.render(context)

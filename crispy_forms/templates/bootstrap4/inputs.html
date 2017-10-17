@@ -1,5 +1,5 @@
 {% if inputs %}
-    <div class="form-group">
+    <div class="form-group{% if form_group_wrapper_class %} {{ form_group_wrapper_class }}{% endif %}">
         {% if label_class %}
             <div class="aab {{ label_class }}"></div>
         {% endif %}
