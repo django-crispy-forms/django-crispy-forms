@@ -97,11 +97,8 @@ class BasicNode(template.Node):
             helper = FormHelper() if not hasattr(actual_form, 'helper') else actual_form.helper
 
         # use template_pack from helper, if defined
-        try:
-            if helper.template_pack:
-                self.template_pack = helper.template_pack
-        except AttributeError:
-            pass
+        if hasattr(helper, 'template_pack'):
+            self.template_pack = helper.template_pack
 
         self.actual_helper = helper
 
