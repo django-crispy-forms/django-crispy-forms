@@ -9,7 +9,6 @@ python:
   - "3.6"
 env:
   - DJANGO='django>=1.8.0,<1.9.0'
-  - DJANGO='django>=1.10.0,<1.11.0'
   - DJANGO='django>=1.11.0,<2.0'
   - DJANGO='django>=2.0,<2.1'
   - DJANGO='https://github.com/django/django/archive/master.tar.gz'
