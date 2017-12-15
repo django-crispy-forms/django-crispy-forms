@@ -1,5 +1,13 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.7.0 (2017/10/17)
+
+* Fixes compatibility with Django 2.0
+* Various other fixes.
+
+See [1.7 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/4?closed=1)
+for full issue list.
+
 ## 1.6.1 (2016/10/17)
 
   * Updates compatibility for Django 1.10
