@@ -93,10 +93,8 @@ def test_field_wrapper_class(settings):
     html = render_crispy_form(form)
     if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
         assert html.count('class="control-group testing"') == 1
-    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+    elif settings.CRISPY_TEMPLATE_PACK in ('bootstrap3', 'bootstrap4'):
         assert html.count('class="form-group testing"') == 1
-    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-        assert html.count('class="form-group row testing"') == 1
 
 
 def test_html_with_carriage_returns(settings):
@@ -200,7 +198,7 @@ class TestBootstrapLayoutObjects(object):
             html = render_crispy_form(test_form)
 
             assert 'class="input-lg' in html
-            assert contains_partial(html, '<span class="input-group-addon input-lg"/>' )
+            assert contains_partial(html, '<span class="input-group-addon input-lg"/>')
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
             test_form.helper.layout = Layout(
@@ -319,7 +317,7 @@ class TestBootstrapLayoutObjects(object):
         assert html.count('<div class="alert alert-block"') == 1
         assert html.count('Testing...') == 1
 
-    def test_tab_and_tab_holder(self):
+    def test_tab_and_tab_holder(self, settings):
         test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -339,12 +337,20 @@ class TestBootstrapLayoutObjects(object):
         )
         html = render_crispy_form(test_form)
 
-        assert html.count(
-            '<li class="nav-item"><a class="nav-link active" href="#custom-name" data-toggle="tab">One</a></li>'
-        ) == 1
-        assert html.count('class="nav-item first-tab-class active"') == 1
-        assert html.count('<li class="nav-item') == 2
-        assert html.count('nav-item') == 4
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            assert html.count(
+                '<ul class="nav nav-tabs"> <li class="nav-item"><a class="nav-link active" href="#custom-name" data-toggle="tab">One</a></li>'
+            ) == 1
+            assert html.count('tab-pane') == 2
+        else:
+            assert html.count(
+                '<ul class="nav nav-tabs"> <li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'
+            ) == 1
+            assert html.count('<li class="tab-pane') == 2
+            assert html.count('tab-pane') == 4
+
+        assert html.count('class="tab-pane first-tab-class active"') == 1
+
         assert html.count('<div id="custom-name"') == 1
         assert html.count('<div id="two"') == 1
         assert html.count('name="first_name"') == 1
@@ -379,10 +385,15 @@ class TestBootstrapLayoutObjects(object):
         # render a new form, now with errors
         test_form = SampleForm(data={'val1': 'foo'})
         html = render_crispy_form(test_form)
+        tab_class = 'tab-pane'
+        # if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            # tab_class = 'nav-link'
+        # else:
+            # tab_class = 'tab-pane'
         # tab 1 should not be active
-        assert html.count('<div id="one" \n    class="nav-item active') == 0
+        assert html.count('<div id="one" \n    class="{} active'.format(tab_class)) == 0
         # tab 2 should be active
-        assert html.count('<div id="two" \n    class="nav-item active') == 1
+        assert html.count('<div id="two" \n    class="{} active'.format(tab_class)) == 1
 
     def test_radio_attrs(self):
         form = CheckboxesSampleForm()
@@ -408,10 +419,8 @@ class TestBootstrapLayoutObjects(object):
         html = render_crispy_form(form)
 
         form_group_class = 'control-group'
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+        if settings.CRISPY_TEMPLATE_PACK in ('bootstrap3', 'bootstrap4'):
             form_group_class = 'form-group'
-        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-            form_group_class = 'form-group row'
 
         assert html.count('class="%s extra"' % form_group_class) == 1
         assert html.count('autocomplete="off"') == 1
