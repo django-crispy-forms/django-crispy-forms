@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
 
-from crispy_forms.bootstrap import InlineCheckboxes
+from crispy_forms.bootstrap import Field, InlineCheckboxes
 from crispy_forms.compatibility import PY2
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
@@ -600,3 +600,18 @@ def test_bootstrap4_form_inline():
     assert html.count('id="div_id_email" class="form-group"') == 1
     assert html.count('placeholder="email"') == 1
     assert html.count('</label> <input') == 3
+
+
+def test_update_attributes_class():
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        'email',
+        Field('password1'),
+        'password2',
+    )
+    form.helper['password1'].update_attributes(css_class='hello')
+    html = render_crispy_form(form)
+    assert html.count(
+        '<input type="password" name="password1" maxlength="30" class="hello '
+    ) == 1

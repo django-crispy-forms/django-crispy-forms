@@ -143,12 +143,18 @@ class LayoutSlice(object):
                 else:
                     function(layout_object)
 
-    def update_attributes(self, **kwargs):
+    def update_attributes(self, **original_kwargs):
         """
         Updates attributes of every layout object pointed in `self.slice` using kwargs
         """
         def update_attrs(layout_object):
+            kwargs = original_kwargs.copy()
             if hasattr(layout_object, 'attrs'):
+                if 'css_class' in kwargs:
+                    if 'class' in layout_object.attrs:
+                        layout_object.attrs['class'] += " %s" % kwargs.pop('css_class')
+                    else:
+                        layout_object.attrs['class'] = kwargs.pop('css_class')
                 layout_object.attrs.update(kwargs)
 
         self.map(update_attrs)
