@@ -613,5 +613,5 @@ def test_update_attributes_class():
     form.helper['password1'].update_attributes(css_class='hello')
     html = render_crispy_form(form)
     assert html.count(
-        '<input type="password" name="password1" maxlength="30" class="hello '
+        ' class="hello textinput'
     ) == 1
