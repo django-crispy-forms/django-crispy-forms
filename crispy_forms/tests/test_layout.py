@@ -306,8 +306,11 @@ def test_formset_layout(settings):
     assert html.count('Note for first form only') == 1
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         assert html.count('formRow') == 3
-    else:
+    elif settings.CRISPY_TEMPLATE_PACK in ('bootstrap3', 'bootstrap4'):
         assert html.count('row') == 3
+
+    if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert html.count('form-group') == 18
 
 
 def test_modelformset_layout():
@@ -556,8 +559,10 @@ def test_keepcontext_context_manager(settings):
 
     if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
         assert response.content.count(b'checkbox inline') == 3
-    elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         assert response.content.count(b'checkbox-inline') == 3
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert response.content.count(b'form-check-inline') == 3
 
 
 @only_bootstrap3
@@ -595,8 +600,8 @@ def test_bootstrap4_form_inline():
 
     html = render_crispy_form(form)
     assert html.count('class="form-inline"') == 1
-    assert html.count('class="form-group"') == 3
+    assert html.count('class="input-group"') == 3
     assert html.count('<label for="id_email" class="sr-only') == 1
-    assert html.count('id="div_id_email" class="form-group"') == 1
+    assert html.count('id="div_id_email" class="input-group"') == 1
     assert html.count('placeholder="email"') == 1
     assert html.count('</label> <input') == 3

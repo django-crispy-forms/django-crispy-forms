@@ -14,6 +14,8 @@ FormHelper with a form attached (Default layout)
 
 Since version 1.2.0 ``FormHelper`` optionally can be passed an instance of a form. You would do it this way::
 
+    from crispy_forms.helper import FormHelper
+
     class ExampleForm(forms.Form):
         def __init__(self, *args, **kwargs):
             super(ExampleForm, self).__init__(*args, **kwargs)
@@ -94,7 +96,7 @@ Helper attributes you can set
     By default django-crispy-forms renders the layout specified if it exists strictly. Sometimes you might be interested in rendering all form's hidden required fields no matter if they are mentioned or not. It defaults to ``False``.
 
 **include_media = True**
-    By default django-crispy-forms renders all form media for you within the form. If you want to render form media yourself manually outside the form, set this to ``False``. If you want to globally prevent rendering of form media, override the FormHelper class with this setting modified. It defaults to ``False``.
+    By default django-crispy-forms renders all form media for you within the form. If you want to render form media yourself manually outside the form, set this to ``False``. If you want to globally prevent rendering of form media, override the FormHelper class with this setting modified. It defaults to ``True``.
 
 
 Bootstrap Helper attributes

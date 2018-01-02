@@ -624,10 +624,12 @@ def test_error_text_inline(settings):
     html = render_crispy_form(form)
 
     help_class = 'help-inline'
+    help_tag_name = 'p'
     if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         help_class = 'help-block'
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
         help_class = 'invalid-feedback'
+        help_tag_name = 'div'
 
     matches = re.findall(
         '<span id="error_\d_\w*" class="%s"' % help_class, html, re.MULTILINE
@@ -644,9 +646,10 @@ def test_error_text_inline(settings):
         help_class = 'help-block'
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
         help_class = 'invalid-feedback'
+        help_tag_name = 'p'
 
     matches = re.findall(
-        '<p id="error_\d_\w*" class="%s"' % help_class,
+        '<%s id="error_\d_\w*" class="%s"' % (help_tag_name, help_class),
         html,
         re.MULTILINE
     )
@@ -709,7 +712,7 @@ def test_error_and_help_inline():
 
     # Check that error goes before help, otherwise CSS won't work
     error_position = html.find('<span id="error_1_id_email" class="help-inline">')
-    help_position = html.find('<small id="hint_id_email" class="text-muted">')
+    help_position = html.find('<small id="hint_id_email" class="form-text text-muted">')
     assert error_position < help_position
 
 
@@ -785,7 +788,7 @@ def test_label_class_and_field_class_bs4():
     html = render_crispy_form(form)
 
     assert '<div class="form-group">' in html
-    assert '<div class="col-lg-offset-2 col-lg-8">' in html
+    assert '<div class="offset-lg-2 col-lg-8">' in html
     assert html.count('col-lg-8') == 7
 
     form.helper.label_class = 'col-sm-3 col-md-4'
@@ -793,8 +796,24 @@ def test_label_class_and_field_class_bs4():
     html = render_crispy_form(form)
 
     assert '<div class="form-group">' in html
-    assert '<div class="col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6">' in html
+    assert '<div class="offset-sm-3 offset-md-4 col-sm-8 col-md-6">' in html
     assert html.count('col-sm-8') == 7
+
+
+@only_bootstrap4
+def test_form_group_with_form_inline_bs4():
+    form = SampleForm()
+    form.helper = FormHelper()
+    html = render_crispy_form(form)
+    assert '<div class="form-group">' in html
+
+    # .row class shouldn't be together with .form-group in inline forms
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.form_class = 'form-inline'
+    form.helper.field_template = 'bootstrap4/layout/inline_field.html'
+    html = render_crispy_form(form)
+    assert '<div class="form-group row">' not in html
 
 
 @only_bootstrap4
