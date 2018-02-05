@@ -31,7 +31,7 @@
         </thead>
 
         <tbody>
-            <tr class="hidden empty-form">
+            <tr class="d-none empty-form">
                 {% for field in formset.empty_form %}
                     {% include 'bootstrap4/field.html' with tag="td" form_show_labels=False %}
                 {% endfor %}
