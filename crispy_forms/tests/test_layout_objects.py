@@ -184,14 +184,12 @@ class TestBootstrapLayoutObjects(object):
             assert dom.count(parse_html('<span class="add-on">#</span>')) == 1
             assert dom.count(parse_html('<span class="add-on">$</span>')) == 1
 
-        if settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             assert html.count('<span class="input-group-addon">@</span>') == 1
             assert html.count(
                 '<span class="input-group-addon">gmail.com</span>') == 1
             assert html.count('<span class="input-group-addon">#</span>') == 1
             assert html.count('<span class="input-group-addon">$</span>') == 1
-
-        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             test_form.helper.layout = Layout(
                 PrependedAppendedText('email', '@', 'gmail.com',
                                       css_class='input-lg'), )
@@ -201,13 +199,18 @@ class TestBootstrapLayoutObjects(object):
             assert contains_partial(html, '<span class="input-group-addon input-lg"/>')
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            assert html.count('<span class="input-group-text">@</span>') == 1
+            assert html.count(
+                '<span class="input-group-text">gmail.com</span>') == 1
+            assert html.count('<span class="input-group-text">#</span>') == 1
+            assert html.count('<span class="input-group-text">$</span>') == 1
             test_form.helper.layout = Layout(
                 PrependedAppendedText('email', '@', 'gmail.com',
                                       css_class='form-control-lg'), )
             html = render_crispy_form(test_form)
 
             assert 'class="form-control-lg' in html
-            assert contains_partial(html, '<span class="input-group-addon"/>')
+            assert contains_partial(html, '<span class="input-group-text"/>')
 
     def test_inline_radios(self, settings):
         test_form = CheckboxesSampleForm()
