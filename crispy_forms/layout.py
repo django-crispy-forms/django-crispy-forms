@@ -194,11 +194,21 @@ class BaseInput(TemplateNameMixin):
         Renders an `<input />` if container is used as a Layout object.
         Input button value can be a variable in context.
         """
-        self.value = Template(text_type(self.value)).render(context)
+        value = Template(text_type(self.value)).render(context)
         template = self.get_template_name(template_pack)
-        context.update({'input': self})
+        context.update({'input': InputRenderProxy(self, value)})
 
         return render_to_string(template, context.flatten())
+
+
+
+class InputRenderProxy(object):
+    def __init__(self, input, value):
+        self._input = input
+        self.value = value
+
+    def __getattr__(self, attr):
+        return getattr(self._input, attr)
 
 
 class Submit(BaseInput):

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django import forms, VERSION as DJANGO_VERSION
 from django.template import Context, Template
 from django.test.html import parse_html
-from django.utils.translation import activate, deactivate, ugettext as _
+from django.utils.translation import activate, deactivate, ugettext as _, ugettext_lazy
 
 from crispy_forms.bootstrap import (
     Accordion, AccordionGroup, Alert, AppendedText, FieldWithButtons,
@@ -12,7 +12,7 @@ from crispy_forms.bootstrap import (
     StrictButton, Tab, TabHolder,
 )
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
+from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField, BaseInput
 from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import render_crispy_form
 
@@ -117,6 +117,43 @@ def test_html_with_carriage_returns(settings):
         assert html.count('\n') == 25
     else:
         assert html.count('\n') == 27
+
+
+def test_button_lazy():
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        BaseInput('_', ugettext_lazy("Enter a valid value."))
+    )
+
+    activate('en')
+    html = render_crispy_form(form)
+    assert "Enter a valid value." in html
+
+    activate('es')
+    html = render_crispy_form(form)
+    if DJANGO_VERSION >= (1, 11):
+        assert "Introduzca un valor válido" in html
+    else:
+        assert "Introduzca un valor correcto" in html
+
+def test_html_lazy():
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        HTML(ugettext_lazy("Enter a valid value."))
+    )
+
+    activate('en')
+    html = render_crispy_form(form)
+    assert "Enter a valid value." in html
+
+    activate('es')
+    html = render_crispy_form(form)
+    if DJANGO_VERSION >= (1, 11):
+        assert "Introduzca un valor válido" in html
+    else:
+        assert "Introduzca un valor correcto" in html
 
 
 def test_i18n():
