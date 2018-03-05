@@ -189,9 +189,12 @@ def test_crispy_addon(settings):
         # prepend and append tests
         assert "input-append" in crispy_addon(bound_field, prepend="Work", append="Primary")
         assert "input-prepend" in crispy_addon(bound_field, prepend="Work", append="Secondary")
-    elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Primary")
         assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Secondary")
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert "input-group-text" in crispy_addon(bound_field, prepend="Work", append="Primary")
+        assert "input-group-text" in crispy_addon(bound_field, prepend="Work", append="Secondary")
 
     # errors
     with pytest.raises(TypeError):
