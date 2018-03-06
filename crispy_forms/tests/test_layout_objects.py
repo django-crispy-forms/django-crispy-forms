@@ -439,8 +439,10 @@ class TestBootstrapLayoutObjects(object):
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
             assert html.count('class="input-append"') == 1
-        elif settings.CRISPY_TEMPLATE_PACK in ['bootstrap3', 'bootstrap4']:
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             assert html.count('class="input-group-btn') == 1
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            assert html.count('class="input-group-append') == 1
 
     def test_hidden_fields(self):
         form = SampleForm()
