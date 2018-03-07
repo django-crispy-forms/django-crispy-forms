@@ -468,7 +468,6 @@ class TestBootstrapLayoutObjects(object):
         html = render_crispy_form(test_form)
 
         assert html.count('checked="checked"') == 6
-        assert html.count('id="id__1"') == 1
 
         test_form.helper = FormHelper(test_form)
         test_form.helper[1].wrap(InlineCheckboxes, inline=True)
@@ -483,3 +482,23 @@ class TestBootstrapLayoutObjects(object):
                 assert html.count('checkbox-inline"') == 3
             elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
                 assert html.count('form-check-inline"') == 3
+
+    def test_multiple_checkboxes_unique_ids(self):
+        test_form = CheckboxesSampleForm()
+        html = render_crispy_form(test_form)
+
+        expected_ids = [
+            'checkboxes_1',
+            'checkboxes_2',
+            'checkboxes_3',
+            'alphacheckboxes_1',
+            'alphacheckboxes_2',
+            'alphacheckboxes_3',
+            'numeric_multiple_checkboxes_1',
+            'numeric_multiple_checkboxes_2',
+            'numeric_multiple_checkboxes_3',
+        ]
+        for id_suffix in expected_ids:
+            expected_str = 'id="id_{id_suffix}"'.format(id_suffix=id_suffix)
+            assert html.count(expected_str) == 1
+
