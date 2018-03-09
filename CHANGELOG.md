@@ -1,5 +1,12 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.7.2 (2018/03/09)
+
+* Bugfixes following v1.7.1
+
+See [1.7.1 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/6?closed=1)
+for full issue list.
+
 ## 1.7.1 (2018/03/05)
 
 * Bootstrap 4 template pack.
