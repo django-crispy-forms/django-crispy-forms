@@ -39,7 +39,7 @@ Since version 1.1.0, django-crispy-forms has built-in support for different CSS 
 
 * ``bootstrap`` `Bootstrap`_ is crispy-forms's default template pack, version 2 of the popular simple and flexible HTML, CSS, and Javascript for user interfaces from Twitter.
 * ``bootstrap3`` Twitter Bootstrap version 3.
-* ``bootstrap4`` Alpha support for Twitter Bootstrap version 4, which is still in Alpha.
+* ``bootstrap4`` support for Twitter Bootstrap version 4.
 * ``uni-form`` `Uni-form`_ is a nice looking, well structured, highly customizable, accessible and usable forms.
 * ``foundation`` `Foundation`_ In the creator's words, "The most advanced responsive front-end framework in the world." This template pack is externally available through `crispy-forms-foundation`_
 
