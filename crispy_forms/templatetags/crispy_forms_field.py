@@ -128,7 +128,7 @@ class CrispyFieldNode(template.Node):
                 css_class += ' form-control'
                 if field.errors:
                     css_class += ' form-control-danger'
-            
+
             if (
                 template_pack == 'bootstrap4'
                 and not is_checkbox(field)
@@ -154,7 +154,7 @@ class CrispyFieldNode(template.Node):
                 else:
                     widget.attrs[attribute_name] = template.Variable(attribute).resolve(context)
 
-        return field
+        return str(field)
 
 
 @register.tag(name="crispy_field")
