@@ -124,7 +124,7 @@ class InlineRadios(Field):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         return super(InlineRadios, self).render(
             form, form_style, context, template_pack=template_pack,
-            extra_context={'inline_class': 'inline'}
+            extra_context={'is_inline': True}
         )
 
 
