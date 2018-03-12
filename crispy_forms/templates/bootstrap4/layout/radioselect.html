@@ -4,7 +4,7 @@
 <div class="{% if field_class %} {{ field_class }}{% endif %}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
     {% for choice in field.field.choices %}
       <div class="form-check{% if is_inline %} form-check-inline{% endif %}">
-        <input type="radio" class="form-check-input"{% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.id_for_label }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
+        <input type="radio" class="form-check-input"{% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %}{% if field.field.required %} required{% endif %} name="{{ field.html_name }}" id="id_{{ field.id_for_label }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
         <label for="id_{{ field.id_for_label }}_{{ forloop.counter }}" class="form-check-label">
             {{ choice.1|unlocalize }}
         </label>
