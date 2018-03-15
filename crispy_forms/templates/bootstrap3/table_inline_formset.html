@@ -20,9 +20,9 @@
             {% else %}
                 <tr>
                     {% for field in formset.forms.0 %}
-                        {% if field.label and not field|is_checkbox and not field.is_hidden %}
+                        {% if field.label and not field.is_hidden %}
                             <th for="{{ field.auto_id }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
-                                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                                {{ field.label|safe }}{% if field.field.required and not field|is_checkbox %}<span class="asteriskField">*</span>{% endif %}
                             </th>
                         {% endif %}
                     {% endfor %}
