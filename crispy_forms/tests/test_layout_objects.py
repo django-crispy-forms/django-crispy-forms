@@ -249,10 +249,14 @@ class TestBootstrapLayoutObjects(object):
             assert html.count('<div class="accordion"') == 1
             assert html.count('<div class="accordion-group">') == 2
             assert html.count('<div class="accordion-heading">') == 2
-        else:
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             assert html.count('<div class="panel panel-default"') == 2
             assert html.count('<div class="panel-group"') == 1
             assert html.count('<div class="panel-heading">') == 2
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            assert html.count('<div id="accordion"') == 1
+            assert html.count('<div class="card mb-2"') == 2
+            assert html.count('<div class="card-header"') == 2
 
         assert html.count('<div id="one"') == 1
         assert html.count('<div id="two"') == 1
@@ -277,11 +281,13 @@ class TestBootstrapLayoutObjects(object):
         html = render_crispy_form(test_form)
 
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap':
-            accordion_class = "accordion-body"
-        else:
-            accordion_class = "panel-collapse"
+            accordion_class = "accordion-body collapse in"
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
+            accordion_class = "panel-collapse collapse in"
+        elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            accordion_class = "collapse show"
 
-        assert html.count('<div id="one" class="%s collapse in"' % accordion_class) == 1
+        assert html.count('<div id="one" class="%s"' % accordion_class) == 1
 
         test_form.helper.layout = Layout(
             Accordion(

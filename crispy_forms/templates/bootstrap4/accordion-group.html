@@ -1,11 +1,16 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{ div.data_parent }}" href="#{{ div.css_id }}">{{ div.name }}</a>
-        </h4>
+<div class="card mb-2">
+    <div class="card-header" role="tab">
+        <h5 class="mb-0">
+            <a data-toggle="collapse" href="#{{ div.css_id }}" aria-expanded="true"
+               aria-controls="{{ div.css_id }}">
+                {{ div.name }}
+            </a>
+        </h5>
     </div>
-    <div id="{{ div.css_id }}" class="panel-collapse collapse{% if div.active %} in{% endif %}" >
-        <div class="panel-body">
+
+    <div id="{{ div.css_id }}" class="collapse{% if div.active %} show{% endif %}" role="tabpanel"
+         aria-labelledby="{{ div.css_id }}" data-parent="#accordion">
+        <div class="card-body">
             {{ fields|safe }}
         </div>
     </div>
