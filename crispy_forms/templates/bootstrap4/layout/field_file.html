@@ -1,10 +1,6 @@
 {% load crispy_forms_field %}
 
 <div class="custom-file">
-    {% if field.errors %}
-        {% crispy_field field 'class' 'custom-file-input form-control is-invalid' %}
-    {% else %}
-        {% crispy_field field 'class' 'custom-file-input form-control' %}
-    {% endif %}
+    {% crispy_field field 'class' 'custom-file-input' %}
     <label class="custom-file-label" for="{{ field.id_for_label }}">Choose file</label>
 </div>
