@@ -31,6 +31,8 @@
                     {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                 </label>
                 {% include 'bootstrap4/layout/help_text_and_errors.html' %}
+            {% elif field|is_file %}
+                {% include 'bootstrap4/layout/field_file.html' %}
             {% else %}
                 <div class="{{ field_class }}">
                     {% crispy_field field %}
