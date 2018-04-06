@@ -24,7 +24,7 @@ tempfile
 # testing
 .tox/
 
-# coverage 
+# coverage
 .coverage
 htmlcov
 _build
@@ -36,3 +36,4 @@ _build
 .project
 .pydevproject
 .settings/
+/.pytest_cache
