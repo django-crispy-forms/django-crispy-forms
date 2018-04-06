@@ -128,11 +128,10 @@ class CrispyFieldNode(template.Node):
                 css_class += ' form-control'
                 if field.errors:
                     css_class += ' form-control-danger'
-            
+
             if (
                 template_pack == 'bootstrap4'
                 and not is_checkbox(field)
-                and not is_file(field)
                 and not is_multivalue(field)
             ):
                 css_class += ' form-control'
