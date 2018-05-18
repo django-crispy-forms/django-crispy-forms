@@ -66,6 +66,17 @@ class SelectSampleForm(forms.Form):
     )
 
 
+class GroupedCheckboxesSampleForm(SampleForm2):
+    grouped_checkboxes = forms.MultipleChoiceField(
+        choices=(
+            ("Group 1", ((1, "Option one"), (2, "Option two"), (3, "Option three"))),
+            ("Group 2", ((4, "Option four"), (5, "Option five"), (6, "Option six"))),
+        ),
+        initial=(1,),
+        widget=forms.CheckboxSelectMultiple,
+    )
+
+
 class CrispyTestModel(models.Model):
     email = models.CharField(max_length=20)
     password = models.CharField(max_length=20)

@@ -32,3 +32,7 @@ def specialspaceless(parser, token):
     parser.delete_first_token()
 
     return SpecialSpacelessNode(nodelist)
+
+@register.filter
+def mod(left_operand, right_operand):
+    return int(left_operand or 0) % int(right_operand)

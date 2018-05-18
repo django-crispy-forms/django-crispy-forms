@@ -1,0 +1,40 @@
+{% load crispy_forms_filters %}
+{% load crispy_forms_utils %}
+{% load l10n %}
+
+<div class="{% if inline_class %}form-check{% endif %}{% if field_class %} {{ field_class }}{% endif %}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
+    {% include 'bootstrap4/layout/field_errors_block.html' %}
+    <div class="container-fluid">
+        {% for choice_or_group in field.field.choices %}
+            {% with forloop.counter as outer_loop_counter %}
+                {% if outer_loop_counter|mod:field.field.widget.attrs.cols %}
+                    <div class="row">
+                {% endif %}
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <dl class="grouped-checkboxes">
+                        <dt>{{ choice_or_group.0 }}</dt>
+                        <dd>
+                        {% for choice in choice_or_group.1 %}
+                            {% if not inline_class %}<div class="form-check">{% endif %}
+                            <label id="id_{{ field.html_name }}_{{ outer_loop_counter }}_{{ forloop.counter }}_label"
+                                class="form-check-{% if inline_class %}{{ inline_class }}{% else %}label{% endif %}"
+                                for="id_{{ field.html_name }}_{{ outer_loop_counter }}_{{ forloop.counter }}">
+                              <input type="checkbox" class="form-check-input"{% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %}
+                                name="{{ field.html_name }}"
+                                id="id_{{ field.html_name }}_{{ outer_loop_counter }}_{{ forloop.counter }}"
+                                value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
+                                {{ choice.1|unlocalize }}
+                            </label>
+                          {% if not inline_class %}</div>{% endif %}
+                        {% endfor %}
+                        </dd>
+                    </dl>
+                </div>
+                {% if not outer_loop_counter|mod:field.field.widget.attrs.cols or outer_loop_counter == field.field.choices|length %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+    {% include 'bootstrap4/layout/help_text.html' %}
+</div>

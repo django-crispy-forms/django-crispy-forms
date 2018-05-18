@@ -237,3 +237,20 @@ def test_crispy_addon(settings):
         crispy_addon()
     with pytest.raises(TypeError):
         crispy_addon(bound_field)
+
+
+def test_mod_filter():
+    template = Template(
+        """
+        {% load crispy_forms_utils %}
+        {% for index in test_range %}
+            {{ index }} % 2 = {{ index|mod:2 }}
+        {% endfor %}
+    """
+    )
+    c = Context({"test_range": range(4)})
+    html = template.render(c)
+    assert "0 % 2 = 0" in html
+    assert "1 % 2 = 1" in html
+    assert "2 % 2 = 0" in html
+    assert "3 % 2 = 1" in html

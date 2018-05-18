@@ -16,8 +16,20 @@
             </label>
         {% endif %}
 
-        {% if field|is_checkboxselectmultiple %}
-            {% include 'bootstrap4/layout/checkboxselectmultiple.html' %}
+        {% if field|is_grouped_checkboxselectmultiple %}
+            {% if field.field.widget.attrs.cols %}
+                {% include 'bootstrap4/layout/checkboxselectmultiple_grouped_cols.html' %}
+            {% else %}
+                {% include 'bootstrap4/layout/checkboxselectmultiple_grouped.html' %}
+            {% endif %}
+        {% else %}
+            {% if field|is_checkboxselectmultiple %}
+                {% if field.field.widget.attrs.cols %}
+                    {% include 'bootstrap4/layout/checkboxselectmultiple_cols.html' %}
+                {% else %}
+                    {% include 'bootstrap4/layout/checkboxselectmultiple.html' %}
+                {% endif %}
+            {% endif %}
         {% endif %}
 
         {% if field|is_radioselect %}
