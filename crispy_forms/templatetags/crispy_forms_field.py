@@ -38,6 +38,16 @@ def is_checkboxselectmultiple(field):
 
 
 @register.filter
+def is_grouped_checkboxselectmultiple(field):
+    '''Return true if this is a CheckboxSelectMultiple widget with grouped choices'''
+    if isinstance(field.field.widget, forms.CheckboxSelectMultiple):
+        for key, value in field.field.choices:
+            if type(value) in [tuple, list]:
+                return True
+    return False
+
+
+@register.filter
 def is_file(field):
     return isinstance(field.field.widget, forms.FileInput)
 
