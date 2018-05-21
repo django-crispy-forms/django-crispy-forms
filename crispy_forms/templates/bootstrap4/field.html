@@ -18,14 +18,14 @@
 
         {% if field|is_grouped_checkboxselectmultiple %}
             {% if field.field.widget.attrs.cols %}
-                {% include 'bootstrap4/layout/grouped_cols_checkboxselectmultiple.html' %}
+                {% include 'bootstrap4/layout/checkboxselectmultiple_grouped_cols.html' %}
             {% else %}
-                {% include 'bootstrap4/layout/grouped_checkboxselectmultiple.html' %}
+                {% include 'bootstrap4/layout/checkboxselectmultiple_grouped.html' %}
             {% endif %}
         {% else %}
             {% if field|is_checkboxselectmultiple %}
                 {% if field.field.widget.attrs.cols %}
-                    {% include 'bootstrap4/layout/cols_checkboxselectmultiple.html' %}
+                    {% include 'bootstrap4/layout/checkboxselectmultiple_cols.html' %}
                 {% else %}
                     {% include 'bootstrap4/layout/checkboxselectmultiple.html' %}
                 {% endif %}

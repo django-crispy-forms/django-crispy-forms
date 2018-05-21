@@ -17,7 +17,7 @@ from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap
-from .forms import CheckboxesSampleForm, SampleForm
+from .forms import CheckboxesSampleForm, SampleForm, GroupedCheckboxesSampleForm
 
 
 def test_field_with_custom_template():
@@ -164,7 +164,6 @@ class TestBootstrapLayoutObjects(object):
             assert 'class="form-check"' in html
         else:
             assert 'class="checkbox"' in html
-
 
     def test_prepended_appended_text(self, settings):
         test_form = SampleForm()
@@ -507,4 +506,33 @@ class TestBootstrapLayoutObjects(object):
         for id_suffix in expected_ids:
             expected_str = 'id="id_{id_suffix}"'.format(id_suffix=id_suffix)
             assert html.count(expected_str) == 1
+
+    def test_grouped_muliplecheckboxes(self):
+        test_form = GroupedCheckboxesSampleForm()
+        html = render_crispy_form(test_form)
+        assert 'Group 1' in html
+        assert 'Option one' in html
+        assert 'Option two' in html
+        assert 'Option three' in html
+        assert 'Group 2' in html
+        assert 'Option four' in html
+        assert 'Option five' in html
+        assert 'Option six' in html
+
+        group1_index = html.index('Group 1')
+        option1_index = html.index('Option one')
+        option2_index = html.index('Option two')
+        option3_index = html.index('Option three')
+        group2_index = html.index('Group 2')
+        option4_index = html.index('Option four')
+        option5_index = html.index('Option five')
+        option6_index = html.index('Option six')
+
+        assert group1_index < option1_index
+        assert option1_index < option2_index
+        assert option2_index < option3_index
+        assert option3_index < group2_index
+        assert group2_index < option4_index
+        assert option4_index < option5_index
+        assert option5_index < option6_index
 
