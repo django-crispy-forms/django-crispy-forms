@@ -2,7 +2,7 @@
 
 
 <div id="div_{{ field.auto_id }}" class="form-group{% if 'form-horizontal' in form_class %} row{% endif %}{% if form_show_errors and field.errors %} error{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
-    <label class="col-form-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">{{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}</label>
+    <label class="{% if 'form-horizontal' in form_class %}col-form-label {% endif %}{{ label_class }}{% if field.field.required %} requiredField{% endif %}">{{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}</label>
     <div class="{{ field_class }}">
         {% crispy_field field 'disabled' 'disabled' %}
         {% include 'bootstrap4/layout/help_text.html' %}
