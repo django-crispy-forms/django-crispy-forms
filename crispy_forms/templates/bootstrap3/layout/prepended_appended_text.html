@@ -12,17 +12,11 @@
         {% endif %}
 
         <div class="controls {{ field_class }}">
-            {% if field|is_select %}
-                {% if crispy_prepended_text %}<span class="input-group{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
+            <div class="input-group">
+                {% if crispy_prepended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
                 {% crispy_field field %}
-                {% if crispy_appended_text %}<span class="input-group{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
-            {% else %}
-                <div class="input-group">
-                    {% if crispy_prepended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
-                    {% crispy_field field %}
-                    {% if crispy_appended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
-                </div>
-          {% endif %}
+                {% if crispy_appended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
+            </div>
 
             {% include 'bootstrap3/layout/help_text_and_errors.html' %}
         </div>
