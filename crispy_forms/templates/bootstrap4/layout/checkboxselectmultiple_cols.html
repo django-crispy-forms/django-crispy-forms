@@ -19,7 +19,7 @@
                 {{ choice.1|unlocalize }}
             </label>
         </div>
-        {% if not forloop.counter|mod:field.field.widget.attrs.cols %}
+        {% if not forloop.counter|mod:field.field.widget.attrs.cols or forloop.counter == field.field.choice|length %}
             </div>
         {% endif %}
         {% if not inline_class %}</div>{% endif %}

@@ -29,7 +29,7 @@
                         </dd>
                     </dl>
                 </div>
-                {% if not outer_loop_counter|mod:field.field.widget.attrs.cols %}
+                {% if not outer_loop_counter|mod:field.field.widget.attrs.cols or outer_loop_counter == field.field.choices|length %}
                     </div>
                 {% endif %}
             {% endwith %}
