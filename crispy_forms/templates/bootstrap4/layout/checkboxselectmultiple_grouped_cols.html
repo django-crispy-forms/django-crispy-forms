@@ -16,11 +16,12 @@
                         <dd>
                         {% for choice in choice_or_group.1 %}
                             {% if not inline_class %}<div class="form-check">{% endif %}
-                            <label id="id_{{ field.id_for_label }}_{{ outer_loop_counter }}"
+                            <label id="id_{{ field.html_name }}_{{ outer_loop_counter }}_{{ forloop.counter }}_label"
                                 class="form-check-{% if inline_class %}{{ inline_class }}{% else %}label{% endif %}"
-                                for="id_{{ field.html_name }}_{{ outer_loop_counter }}">
+                                for="id_{{ field.html_name }}_{{ outer_loop_counter }}_{{ forloop.counter }}">
                               <input type="checkbox" class="form-check-input"{% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %}
-                                name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ outer_loop_counter }}"
+                                name="{{ field.html_name }}"
+                                id="id_{{ field.html_name }}_{{ outer_loop_counter }}_{{ forloop.counter }}"
                                 value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
                                 {{ choice.1|unlocalize }}
                             </label>
