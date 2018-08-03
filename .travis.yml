@@ -1,19 +1,18 @@
-language: python
-
 sudo: false
 
+
+language: python
 python:
   - "2.7"
   - "3.4"
   - "3.5"
   - "3.6"
 env:
-  - DJANGO='django>=1.8.0,<1.9.0'
   - DJANGO='django>=1.11.0,<2.0'
   - DJANGO='django>=2.0,<2.1'
   - DJANGO='https://github.com/django/django/archive/master.tar.gz'
 before_install:
-  - pip install --upgrade 'pytest<3.0.0'
+  - pip install --upgrade pytest
 install:
   - pip install $DJANGO
   - pip install -e .
