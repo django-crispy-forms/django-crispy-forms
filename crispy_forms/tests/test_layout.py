@@ -293,7 +293,7 @@ def test_formset_layout(settings):
 
     # Check form structure
     assert html.count('<form') == 1
-    assert html.count("<input type='hidden' name='csrfmiddlewaretoken'") == 1
+    assert html.count('csrfmiddlewaretoken') == 1
     assert 'formsets-that-rock' in html
     assert 'method="post"' in html
     assert 'id="thisFormsetRocks"' in html

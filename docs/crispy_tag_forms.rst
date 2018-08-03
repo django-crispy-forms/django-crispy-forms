@@ -91,7 +91,7 @@ This is exactly the html that you would get::
 
     <form action="/submit/survey/" class="uniForm blueForms" method="post" id="id-exampleForm">
         <div style='display:none'>
-            <input type='hidden' name='csrfmiddlewaretoken' value='a643fab735d5ce6377ff456e73c4b1af' />
+            <input type="hidden" name="csrfmiddlewaretoken" value="a643fab735d5ce6377ff456e73c4b1af" />
         </div>
         <fieldset>
             <legend></legend>
@@ -135,7 +135,7 @@ What you'll get is the form rendered as HTML with awesome bits. Specifically...
  * Django's CSRF controls::
 
     <div style='display:none'>
-        <input type='hidden' name='csrfmiddlewaretoken' value='a643fab735d5ce6377ff456e73c4b1af' />
+        <input type="hidden" name="csrfmiddlewaretoken" value="a643fab735d5ce6377ff456e73c4b1af" />
     </div>
 
  * Submit button::
