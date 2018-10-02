@@ -12,25 +12,19 @@
         {% endif %}
 
         <div class="{{ field_class }}">
-            {% if field|is_select %}
-                {% if crispy_prepended_text %}<span class="input-group{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
+            <div class="input-group">
+                {% if crispy_prepended_text %}
+                  <div class="input-group-prepend{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
+                    <span class="input-group-text">{{ crispy_prepended_text|safe }}</span>
+                  </div>
+                {% endif %}
                 {% crispy_field field %}
-                {% if crispy_appended_text %}<span class="input-group{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
-            {% else %}
-                <div class="input-group">
-                    {% if crispy_prepended_text %}
-                      <div class="input-group-prepend{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
-                        <span class="input-group-text">{{ crispy_prepended_text|safe }}</span>
-                      </div>
-                    {% endif %}
-                    {% crispy_field field %}
-                    {% if crispy_appended_text %}
-                      <div class="input-group-append{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
-                        <span class="input-group-text">{{ crispy_appended_text|safe }}</span>
-                      </div>
-                    {% endif %}
-                </div>
-            {% endif %}
+                {% if crispy_appended_text %}
+                  <div class="input-group-append{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
+                    <span class="input-group-text">{{ crispy_appended_text|safe }}</span>
+                  </div>
+                {% endif %}
+            </div>
 
             {% include 'bootstrap4/layout/help_text_and_errors.html' %}
         </div>
