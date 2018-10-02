@@ -43,7 +43,7 @@ setup(
     keywords=['forms', 'django', 'crispy', 'DRY'],
     author='Miguel Araujo',
     author_email='miguel.araujo.perez@gmail.com',
-    url='http://github.com/maraujop/django-crispy-forms',
+    url='http://github.com/djang-crispy-forms/django-crispy-forms',
     license='MIT',
     packages=find_packages(exclude=['docs']),
     include_package_data=True,
