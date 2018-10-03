@@ -9,7 +9,7 @@
 {% endif %}
 
 {% for field in form %}
-    {% include "uni_form/field.html" %}
+    {% include field_template|default:"uni_form/field.html" %}
 {% endfor %}
 
 {% if form_style == "" or form_style %}

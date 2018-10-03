@@ -500,6 +500,27 @@ def test_helper_custom_field_template():
     assert html.count("<h1>Special custom field</h1>") == 2
 
 
+def test_helper_custom_field_template_no_layout():
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.field_template = 'custom_field_template.html'
+
+    html = render_crispy_form(form)
+    print(html)
+    assert html.count("<h1>Special custom field</h1>") == len(form.fields)
+
+
+def test_helper_std_field_template_no_layout():
+    form = SampleForm()
+    form.helper = FormHelper()
+
+    html = render_crispy_form(form)
+    print(html)
+    for field in form.fields:
+        print(field)
+        assert html.count('id="div_id_%s"' % field) == 1
+
+
 @only_uni_form
 def test_form_show_errors():
     form = SampleForm({
