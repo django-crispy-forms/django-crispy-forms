@@ -389,7 +389,7 @@ def test_formset_with_helper_without_layout(settings):
     html = template.render(c)
 
     assert html.count('<form') == 1
-    assert html.count("<input type='hidden' name='csrfmiddlewaretoken'") == 1
+    assert html.count('csrfmiddlewaretoken') == 1
 
     # Check formset management form
     assert 'form-TOTAL_FORMS' in html
@@ -417,7 +417,7 @@ def test_CSRF_token_POST_form():
     c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
     html = template.render(c)
 
-    assert "<input type='hidden' name='csrfmiddlewaretoken'" in html
+    assert 'csrfmiddlewaretoken' in html
 
 
 def test_CSRF_token_GET_form():
@@ -431,7 +431,7 @@ def test_CSRF_token_GET_form():
     c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
     html = template.render(c)
 
-    assert "<input type='hidden' name='csrfmiddlewaretoken'" not in html
+    assert 'csrfmiddlewaretoken' not in html
 
 
 def test_disable_csrf():
