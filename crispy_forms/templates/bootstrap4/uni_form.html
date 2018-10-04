@@ -6,6 +6,6 @@
         {% include "bootstrap4/errors.html" %}
     {% endif %}
     {% for field in form %}
-        {% include "bootstrap4/field.html" %}
+        {% include field_template|default:"bootstrap4/field.html" %}
     {% endfor %}
 {% endspecialspaceless %}
