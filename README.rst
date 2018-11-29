@@ -18,10 +18,10 @@ The application mainly provides:
 * A filter named ``|crispy`` that will render elegant div based forms. Think of it as the built-in methods: ``as_table``, ``as_ul`` and ``as_p``. You cannot tune up the output, but it is easy to start using it.
 * A tag named ``{% crispy %}`` that will render a form based on your configuration and specific layout setup. This gives you amazing power without much hassle, helping you save tons of time.
 
-Django-crispy-forms supports several frontend frameworks, such as Twitter `Bootstrap`_ (versions 2 and 3), `Uni-form`_ and Foundation. You can also easily adapt your custom company's one, creating your own, `see the docs`_ for more information. You can easily switch among them using ``CRISPY_TEMPLATE_PACK`` setting variable.
+Django-crispy-forms supports several frontend frameworks, such as Twitter `Bootstrap`_ (versions 2, 3, and 4), `Uni-form`_ and Foundation. You can also easily adapt your custom company's one, creating your own, `see the docs`_ for more information. You can easily switch among them using ``CRISPY_TEMPLATE_PACK`` setting variable.
 
 .. _`Uni-form`: http://sprawsm.com/uni-form
-.. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
+.. _`Bootstrap`: https://getbootstrap.com
 .. _`see the docs`: https://django-crispy-forms.readthedocs.io
 
 Authors
