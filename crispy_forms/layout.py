@@ -372,7 +372,7 @@ class Row(Div):
     """
 
     def __init__(self, *args, **kwargs):
-        self.css_class = 'formRow' if get_template_pack() == 'uni_form' else 'row'
+        self.css_class = 'formRow' if get_template_pack() == 'uni_form' else 'grid-x grid-margin-x'#'row'
         super(Row, self).__init__(*args, **kwargs)
 
 
