@@ -135,8 +135,11 @@ class CrispyFieldNode(template.Node):
                 and not is_multivalue(field)
             ):
                 css_class += ' form-control'
-                if field.errors:
-                    css_class += ' is-invalid'
+            if (
+                template_pack == 'bootstrap4'
+                and field.errors
+            ):
+                css_class += ' is-invalid'
 
             widget.attrs['class'] = css_class
 
