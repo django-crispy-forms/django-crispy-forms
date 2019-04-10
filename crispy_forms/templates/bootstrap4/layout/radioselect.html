@@ -2,14 +2,16 @@
 {% load l10n %}
 
 <div class="{% if inline_class %}form-check{% endif %}{% if field_class %} {{ field_class }}{% endif %}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
-    {% include 'bootstrap4/layout/field_errors_block.html' %}
 
     {% for choice in field.field.choices %}
       {% if not inline_class %}<div class="form-check">{% endif %}
+        <input type="radio" class="form-check-input{% if field.errors %} is-invalid{% endif %}"{% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.id_for_label }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
         <label for="id_{{ field.id_for_label }}_{{ forloop.counter }}" class="form-check-{% if inline_class %}{{ inline_class }}{% else %}label{% endif %}">
-            <input type="radio" class="form-check-input"{% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.id_for_label }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
             {{ choice.1|unlocalize }}
         </label>
+        {% if field.errors and forloop.last %}
+            {% include 'bootstrap4/layout/field_errors_block.html' %}
+        {% endif %}
       {% if not inline_class %}</div>{% endif %}
     {% endfor %}
 
