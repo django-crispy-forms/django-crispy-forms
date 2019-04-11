@@ -12,11 +12,11 @@ python:
 cache: pip
 
 install:
-  - pip install coverage detox tox-travis tox-venv
+  - pip install coverage tox tox-travis tox-venv
 
 script:
   - coverage erase
-  - detox
+  - tox -p all
 
 after_success:
   - coverage combine --append
