@@ -372,10 +372,11 @@ class FormHelper(DynamicLayoutHandler):
         }
 
         if template_pack == 'bootstrap4':
-            bootstrap_size_match = re.findall(r'col-(xl|lg|md|sm)-(\d+)', self.label_class)
-            if bootstrap_size_match:
-                offset_pattern = 'offset-%s-%s'
-                items['bootstrap_checkbox_offsets'] = [offset_pattern % m for m in bootstrap_size_match]
+            if 'form-horizontal' in self.form_class.split():
+                bootstrap_size_match = re.findall(r'col-(xl|lg|md|sm)-(\d+)', self.label_class)
+                if bootstrap_size_match:
+                    offset_pattern = 'offset-%s-%s'
+                    items['bootstrap_checkbox_offsets'] = [offset_pattern % m for m in bootstrap_size_match]
         else:
             bootstrap_size_match = re.findall(r'col-(lg|md|sm|xs)-(\d+)', self.label_class)
             if bootstrap_size_match:
