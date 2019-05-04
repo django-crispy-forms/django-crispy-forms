@@ -125,7 +125,7 @@ class FormHelper(DynamicLayoutHandler):
     Let's see what attributes you can set and what form behaviors they apply to:
 
         **form_method**: Specifies form method attribute.
-            You can see it to 'POST' or 'GET'. Defaults to 'POST'
+            You can set it to 'POST' or 'GET'. Defaults to 'POST'
 
         **form_action**: Applied to the form action attribute:
             - Can be a named url in your URLconf that can be executed via the `{% url %}` template tag. \
