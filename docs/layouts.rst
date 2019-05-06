@@ -108,9 +108,11 @@ Universal layout objects
 
 These ones live in module ``crispy_forms.layout``. These are layout objects that are not specific to a template pack. We'll go one by one, showing usage examples:
 
-- **Div**: It wraps fields in a ``<div>``::
+- **Div**: It wraps fields in a ``<div>`` or any other tag::
 
     Div('form_field_1', 'form_field_2', 'form_field_3', ...)
+
+If you need a different tag than ``div`` you can specify it with the ``tag`` parameter, e.g., ``Div(HTML('title'), Div(tag='h1'))``.
 
 **NOTE** Mainly in all layout objects you can set kwargs that will be used as HTML attributes. As ``class`` is a reserved keyword in Python, for it you will have to use ``css_class``. For example::
 
