@@ -32,12 +32,12 @@ def advanced_layout():
 @pytest.fixture(autouse=True, params=('uni_form', 'bootstrap', 'bootstrap3',
                                       'bootstrap4'))
 def template_packs(request, settings):
-    check_template_pack(request._pyfuncitem._obj, request.param)
+    check_template_pack(request.node, request.param)
     settings.CRISPY_TEMPLATE_PACK = request.param
 
 
-def check_template_pack(function, template_pack):
-    if hasattr(function, 'only'):
-        mark = function.only
+def check_template_pack(node, template_pack):
+    mark = node.get_closest_marker('only')
+    if mark:
         if template_pack not in mark.args:
             pytest.skip('Requires %s template pack' % ' or '.join(mark.args))
