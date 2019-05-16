@@ -3,4 +3,5 @@
 <div class="custom-file {{ field_class }}">
     {% crispy_field field 'class' 'custom-file-input' %}
     <label class="custom-file-label" for="{{ field.id_for_label }}">Choose file</label>
+    {% include 'bootstrap4/layout/help_text_and_errors.html' %}
 </div>
