@@ -72,7 +72,7 @@ Helper attributes you can set
     It specifies if ``<form></form>`` tags should be rendered when using a Layout. If set to ``False`` it renders the form without the ``<form></form>`` tags. Defaults to ``True``.
 
 **disable_csrf = False**
-    Disable CSRF token, when done, crispy-forms won't use ``{% crsf_token %}`` tag. This is useful when rendering several forms using ``{% crispy %}`` tag and ``form_tag = False`` csrf_token gets rendered several times.
+    Disable CSRF token, when done, crispy-forms won't use ``{% csrf_token %}`` tag. This is useful when rendering several forms using ``{% crispy %}`` tag and ``form_tag = False`` csrf_token gets rendered several times.
 
 **form_error_title**
     If you are rendering a form using ``{% crispy %}`` tag and it has ``non_field_errors`` to display, they are rendered in a div. You can set the title of the div with this attribute. Example: “Form Errors”.
