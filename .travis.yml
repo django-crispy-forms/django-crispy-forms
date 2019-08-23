@@ -1,22 +1,23 @@
 sudo: false
 
 
+dist: xenial
 language: python
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
-  - "3.7-dev"
+  - "3.7"
+  - "3.8-dev"
 
 cache: pip
 
 install:
-  - pip install coverage detox tox-travis tox-venv
+  - pip install coverage tox-travis tox-venv
 
 script:
   - coverage erase
-  - detox
+  - tox
 
 after_success:
   - coverage combine --append

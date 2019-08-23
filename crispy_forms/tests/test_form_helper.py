@@ -652,7 +652,7 @@ def test_error_text_inline(settings):
         help_tag_name = 'div'
 
     matches = re.findall(
-        '<span id="error_\d_\w*" class="%s"' % help_class, html, re.MULTILINE
+        r'<span id="error_\d_\w*" class="%s"' % help_class, html, re.MULTILINE
     )
     assert len(matches) == 3
 
@@ -669,7 +669,7 @@ def test_error_text_inline(settings):
         help_tag_name = 'p'
 
     matches = re.findall(
-        '<%s id="error_\d_\w*" class="%s"' % (help_tag_name, help_class),
+        r'<%s id="error_\d_\w*" class="%s"' % (help_tag_name, help_class),
         html,
         re.MULTILINE
     )
