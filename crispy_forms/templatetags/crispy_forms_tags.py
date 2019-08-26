@@ -109,6 +109,7 @@ class BasicNode(template.Node):
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(helper, context, is_formset)
         node_context = context.__copy__()
+        node_context.update({'is_bound': actual_form.is_bound})
         node_context.update(response_dict)
         final_context = node_context.__copy__()
 
