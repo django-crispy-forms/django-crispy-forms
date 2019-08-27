@@ -135,11 +135,8 @@ class CrispyFieldNode(template.Node):
                 and not is_multivalue(field)
             ):
                 css_class += ' form-control'
-                if context.get("is_bound", False):
-                    if field.errors:
-                        css_class += ' is-invalid'
-                    else:
-                        css_class += ' is-valid'
+                if field.errors:
+                    css_class += ' is-invalid'
 
             widget.attrs['class'] = css_class
 
