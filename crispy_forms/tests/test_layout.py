@@ -566,7 +566,7 @@ def test_keepcontext_context_manager(settings):
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
         assert response.content.count(b'checkbox-inline') == 3
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-        assert response.content.count(b'form-check-inline') == 3
+        assert response.content.count(b'custom-control-inline') == 3
 
 
 @only_bootstrap3
