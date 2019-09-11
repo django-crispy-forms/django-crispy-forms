@@ -1,4 +1,5 @@
 import sys
+import django
 
 try:
     basestring
@@ -16,3 +17,8 @@ else:
     binary_type = str
     string_types = basestring
     integer_types = (int, long)
+
+if django.VERSION < (3, 0):
+    from django.utils.lru_cache import lru_cache
+else:
+    from functools import lru_cache

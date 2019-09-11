@@ -5,9 +5,9 @@ from django.forms import forms
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.lru_cache import lru_cache
 from django.utils.safestring import mark_safe
 
+from crispy_forms.compatibility import lru_cache
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import TEMPLATE_PACK, flatatt
 
