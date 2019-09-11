@@ -3,7 +3,11 @@ from django import template
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template.loader import get_template
-from django.utils.lru_cache import lru_cache
+try:
+    from django.utils.lru_cache import lru_cache
+except ImportError:
+    from functools import lru_cache
+
 
 from crispy_forms.compatibility import string_types
 from crispy_forms.helper import FormHelper
