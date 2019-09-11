@@ -5,7 +5,13 @@ from django.forms import forms
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
-from django.utils.lru_cache import lru_cache
+
+try:
+    from django.utils.lru_cache import lru_cache
+except ImportError:
+    from functools import lru_cache
+
+
 from django.utils.safestring import mark_safe
 
 from crispy_forms.exceptions import CrispyError
