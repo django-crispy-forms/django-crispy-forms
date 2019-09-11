@@ -8,7 +8,11 @@ from django.forms.utils import flatatt as _flatatt
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
-from django.utils.lru_cache import lru_cache
+
+try:
+    from django.utils.lru_cache import lru_cache
+except ImportError:
+    from functools import lru_cache
 
 from .base import KeepContext
 from .compatibility import PY2, text_type
