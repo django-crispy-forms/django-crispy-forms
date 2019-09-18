@@ -24,9 +24,15 @@
                     <span class="input-group-text">{{ crispy_appended_text|safe }}</span>
                   </div>
                 {% endif %}
+                {% if error_text_inline %}
+                    {% include 'bootstrap4/layout/field_errors.html' %}
+                {% else %}
+                    {% include 'bootstrap4/layout/field_errors_block.html' %}
+                {% endif %}
             </div>
-
-            {% include 'bootstrap4/layout/help_text_and_errors.html' %}
+        {% if not help_text_inline %}
+            {% include 'bootstrap4/layout/help_text.html' %}
+        {% endif %}
         </div>
 
     </div>
