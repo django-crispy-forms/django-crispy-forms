@@ -1,5 +1,9 @@
 # CHANGELOG for django-crispy-forms
 
+## next
+
+* Add compatibility for django 3.0
+
 ## 1.7.2 (2018/03/09)
 
 * Bugfixes following v1.7.1
