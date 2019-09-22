@@ -677,7 +677,7 @@ def test_error_text_inline(settings):
 
 
 @only_bootstrap3
-def test_error_and_help_inline():
+def test_error_and_help_inline_bootstrap3():
     form = SampleForm({'email': 'invalidemail'})
     form.helper = FormHelper()
     form.helper.error_text_inline = False
