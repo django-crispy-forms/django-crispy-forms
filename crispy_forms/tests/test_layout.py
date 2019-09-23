@@ -567,6 +567,50 @@ def test_keepcontext_context_manager(settings):
         assert response.content.count(b'checkbox-inline') == 3
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
         assert response.content.count(b'custom-control-inline') == 3
+        assert response.content.count(b'custom-checkbox') > 0
+
+
+@only_bootstrap4
+def test_use_custom_control_is_used():
+    form = CheckboxesSampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        'checkboxes',
+        InlineCheckboxes('alphacheckboxes'),
+        'numeric_multiple_checkboxes'
+    )
+    # form.helper.use_custom_control take default value which is True
+
+    response = render(
+        request=None,
+        template_name='crispy_render_template.html',
+        context={'form': form}
+    )
+    assert response.content.count(b'custom-control-inline') == 3
+    assert response.content.count(b'custom-checkbox') == 9
+
+    form.helper.use_custom_control = True
+
+    response = render(
+        request=None,
+        template_name='crispy_render_template.html',
+        context={'form': form}
+    )
+    assert response.content.count(b'custom-control-inline') == 3
+    assert response.content.count(b'custom-checkbox') == 9
+
+    form.helper.use_custom_control = False
+
+    response = render(
+        request=None,
+        template_name='crispy_render_template.html',
+        context={'form': form}
+    )
+
+    assert response.content.count(b'custom-control-inline') == 0
+    assert response.content.count(b'form-check-inline') == 3
+    assert response.content.count(b'form-check') > 0
+    assert response.content.count(b'custom-checkbox') == 0
 
 
 @only_bootstrap3
