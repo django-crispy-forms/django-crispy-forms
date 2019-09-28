@@ -9,11 +9,18 @@
         <label for="id_{{ field.id_for_label }}_{{ forloop.counter }}" class="{%if use_custom_control%}custom-control-label{% else %}form-check-{% if inline_class %}{{ inline_class }}{% else %}label{% endif %}{% endif %}">
             {{ choice.1|unlocalize }}
         </label>
-        {% if field.errors and forloop.last %}
+        {% if field.errors and forloop.last and not inline_class %}
             {% include 'bootstrap4/layout/field_errors_block.html' %}
         {% endif %}
      </div>
     {% endfor %}
+    {% if field.errors and inline_class %}
+    <div class="w-100 {%if use_custom_control%}custom-control custom-radio{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
+        <input type="checkbox" class="custom-control-input {% if field.errors %}is-invalid{%endif%}">
+        {% include 'bootstrap4/layout/field_errors_block.html' %}
+    </div>
+        {% include 'bootstrap4/layout/field_errors_block.html' %}
+    {% endif %}
 
     {% include 'bootstrap4/layout/help_text.html' %}
 </div>
