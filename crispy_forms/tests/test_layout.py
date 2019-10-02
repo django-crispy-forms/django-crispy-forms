@@ -207,6 +207,8 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
 
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         assert 'class="formRow rows"' in html
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert 'class="form-row rows"' in html
     else:
         assert 'class="row rows"' in html
     assert 'Hello!' in html

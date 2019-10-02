@@ -372,7 +372,16 @@ class Row(Div):
     """
 
     def __init__(self, *args, **kwargs):
-        self.css_class = 'formRow' if get_template_pack() == 'uni_form' else 'row'
+        # Map template packs to the css class they need here.
+        # TODO: This is a _Smell_. There should be a factory which creates a
+        #       template pack specific subclass. (Or such...)
+        row_class_map = {
+            'uni_form': 'formRow',
+            'bootstrap4': 'form-row',
+            'bootstrap3': 'row',
+        }
+        # Fetch the class, with a suitable default.
+        self.css_class = row_class_map.get(get_template_pack(), 'row')
         super(Row, self).__init__(*args, **kwargs)
 
 
