@@ -16,6 +16,7 @@
     {% endfor %}
     {% if field.errors and inline_class %}
     <div class="w-100 {%if use_custom_control%}custom-control custom-radio{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
+        {# the following input is only meant to allow boostrap to render the error message as it has to be after an invalid input. As the input has no name, no data will be sent. #}
         <input type="checkbox" class="custom-control-input {% if field.errors %}is-invalid{%endif%}">
         {% include 'bootstrap4/layout/field_errors_block.html' %}
     </div>
