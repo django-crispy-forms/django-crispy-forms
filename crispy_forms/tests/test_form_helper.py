@@ -69,8 +69,10 @@ def test_inputs(settings):
         assert 'class="btn"' in html
         assert 'btn btn-primary' in html
         assert 'btn btn-inverse' in html
-        assert len(re.findall(r'<input[^>]+> <', html)) == 8
-
+        if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+            assert len(re.findall(r'<input[^>]+> <', html)) == 9
+        else:
+            assert len(re.findall(r'<input[^>]+> <', html)) == 8
 
 def test_invalid_form_method():
     form_helper = FormHelper()

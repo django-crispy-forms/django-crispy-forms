@@ -150,9 +150,9 @@ class TestBootstrapLayoutObjects(object):
         form.helper = FormHelper()
         form.helper.layout = Layout('inline_radios')
 
-        html = render_crispy_form(form)
+        html = render_crispy_form(form)  
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-            assert 'class="form-check"' in html
+            assert 'class="custom-control-input"' in html
         else:
             assert 'class="radio"' in html
 
@@ -161,7 +161,7 @@ class TestBootstrapLayoutObjects(object):
         form.helper.layout = Layout('checkboxes')
         html = render_crispy_form(form)
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-            assert 'class="form-check"' in html
+            assert 'class="custom-control-input"' in html
         else:
             assert 'class="checkbox"' in html
 
@@ -225,7 +225,7 @@ class TestBootstrapLayoutObjects(object):
         elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
             assert html.count('radio-inline"') == 2
         elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-            assert html.count('form-check-inline"') == 2
+            assert html.count('custom-control-inline"') == 2
 
     def test_accordion_and_accordiongroup(self, settings):
         test_form = SampleForm()
@@ -487,7 +487,7 @@ class TestBootstrapLayoutObjects(object):
             if settings.CRISPY_TEMPLATE_PACK == 'bootstrap3':
                 assert html.count('checkbox-inline"') == 3
             elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-                assert html.count('form-check-inline"') == 3
+                assert html.count('custom-control-inline"') == 3
 
     def test_multiple_checkboxes_unique_ids(self):
         test_form = CheckboxesSampleForm()
