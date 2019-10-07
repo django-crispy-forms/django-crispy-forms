@@ -2,7 +2,7 @@
 How to create your own template packs
 =====================================
 
-First you will have to name your template pack, for this you can't use the name of one of the available template packs in crispy-forms, due to name collisions. For example, let's say in the company we work for, a designer has come up with a CSS bootstrap internally known as ``chocolat``. The company has a Django project that needs to start using ``chocolat``, therefore we need to create a folder named ``chocolat`` within our templates directory. Check your ``TEMPLATE_DIRS`` setting in Django and pick your preferred path.
+First you will have to name your template pack, for this you can't use the name of one of the available template packs in crispy-forms, due to name collisions. For example, let's say in the company we work for, a designer has come up with a CSS bootstrap internally known as ``chocolate``. The company has a Django project that needs to start using ``chocolate``, therefore we need to create a folder named ``chocolate`` within our templates directory. Check your ``TEMPLATE_DIRS`` setting in Django and pick your preferred path.
 
 Once we have that folder created, we will have to create a concrete directory hierarchy so that crispy-forms can pick it up. This is what bootstrap template pack (v2) looks like::
 
@@ -61,7 +61,7 @@ In the previous template tree, there are some templates that are there for DRY p
 Starting
 ~~~~~~~~
 
-Now your best bet is probably start copying some or all of the templates under an existing crispy-forms template pack, such as ``bootstrap3``, then drop the ones you don't need. Next step is edit those templates, and adjust the HTML/CSS making it align with ``chocolat``, that sometimes means dropping/adding divs, classes and other stuff around. You can always create a form in your application, with a helper attached to that new template pack and start trying out your adaptation right away.
+Now your best bet is probably start copying some or all of the templates under an existing crispy-forms template pack, such as ``bootstrap3``, then drop the ones you don't need. Next step is edit those templates, and adjust the HTML/CSS making it align with ``chocolate``, that sometimes means dropping/adding divs, classes and other stuff around. You can always create a form in your application, with a helper attached to that new template pack and start trying out your adaptation right away.
 
 Currently, there is an existing template pack for crispy-forms that doesn't live in core, developed by David Thenon as an external pluggable application named `crispy-forms-foundation`_, it's also a good reference to check out.
 
