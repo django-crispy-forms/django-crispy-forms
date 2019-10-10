@@ -704,7 +704,7 @@ def test_error_and_help_inline_bootstrap3():
 
     # Check that error goes before help, otherwise CSS won't work
     error_position = html.find('<span id="error_1_id_email" class="help-inline">')
-    help_position = html.find('<p id="hint_id_email" class="help-block">')
+    help_position = html.find('<div id="hint_id_email" class="help-block">')
     assert error_position < help_position
 
 
