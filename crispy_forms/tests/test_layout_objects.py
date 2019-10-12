@@ -133,6 +133,17 @@ def test_i18n():
         assert "Introduzca un valor correcto" in html
     deactivate()
 
+def test_remove_labels():
+    form = SampleForm()
+    #remove boolean field as label is still printed in boostrap
+    del form.fields['is_company']
+
+    for fields in form:
+        fields.label = False
+
+    html = render_crispy_form(form)
+
+    assert '<label' not in html
 
 @only_bootstrap
 class TestBootstrapLayoutObjects(object):
@@ -150,7 +161,7 @@ class TestBootstrapLayoutObjects(object):
         form.helper = FormHelper()
         form.helper.layout = Layout('inline_radios')
 
-        html = render_crispy_form(form)  
+        html = render_crispy_form(form)
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
             assert 'class="custom-control-input"' in html
         else:
