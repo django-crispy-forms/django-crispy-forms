@@ -1,24 +1,41 @@
 # CHANGELOG for django-crispy-forms
 
-## next
+## 1.8.0 (2019-10-17)
 
-* Add compatibility for django 3.0
+* Updated compatibility for Django 1.11, 2.1, 2.2 and 3.0 in line with Django's
+  supported versions policy.
+* Numerous improvements to the Bootstrap 4 template pack, which may now be
+  considered mature.
 
-## 1.7.2 (2018/03/09)
+  Here are some changes that might affect custom templating you already have in
+  place when using Bootstrap 4 :
+
+    * Using [Custom Forms for radio and checkbox](https://www.w3schools.com/bootstrap4/bootstrap_forms_custom.asp).
+      You may disable this by setting  `FormHelper.use_custom_control = False`.
+    * Using [Bootstrap 4 `"form-row"` class in place of `"row"`](https://getbootstrap.com/docs/4.3/components/forms/#form-row).
+    * Fixing [layout hierarchy between input and its label for checkbox and radio](https://getbootstrap.com/docs/4.0/components/forms/#checkboxes-and-radios).
+
+  <small>Links are to the relevant Bootstap 4 docs.</small>
+
+See the [1.8.0 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/7?closed=1) for the full change list.
+
+Many thanks to all involved in bringing together a great release!
+
+## 1.7.2 (2018-03-09)
 
 * Bugfixes following v1.7.1
 
 See [1.7.1 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/6?closed=1)
 for full issue list.
 
-## 1.7.1 (2018/03/05)
+## 1.7.1 (2018-03-05)
 
 * Bootstrap 4 template pack.
 
 See [1.7.1 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/5?closed=1)
 for full issue list.
 
-## 1.7.0 (2017/10/17)
+## 1.7.0 (2017-10-17)
 
 * Fixes compatibility with Django 2.0
 * Various other fixes.
@@ -26,7 +43,7 @@ for full issue list.
 See [1.7 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/4?closed=1)
 for full issue list.
 
-## 1.6.1 (2016/10/17)
+## 1.6.1 (2016-10-17)
 
   * Updates compatibility for Django 1.10
   * A number of small Bootstrap 4 fixes.
@@ -184,13 +201,13 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Removed circular dependency between `layout` and `bootstrap`, see #129.
  * Bug fix, adapted use of inspect module in `utils.py` to avoid breaking Python 2.5 compatibility.
 
-## 1.2.2 (2012/11/30)
+## 1.2.2 (2012-11-30)
 
  * Bug fix, reduction of white space in crispy-forms output could mess within tags, see #127, reverting part of this reduction.
  * Renamed `AppendedPrependedText` to `PrependedAppendedText`.
  * Moved `Tab` and `TabHolder` to `bootstrap.py`.
 
-## 1.2.1 (2012/11/28)
+## 1.2.1 (2012-11-28)
 
  * Bug fix `help_text_inline` set to True, see #117.
  * New fix for the space between buttons problems, see #62.
@@ -210,7 +227,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Added checks and better error messages for dynamic API.
  * Fixed `get_layout_objects` recursive call for Python2.5 compatibility, thanks to Can Başçıl for reporting it.
 
-## 1.2.0 (2012/9/24)
+## 1.2.0 (2012-9-24)
 
  * Update prepended and appended templates to respect hidden fields, thanks to Bojan Mihelac, see #GH-103.
  * Added `InlineCheckboxes` to bootstrap layout objects, for rendering checkboxes inline.
@@ -245,7 +262,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Removal of some whitespace in crispy form's HTML generated, see #GH-42.
  * New `MultiWidgetField` layout object by Michal Kuffa, see #GH-39.
 
-## 1.1.4 (2012/5/24)
+## 1.1.4 (2012-5-24)
 
  * Multithread safety improvements for `BasicNode`.
  * Security fix: Thread safety fixes to `CrispyFieldNode` thanks to Paul Oswald. This avoids leaking information between requests in multithreaded WSGI servers.
@@ -254,7 +271,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Turning underscores into hyphens for `Field` layout objects.
  * Fix for `ChoiceFields` using non-string choices with radio buttons thanks to Rudy Mutter. See #GH-46, #GH-43 and #GH-35.
 
-## 1.1.3 (2012/4/21)
+## 1.1.3 (2012-4-21)
 
  * `|crispy` and `|as_crispy_field` filters were not rendering errors. Thanks to @ximi for reporting it and submitting a patch. See issue #GH-28.
  * Fixing a test that was breaking when language was not English. Thanks to @gaftech, see #GH-30.
@@ -266,7 +283,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * HTML attributes can now be set in `Div` layout object.
  * Adding tests for new functionality and bugs.
 
-## 1.1.2 (2012/2/29)
+## 1.1.2 (2012-2-29)
 
  * input name attribute is no longer slugified if only one word is provided, respecting caps.
  * Changes in bootstrap global error templates by David Bennett.
@@ -276,7 +293,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * Applying `field.css_classes` in bootstrap `field.html` instead of widget classes.
  * Fixes for bootstrap simple checkbox input to be wrapped correctly.
 
-## 1.1.1 (2012/2/17)
+## 1.1.1 (2012-2-17)
 
  * Fixing a critical bug in bootstrap templates, that was breaking `{% load crispy_forms_tags %}`
 
