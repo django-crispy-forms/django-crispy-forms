@@ -74,9 +74,6 @@ Helper attributes you can set
 **disable_csrf = False**
     Disable CSRF token, when done, crispy-forms won't use ``{% csrf_token %}`` tag. This is useful when rendering several forms using ``{% crispy %}`` tag and ``form_tag = False`` csrf_token gets rendered several times.
 
-**use_custom_control = True**
-    It indicate whether the radio and checkbox button should use the optional UI customization of the template pack or not. Useful when you already have customization based on the default interpretation of the template pack. When enabled crispy-forms will render elements such as checkbox and radio with optional additional UI customization, when available. Defaults to ``True``.
-
 **form_error_title**
     If you are rendering a form using ``{% crispy %}`` tag and it has ``non_field_errors`` to display, they are rendered in a div. You can set the title of the div with this attribute. Example: “Form Errors”.
 
@@ -130,6 +127,16 @@ All previous, ``bootstrap`` (version 2) attributes are also settable in bootstra
 
 **field_class = ''**
     Default set to ``''``. This class will be applied to every div ``controls`` wrapping a field. This is useful for doing horizontal forms. Set it for example like this ``field_class = col-lg-8``.
+
+
+Bootstrap 4 Helper attributes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+All previous, ``bootstrap`` (version 2 and 3) attributes are also settable in bootstrap 4 template pack ``FormHelpers``. Here are listed the ones, that are only available in ``bootstrap4`` template pack:
+
+**use_custom_control = True**
+    It indicates whether the radio and checkbox button should use the optional UI customization of the template pack or not. Useful when you already have customization based on the default interpretation of the template pack. When enabled crispy-forms will render elements such as checkbox and radio with optional additional UI customization, when available. Defaults to ``True``.
+
 
 Custom Helper attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~
