@@ -4,7 +4,6 @@ import pytest
 from django import forms
 
 from crispy_forms.bootstrap import AppendedText
-from crispy_forms.compatibility import string_types
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, MultiField
@@ -173,12 +172,12 @@ def test_update_attributes_and_wrap_once():
     )
     helper.layout = layout
 
-    helper.filter(string_types, greedy=True).wrap_once(Field)
+    helper.filter(str, greedy=True).wrap_once(Field)
     helper.filter(Field, greedy=True).update_attributes(readonly=True)
 
     assert isinstance(layout[0], Field)
     assert isinstance(layout[1][0], Field)
-    assert isinstance(layout[1][0][0], string_types)
+    assert isinstance(layout[1][0][0], str)
     assert isinstance(layout[2], Field)
     assert layout[1][0].attrs == {'readonly': True}
     assert layout[0].attrs == {'readonly': True}
@@ -218,7 +217,7 @@ def test_get_layout_objects():
         Div('password1'),
         'password2',
     )
-    assert layout_3.get_layout_objects(string_types, max_level=2) == [
+    assert layout_3.get_layout_objects(str, max_level=2) == [
         [[0], 'email'],
         [[1, 0], 'password1'],
         [[2], 'password2']
@@ -252,7 +251,7 @@ def test_filter_and_wrap():
     )
     helper.layout = layout
 
-    helper.filter(string_types).wrap(Field, css_class="test-class")
+    helper.filter(str).wrap(Field, css_class="test-class")
     assert isinstance(layout.fields[0], Field)
     assert isinstance(layout.fields[1], Div)
     assert isinstance(layout.fields[2], Field)
@@ -400,8 +399,8 @@ def test_exclude_by_widget_and_wrap(advanced_layout):
     assert isinstance(form.helper.layout[1], Field)
     # Check others stay the same
     assert isinstance(form.helper.layout[0][3][1], HTML)
-    assert isinstance(form.helper.layout[0][1][0][0], string_types)
-    assert isinstance(form.helper.layout[0][4][0], string_types)
+    assert isinstance(form.helper.layout[0][1][0][0], str)
+    assert isinstance(form.helper.layout[0][4][0], str)
 
 
 def test_all_without_layout():
@@ -483,8 +482,8 @@ def test__getitem__layout_object():
     assert isinstance(layout[0][0], Div)
     assert isinstance(layout[0][0][0], Div)
     assert isinstance(layout[0][1], Div)
-    assert isinstance(layout[0][1][0], string_types)
-    assert isinstance(layout[0][2], string_types)
+    assert isinstance(layout[0][1][0], str)
+    assert isinstance(layout[0][2], str)
 
 
 def test__getattr__append_layout_object():
@@ -493,8 +492,8 @@ def test__getattr__append_layout_object():
     )
     layout.append('password1')
     assert isinstance(layout[0], Div)
-    assert isinstance(layout[0][0], string_types)
-    assert isinstance(layout[1], string_types)
+    assert isinstance(layout[0][0], str)
+    assert isinstance(layout[1], str)
 
 
 def test__setitem__layout_object():

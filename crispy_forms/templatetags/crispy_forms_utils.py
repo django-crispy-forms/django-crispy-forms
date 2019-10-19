@@ -4,7 +4,6 @@ import re
 from django import template
 from django.utils.encoding import force_text
 
-from crispy_forms.compatibility import text_type
 
 try:
     from django.utils.functional import keep_lazy
@@ -20,7 +19,7 @@ except ImportError:
 register = template.Library()
 
 
-@keep_lazy(text_type)
+@keep_lazy(str)
 def remove_spaces(value):
     html = re.sub(r'>\s{3,}<', '> <', force_text(value))
     return re.sub(r'/><', r'/> <', force_text(html))

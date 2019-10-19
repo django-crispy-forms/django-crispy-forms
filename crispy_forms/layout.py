@@ -1,10 +1,7 @@
-from __future__ import unicode_literals
-
 from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
-from crispy_forms.compatibility import string_types, text_type
 from crispy_forms.utils import (
     TEMPLATE_PACK, flatatt, get_template_pack, render_field,
 )
@@ -55,7 +52,7 @@ class LayoutObject(TemplateNameMixin):
                 [[0,3], 'field_name2']
             ]
         """
-        return self.get_layout_objects(string_types, index=None, greedy=True)
+        return self.get_layout_objects(str, index=None, greedy=True)
 
     def get_layout_objects(self, *LayoutClasses, **kwargs):
         """
@@ -85,7 +82,7 @@ class LayoutObject(TemplateNameMixin):
 
         for i, layout_object in enumerate(self.fields):
             if isinstance(layout_object, LayoutClasses):
-                if len(LayoutClasses) == 1 and LayoutClasses[0] == string_types:
+                if len(LayoutClasses) == 1 and LayoutClasses[0] == str:
                     pointers.append([index + [i], layout_object])
                 else:
                     pointers.append([index + [i], layout_object.__class__.__name__.lower()])
@@ -194,7 +191,7 @@ class BaseInput(TemplateNameMixin):
         Renders an `<input />` if container is used as a Layout object.
         Input button value can be a variable in context.
         """
-        self.value = Template(text_type(self.value)).render(context)
+        self.value = Template(str(self.value)).render(context)
         template = self.get_template_name(template_pack)
         context.update({'input': self})
 
@@ -288,7 +285,7 @@ class Fieldset(LayoutObject):
 
         legend = ''
         if self.legend:
-            legend = '%s' % Template(text_type(self.legend)).render(context)
+            legend = '%s' % Template(str(self.legend)).render(context)
 
         template = self.get_template_name(template_pack)
         return render_to_string(
@@ -402,7 +399,7 @@ class HTML(object):
         self.html = html
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return Template(text_type(self.html)).render(context)
+        return Template(str(self.html)).render(context)
 
 
 class Field(LayoutObject):

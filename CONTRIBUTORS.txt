@@ -108,3 +108,4 @@ Contributors
 * Dmitry Dygalo <Stranger6667>
 * Lee Skillen <lskillen>
 * Bryan Brancotte <bryan-brancotte>
+* David Smith <smithdc1>

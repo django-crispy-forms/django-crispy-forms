@@ -1,8 +1,3 @@
-try:
-    from itertools import izip
-except ImportError:
-    izip = zip
-
 from django import forms, template
 from django.conf import settings
 from django.template import Context, loader
@@ -71,7 +66,7 @@ def css_class(field):
 def pairwise(iterable):
     """s -> (s0,s1), (s2,s3), (s4, s5), ..."""
     a = iter(iterable)
-    return izip(a, a)
+    return zip(a, a)
 
 
 class CrispyFieldNode(template.Node):
