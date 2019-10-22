@@ -387,11 +387,16 @@ class Row(Div):
 
 class Column(Div):
     """
-    Layout object. It wraps fields in a div whose default class is "formColumn". Example::
+    Layout object. It wraps fields in a div so the wrapper can be used as a column. Example::
 
         Column('form_field_1', 'form_field_2')
+
+    Depending on the template, css class associated to the div is formColumn, row, or nothing. For this last case, you
+     must provide css classes. Example::
+
+        Column('form_field_1', 'form_field_2', css_class='col-xs-6',)
     """
-    css_class = 'formColumn'
+    template = "%s/layout/column.html"
 
 
 class HTML(object):
