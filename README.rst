@@ -2,7 +2,7 @@
 django-crispy-forms
 ===================
 
-.. image:: https://travis-ci.org/django-crispy-forms/django-crispy-forms.png?branch=dev
+.. image:: https://travis-ci.org/django-crispy-forms/django-crispy-forms.png?branch=master
    :alt: Build Status
    :target: https://travis-ci.org/django-crispy-forms/django-crispy-forms
 
