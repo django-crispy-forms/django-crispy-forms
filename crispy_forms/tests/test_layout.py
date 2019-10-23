@@ -251,6 +251,43 @@ def test_change_layout_dynamically_delete_field():
     assert 'email' not in html
 
 
+def test_column_has_css_classes(settings):
+    template = Template("""
+        {% load crispy_forms_tags %}
+        {% crispy form form_helper %}
+    """)
+
+    form = SampleForm()
+    form_helper = FormHelper()
+    form_helper.add_layout(
+        Layout(
+            Fieldset(
+                'Company Data',
+                'is_company',
+                'email',
+                'password1',
+                'password2',
+                css_id="multifield_info",
+            ),
+            Column(
+                'first_name',
+                'last_name',
+            )
+        )
+    )
+
+    c = Context({'form': form, 'form_helper': form_helper})
+    html = template.render(c)
+    print(html)
+
+    if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
+        assert html.count('formColumn') == 1
+        assert html.count('col') == 0
+    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
+        assert html.count('formColumn') == 0
+        assert html.count('col') == 1
+
+
 def test_formset_layout(settings):
     SampleFormSet = formset_factory(SampleForm, extra=3)
     formset = SampleFormSet()

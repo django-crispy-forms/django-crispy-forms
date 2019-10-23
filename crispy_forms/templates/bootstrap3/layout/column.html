@@ -1,0 +1,3 @@
+<div {% if div.css_id %}id="{{ div.css_id }}"{% endif %} class="formColumn {{ div.css_class|default:'' }}" {{ div.flat_attrs|safe }}>
+        {{ fields|safe }}
+</div>
