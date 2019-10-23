@@ -33,8 +33,8 @@ Get the most out of django-crispy-forms
 * See who's contributed to the project at `crispy-forms contributors`_
 * You can find a detailed history of the project in `Github's CHANGELOG`_
 
-.. _`crispy-forms contributors`: https://github.com/maraujop/django-crispy-forms/blob/dev/CONTRIBUTORS.txt
-.. _`Github's CHANGELOG`: https://github.com/maraujop/django-crispy-forms/blob/dev/CHANGELOG.md
+.. _`crispy-forms contributors`: https://github.com/django-crispy-forms/django-crispy-forms/blob/master/CONTRIBUTORS.txt
+.. _`Github's CHANGELOG`: https://github.com/django-crispy-forms/django-crispy-forms/blob/master/CHANGELOG.md
 
 API documentation
 ~~~~~~~~~~~~~~~~~
@@ -58,5 +58,5 @@ Think this is awesome and want to make it better? Read our contribution page, ma
 
     contributing
 
-.. _contributors: https://github.com/maraujop/django-crispy-forms/blob/dev/CONTRIBUTORS.txt
+.. _contributors: https://github.com/django-crispy-forms/django-crispy-forms/blob/master/CONTRIBUTORS.txt
 .. _Django: http://djangoproject.com
