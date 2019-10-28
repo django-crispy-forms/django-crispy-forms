@@ -43,6 +43,11 @@ def is_file(field):
 
 
 @register.filter
+def is_clearable_file(field):
+    return isinstance(field.field.widget, forms.ClearableFileInput)
+
+
+@register.filter
 def is_multivalue(field):
     return isinstance(field.field.widget, forms.MultiWidget)
 
