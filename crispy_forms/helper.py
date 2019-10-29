@@ -356,21 +356,23 @@ class FormHelper(DynamicLayoutHandler):
         Used by crispy_forms_tags to get helper attributes
         """
         items = {
-            'form_method': self.form_method.strip(),
-            'form_tag': self.form_tag,
-            'form_style': self.form_style.strip(),
-            'form_show_errors': self.form_show_errors,
-            'help_text_inline': self.help_text_inline,
-            'error_text_inline': self.error_text_inline,
-            'html5_required': self.html5_required,
-            'form_show_labels': self.form_show_labels,
             'disable_csrf': self.disable_csrf,
-            'use_custom_control': self.use_custom_control,
-            'label_class': self.label_class,
+            'error_text_inline': self.error_text_inline,
             'field_class': self.field_class,
-            'include_media': self.include_media
+            'field_template':
+                self.field_template or '%s/field.html' % template_pack,
+            'form_method': self.form_method.strip(),
+            'form_show_errors': self.form_show_errors,
+            'form_show_labels': self.form_show_labels,
+            'form_style': self.form_style.strip(),
+            'form_tag': self.form_tag,
+            'help_text_inline': self.help_text_inline,
+            'html5_required': self.html5_required,
+            'include_media': self.include_media,
+            'label_class': self.label_class,
+            'use_custom_control': self.use_custom_control,
         }
-        
+
         if template_pack == 'bootstrap4':
             bootstrap_size_match = re.findall(r'col-(xl|lg|md|sm)-(\d+)', self.label_class)
             if bootstrap_size_match:

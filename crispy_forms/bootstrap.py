@@ -130,7 +130,7 @@ class InlineRadios(Field):
 
 class FieldWithButtons(Div):
     template = '%s/layout/field_with_buttons.html'
-    field_template = '%s/layout/field.html'
+    field_template = '%s/field.html'
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
