@@ -522,6 +522,18 @@ def test_helper_std_field_template_no_layout():
         assert html.count('id="div_id_%s"' % field) == 1
 
 
+def test_auto_populate_placeholders():
+    form = SampleForm()
+    form.helper = FormHelper()
+    html = render_crispy_form(form)
+    # default = False
+    assert html.count('value') == 0
+    form.helper.auto_populate_placeholders = True
+    html = render_crispy_form(form)
+    # 3 text fields in sample form
+    assert html.count('value') == 3
+
+
 @only_uni_form
 def test_form_show_errors():
     form = SampleForm({

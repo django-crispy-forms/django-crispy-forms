@@ -216,6 +216,7 @@ class FormHelper(DynamicLayoutHandler):
     field_template = None
     disable_csrf = False
     use_custom_control = True
+    auto_populate_placeholders = False
     label_class = ''
     field_class = ''
     include_media = True
@@ -370,7 +371,7 @@ class FormHelper(DynamicLayoutHandler):
             'field_class': self.field_class,
             'include_media': self.include_media
         }
-        
+
         if template_pack == 'bootstrap4':
             bootstrap_size_match = re.findall(r'col-(xl|lg|md|sm)-(\d+)', self.label_class)
             if bootstrap_size_match:

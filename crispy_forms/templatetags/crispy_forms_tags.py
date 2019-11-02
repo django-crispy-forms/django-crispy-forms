@@ -162,6 +162,7 @@ class BasicNode(template.Node):
             'help_text_inline': attrs.get("help_text_inline", False),
             'html5_required': attrs.get("html5_required", False),
             'form_show_labels': attrs.get("form_show_labels", True),
+            'auto_populate_placeholders': attrs.get("auto_populate_placeholders", False),
             'disable_csrf': attrs.get("disable_csrf", False),
             'inputs': attrs.get('inputs', []),
             'is_formset': is_formset,

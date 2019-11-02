@@ -95,6 +95,14 @@ class CrispyFieldNode(template.Node):
         # If template pack has been overridden in FormHelper we can pick it from context
         template_pack = context.get('template_pack', TEMPLATE_PACK)
 
+        if context.get('auto_populate_placeholders'):
+            try:
+                if field.field.widget.input_type == 'text':
+                    field.initial = field.field.label
+            except AttributeError:
+                pass
+
+
         # There are special django widgets that wrap actual widgets,
         # such as forms.widgets.MultiWidget, admin.widgets.RelatedFieldWidgetWrapper
         widgets = getattr(field.field.widget, 'widgets', [getattr(field.field.widget, 'widget', field.field.widget)])
