@@ -383,7 +383,7 @@ class UneditableField(Field):
     """
     template = "%s/layout/uneditable_input.html"
 
-    def __init__(self, field, *args, trim_invisible_from_select=False, **kwargs):
+    def __init__(self, field, trim_invisible_from_select=False, *args, **kwargs):
         self.attrs = {'class': 'uneditable-input'}
         self.trim_invisible_from_select = trim_invisible_from_select
         super(UneditableField, self).__init__(field, *args, **kwargs)
