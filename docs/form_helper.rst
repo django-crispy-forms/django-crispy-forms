@@ -4,7 +4,7 @@
 FormHelper
 ==========
 
-What is a ``FormHelper`` and how to use it, is throughly explained in a previous section :ref:`crispy tag forms`.
+What is a ``FormHelper`` and how to use it, is thoroughly explained in a previous section :ref:`crispy tag forms`.
 
 
 .. _`helper form attached`:
@@ -135,8 +135,40 @@ Bootstrap 4 Helper attributes
 All previous, ``bootstrap`` (version 2 and 3) attributes are also settable in bootstrap 4 template pack ``FormHelpers``. Here are listed the ones, that are only available in ``bootstrap4`` template pack:
 
 **use_custom_control = True**
-    It indicates whether UI elements (radio, checkbox, file field, ...) should use the optional UI customization of the template pack or not. Useful when you already have customization based on the default interpretation of the template pack. When enabled crispy-forms will render elements such as checkbox and radio with optional additional UI customization, when available. Defaults to ``True``.
+    Enables the `optional UI customization <https://getbootstrap.com/docs/4.3/components/forms/#custom-forms>`_ of the template pack for radio, checkbox and file field (non clearable only). Useful when you already have customization based on the default interpretation of the template pack. Setting to ``False`` results in the `standard bootstrap <https://getbootstrap.com/docs/4.3/components/forms/#checkboxes-and-radios>`_ classes being applied for radio and checkbox, and Django rendering for file field. See table below for examples. 
+    
+    The file field requires additional JS to enable its functionality which is provided within the template pack. If you already have the additional JS you should override the provided file field template (field_file.html). :ref:`Overriding_project_templates` explains how to do this for a specific layout object. 
+    
+    Defaults to ``True``.
 
+.. |checkbox| image:: images/checkbox.png
+   :width: 300px
+   :align: middle
+.. |customcheckbox| image:: images/custom_checkbox.png
+   :width: 300px
+   :align: middle
+.. |radio| image:: images/radio.png    
+   :width: 300px
+   :align: middle
+.. |customradio| image:: images/custom_radio.png
+   :width: 300px
+   :align: middle
+.. |file| image:: images/file_field.png    
+   :height: 60px
+   :align: middle
+.. |customfile| image:: images/custom_file_field.png
+   :width: 300px
+   :align: middle
+
++------------------+------------------+
+|     Standard     |     Optional     |
++------------------+------------------+
+| |checkbox|       | |customcheckbox| |
++------------------+------------------+
+|  |radio|         | |customradio|    |
++------------------+------------------+
+|  |file|          | |customfile|     |
++------------------+------------------+
 
 Custom Helper attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~
