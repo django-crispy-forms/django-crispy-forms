@@ -294,6 +294,14 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/alert.png
    :align: center
 
+- **UneditableField**: ``UneditableField`` renders a disabled field using the bootstrap ``uneditable-input`` class:: 
+    
+    UneditableField('text_input', css_class='form-control-lg')
+
+
+.. image:: images/field_disabled.png
+   :align: center
+
 .. _`override templates`:
 
 Overriding layout objects templates

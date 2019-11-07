@@ -370,28 +370,21 @@ class Row(Div):
 
         Row('form_field_1', 'form_field_2', 'form_field_3')
     """
-
-    def __init__(self, *args, **kwargs):
-        # Map template packs to the css class they need here.
-        # TODO: This is a _Smell_. There should be a factory which creates a
-        #       template pack specific subclass. (Or such...)
-        row_class_map = {
-            'uni_form': 'formRow',
-            'bootstrap4': 'form-row',
-            'bootstrap3': 'row',
-        }
-        # Fetch the class, with a suitable default.
-        self.css_class = row_class_map.get(get_template_pack(), 'row')
-        super(Row, self).__init__(*args, **kwargs)
+    template = "%s/layout/row.html"
 
 
 class Column(Div):
     """
-    Layout object. It wraps fields in a div whose default class is "formColumn". Example::
+    Layout object. It wraps fields in a div so the wrapper can be used as a column. Example::
 
         Column('form_field_1', 'form_field_2')
+
+    Depending on the template, css class associated to the div is formColumn, row, or nothing. For this last case, you
+     must provide css classes. Example::
+
+        Column('form_field_1', 'form_field_2', css_class='col-xs-6',)
     """
-    css_class = 'formColumn'
+    template = "%s/layout/column.html"
 
 
 class HTML(object):

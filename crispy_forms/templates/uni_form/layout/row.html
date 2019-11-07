@@ -1,0 +1,4 @@
+<div {% if div.css_id %}id="{{ div.css_id }}"{% endif %} class="formRow {{ div.css_class|default:'' }}" {{ div.flat_attrs|safe }}>
+        {{ fields|safe }}
+</div>
+
