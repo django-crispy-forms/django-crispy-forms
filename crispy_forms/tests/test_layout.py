@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import pytest
 
 import django
@@ -58,7 +57,7 @@ def test_invalid_unicode_characters(settings):
 def test_unicode_form_field():
     class UnicodeForm(forms.Form):
         def __init__(self, *args, **kwargs):
-            super(UnicodeForm, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.fields['contraseña'] = forms.CharField()
 
         helper = FormHelper()

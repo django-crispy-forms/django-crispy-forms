@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import pytest
 
 import django
@@ -44,7 +41,7 @@ def test_custom_bound_field():
         f = MyCharField()
 
         def __init__(self, *args, **kwargs):
-            super(MyForm, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.layout = Layout('f')
 

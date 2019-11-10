@@ -1,6 +1,4 @@
-
-
-class KeepContext(object):
+class KeepContext:
     """
     Context manager that receives a `django.template.Context` instance and a list of keys
 
