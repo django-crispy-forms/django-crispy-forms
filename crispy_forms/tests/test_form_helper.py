@@ -810,6 +810,30 @@ def test_label_class_and_field_class_bs4():
     html = render_crispy_form(form)
 
     assert '<div class="form-group">' in html
+    assert '<div class="col-lg-8">' in html
+    assert html.count('col-lg-8') == 7
+    assert 'offset' not in html
+
+    form.helper.label_class = 'col-sm-3 col-md-4'
+    form.helper.field_class = 'col-sm-8 col-md-6'
+    html = render_crispy_form(form)
+
+    assert '<div class="form-group">' in html
+    assert '<div class="col-sm-8 col-md-6">' in html
+    assert html.count('col-sm-8') == 7
+    assert 'offset' not in html
+
+
+@only_bootstrap4
+def test_label_class_and_field_class_bs4_offset_when_horizontal():
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.label_class = 'col-lg-2'
+    form.helper.field_class = 'col-lg-8'
+    form.helper.form_class = 'form-horizontal'
+    html = render_crispy_form(form)
+
+    assert '<div class="form-group row">' in html
     assert '<div class="offset-lg-2 col-lg-8">' in html
     assert html.count('col-lg-8') == 7
 
@@ -817,7 +841,7 @@ def test_label_class_and_field_class_bs4():
     form.helper.field_class = 'col-sm-8 col-md-6'
     html = render_crispy_form(form)
 
-    assert '<div class="form-group">' in html
+    assert '<div class="form-group row">' in html
     assert '<div class="offset-sm-3 offset-md-4 col-sm-8 col-md-6">' in html
     assert html.count('col-sm-8') == 7
 
