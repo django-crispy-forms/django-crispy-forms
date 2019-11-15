@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import re
 
 import pytest
@@ -16,7 +13,6 @@ from crispy_forms.bootstrap import (
     AppendedText, FieldWithButtons, PrependedAppendedText, PrependedText,
     StrictButton,
 )
-from crispy_forms.compatibility import text_type
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import (
     Button, Field, Hidden, Layout, MultiField, Reset, Submit,
@@ -139,7 +135,7 @@ def test_form_show_errors_non_field_errors():
 
     # Ensure those errors were rendered
     assert '<li>Passwords dont match</li>' in html
-    assert text_type(_('This field is required.')) in html
+    assert str(_('This field is required.')) in html
     assert 'error' in html
 
     # Now we render without errors
@@ -149,7 +145,7 @@ def test_form_show_errors_non_field_errors():
 
     # Ensure errors were not rendered
     assert '<li>Passwords dont match</li>' not in html
-    assert text_type(_('This field is required.')) not in html
+    assert str(_('This field is required.')) not in html
     assert 'error' not in html
 
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # django-crispy-forms documentation build configuration file, created by
 # sphinx-quickstart on Mon Mar  8 22:42:02 2010.
 #

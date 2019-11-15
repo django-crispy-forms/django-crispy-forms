@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django import forms, VERSION as DJANGO_VERSION
 from django.template import Context, Template
 from django.test.html import parse_html

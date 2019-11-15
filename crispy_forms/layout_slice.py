@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 from crispy_forms.bootstrap import Container
-from crispy_forms.compatibility import integer_types, string_types
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.layout import Fieldset, MultiField
 
@@ -11,7 +9,7 @@ class LayoutSlice(object):
 
     def __init__(self, layout, key):
         self.layout = layout
-        if isinstance(key, integer_types):
+        if isinstance(key, int):
             self.slice = slice(key, key + 1, 1)
         else:
             self.slice = key
@@ -137,7 +135,7 @@ class LayoutSlice(object):
                 # If update_attrs is applied to a string, we call to its wrapping layout object
                 if (
                     function.__name__ == 'update_attrs'
-                    and isinstance(layout_object, string_types)
+                    and isinstance(layout_object, str)
                 ):
                     function(previous_layout_object)
                 else:

@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 import re
 
 from django.utils.safestring import mark_safe
 
-from crispy_forms.compatibility import string_types
 from crispy_forms.exceptions import FormHelpersException
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
@@ -82,7 +80,7 @@ class DynamicLayoutHandler(object):
         and not a copy.
         """
         # when key is a string containing the field name
-        if isinstance(key, string_types):
+        if isinstance(key, str):
             # Django templates access FormHelper attributes using dictionary [] operator
             # This could be a helper['form_id'] access, not looking for a field
             if hasattr(self, key):
