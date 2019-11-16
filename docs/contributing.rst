@@ -8,7 +8,7 @@ Setup
 Fork on github
 --------------
 
-Before you do anything else, login/signup on Github.com and fork django-crispy-forms from https://github.com/maraujop/django-crispy-forms.
+Before you do anything else, login/signup on Github.com and fork django-crispy-forms from https://github.com/django-crispy-forms/django-crispy-forms.
 
 Clone your fork locally
 -----------------------
@@ -76,7 +76,7 @@ django-crispy-forms is worked on by a lot of people. It is therefore critical th
 
 To pull in upstream changes::
 
-    git remote add trunk git://github.com/maraujop/django-crispy-forms.git
+    git remote add trunk git://github.com/django-crispy-forms/django-crispy-forms.git
     git fetch trunk
 
 Check the log to be sure that you actually want the changes, before merging::
