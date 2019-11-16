@@ -328,6 +328,7 @@ Some advanced users may want to use their own templates, to adapt the layout obj
 
 - **Overriding templates directory**: This means mimicking crispy-forms directory structure into your project and then copying the templates that you want to override there, finally editing those copies. If you are using this approach it's better to just copy and edit templates you will customize instead of all.
 
+.. _Overriding_project_templates:
 
 Overriding project templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

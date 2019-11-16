@@ -4,4 +4,13 @@
     {% crispy_field field 'class' 'custom-file-input' %}
     <label class="custom-file-label" for="{{ field.id_for_label }}">Choose file</label>
     {% include 'bootstrap4/layout/help_text_and_errors.html' %}
+    <script type="text/javascript" id="script-{{ field.id_for_label }}">        
+        document.getElementById("script-{{ field.id_for_label }}").parentNode.querySelector('.custom-file-input').onchange =  function (e){
+            var filenames = "";
+            for (let i=0;i<e.target.files.length;i++){
+                filenames+=(i>0?", ":"")+e.target.files[0].name;
+            }
+            e.target.parentNode.querySelector('.custom-file-label').innerHTML=filenames;    
+        }        
+    </script>
 </div>
