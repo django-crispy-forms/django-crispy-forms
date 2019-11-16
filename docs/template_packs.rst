@@ -1,3 +1,5 @@
+.. _template_packs:
+
 =====================================
 How to create your own template packs
 =====================================
