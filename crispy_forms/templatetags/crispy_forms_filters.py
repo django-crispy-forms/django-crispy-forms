@@ -44,24 +44,19 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
 
         {{ myform|label_class:"col-lg-2",field_class:"col-lg-8" }}
     """
+    c = Context({
+        'field_class': field_class,
+        'field_template': '%s/field.html' % template_pack,
+        'form_show_errors': True,
+        'form_show_labels': True,
+        'label_class': label_class,
+    }).flatten()
     if isinstance(form, BaseFormSet):
         template = uni_formset_template(template_pack)
-        c = Context({
-            'formset': form,
-            'form_show_errors': True,
-            'form_show_labels': True,
-            'label_class': label_class,
-            'field_class': field_class,
-        }).flatten()
+        c['formset'] = form
     else:
         template = uni_form_template(template_pack)
-        c = Context({
-            'form': form,
-            'form_show_errors': True,
-            'form_show_labels': True,
-            'label_class': label_class,
-            'field_class': field_class,
-        }).flatten()
+        c['form'] = form
 
     return template.render(c)
 
