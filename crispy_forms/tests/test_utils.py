@@ -5,7 +5,8 @@ import pytest
 
 import django
 from django import forms
-from django.template.base import Context, Template
+from django.template.context import Context
+from django.template.base import Template
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout

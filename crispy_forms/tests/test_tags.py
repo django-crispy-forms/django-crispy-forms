@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 
 import pytest
 
-from django.forms.forms import BoundField
-from django.forms.models import formset_factory
+from django.forms.boundfield import BoundField
+from django.forms.formsets import formset_factory
 from django.template import Context, Template
 
 from crispy_forms.exceptions import CrispyError
