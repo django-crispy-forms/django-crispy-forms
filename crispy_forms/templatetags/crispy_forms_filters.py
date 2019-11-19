@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.conf import settings
-from django.forms import forms
+from django.forms import boundfield
 from django.forms.formsets import BaseFormSet
 from django.template import Context
 from django.template.loader import get_template
@@ -95,7 +95,7 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
 
         {{ form.field|as_crispy_field:"bootstrap" }}
     """
-    if not isinstance(field, forms.BoundField) and settings.DEBUG:
+    if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
         raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
 
     attributes = {
