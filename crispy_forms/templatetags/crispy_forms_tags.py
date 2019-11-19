@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 from django import template
+from django.conf import settings
+from django.forms.formsets import BaseFormSet
+from django.template.loader import get_template
+
+from crispy_forms.compatibility import lru_cache, string_types
 from crispy_forms.helper import FormHelper
-from crispy_forms.utils import get_template_pack
+from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 
 register = template.Library()
 
