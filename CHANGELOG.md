@@ -3,7 +3,7 @@
 ## 1.8.1 (2019-12-01)
 
 * Fixing FileField UI bug introduced with 1.8.0
-* Fixing is-valid bug introduced with 1.8.0
+* Remove is-valid css class for radio (bug introduced with 1.8.0)
 * Various alignment and margin fixes for Bootstrap 4 template pack
 * Documentation : using read-the-docs template, documenting how to run test suite, documenting use_custom_control help attributes
 
