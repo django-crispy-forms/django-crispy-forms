@@ -1,5 +1,14 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.8.1 (2019-12-01)
+
+* Fixing FileField UI bug introduced with 1.8.0
+* Fixing is-valid bug introduced with 1.8.0
+* Various alignment and margin fixes for Bootstrap 4 template pack
+* Documentation : using read-the-docs template, documenting how to run test suite, documenting use_custom_control help attributes
+
+See the [1.8.1 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/8?closed=1) for the full change list.
+
 ## 1.8.0 (2019-10-17)
 
 * Updated compatibility for Django 1.11, 2.1, 2.2 and 3.0 in line with Django's
