@@ -107,3 +107,4 @@ Contributors
 * Yoong Kang Lim <yoongkang>
 * Dmitry Dygalo <Stranger6667>
 * Lee Skillen <lskillen>
+* Bryan Brancotte <bryan-brancotte>
