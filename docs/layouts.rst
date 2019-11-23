@@ -294,9 +294,11 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/alert.png
    :align: center
 
-- **UneditableField**: ``UneditableField`` renders a disabled field using the bootstrap ``uneditable-input`` class:: 
+- **UneditableField**: ``UneditableField`` renders a disabled field using the disabled attribute. The uneditable field has an additional argument of ``trim_invisible_from_select``. When set to ``True`` this option removes all but the seen options from an uneditable field. Defaults to ``False``:: 
     
-    UneditableField('text_input', css_class='form-control-lg')
+    UneditableField('choice_field', trim_invisible_from_select=True, css_class='form-control-lg')
+
+    
 
 
 .. image:: images/field_disabled.png

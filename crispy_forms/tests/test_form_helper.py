@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.bootstrap import (
     AppendedText, FieldWithButtons, PrependedAppendedText, PrependedText,
-    StrictButton,
+    StrictButton, UneditableField
 )
 from crispy_forms.compatibility import text_type
 from crispy_forms.helper import FormHelper, FormHelpersException
@@ -27,7 +27,7 @@ from crispy_forms.utils import render_crispy_form
 from .conftest import (
     only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
 )
-from .forms import SampleForm, SampleFormWithMedia, SampleFormWithMultiValueField
+from .forms import SampleForm, SampleFormWithMedia, SampleFormWithMultiValueField, SampleForm5
 
 try:
     from django.middleware.csrf import _get_new_csrf_key
@@ -910,3 +910,19 @@ def test_bootstrap3_does_not_add_form_control_class_to_multivaluefield():
     form.helper.template_pack = 'bootstrap3'
     html = render_crispy_form(form)
     assert 'form-control' not in html
+
+
+@only_bootstrap4
+def test_trim_invisible():
+    form = SampleForm5()
+    form.helper = FormHelper()
+    form.helper.add_layout(
+        Layout(
+            UneditableField('simple_select'),
+            UneditableField('simple_select', trim_invisible_from_select=True)
+        )
+    )
+    html = render_crispy_form(form)
+    print(html)
+    # 3 options in choice field. Second field should be blank as we've not passed in a value to match
+    assert html.count('<option') == 3
