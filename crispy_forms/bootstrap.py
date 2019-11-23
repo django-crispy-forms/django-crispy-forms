@@ -383,9 +383,16 @@ class UneditableField(Field):
     """
     template = "%s/layout/uneditable_input.html"
 
-    def __init__(self, field, *args, **kwargs):
+    def __init__(self, field, trim_invisible_from_select=False, *args, **kwargs):
         self.attrs = {'class': 'uneditable-input'}
+        self.trim_invisible_from_select = trim_invisible_from_select
         super(UneditableField, self).__init__(field, *args, **kwargs)
+
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+        return super(UneditableField, self).render(
+            form, form_style, context, template_pack=template_pack,
+            extra_context={'trim_invisible_from_select': self.trim_invisible_from_select}
+        )
 
 
 class InlineField(Field):
