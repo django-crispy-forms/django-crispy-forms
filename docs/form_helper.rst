@@ -90,7 +90,7 @@ Helper attributes you can set
     By default django-crispy-forms renders the layout specified if it exists strictly, which means it only renders what the layout mentions, unless your form has ``Meta.fields`` and ``Meta.exclude`` defined, in that case it uses them. If you want to render unmentioned fields (all form fields), for example if you are worried about forgetting mentioning them you have to set this property to ``True``. It defaults to ``False``.
 
 **render_hidden_fields = False**
-    By default django-crispy-forms renders the layout specified if it exists strictly. Sometimes you might be interested in rendering all form's hidden fields no matter if they are mentioned or not. It defaults to ``False``.
+    By default django-crispy-forms renders the layout specified if it exists strictly. Sometimes you might be interested in rendering all form's hidden fields no matter if they are mentioned or not. Useful when trying to render forms with layouts as part of a formset with hidden primary key fields. It defaults to ``False``.
 
 **render_required_fields = False**
     By default django-crispy-forms renders the layout specified if it exists strictly. Sometimes you might be interested in rendering all form's required fields no matter if they are mentioned or not. It defaults to ``False``.
