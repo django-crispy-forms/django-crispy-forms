@@ -311,8 +311,8 @@ class FormHelper(DynamicLayoutHandler):
 
         # Rendering some extra fields if specified
         if self.render_unmentioned_fields or self.render_hidden_fields or self.render_required_fields:
-            fields = set(form.fields.keys())
-            left_fields_to_render = fields - form.rendered_fields
+            fields = tuple(form.fields.keys())
+            left_fields_to_render = list_difference(fields, form.rendered_fields)
             for field in left_fields_to_render:
                 if (
                     self.render_unmentioned_fields or
