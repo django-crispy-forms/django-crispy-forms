@@ -7,7 +7,7 @@ from django import forms
 from django.forms.models import formset_factory
 from django.template import Context, Template, TemplateSyntaxError
 from django.test.html import parse_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import (
     AppendedText, FieldWithButtons, PrependedAppendedText, PrependedText,
