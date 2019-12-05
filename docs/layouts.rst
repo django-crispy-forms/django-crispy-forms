@@ -296,6 +296,8 @@ These ones live under module ``crispy_forms.bootstrap``.
 
 - **UneditableField**: ``UneditableField`` renders a disabled field using the bootstrap ``uneditable-input`` class:: 
     
+    from crispy_forms.bootstrap import UneditableField
+    
     UneditableField('text_input', css_class='form-control-lg')
 
 
