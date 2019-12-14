@@ -471,8 +471,16 @@ def test_render_unmentioned_fields_order():
     test_form.helper.render_unmentioned_fields = True
 
     html = render_crispy_form(test_form)
-    assert html.count('<input') == 3
-    assert html.index('id="div_id_password"') < html.index('id="div_id_password2"')
+    assert html.count('<input') == 4
+    assert (
+        # From layout
+        html.index('id="div_id_email"')
+        # From form.Meta.fields
+        < html.index('id="div_id_password"')
+        < html.index('id="div_id_password2"')
+        # From fields
+        < html.index('id="div_id_is_company"')
+    )
 
     test_form = SampleForm8()
     test_form.helper = FormHelper()
@@ -482,8 +490,16 @@ def test_render_unmentioned_fields_order():
     test_form.helper.render_unmentioned_fields = True
 
     html = render_crispy_form(test_form)
-    assert html.count('<input') == 3
-    assert html.index('id="div_id_password2"') < html.index('id="div_id_password"')
+    assert html.count('<input') == 4
+    assert (
+        # From layout
+        html.index('id="div_id_email"')
+        # From form.Meta.fields
+        < html.index('id="div_id_password2"')
+        < html.index('id="div_id_password"')
+        # From fields
+        < html.index('id="div_id_is_company"')
+    )
 
 
 def test_render_hidden_fields():

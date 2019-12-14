@@ -150,6 +150,7 @@ class SampleForm6(forms.ModelForm):
 
 
 class SampleForm7(forms.ModelForm):
+    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
 
     class Meta:
@@ -158,6 +159,7 @@ class SampleForm7(forms.ModelForm):
 
 
 class SampleForm8(forms.ModelForm):
+    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
 
     class Meta:
