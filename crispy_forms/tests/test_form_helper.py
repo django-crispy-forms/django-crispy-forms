@@ -27,7 +27,13 @@ from crispy_forms.utils import render_crispy_form
 from .conftest import (
     only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
 )
-from .forms import SampleForm, SampleFormWithMedia, SampleFormWithMultiValueField
+from .forms import (
+    SampleForm,
+    SampleForm7,
+    SampleForm8,
+    SampleFormWithMedia,
+    SampleFormWithMultiValueField,
+)
 
 try:
     from django.middleware.csrf import _get_new_csrf_key
@@ -454,6 +460,30 @@ def test_render_unmentioned_fields():
 
     html = render_crispy_form(test_form)
     assert html.count('<input') == 8
+
+
+def test_render_unmentioned_fields_order():
+    test_form = SampleForm7()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        'email'
+    )
+    test_form.helper.render_unmentioned_fields = True
+
+    html = render_crispy_form(test_form)
+    assert html.count('<input') == 3
+    assert html.index('id="div_id_password"') < html.index('id="div_id_password2"')
+
+    test_form = SampleForm8()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        'email'
+    )
+    test_form.helper.render_unmentioned_fields = True
+
+    html = render_crispy_form(test_form)
+    assert html.count('<input') == 3
+    assert html.index('id="div_id_password2"') < html.index('id="div_id_password"')
 
 
 def test_render_hidden_fields():
