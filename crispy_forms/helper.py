@@ -314,15 +314,7 @@ class FormHelper(DynamicLayoutHandler):
             fields = tuple(form.fields.keys())
             left_fields_to_render = list_difference(fields, form.rendered_fields)
 
-            # If the user has Meta.fields defined, we use that order
-            if hasattr(form, 'Meta') and hasattr(form.Meta, 'fields'):
-                field_indexes = {field: index for index, field in enumerate(form.Meta.fields)}
-                end_index = len(form.Meta.fields)
-                left_fields_to_render = sorted(left_fields_to_render, key=lambda x: field_indexes.get(x, end_index))
-
             for field in left_fields_to_render:
-                # We still respect the configuration of the helper
-                # regarding which fields to render
                 if (
                     self.render_unmentioned_fields or
                     (self.render_hidden_fields and form.fields[field].widget.is_hidden) or
