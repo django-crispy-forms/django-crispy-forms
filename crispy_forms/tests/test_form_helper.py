@@ -444,6 +444,18 @@ def test_disable_csrf():
     assert 'csrf' not in html
 
 
+def test_render_unmentioned_fields():
+    test_form = SampleForm()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        'email'
+    )
+    test_form.helper.render_unmentioned_fields = True
+
+    html = render_crispy_form(test_form)
+    assert html.count('<input') == 8
+
+
 def test_render_hidden_fields():
     from .utils import contains_partial
     test_form = SampleForm()
