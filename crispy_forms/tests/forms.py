@@ -147,3 +147,21 @@ class SampleForm6(forms.ModelForm):
         model = CrispyEmptyChoiceTestModel
         fields = ['fruit']
         widgets = {'fruit': forms.RadioSelect() }
+
+
+class SampleForm7(forms.ModelForm):
+    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
+    password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
+
+    class Meta:
+        model = CrispyTestModel
+        fields = ('email', 'password', 'password2')
+
+
+class SampleForm8(forms.ModelForm):
+    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
+    password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
+
+    class Meta:
+        model = CrispyTestModel
+        fields = ('email', 'password2', 'password')
