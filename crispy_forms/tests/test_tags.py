@@ -99,7 +99,7 @@ def test_as_crispy_field_non_field(settings):
 
     c = Context({'field': "notafield"})
 
-    # Raises an AttributeError when tring to figure out how to render it
+    # Raises an AttributeError when trying to figure out how to render it
     # Not sure if this is expected behavior -- @kavdev
     error_class = CrispyError if settings.DEBUG else AttributeError
 
