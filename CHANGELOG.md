@@ -1,5 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
+## Next release
+* Removed support for Python 2
+
 ## 1.8.1 (2019-11-22)
 
 * Fixing FileField UI bug introduced with 1.8.0

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template.loader import get_template
 
-from crispy_forms.compatibility import lru_cache, string_types
+from crispy_forms.compatibility import lru_cache
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 
@@ -253,7 +253,7 @@ def do_uni_form(parser, token):
     # {% crispy form 'bootstrap' %}
     if (
         helper is not None and
-        isinstance(helper, string_types) and
+        isinstance(helper, str) and
         ("'" in helper or '"' in helper)
     ):
         template_pack = helper
