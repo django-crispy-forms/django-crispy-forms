@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 from crispy_forms.bootstrap import Container
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.layout import Fieldset, MultiField
 
 
-class LayoutSlice(object):
+class LayoutSlice:
     # List of layout objects that need args passed first before fields
     args_first = (Fieldset, MultiField, Container)
 

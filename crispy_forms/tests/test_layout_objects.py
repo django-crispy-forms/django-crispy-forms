@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django import forms, VERSION as DJANGO_VERSION
 from django.template import Context, Template
 from django.test.html import parse_html
@@ -146,7 +143,7 @@ def test_remove_labels():
     assert '<label' not in html
 
 @only_bootstrap
-class TestBootstrapLayoutObjects(object):
+class TestBootstrapLayoutObjects:
 
     def test_custom_django_widget(self, settings):
         class CustomRadioSelect(forms.RadioSelect):

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import re
 
 import pytest
@@ -728,7 +725,7 @@ def test_error_text_inline(settings):
         help_tag_name = 'p'
 
     matches = re.findall(
-        r'<%s id="error_\d_\w*" class="%s"' % (help_tag_name, help_class),
+        r'<{} id="error_\d_\w*" class="{}"'.format(help_tag_name, help_class),
         html,
         re.MULTILINE
     )

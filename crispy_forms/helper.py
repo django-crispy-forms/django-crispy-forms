@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 
 from django.utils.safestring import mark_safe
@@ -17,7 +16,7 @@ except ImportError:
     from django.core.urlresolvers import reverse, NoReverseMatch
 
 
-class DynamicLayoutHandler(object):
+class DynamicLayoutHandler:
     def _check_layout(self):
         if self.layout is None:
             raise FormHelpersException("You need to set a layout in your FormHelper")

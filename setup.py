@@ -15,7 +15,7 @@ if sys.argv[-1] == 'publish':
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     print("You probably want to also tag the version now:")
-    print("  git tag -a %s -m 'version %s'" % (crispy_forms.__version__, crispy_forms.__version__))
+    print("  git tag -a {} -m 'version {}'".format(crispy_forms.__version__, crispy_forms.__version__))
     print("  git push --tags")
     sys.exit()
 
@@ -35,8 +35,6 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: JavaScript",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",

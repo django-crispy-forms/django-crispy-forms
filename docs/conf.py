@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # django-crispy-forms documentation build configuration file, created by
 # sphinx-quickstart on Mon Mar  8 22:42:02 2010.
@@ -45,8 +44,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-crispy-forms'
-copyright = u'2009-2013, Miguel Araujo and Daniel Greenfeld'
+project = 'django-crispy-forms'
+copyright = '2009-2013, Miguel Araujo and Daniel Greenfeld'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -184,8 +183,8 @@ htmlhelp_basename = 'django-crispy-formdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-crispy-forms.tex', u'django-crispy-forms Documentation',
-   u'Miguel Araujo', 'manual'),
+  ('index', 'django-crispy-forms.tex', 'django-crispy-forms Documentation',
+   'Miguel Araujo', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

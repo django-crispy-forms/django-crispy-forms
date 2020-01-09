@@ -14,7 +14,7 @@ class SampleForm(forms.Form):
     datetime_field = forms.SplitDateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
 
     def clean(self):
-        super(SampleForm, self).clean()
+        super().clean()
         password1 = self.cleaned_data.get('password1', None)
         password2 = self.cleaned_data.get('password2', None)
         if not password1 and not password2 or password1 != password2:
@@ -25,7 +25,7 @@ class SampleForm(forms.Form):
 
 class SampleForm2(SampleForm):
     def __init__(self, *args, **kwargs):
-        super(SampleForm2, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
 
@@ -82,7 +82,7 @@ class SampleForm3(forms.ModelForm):
         exclude = ['password']
 
     def __init__(self, *args, **kwargs):
-        super(SampleForm3, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
 

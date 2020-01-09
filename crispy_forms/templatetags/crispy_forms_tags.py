@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django import template
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
@@ -14,7 +13,7 @@ register = template.Library()
 from crispy_forms.templatetags.crispy_forms_filters import *  # isort:skip
 
 
-class ForLoopSimulator(object):
+class ForLoopSimulator:
     """
     Simulates a forloop tag, precisely::
 

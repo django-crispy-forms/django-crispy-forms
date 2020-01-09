@@ -7,7 +7,7 @@ from crispy_forms.utils import (
 )
 
 
-class TemplateNameMixin(object):
+class TemplateNameMixin:
 
     def get_template_name(self, template_pack):
         if '%s' in self.template:
@@ -210,7 +210,7 @@ class Submit(BaseInput):
 
     def __init__(self, *args, **kwargs):
         self.field_classes = 'submit submitButton' if get_template_pack() == 'uni_form' else 'btn btn-primary'
-        super(Submit, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Button(BaseInput):
@@ -225,7 +225,7 @@ class Button(BaseInput):
 
     def __init__(self, *args, **kwargs):
         self.field_classes = 'button' if get_template_pack() == 'uni_form' else 'btn'
-        super(Button, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Hidden(BaseInput):
@@ -248,7 +248,7 @@ class Reset(BaseInput):
 
     def __init__(self, *args, **kwargs):
         self.field_classes = 'reset resetButton' if get_template_pack() == 'uni_form' else 'btn btn-inverse'
-        super(Reset, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Fieldset(LayoutObject):
@@ -384,7 +384,7 @@ class Column(Div):
     template = "%s/layout/column.html"
 
 
-class HTML(object):
+class HTML:
     """
     Layout object. It can contain pure HTML and it has access to the whole
     context of the page where the form is being rendered.
@@ -432,7 +432,7 @@ class Field(LayoutObject):
         self.template = kwargs.pop('template', self.template)
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
-        self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k, v in kwargs.items()]))
+        self.attrs.update({k.replace('_', '-'): conditional_escape(v) for k, v in kwargs.items()})
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         if extra_context is None:

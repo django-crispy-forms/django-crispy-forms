@@ -25,7 +25,7 @@ class PrependedAppendedText(Field):
         if 'input-sm' in css_class:
             self.input_size = 'input-sm'
 
-        super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
+        super().__init__(field, *args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -50,7 +50,7 @@ class AppendedText(PrependedAppendedText):
         kwargs.pop('appended_text', None)
         kwargs.pop('prepended_text', None)
         self.text = text
-        super(AppendedText, self).__init__(field, appended_text=text, **kwargs)
+        super().__init__(field, appended_text=text, **kwargs)
 
 
 class PrependedText(PrependedAppendedText):
@@ -58,7 +58,7 @@ class PrependedText(PrependedAppendedText):
         kwargs.pop('appended_text', None)
         kwargs.pop('prepended_text', None)
         self.text = text
-        super(PrependedText, self).__init__(field, prepended_text=text, **kwargs)
+        super().__init__(field, prepended_text=text, **kwargs)
 
 
 class FormActions(LayoutObject):
@@ -104,7 +104,7 @@ class InlineCheckboxes(Field):
     template = "%s/layout/checkboxselectmultiple_inline.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return super(InlineCheckboxes, self).render(
+        return super().render(
             form, form_style, context, template_pack=template_pack,
             extra_context={'inline_class': 'inline'}
         )
@@ -119,7 +119,7 @@ class InlineRadios(Field):
     template = "%s/layout/radioselect_inline.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return super(InlineRadios, self).render(
+        return super().render(
             form, form_style, context, template_pack=template_pack,
             extra_context={'inline_class': 'inline'}
         )
@@ -197,7 +197,7 @@ class Container(Div):
     css_class = ""
 
     def __init__(self, name, *fields, **kwargs):
-        super(Container, self).__init__(*fields, **kwargs)
+        super().__init__(*fields, **kwargs)
         self.template = kwargs.pop('template', self.template)
         self.name = name
         self._active_originally_included = "active" in kwargs
@@ -217,7 +217,7 @@ class Container(Div):
                 self.css_class += ' active'
         else:
             self.css_class = self.css_class.replace('active', '')
-        return super(Container, self).render(form, form_style, context, template_pack)
+        return super().render(form, form_style, context, template_pack)
 
 
 class ContainerHolder(Div):
@@ -382,7 +382,7 @@ class UneditableField(Field):
 
     def __init__(self, field, *args, **kwargs):
         self.attrs = {'class': 'uneditable-input'}
-        super(UneditableField, self).__init__(field, *args, **kwargs)
+        super().__init__(field, *args, **kwargs)
 
 
 class InlineField(Field):
