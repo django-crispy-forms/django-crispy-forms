@@ -135,6 +135,8 @@ class CrispyFieldNode(template.Node):
             ):
                 if not is_checkbox(field):
                     css_class += ' form-control'
+                    if is_file(field):
+                        css_class += '-file'
                 if field.errors:
                     css_class += ' is-invalid'
 
