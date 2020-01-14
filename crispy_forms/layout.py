@@ -334,7 +334,8 @@ class MultiField(LayoutObject):
 
 class Div(LayoutObject):
     """
-    Layout object. It wraps fields in a <div>
+    Layout object. It wraps fields in a <div>, or alternatively any other tag you
+    specify with tag='h1'.
 
     You can set `css_id` for a DOM id and `css_class` for a DOM class. Example::
 
@@ -350,6 +351,7 @@ class Div(LayoutObject):
         if not hasattr(self, 'css_class'):
             self.css_class = kwargs.pop('css_class', None)
 
+        self.tag = kwargs.pop('tag', 'div')
         self.css_id = kwargs.pop('css_id', '')
         self.template = kwargs.pop('template', self.template)
         self.flat_attrs = flatatt(kwargs)
