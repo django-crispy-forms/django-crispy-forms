@@ -270,7 +270,6 @@ def test_column_has_css_classes(settings):
 
     c = Context({'form': form, 'form_helper': form_helper})
     html = template.render(c)
-    print(html)
 
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         assert html.count('formColumn') == 1
