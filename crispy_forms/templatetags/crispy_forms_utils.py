@@ -10,6 +10,7 @@ except ImportError:
     # django < 1.10
     from django.utils.functional import allow_lazy
     # bare version for remove_spaces
+
     def keep_lazy(*args):
         def decorator(func):
             return allow_lazy(func, *args)

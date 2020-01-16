@@ -452,6 +452,7 @@ def test_specialspaceless_not_screwing_intended_spaces():
     html = render_crispy_form(test_form)
     assert '<span>first span</span> <span>second span</span>' in html
 
+
 def test_choice_with_none_is_selected():
     # see issue #701
     model_instance = CrispyEmptyChoiceTestModel()
@@ -459,6 +460,7 @@ def test_choice_with_none_is_selected():
     test_form = SampleForm6(instance=model_instance)
     html = render_crispy_form(test_form)
     assert 'checked' in html
+
 
 @only_uni_form
 def test_layout_composition():

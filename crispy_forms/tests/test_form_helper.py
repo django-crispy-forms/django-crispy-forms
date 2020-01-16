@@ -76,6 +76,7 @@ def test_inputs(settings):
         else:
             assert len(re.findall(r'<input[^>]+> <', html)) == 8
 
+
 def test_invalid_form_method():
     form_helper = FormHelper()
     with pytest.raises(FormHelpersException):
@@ -165,7 +166,6 @@ def test_html5_required():
         assert html.count('required="required"') == 7
     else:
         assert len(re.findall(r'\brequired\b', html)) == 7
-
 
     form = SampleForm()
     form.helper = FormHelper()
@@ -943,9 +943,6 @@ def test_passthrough_context():
     html = render_crispy_form(form, helper=form.helper, context=c)
     assert "Got prefix: foo" in html
     assert "Got suffix: bar" in html
-
-
-
 
 
 @only_bootstrap3

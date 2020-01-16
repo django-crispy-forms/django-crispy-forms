@@ -130,6 +130,7 @@ def test_i18n():
         assert "Introduzca un valor correcto" in html
     deactivate()
 
+
 def test_remove_labels():
     form = SampleForm()
     #remove boolean field as label is still printed in boostrap
@@ -141,6 +142,7 @@ def test_remove_labels():
     html = render_crispy_form(form)
 
     assert '<label' not in html
+
 
 @only_bootstrap
 class TestBootstrapLayoutObjects:
@@ -172,7 +174,6 @@ class TestBootstrapLayoutObjects:
             assert 'class="custom-control-input"' in html
         else:
             assert 'class="checkbox"' in html
-
 
     def test_prepended_appended_text(self, settings):
         test_form = SampleForm()

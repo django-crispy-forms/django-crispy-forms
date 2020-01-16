@@ -20,6 +20,7 @@ def uni_formset_template(template_pack=TEMPLATE_PACK):
 def uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_form.html' % template_pack)
 
+
 register = template.Library()
 
 
