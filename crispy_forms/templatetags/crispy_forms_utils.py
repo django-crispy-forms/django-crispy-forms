@@ -1,7 +1,7 @@
 import re
 
 from django import template
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 
 try:
@@ -20,8 +20,8 @@ register = template.Library()
 
 @keep_lazy(str)
 def remove_spaces(value):
-    html = re.sub(r'>\s{3,}<', '> <', force_text(value))
-    return re.sub(r'/><', r'/> <', force_text(html))
+    html = re.sub(r'>\s{3,}<', '> <', force_str(value))
+    return re.sub(r'/><', r'/> <', force_str(html))
 
 
 class SpecialSpacelessNode(template.Node):
