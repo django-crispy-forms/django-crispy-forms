@@ -124,6 +124,7 @@ class SampleFormWithMedia(forms.Form):
 class SampleFormWithMultiValueField(forms.Form):
     multi = forms.SplitDateTimeField()
 
+
 class CrispyEmptyChoiceTestModel(models.Model):
     fruit = models.CharField(
         choices=[
@@ -132,6 +133,7 @@ class CrispyEmptyChoiceTestModel(models.Model):
         null=True,
         blank=True,
     )
+
 
 class SampleForm6(forms.ModelForm):
     class Meta:
