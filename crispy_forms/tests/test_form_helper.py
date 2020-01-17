@@ -631,7 +631,7 @@ def test_multifield_errors():
 
 
 @only_bootstrap3
-def test_bootstrap_form_show_errors():
+def test_bootstrap_form_show_errors_bs3():
     form = SampleForm({
         'email': 'invalidemail',
         'first_name': 'first_name_too_long',
@@ -659,7 +659,7 @@ def test_bootstrap_form_show_errors():
 
 
 @only_bootstrap4
-def test_bootstrap_form_show_errors():
+def test_bootstrap_form_show_errors_bs4():
     form = SampleForm({
         'email': 'invalidemail',
         'first_name': 'first_name_too_long',
