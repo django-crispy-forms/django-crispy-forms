@@ -127,8 +127,8 @@ class SampleFormWithMultiValueField(forms.Form):
 class CrispyEmptyChoiceTestModel(models.Model):
     fruit = models.CharField(
         choices=[
-        ('apple','Apple'),
-        ('pear','Pear')],
+        ('apple', 'Apple'),
+        ('pear', 'Pear')],
         null=True,
         blank=True,
     )
@@ -146,7 +146,7 @@ class SampleForm6(forms.ModelForm):
         """
         model = CrispyEmptyChoiceTestModel
         fields = ['fruit']
-        widgets = {'fruit': forms.RadioSelect() }
+        widgets = {'fruit': forms.RadioSelect()}
 
 
 class SampleForm7(forms.ModelForm):

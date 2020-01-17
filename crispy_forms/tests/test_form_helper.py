@@ -840,7 +840,7 @@ def test_label_class_and_field_class():
     html = render_crispy_form(form)
     dom = parse_html(html)
 
-    snippet = parse_html('<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company' )
+    snippet = parse_html('<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company')
     assert dom.count(snippet)
     assert html.count('col-sm-8') == 7
 
