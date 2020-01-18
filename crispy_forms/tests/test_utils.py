@@ -21,8 +21,7 @@ def test_render_field_with_none_field():
     rendered = render_field(field=None, form=None, form_style=None, context=None)
     assert rendered == ''
 
-@pytest.mark.skipif(django.VERSION < (1, 9),
-                    reason="Custom BoundField behavior is was introduced in 1.9.")
+
 def test_custom_bound_field():
     from django.forms.boundfield import BoundField
 

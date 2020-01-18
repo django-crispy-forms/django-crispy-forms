@@ -2,19 +2,7 @@ import re
 
 from django import template
 from django.utils.encoding import force_str
-
-
-try:
-    from django.utils.functional import keep_lazy
-except ImportError:
-    # django < 1.10
-    from django.utils.functional import allow_lazy
-    # bare version for remove_spaces
-
-    def keep_lazy(*args):
-        def decorator(func):
-            return allow_lazy(func, *args)
-        return decorator
+from django.utils.functional import keep_lazy
 
 register = template.Library()
 
