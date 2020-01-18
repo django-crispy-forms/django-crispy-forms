@@ -264,7 +264,7 @@ def test_column_has_css_classes(settings):
             Column(
                 'first_name',
                 'last_name',
-            )
+            ),
         )
     )
 
@@ -276,7 +276,42 @@ def test_column_has_css_classes(settings):
         assert html.count('col') == 0
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
         assert html.count('formColumn') == 0
-        assert html.count('col') == 1
+        assert html.count('col-md') == 1
+
+
+@only_bootstrap4
+def test_bs4_column_css_classes(settings):
+    template = Template("""
+        {% load crispy_forms_tags %}
+        {% crispy form form_helper %}
+    """)
+
+    form = SampleForm()
+    form_helper = FormHelper()
+    form_helper.add_layout(
+        Layout(
+            Column(
+                'first_name',
+                'last_name',
+            ),
+            Column(
+                'first_name',
+                'last_name',
+                css_class='col-sm'
+            ),
+            Column(
+                'first_name',
+                'last_name',
+                css_class='mb-4'
+            ),
+        )
+    )
+
+    c = Context({'form': form, 'form_helper': form_helper})
+    html = template.render(c)
+
+    assert html.count('col-md') == 2
+    assert html.count('col-sm') == 1
 
 
 def test_formset_layout(settings):
