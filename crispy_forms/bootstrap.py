@@ -213,7 +213,7 @@ class Container(Div):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         if self.active:
-            if not 'active' in self.css_class:
+            if 'active' not in self.css_class:
                 self.css_class += ' active'
         else:
             self.css_class = self.css_class.replace('active', '')
