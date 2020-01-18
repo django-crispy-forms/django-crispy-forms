@@ -584,7 +584,7 @@ def test_form_show_errors():
         'last_name': 'last_name_too_long',
         'password1': 'yes',
         'password2': 'yes',
-        })
+    })
     form.helper = FormHelper()
     form.helper.layout = Layout(
         Field('email'),

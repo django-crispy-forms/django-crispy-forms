@@ -308,17 +308,17 @@ def test_formset_layout(settings):
 
     # Check formset fields
     assert contains_partial(html,
-        '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
-    )
+                            '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
-    )
+                            '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
-    )
+                            '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"/>'
-    )
+                            '<input id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"/>'
+                            )
     assert html.count("hidden") == 5
 
     # Check form structure
@@ -358,14 +358,14 @@ def test_modelformset_layout():
     assert html.count("id_form-2-id") == 1
 
     assert contains_partial(html,
-        '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
-    )
+                            '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
-    )
+                            '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
-    )
+                            '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
+                            )
 
     assert html.count('name="form-0-email"') == 1
     assert html.count('name="form-1-email"') == 1
