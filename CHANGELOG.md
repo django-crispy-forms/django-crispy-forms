@@ -1,9 +1,11 @@
 # CHANGELOG for django-crispy-forms
 
-## Next release
+## 1.9.0 (DATE TBC)
 * Removed support for Python 2
-* Removed support for Django version 1
+* Removed support for Django versions prior to 2.2
 * CSS for Column layout object in Bootstrap 4 template pack changed to 'col-md'. Default is now over ridden when another 'col' class is added to css_class.
+
+See the [1.9.0 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/9) for the full change list.
 
 ## 1.8.1 (2019-11-22)
 
