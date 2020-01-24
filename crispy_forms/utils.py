@@ -93,7 +93,7 @@ def render_field(
                 logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
 
         if hasattr(form, 'rendered_fields'):
-            if not field in form.rendered_fields:
+            if field not in form.rendered_fields:
                 form.rendered_fields.add(field)
             else:
                 if not FAIL_SILENTLY:

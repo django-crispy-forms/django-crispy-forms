@@ -516,4 +516,3 @@ class TestBootstrapLayoutObjects:
         for id_suffix in expected_ids:
             expected_str = 'id="id_{id_suffix}"'.format(id_suffix=id_suffix)
             assert html.count(expected_str) == 1
-

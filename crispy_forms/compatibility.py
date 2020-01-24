@@ -1,4 +1,3 @@
-import sys
 import django
 
 if django.VERSION < (3, 0):
