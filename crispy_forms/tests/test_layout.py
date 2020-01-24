@@ -6,6 +6,8 @@ from django.forms.models import formset_factory, modelformset_factory
 from django.shortcuts import render
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
+from django.middleware.csrf import _get_new_csrf_string
 
 from crispy_forms.bootstrap import Field, InlineCheckboxes
 from crispy_forms.helper import FormHelper
@@ -22,17 +24,6 @@ from .forms import (
     SampleForm, SampleForm2, SampleForm3, SampleForm4, SampleForm5, SampleForm6,
 )
 from .utils import contains_partial
-
-try:
-    from django.middleware.csrf import _get_new_csrf_key
-except ImportError:
-    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
-
-try:
-    from django.urls import reverse
-except ImportError:
-    # Django < 1.10
-    from django.core.urlresolvers import reverse
 
 
 def test_invalid_unicode_characters(settings):
@@ -338,7 +329,7 @@ def test_formset_layout(settings):
     )
 
     html = render_crispy_form(
-        form=formset, helper=helper, context={'csrf_token': _get_new_csrf_key()}
+        form=formset, helper=helper, context={'csrf_token': _get_new_csrf_string()}
     )
 
     # Check formset fields
@@ -428,27 +419,6 @@ def test_i18n():
 
     html = template.render(Context({'form': form}))
     assert html.count('i18n legend') == 1
-
-@pytest.mark.skipif(django.VERSION >= (1,11),
-                    reason="See #683: Not localising labels/values changed in 1.11")
-def test_l10n(settings):
-    settings.USE_L10N = True
-    settings.USE_THOUSAND_SEPARATOR = True
-
-    form = SampleForm5(data={'pk': 1000})
-    html = render_crispy_form(form)
-
-    # Make sure values are unlocalized
-    assert 'value="1,000"' not in html
-
-    # Make sure label values are NOT localized.
-    # Dirty check, which relates on HTML structure
-    label_text = '>1000'
-    if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
-        label_text = '/> 1000<'
-    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-        label_text = '>\n            1000'
-    assert html.count(label_text) == 2
 
 
 def test_default_layout():

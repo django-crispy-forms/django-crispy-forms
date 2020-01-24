@@ -7,6 +7,8 @@ from django import forms
 from django.forms.models import formset_factory
 from django.template import Context, Template, TemplateSyntaxError
 from django.test.html import parse_html
+from django.urls import reverse
+from django.middleware.csrf import _get_new_csrf_string
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import (
@@ -30,17 +32,6 @@ from .forms import (
     SampleFormWithMedia,
     SampleFormWithMultiValueField,
 )
-
-try:
-    from django.middleware.csrf import _get_new_csrf_key
-except ImportError:
-    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
-
-try:
-    from django.urls import reverse
-except ImportError:
-    # Django < 1.10
-    from django.core.urlresolvers import reverse
 
 
 def test_inputs(settings):
@@ -389,7 +380,7 @@ def test_formset_with_helper_without_layout(settings):
     SampleFormSet = formset_factory(SampleForm, extra=3)
     testFormSet = SampleFormSet()
 
-    c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+    c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_string()})
     html = template.render(c)
 
     assert html.count('<form') == 1
@@ -418,7 +409,7 @@ def test_CSRF_token_POST_form():
     # The middleware only initializes the CSRF token when processing a real request
     # So using RequestContext or csrf(request) here does not work.
     # Instead I set the key `csrf_token` to a CSRF token manually, which `csrf_token` tag uses
-    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_string()})
     html = template.render(c)
 
     assert 'csrfmiddlewaretoken' in html
@@ -432,7 +423,7 @@ def test_CSRF_token_GET_form():
         {% crispy form form_helper %}
     """)
 
-    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_string()})
     html = template.render(c)
 
     assert 'csrfmiddlewaretoken' not in html
@@ -442,7 +433,7 @@ def test_disable_csrf():
     form = SampleForm()
     helper = FormHelper()
     helper.disable_csrf = True
-    html = render_crispy_form(form, helper, {'csrf_token': _get_new_csrf_key()})
+    html = render_crispy_form(form, helper, {'csrf_token': _get_new_csrf_string()})
     assert 'csrf' not in html
 
 

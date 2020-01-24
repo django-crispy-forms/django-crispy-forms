@@ -124,10 +124,8 @@ def test_i18n():
         HTML(_("Enter a valid value."))
     )
     html = render_crispy_form(form)
-    if DJANGO_VERSION >= (1, 11):
-        assert "Introduzca un valor válido" in html
-    else:
-        assert "Introduzca un valor correcto" in html
+    assert "Introduzca un valor válido" in html
+
     deactivate()
 
 
