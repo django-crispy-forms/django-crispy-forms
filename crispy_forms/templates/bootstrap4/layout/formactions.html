@@ -1,4 +1,4 @@
-<div{% if formactions.attrs %} {{ formactions.flat_attrs|safe }}{% endif %} class="form-group">
+<div{% if formactions.attrs %} {{ formactions.flat_attrs|safe }}{% endif %} class="form-group{% if 'form-horizontal' in form_class %} row{% endif %}">
     {% if label_class %}
         <div class="aab {{ label_class }}"></div>
     {% endif %}
