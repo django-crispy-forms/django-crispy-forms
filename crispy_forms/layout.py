@@ -1,16 +1,13 @@
-from __future__ import unicode_literals
-
 from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
-from crispy_forms.compatibility import string_types, text_type
 from crispy_forms.utils import (
     TEMPLATE_PACK, flatatt, get_template_pack, render_field,
 )
 
 
-class TemplateNameMixin(object):
+class TemplateNameMixin:
 
     def get_template_name(self, template_pack):
         if '%s' in self.template:
@@ -55,7 +52,7 @@ class LayoutObject(TemplateNameMixin):
                 [[0,3], 'field_name2']
             ]
         """
-        return self.get_layout_objects(string_types, index=None, greedy=True)
+        return self.get_layout_objects(str, index=None, greedy=True)
 
     def get_layout_objects(self, *LayoutClasses, **kwargs):
         """
@@ -85,7 +82,7 @@ class LayoutObject(TemplateNameMixin):
 
         for i, layout_object in enumerate(self.fields):
             if isinstance(layout_object, LayoutClasses):
-                if len(LayoutClasses) == 1 and LayoutClasses[0] == string_types:
+                if len(LayoutClasses) == 1 and LayoutClasses[0] == str:
                     pointers.append([index + [i], layout_object])
                 else:
                     pointers.append([index + [i], layout_object.__class__.__name__.lower()])
@@ -194,7 +191,7 @@ class BaseInput(TemplateNameMixin):
         Renders an `<input />` if container is used as a Layout object.
         Input button value can be a variable in context.
         """
-        self.value = Template(text_type(self.value)).render(context)
+        self.value = Template(str(self.value)).render(context)
         template = self.get_template_name(template_pack)
         context.update({'input': self})
 
@@ -213,7 +210,7 @@ class Submit(BaseInput):
 
     def __init__(self, *args, **kwargs):
         self.field_classes = 'submit submitButton' if get_template_pack() == 'uni_form' else 'btn btn-primary'
-        super(Submit, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Button(BaseInput):
@@ -228,7 +225,7 @@ class Button(BaseInput):
 
     def __init__(self, *args, **kwargs):
         self.field_classes = 'button' if get_template_pack() == 'uni_form' else 'btn'
-        super(Button, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Hidden(BaseInput):
@@ -251,7 +248,7 @@ class Reset(BaseInput):
 
     def __init__(self, *args, **kwargs):
         self.field_classes = 'reset resetButton' if get_template_pack() == 'uni_form' else 'btn btn-inverse'
-        super(Reset, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class Fieldset(LayoutObject):
@@ -288,7 +285,7 @@ class Fieldset(LayoutObject):
 
         legend = ''
         if self.legend:
-            legend = '%s' % Template(text_type(self.legend)).render(context)
+            legend = '%s' % Template(str(self.legend)).render(context)
 
         template = self.get_template_name(template_pack)
         return render_to_string(
@@ -387,7 +384,7 @@ class Column(Div):
     template = "%s/layout/column.html"
 
 
-class HTML(object):
+class HTML:
     """
     Layout object. It can contain pure HTML and it has access to the whole
     context of the page where the form is being rendered.
@@ -402,7 +399,7 @@ class HTML(object):
         self.html = html
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return Template(text_type(self.html)).render(context)
+        return Template(str(self.html)).render(context)
 
 
 class Field(LayoutObject):
@@ -435,7 +432,7 @@ class Field(LayoutObject):
         self.template = kwargs.pop('template', self.template)
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
-        self.attrs.update(dict([(k.replace('_', '-'), conditional_escape(v)) for k, v in kwargs.items()]))
+        self.attrs.update({k.replace('_', '-'): conditional_escape(v) for k, v in kwargs.items()})
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         if extra_context is None:

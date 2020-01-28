@@ -1,12 +1,9 @@
-from __future__ import unicode_literals
-
 from random import randint
 
 from django.template import Template
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 
-from .compatibility import text_type
 from .layout import Div, Field, LayoutObject, TemplateNameMixin
 from .utils import TEMPLATE_PACK, flatatt, render_field
 
@@ -28,7 +25,7 @@ class PrependedAppendedText(Field):
         if 'input-sm' in css_class:
             self.input_size = 'input-sm'
 
-        super(PrependedAppendedText, self).__init__(field, *args, **kwargs)
+        super().__init__(field, *args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -53,7 +50,7 @@ class AppendedText(PrependedAppendedText):
         kwargs.pop('appended_text', None)
         kwargs.pop('prepended_text', None)
         self.text = text
-        super(AppendedText, self).__init__(field, appended_text=text, **kwargs)
+        super().__init__(field, appended_text=text, **kwargs)
 
 
 class PrependedText(PrependedAppendedText):
@@ -61,7 +58,7 @@ class PrependedText(PrependedAppendedText):
         kwargs.pop('appended_text', None)
         kwargs.pop('prepended_text', None)
         self.text = text
-        super(PrependedText, self).__init__(field, prepended_text=text, **kwargs)
+        super().__init__(field, prepended_text=text, **kwargs)
 
 
 class FormActions(LayoutObject):
@@ -107,7 +104,7 @@ class InlineCheckboxes(Field):
     template = "%s/layout/checkboxselectmultiple_inline.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return super(InlineCheckboxes, self).render(
+        return super().render(
             form, form_style, context, template_pack=template_pack,
             extra_context={'inline_class': 'inline'}
         )
@@ -122,7 +119,7 @@ class InlineRadios(Field):
     template = "%s/layout/radioselect_inline.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return super(InlineRadios, self).render(
+        return super().render(
             form, form_style, context, template_pack=template_pack,
             extra_context={'inline_class': 'inline'}
         )
@@ -186,7 +183,7 @@ class StrictButton(TemplateNameMixin):
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        self.content = Template(text_type(self.content)).render(context)
+        self.content = Template(str(self.content)).render(context)
         template = self.get_template_name(template_pack)
         context.update({'button': self})
 
@@ -200,7 +197,7 @@ class Container(Div):
     css_class = ""
 
     def __init__(self, name, *fields, **kwargs):
-        super(Container, self).__init__(*fields, **kwargs)
+        super().__init__(*fields, **kwargs)
         self.template = kwargs.pop('template', self.template)
         self.name = name
         self._active_originally_included = "active" in kwargs
@@ -216,11 +213,11 @@ class Container(Div):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         if self.active:
-            if not 'active' in self.css_class:
+            if 'active' not in self.css_class:
                 self.css_class += ' active'
         else:
             self.css_class = self.css_class.replace('active', '')
-        return super(Container, self).render(form, form_style, context, template_pack)
+        return super().render(form, form_style, context, template_pack)
 
 
 class ContainerHolder(Div):
@@ -331,7 +328,7 @@ class Accordion(ContainerHolder):
         # accordion group needs the parent div id to set `data-parent` (I don't
         # know why). This needs to be a unique id
         if not self.css_id:
-            self.css_id = "-".join(["accordion", text_type(randint(1000, 9999))])
+            self.css_id = "-".join(["accordion", str(randint(1000, 9999))])
 
         # Open the group that should be open.
         self.open_target_group_for_form(form)
@@ -385,7 +382,7 @@ class UneditableField(Field):
 
     def __init__(self, field, *args, **kwargs):
         self.attrs = {'class': 'uneditable-input'}
-        super(UneditableField, self).__init__(field, *args, **kwargs)
+        super().__init__(field, *args, **kwargs)
 
 
 class InlineField(Field):

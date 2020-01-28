@@ -1,5 +1,10 @@
 # CHANGELOG for django-crispy-forms
 
+## Next release
+* Removed support for Python 2
+* Removed support for Django version 1
+* CSS for Column layout object in Bootstrap 4 template pack changed to 'col-md'. Default is now over ridden when another 'col' class is added to css_class.
+
 ## 1.8.1 (2019-11-22)
 
 * Fixing FileField UI bug introduced with 1.8.0

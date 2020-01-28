@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django import template
 from django.conf import settings
 from django.forms import forms
@@ -20,6 +19,7 @@ def uni_formset_template(template_pack=TEMPLATE_PACK):
 @lru_cache()
 def uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template('%s/uni_form.html' % template_pack)
+
 
 register = template.Library()
 

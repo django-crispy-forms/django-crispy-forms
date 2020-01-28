@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django import forms, VERSION as DJANGO_VERSION
 from django.template import Context, Template
 from django.test.html import parse_html
@@ -127,15 +124,14 @@ def test_i18n():
         HTML(_("Enter a valid value."))
     )
     html = render_crispy_form(form)
-    if DJANGO_VERSION >= (1, 11):
-        assert "Introduzca un valor válido" in html
-    else:
-        assert "Introduzca un valor correcto" in html
+    assert "Introduzca un valor válido" in html
+
     deactivate()
+
 
 def test_remove_labels():
     form = SampleForm()
-    #remove boolean field as label is still printed in boostrap
+    # remove boolean field as label is still printed in boostrap
     del form.fields['is_company']
 
     for fields in form:
@@ -145,8 +141,9 @@ def test_remove_labels():
 
     assert '<label' not in html
 
+
 @only_bootstrap
-class TestBootstrapLayoutObjects(object):
+class TestBootstrapLayoutObjects:
 
     def test_custom_django_widget(self, settings):
         class CustomRadioSelect(forms.RadioSelect):
@@ -175,7 +172,6 @@ class TestBootstrapLayoutObjects(object):
             assert 'class="custom-control-input"' in html
         else:
             assert 'class="checkbox"' in html
-
 
     def test_prepended_appended_text(self, settings):
         test_form = SampleForm()
@@ -518,4 +514,3 @@ class TestBootstrapLayoutObjects(object):
         for id_suffix in expected_ids:
             expected_str = 'id="id_{id_suffix}"'.format(id_suffix=id_suffix)
             assert html.count(expected_str) == 1
-

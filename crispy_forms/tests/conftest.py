@@ -1,4 +1,3 @@
-# coding: utf-8
 import pytest
 
 from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, Submit

@@ -14,7 +14,7 @@ class SampleForm(forms.Form):
     datetime_field = forms.SplitDateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
 
     def clean(self):
-        super(SampleForm, self).clean()
+        super().clean()
         password1 = self.cleaned_data.get('password1', None)
         password2 = self.cleaned_data.get('password2', None)
         if not password1 and not password2 or password1 != password2:
@@ -25,7 +25,7 @@ class SampleForm(forms.Form):
 
 class SampleForm2(SampleForm):
     def __init__(self, *args, **kwargs):
-        super(SampleForm2, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
 
@@ -82,7 +82,7 @@ class SampleForm3(forms.ModelForm):
         exclude = ['password']
 
     def __init__(self, *args, **kwargs):
-        super(SampleForm3, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
 
@@ -124,14 +124,16 @@ class SampleFormWithMedia(forms.Form):
 class SampleFormWithMultiValueField(forms.Form):
     multi = forms.SplitDateTimeField()
 
+
 class CrispyEmptyChoiceTestModel(models.Model):
     fruit = models.CharField(
         choices=[
-        ('apple','Apple'),
-        ('pear','Pear')],
+            ('apple', 'Apple'),
+            ('pear', 'Pear')],
         null=True,
         blank=True,
     )
+
 
 class SampleForm6(forms.ModelForm):
     class Meta:
@@ -146,4 +148,22 @@ class SampleForm6(forms.ModelForm):
         """
         model = CrispyEmptyChoiceTestModel
         fields = ['fruit']
-        widgets = {'fruit': forms.RadioSelect() }
+        widgets = {'fruit': forms.RadioSelect()}
+
+
+class SampleForm7(forms.ModelForm):
+    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
+    password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
+
+    class Meta:
+        model = CrispyTestModel
+        fields = ('email', 'password', 'password2')
+
+
+class SampleForm8(forms.ModelForm):
+    is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
+    password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
+
+    class Meta:
+        model = CrispyTestModel
+        fields = ('email', 'password2', 'password')

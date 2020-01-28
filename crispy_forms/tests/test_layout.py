@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import pytest
 
 import django
@@ -9,9 +6,10 @@ from django.forms.models import formset_factory, modelformset_factory
 from django.shortcuts import render
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
+from django.middleware.csrf import _get_new_csrf_string
 
 from crispy_forms.bootstrap import Field, InlineCheckboxes
-from crispy_forms.compatibility import PY2
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (
     HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit,
@@ -26,17 +24,6 @@ from .forms import (
     SampleForm, SampleForm2, SampleForm3, SampleForm4, SampleForm5, SampleForm6,
 )
 from .utils import contains_partial
-
-try:
-    from django.middleware.csrf import _get_new_csrf_key
-except ImportError:
-    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
-
-try:
-    from django.urls import reverse
-except ImportError:
-    # Django < 1.10
-    from django.core.urlresolvers import reverse
 
 
 def test_invalid_unicode_characters(settings):
@@ -61,18 +48,14 @@ def test_invalid_unicode_characters(settings):
 def test_unicode_form_field():
     class UnicodeForm(forms.Form):
         def __init__(self, *args, **kwargs):
-            super(UnicodeForm, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.fields['contraseña'] = forms.CharField()
 
         helper = FormHelper()
         helper.layout = Layout('contraseña')
 
-    if PY2:
-        with pytest.raises(Exception):
-            render_crispy_form(UnicodeForm())
-    else:
-        html = render_crispy_form(UnicodeForm())
-        assert 'id="id_contraseña"' in html
+    html = render_crispy_form(UnicodeForm())
+    assert 'id="id_contraseña"' in html
 
 
 def test_meta_extra_fields_with_missing_fields():
@@ -272,20 +255,54 @@ def test_column_has_css_classes(settings):
             Column(
                 'first_name',
                 'last_name',
-            )
+            ),
         )
     )
 
     c = Context({'form': form, 'form_helper': form_helper})
     html = template.render(c)
-    print(html)
 
     if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
         assert html.count('formColumn') == 1
         assert html.count('col') == 0
     elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
         assert html.count('formColumn') == 0
-        assert html.count('col') == 1
+        assert html.count('col-md') == 1
+
+
+@only_bootstrap4
+def test_bs4_column_css_classes(settings):
+    template = Template("""
+        {% load crispy_forms_tags %}
+        {% crispy form form_helper %}
+    """)
+
+    form = SampleForm()
+    form_helper = FormHelper()
+    form_helper.add_layout(
+        Layout(
+            Column(
+                'first_name',
+                'last_name',
+            ),
+            Column(
+                'first_name',
+                'last_name',
+                css_class='col-sm'
+            ),
+            Column(
+                'first_name',
+                'last_name',
+                css_class='mb-4'
+            ),
+        )
+    )
+
+    c = Context({'form': form, 'form_helper': form_helper})
+    html = template.render(c)
+
+    assert html.count('col-md') == 2
+    assert html.count('col-sm') == 1
 
 
 def test_formset_layout(settings):
@@ -312,22 +329,22 @@ def test_formset_layout(settings):
     )
 
     html = render_crispy_form(
-        form=formset, helper=helper, context={'csrf_token': _get_new_csrf_key()}
+        form=formset, helper=helper, context={'csrf_token': _get_new_csrf_string()}
     )
 
     # Check formset fields
     assert contains_partial(html,
-        '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
-    )
+                            '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
-    )
+                            '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
-    )
+                            '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"/>'
-    )
+                            '<input id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"/>'
+                            )
     assert html.count("hidden") == 5
 
     # Check form structure
@@ -367,14 +384,14 @@ def test_modelformset_layout():
     assert html.count("id_form-2-id") == 1
 
     assert contains_partial(html,
-        '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
-    )
+                            '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
-    )
+                            '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
+                            )
     assert contains_partial(html,
-        '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
-    )
+                            '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
+                            )
 
     assert html.count('name="form-0-email"') == 1
     assert html.count('name="form-1-email"') == 1
@@ -402,27 +419,6 @@ def test_i18n():
 
     html = template.render(Context({'form': form}))
     assert html.count('i18n legend') == 1
-
-@pytest.mark.skipif(django.VERSION >= (1,11),
-                    reason="See #683: Not localising labels/values changed in 1.11")
-def test_l10n(settings):
-    settings.USE_L10N = True
-    settings.USE_THOUSAND_SEPARATOR = True
-
-    form = SampleForm5(data={'pk': 1000})
-    html = render_crispy_form(form)
-
-    # Make sure values are unlocalized
-    assert 'value="1,000"' not in html
-
-    # Make sure label values are NOT localized.
-    # Dirty check, which relates on HTML structure
-    label_text = '>1000'
-    if settings.CRISPY_TEMPLATE_PACK == 'uni_form':
-        label_text = '/> 1000<'
-    elif settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-        label_text = '>\n            1000'
-    assert html.count(label_text) == 2
 
 
 def test_default_layout():
@@ -460,6 +456,7 @@ def test_specialspaceless_not_screwing_intended_spaces():
     html = render_crispy_form(test_form)
     assert '<span>first span</span> <span>second span</span>' in html
 
+
 def test_choice_with_none_is_selected():
     # see issue #701
     model_instance = CrispyEmptyChoiceTestModel()
@@ -467,6 +464,7 @@ def test_choice_with_none_is_selected():
     test_form = SampleForm6(instance=model_instance)
     html = render_crispy_form(test_form)
     assert 'checked' in html
+
 
 @only_uni_form
 def test_layout_composition():

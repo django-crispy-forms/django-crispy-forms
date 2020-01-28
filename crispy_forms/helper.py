@@ -1,24 +1,17 @@
-# -*- coding: utf-8 -*-
 import re
 
 from django.utils.safestring import mark_safe
+from django.urls import reverse, NoReverseMatch
 
-from crispy_forms.compatibility import string_types
 from crispy_forms.exceptions import FormHelpersException
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
 from crispy_forms.utils import (
-    TEMPLATE_PACK, flatatt, list_difference, list_intersection, render_field,
+    TEMPLATE_PACK, flatatt, list_difference, render_field,
 )
 
-try:
-    from django.urls import reverse, NoReverseMatch
-except ImportError:
-    # Django < 1.10
-    from django.core.urlresolvers import reverse, NoReverseMatch
 
-
-class DynamicLayoutHandler(object):
+class DynamicLayoutHandler:
     def _check_layout(self):
         if self.layout is None:
             raise FormHelpersException("You need to set a layout in your FormHelper")
@@ -82,7 +75,7 @@ class DynamicLayoutHandler(object):
         and not a copy.
         """
         # when key is a string containing the field name
-        if isinstance(key, string_types):
+        if isinstance(key, str):
             # Django templates access FormHelper attributes using dictionary [] operator
             # This could be a helper['form_id'] access, not looking for a field
             if hasattr(self, key):
@@ -311,13 +304,13 @@ class FormHelper(DynamicLayoutHandler):
 
         # Rendering some extra fields if specified
         if self.render_unmentioned_fields or self.render_hidden_fields or self.render_required_fields:
-            fields = set(form.fields.keys())
-            left_fields_to_render = fields - form.rendered_fields
+            fields = tuple(form.fields.keys())
+            left_fields_to_render = list_difference(fields, form.rendered_fields)
             for field in left_fields_to_render:
                 if (
                     self.render_unmentioned_fields or
-                    self.render_hidden_fields and form.fields[field].widget.is_hidden or
-                    self.render_required_fields and form.fields[field].widget.is_required
+                    (self.render_hidden_fields and form.fields[field].widget.is_hidden) or
+                    (self.render_required_fields and form.fields[field].widget.is_required)
                 ):
                     html += render_field(
                         field,
@@ -326,28 +319,6 @@ class FormHelper(DynamicLayoutHandler):
                         context,
                         template_pack=template_pack
                     )
-
-        # If the user has Meta.fields defined, not included in the layout,
-        # we suppose they need to be rendered
-        if hasattr(form, 'Meta'):
-            if hasattr(form.Meta, 'fields'):
-                current_fields = tuple(getattr(form, 'fields', {}).keys())
-                meta_fields = getattr(form.Meta, 'fields')
-
-                fields_to_render = list_intersection(current_fields, meta_fields)
-                left_fields_to_render = list_difference(fields_to_render, form.rendered_fields)
-
-                for field in left_fields_to_render:
-                    # We still respect the configuration of the helper
-                    # regarding which fields to render
-                    if (
-                        self.render_unmentioned_fields or
-                        (self.render_hidden_fields and
-                         form.fields[field].widget.is_hidden) or
-                        (self.render_required_fields and
-                         form.fields[field].widget.is_required)
-                    ):
-                        html += render_field(field, form, self.form_style, context)
 
         return mark_safe(html)
 

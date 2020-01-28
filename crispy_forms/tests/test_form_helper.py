@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import re
 
 import pytest
@@ -10,13 +7,14 @@ from django import forms
 from django.forms.models import formset_factory
 from django.template import Context, Template, TemplateSyntaxError
 from django.test.html import parse_html
-from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
+from django.middleware.csrf import _get_new_csrf_string
+from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import (
     AppendedText, FieldWithButtons, PrependedAppendedText, PrependedText,
     StrictButton,
 )
-from crispy_forms.compatibility import text_type
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import (
     Button, Field, Hidden, Layout, MultiField, Reset, Submit,
@@ -27,18 +25,13 @@ from crispy_forms.utils import render_crispy_form
 from .conftest import (
     only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
 )
-from .forms import SampleForm, SampleFormWithMedia, SampleFormWithMultiValueField
-
-try:
-    from django.middleware.csrf import _get_new_csrf_key
-except ImportError:
-    from django.middleware.csrf import _get_new_csrf_string as _get_new_csrf_key
-
-try:
-    from django.urls import reverse
-except ImportError:
-    # Django < 1.10
-    from django.core.urlresolvers import reverse
+from .forms import (
+    SampleForm,
+    SampleForm7,
+    SampleForm8,
+    SampleFormWithMedia,
+    SampleFormWithMultiValueField,
+)
 
 
 def test_inputs(settings):
@@ -73,6 +66,7 @@ def test_inputs(settings):
             assert len(re.findall(r'<input[^>]+> <', html)) == 9
         else:
             assert len(re.findall(r'<input[^>]+> <', html)) == 8
+
 
 def test_invalid_form_method():
     form_helper = FormHelper()
@@ -139,7 +133,7 @@ def test_form_show_errors_non_field_errors():
 
     # Ensure those errors were rendered
     assert '<li>Passwords dont match</li>' in html
-    assert text_type(_('This field is required.')) in html
+    assert str(_('This field is required.')) in html
     assert 'error' in html
 
     # Now we render without errors
@@ -149,7 +143,7 @@ def test_form_show_errors_non_field_errors():
 
     # Ensure errors were not rendered
     assert '<li>Passwords dont match</li>' not in html
-    assert text_type(_('This field is required.')) not in html
+    assert str(_('This field is required.')) not in html
     assert 'error' not in html
 
 
@@ -163,7 +157,6 @@ def test_html5_required():
         assert html.count('required="required"') == 7
     else:
         assert len(re.findall(r'\brequired\b', html)) == 7
-
 
     form = SampleForm()
     form.helper = FormHelper()
@@ -387,7 +380,7 @@ def test_formset_with_helper_without_layout(settings):
     SampleFormSet = formset_factory(SampleForm, extra=3)
     testFormSet = SampleFormSet()
 
-    c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+    c = Context({'testFormSet': testFormSet, 'formset_helper': form_helper, 'csrf_token': _get_new_csrf_string()})
     html = template.render(c)
 
     assert html.count('<form') == 1
@@ -416,7 +409,7 @@ def test_CSRF_token_POST_form():
     # The middleware only initializes the CSRF token when processing a real request
     # So using RequestContext or csrf(request) here does not work.
     # Instead I set the key `csrf_token` to a CSRF token manually, which `csrf_token` tag uses
-    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_string()})
     html = template.render(c)
 
     assert 'csrfmiddlewaretoken' in html
@@ -430,7 +423,7 @@ def test_CSRF_token_GET_form():
         {% crispy form form_helper %}
     """)
 
-    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_key()})
+    c = Context({'form': SampleForm(), 'form_helper': form_helper, 'csrf_token': _get_new_csrf_string()})
     html = template.render(c)
 
     assert 'csrfmiddlewaretoken' not in html
@@ -440,8 +433,60 @@ def test_disable_csrf():
     form = SampleForm()
     helper = FormHelper()
     helper.disable_csrf = True
-    html = render_crispy_form(form, helper, {'csrf_token': _get_new_csrf_key()})
+    html = render_crispy_form(form, helper, {'csrf_token': _get_new_csrf_string()})
     assert 'csrf' not in html
+
+
+def test_render_unmentioned_fields():
+    test_form = SampleForm()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        'email'
+    )
+    test_form.helper.render_unmentioned_fields = True
+
+    html = render_crispy_form(test_form)
+    assert html.count('<input') == 8
+
+
+def test_render_unmentioned_fields_order():
+    test_form = SampleForm7()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        'email'
+    )
+    test_form.helper.render_unmentioned_fields = True
+
+    html = render_crispy_form(test_form)
+    assert html.count('<input') == 4
+    assert (
+        # From layout
+        html.index('id="div_id_email"')
+        # From form.Meta.fields
+        < html.index('id="div_id_password"')
+        < html.index('id="div_id_password2"')
+        # From fields
+        < html.index('id="div_id_is_company"')
+    )
+
+    test_form = SampleForm8()
+    test_form.helper = FormHelper()
+    test_form.helper.layout = Layout(
+        'email'
+    )
+    test_form.helper.render_unmentioned_fields = True
+
+    html = render_crispy_form(test_form)
+    assert html.count('<input') == 4
+    assert (
+        # From layout
+        html.index('id="div_id_email"')
+        # From form.Meta.fields
+        < html.index('id="div_id_password2"')
+        < html.index('id="div_id_password"')
+        # From fields
+        < html.index('id="div_id_is_company"')
+    )
 
 
 def test_render_hidden_fields():
@@ -530,7 +575,7 @@ def test_form_show_errors():
         'last_name': 'last_name_too_long',
         'password1': 'yes',
         'password2': 'yes',
-        })
+    })
     form.helper = FormHelper()
     form.helper.layout = Layout(
         Field('email'),
@@ -577,7 +622,7 @@ def test_multifield_errors():
 
 
 @only_bootstrap3
-def test_bootstrap_form_show_errors():
+def test_bootstrap_form_show_errors_bs3():
     form = SampleForm({
         'email': 'invalidemail',
         'first_name': 'first_name_too_long',
@@ -605,7 +650,7 @@ def test_bootstrap_form_show_errors():
 
 
 @only_bootstrap4
-def test_bootstrap_form_show_errors():
+def test_bootstrap_form_show_errors_bs4():
     form = SampleForm({
         'email': 'invalidemail',
         'first_name': 'first_name_too_long',
@@ -671,7 +716,7 @@ def test_error_text_inline(settings):
         help_tag_name = 'p'
 
     matches = re.findall(
-        r'<%s id="error_\d_\w*" class="%s"' % (help_tag_name, help_class),
+        r'<{} id="error_\d_\w*" class="{}"'.format(help_tag_name, help_class),
         html,
         re.MULTILINE
     )
@@ -786,7 +831,7 @@ def test_label_class_and_field_class():
     html = render_crispy_form(form)
     dom = parse_html(html)
 
-    snippet = parse_html('<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company' )
+    snippet = parse_html('<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company')
     assert dom.count(snippet)
     assert html.count('col-sm-8') == 7
 
@@ -889,9 +934,6 @@ def test_passthrough_context():
     html = render_crispy_form(form, helper=form.helper, context=c)
     assert "Got prefix: foo" in html
     assert "Got suffix: bar" in html
-
-
-
 
 
 @only_bootstrap3
