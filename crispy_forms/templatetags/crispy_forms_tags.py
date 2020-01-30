@@ -8,6 +8,7 @@ from django.template.loader import get_template
 from crispy_forms.compatibility import lru_cache
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
+from crispy_forms_field import pairwise, is_checkbox, is_multivalue, is_file
 
 register = template.Library()
 
@@ -281,11 +282,10 @@ def render_multi_field(parser, token):
     """
     Takes form field as first argument, field number as second argument, and
     list of attribute-value pairs for all other arguments.
-    Attribute-value pairs should be in the form of attribute=value OR
-    attribute="a value"
+    Attribute-value pairs should be in the form of 'attribute' 'value'
     """
     error_msg = ('%r tag requires a form field and index followed by a list '
-                 'of attributes and values in the form attr="value"'
+                 'of attributes and values in the form "attr" "value"'
                  % token.split_contents()[0])
     try:
         bits = token.split_contents()
@@ -295,42 +295,35 @@ def render_multi_field(parser, token):
     except ValueError:
         raise template.TemplateSyntaxError(error_msg)
 
-    attr_assign_dict = {}
-    attr_concat_dict = {}
-    for pair in attr_list:
-        match = re.match(r'([\w_-]+)(\+?=)"?([^"]*)"?', pair)
-        if not match:
-            raise template.TemplateSyntaxError(error_msg + ": %s" % pair)
-        attr, sign, value = match.groups()
-        if sign == "=":
-            attr_assign_dict[attr] = value
-        else:
-            attr_concat_dict[attr] = value
+    attrs = {}
+    for attribute_name, value in pairwise(attr_list):
+        attrs[attribute_name] = value
 
-    return MultiFieldAttributeNode(form_field, attr_assign_dict,
-                                   attr_concat_dict, index=field_index)
+    return MultiFieldAttributeNode(form_field, attrs, index=field_index)
 
 
 class MultiFieldAttributeNode(template.Node):
-    def __init__(self, field, assign_dict, concat_dict, index):
+    def __init__(self, field, attrs, index):
         self.field = field
-        self.assign_dict = assign_dict
-        self.concat_dict = concat_dict
+        self.attrs = attrs
+        self.html5_required = 'html5_required'
         self.index = index
 
     def render(self, context):
-        bounded_field = template.Variable(self.field).resolve(context)
-        field_index = template.Variable(self.index).resolve(context)
-        field = bounded_field.field.fields[field_index]
-        widget = field.widget
+        # Nodes are not threadsafe so we must store and look up our instance
+        # variables in the current rendering context first
+        if self not in context.render_context:
+            context.render_context[self] = (
+                template.Variable(self.field),
+                self.attrs,
+                template.Variable(self.html5_required),
+                template.Variable(self.index)
+            )
 
-        attrs = widget.attrs.copy()
-        for k, v in self.assign_dict.items():
-            attrs[k] = v
-        for k, v in self.concat_dict.items():
-            attrs[k] = widget.attrs.get(k, '') + ' ' + v
-        if bounded_field.errors:
-            attrs['class'] = attrs.get('class', '') + ' error'
+        field, attrs, html5_required, field_index = context.render_context[self]
+        field_index = field_index.resolve(context)
+        bounded_field = field.resolve(context)
+        field = bounded_field.field.fields[field_index]
 
         if not bounded_field.form.is_bound:
             data = bounded_field.field.initial
@@ -340,6 +333,57 @@ class MultiFieldAttributeNode(template.Node):
             data = bounded_field.field.widget.decompress(data)[field_index]
         else:
             data = bounded_field.data[field_index]
-        return widget.render('%s_%d' % (bounded_field.html_name, field_index),
-                             data, attrs)
 
+        try:
+            html5_required = html5_required.resolve(context)
+        except template.VariableDoesNotExist:
+            html5_required = False
+
+        # If template pack has been overridden in FormHelper we can pick it from context
+        template_pack = context.get('template_pack', TEMPLATE_PACK)
+
+        # There are special django widgets that wrap actual widgets,
+        # such as forms.widgets.MultiWidget, admin.widgets.RelatedFieldWidgetWrapper
+        widgets = getattr(field.widget, 'widgets', [getattr(field.widget, 'widget', field.widget)])
+
+        if isinstance(attrs, dict):
+            attrs = [attrs] * len(widgets)
+
+        converters = {
+            'textinput': 'textinput textInput',
+            'fileinput': 'fileinput fileUpload',
+            'passwordinput': 'textinput textInput',
+        }
+        converters.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
+
+        for widget, attr in zip(widgets, attrs):
+            class_name = widget.__class__.__name__.lower()
+            class_name = converters.get(class_name, class_name)
+            css_class = widget.attrs.get('class', '')
+            if css_class:
+                if css_class.find(class_name) == -1:
+                    css_class += " %s" % class_name
+            else:
+                css_class = class_name
+
+            if template_pack == 'bootstrap4':
+                if bounded_field.errors:
+                    css_class += ' is-invalid'
+
+            widget.attrs['class'] = css_class
+
+            # HTML5 required attribute
+            if html5_required and field.required and 'required' not in widget.attrs:
+                if field.widget.__class__.__name__ != 'RadioSelect':
+                    widget.attrs['required'] = 'required'
+
+            for attribute_name, attribute in attr.items():
+                attribute_name = template.Variable(attribute_name).resolve(context)
+
+                if attribute_name in widget.attrs:
+                    widget.attrs[attribute_name] += " " + template.Variable(attribute).resolve(context)
+                else:
+                    widget.attrs[attribute_name] = template.Variable(attribute).resolve(context)
+
+        return widget.render('%s_%d' % (bounded_field.html_name, field_index),
+                             data, widget.attrs)

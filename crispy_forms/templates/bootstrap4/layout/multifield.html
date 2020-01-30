@@ -18,9 +18,9 @@
     {% if not field|is_checkbox %}
             <div class="row">
             {% for f in field.field.widget.widgets %}
-            <div class="col">
+            <div class="col-md">
 
-                {% render_multi_field field forloop.counter0 class+="form-control" %}
+                {% render_multi_field field forloop.counter0 'class' 'form-control' %}
            </div>
                 
             {% endfor %}
