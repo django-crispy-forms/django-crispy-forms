@@ -5,7 +5,7 @@ from django import forms
 from django.forms.models import formset_factory, modelformset_factory
 from django.shortcuts import render
 from django.template import Context, Template
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.middleware.csrf import _get_new_csrf_string
 

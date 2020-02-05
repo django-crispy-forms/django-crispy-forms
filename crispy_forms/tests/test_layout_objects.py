@@ -1,7 +1,7 @@
 from django import forms, VERSION as DJANGO_VERSION
 from django.template import Context, Template
 from django.test.html import parse_html
-from django.utils.translation import activate, deactivate, ugettext as _
+from django.utils.translation import activate, deactivate, gettext as _
 
 from crispy_forms.bootstrap import (
     Accordion, AccordionGroup, Alert, AppendedText, FieldWithButtons,
