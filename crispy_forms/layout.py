@@ -309,6 +309,7 @@ class MultiField(LayoutObject):
         self.template = kwargs.pop('template', self.template)
         self.field_template = kwargs.pop('field_template', self.field_template)
         self.flat_attrs = flatatt(kwargs)
+        self.has_errors = False
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         # If a field within MultiField contains errors
@@ -316,6 +317,7 @@ class MultiField(LayoutObject):
             for field in map(lambda pointer: pointer[1], self.get_field_names()):
                 if field in form.errors:
                     self.css_class += " error"
+                    self.has_errors = True
 
         field_template = self.field_template % template_pack
         fields_output = self.get_rendered_fields(
