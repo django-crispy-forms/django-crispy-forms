@@ -2,7 +2,7 @@
     {% if multifield.css_class %}class="{{ multifield.css_class }}"{% endif %}
     {{ multifield.flat_attrs|safe }}>
 
-    {% if form_show_errors %}
+    {% if form_show_errors and multifield.has_errors %}
         <div class="alert alert-danger" role="alert">
         {% for field in multifield.bound_fields %}
             {% if field.errors %}
