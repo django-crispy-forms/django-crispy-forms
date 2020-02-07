@@ -72,7 +72,7 @@ def test_inputs(settings):
         assert 'btn btn-primary' in html
         assert 'btn btn-inverse' in html
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-            assert len(re.findall(r'<input[^>]+> <', html)) == 9
+            assert len(re.findall(r'<input[^>]+> <', html)) == 10
         else:
             assert len(re.findall(r'<input[^>]+> <', html)) == 8
 
@@ -865,6 +865,7 @@ def test_label_class_and_field_class_bs4():
 
     assert '<div class="form-group">' in html
     assert '<div class="col-lg-8">' in html
+    print(html)
     assert html.count('col-lg-8') == 7
     assert 'offset' not in html
 

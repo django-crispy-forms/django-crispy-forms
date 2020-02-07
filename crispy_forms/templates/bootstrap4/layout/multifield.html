@@ -16,7 +16,7 @@
 
 
     {% if not field|is_checkbox %}
-            <div class="row">
+            <div class="row {% if field_class %} {{ field_class }}{% endif %}">
             {% for f in field.field.widget.widgets %}
             <div class="col-md">
 

@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from crispy_forms.compatibility import lru_cache
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
-from crispy_forms_field import pairwise, is_checkbox, is_multivalue, is_file
+from crispy_forms.templatetags.crispy_forms_field import pairwise, is_checkbox, is_multivalue, is_file
 
 register = template.Library()
 
@@ -323,6 +323,12 @@ class MultiFieldAttributeNode(template.Node):
         field, attrs, html5_required, field_index = context.render_context[self]
         field_index = field_index.resolve(context)
         bounded_field = field.resolve(context)
+
+        try:
+            html5_required = html5_required.resolve(context)
+        except template.VariableDoesNotExist:
+            html5_required = False
+
         field = bounded_field.field.fields[field_index]
 
         if not bounded_field.form.is_bound:
@@ -334,10 +340,7 @@ class MultiFieldAttributeNode(template.Node):
         else:
             data = bounded_field.data[field_index]
 
-        try:
-            html5_required = html5_required.resolve(context)
-        except template.VariableDoesNotExist:
-            html5_required = False
+
 
         # If template pack has been overridden in FormHelper we can pick it from context
         template_pack = context.get('template_pack', TEMPLATE_PACK)
@@ -376,6 +379,9 @@ class MultiFieldAttributeNode(template.Node):
             if html5_required and field.required and 'required' not in widget.attrs:
                 if field.widget.__class__.__name__ != 'RadioSelect':
                     widget.attrs['required'] = 'required'
+
+            if widget.is_required:
+                widget.attrs['required'] = True
 
             for attribute_name, attribute in attr.items():
                 attribute_name = template.Variable(attribute_name).resolve(context)

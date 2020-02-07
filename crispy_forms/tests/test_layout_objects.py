@@ -49,7 +49,7 @@ def test_multiwidget_field():
     c = Context({'form': test_form})
 
     html = template.render(c)
-
+    print(html)
     assert html.count('class="dateinput') == 1
     assert html.count('rel="test_dateinput"') == 1
     assert html.count('rel="test_timeinput"') == 2
