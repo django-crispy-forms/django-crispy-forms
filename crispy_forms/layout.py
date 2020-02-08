@@ -318,6 +318,7 @@ class MultiField(LayoutObject):
                 if field in form.errors:
                     self.css_class += " error"
                     self.has_errors = True
+                    break
 
         field_template = self.field_template % template_pack
         fields_output = self.get_rendered_fields(
