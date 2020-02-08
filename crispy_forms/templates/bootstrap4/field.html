@@ -25,7 +25,7 @@
         {% endif %}
                 
         {% if field|is_multivalue %}
-                {% include 'bootstrap4/layout/multifield.html' %}
+                {% include 'bootstrap4/layout/multivalue.html' %}
         {% endif %}        
 
         {% if not field|is_checkboxselectmultiple and not field|is_radioselect and not field|is_multivalue %}

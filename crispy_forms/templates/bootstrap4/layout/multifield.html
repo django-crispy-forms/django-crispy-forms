@@ -1,5 +1,4 @@
 {% load crispy_forms_field %}
-{% load crispy_forms_tags %}
 
 {% if field.is_hidden %}
     {{ field }}
@@ -13,20 +12,12 @@
         {% crispy_field field %}
     {% endif %}
 
-
+    {% if field.label %}
+        {{ field.label }}
+    {% endif %}
 
     {% if not field|is_checkbox %}
-            <div class="row {% if field_class %} {{ field_class }}{% endif %}">
-            {% for f in field.field.widget.widgets %}
-            <div class="col-md">
-
-                {% render_multi_field field forloop.counter0 'class' 'form-control' %}
-           </div>
-                
-            {% endfor %}
-            </div>
-
-            
+        {% crispy_field field %}
     {% endif %}
 
     {% if field.label %}
