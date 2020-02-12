@@ -1,5 +1,3 @@
-import re
-
 from django import template
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
@@ -8,7 +6,7 @@ from django.template.loader import get_template
 from crispy_forms.compatibility import lru_cache
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
-from crispy_forms.templatetags.crispy_forms_field import pairwise, is_checkbox, is_multivalue, is_file
+from crispy_forms.templatetags.crispy_forms_field import pairwise
 
 register = template.Library()
 
@@ -340,14 +338,13 @@ class MultiFieldAttributeNode(template.Node):
         else:
             data = bounded_field.data[field_index]
 
-
-
         # If template pack has been overridden in FormHelper we can pick it from context
         template_pack = context.get('template_pack', TEMPLATE_PACK)
 
         # There are special django widgets that wrap actual widgets,
         # such as forms.widgets.MultiWidget, admin.widgets.RelatedFieldWidgetWrapper
-        widgets = getattr(field.widget, 'widgets', [getattr(field.widget, 'widget', field.widget)])
+        widgets = getattr(bounded_field.field.widget, 'widgets',
+                          [getattr(bounded_field.field.widget, 'widget', bounded_field.field.widget)])
 
         if isinstance(attrs, dict):
             attrs = [attrs] * len(widgets)
@@ -376,12 +373,9 @@ class MultiFieldAttributeNode(template.Node):
             widget.attrs['class'] = css_class
 
             # HTML5 required attribute
-            if html5_required and field.required and 'required' not in widget.attrs:
+            if html5_required and bounded_field.field.required and 'required' not in widget.attrs:
                 if field.widget.__class__.__name__ != 'RadioSelect':
-                    widget.attrs['required'] = 'required'
-
-            if widget.is_required:
-                widget.attrs['required'] = True
+                    widget.attrs['required'] = True
 
             for attribute_name, attribute in attr.items():
                 attribute_name = template.Variable(attribute_name).resolve(context)
@@ -391,5 +385,5 @@ class MultiFieldAttributeNode(template.Node):
                 else:
                     widget.attrs[attribute_name] = template.Variable(attribute).resolve(context)
 
-        return widget.render('%s_%d' % (bounded_field.html_name, field_index),
-                             data, widget.attrs)
+        return widgets[field_index].render('%s_%d' % (bounded_field.html_name, field_index),
+                                           data, widgets[field_index].attrs)

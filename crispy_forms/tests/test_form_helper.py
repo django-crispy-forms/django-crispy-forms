@@ -72,7 +72,7 @@ def test_inputs(settings):
         assert 'btn btn-primary' in html
         assert 'btn btn-inverse' in html
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-            assert len(re.findall(r'<input[^>]+> <', html)) == 9
+            assert len(re.findall(r'<input[^>]+> <', html)) == 10
         else:
             assert len(re.findall(r'<input[^>]+> <', html)) == 8
 

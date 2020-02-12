@@ -8,7 +8,7 @@
     <div class="form-row">
         {% for subfield in field.field.fields %}
             <div class="
-                    {% if 'col' in field_class %}{{ field_class }}{% else %} col-md{% endif %} {% if not forloop.last %}form-group {% endif %}">
+                    {% if 'col' in field_class %}{{ field_class }}{% else %} col-md{% endif %} {% if not forloop.last %}form-group {% endif %} ">
                 {% if subfield|is_checkbox %}
                     <div class="form-check">
                         {% render_multi_field field forloop.counter0 'class' 'form-check-input' %}
