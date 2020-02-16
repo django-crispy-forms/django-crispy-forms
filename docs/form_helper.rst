@@ -173,7 +173,7 @@ All previous, ``bootstrap`` (version 2 and 3) attributes are also settable in bo
 Custom Helper attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Maybe you would like ``FormHelper`` to do some extra thing that is not currently supported or maybe you have a very specific use case. The good thing is that you can add extra attributes and crispy-forms will automagically inject them within template context. Let's see an example, to make things clear.
+Maybe you would like ``FormHelper`` to do some extra thing that is not currently supported or maybe you have a very specific use case. The good thing is that you can add extra attributes and crispy-forms will automatically inject them within template context. Let's see an example, to make things clear.
 
 We want some forms to have uppercase labels, and for that we would like to set a helper attribute name ``labels_uppercase`` to ``True`` or ``False``. So we go and set in our helper::
 
