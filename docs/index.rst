@@ -17,8 +17,7 @@ Get the most out of django-crispy-forms
     :maxdepth: 2
 
     install
-    filters
-    crispy_tag_forms
+    getting_started
     form_helper
     layouts
     template_packs
@@ -28,6 +27,7 @@ Get the most out of django-crispy-forms
 .. toctree::
     :maxdepth: 1
 
+    concepts
     faq
 
 * See who's contributed to the project at `crispy-forms contributors`_
