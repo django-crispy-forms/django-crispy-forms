@@ -9,7 +9,11 @@ register = template.Library()
 
 @register.filter
 def is_checkbox(field):
-    return isinstance(field.field.widget, forms.CheckboxInput)
+    try:
+        return isinstance(field.widget, forms.CheckboxInput)
+    except AttributeError:
+        return isinstance(field.field.widget, forms.CheckboxInput)
+
 
 
 @register.filter

@@ -74,8 +74,8 @@ def test_field_type_hidden():
         'test_form': test_form,
     })
     html = template.render(c)
-
     # Check form parameters
+
     assert html.count('data-test="12"') == 1
     assert html.count('name="email"') == 1
     assert html.count('class="dateinput') == 1

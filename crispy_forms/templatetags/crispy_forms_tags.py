@@ -6,6 +6,7 @@ from django.template.loader import get_template
 from crispy_forms.compatibility import lru_cache
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
+from crispy_forms.templatetags.crispy_forms_field import pairwise
 
 register = template.Library()
 
@@ -272,3 +273,117 @@ def do_uni_form(parser, token):
             )
 
     return CrispyFormNode(form, helper, template_pack=template_pack)
+
+
+@register.tag
+def render_multi_field(parser, token):
+    """
+    Takes form field as first argument, field number as second argument, and
+    list of attribute-value pairs for all other arguments.
+    Attribute-value pairs should be in the form of 'attribute' 'value'
+    """
+    error_msg = ('%r tag requires a form field and index followed by a list '
+                 'of attributes and values in the form "attr" "value"'
+                 % token.split_contents()[0])
+    try:
+        bits = token.split_contents()
+        form_field = bits[1]
+        field_index = bits[2]
+        attr_list = bits[3:]
+    except ValueError:
+        raise template.TemplateSyntaxError(error_msg)
+
+    attrs = {}
+    for attribute_name, value in pairwise(attr_list):
+        attrs[attribute_name] = value
+
+    return MultiFieldAttributeNode(form_field, attrs, index=field_index)
+
+
+class MultiFieldAttributeNode(template.Node):
+    def __init__(self, field, attrs, index):
+        self.field = field
+        self.attrs = attrs
+        self.html5_required = 'html5_required'
+        self.index = index
+
+    def render(self, context):
+        # Nodes are not threadsafe so we must store and look up our instance
+        # variables in the current rendering context first
+        if self not in context.render_context:
+            context.render_context[self] = (
+                template.Variable(self.field),
+                self.attrs,
+                template.Variable(self.html5_required),
+                template.Variable(self.index)
+            )
+
+        field, attrs, html5_required, field_index = context.render_context[self]
+        field_index = field_index.resolve(context)
+        bounded_field = field.resolve(context)
+
+        try:
+            html5_required = html5_required.resolve(context)
+        except template.VariableDoesNotExist:
+            html5_required = False
+
+        field = bounded_field.field.fields[field_index]
+
+        if not bounded_field.form.is_bound:
+            data = bounded_field.field.initial
+
+            if callable(data):
+                data = data()
+            data = bounded_field.field.widget.decompress(data)[field_index]
+        else:
+            data = bounded_field.data[field_index]
+
+        # If template pack has been overridden in FormHelper we can pick it from context
+        template_pack = context.get('template_pack', TEMPLATE_PACK)
+
+        # There are special django widgets that wrap actual widgets,
+        # such as forms.widgets.MultiWidget, admin.widgets.RelatedFieldWidgetWrapper
+        widgets = getattr(bounded_field.field.widget, 'widgets',
+                          [getattr(bounded_field.field.widget, 'widget', bounded_field.field.widget)])
+
+        if isinstance(attrs, dict):
+            attrs = [attrs] * len(widgets)
+
+        converters = {
+            'textinput': 'textinput textInput',
+            'fileinput': 'fileinput fileUpload',
+            'passwordinput': 'textinput textInput',
+        }
+        converters.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
+
+        for widget, attr in zip(widgets, attrs):
+            class_name = widget.__class__.__name__.lower()
+            class_name = converters.get(class_name, class_name)
+            css_class = widget.attrs.get('class', '')
+            if css_class:
+                if css_class.find(class_name) == -1:
+                    css_class += " %s" % class_name
+            else:
+                css_class = class_name
+
+            if template_pack == 'bootstrap4':
+                if bounded_field.errors:
+                    css_class += ' is-invalid'
+
+            widget.attrs['class'] = css_class
+
+            # HTML5 required attribute
+            if html5_required and bounded_field.field.required and 'required' not in widget.attrs:
+                if field.widget.__class__.__name__ != 'RadioSelect':
+                    widget.attrs['required'] = True
+
+            for attribute_name, attribute in attr.items():
+                attribute_name = template.Variable(attribute_name).resolve(context)
+
+                if attribute_name in widget.attrs:
+                    widget.attrs[attribute_name] += " " + template.Variable(attribute).resolve(context)
+                else:
+                    widget.attrs[attribute_name] = template.Variable(attribute).resolve(context)
+
+        return widgets[field_index].render('%s_%d' % (bounded_field.html_name, field_index),
+                                           data, widgets[field_index].attrs)

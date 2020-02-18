@@ -63,7 +63,7 @@ def test_inputs(settings):
         assert 'btn btn-primary' in html
         assert 'btn btn-inverse' in html
         if settings.CRISPY_TEMPLATE_PACK == 'bootstrap4':
-            assert len(re.findall(r'<input[^>]+> <', html)) == 9
+            assert len(re.findall(r'<input[^>]+> <', html)) == 10
         else:
             assert len(re.findall(r'<input[^>]+> <', html)) == 8
 
@@ -856,7 +856,7 @@ def test_label_class_and_field_class_bs4():
 
     assert '<div class="form-group">' in html
     assert '<div class="col-lg-8">' in html
-    assert html.count('col-lg-8') == 7
+    assert html.count('col-lg-8') == 8
     assert 'offset' not in html
 
     form.helper.label_class = 'col-sm-3 col-md-4'
@@ -865,7 +865,7 @@ def test_label_class_and_field_class_bs4():
 
     assert '<div class="form-group">' in html
     assert '<div class="col-sm-8 col-md-6">' in html
-    assert html.count('col-sm-8') == 7
+    assert html.count('col-sm-8') == 8
     assert 'offset' not in html
 
 
@@ -880,7 +880,7 @@ def test_label_class_and_field_class_bs4_offset_when_horizontal():
 
     assert '<div class="form-group row">' in html
     assert '<div class="offset-lg-2 col-lg-8">' in html
-    assert html.count('col-lg-8') == 7
+    assert html.count('col-lg-8') == 8
 
     form.helper.label_class = 'col-sm-3 col-md-4'
     form.helper.field_class = 'col-sm-8 col-md-6'
@@ -888,7 +888,7 @@ def test_label_class_and_field_class_bs4_offset_when_horizontal():
 
     assert '<div class="form-group row">' in html
     assert '<div class="offset-sm-3 offset-md-4 col-sm-8 col-md-6">' in html
-    assert html.count('col-sm-8') == 7
+    assert html.count('col-sm-8') == 8
 
 
 @only_bootstrap4
