@@ -1,6 +1,3 @@
-import pytest
-
-import django
 from django import forms
 from django.template.base import Template
 from django.template.context import Context
@@ -15,7 +12,7 @@ def test_list_intersection():
 
 
 def test_list_difference():
-    assert list_difference([3, 1, 2, 3], [4, 1,]) == [3, 2]
+    assert list_difference([3, 1, 2, 3], [4, 1]) == [3, 2]
 
 
 def test_render_field_with_none_field():
