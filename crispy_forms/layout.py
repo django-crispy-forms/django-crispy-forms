@@ -176,7 +176,7 @@ class BaseInput(TemplateNameMixin):
 
     def __init__(self, name, value, **kwargs):
         self.name = name
-        self.value = value
+        self.value_template_string = value
         self.id = kwargs.pop('css_id', '')
         self.attrs = {}
 
@@ -191,7 +191,7 @@ class BaseInput(TemplateNameMixin):
         Renders an `<input />` if container is used as a Layout object.
         Input button value can be a variable in context.
         """
-        self.value = Template(str(self.value)).render(context)
+        self.value = Template(str(self.value_template_string)).render(context)
         template = self.get_template_name(template_pack)
         context.update({'input': self})
 
