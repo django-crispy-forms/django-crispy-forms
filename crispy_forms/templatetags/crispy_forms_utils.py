@@ -9,8 +9,8 @@ register = template.Library()
 
 @keep_lazy(str)
 def remove_spaces(value):
-    html = re.sub(r'>\s{3,}<', '> <', force_str(value))
-    return re.sub(r'/><', r'/> <', force_str(html))
+    html = re.sub(r">\s{3,}<", "> <", force_str(value))
+    return re.sub(r"/><", r"/> <", force_str(html))
 
 
 class SpecialSpacelessNode(template.Node):
@@ -28,7 +28,7 @@ def specialspaceless(parser, token):
     after buttons an inputs, necessary for Bootstrap to place them
     correctly in the layout.
     """
-    nodelist = parser.parse(('endspecialspaceless',))
+    nodelist = parser.parse(("endspecialspaceless",))
     parser.delete_first_token()
 
     return SpecialSpacelessNode(nodelist)

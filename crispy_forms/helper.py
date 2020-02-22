@@ -31,8 +31,8 @@ class DynamicLayoutHandler:
         Returns a LayoutSlice pointing to layout objects of type `LayoutClass`
         """
         self._check_layout()
-        max_level = kwargs.pop('max_level', 0)
-        greedy = kwargs.pop('greedy', False)
+        max_level = kwargs.pop("max_level", 0)
+        greedy = kwargs.pop("greedy", False)
         filtered_layout_objects = self.layout.get_layout_objects(LayoutClasses, max_level=max_level, greedy=greedy)
 
         return LayoutSlice(self.layout, filtered_layout_objects)
@@ -184,13 +184,14 @@ class FormHelper(DynamicLayoutHandler):
         {% load crispy_forms_tags %}
         {% crispy form %}
     """
-    _form_method = 'post'
-    _form_action = ''
-    _form_style = 'default'
+
+    _form_method = "post"
+    _form_action = ""
+    _form_style = "default"
     form = None
-    form_id = ''
-    form_class = ''
-    form_group_wrapper_class = ''
+    form_id = ""
+    form_class = ""
+    form_group_wrapper_class = ""
     layout = None
     form_tag = True
     form_error_title = None
@@ -207,8 +208,8 @@ class FormHelper(DynamicLayoutHandler):
     field_template = None
     disable_csrf = False
     use_custom_control = True
-    label_class = ''
-    field_class = ''
+    label_class = ""
+    field_class = ""
     include_media = True
 
     def __init__(self, form=None):
@@ -228,9 +229,11 @@ class FormHelper(DynamicLayoutHandler):
 
     @form_method.setter
     def form_method(self, method):
-        if method.lower() not in ('get', 'post'):
-            raise FormHelpersException('Only GET and POST are valid in the \
-                    form_method helper attribute')
+        if method.lower() not in ("get", "post"):
+            raise FormHelpersException(
+                "Only GET and POST are valid in the \
+                    form_method helper attribute"
+            )
 
         self._form_method = method.lower()
 
@@ -248,16 +251,18 @@ class FormHelper(DynamicLayoutHandler):
     @property
     def form_style(self):
         if self._form_style == "default":
-            return ''
+            return ""
 
         if self._form_style == "inline":
-            return 'inlineLabels'
+            return "inlineLabels"
 
     @form_style.setter
     def form_style(self, style):
-        if style.lower() not in ('default', 'inline'):
-            raise FormHelpersException('Only default and inline are valid in the \
-                    form_style helper attribute')
+        if style.lower() not in ("default", "inline"):
+            raise FormHelpersException(
+                "Only default and inline are valid in the \
+                    form_style helper attribute"
+            )
 
         self._form_style = style.lower()
 
@@ -293,12 +298,7 @@ class FormHelper(DynamicLayoutHandler):
         form.crispy_field_template = self.field_template
 
         # This renders the specified Layout strictly
-        html = self.layout.render(
-            form,
-            self.form_style,
-            context,
-            template_pack=template_pack
-        )
+        html = self.layout.render(form, self.form_style, context, template_pack=template_pack)
 
         # Rendering some extra fields if specified
         if self.render_unmentioned_fields or self.render_hidden_fields or self.render_required_fields:
@@ -306,17 +306,11 @@ class FormHelper(DynamicLayoutHandler):
             left_fields_to_render = list_difference(fields, form.rendered_fields)
             for field in left_fields_to_render:
                 if (
-                    self.render_unmentioned_fields or
-                    (self.render_hidden_fields and form.fields[field].widget.is_hidden) or
-                    (self.render_required_fields and form.fields[field].widget.is_required)
+                    self.render_unmentioned_fields
+                    or (self.render_hidden_fields and form.fields[field].widget.is_hidden)
+                    or (self.render_required_fields and form.fields[field].widget.is_required)
                 ):
-                    html += render_field(
-                        field,
-                        form,
-                        self.form_style,
-                        context,
-                        template_pack=template_pack
-                    )
+                    html += render_field(field, form, self.form_style, context, template_pack=template_pack)
 
         return mark_safe(html)
 
@@ -325,65 +319,68 @@ class FormHelper(DynamicLayoutHandler):
         Used by crispy_forms_tags to get helper attributes
         """
         items = {
-            'disable_csrf': self.disable_csrf,
-            'error_text_inline': self.error_text_inline,
-            'field_class': self.field_class,
-            'field_template':
-                self.field_template or '%s/field.html' % template_pack,
-            'form_method': self.form_method.strip(),
-            'form_show_errors': self.form_show_errors,
-            'form_show_labels': self.form_show_labels,
-            'form_style': self.form_style.strip(),
-            'form_tag': self.form_tag,
-            'help_text_inline': self.help_text_inline,
-            'html5_required': self.html5_required,
-            'include_media': self.include_media,
-            'label_class': self.label_class,
-            'use_custom_control': self.use_custom_control,
+            "disable_csrf": self.disable_csrf,
+            "error_text_inline": self.error_text_inline,
+            "field_class": self.field_class,
+            "field_template": self.field_template or "%s/field.html" % template_pack,
+            "form_method": self.form_method.strip(),
+            "form_show_errors": self.form_show_errors,
+            "form_show_labels": self.form_show_labels,
+            "form_style": self.form_style.strip(),
+            "form_tag": self.form_tag,
+            "help_text_inline": self.help_text_inline,
+            "html5_required": self.html5_required,
+            "include_media": self.include_media,
+            "label_class": self.label_class,
+            "use_custom_control": self.use_custom_control,
         }
 
-        if template_pack == 'bootstrap4':
-            if 'form-horizontal' in self.form_class.split():
-                bootstrap_size_match = re.findall(r'col-(xl|lg|md|sm)-(\d+)', self.label_class)
+        if template_pack == "bootstrap4":
+            if "form-horizontal" in self.form_class.split():
+                bootstrap_size_match = re.findall(r"col-(xl|lg|md|sm)-(\d+)", self.label_class)
                 if bootstrap_size_match:
-                    offset_pattern = 'offset-%s-%s'
-                    items['bootstrap_checkbox_offsets'] = [offset_pattern % m for m in bootstrap_size_match]
+                    offset_pattern = "offset-%s-%s"
+                    items["bootstrap_checkbox_offsets"] = [offset_pattern % m for m in bootstrap_size_match]
         else:
-            bootstrap_size_match = re.findall(r'col-(lg|md|sm|xs)-(\d+)', self.label_class)
+            bootstrap_size_match = re.findall(r"col-(lg|md|sm|xs)-(\d+)", self.label_class)
             if bootstrap_size_match:
-                offset_pattern = 'col-%s-offset-%s'
-                items['bootstrap_checkbox_offsets'] = [offset_pattern % m for m in bootstrap_size_match]
+                offset_pattern = "col-%s-offset-%s"
+                items["bootstrap_checkbox_offsets"] = [offset_pattern % m for m in bootstrap_size_match]
 
-        items['attrs'] = {}
+        items["attrs"] = {}
         if self.attrs:
-            items['attrs'] = self.attrs.copy()
+            items["attrs"] = self.attrs.copy()
         if self.form_action:
-            items['attrs']['action'] = self.form_action.strip()
+            items["attrs"]["action"] = self.form_action.strip()
         if self.form_id:
-            items['attrs']['id'] = self.form_id.strip()
+            items["attrs"]["id"] = self.form_id.strip()
         if self.form_class:
             # uni_form TEMPLATE PACK has a uniForm class by default
-            if template_pack == 'uni_form':
-                items['attrs']['class'] = "uniForm %s" % self.form_class.strip()
+            if template_pack == "uni_form":
+                items["attrs"]["class"] = "uniForm %s" % self.form_class.strip()
             else:
-                items['attrs']['class'] = self.form_class.strip()
+                items["attrs"]["class"] = self.form_class.strip()
         else:
-            if template_pack == 'uni_form':
-                items['attrs']['class'] = self.attrs.get('class', '') + " uniForm"
+            if template_pack == "uni_form":
+                items["attrs"]["class"] = self.attrs.get("class", "") + " uniForm"
         if self.form_group_wrapper_class:
-            items['attrs']['form_group_wrapper_class'] = self.form_group_wrapper_class
+            items["attrs"]["form_group_wrapper_class"] = self.form_group_wrapper_class
 
-        items['flat_attrs'] = flatatt(items['attrs'])
+        items["flat_attrs"] = flatatt(items["attrs"])
 
         if self.inputs:
-            items['inputs'] = self.inputs
+            items["inputs"] = self.inputs
         if self.form_error_title:
-            items['form_error_title'] = self.form_error_title.strip()
+            items["form_error_title"] = self.form_error_title.strip()
         if self.formset_error_title:
-            items['formset_error_title'] = self.formset_error_title.strip()
+            items["formset_error_title"] = self.formset_error_title.strip()
 
         for attribute_name, value in self.__dict__.items():
-            if attribute_name not in items and attribute_name not in ['layout', 'inputs'] and not attribute_name.startswith('_'):
+            if (
+                attribute_name not in items
+                and attribute_name not in ["layout", "inputs"]
+                and not attribute_name.startswith("_")
+            ):
                 items[attribute_name] = value
 
         return items

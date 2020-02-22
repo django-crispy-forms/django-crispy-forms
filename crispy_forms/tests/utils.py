@@ -10,12 +10,6 @@ def contains_partial(haystack, needle):
     if not isinstance(needle, Element):
         needle = parse_html(needle)
 
-    if (
-        needle.name == haystack.name and
-        set(needle.attributes).issubset(haystack.attributes)
-    ):
+    if needle.name == haystack.name and set(needle.attributes).issubset(haystack.attributes):
         return True
-    return any(
-        contains_partial(child, needle) for child in haystack.children
-        if isinstance(child, Element)
-    )
+    return any(contains_partial(child, needle) for child in haystack.children if isinstance(child, Element))

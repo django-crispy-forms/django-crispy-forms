@@ -8,6 +8,7 @@ class KeepContext:
     Layout objects should use `extra_context` to introduce context variables, never
     touch context object themselves, that could introduce side effects.
     """
+
     def __init__(self, context, keys):
         self.context = context
         self.keys = keys

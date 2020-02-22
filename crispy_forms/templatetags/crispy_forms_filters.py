@@ -13,18 +13,18 @@ from crispy_forms.utils import TEMPLATE_PACK, flatatt
 
 @lru_cache()
 def uni_formset_template(template_pack=TEMPLATE_PACK):
-    return get_template('%s/uni_formset.html' % template_pack)
+    return get_template("%s/uni_formset.html" % template_pack)
 
 
 @lru_cache()
 def uni_form_template(template_pack=TEMPLATE_PACK):
-    return get_template('%s/uni_form.html' % template_pack)
+    return get_template("%s/uni_form.html" % template_pack)
 
 
 register = template.Library()
 
 
-@register.filter(name='crispy')
+@register.filter(name="crispy")
 def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_class=""):
     """
     The original and still very useful way to generate a div elegant form/formset::
@@ -44,24 +44,26 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
 
         {{ myform|label_class:"col-lg-2",field_class:"col-lg-8" }}
     """
-    c = Context({
-        'field_class': field_class,
-        'field_template': '%s/field.html' % template_pack,
-        'form_show_errors': True,
-        'form_show_labels': True,
-        'label_class': label_class,
-    }).flatten()
+    c = Context(
+        {
+            "field_class": field_class,
+            "field_template": "%s/field.html" % template_pack,
+            "form_show_errors": True,
+            "form_show_labels": True,
+            "label_class": label_class,
+        }
+    ).flatten()
     if isinstance(form, BaseFormSet):
         template = uni_formset_template(template_pack)
-        c['formset'] = form
+        c["formset"] = form
     else:
         template = uni_form_template(template_pack)
-        c['form'] = form
+        c["form"] = form
 
     return template.render(c)
 
 
-@register.filter(name='as_crispy_errors')
+@register.filter(name="as_crispy_errors")
 def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
     """
     Renders only form errors the same way as django-crispy-forms::
@@ -74,16 +76,16 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
         {{ form|as_crispy_errors:"bootstrap" }}
     """
     if isinstance(form, BaseFormSet):
-        template = get_template('%s/errors_formset.html' % template_pack)
-        c = Context({'formset': form}).flatten()
+        template = get_template("%s/errors_formset.html" % template_pack)
+        c = Context({"formset": form}).flatten()
     else:
-        template = get_template('%s/errors.html' % template_pack)
-        c = Context({'form': form}).flatten()
+        template = get_template("%s/errors.html" % template_pack)
+        c = Context({"form": form}).flatten()
 
     return template.render(c)
 
 
-@register.filter(name='as_crispy_field')
+@register.filter(name="as_crispy_field")
 def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_class=""):
     """
     Renders a form field like a django-crispy-forms field::
@@ -96,29 +98,29 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
         {{ form.field|as_crispy_field:"bootstrap" }}
     """
     if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
-        raise CrispyError('|as_crispy_field got passed an invalid or inexistent field')
+        raise CrispyError("|as_crispy_field got passed an invalid or inexistent field")
 
     attributes = {
-        'field': field,
-        'form_show_errors': True,
-        'form_show_labels': True,
-        'label_class': label_class,
-        'field_class': field_class,
+        "field": field,
+        "form_show_errors": True,
+        "form_show_labels": True,
+        "label_class": label_class,
+        "field_class": field_class,
     }
-    helper = getattr(field.form, 'helper', None)
+    helper = getattr(field.form, "helper", None)
 
     template_path = None
     if helper is not None:
         attributes.update(helper.get_attributes(template_pack))
         template_path = helper.field_template
     if not template_path:
-        template_path = '%s/field.html' % template_pack
+        template_path = "%s/field.html" % template_pack
     template = get_template(template_path)
 
     c = Context(attributes).flatten()
     return template.render(c)
 
 
-@register.filter(name='flatatt')
+@register.filter(name="flatatt")
 def flatatt_filter(attrs):
     return mark_safe(flatatt(attrs))

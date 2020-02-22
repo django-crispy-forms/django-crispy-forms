@@ -12,7 +12,7 @@ from .compatibility import lru_cache
 
 
 def get_template_pack():
-    return getattr(settings, 'CRISPY_TEMPLATE_PACK', 'bootstrap')
+    return getattr(settings, "CRISPY_TEMPLATE_PACK", "bootstrap")
 
 
 TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
@@ -26,9 +26,17 @@ def default_field_template(template_pack=TEMPLATE_PACK):
 
 
 def render_field(
-    field, form, form_style, context, template=None, labelclass=None,
-    layout_object=None, attrs=None, template_pack=TEMPLATE_PACK,
-    extra_context=None, **kwargs
+    field,
+    form,
+    form_style,
+    context,
+    template=None,
+    labelclass=None,
+    layout_object=None,
+    attrs=None,
+    template_pack=TEMPLATE_PACK,
+    extra_context=None,
+    **kwargs
 ):
     """
     Renders a django-crispy-forms field
@@ -50,21 +58,19 @@ def render_field(
     added_keys = [] if extra_context is None else extra_context.keys()
     with KeepContext(context, added_keys):
         if field is None:
-            return ''
+            return ""
 
-        FAIL_SILENTLY = getattr(settings, 'CRISPY_FAIL_SILENTLY', True)
+        FAIL_SILENTLY = getattr(settings, "CRISPY_FAIL_SILENTLY", True)
 
-        if hasattr(field, 'render'):
-            return field.render(
-                form, form_style, context, template_pack=template_pack,
-            )
+        if hasattr(field, "render"):
+            return field.render(form, form_style, context, template_pack=template_pack,)
 
         try:
             # Injecting HTML attributes into field's widget, Django handles rendering these
             bound_field = form[field]
             field_instance = bound_field.field
             if attrs is not None:
-                widgets = getattr(field_instance.widget, 'widgets', [field_instance.widget])
+                widgets = getattr(field_instance.widget, "widgets", [field_instance.widget])
 
                 # We use attrs as a dictionary later, so here we make a copy
                 list_attrs = attrs
@@ -72,14 +78,14 @@ def render_field(
                     list_attrs = [attrs] * len(widgets)
 
                 for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
-                    if hasattr(field_instance.widget, 'widgets'):
-                        if 'type' in attr and attr['type'] == "hidden":
+                    if hasattr(field_instance.widget, "widgets"):
+                        if "type" in attr and attr["type"] == "hidden":
                             field_instance.widget.widgets[index] = field_instance.hidden_widget(attr)
 
                         else:
                             field_instance.widget.widgets[index].attrs.update(attr)
                     else:
-                        if 'type' in attr and attr['type'] == "hidden":
+                        if "type" in attr and attr["type"] == "hidden":
                             field_instance.widget = field_instance.hidden_widget(attr)
 
                         else:
@@ -92,7 +98,7 @@ def render_field(
                 field_instance = None
                 logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
 
-        if hasattr(form, 'rendered_fields'):
+        if hasattr(form, "rendered_fields"):
             if field not in form.rendered_fields:
                 form.rendered_fields.add(field)
             else:
@@ -102,28 +108,30 @@ def render_field(
                     logging.warning("A field should only be rendered once: %s" % field, exc_info=sys.exc_info())
 
         if field_instance is None:
-            html = ''
+            html = ""
         else:
             if template is None:
                 if form.crispy_field_template is None:
                     template = default_field_template(template_pack)
-                else:   # FormHelper.field_template set
+                else:  # FormHelper.field_template set
                     template = get_template(form.crispy_field_template)
             else:
                 template = get_template(template)
 
             # We save the Layout object's bound fields in the layout object's `bound_fields` list
             if layout_object is not None:
-                if hasattr(layout_object, 'bound_fields') and isinstance(layout_object.bound_fields, list):
+                if hasattr(layout_object, "bound_fields") and isinstance(layout_object.bound_fields, list):
                     layout_object.bound_fields.append(bound_field)
                 else:
                     layout_object.bound_fields = [bound_field]
 
-            context.update({
-                'field': bound_field,
-                'labelclass': labelclass,
-                'flat_attrs': flatatt(attrs if isinstance(attrs, dict) else {}),
-            })
+            context.update(
+                {
+                    "field": bound_field,
+                    "labelclass": labelclass,
+                    "flat_attrs": flatatt(attrs if isinstance(attrs, dict) else {}),
+                }
+            )
             if extra_context is not None:
                 context.update(extra_context)
 
@@ -140,7 +148,7 @@ def flatatt(attrs):
     Passed attributes are redirected to `django.forms.utils.flatatt()`
     with replaced "_" (underscores) by "-" (dashes) in their names.
     """
-    return _flatatt({k.replace('_', '-'): v for k, v in attrs.items()})
+    return _flatatt({k.replace("_", "-"): v for k, v in attrs.items()})
 
 
 def render_crispy_form(form, helper=None, context=None):
@@ -152,15 +160,12 @@ def render_crispy_form(form, helper=None, context=None):
     from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 
     if helper is not None:
-        node = CrispyFormNode('form', 'helper')
+        node = CrispyFormNode("form", "helper")
     else:
-        node = CrispyFormNode('form', None)
+        node = CrispyFormNode("form", None)
 
     node_context = Context(context)
-    node_context.update({
-        'form': form,
-        'helper': helper
-    })
+    node_context.update({"form": form, "helper": helper})
 
     return node.render(node_context)
 

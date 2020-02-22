@@ -64,18 +64,19 @@ class LayoutSlice:
                     except IndexError:
                         # We could avoid this exception, recalculating pointers.
                         # However this case is most of the time an undesired behavior
-                        raise DynamicError("Trying to wrap a field within an already wrapped field, \
-                            recheck your filter or layout")
+                        raise DynamicError(
+                            "Trying to wrap a field within an already wrapped field, \
+                            recheck your filter or layout"
+                        )
 
     def wrap(self, LayoutClass, *args, **kwargs):
         """
         Wraps every layout object pointed in `self.slice` under a `LayoutClass` instance with
         `args` and `kwargs` passed.
         """
+
         def wrap_object(layout_object, j):
-            layout_object.fields[j] = self.wrapped_object(
-                LayoutClass, layout_object.fields[j], *args, **kwargs
-            )
+            layout_object.fields[j] = self.wrapped_object(LayoutClass, layout_object.fields[j], *args, **kwargs)
 
         self.pre_map(wrap_object)
 
@@ -85,11 +86,10 @@ class LayoutSlice:
         `args` and `kwargs` passed, unless layout object's parent is already a subclass of
         `LayoutClass`.
         """
+
         def wrap_object_once(layout_object, j):
             if not isinstance(layout_object, LayoutClass):
-                layout_object.fields[j] = self.wrapped_object(
-                    LayoutClass, layout_object.fields[j], *args, **kwargs
-                )
+                layout_object.fields[j] = self.wrapped_object(LayoutClass, layout_object.fields[j], *args, **kwargs)
 
         self.pre_map(wrap_object_once)
 
@@ -133,10 +133,7 @@ class LayoutSlice:
                     layout_object = layout_object.fields[i]
 
                 # If update_attrs is applied to a string, we call to its wrapping layout object
-                if (
-                    function.__name__ == 'update_attrs'
-                    and isinstance(layout_object, str)
-                ):
+                if function.__name__ == "update_attrs" and isinstance(layout_object, str):
                     function(previous_layout_object)
                 else:
                     function(layout_object)
@@ -145,14 +142,15 @@ class LayoutSlice:
         """
         Updates attributes of every layout object pointed in `self.slice` using kwargs
         """
+
         def update_attrs(layout_object):
             kwargs = original_kwargs.copy()
-            if hasattr(layout_object, 'attrs'):
-                if 'css_class' in kwargs:
-                    if 'class' in layout_object.attrs:
-                        layout_object.attrs['class'] += " %s" % kwargs.pop('css_class')
+            if hasattr(layout_object, "attrs"):
+                if "css_class" in kwargs:
+                    if "class" in layout_object.attrs:
+                        layout_object.attrs["class"] += " %s" % kwargs.pop("css_class")
                     else:
-                        layout_object.attrs['class'] = kwargs.pop('css_class')
+                        layout_object.attrs["class"] = kwargs.pop("css_class")
                 layout_object.attrs.update(kwargs)
 
         self.map(update_attrs)
