@@ -1,9 +1,9 @@
 import os
 import sys
+
+from setuptools import find_packages, setup
+
 import crispy_forms
-
-from setuptools import setup, find_packages
-
 
 if sys.argv[-1] == 'publish':
     if os.system("pip freeze | grep wheel"):

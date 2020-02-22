@@ -1,4 +1,4 @@
-from django import forms, VERSION as DJANGO_VERSION
+from django import VERSION as DJANGO_VERSION, forms
 from django.template import Context, Template
 from django.test.html import parse_html
 from django.utils.translation import activate, deactivate, gettext as _
