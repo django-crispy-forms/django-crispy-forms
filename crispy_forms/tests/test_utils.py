@@ -14,18 +14,18 @@ def test_list_intersection():
 
 
 def test_list_difference():
-    assert list_difference([3, 1, 2, 3], [4, 1, ]) == [3, 2]
+    assert list_difference([3, 1, 2, 3], [4, 1,]) == [3, 2]
 
 
 def test_render_field_with_none_field():
     rendered = render_field(field=None, form=None, form_style=None, context=None)
-    assert rendered == ''
+    assert rendered == ""
 
 
 def test_custom_bound_field():
     from django.forms.boundfield import BoundField
 
-    extra = 'xyxyxyxyxyx'
+    extra = "xyxyxyxyxyx"
 
     class CustomBoundField(BoundField):
         @property
@@ -42,9 +42,9 @@ def test_custom_bound_field():
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
-            self.helper.layout = Layout('f')
+            self.helper.layout = Layout("f")
 
     template = Template('{% load crispy_forms_tags %}\n{% crispy form "bootstrap3" %}')
-    rendered = template.render(Context({'form': MyForm(data={'f': 'something'})}))
+    rendered = template.render(Context({"form": MyForm(data={"f": "something"})}))
 
     assert extra in rendered

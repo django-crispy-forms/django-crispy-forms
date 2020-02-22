@@ -8,6 +8,7 @@ class FormHelpersException(CrispyError):
     We want to catch form helper errors as soon as possible because
     debugging templatetags is never fun.
     """
+
     pass
 
 

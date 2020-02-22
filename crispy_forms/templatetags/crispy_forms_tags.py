@@ -25,6 +25,7 @@ class ForLoopSimulator:
         Fieldset("Item {{ forloop.counter }}", [...])
         HTML("{% if forloop.first %}First form text{% endif %}"
     """
+
     def __init__(self, formset):
         self.len_values = len(formset.forms)
 
@@ -36,7 +37,7 @@ class ForLoopSimulator:
         self.revcounter0 = self.len_values - 1
         # Boolean values designating first and last times through loop.
         self.first = True
-        self.last = (0 == self.len_values - 1)
+        self.last = 0 == self.len_values - 1
 
     def iterate(self):
         """
@@ -47,7 +48,7 @@ class ForLoopSimulator:
         self.revcounter -= 1
         self.revcounter0 -= 1
         self.first = False
-        self.last = (self.revcounter0 == self.len_values - 1)
+        self.last = self.revcounter0 == self.len_values - 1
 
 
 class BasicNode(template.Node):
@@ -58,6 +59,7 @@ class BasicNode(template.Node):
     both the form object and parses out the helper string into attributes
     that templates can easily handle.
     """
+
     def __init__(self, form, helper, template_pack=None):
         self.form = form
         if helper is not None:
@@ -82,7 +84,7 @@ class BasicNode(template.Node):
         if self not in context.render_context:
             context.render_context[self] = (
                 template.Variable(self.form),
-                template.Variable(self.helper) if self.helper else None
+                template.Variable(self.helper) if self.helper else None,
             )
         form, helper = context.render_context[self]
 
@@ -92,7 +94,7 @@ class BasicNode(template.Node):
         else:
             # If the user names the helper within the form `helper` (standard), we use it
             # This allows us to have simplified tag syntax: {% crispy form %}
-            helper = FormHelper() if not hasattr(actual_form, 'helper') else actual_form.helper
+            helper = FormHelper() if not hasattr(actual_form, "helper") else actual_form.helper
 
         # use template_pack from helper, if defined
         try:
@@ -107,27 +109,29 @@ class BasicNode(template.Node):
         is_formset = isinstance(actual_form, BaseFormSet)
         response_dict = self.get_response_dict(helper, context, is_formset)
         node_context = context.__copy__()
-        node_context.update({'is_bound': actual_form.is_bound})
+        node_context.update({"is_bound": actual_form.is_bound})
         node_context.update(response_dict)
         final_context = node_context.__copy__()
 
         # If we have a helper's layout we use it, for the form or the formset's forms
         if helper and helper.layout:
             if not is_formset:
-                actual_form.form_html = helper.render_layout(actual_form, node_context, template_pack=self.template_pack)
+                actual_form.form_html = helper.render_layout(
+                    actual_form, node_context, template_pack=self.template_pack
+                )
             else:
                 forloop = ForLoopSimulator(actual_form)
                 helper.render_hidden_fields = True
                 for form in actual_form:
-                    node_context.update({'forloop': forloop})
-                    node_context.update({'formset_form': form})
+                    node_context.update({"forloop": forloop})
+                    node_context.update({"formset_form": form})
                     form.form_html = helper.render_layout(form, node_context, template_pack=self.template_pack)
                     forloop.iterate()
 
         if is_formset:
-            final_context['formset'] = actual_form
+            final_context["formset"] = actual_form
         else:
-            final_context['form'] = actual_form
+            final_context["form"] = actual_form
 
         return final_context
 
@@ -139,7 +143,7 @@ class BasicNode(template.Node):
         :param is_formset: Boolean value. If set to True, indicates we are working with a formset.
         """
         if not isinstance(helper, FormHelper):
-            raise TypeError('helper object provided to {% crispy %} tag must be a crispy.helper.FormHelper object.')
+            raise TypeError("helper object provided to {% crispy %} tag must be a crispy.helper.FormHelper object.")
 
         attrs = helper.get_attributes(template_pack=self.template_pack)
         form_type = "form"
@@ -148,29 +152,29 @@ class BasicNode(template.Node):
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
         response_dict = {
-            '%s_action' % form_type: attrs['attrs'].get('action', ''),
-            '%s_attrs' % form_type: attrs.get('attrs', ''),
-            '%s_class' % form_type: attrs['attrs'].get('class', ''),
-            '%s_id' % form_type: attrs['attrs'].get('id', ''),
-            '%s_method' % form_type: attrs.get('form_method', 'post'),
-            '%s_style' % form_type: attrs.get('form_style', None),
-            '%s_tag' % form_type: attrs.get('form_tag', True),
-            'disable_csrf': attrs.get('disable_csrf', False),
-            'error_text_inline': attrs.get('error_text_inline', True),
-            'field_class': attrs.get('field_class', ''),
-            'field_template': attrs.get('field_template', ''),
-            'flat_attrs': attrs.get('flat_attrs', ''),
-            'form_error_title': attrs.get('form_error_title', None),
-            'form_show_errors': attrs.get('form_show_errors', True),
-            'form_show_labels': attrs.get('form_show_labels', True),
-            'formset_error_title': attrs.get('formset_error_title', None),
-            'help_text_inline': attrs.get('help_text_inline', False),
-            'html5_required': attrs.get('html5_required', False),
-            'include_media': attrs.get('include_media', True),
-            'inputs': attrs.get('inputs', []),
-            'is_formset': is_formset,
-            'label_class': attrs.get('label_class', ''),
-            'template_pack': self.template_pack,
+            "%s_action" % form_type: attrs["attrs"].get("action", ""),
+            "%s_attrs" % form_type: attrs.get("attrs", ""),
+            "%s_class" % form_type: attrs["attrs"].get("class", ""),
+            "%s_id" % form_type: attrs["attrs"].get("id", ""),
+            "%s_method" % form_type: attrs.get("form_method", "post"),
+            "%s_style" % form_type: attrs.get("form_style", None),
+            "%s_tag" % form_type: attrs.get("form_tag", True),
+            "disable_csrf": attrs.get("disable_csrf", False),
+            "error_text_inline": attrs.get("error_text_inline", True),
+            "field_class": attrs.get("field_class", ""),
+            "field_template": attrs.get("field_template", ""),
+            "flat_attrs": attrs.get("flat_attrs", ""),
+            "form_error_title": attrs.get("form_error_title", None),
+            "form_show_errors": attrs.get("form_show_errors", True),
+            "form_show_labels": attrs.get("form_show_labels", True),
+            "formset_error_title": attrs.get("formset_error_title", None),
+            "help_text_inline": attrs.get("help_text_inline", False),
+            "html5_required": attrs.get("html5_required", False),
+            "include_media": attrs.get("include_media", True),
+            "inputs": attrs.get("inputs", []),
+            "is_formset": is_formset,
+            "label_class": attrs.get("label_class", ""),
+            "template_pack": self.template_pack,
         }
 
         # Handles custom attributes added to helpers
@@ -178,30 +182,30 @@ class BasicNode(template.Node):
             if attribute_name not in response_dict:
                 response_dict[attribute_name] = value
 
-        if 'csrf_token' in context:
-            response_dict['csrf_token'] = context['csrf_token']
+        if "csrf_token" in context:
+            response_dict["csrf_token"] = context["csrf_token"]
 
         return response_dict
 
 
 @lru_cache()
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
-    return get_template('%s/whole_uni_formset.html' % template_pack)
+    return get_template("%s/whole_uni_formset.html" % template_pack)
 
 
 @lru_cache()
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
-    return get_template('%s/whole_uni_form.html' % template_pack)
+    return get_template("%s/whole_uni_form.html" % template_pack)
 
 
 class CrispyFormNode(BasicNode):
     def render(self, context):
         c = self.get_render(context).flatten()
 
-        if self.actual_helper is not None and getattr(self.actual_helper, 'template', False):
+        if self.actual_helper is not None and getattr(self.actual_helper, "template", False):
             template = get_template(self.actual_helper.template)
         else:
-            if c['is_formset']:
+            if c["is_formset"]:
                 template = whole_uni_formset_template(self.template_pack)
             else:
                 template = whole_uni_form_template(self.template_pack)
@@ -250,25 +254,18 @@ def do_uni_form(parser, token):
         pass
 
     # {% crispy form 'bootstrap' %}
-    if (
-        helper is not None and
-        isinstance(helper, str) and
-        ("'" in helper or '"' in helper)
-    ):
+    if helper is not None and isinstance(helper, str) and ("'" in helper or '"' in helper):
         template_pack = helper
         helper = None
 
     if template_pack is not None:
         template_pack = template_pack[1:-1]
         ALLOWED_TEMPLATE_PACKS = getattr(
-            settings,
-            'CRISPY_ALLOWED_TEMPLATE_PACKS',
-            ('bootstrap', 'uni_form', 'bootstrap3', 'bootstrap4')
+            settings, "CRISPY_ALLOWED_TEMPLATE_PACKS", ("bootstrap", "uni_form", "bootstrap3", "bootstrap4")
         )
         if template_pack not in ALLOWED_TEMPLATE_PACKS:
             raise template.TemplateSyntaxError(
-                "crispy tag's template_pack argument should be in %s" %
-                str(ALLOWED_TEMPLATE_PACKS)
+                "crispy tag's template_pack argument should be in %s" % str(ALLOWED_TEMPLATE_PACKS)
             )
 
     return CrispyFormNode(form, helper, template_pack=template_pack)
