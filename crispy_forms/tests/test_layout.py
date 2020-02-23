@@ -11,17 +11,19 @@ from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import Field, InlineCheckboxes
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (
-    HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit,
-)
+from crispy_forms.layout import HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import (
-    only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
-)
+from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form
 from .forms import (
-    CheckboxesSampleForm, CrispyEmptyChoiceTestModel, CrispyTestModel,
-    SampleForm, SampleForm2, SampleForm3, SampleForm4, SampleForm5,
+    CheckboxesSampleForm,
+    CrispyEmptyChoiceTestModel,
+    CrispyTestModel,
+    SampleForm,
+    SampleForm2,
+    SampleForm3,
+    SampleForm4,
+    SampleForm5,
     SampleForm6,
 )
 from .utils import contains_partial

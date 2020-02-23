@@ -1,12 +1,23 @@
-from django import VERSION as DJANGO_VERSION, forms
+from django import VERSION as DJANGO_VERSION
+from django import forms
 from django.template import Context, Template
 from django.test.html import parse_html
-from django.utils.translation import activate, deactivate, gettext as _
+from django.utils.translation import activate, deactivate
+from django.utils.translation import gettext as _
 
 from crispy_forms.bootstrap import (
-    Accordion, AccordionGroup, Alert, AppendedText, FieldWithButtons,
-    InlineCheckboxes, InlineRadios, PrependedAppendedText, PrependedText,
-    StrictButton, Tab, TabHolder,
+    Accordion,
+    AccordionGroup,
+    Alert,
+    AppendedText,
+    FieldWithButtons,
+    InlineCheckboxes,
+    InlineRadios,
+    PrependedAppendedText,
+    PrependedText,
+    StrictButton,
+    Tab,
+    TabHolder,
 )
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
