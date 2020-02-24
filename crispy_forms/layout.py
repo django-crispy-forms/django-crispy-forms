@@ -2,12 +2,7 @@ from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
 
-from crispy_forms.utils import (
-    TEMPLATE_PACK,
-    flatatt,
-    get_template_pack,
-    render_field,
-)
+from crispy_forms.utils import TEMPLATE_PACK, flatatt, get_template_pack, render_field
 
 
 class TemplateNameMixin:
