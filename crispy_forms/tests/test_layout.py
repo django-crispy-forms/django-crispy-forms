@@ -3,25 +3,28 @@ import pytest
 import django
 from django import forms
 from django.forms.models import formset_factory, modelformset_factory
+from django.middleware.csrf import _get_new_csrf_string
 from django.shortcuts import render
 from django.template import Context, Template
-from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from django.middleware.csrf import _get_new_csrf_string
+from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import Field, InlineCheckboxes
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (
-    HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit,
-)
+from crispy_forms.layout import HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import (
-    only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
-)
+from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form
 from .forms import (
-    CheckboxesSampleForm, CrispyTestModel, CrispyEmptyChoiceTestModel,
-    SampleForm, SampleForm2, SampleForm3, SampleForm4, SampleForm5, SampleForm6,
+    CheckboxesSampleForm,
+    CrispyEmptyChoiceTestModel,
+    CrispyTestModel,
+    SampleForm,
+    SampleForm2,
+    SampleForm3,
+    SampleForm4,
+    SampleForm5,
+    SampleForm6,
 )
 from .utils import contains_partial
 

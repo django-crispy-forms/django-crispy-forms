@@ -5,33 +5,20 @@ import pytest
 import django
 from django import forms
 from django.forms.models import formset_factory
+from django.middleware.csrf import _get_new_csrf_string
 from django.template import Context, Template, TemplateSyntaxError
 from django.test.html import parse_html
 from django.urls import reverse
-from django.middleware.csrf import _get_new_csrf_string
 from django.utils.translation import gettext_lazy as _
 
-from crispy_forms.bootstrap import (
-    AppendedText, FieldWithButtons, PrependedAppendedText, PrependedText,
-    StrictButton,
-)
+from crispy_forms.bootstrap import AppendedText, FieldWithButtons, PrependedAppendedText, PrependedText, StrictButton
 from crispy_forms.helper import FormHelper, FormHelpersException
-from crispy_forms.layout import (
-    Button, Field, Hidden, Layout, MultiField, Reset, Submit,
-)
+from crispy_forms.layout import Button, Field, Hidden, Layout, MultiField, Reset, Submit
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import (
-    only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form,
-)
-from .forms import (
-    SampleForm,
-    SampleForm7,
-    SampleForm8,
-    SampleFormWithMedia,
-    SampleFormWithMultiValueField,
-)
+from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form
+from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia, SampleFormWithMultiValueField
 
 
 def test_inputs(settings):

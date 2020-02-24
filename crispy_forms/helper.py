@@ -1,14 +1,12 @@
 import re
 
+from django.urls import NoReverseMatch, reverse
 from django.utils.safestring import mark_safe
-from django.urls import reverse, NoReverseMatch
 
 from crispy_forms.exceptions import FormHelpersException
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
-from crispy_forms.utils import (
-    TEMPLATE_PACK, flatatt, list_difference, render_field,
-)
+from crispy_forms.utils import TEMPLATE_PACK, flatatt, list_difference, render_field
 
 
 class DynamicLayoutHandler:
