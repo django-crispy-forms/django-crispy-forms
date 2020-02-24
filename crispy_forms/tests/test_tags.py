@@ -1,5 +1,6 @@
 import pytest
 
+import django
 from django.forms.boundfield import BoundField
 from django.forms.formsets import formset_factory
 from django.template import Context, Template
@@ -112,9 +113,12 @@ def test_as_crispy_field_non_field(settings):
 
     # Raises an AttributeError when trying to figure out how to render it
     # Not sure if this is expected behavior -- @kavdev
-    error_class = CrispyError if settings.DEBUG else AttributeError
+    with pytest.raises(AttributeError):
+        template.render(c)
 
-    with pytest.raises(error_class):
+    django.conf.settings.DEBUG = True
+
+    with pytest.raises(CrispyError):
         template.render(c)
 
 

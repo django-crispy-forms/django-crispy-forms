@@ -253,8 +253,13 @@ class FormHelper(DynamicLayoutHandler):
         if self._form_style == "default":
             return ""
 
-        if self._form_style == "inline":
+        elif self._form_style == "inline":
             return "inlineLabels"
+
+        else:
+            raise FormHelpersException(
+                "Invalid _form_style has been set. Only default and inline are valid attributes"
+            )
 
     @form_style.setter
     def form_style(self, style):

@@ -2,7 +2,6 @@ import re
 
 import pytest
 
-import django
 from django import forms
 from django.forms.models import formset_factory
 from django.middleware.csrf import _get_new_csrf_string
@@ -146,10 +145,7 @@ def test_html5_required():
     form.helper.html5_required = True
     html = render_crispy_form(form)
     # 6 out of 7 fields are required and an extra one for the SplitDateTimeWidget makes 7.
-    if django.VERSION < (1, 10):
-        assert html.count('required="required"') == 7
-    else:
-        assert len(re.findall(r"\brequired\b", html)) == 7
+    assert len(re.findall(r"\brequired\b", html)) == 7
 
     form = SampleForm()
     form.helper = FormHelper()
@@ -929,3 +925,20 @@ def test_bootstrap3_does_not_add_form_control_class_to_multivaluefield():
     form.helper.template_pack = "bootstrap3"
     html = render_crispy_form(form)
     assert "form-control" not in html
+
+
+def test_form_style_setter():
+    form = SampleForm()
+    form.helper = FormHelper()
+    with pytest.raises(FormHelpersException):
+        form.helper.form_style = "typo"
+
+    form.helper.form_style = "inline"
+    assert form.helper.form_style == "inlineLabels"
+
+    form.helper.form_style = "default"
+    assert form.helper.form_style == ""
+
+    form.helper._form_style = "error"
+    with pytest.raises(FormHelpersException):
+        assert form.helper.form_style == "error"

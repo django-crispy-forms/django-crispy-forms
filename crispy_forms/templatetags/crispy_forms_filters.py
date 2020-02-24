@@ -108,7 +108,6 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
         "field_class": field_class,
     }
     helper = getattr(field.form, "helper", None)
-
     template_path = None
     if helper is not None:
         attributes.update(helper.get_attributes(template_pack))

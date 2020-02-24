@@ -144,3 +144,8 @@ class SampleForm8(forms.ModelForm):
     class Meta:
         model = CrispyTestModel
         fields = ("email", "password2", "password")
+
+
+class SampleFileFieldForm(forms.Form):
+    file = forms.FileField(widget=forms.FileInput)
+    clearable_file = forms.FileField(widget=forms.ClearableFileInput)

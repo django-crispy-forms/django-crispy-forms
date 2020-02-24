@@ -18,6 +18,7 @@ from .forms import (
     CheckboxesSampleForm,
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
+    SampleFileFieldForm,
     SampleForm,
     SampleForm2,
     SampleForm3,
@@ -80,7 +81,7 @@ def test_meta_extra_fields_with_missing_fields():
     assert "email" not in html
 
 
-def test_layout_unresolved_field(settings):
+def test_layout_unresolved_field(settings, caplog):
     form_helper = FormHelper()
     form_helper.add_layout(Layout("typo"))
 
@@ -94,6 +95,10 @@ def test_layout_unresolved_field(settings):
     settings.CRISPY_FAIL_SILENTLY = False
     with pytest.raises(Exception):
         template.render(c)
+
+    settings.CRISPY_FAIL_SILENTLY = True
+    template.render(c)
+    assert caplog.record_tuples[0][2] == "Could not resolve form field 'typo'."
 
 
 def test_double_rendered_field(settings):
@@ -550,6 +555,30 @@ def test_use_custom_control_is_used():
     assert response.content.count(b"form-check-inline") == 3
     assert response.content.count(b"form-check") > 0
     assert response.content.count(b"custom-checkbox") == 0
+
+
+@only_bootstrap4
+def test_file_field():
+    form = SampleFileFieldForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout("file", "clearable_file")
+    form.helper.layout = Layout("file", "clearable_file")
+    # form.helper.use_custom_control take default value which is True
+
+    html = render_crispy_form(form)
+    assert 'class="fileinput fileUpload form-control-file custom-file-input"' in html
+    assert 'class="clearablefileinput form-control-file"' in html
+
+    form2 = SampleFileFieldForm()
+    form2.helper = FormHelper()
+    form2.helper.layout = Layout("file", "clearable_file")
+    form2.helper.layout = Layout("file", "clearable_file")
+
+    form2.helper.use_custom_control = False
+
+    html = render_crispy_form(form2)
+    assert 'class="fileinput fileUpload form-control-file"' in html
+    assert 'class="clearablefileinput form-control-file"' in html
 
 
 @only_bootstrap3

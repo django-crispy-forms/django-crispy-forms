@@ -1,3 +1,5 @@
+import sys
+
 from django import forms
 from django.template import Context, Template
 from django.test.html import parse_html
@@ -10,6 +12,7 @@ from crispy_forms.bootstrap import (
     Alert,
     AppendedText,
     FieldWithButtons,
+    FormActions,
     InlineCheckboxes,
     InlineRadios,
     PrependedAppendedText,
@@ -17,9 +20,10 @@ from crispy_forms.bootstrap import (
     StrictButton,
     Tab,
     TabHolder,
+    UneditableField,
 )
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
+from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField, Submit
 from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import render_crispy_form
 
@@ -205,17 +209,25 @@ class TestBootstrapLayoutObjects:
             assert 'class="input-lg' in html
             assert contains_partial(html, '<span class="input-group-addon input-lg"/>')
 
+            test_form.helper.layout = Layout(PrependedAppendedText("email", "@", "gmail.com", css_class="input-sm"),)
+            html = render_crispy_form(test_form)
+
+            assert 'class="input-sm' in html
+            assert contains_partial(html, '<span class="input-group-addon input-sm"/>')
+
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
             assert html.count('<span class="input-group-text">@</span>') == 1
             assert html.count('<span class="input-group-text">gmail.com</span>') == 1
             assert html.count('<span class="input-group-text">#</span>') == 1
             assert html.count('<span class="input-group-text">$</span>') == 1
             test_form.helper.layout = Layout(
-                PrependedAppendedText("email", "@", "gmail.com", css_class="form-control-lg"),
+                PrependedAppendedText("email", "@", "gmail.com", css_class="form-control-lg", active=True,),
             )
             html = render_crispy_form(test_form)
 
             assert 'class="form-control-lg' in html
+            assert '<div class="input-group-prepend active">' in html
+            assert '<div class="input-group-append active">' in html
             assert contains_partial(html, '<span class="input-group-text"/>')
 
     def test_inline_radios(self, settings):
@@ -482,3 +494,88 @@ class TestBootstrapLayoutObjects:
         for id_suffix in expected_ids:
             expected_str = 'id="id_{id_suffix}"'.format(id_suffix=id_suffix)
             assert html.count(expected_str) == 1
+
+    def test_uneditablefield(self, settings):
+        test_form = SampleForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(UneditableField("is_company"))
+        html = render_crispy_form(test_form)
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
+            expected = (
+                '<form  method="post" > <div id="div_id_is_company" class="control-group"> '
+                '<div class="control-label">company</div> <div class="controls"> '
+                '<span  class="uneditable-input"></span> </div>\n</div> </form>'
+            )
+            assert html.strip() == expected
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
+            if sys.version_info >= (3, 6, 0):  # Input order is different in python 3.5
+                expected = (
+                    '<form  method="post" > <div id="div_id_is_company" class="form-group"> '
+                    '<label class="control-label ">company</label> <div class="controls "> '
+                    '<input type="checkbox" name="is_company" class="uneditable-input checkboxinput" '
+                    'disabled="disabled" id="id_is_company"> </div>\n</div> </form>'
+                )
+            else:
+                expected = (
+                    '<form  method="post" > <div id="div_id_is_company" class="form-group"> '
+                    '<label class="control-label ">company</label> <div class="controls "> '
+                    '<input type="checkbox" name="is_company" id="id_is_company" disabled="disabled" '
+                    'class="uneditable-input checkboxinput"> </div>\n</div> </form>'
+                )
+            assert html.strip() == expected
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+            if sys.version_info >= (3, 6, 0):  # Input order is different in python 3.5
+                expected = (
+                    '<form  method="post" > <div id="div_id_is_company" class="form-group"> '
+                    '<label class="">company</label> <div class=""> <input type="checkbox" '
+                    'name="is_company" class="uneditable-input checkboxinput" disabled="disabled" '
+                    'id="id_is_company"> </div>\n</div> </form>'
+                )
+            else:
+                expected = (
+                    '<form  method="post" > <div id="div_id_is_company" class="form-group"> '
+                    '<label class="">company</label> <div class=""> <input type="checkbox" '
+                    'name="is_company" id="id_is_company" disabled="disabled" class="uneditable-input checkboxinput"> '
+                    "</div>\n</div> </form>"
+                )
+
+            assert html.strip() == expected
+
+    def test_formactions(self, settings):
+        test_form = SampleForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(FormActions(Submit("Save", "Save", css_class="btn-primary")))
+        html = render_crispy_form(test_form)
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
+            expected = (
+                '<form  method="post" > <div class="form-actions"> <input type="submit"\n    '
+                'name="Save"\n    value="Save"\n    \n        class="btn btn-primary btn-primary"'
+                '\n        id="submit-id-save"\n    \n    \n    />\n\n</div> </form>'
+            )
+            assert html.strip() == expected
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
+            expected = (
+                '<form  method="post" > <div class="form-group"> <div class="controls "> '
+                '<input type="submit"\n    name="Save"\n    value="Save"\n    \n        '
+                'class="btn btn-primary btn-primary"\n        id="submit-id-save"\n    \n    \n    /> '
+                "</div>\n</div> </form>"
+            )
+            assert html.strip() == expected
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+            expected = (
+                '<form  method="post" > <div class="form-group"> <div class=""> <input type="submit"\n    '
+                'name="Save"\n    value="Save"\n    \n        class="btn btn-primary btn-primary"\n        '
+                'id="submit-id-save"\n    \n    \n    /> </div>\n</div> </form>'
+            )
+            assert html.strip() == expected
+
+            test_form.helper.layout = Layout(
+                FormActions(Submit("Save", "Save", css_class="btn-primary"), css_class="test")
+            )
+            html = render_crispy_form(test_form)
+            expected = (
+                '<form  method="post" > <div  class="test" class="form-group"> <div class=""> <input type="submit"\n  '
+                '  name="Save"\n    value="Save"\n    \n        class="btn btn-primary btn-primary"\n        '
+                'id="submit-id-save"\n    \n    \n    /> </div>\n</div> </form>'
+            )
+            assert html.strip() == expected

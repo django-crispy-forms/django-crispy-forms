@@ -76,6 +76,9 @@ def test_wrap_together_with_slices():
     assert layout.fields[1] == "password1"
     assert layout.fields[2] == "password2"
 
+    with pytest.raises(DynamicError):
+        helper.filter(Field).wrap_together(Field, css_class="error_class")
+
 
 def test_wrap_together_partial_slices():
     helper = FormHelper()
@@ -104,6 +107,9 @@ def test_update_attributes():
     helper.layout = Layout("email", Field("password1"), "password2",)
     helper["password1"].update_attributes(readonly=True)
     assert "readonly" in helper.layout[1].attrs
+
+    helper[1].update_attributes(readonly=False)
+    assert helper.layout[1].attrs == {"readonly": False}
 
 
 def test_update_attributes_and_wrap_once():
