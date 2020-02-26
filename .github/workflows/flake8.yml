@@ -1,4 +1,4 @@
-name: Python package
+name: Flake8
 
 on: [pull_request]
 
