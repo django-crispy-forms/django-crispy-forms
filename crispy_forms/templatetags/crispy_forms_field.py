@@ -52,7 +52,7 @@ def classes(field):
     """
     Returns CSS classes of a field
     """
-    return field.widget.attrs.get('class', None)
+    return field.widget.attrs.get("class", None)
 
 
 @register.filter
@@ -73,7 +73,7 @@ class CrispyFieldNode(template.Node):
     def __init__(self, field, attrs):
         self.field = field
         self.attrs = attrs
-        self.html5_required = 'html5_required'
+        self.html5_required = "html5_required"
 
     def render(self, context):
         # Nodes are not threadsafe so we must store and look up our instance
@@ -82,7 +82,7 @@ class CrispyFieldNode(template.Node):
             context.render_context[self] = (
                 template.Variable(self.field),
                 self.attrs,
-                template.Variable(self.html5_required)
+                template.Variable(self.html5_required),
             )
 
         field, attrs, html5_required = context.render_context[self]
@@ -93,26 +93,26 @@ class CrispyFieldNode(template.Node):
             html5_required = False
 
         # If template pack has been overridden in FormHelper we can pick it from context
-        template_pack = context.get('template_pack', TEMPLATE_PACK)
+        template_pack = context.get("template_pack", TEMPLATE_PACK)
 
         # There are special django widgets that wrap actual widgets,
         # such as forms.widgets.MultiWidget, admin.widgets.RelatedFieldWidgetWrapper
-        widgets = getattr(field.field.widget, 'widgets', [getattr(field.field.widget, 'widget', field.field.widget)])
+        widgets = getattr(field.field.widget, "widgets", [getattr(field.field.widget, "widget", field.field.widget)])
 
         if isinstance(attrs, dict):
             attrs = [attrs] * len(widgets)
 
         converters = {
-            'textinput': 'textinput textInput',
-            'fileinput': 'fileinput fileUpload',
-            'passwordinput': 'textinput textInput',
+            "textinput": "textinput textInput",
+            "fileinput": "fileinput fileUpload",
+            "passwordinput": "textinput textInput",
         }
-        converters.update(getattr(settings, 'CRISPY_CLASS_CONVERTERS', {}))
+        converters.update(getattr(settings, "CRISPY_CLASS_CONVERTERS", {}))
 
         for widget, attr in zip(widgets, attrs):
             class_name = widget.__class__.__name__.lower()
             class_name = converters.get(class_name, class_name)
-            css_class = widget.attrs.get('class', '')
+            css_class = widget.attrs.get("class", "")
             if css_class:
                 if css_class.find(class_name) == -1:
                     css_class += " %s" % class_name
@@ -120,32 +120,29 @@ class CrispyFieldNode(template.Node):
                 css_class = class_name
 
             if (
-                template_pack == 'bootstrap3'
+                template_pack == "bootstrap3"
                 and not is_checkbox(field)
                 and not is_file(field)
                 and not is_multivalue(field)
             ):
-                css_class += ' form-control'
+                css_class += " form-control"
                 if field.errors:
-                    css_class += ' form-control-danger'
+                    css_class += " form-control-danger"
 
-            if (
-                template_pack == 'bootstrap4'
-                and not is_multivalue(field)
-            ):
+            if template_pack == "bootstrap4" and not is_multivalue(field):
                 if not is_checkbox(field):
-                    css_class += ' form-control'
+                    css_class += " form-control"
                     if is_file(field):
-                        css_class += '-file'
+                        css_class += "-file"
                 if field.errors:
-                    css_class += ' is-invalid'
+                    css_class += " is-invalid"
 
-            widget.attrs['class'] = css_class
+            widget.attrs["class"] = css_class
 
             # HTML5 required attribute
-            if html5_required and field.field.required and 'required' not in widget.attrs:
-                if field.field.widget.__class__.__name__ != 'RadioSelect':
-                    widget.attrs['required'] = 'required'
+            if html5_required and field.field.required and "required" not in widget.attrs:
+                if field.field.widget.__class__.__name__ != "RadioSelect":
+                    widget.attrs["required"] = "required"
 
             for attribute_name, attribute in attr.items():
                 attribute_name = template.Variable(attribute_name).resolve(context)
@@ -188,14 +185,10 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
         {% crispy_addon form.my_field append=".00" %}
     """
     if field:
-        context = Context({
-            'field': field,
-            'form_show_errors': True,
-            'form_show_labels': form_show_labels,
-        })
-        template = loader.get_template('%s/layout/prepended_appended_text.html' % get_template_pack())
-        context['crispy_prepended_text'] = prepend
-        context['crispy_appended_text'] = append
+        context = Context({"field": field, "form_show_errors": True, "form_show_labels": form_show_labels,})
+        template = loader.get_template("%s/layout/prepended_appended_text.html" % get_template_pack())
+        context["crispy_prepended_text"] = prepend
+        context["crispy_appended_text"] = append
 
         if not prepend and not append:
             raise TypeError("Expected a prepend and/or append argument")

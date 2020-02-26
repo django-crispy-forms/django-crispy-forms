@@ -6,7 +6,9 @@ from crispy_forms.helper import FormHelper
 
 class SampleForm(forms.Form):
     is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
-    email = forms.EmailField(label="email", max_length=30, required=True, widget=forms.TextInput(), help_text="Insert your email")
+    email = forms.EmailField(
+        label="email", max_length=30, required=True, widget=forms.TextInput(), help_text="Insert your email"
+    )
     password1 = forms.CharField(label="password", max_length=30, required=True, widget=forms.PasswordInput())
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
     first_name = forms.CharField(label="first name", max_length=5, required=True, widget=forms.TextInput())
@@ -15,8 +17,8 @@ class SampleForm(forms.Form):
 
     def clean(self):
         super().clean()
-        password1 = self.cleaned_data.get('password1', None)
-        password2 = self.cleaned_data.get('password2', None)
+        password1 = self.cleaned_data.get("password1", None)
+        password2 = self.cleaned_data.get("password2", None)
         if not password1 and not password2 or password1 != password2:
             raise forms.ValidationError("Passwords dont match")
 
@@ -31,42 +33,27 @@ class SampleForm2(SampleForm):
 
 class CheckboxesSampleForm(forms.Form):
     checkboxes = forms.MultipleChoiceField(
-        choices=(
-            (1, "Option one"),
-            (2, "Option two"),
-            (3, "Option three")
-        ),
+        choices=((1, "Option one"), (2, "Option two"), (3, "Option three")),
         initial=(1,),
         widget=forms.CheckboxSelectMultiple,
     )
 
     alphacheckboxes = forms.MultipleChoiceField(
-        choices=(
-            ('option_one', "Option one"),
-            ('option_two', "Option two"),
-            ('option_three', "Option three")
-        ),
-        initial=('option_two', 'option_three'),
+        choices=(("option_one", "Option one"), ("option_two", "Option two"), ("option_three", "Option three")),
+        initial=("option_two", "option_three"),
         widget=forms.CheckboxSelectMultiple,
     )
 
     numeric_multiple_checkboxes = forms.MultipleChoiceField(
-        choices=(
-            (1, "Option one"),
-            (2, "Option two"),
-            (3, "Option three")
-        ),
+        choices=((1, "Option one"), (2, "Option two"), (3, "Option three")),
         initial=(1, 2),
         widget=forms.CheckboxSelectMultiple,
     )
 
     inline_radios = forms.ChoiceField(
-        choices=(
-            ('option_one', "Option one"),
-            ('option_two', "Option two"),
-        ),
+        choices=(("option_one", "Option one"), ("option_two", "Option two"),),
         widget=forms.RadioSelect,
-        initial='option_two',
+        initial="option_two",
     )
 
 
@@ -78,8 +65,8 @@ class CrispyTestModel(models.Model):
 class SampleForm3(forms.ModelForm):
     class Meta:
         model = CrispyTestModel
-        fields = ['email', 'password']
-        exclude = ['password']
+        fields = ["email", "password"]
+        exclude = ["password"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -94,8 +81,9 @@ class SampleForm4(forms.ModelForm):
         django.core.exceptions.FieldError: Unknown field(s) (a, l, _) specified for CrispyTestModel
         because obviously it casts the string to a set
         """
+
         model = CrispyTestModel
-        fields = '__all__'  # eliminate RemovedInDjango18Warning
+        fields = "__all__"  # eliminate RemovedInDjango18Warning
 
 
 class SampleForm5(forms.Form):
@@ -104,21 +92,15 @@ class SampleForm5(forms.Form):
         (2, 2),
         (1000, 1000),
     ]
-    checkbox_select_multiple = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        choices=choices
-    )
-    radio_select = forms.ChoiceField(
-        widget=forms.RadioSelect,
-        choices=choices
-    )
+    checkbox_select_multiple = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=choices)
+    radio_select = forms.ChoiceField(widget=forms.RadioSelect, choices=choices)
     pk = forms.IntegerField()
 
 
 class SampleFormWithMedia(forms.Form):
     class Media:
-        css = {'all': ('test.css',)}
-        js = ('test.js',)
+        css = {"all": ("test.css",)}
+        js = ("test.js",)
 
 
 class SampleFormWithMultiValueField(forms.Form):
@@ -126,13 +108,7 @@ class SampleFormWithMultiValueField(forms.Form):
 
 
 class CrispyEmptyChoiceTestModel(models.Model):
-    fruit = models.CharField(
-        choices=[
-            ('apple', 'Apple'),
-            ('pear', 'Pear')],
-        null=True,
-        blank=True,
-    )
+    fruit = models.CharField(choices=[("apple", "Apple"), ("pear", "Pear")], null=True, blank=True,)
 
 
 class SampleForm6(forms.ModelForm):
@@ -146,9 +122,10 @@ class SampleForm6(forms.ModelForm):
         with initial value None, this choice should
         be selected.
         """
+
         model = CrispyEmptyChoiceTestModel
-        fields = ['fruit']
-        widgets = {'fruit': forms.RadioSelect()}
+        fields = ["fruit"]
+        widgets = {"fruit": forms.RadioSelect()}
 
 
 class SampleForm7(forms.ModelForm):
@@ -157,7 +134,7 @@ class SampleForm7(forms.ModelForm):
 
     class Meta:
         model = CrispyTestModel
-        fields = ('email', 'password', 'password2')
+        fields = ("email", "password", "password2")
 
 
 class SampleForm8(forms.ModelForm):
@@ -166,4 +143,4 @@ class SampleForm8(forms.ModelForm):
 
     class Meta:
         model = CrispyTestModel
-        fields = ('email', 'password2', 'password')
+        fields = ("email", "password2", "password")

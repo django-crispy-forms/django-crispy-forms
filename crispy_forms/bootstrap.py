@@ -15,48 +15,56 @@ class PrependedAppendedText(Field):
         self.field = field
         self.appended_text = appended_text
         self.prepended_text = prepended_text
-        if 'active' in kwargs:
-            self.active = kwargs.pop('active')
+        if "active" in kwargs:
+            self.active = kwargs.pop("active")
 
         self.input_size = None
-        css_class = kwargs.get('css_class', '')
-        if 'input-lg' in css_class:
-            self.input_size = 'input-lg'
-        if 'input-sm' in css_class:
-            self.input_size = 'input-sm'
+        css_class = kwargs.get("css_class", "")
+        if "input-lg" in css_class:
+            self.input_size = "input-lg"
+        if "input-sm" in css_class:
+            self.input_size = "input-sm"
 
         super().__init__(field, *args, **kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         extra_context = extra_context.copy() if extra_context is not None else {}
-        extra_context.update({
-            'crispy_appended_text': self.appended_text,
-            'crispy_prepended_text': self.prepended_text,
-            'input_size': self.input_size,
-            'active': getattr(self, "active", False)
-        })
-        if hasattr(self, 'wrapper_class'):
-            extra_context['wrapper_class'] = self.wrapper_class
+        extra_context.update(
+            {
+                "crispy_appended_text": self.appended_text,
+                "crispy_prepended_text": self.prepended_text,
+                "input_size": self.input_size,
+                "active": getattr(self, "active", False),
+            }
+        )
+        if hasattr(self, "wrapper_class"):
+            extra_context["wrapper_class"] = self.wrapper_class
         template = self.get_template_name(template_pack)
         return render_field(
-            self.field, form, form_style, context,
-            template=template, attrs=self.attrs,
-            template_pack=template_pack, extra_context=extra_context, **kwargs
+            self.field,
+            form,
+            form_style,
+            context,
+            template=template,
+            attrs=self.attrs,
+            template_pack=template_pack,
+            extra_context=extra_context,
+            **kwargs,
         )
 
 
 class AppendedText(PrependedAppendedText):
     def __init__(self, field, text, *args, **kwargs):
-        kwargs.pop('appended_text', None)
-        kwargs.pop('prepended_text', None)
+        kwargs.pop("appended_text", None)
+        kwargs.pop("prepended_text", None)
         self.text = text
         super().__init__(field, appended_text=text, **kwargs)
 
 
 class PrependedText(PrependedAppendedText):
     def __init__(self, field, text, *args, **kwargs):
-        kwargs.pop('appended_text', None)
-        kwargs.pop('prepended_text', None)
+        kwargs.pop("appended_text", None)
+        kwargs.pop("prepended_text", None)
         self.text = text
         super().__init__(field, prepended_text=text, **kwargs)
 
@@ -72,22 +80,20 @@ class FormActions(LayoutObject):
             Submit('Save', 'Save', css_class='btn-primary')
         )
     """
+
     template = "%s/layout/formactions.html"
 
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop("template", self.template)
         self.attrs = kwargs
-        if 'css_class' in self.attrs:
-            self.attrs['class'] = self.attrs.pop('css_class')
+        if "css_class" in self.attrs:
+            self.attrs["class"] = self.attrs.pop("css_class")
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
         template = self.get_template_name(template_pack)
-        context.update({
-            'formactions': self,
-            'fields_output': html
-        })
+        context.update({"formactions": self, "fields_output": html})
 
         return render_to_string(template, context.flatten())
 
@@ -101,12 +107,12 @@ class InlineCheckboxes(Field):
 
         InlineCheckboxes('field_name')
     """
+
     template = "%s/layout/checkboxselectmultiple_inline.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         return super().render(
-            form, form_style, context, template_pack=template_pack,
-            extra_context={'inline_class': 'inline'}
+            form, form_style, context, template_pack=template_pack, extra_context={"inline_class": "inline"}
         )
 
 
@@ -116,45 +122,56 @@ class InlineRadios(Field):
 
         InlineRadios('field_name')
     """
+
     template = "%s/layout/radioselect_inline.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         return super().render(
-            form, form_style, context, template_pack=template_pack,
-            extra_context={'inline_class': 'inline'}
+            form, form_style, context, template_pack=template_pack, extra_context={"inline_class": "inline"}
         )
 
 
 class FieldWithButtons(Div):
-    template = '%s/layout/field_with_buttons.html'
-    field_template = '%s/field.html'
+    template = "%s/layout/field_with_buttons.html"
+    field_template = "%s/field.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
         field_template = self.field_template % template_pack
-        buttons = ''.join(
+        buttons = "".join(
             render_field(
-                field, form, form_style, context,
-                field_template, layout_object=self,
-                template_pack=template_pack, **kwargs
-            ) for field in self.fields[1:]
+                field,
+                form,
+                form_style,
+                context,
+                field_template,
+                layout_object=self,
+                template_pack=template_pack,
+                **kwargs,
+            )
+            for field in self.fields[1:]
         )
 
-        extra_context = {'div': self, 'buttons': buttons}
+        extra_context = {"div": self, "buttons": buttons}
         template = self.get_template_name(template_pack)
 
         if isinstance(self.fields[0], Field):
             # FieldWithButtons(Field('field_name'), StrictButton("go"))
             # We render the field passing its name and attributes
             return render_field(
-                self.fields[0][0], form, form_style, context,
-                template, attrs=self.fields[0].attrs,
-                template_pack=template_pack, extra_context=extra_context, **kwargs
+                self.fields[0][0],
+                form,
+                form_style,
+                context,
+                template,
+                attrs=self.fields[0].attrs,
+                template_pack=template_pack,
+                extra_context=extra_context,
+                **kwargs,
             )
         else:
             return render_field(
-                self.fields[0], form, form_style, context, template,
-                extra_context=extra_context, **kwargs
+                self.fields[0], form, form_style, context, template, extra_context=extra_context, **kwargs
             )
 
 
@@ -164,28 +181,29 @@ class StrictButton(TemplateNameMixin):
 
         Button("button content", css_class="extra")
     """
-    template = '%s/layout/button.html'
-    field_classes = 'btn'
+
+    template = "%s/layout/button.html"
+    field_classes = "btn"
 
     def __init__(self, content, **kwargs):
         self.content = content
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop("template", self.template)
 
-        kwargs.setdefault('type', 'button')
+        kwargs.setdefault("type", "button")
 
         # We turn css_id and css_class into id and class
-        if 'css_id' in kwargs:
-            kwargs['id'] = kwargs.pop('css_id')
-        kwargs['class'] = self.field_classes
-        if 'css_class' in kwargs:
-            kwargs['class'] += " %s" % kwargs.pop('css_class')
+        if "css_id" in kwargs:
+            kwargs["id"] = kwargs.pop("css_id")
+        kwargs["class"] = self.field_classes
+        if "css_class" in kwargs:
+            kwargs["class"] += " %s" % kwargs.pop("css_class")
 
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         self.content = Template(str(self.content)).render(context)
         template = self.get_template_name(template_pack)
-        context.update({'button': self})
+        context.update({"button": self})
 
         return render_to_string(template, context.flatten())
 
@@ -194,11 +212,12 @@ class Container(Div):
     """
     Base class used for `Tab` and `AccordionGroup`, represents a basic container concept
     """
+
     css_class = ""
 
     def __init__(self, name, *fields, **kwargs):
         super().__init__(*fields, **kwargs)
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop("template", self.template)
         self.name = name
         self._active_originally_included = "active" in kwargs
         self.active = kwargs.pop("active", False)
@@ -213,10 +232,10 @@ class Container(Div):
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         if self.active:
-            if 'active' not in self.css_class:
-                self.css_class += ' active'
+            if "active" not in self.css_class:
+                self.css_class += " active"
         else:
-            self.css_class = self.css_class.replace('active', '')
+            self.css_class = self.css_class.replace("active", "")
         return super().render(form, form_style, context, template_pack)
 
 
@@ -224,6 +243,7 @@ class ContainerHolder(Div):
     """
     Base class used for `TabHolder` and `Accordion`, groups containers
     """
+
     def first_container_with_errors(self, errors):
         """
         Returns the first container with errors, otherwise returns None.
@@ -244,7 +264,7 @@ class ContainerHolder(Div):
         target = self.first_container_with_errors(form.errors.keys())
         if target is None:
             target = self.fields[0]
-            if not getattr(target, '_active_originally_included', None):
+            if not getattr(target, "_active_originally_included", None):
                 target.active = True
             return target
 
@@ -259,8 +279,9 @@ class Tab(Container):
 
         Tab('tab_name', 'form_field_1', 'form_field_2', 'form_field_3')
     """
-    css_class = 'tab-pane'
-    link_template = '%s/layout/tab-link.html'
+
+    css_class = "tab-pane"
+    link_template = "%s/layout/tab-link.html"
 
     def render_link(self, template_pack=TEMPLATE_PACK, **kwargs):
         """
@@ -268,7 +289,7 @@ class Tab(Container):
         with active if needed.
         """
         link_template = self.link_template % template_pack
-        return render_to_string(link_template, {'link': self})
+        return render_to_string(link_template, {"link": self})
 
 
 class TabHolder(ContainerHolder):
@@ -280,7 +301,8 @@ class TabHolder(ContainerHolder):
             Tab('form_field_3')
         )
     """
-    template = '%s/layout/tab.html'
+
+    template = "%s/layout/tab.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         for tab in self.fields:
@@ -289,13 +311,9 @@ class TabHolder(ContainerHolder):
         # Open the group that should be open.
         self.open_target_group_for_form(form)
         content = self.get_rendered_fields(form, form_style, context, template_pack)
-        links = ''.join(tab.render_link(template_pack) for tab in self.fields)
+        links = "".join(tab.render_link(template_pack) for tab in self.fields)
 
-        context.update({
-            'tabs': self,
-            'links': links,
-            'content': content
-        })
+        context.update({"tabs": self, "links": links, "content": content})
         template = self.get_template_name(template_pack)
         return render_to_string(template, context.flatten())
 
@@ -307,6 +325,7 @@ class AccordionGroup(Container):
 
         AccordionGroup("group name", "form_field_1", "form_field_2")
     """
+
     template = "%s/accordion-group.html"
     data_parent = ""  # accordion parent div id.
 
@@ -320,10 +339,11 @@ class Accordion(ContainerHolder):
             AccordionGroup("another group name", "form_field")
         )
     """
+
     template = "%s/accordion.html"
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        content = ''
+        content = ""
 
         # accordion group needs the parent div id to set `data-parent` (I don't
         # know why). This needs to be a unique id
@@ -335,12 +355,10 @@ class Accordion(ContainerHolder):
 
         for group in self.fields:
             group.data_parent = self.css_id
-            content += render_field(
-                group, form, form_style, context, template_pack=template_pack, **kwargs
-            )
+            content += render_field(group, form, form_style, context, template_pack=template_pack, **kwargs)
 
         template = self.get_template_name(template_pack)
-        context.update({'accordion': self, 'content': content})
+        context.update({"accordion": self, "content": content})
 
         return render_to_string(template, context.flatten())
 
@@ -351,21 +369,22 @@ class Alert(Div):
 
         Alert(content='<strong>Warning!</strong> Best check yo self, you're not looking too good.')
     """
+
     template = "%s/layout/alert.html"
     css_class = "alert"
 
     def __init__(self, content, dismiss=True, block=False, **kwargs):
         fields = []
         if block:
-            self.css_class += ' alert-block'
+            self.css_class += " alert-block"
         Div.__init__(self, *fields, **kwargs)
-        self.template = kwargs.pop('template', self.template)
+        self.template = kwargs.pop("template", self.template)
         self.content = content
         self.dismiss = dismiss
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         template = self.get_template_name(template_pack)
-        context.update({'alert': self, 'content': self.content, 'dismiss': self.dismiss})
+        context.update({"alert": self, "content": self.content, "dismiss": self.dismiss})
 
         return render_to_string(template, context.flatten())
 
@@ -378,10 +397,11 @@ class UneditableField(Field):
 
         UneditableField('field_name', css_class="input-xlarge")
     """
+
     template = "%s/layout/uneditable_input.html"
 
     def __init__(self, field, *args, **kwargs):
-        self.attrs = {'class': 'uneditable-input'}
+        self.attrs = {"class": "uneditable-input"}
         super().__init__(field, *args, **kwargs)
 
 
