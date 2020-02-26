@@ -594,7 +594,7 @@ def test_form_show_errors():
 
 @only_uni_form
 def test_multifield_errors():
-    form = SampleForm({"email": "invalidemail", "password1": "yes", "password2": "yes",})
+    form = SampleForm({"email": "invalidemail", "password1": "yes", "password2": "yes"})
     form.helper = FormHelper()
     form.helper.layout = Layout(MultiField("legend", "email"))
     form.is_valid()
@@ -795,7 +795,9 @@ def test_label_class_and_field_class():
     dom = parse_html(html)
 
     snippet = parse_html(
-        '<div class="form-group"> <div class="controls col-lg-offset-2 col-lg-8"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company'
+        '<div class="form-group"> <div class="controls col-lg-offset-2 col-lg-8"> '
+        '<div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> '
+        '<input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company'
     )
     assert dom.count(snippet)
     assert html.count("col-lg-8") == 7
@@ -806,7 +808,9 @@ def test_label_class_and_field_class():
     dom = parse_html(html)
 
     snippet = parse_html(
-        '<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> <div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> <input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company'
+        '<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> '
+        '<div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> '
+        '<input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company'
     )
     assert dom.count(snippet)
     assert html.count("col-sm-8") == 7

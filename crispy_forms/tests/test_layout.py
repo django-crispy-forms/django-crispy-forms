@@ -1,6 +1,5 @@
 import pytest
 
-import django
 from django import forms
 from django.forms.models import formset_factory, modelformset_factory
 from django.middleware.csrf import _get_new_csrf_string
@@ -23,7 +22,6 @@ from .forms import (
     SampleForm2,
     SampleForm3,
     SampleForm4,
-    SampleForm5,
     SampleForm6,
 )
 from .utils import contains_partial
@@ -170,7 +168,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
         {% crispy form form_helper %}
     """
     )
-    c = Context({"form": SampleForm(), "form_helper": form_helper, "flag": True, "message": "Hello!",})
+    c = Context({"form": SampleForm(), "form_helper": form_helper, "flag": True, "message": "Hello!"})
     html = template.render(c)
 
     assert 'id="fieldset_company_data"' in html

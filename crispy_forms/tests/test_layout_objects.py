@@ -1,4 +1,3 @@
-from django import VERSION as DJANGO_VERSION
 from django import forms
 from django.template import Context, Template
 from django.test.html import parse_html
@@ -77,7 +76,7 @@ def test_field_type_hidden():
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(Field("email", type="hidden", data_test=12), Field("datetime_field"),)
 
-    c = Context({"test_form": test_form,})
+    c = Context({"test_form": test_form})
     html = template.render(c)
 
     # Check form parameters
@@ -322,7 +321,8 @@ class TestBootstrapLayoutObjects:
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
             assert (
                 html.count(
-                    '<ul class="nav nav-tabs"> <li class="nav-item"><a class="nav-link active" href="#custom-name" data-toggle="tab">One</a></li>'
+                    '<ul class="nav nav-tabs"> <li class="nav-item">'
+                    '<a class="nav-link active" href="#custom-name" data-toggle="tab">One</a></li>'
                 )
                 == 1
             )
@@ -330,7 +330,8 @@ class TestBootstrapLayoutObjects:
         else:
             assert (
                 html.count(
-                    '<ul class="nav nav-tabs"> <li class="tab-pane active"><a href="#custom-name" data-toggle="tab">One</a></li>'
+                    '<ul class="nav nav-tabs"> <li class="tab-pane active">'
+                    '<a href="#custom-name" data-toggle="tab">One</a></li>'
                 )
                 == 1
             )

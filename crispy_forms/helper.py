@@ -314,7 +314,7 @@ class FormHelper(DynamicLayoutHandler):
 
         return mark_safe(html)
 
-    def get_attributes(self, template_pack=TEMPLATE_PACK):
+    def get_attributes(self, template_pack=TEMPLATE_PACK):  # noqa: C901
         """
         Used by crispy_forms_tags to get helper attributes
         """
