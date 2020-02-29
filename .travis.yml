@@ -12,13 +12,13 @@ python:
 cache: pip
 
 install:
-  - pip install coverage tox-travis tox-venv
+  - pip install coverage tox-travis tox-venv django_coverage_plugin
 
 script:
-  - coverage erase
   - tox
 
 after_success:
+  - pip install Django
   - coverage combine --append
   - coverage report -m
   - pip install codecov

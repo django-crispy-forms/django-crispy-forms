@@ -1,8 +1,8 @@
 .PHONY: develop test
 
 develop:
-	pip install -q -r requirements.txt
-	pip install -q -e .
+	pip3 install -q -r requirements.txt
+	pip3 install -q -e .
 
 test: develop
-	DJANGO_SETTINGS_MODULE=crispy_forms.tests.test_settings py.test crispy_forms/tests --cov=crispy_forms
+	coverage run -m pytest --ds=crispy_forms.tests.test_settings

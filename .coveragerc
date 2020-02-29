@@ -1,0 +1,7 @@
+[run]
+plugins =
+    django_coverage_plugin
+source =
+    crispy_forms
+omit =
+    */.tox/*

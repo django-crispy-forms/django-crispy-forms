@@ -5,3 +5,4 @@ pytest
 pytest-cov
 pytest-django
 pre-commit
+django_coverage_plugin
