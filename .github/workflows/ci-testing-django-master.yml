@@ -1,0 +1,28 @@
+name: C/I testing - Django master
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python}}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install https://github.com/django/django/archive/master.tar.gz
+    - name: Test with pytest
+      run: |
+        cd /home/runner/work/django-crispy-forms/django-crispy-forms/
+        make test
