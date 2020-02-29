@@ -508,38 +508,23 @@ class TestBootstrapLayoutObjects:
             )
             assert html.strip() == expected
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            if sys.version_info >= (3, 6, 0):  # Input order is different in python 3.5
+            if sys.version_info >= (3, 6, 0):  # Dictionaries are unordered in python 3.5
                 expected = (
                     '<form  method="post" > <div id="div_id_is_company" class="form-group"> '
                     '<label class="control-label ">company</label> <div class="controls "> '
                     '<input type="checkbox" name="is_company" class="uneditable-input checkboxinput" '
                     'disabled="disabled" id="id_is_company"> </div>\n</div> </form>'
                 )
-            else:
-                expected = (
-                    '<form  method="post" > <div id="div_id_is_company" class="form-group"> '
-                    '<label class="control-label ">company</label> <div class="controls "> '
-                    '<input type="checkbox" name="is_company" id="id_is_company" disabled="disabled" '
-                    'class="uneditable-input checkboxinput"> </div>\n</div> </form>'
-                )
-            assert html.strip() == expected
+                assert html.strip() == expected
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            if sys.version_info >= (3, 6, 0):  # Input order is different in python 3.5
+            if sys.version_info >= (3, 6, 0):  # Dictionaries are unordered in python 3.5
                 expected = (
                     '<form  method="post" > <div id="div_id_is_company" class="form-group"> '
                     '<label class="">company</label> <div class=""> <input type="checkbox" '
                     'name="is_company" class="uneditable-input checkboxinput" disabled="disabled" '
                     'id="id_is_company"> </div>\n</div> </form>'
                 )
-            else:
-                expected = (
-                    '<form  method="post" > <div id="div_id_is_company" class="form-group"> '
-                    '<label class="">company</label> <div class=""> <input type="checkbox" '
-                    'name="is_company" id="id_is_company" disabled="disabled" class="uneditable-input checkboxinput"> '
-                    "</div>\n</div> </form>"
-                )
-
-            assert html.strip() == expected
+                assert html.strip() == expected
 
     def test_formactions(self, settings):
         test_form = SampleForm()
