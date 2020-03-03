@@ -17,6 +17,19 @@ If you have git-scm installed, you now clone your git repo using the following c
 
     git clone git@github.com/<my-github-name>/django-crispy-forms.git
 
+Install requirements
+--------------------
+
+Install dependencies for development by **cd**-ing into the crispy-forms folder and then running:: 
+
+    pip install -r requirements.txt
+
+Django-crispy-forms comes with git hook scripts. These can be installed by running::
+
+    pre-commit install
+    
+Pre-commit will now run automatically on git-commit and check adherence to the style guide (black, isort & flake8).
+
 Setting up topic branches and generating pull requests
 ======================================================
 
