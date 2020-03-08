@@ -14,7 +14,7 @@
         <div class="controls {{ field_class }}">
             <div class="input-group">
                 {% if crispy_prepended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
-                {% crispy_field field %}
+                {% crispy_field field 'class' 'form-control' %}
                 {% if crispy_appended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
             </div>
 
