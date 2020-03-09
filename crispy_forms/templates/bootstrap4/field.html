@@ -35,7 +35,7 @@
                     {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                 </label>
                 {% include 'bootstrap4/layout/help_text_and_errors.html' %}
-            {% elif field|is_file and not field|is_clearable_file and use_custom_control  %}
+            {% elif field|is_file and use_custom_control  %}
                 {% include 'bootstrap4/layout/field_file.html' %}
             {% else %}
                 <div class="{{ field_class }}">
