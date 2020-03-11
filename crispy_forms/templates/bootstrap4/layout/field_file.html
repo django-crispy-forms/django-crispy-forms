@@ -20,8 +20,12 @@
     {% endif %}
     </div>
 </div>
+<div class="input-group mb-2">
+    <div class="input-group-prepend">
+        <span class="input-group-text">{{ widget.data.input_text }}</span>
+    </div>
 {% endif %}
-<div class="custom-file {{ field_class }}">
+<div class="form-control custom-file {{ field_class }}" style="border:0">
     <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
     <label class="custom-file-label" for="{{ field.id_for_label }}">Choose file</label>
     {% include 'bootstrap4/layout/help_text_and_errors.html' %}
@@ -35,4 +39,5 @@
         }        
     </script>
 </div>
+{% if widget.data.is_initial %}</div>{% endif %}
 {% endfor %}
