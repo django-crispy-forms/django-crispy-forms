@@ -10,7 +10,7 @@ jobs:
       matrix:
         python: [3.5, 3.6, 3.7, 3.8]
         django: [2.2.*, 3.0.*]
-        exclude: 
+        exclude:
           # exclude python 3.5 with django v3+
           - python: 3.5
             django: 3.0.*
@@ -39,3 +39,12 @@ jobs:
       run: |
         cd /home/runner/work/django-crispy-forms/django-crispy-forms/
         make test
+        pip install coverage
+        coverage xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
