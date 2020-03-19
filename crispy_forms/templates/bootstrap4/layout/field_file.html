@@ -26,8 +26,8 @@
         <span class="input-group-text">{{ widget.data.input_text }}</span>
     </div>
 {% endif %}
-    <div class="form-control custom-file" style="border:0">
-        <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+    <div class="form-control custom-file{% if field.errors %} is-invalid{%endif%}" style="border:0">
+        <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input{% if field.errors %} is-invalid{%endif%}" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
         <label class="custom-file-label" for="{{ field.id_for_label }}">---</label>
         <script type="text/javascript" id="script-{{ field.id_for_label }}">        
             document.getElementById("script-{{ field.id_for_label }}").parentNode.querySelector('.custom-file-input').onchange =  function (e){
