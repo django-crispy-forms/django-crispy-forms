@@ -1,12 +1,11 @@
 import re
 
-from django.urls import NoReverseMatch, reverse
-from django.utils.safestring import mark_safe
-
 from crispy_forms.exceptions import FormHelpersException
 from crispy_forms.layout import Layout
 from crispy_forms.layout_slice import LayoutSlice
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, list_difference, render_field
+from django.urls import NoReverseMatch, reverse
+from django.utils.safestring import mark_safe
 
 
 class DynamicLayoutHandler:
@@ -337,10 +336,10 @@ class FormHelper(DynamicLayoutHandler):
 
         if template_pack == "bootstrap4":
             if "form-horizontal" in self.form_class.split():
-                bootstrap_size_match = re.findall(r"col-(xl|lg|md|sm)-(\d+)", self.label_class)
+                bootstrap_size_match = re.findall(r"col(-(xl|lg|md|sm))?-(\d+)", self.label_class)
                 if bootstrap_size_match:
-                    offset_pattern = "offset-%s-%s"
-                    items["bootstrap_checkbox_offsets"] = [offset_pattern % m for m in bootstrap_size_match]
+                    offset_pattern = "offset%s-%s"
+                    items["bootstrap_checkbox_offsets"] = [offset_pattern % (m[0], m[-1]) for m in bootstrap_size_match]
         else:
             bootstrap_size_match = re.findall(r"col-(lg|md|sm|xs)-(\d+)", self.label_class)
             if bootstrap_size_match:
