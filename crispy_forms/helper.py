@@ -339,7 +339,9 @@ class FormHelper(DynamicLayoutHandler):
                 bootstrap_size_match = re.findall(r"col(-(xl|lg|md|sm))?-(\d+)", self.label_class)
                 if bootstrap_size_match:
                     offset_pattern = "offset%s-%s"
-                    items["bootstrap_checkbox_offsets"] = [offset_pattern % (m[0], m[-1]) for m in bootstrap_size_match]
+                    items["bootstrap_checkbox_offsets"] = [
+                        offset_pattern % (m[0], m[-1]) for m in bootstrap_size_match
+                    ]
         else:
             bootstrap_size_match = re.findall(r"col-(lg|md|sm|xs)-(\d+)", self.label_class)
             if bootstrap_size_match:
