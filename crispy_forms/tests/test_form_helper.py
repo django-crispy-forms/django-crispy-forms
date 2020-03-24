@@ -851,6 +851,7 @@ def test_label_class_and_field_class_bs4():
 
 @only_bootstrap4
 def test_label_class_and_field_class_bs4_offset_when_horizontal():
+    # Test col-XX-YY pattern
     form = SampleForm()
     form.helper = FormHelper()
     form.helper.label_class = "col-lg-2"
@@ -862,13 +863,18 @@ def test_label_class_and_field_class_bs4_offset_when_horizontal():
     assert '<div class="offset-lg-2 col-lg-8">' in html
     assert html.count("col-lg-8") == 7
 
-    form.helper.label_class = "col-sm-3 col-md-4"
-    form.helper.field_class = "col-sm-8 col-md-6"
+    # Test multi col-XX-YY pattern and col-X pattern
+
+    form.helper.label_class = "col-sm-3 col-md-4 col-5 col-lg-4"
+    form.helper.field_class = "col-sm-8 col-md-6 col-7 col-lg-8"
     html = render_crispy_form(form)
 
     assert '<div class="form-group row">' in html
-    assert '<div class="offset-sm-3 offset-md-4 col-sm-8 col-md-6">' in html
+    assert '<div class="offset-sm-3 offset-md-4 offset-5 offset-lg-4 col-sm-8 col-md-6 col-7 col-lg-8">' in html
     assert html.count("col-sm-8") == 7
+    assert html.count("col-md-6") == 7
+    assert html.count("col-7") == 7
+    assert html.count("col-lg-8") == 7
 
 
 @only_bootstrap4
