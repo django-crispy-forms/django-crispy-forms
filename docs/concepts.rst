@@ -5,7 +5,7 @@ Concepts
 Form Helpers
 -------------
 
-The biggest advantage of this library are :ref:`form helpers` and layouts. The advantage of these tools is that they let you build forms with most of the coding done in Python, rather than HTML. We **strongly** suggest you study and learn the examples in the :ref:`form helpers` documentation.
+The biggest advantage of this library are :ref:`form helper` and layouts. The advantage of these tools is that they let you build forms with most of the coding done in Python, rather than HTML. We **strongly** suggest you study and learn the examples in the :ref:`form helper` documentation.
 
 Don't Repeat Yourself
 ---------------------
