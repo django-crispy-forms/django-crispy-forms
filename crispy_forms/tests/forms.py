@@ -144,3 +144,20 @@ class SampleForm8(forms.ModelForm):
     class Meta:
         model = CrispyTestModel
         fields = ("email", "password2", "password")
+
+
+class FakeFieldFile:
+    """
+    Quacks like a FieldFile (has a .url and string representation), but
+    doesn't require us to care about storages etc.
+    """
+
+    url = "something"
+
+    def __str__(self):
+        return self.url
+
+
+class FileForm(forms.Form):
+    file_field = forms.FileField(widget=forms.FileInput)
+    clearable_file = forms.FileField(widget=forms.ClearableFileInput, required=False, initial=FakeFieldFile())

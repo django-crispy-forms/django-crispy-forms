@@ -18,6 +18,7 @@ from .forms import (
     CheckboxesSampleForm,
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
+    FileForm,
     SampleForm,
     SampleForm2,
     SampleForm3,
@@ -598,3 +599,54 @@ def test_update_attributes_class():
     form.helper["password1"].update_attributes(css_class="hello2")
     html = render_crispy_form(form)
     assert html.count(' class="hello hello2 textinput') == 1
+
+
+@only_bootstrap4
+def test_file_field():
+    form = FileForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout("clearable_file")
+    html = render_crispy_form(form)
+    assert contains_partial(
+        html,
+        """<div class=" mb-2"><div class="input-group mb-2"><div class="input-group-prepend">
+        <span class="input-group-text">Currently</span></div><div class="form-control d-flex">
+        <span style="flex-grow: 1;"> <a href="something">something</a> </span> <span class=" ">
+        <span class="custom-control custom-checkbox">
+        <input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id" class="custom-control-input">
+        <label class="custom-control-label mb-0" for="clearable_file-clear_id">Clear</label></span></span></div></div>
+        <div class="input-group mb-0"><div class="input-group-prepend"> <span class="input-group-text">Change</span>
+        </div><div class="form-control custom-file" style="border:0">
+        <input type="file" name="clearable_file" class="custom-file-input">
+        <label class="custom-file-label" for="id_clearable_file">---</label></div></div>
+        <div class="input-group mb-0"> </div></div>""",
+    )
+    form.helper.use_custom_control = False
+    html = render_crispy_form(form)
+    assert contains_partial(
+        html,
+        """<div class="">Currently: <a href="something">something</a>
+        <input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id">
+        <label for="clearable_file-clear_id">Clear</label><br>Change:
+        <input type="file" name="clearable_file" class="clearablefileinput form-control-file" id="id_clearable_file">
+         </div>""",
+    )
+
+    form.helper.use_custom_control = True
+    form.helper.layout = Layout("file_field")
+    html = render_crispy_form(form)
+    assert contains_partial(
+        html,
+        """<div class="form-control custom-file" style="border:0">
+        <input type="file" name="file_field" class="custom-file-input">
+        <label class="custom-file-label" for="id_file_field">---</label>
+        </div>""",
+    )
+
+    form.helper.use_custom_control = False
+    html = render_crispy_form(form)
+    assert contains_partial(
+        html,
+        """<input type="file" name="file_field" class="fileinput fileUpload form-control-file"
+        required id="id_file_field">""",
+    )
