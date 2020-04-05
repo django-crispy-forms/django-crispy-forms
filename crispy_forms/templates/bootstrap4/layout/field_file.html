@@ -33,7 +33,7 @@
             document.getElementById("script-{{ field.id_for_label }}").parentNode.querySelector('.custom-file-input').onchange =  function (e){
                 var filenames = "";
                 for (let i=0;i<e.target.files.length;i++){
-                    filenames+=(i>0?", ":"")+e.target.files[0].name;
+                    filenames+=(i>0?", ":"")+e.target.files[i].name;
                 }
                 e.target.parentNode.querySelector('.custom-file-label').innerHTML=filenames;    
             }        
