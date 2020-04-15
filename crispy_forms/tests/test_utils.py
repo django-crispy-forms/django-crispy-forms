@@ -52,21 +52,21 @@ def test_custom_bound_field():
 
 def test_contains_partial():
     c = SimpleTestCase()
-    needle = '<span></span>'
-    html = '<form>%s</form>'
+    needle = "<span></span>"
+    html = "<form>%s</form>"
     c.assertTrue(contains_partial(html % needle, needle))
 
-    needle = '<span></span><b></b>'
+    needle = "<span></span><b></b>"
     c.assertRaises(NotImplementedError, contains_partial, html % needle, needle)
 
-    needle = '<span>a</span>'
+    needle = "<span>a</span>"
     c.assertRaises(NotImplementedError, contains_partial, html % needle, needle)
 
     needle = '<span id="e"></span>'
     html = '<form id="tt"><span id="f"></span>%s</form>'
     c.assertTrue(contains_partial(html % needle, needle))
 
-    missing = '<script></script>'
+    missing = "<script></script>"
     c.assertFalse(contains_partial(html % missing, needle))
 
     needle = '<span id="e"></span>'
