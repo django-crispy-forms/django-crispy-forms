@@ -1,0 +1,9 @@
+{% if form.form_html %}
+    {% if include_media %}{{ form.media }}{% endif %}
+    {% if form_show_errors %}
+        {% include "tailwind/errors.html" %}
+    {% endif %}
+    {{ form.form_html }}
+{% else %}
+    {% include "tailwind/uni_form.html" %}
+{% endif %}

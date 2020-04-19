@@ -1,0 +1,11 @@
+{% load crispy_forms_utils %}
+
+{% specialspaceless %}
+    {% if include_media %}{{ form.media }}{% endif %}
+    {% if form_show_errors %}
+        {% include "tailwind/errors.html" %}
+    {% endif %}
+    {% for field in form %}
+        {% include field_template %}
+    {% endfor %}
+{% endspecialspaceless %}

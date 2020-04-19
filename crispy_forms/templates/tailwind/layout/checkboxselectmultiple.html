@@ -1,0 +1,17 @@
+{% load crispy_forms_filters %}
+{% load l10n %}
+
+
+    {% for choice in field.field.choices %}
+        <div class="mr-3">
+            <label class="{{ css_container.option_label }}" for="id_{{ field.html_name }}_{{ forloop.counter }}">
+                <input type="checkbox" class="{{ css_container.checkboxselectmultiple }}"{% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
+                {{ choice.1|unlocalize }}
+            </label>
+            {% if field.errors and forloop.last and not inline_class %}
+                {% include 'tailwind/layout/field_errors_block.html' %}
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% include 'tailwind/layout/help_text.html' %}
+</div>

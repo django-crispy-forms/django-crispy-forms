@@ -1,0 +1,33 @@
+{% load crispy_forms_field %}
+
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+    {# Opening Div and Label first#}
+    
+        <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" class="{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if field_class %} {{ field_class }}{% endif %}">
+            {% if field.label and form_show_labels %}
+                <label for="{{ field.id_for_label }}" class="{{ label_class }}">
+                    {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                </label>
+            {% endif %}
+        
+        {# if field has a special template then use this #}
+    {% if field|is_radioselect %}
+        <div class="{% if field_class %} {{ field_class }}{% endif %}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
+
+        {% include 'tailwind/layout/radioselect.html' %}
+    {% elif field|is_checkboxselectmultiple %}
+            
+<div class="{% if field_class %} {{ field_class }}{% endif %}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
+        {% include 'tailwind/layout/checkboxselectmultiple.html' %}
+    {% else %}
+        
+        {# otherwise use django rendering with additional classes added #}
+            {% crispy_field field %}
+
+            {% include 'tailwind/layout/help_text_and_errors.html' %}
+
+        </{% if tag %}{{ tag }}{% else %}div{% endif %}>
+    {% endif %}
+{% endif %}

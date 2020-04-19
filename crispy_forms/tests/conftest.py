@@ -6,7 +6,7 @@ only_uni_form = pytest.mark.only("uni_form")
 only_bootstrap = pytest.mark.only("bootstrap", "bootstrap3", "bootstrap4")
 only_bootstrap3 = pytest.mark.only("bootstrap3")
 only_bootstrap4 = pytest.mark.only("bootstrap4")
-
+only_tailwind = pytest.mark.only("tailwind")
 
 @pytest.fixture
 def advanced_layout():
@@ -22,7 +22,7 @@ def advanced_layout():
     )
 
 
-@pytest.fixture(autouse=True, params=("uni_form", "bootstrap", "bootstrap3", "bootstrap4"))
+@pytest.fixture(autouse=True, params=("uni_form", "bootstrap", "bootstrap3", "bootstrap4", "tailwind"))
 def template_packs(request, settings):
     check_template_pack(request.node, request.param)
     settings.CRISPY_TEMPLATE_PACK = request.param

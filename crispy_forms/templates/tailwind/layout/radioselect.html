@@ -1,0 +1,16 @@
+{% load crispy_forms_filters %}
+{% load l10n %}
+
+
+    {% for choice in field.field.choices %}
+            <label for="id_{{ field.html_name }}_{{ forloop.counter }}" class="{{ css_container.option_label }} mr-3">
+                <input type="radio" class="{{ css_container.radioselect }}"{% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
+                {{ choice.1|unlocalize }}
+            </label>
+                    {% if field.errors and forloop.last %}
+                {% include 'tailwind/layout/field_errors_block.html' %}
+            {% endif %}
+            
+    {% endfor %}
+    {% include 'tailwind/layout/help_text.html' %} 
+    </div>

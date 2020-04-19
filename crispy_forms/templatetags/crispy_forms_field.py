@@ -3,6 +3,7 @@ from django.conf import settings
 from django.template import Context, loader
 
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
+from crispy_forms.tailwind import CSSContainer
 
 register = template.Library()
 
@@ -136,6 +137,12 @@ class CrispyFieldNode(template.Node):
                         css_class += "-file"
                 if field.errors:
                     css_class += " is-invalid"
+
+            if template_pack == "tailwind":
+                css_container = context.get("css_container")
+                if css_container:
+                    css = " " + css_container.get_input_class(field)
+                    css_class += css
 
             widget.attrs["class"] = css_class
 
