@@ -1,24 +1,17 @@
-from crispy_forms.tailwind import CSSContainer
 from django.template import Context, Template
-from .forms import SampleForm
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
-from  .conftest import only_tailwind
+from crispy_forms.tailwind import CSSContainer
 
-individual_inputs = {
-    "text": "text",
-    "radioselect": "radio"
-}
+from .conftest import only_tailwind
+from .forms import SampleForm
 
-base_standalone = {
-    "base": "base"
-}
+individual_inputs = {"text": "text", "radioselect": "radio"}
 
-combined = {
-    "base": "base",
-    "text": "text",
-    "radioselect": "radio"
-}
+base_standalone = {"base": "base"}
+
+combined = {"base": "base", "text": "text", "radioselect": "radio"}
 
 
 def test_individual_input():
@@ -54,9 +47,7 @@ def test_add_remove_extra_class():
 def test_form():
     form_helper = FormHelper()
     form_helper.css_container = CSSContainer(base_standalone)
-    form_helper.layout = Layout(
-        'first_name'
-    )
+    form_helper.layout = Layout("first_name")
 
     template = Template(
         """

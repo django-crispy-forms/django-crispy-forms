@@ -8,6 +8,7 @@ only_bootstrap3 = pytest.mark.only("bootstrap3")
 only_bootstrap4 = pytest.mark.only("bootstrap4")
 only_tailwind = pytest.mark.only("tailwind")
 
+
 @pytest.fixture
 def advanced_layout():
     return Layout(

@@ -3,7 +3,6 @@ from django.conf import settings
 from django.template import Context, loader
 
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
-from crispy_forms.tailwind import CSSContainer
 
 register = template.Library()
 

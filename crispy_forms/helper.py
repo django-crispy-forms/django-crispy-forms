@@ -334,7 +334,7 @@ class FormHelper(DynamicLayoutHandler):
             "include_media": self.include_media,
             "label_class": self.label_class,
             "use_custom_control": self.use_custom_control,
-            "css_container": self.css_container
+            "css_container": self.css_container,
         }
 
         if template_pack == "bootstrap4":
