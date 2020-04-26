@@ -54,7 +54,7 @@ Your helper can be a class level variable or an instance level variable, if you 
     class ExampleForm(forms.Form):
         [...]
         def __init__(self, *args, **kwargs):
-            super(ExampleForm, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.helper = FormHelper()
 
 As you can see you need to call the base class constructor using ``super`` and override the constructor. This helper doesn't set any form attributes, so it's useless. Let's see how to set up some basic `FormHelper` attributes::
@@ -65,7 +65,7 @@ As you can see you need to call the base class constructor using ``super`` and o
     class ExampleForm(forms.Form):
         [...]
         def __init__(self, *args, **kwargs):
-            super(ExampleForm, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.form_id = 'id-exampleForm'
             self.helper.form_class = 'blueForms'

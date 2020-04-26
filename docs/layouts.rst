@@ -23,7 +23,7 @@ Let's add a layout to our helper::
     class ExampleForm(forms.Form):
         [...]
         def __init__(self, *args, **kwargs):
-            super(ExampleForm, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.layout = Layout(
                 Fieldset(
@@ -145,7 +145,6 @@ Fields in bootstrap are wrapped in a ``<div class="control-group">``. You may wa
 - **Submit**: Used to create a submit button. First parameter is the ``name`` attribute of the button, second parameter is the ``value`` attribute::
 
     Submit('search', 'SEARCH')
-    Submit('search', 'SEARCH')
 
 Renders to::
 
@@ -179,7 +178,7 @@ These ones live in module ``crispy_forms.layout``. Probably in the future they w
 - **ButtonHolder**: It wraps fields in a ``<div class=”buttonHolder”>``, which uni-form positions in a nice way. This is where form's submit buttons go in uni-form::
 
     ButtonHolder(
-        HTML("<span class="hidden">✓ Saved data</span>"),
+        HTML('<span class="hidden">✓ Saved data</span>'),
         Submit('save', 'Save')
     )
 
@@ -294,8 +293,8 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/alert.png
    :align: center
 
-- **UneditableField**: ``UneditableField`` renders a disabled field using the bootstrap ``uneditable-input`` class:: 
-    
+- **UneditableField**: ``UneditableField`` renders a disabled field using the bootstrap ``uneditable-input`` class::
+
     UneditableField('text_input', css_class='form-control-lg')
 
 
@@ -364,7 +363,7 @@ Imagine you have several forms that share a big chunk of the same layout. There 
 
     class CommonLayout(Layout):
         def __init__(self, *args, **kwargs):
-            super(CommonLayout, self).__init__(
+            super().__init__(
                 MultiField("User data",
                     'username',
                     'lastname',

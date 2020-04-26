@@ -23,7 +23,7 @@ Of course, you can still use a helper, otherwise there would be nothing crispy i
 
     class ExampleFormSetHelper(FormHelper):
         def __init__(self, *args, **kwargs):
-            super(ExampleFormSetHelper, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.form_method = 'post'
             self.layout = Layout(
                 'favorite_color',

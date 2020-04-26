@@ -18,7 +18,7 @@ Since version 1.2.0 ``FormHelper`` optionally can be passed an instance of a for
 
     class ExampleForm(forms.Form):
         def __init__(self, *args, **kwargs):
-            super(ExampleForm, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
             self.helper = FormHelper(self)
 
 
