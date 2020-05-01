@@ -232,6 +232,7 @@ One easy way to validate a crispy-form through AJAX and re-render the resulting 
 
 Our server side code could be::
 
+    from django.template.context_processors import csrf
     from crispy_forms.utils import render_crispy_form
 
     @json_view
@@ -242,19 +243,15 @@ Our server side code could be::
             form.save()
             return {'success': True}
 
-        # RequestContext ensures CSRF token is placed in newly rendered form_html
-        request_context = RequestContext(request)
-        form_html = render_crispy_form(form, context=request_context)
+
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
         return {'success': False, 'form_html': form_html}
 
 I'm using a jsonview decorator from `django-jsonview`_.
 
-Note that in Django versions 1.8 and onwards, using ``RequestContext`` in this way will not work. Instead you can provide ``render_crispy_form`` with the necessary CSRF token with the following code::
-
-    from django.template.context_processors import csrf
-    ctx = {}
-    ctx.update(csrf(request))
-    form_html = render_crispy_form(form, context=ctx)
+Note that you have to provide ``render_crispy_form`` the necessary CSRF token, otherwise it will not work.
 
 In our client side using jQuery would look like::
 
