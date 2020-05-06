@@ -29,7 +29,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
     """
     The original and still very useful way to generate a div elegant form/formset::
 
-        {% load crispy_forms_tags %}
+        {% load crispy_forms_filters %}
 
         <form class="uniForm" method="post">
             {% csrf_token %}
@@ -90,7 +90,7 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
     """
     Renders a form field like a django-crispy-forms field::
 
-        {% load crispy_forms_tags %}
+        {% load crispy_forms_filters %}
         {{ form.field|as_crispy_field }}
 
     or::
