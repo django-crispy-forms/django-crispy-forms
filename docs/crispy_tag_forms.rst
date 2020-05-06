@@ -228,10 +228,13 @@ Sometimes, it might be useful to render a form using crispy-forms within Python 
 AJAX validation recipe
 ~~~~~~~~~~~~~~~~~~~~~~
 
-One easy way to validate a crispy-form through AJAX and re-render the resulting form errors if any is to set up a view, that validates the form and renders its html using ``render_crispy_form`` to finally return this html to the client AJAX request. Let's see an example.
+You may wish to validate a crispy-form through AJAX to re-render any resulting form errors. One way to do this is to set 
+up a view that validates the form and renders its html using ``render_crispy_form``. This html is then returned to the 
+client AJAX request. Let's see an example.
 
 Our server side code could be::
 
+    from django.template.context_processors import csrf
     from crispy_forms.utils import render_crispy_form
 
     @json_view
@@ -242,19 +245,15 @@ Our server side code could be::
             form.save()
             return {'success': True}
 
-        # RequestContext ensures CSRF token is placed in newly rendered form_html
-        request_context = RequestContext(request)
-        form_html = render_crispy_form(form, context=request_context)
+
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
         return {'success': False, 'form_html': form_html}
 
 I'm using a jsonview decorator from `django-jsonview`_.
 
-Note that in Django versions 1.8 and onwards, using ``RequestContext`` in this way will not work. Instead you can provide ``render_crispy_form`` with the necessary CSRF token with the following code::
-
-    from django.template.context_processors import csrf
-    ctx = {}
-    ctx.update(csrf(request))
-    form_html = render_crispy_form(form, context=ctx)
+Note that you have to provide ``render_crispy_form`` the necessary CSRF token, otherwise it will not work.
 
 In our client side using jQuery would look like::
 
@@ -278,8 +277,6 @@ In our client side using jQuery would look like::
             $(example_form).find('.error-message').show()
         }
     });
-
-Obviously, you can adjust this snippets to your needs, or class based views or favorite frontend library.
 
 .. warning ::
 
