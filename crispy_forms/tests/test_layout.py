@@ -613,7 +613,7 @@ def test_file_field():
     form.helper.use_custom_control = False
     html = render_crispy_form(form)
     assert '<input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id">' in html
-    assert '<input type="file" name="clearable_file" class="clearablefileinput form-control-file"' in html
+    assert '<input type="file" name="clearable_file" class="custom-file-input" >' not in html
 
     form.helper.use_custom_control = True
     form.helper.layout = Layout("file_field")
@@ -626,6 +626,6 @@ def test_file_field():
     form.helper.use_custom_control = False
     html = render_crispy_form(form)
     assert (
-        '<input type="file" name="file_field" class="fileinput fileUpload form-control-file" '
-        'required id="id_file_field">' in html
+        '<div class="form-control custom-file" style="border:0"> <input type="file" name="file_field" '
+        'class="custom-file-input" > <label class="custom-file-label" for="id_file_field">---</label>' not in html
     )
