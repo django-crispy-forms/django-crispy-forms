@@ -1,5 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
+## next release (TBC)
+* Added Bootstrap 4 styling for clearable file widget
+
 ## 1.9.0 (2020-02-28)
 * Removed support for Python 2.
 * Removed support for Django versions prior to 2.2.

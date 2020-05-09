@@ -1,9 +1,11 @@
 from django import forms
 from django.template.base import Template
 from django.template.context import Context
+from django.test import SimpleTestCase
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
+from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import list_difference, list_intersection, render_field
 
 
@@ -46,3 +48,34 @@ def test_custom_bound_field():
     rendered = template.render(Context({"form": MyForm(data={"f": "something"})}))
 
     assert extra in rendered
+
+
+def test_contains_partial():
+    c = SimpleTestCase()
+    needle = "<span></span>"
+    html = "<form>%s</form>"
+    c.assertTrue(contains_partial(html % needle, needle))
+
+    needle = "<span></span><b></b>"
+    c.assertRaises(NotImplementedError, contains_partial, html % needle, needle)
+
+    needle = "<span>a</span>"
+    c.assertRaises(NotImplementedError, contains_partial, html % needle, needle)
+
+    needle = '<span id="e"></span>'
+    html = '<form id="tt"><span id="f"></span>%s</form>'
+    c.assertTrue(contains_partial(html % needle, needle))
+
+    missing = "<script></script>"
+    c.assertFalse(contains_partial(html % missing, needle))
+
+    needle = '<span id="e"></span>'
+    html = '<form id="tt"><span id="f"></span>%s</form>'
+    missing = '<span id="g"></span>'
+    c.assertFalse(contains_partial(html % missing, needle))
+
+    needle = '<div id="r"><span>toto</span></div>'
+    html = '<form><div id="r"></div></form>'
+    c.assertRaises(NotImplementedError, contains_partial, html, needle)
+    # as we do not look at the children, needle is equivalent to <div id="r"></div> which IS in html
+    c.assertTrue(contains_partial(html, needle, ignore_needle_children=True))

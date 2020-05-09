@@ -159,16 +159,24 @@ All previous, ``bootstrap`` (version 2 and 3) attributes are also settable in bo
 .. |customfile| image:: images/custom_file_field.png
    :width: 300px
    :align: middle
+.. |clearablefile| image:: images/clearable_file.png    
+   :height: 60px
+   :align: middle
+.. |clearablecustomfile| image:: images/clearable_file_custom.png
+   :width: 300px
+   :align: middle
 
-+------------------+------------------+
-|     Standard     |     Optional     |
-+------------------+------------------+
-| |checkbox|       | |customcheckbox| |
-+------------------+------------------+
-|  |radio|         | |customradio|    |
-+------------------+------------------+
-|  |file|          | |customfile|     |
-+------------------+------------------+
++-----------------------+-----------------------+
+|     Standard          |     Optional          |
++-----------------------+-----------------------+
+| |checkbox|            | |customcheckbox|      |
++-----------------------+-----------------------+
+|  |radio|              | |customradio|         |
++-----------------------+-----------------------+
+|  |file|               | |customfile|          |
++-----------------------+-----------------------+
+|  |clearablefile|      | |clearablecustomfile| |
++-----------------------+-----------------------+
 
 Custom Helper attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~

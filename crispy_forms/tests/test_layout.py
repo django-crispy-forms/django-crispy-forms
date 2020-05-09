@@ -18,6 +18,7 @@ from .forms import (
     CheckboxesSampleForm,
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
+    FileForm,
     SampleForm,
     SampleForm2,
     SampleForm3,
@@ -598,3 +599,33 @@ def test_update_attributes_class():
     form.helper["password1"].update_attributes(css_class="hello2")
     html = render_crispy_form(form)
     assert html.count(' class="hello hello2 textinput') == 1
+
+
+@only_bootstrap4
+def test_file_field():
+    form = FileForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout("clearable_file")
+    html = render_crispy_form(form)
+    assert '<span class="custom-control custom-checkbox">' in html
+    assert '<input type="file" name="clearable_file" class="custom-file-input" >' in html
+
+    form.helper.use_custom_control = False
+    html = render_crispy_form(form)
+    assert '<input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id">' in html
+    assert '<input type="file" name="clearable_file" class="custom-file-input" >' not in html
+
+    form.helper.use_custom_control = True
+    form.helper.layout = Layout("file_field")
+    html = render_crispy_form(form)
+    assert (
+        '<div class="form-control custom-file" style="border:0"> <input type="file" name="file_field" '
+        'class="custom-file-input" > <label class="custom-file-label" for="id_file_field">---</label>' in html
+    )
+
+    form.helper.use_custom_control = False
+    html = render_crispy_form(form)
+    assert (
+        '<div class="form-control custom-file" style="border:0"> <input type="file" name="file_field" '
+        'class="custom-file-input" > <label class="custom-file-label" for="id_file_field">---</label>' not in html
+    )
