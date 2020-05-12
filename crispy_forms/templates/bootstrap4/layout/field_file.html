@@ -35,7 +35,7 @@
                 for (let i=0;i<e.target.files.length;i++){
                     filenames+=(i>0?", ":"")+e.target.files[i].name;
                 }
-                e.target.parentNode.querySelector('.custom-file-label').innerHTML=filenames;    
+                e.target.parentNode.querySelector('.custom-file-label').textContent=filenames;    
             }        
         </script>
     </div>
