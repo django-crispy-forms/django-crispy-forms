@@ -14,7 +14,7 @@
         {% if not widget.data.required %}
         <span class=" ">
             <span class="custom-control custom-checkbox">
-                <input type="checkbox" name="{{ widget.data.checkbox_name }}" id="{{ widget.data.checkbox_id }}" class="custom-control-input">
+                <input type="checkbox" name="{{ widget.data.checkbox_name }}" id="{{ widget.data.checkbox_id }}" class="custom-control-input"{% if field.field.disabled %} disabled{% endif %} >
                 <label class="custom-control-label mb-0" for="{{ widget.data.checkbox_id }}">{{ widget.data.clear_checkbox_label }}</label>
             </span>
         </span>
@@ -27,7 +27,7 @@
     </div>
 {% endif %}
     <div class="form-control custom-file{% if field.errors %} is-invalid{%endif%}" style="border:0">
-        <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input{% if field.errors %} is-invalid{%endif%}" {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+        <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input{% if field.errors %} is-invalid{%endif%}" {% if field.field.disabled %}disabled{% endif %} {% for name, value in field.field.widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
         <label class="custom-file-label" for="{{ field.id_for_label }}">---</label>
         <script type="text/javascript" id="script-{{ field.id_for_label }}">        
             document.getElementById("script-{{ field.id_for_label }}").parentNode.querySelector('.custom-file-input').onchange =  function (e){
