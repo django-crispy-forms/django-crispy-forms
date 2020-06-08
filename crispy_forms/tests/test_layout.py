@@ -618,14 +618,13 @@ def test_file_field():
     form.helper.use_custom_control = True
     form.helper.layout = Layout("file_field")
     html = render_crispy_form(form)
-    assert (
-        '<div class="form-control custom-file" style="border:0"> <input type="file" name="file_field" '
-        'class="custom-file-input"  > <label class="custom-file-label" for="id_file_field">---</label>' in html
-    )
+    assert '<div class="form-control custom-file"' in html
+    assert '<input type="file" name="file_field" class="custom-file-input"' in html
+    assert '<label class="custom-file-label' in html
+    assert 'for="id_file_field">---</label>' in html
 
     form.helper.use_custom_control = False
     html = render_crispy_form(form)
-    assert (
-        '<div class="form-control custom-file" style="border:0"> <input type="file" name="file_field" '
-        'class="custom-file-input"  > <label class="custom-file-label" for="id_file_field">---</label>' not in html
-    )
+    assert 'custom-file"' not in html
+    assert 'custom-file-input"' not in html
+    assert 'custom-file-label' not in html
