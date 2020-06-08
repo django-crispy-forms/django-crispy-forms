@@ -625,6 +625,6 @@ def test_file_field():
 
     form.helper.use_custom_control = False
     html = render_crispy_form(form)
-    assert 'custom-file"' not in html
-    assert 'custom-file-input"' not in html
-    assert 'custom-file-label' not in html
+    assert "custom-file" not in html
+    assert "custom-file-input" not in html
+    assert "custom-file-label" not in html
