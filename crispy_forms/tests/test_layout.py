@@ -306,7 +306,7 @@ def test_formset_layout(settings):
     assert "formsets-that-rock" in html
     assert 'method="post"' in html
     assert 'id="thisFormsetRocks"' in html
-    assert 'action="%s"' % reverse("simpleAction") in html
+    assert f"action=\"{reverse('simpleAction')}\"" in html
 
     # Check form layout
     assert "Item 1" in html

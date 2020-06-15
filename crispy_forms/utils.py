@@ -22,7 +22,7 @@ TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
 # is called without a template
 @lru_cache()
 def default_field_template(template_pack=TEMPLATE_PACK):
-    return get_template("%s/field.html" % template_pack)
+    return get_template(f"{template_pack}/field.html")
 
 
 def render_field(  # noqa: C901
@@ -93,19 +93,19 @@ def render_field(  # noqa: C901
 
         except KeyError:
             if not FAIL_SILENTLY:
-                raise Exception("Could not resolve form field '%s'." % field)
+                raise Exception(f"Could not resolve form field '{field}'.")
             else:
                 field_instance = None
-                logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
+                logging.warning(f"Could not resolve form field '{field}'.", exc_info=sys.exc_info())
 
         if hasattr(form, "rendered_fields"):
             if field not in form.rendered_fields:
                 form.rendered_fields.add(field)
             else:
                 if not FAIL_SILENTLY:
-                    raise Exception("A field should only be rendered once: %s" % field)
+                    raise Exception(f"A field should only be rendered once: {field}")
                 else:
-                    logging.warning("A field should only be rendered once: %s" % field, exc_info=sys.exc_info())
+                    logging.warning(f"A field should only be rendered once: {field}", exc_info=sys.exc_info())
 
         if field_instance is None:
             html = ""

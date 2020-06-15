@@ -196,7 +196,7 @@ class StrictButton(TemplateNameMixin):
             kwargs["id"] = kwargs.pop("css_id")
         kwargs["class"] = self.field_classes
         if "css_class" in kwargs:
-            kwargs["class"] += " %s" % kwargs.pop("css_class")
+            kwargs["class"] += f" {kwargs.pop('css_class')}"
 
         self.flat_attrs = flatatt(kwargs)
 

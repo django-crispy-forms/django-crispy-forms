@@ -322,7 +322,7 @@ class FormHelper(DynamicLayoutHandler):
             "disable_csrf": self.disable_csrf,
             "error_text_inline": self.error_text_inline,
             "field_class": self.field_class,
-            "field_template": self.field_template or "%s/field.html" % template_pack,
+            "field_template": self.field_template or f"{template_pack}/field.html",
             "form_method": self.form_method.strip(),
             "form_show_errors": self.form_show_errors,
             "form_show_labels": self.form_show_labels,
@@ -359,7 +359,7 @@ class FormHelper(DynamicLayoutHandler):
         if self.form_class:
             # uni_form TEMPLATE PACK has a uniForm class by default
             if template_pack == "uni_form":
-                items["attrs"]["class"] = "uniForm %s" % self.form_class.strip()
+                items["attrs"]["class"] = f"uniForm {self.form_class.strip()}"
             else:
                 items["attrs"]["class"] = self.form_class.strip()
         else:

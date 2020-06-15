@@ -89,7 +89,7 @@ def test_form_with_helper_without_layout(settings):
     assert "forms-that-rock" in html
     assert 'method="get"' in html
     assert 'id="this-form-rocks"' in html
-    assert 'action="%s"' % reverse("simpleAction") in html
+    assert f"action=\"{reverse('simpleAction')}\"" in html
 
     if settings.CRISPY_TEMPLATE_PACK == "uni_form":
         assert 'class="uniForm' in html
@@ -401,7 +401,7 @@ def test_formset_with_helper_without_layout(settings):
     assert "formsets-that-rock" in html
     assert 'method="post"' in html
     assert 'id="thisFormsetRocks"' in html
-    assert 'action="%s"' % reverse("simpleAction") in html
+    assert f"action=\"{reverse('simpleAction')}\"" in html
     if settings.CRISPY_TEMPLATE_PACK == "uni_form":
         assert 'class="uniForm' in html
 
@@ -553,7 +553,7 @@ def test_helper_custom_field_template_no_layout():
 
     html = render_crispy_form(form)
     for field in form.fields:
-        assert html.count('id="div_id_%s"' % field) == 1
+        assert html.count(f'id="div_id_{field}"') == 1
     assert html.count("<h1>Special custom field</h1>") == len(form.fields)
 
 
@@ -563,7 +563,7 @@ def test_helper_std_field_template_no_layout():
 
     html = render_crispy_form(form)
     for field in form.fields:
-        assert html.count('id="div_id_%s"' % field) == 1
+        assert html.count(f'id="div_id_{field}"') == 1
 
 
 @only_uni_form

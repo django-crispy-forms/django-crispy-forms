@@ -11,7 +11,7 @@ def contains_partial(haystack, needle, ignore_needle_children=False):
         needle = parse_html(needle)
 
     if len(needle.children) > 0 and not ignore_needle_children:
-        raise NotImplementedError("contains_partial does not check needle's children:%s" % str(needle.children))
+        raise NotImplementedError(f"contains_partial does not check needle's children:{str(needle.children)}")
 
     if needle.name == haystack.name and set(needle.attributes).issubset(haystack.attributes):
         return True

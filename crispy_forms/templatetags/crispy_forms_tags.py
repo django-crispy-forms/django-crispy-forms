@@ -152,13 +152,13 @@ class BasicNode(template.Node):
 
         # We take form/formset parameters from attrs if they are set, otherwise we use defaults
         response_dict = {
-            "%s_action" % form_type: attrs["attrs"].get("action", ""),
-            "%s_attrs" % form_type: attrs.get("attrs", ""),
-            "%s_class" % form_type: attrs["attrs"].get("class", ""),
-            "%s_id" % form_type: attrs["attrs"].get("id", ""),
-            "%s_method" % form_type: attrs.get("form_method", "post"),
-            "%s_style" % form_type: attrs.get("form_style", None),
-            "%s_tag" % form_type: attrs.get("form_tag", True),
+            f"{form_type}_action": attrs["attrs"].get("action", ""),
+            f"{form_type}_attrs": attrs.get("attrs", ""),
+            f"{form_type}_class": attrs["attrs"].get("class", ""),
+            f"{form_type}_id": attrs["attrs"].get("id", ""),
+            f"{form_type}_method": attrs.get("form_method", "post"),
+            f"{form_type}_style": attrs.get("form_style", None),
+            f"{form_type}_tag": attrs.get("form_tag", True),
             "disable_csrf": attrs.get("disable_csrf", False),
             "error_text_inline": attrs.get("error_text_inline", True),
             "field_class": attrs.get("field_class", ""),
@@ -190,12 +190,12 @@ class BasicNode(template.Node):
 
 @lru_cache()
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
-    return get_template("%s/whole_uni_formset.html" % template_pack)
+    return get_template(f"{template_pack}/whole_uni_formset.html")
 
 
 @lru_cache()
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
-    return get_template("%s/whole_uni_form.html" % template_pack)
+    return get_template(f"{template_pack}/whole_uni_form.html")
 
 
 class CrispyFormNode(BasicNode):
@@ -239,7 +239,7 @@ def do_uni_form(parser, token):
     form = token.pop(1)
 
     helper = None
-    template_pack = "'%s'" % get_template_pack()
+    template_pack = f"'{get_template_pack()}'"
 
     # {% crispy form helper %}
     try:
@@ -265,7 +265,7 @@ def do_uni_form(parser, token):
         )
         if template_pack not in ALLOWED_TEMPLATE_PACKS:
             raise template.TemplateSyntaxError(
-                "crispy tag's template_pack argument should be in %s" % str(ALLOWED_TEMPLATE_PACKS)
+                f"crispy tag's template_pack argument should be in {str(ALLOWED_TEMPLATE_PACKS)}"
             )
 
     return CrispyFormNode(form, helper, template_pack=template_pack)

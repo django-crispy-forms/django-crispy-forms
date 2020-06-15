@@ -115,7 +115,7 @@ class CrispyFieldNode(template.Node):
             css_class = widget.attrs.get("class", "")
             if css_class:
                 if css_class.find(class_name) == -1:
-                    css_class += " %s" % class_name
+                    css_class += f" {class_name}"
             else:
                 css_class = class_name
 
@@ -186,7 +186,7 @@ def crispy_addon(field, append="", prepend="", form_show_labels=True):
     """
     if field:
         context = Context({"field": field, "form_show_errors": True, "form_show_labels": form_show_labels})
-        template = loader.get_template("%s/layout/prepended_appended_text.html" % get_template_pack())
+        template = loader.get_template(f"{get_template_pack()}/layout/prepended_appended_text.html")
         context["crispy_prepended_text"] = prepend
         context["crispy_appended_text"] = append
 

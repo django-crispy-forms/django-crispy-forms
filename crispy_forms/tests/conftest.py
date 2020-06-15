@@ -32,4 +32,4 @@ def check_template_pack(node, template_pack):
     mark = node.get_closest_marker("only")
     if mark:
         if template_pack not in mark.args:
-            pytest.skip("Requires %s template pack" % " or ".join(mark.args))
+            pytest.skip(f"Requires {' or '.join(mark.args)} template pack")

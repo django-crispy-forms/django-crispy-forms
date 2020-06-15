@@ -181,7 +181,7 @@ class BaseInput(TemplateNameMixin):
         self.attrs = {}
 
         if "css_class" in kwargs:
-            self.field_classes += " %s" % kwargs.pop("css_class")
+            self.field_classes += f" {kwargs.pop('css_class')}"
 
         self.template = kwargs.pop("template", self.template)
         self.flat_attrs = flatatt(kwargs)
@@ -290,7 +290,7 @@ class Fieldset(LayoutObject):
 
         legend = ""
         if self.legend:
-            legend = "%s" % Template(str(self.legend)).render(context)
+            legend = f"{Template(str(self.legend)).render(context)}"
 
         template = self.get_template_name(template_pack)
         return render_to_string(
@@ -355,7 +355,7 @@ class Div(LayoutObject):
         self.fields = list(fields)
 
         if hasattr(self, "css_class") and "css_class" in kwargs:
-            self.css_class += " %s" % kwargs.pop("css_class")
+            self.css_class += f" {kwargs.pop('css_class')}"
         if not hasattr(self, "css_class"):
             self.css_class = kwargs.pop("css_class", None)
 
@@ -436,7 +436,7 @@ class Field(LayoutObject):
 
         if "css_class" in kwargs:
             if "class" in self.attrs:
-                self.attrs["class"] += " %s" % kwargs.pop("css_class")
+                self.attrs["class"] += f" {kwargs.pop('css_class')}"
             else:
                 self.attrs["class"] = kwargs.pop("css_class")
 

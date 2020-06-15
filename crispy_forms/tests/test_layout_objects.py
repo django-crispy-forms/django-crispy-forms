@@ -278,7 +278,7 @@ class TestBootstrapLayoutObjects:
         elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
             accordion_class = "collapse show"
 
-        assert html.count('<div id="one" class="%s"' % accordion_class) == 1
+        assert html.count(f'<div id="one" class="{accordion_class}"') == 1
 
         test_form.helper.layout = Layout(
             Accordion(AccordionGroup("one", "first_name", active=False,),)  # now ``active`` manually set as False
@@ -286,7 +286,7 @@ class TestBootstrapLayoutObjects:
 
         # This time, it shouldn't be there at all.
         html = render_crispy_form(test_form)
-        assert html.count('<div id="one" class="%s collapse in"' % accordion_class) == 0
+        assert html.count(f'<div id="one" class="{accordion_class} collapse in"') == 0
 
     def test_alert(self):
         test_form = SampleForm()
@@ -375,9 +375,9 @@ class TestBootstrapLayoutObjects:
         # else:
         # tab_class = 'tab-pane'
         # tab 1 should not be active
-        assert html.count('<div id="one" \n    class="{} active'.format(tab_class)) == 0
+        assert html.count(f'<div id="one" \n    class="{tab_class} active') == 0
         # tab 2 should be active
-        assert html.count('<div id="two" \n    class="{} active'.format(tab_class)) == 1
+        assert html.count(f'<div id="two" \n    class="{tab_class} active') == 1
 
     def test_radio_attrs(self):
         form = CheckboxesSampleForm()
@@ -406,7 +406,7 @@ class TestBootstrapLayoutObjects:
         if settings.CRISPY_TEMPLATE_PACK in ("bootstrap3", "bootstrap4"):
             form_group_class = "form-group"
 
-        assert html.count('class="%s extra"' % form_group_class) == 1
+        assert html.count(f'class="{form_group_class} extra"') == 1
         assert html.count('autocomplete="off"') == 1
         assert html.count('class="span4') == 1
         assert html.count('id="go-button"') == 1
@@ -480,5 +480,5 @@ class TestBootstrapLayoutObjects:
             "numeric_multiple_checkboxes_3",
         ]
         for id_suffix in expected_ids:
-            expected_str = 'id="id_{id_suffix}"'.format(id_suffix=id_suffix)
+            expected_str = f'id="id_{id_suffix}"'
             assert html.count(expected_str) == 1

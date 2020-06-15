@@ -148,7 +148,7 @@ class LayoutSlice:
             if hasattr(layout_object, "attrs"):
                 if "css_class" in kwargs:
                     if "class" in layout_object.attrs:
-                        layout_object.attrs["class"] += " %s" % kwargs.pop("css_class")
+                        layout_object.attrs["class"] += f" {kwargs.pop('css_class')}"
                     else:
                         layout_object.attrs["class"] = kwargs.pop("css_class")
                 layout_object.attrs.update(kwargs)
