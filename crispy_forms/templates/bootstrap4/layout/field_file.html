@@ -7,8 +7,8 @@
     <div class="input-group-prepend">
         <span class="input-group-text">{{ widget.data.initial_text }}</span>
     </div>
-    <div class="form-control d-flex">
-        <span style="flex-grow: 1;">
+    <div class="form-control d-flex h-auto">
+        <span class="text-break" style="flex-grow:1;min-width:0">
         <a href="{{ field.value.url }}">{{ field.value }}</a>
         </span>
         {% if not widget.data.required %}
@@ -28,7 +28,7 @@
 {% endif %}
     <div class="form-control custom-file{% if field.errors %} is-invalid{%endif%}" style="border:0">
         <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input{% if field.errors %} is-invalid{%endif%}" {% if field.field.disabled %}disabled{% endif %} {% for name, value in field.field.widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
-        <label class="custom-file-label" for="{{ field.id_for_label }}">---</label>
+        <label class="custom-file-label text-truncate" for="{{ field.id_for_label }}">---</label>
         <script type="text/javascript" id="script-{{ field.id_for_label }}">        
             document.getElementById("script-{{ field.id_for_label }}").parentNode.querySelector('.custom-file-input').onchange =  function (e){
                 var filenames = "";
