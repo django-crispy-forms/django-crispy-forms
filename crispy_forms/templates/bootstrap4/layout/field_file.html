@@ -12,7 +12,7 @@
         <a href="{{ field.value.url }}">{{ field.value }}</a>
         </span>
         {% if not widget.data.required %}
-        <span class=" ">
+        <span class="align-self-center ml-2">
             <span class="custom-control custom-checkbox">
                 <input type="checkbox" name="{{ widget.data.checkbox_name }}" id="{{ widget.data.checkbox_id }}" class="custom-control-input"{% if field.field.disabled %} disabled{% endif %} >
                 <label class="custom-control-label mb-0" for="{{ widget.data.checkbox_id }}">{{ widget.data.clear_checkbox_label }}</label>
