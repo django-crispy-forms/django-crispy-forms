@@ -2,7 +2,6 @@ import re
 
 import pytest
 
-import django
 from django import forms
 from django.forms.models import formset_factory
 from django.middleware.csrf import _get_new_csrf_string
@@ -145,17 +144,13 @@ def test_html5_required():
     form.helper = FormHelper()
     form.helper.html5_required = True
     html = render_crispy_form(form)
-    # 6 out of 7 fields are required and an extra one for the SplitDateTimeWidget makes 7.
-    if django.VERSION < (1, 10):
-        assert html.count('required="required"') == 7
-    else:
-        assert len(re.findall(r"\brequired\b", html)) == 7
+    assert len(re.findall(r"\brequired\b", html)) == 7
 
     form = SampleForm()
     form.helper = FormHelper()
     form.helper.html5_required = False
     html = render_crispy_form(form)
-
+    assert len(re.findall(r"\brequired\b", html)) == 7
 
 def test_media_is_included_by_default_with_uniform():
     form = SampleFormWithMedia()
