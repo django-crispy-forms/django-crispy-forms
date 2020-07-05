@@ -10,7 +10,7 @@ from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
 register = template.Library()
 
 # We import the filters, so they are available when doing load crispy_forms_tags
-from crispy_forms.templatetags.crispy_forms_filters import *  # NOQA: F403,F401 isort:skip
+from crispy_forms.templatetags.crispy_forms_filters import *  # NOQA: F403,F401, E402 isort:skip
 
 
 class ForLoopSimulator:
