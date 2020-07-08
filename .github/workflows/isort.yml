@@ -20,4 +20,4 @@ jobs:
     - name: run isort
       run: |
         cd crispy_forms
-        isort -c
+        isort . --check --dif
