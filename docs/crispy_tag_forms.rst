@@ -321,6 +321,8 @@ The way you do inline forms in Bootstrap version 3 is::
         StrictButton('Sign in', css_class='btn-default'),
     )
 
+Note: The `form-inline` class needs to be added to the form's `<form>` tag. Therefore let crispy-forms render the `<form>` tag or add the `form-inline` class manually to the `<form>` tag in your template. 
+
 If you need to set attributes in a field, you have to use ``InlineField`` instead of ``Field``::
 
     from crispy_forms.bootstrap import InlineField
@@ -330,3 +332,4 @@ If you need to set attributes in a field, you have to use ``InlineField`` instea
         'password',
         [...]
     )
+
