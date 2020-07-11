@@ -1,5 +1,10 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.9.2 (2020-07-11)
+* Fixed FileField UI bug
+
+See the [1.9.2 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/11?closed=1) for the full change list.
+
 ## 1.9.1 (2020-05-16)
 * Added Bootstrap 4 styling for clearable file widget.
 * Fixed FileField UI bug.
