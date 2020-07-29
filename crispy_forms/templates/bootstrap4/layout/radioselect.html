@@ -5,7 +5,7 @@
 
     {% for choice in field.field.choices %}
       <div class="{%if use_custom_control%}custom-control custom-radio{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
-        <input type="radio" class="{%if use_custom_control%}custom-control-input{% else %}form-check-input{% endif %}{% if field.errors %} is-invalid{% endif %}"{% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
+        <input type="radio" class="{%if use_custom_control%}custom-control-input{% else %}form-check-input{% endif %}{% if field.errors %} is-invalid{% endif %}"{% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {% if field.field.disabled %}disabled="true"{% endif %} {{ field.field.widget.attrs|flatatt }}>
         <label for="id_{{ field.html_name }}_{{ forloop.counter }}" class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}">
             {{ choice.1|unlocalize }}
         </label>
