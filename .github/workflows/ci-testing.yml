@@ -9,11 +9,11 @@ jobs:
     strategy:
       matrix:
         python: [3.5, 3.6, 3.7, 3.8]
-        django: [2.2.*, 3.0.*]
+        django: [2.2.*, 3.0.*, 3.1.*]
         exclude:
           # exclude python 3.5 with django v3+
           - python: 3.5
-            django: 3.0.*
+            django: [3.0.*, 3.1.*]
 
     steps:
     - uses: actions/checkout@v2
