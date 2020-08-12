@@ -13,7 +13,9 @@ jobs:
         exclude:
           # exclude python 3.5 with django v3+
           - python: 3.5
-            django: [3.0.*, 3.1.*]
+            django: 3.0.*
+          - python: 3.5
+            django: 3.1.*
 
     steps:
     - uses: actions/checkout@v2
