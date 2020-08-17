@@ -45,6 +45,7 @@ Since version 1.1.0, django-crispy-forms has built-in support for different CSS 
 In addition the following template packs are available through separately maintained projects.
 
 * ``foundation`` `Foundation`_ In the creator's words, "The most advanced responsive front-end framework in the world." This template pack is available through `crispy-forms-foundation`_
+* ``tailwind`` `Tailwind`_ A utility first framework. This template pack is available through `crispy-tailwind`_
 
 If your form CSS framework is not supported and it's open source, you can create a ``crispy-forms-templatePackName`` project. Please let me know, so I can link to it. Documentation on :ref:`template_packs` is provided.
 
@@ -57,6 +58,8 @@ Please check the documentation of your template pack package for the correct val
 .. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
 .. _`Foundation`: http://foundation.zurb.com/
 .. _`crispy-forms-foundation`: https://github.com/sveetch/crispy-forms-foundation
+.. _`Tailwind`: https://tailwindcss.com/
+.. _`crispy-tailwind`: https://github.com/django-crispy-forms/crispy-tailwind
 
 Setting media files
 ~~~~~~~~~~~~~~~~~~~
