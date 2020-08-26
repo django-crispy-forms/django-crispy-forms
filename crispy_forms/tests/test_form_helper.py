@@ -539,7 +539,7 @@ def test_helper_custom_template():
 def test_helper_custom_field_template():
     form = SampleForm()
     form.helper = FormHelper()
-    form.helper.layout = Layout("password1", "password2",)
+    form.helper.layout = Layout("password1", "password2")
     form.helper.field_template = "custom_field_template.html"
 
     html = render_crispy_form(form)
@@ -579,7 +579,11 @@ def test_form_show_errors():
     )
     form.helper = FormHelper()
     form.helper.layout = Layout(
-        Field("email"), Field("first_name"), Field("last_name"), Field("password1"), Field("password2"),
+        Field("email"),
+        Field("first_name"),
+        Field("last_name"),
+        Field("password1"),
+        Field("password2"),
     )
     form.is_valid()
 
@@ -675,7 +679,9 @@ def test_error_text_inline(settings):
     form = SampleForm({"email": "invalidemail"})
     form.helper = FormHelper()
     layout = Layout(
-        AppendedText("first_name", "wat"), PrependedText("email", "@"), PrependedAppendedText("last_name", "@", "wat"),
+        AppendedText("first_name", "wat"),
+        PrependedText("email", "@"),
+        PrependedAppendedText("last_name", "@", "wat"),
     )
     form.helper.layout = layout
     form.is_valid()

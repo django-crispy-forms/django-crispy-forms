@@ -15,8 +15,12 @@ def advanced_layout():
             Div(Div("email")),
             Div(Field("password1")),
             Submit("save", "save"),
-            Fieldset("legend", "first_name", HTML("extra text"),),
-            Layout("password2",),
+            Fieldset(
+                "legend",
+                "first_name",
+                HTML("extra text"),
+            ),
+            Layout("password2"),
         ),
         "last_name",
     )

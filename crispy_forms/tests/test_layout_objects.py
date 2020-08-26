@@ -74,7 +74,10 @@ def test_field_type_hidden():
 
     test_form = SampleForm()
     test_form.helper = FormHelper()
-    test_form.helper.layout = Layout(Field("email", type="hidden", data_test=12), Field("datetime_field"),)
+    test_form.helper.layout = Layout(
+        Field("email", type="hidden", data_test=12),
+        Field("datetime_field"),
+    )
 
     c = Context({"test_form": test_form})
     html = template.render(c)
@@ -199,7 +202,9 @@ class TestBootstrapLayoutObjects:
             assert html.count('<span class="input-group-addon">gmail.com</span>') == 1
             assert html.count('<span class="input-group-addon">#</span>') == 1
             assert html.count('<span class="input-group-addon">$</span>') == 1
-            test_form.helper.layout = Layout(PrependedAppendedText("email", "@", "gmail.com", css_class="input-lg"),)
+            test_form.helper.layout = Layout(
+                PrependedAppendedText("email", "@", "gmail.com", css_class="input-lg"),
+            )
             html = render_crispy_form(test_form)
 
             assert 'class="input-lg' in html
@@ -211,7 +216,7 @@ class TestBootstrapLayoutObjects:
             assert html.count('<span class="input-group-text">#</span>') == 1
             assert html.count('<span class="input-group-text">$</span>') == 1
             test_form.helper.layout = Layout(
-                PrependedAppendedText("email", "@", "gmail.com", css_class="form-control-lg"),
+                PrependedAppendedText("email", "@", "gmail.com", css_class="form-control-lg")
             )
             html = render_crispy_form(test_form)
 
@@ -235,7 +240,10 @@ class TestBootstrapLayoutObjects:
         test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
-            Accordion(AccordionGroup("one", "first_name"), AccordionGroup("two", "password1", "password2"))
+            Accordion(
+                AccordionGroup("one", "first_name"),
+                AccordionGroup("two", "password1", "password2"),
+            )
         )
         html = render_crispy_form(test_form)
 
@@ -263,7 +271,7 @@ class TestBootstrapLayoutObjects:
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Accordion(
-                AccordionGroup("one", "first_name",),
+                AccordionGroup("one", "first_name"),
                 # there is no ``active`` kwarg here.
             )
         )
@@ -281,7 +289,9 @@ class TestBootstrapLayoutObjects:
         assert html.count('<div id="one" class="%s"' % accordion_class) == 1
 
         test_form.helper.layout = Layout(
-            Accordion(AccordionGroup("one", "first_name", active=False,),)  # now ``active`` manually set as False
+            Accordion(
+                AccordionGroup("one", "first_name", active=False),
+            )  # now ``active`` manually set as False
         )
 
         # This time, it shouldn't be there at all.
@@ -354,7 +364,12 @@ class TestBootstrapLayoutObjects:
             val1 = forms.CharField(required=False)
             val2 = forms.CharField(required=True)
             helper = FormHelper()
-            helper.layout = Layout(TabHolder(Tab("one", "val1",), Tab("two", "val2",)))
+            helper.layout = Layout(
+                TabHolder(
+                    Tab("one", "val1"),
+                    Tab("two", "val2"),
+                )
+            )
 
         # first render of form => everything is fine
         test_form = SampleForm()
