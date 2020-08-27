@@ -68,7 +68,7 @@ def test_meta_extra_fields_with_missing_fields():
     del form.fields["email"]
 
     form_helper = FormHelper()
-    form_helper.layout = Layout("first_name",)
+    form_helper.layout = Layout("first_name")
 
     template = Template(
         """
@@ -99,7 +99,7 @@ def test_layout_unresolved_field(settings):
 
 def test_double_rendered_field(settings):
     form_helper = FormHelper()
-    form_helper.add_layout(Layout("is_company", "is_company",))
+    form_helper.add_layout(Layout("is_company", "is_company"))
 
     template = Template(
         """
@@ -150,7 +150,12 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
             Fieldset(
                 "User Data",
                 "email",
-                Row("password1", "password2", css_id="row_passwords", css_class="rows",),
+                Row(
+                    "password1",
+                    "password2",
+                    css_id="row_passwords",
+                    css_class="rows",
+                ),
                 HTML('<a href="#" id="testLink">test link</a>'),
                 HTML(
                     """
@@ -201,8 +206,19 @@ def test_change_layout_dynamically_delete_field():
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
-            Fieldset("Company Data", "is_company", "email", "password1", "password2", css_id="multifield_info",),
-            Column("first_name", "last_name", css_id="column_name",),
+            Fieldset(
+                "Company Data",
+                "is_company",
+                "email",
+                "password1",
+                "password2",
+                css_id="multifield_info",
+            ),
+            Column(
+                "first_name",
+                "last_name",
+                css_id="column_name",
+            ),
         )
     )
 
@@ -228,8 +244,15 @@ def test_column_has_css_classes(settings):
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
-            Fieldset("Company Data", "is_company", "email", "password1", "password2", css_id="multifield_info",),
-            Column("first_name", "last_name",),
+            Fieldset(
+                "Company Data",
+                "is_company",
+                "email",
+                "password1",
+                "password2",
+                css_id="multifield_info",
+            ),
+            Column("first_name", "last_name"),
         )
     )
 
@@ -257,7 +280,7 @@ def test_bs4_column_css_classes(settings):
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
-            Column("first_name", "last_name",),
+            Column("first_name", "last_name"),
             Column("first_name", "last_name", css_class="col-sm"),
             Column("first_name", "last_name", css_class="mb-4"),
         )
@@ -279,7 +302,11 @@ def test_formset_layout(settings):
     helper.form_method = "POST"
     helper.form_action = "simpleAction"
     helper.layout = Layout(
-        Fieldset("Item {{ forloop.counter }}", "is_company", "email",),
+        Fieldset(
+            "Item {{ forloop.counter }}",
+            "is_company",
+            "email",
+        ),
         HTML("{% if forloop.first %}Note for first form only{% endif %}"),
         Row("password1", "password2"),
         Fieldset("", "first_name", "last_name"),
@@ -358,7 +385,14 @@ def test_i18n():
     )
     form = SampleForm()
     form_helper = FormHelper()
-    form_helper.layout = Layout(HTML(_("i18n text")), Fieldset(_("i18n legend"), "first_name", "last_name",))
+    form_helper.layout = Layout(
+        HTML(_("i18n text")),
+        Fieldset(
+            _("i18n legend"),
+            "first_name",
+            "last_name",
+        ),
+    )
     form.helper = form_helper
 
     html = template.render(Context({"form": form}))
@@ -417,15 +451,29 @@ def test_layout_composition():
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
-            Layout(MultiField("Some company data", "is_company", "email", css_id="multifield_info",),),
+            Layout(
+                MultiField(
+                    "Some company data",
+                    "is_company",
+                    "email",
+                    css_id="multifield_info",
+                ),
+            ),
             Column(
                 "first_name",
                 # 'last_name', Missing a field on purpose
                 css_id="column_name",
                 css_class="columns",
             ),
-            ButtonHolder(Submit("Save", "Save", css_class="button white"),),
-            Div("password1", "password2", css_id="custom-div", css_class="customdivs",),
+            ButtonHolder(
+                Submit("Save", "Save", css_class="button white"),
+            ),
+            Div(
+                "password1",
+                "password2",
+                css_id="custom-div",
+                css_class="customdivs",
+            ),
         )
     )
 
@@ -464,7 +512,12 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
                 title="multifield_title",
                 multifield_test="123",
             ),
-            Column("first_name", "last_name", css_id="column_name", css_class="columns",),
+            Column(
+                "first_name",
+                "last_name",
+                css_id="column_name",
+                css_class="columns",
+            ),
             ButtonHolder(
                 Submit(
                     "Save the world", "{{ value_var }}", css_class="button white", data_id="test", data_name="test"
@@ -559,7 +612,11 @@ def test_form_inline():
     form.helper = FormHelper()
     form.helper.form_class = "form-inline"
     form.helper.field_template = "bootstrap3/layout/inline_field.html"
-    form.helper.layout = Layout("email", "password1", "last_name",)
+    form.helper.layout = Layout(
+        "email",
+        "password1",
+        "last_name",
+    )
 
     html = render_crispy_form(form)
     assert html.count('class="form-inline"') == 1
@@ -576,7 +633,7 @@ def test_bootstrap4_form_inline():
     form.helper = FormHelper()
     form.helper.form_class = "form-inline"
     form.helper.field_template = "bootstrap4/layout/inline_field.html"
-    form.helper.layout = Layout("email", "password1", "last_name",)
+    form.helper.layout = Layout("email", "password1", "last_name")
 
     html = render_crispy_form(form)
     assert html.count('class="form-inline"') == 1
@@ -590,12 +647,16 @@ def test_bootstrap4_form_inline():
 def test_update_attributes_class():
     form = SampleForm()
     form.helper = FormHelper()
-    form.helper.layout = Layout("email", Field("password1"), "password2",)
+    form.helper.layout = Layout("email", Field("password1"), "password2")
     form.helper["password1"].update_attributes(css_class="hello")
     html = render_crispy_form(form)
     assert html.count(' class="hello textinput') == 1
     form.helper = FormHelper()
-    form.helper.layout = Layout("email", Field("password1", css_class="hello"), "password2",)
+    form.helper.layout = Layout(
+        "email",
+        Field("password1", css_class="hello"),
+        "password2",
+    )
     form.helper["password1"].update_attributes(css_class="hello2")
     html = render_crispy_form(form)
     assert html.count(' class="hello hello2 textinput') == 1

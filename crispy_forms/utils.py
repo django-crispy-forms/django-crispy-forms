@@ -63,7 +63,7 @@ def render_field(  # noqa: C901
         FAIL_SILENTLY = getattr(settings, "CRISPY_FAIL_SILENTLY", True)
 
         if hasattr(field, "render"):
-            return field.render(form, form_style, context, template_pack=template_pack,)
+            return field.render(form, form_style, context, template_pack=template_pack)
 
         try:
             # Injecting HTML attributes into field's widget, Django handles rendering these

@@ -51,7 +51,10 @@ class CheckboxesSampleForm(forms.Form):
     )
 
     inline_radios = forms.ChoiceField(
-        choices=(("option_one", "Option one"), ("option_two", "Option two"),),
+        choices=(
+            ("option_one", "Option one"),
+            ("option_two", "Option two"),
+        ),
         widget=forms.RadioSelect,
         initial="option_two",
     )
@@ -108,7 +111,11 @@ class SampleFormWithMultiValueField(forms.Form):
 
 
 class CrispyEmptyChoiceTestModel(models.Model):
-    fruit = models.CharField(choices=[("apple", "Apple"), ("pear", "Pear")], null=True, blank=True,)
+    fruit = models.CharField(
+        choices=[("apple", "Apple"), ("pear", "Pear")],
+        null=True,
+        blank=True,
+    )
 
 
 class SampleForm6(forms.ModelForm):
