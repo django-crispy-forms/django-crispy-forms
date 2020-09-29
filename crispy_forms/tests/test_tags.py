@@ -1,5 +1,6 @@
 import pytest
 
+import django
 from django.forms.boundfield import BoundField
 from django.forms.formsets import formset_factory
 from django.template import Context, Template
@@ -96,7 +97,10 @@ def test_as_crispy_errors_formset_with_non_form_errors():
     c = Context({"formset": formset})
     html = template.render(c)
     assert "errorMsg" in html or "alert" in html
-    assert "<li>Please submit 1 or fewer forms.</li>" in html
+    if django.VERSION < (3, 2):
+        assert "<li>Please submit 1 or fewer forms.</li>" in html
+    else:
+        assert "<li>Please submit at most 1 form.</li>" in html
     assert "<h3>" not in html
 
 
