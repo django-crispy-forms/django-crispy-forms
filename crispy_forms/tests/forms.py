@@ -115,6 +115,7 @@ class CrispyEmptyChoiceTestModel(models.Model):
         choices=[("apple", "Apple"), ("pear", "Pear")],
         null=True,
         blank=True,
+        max_length=20,
     )
 
 
