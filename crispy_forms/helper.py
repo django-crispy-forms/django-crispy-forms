@@ -122,7 +122,7 @@ class FormHelper(DynamicLayoutHandler):
             - Can be a named url in your URLconf that can be executed via the `{% url %}` template tag. \
             Example: 'show_my_profile'. In your URLconf you could have something like::
 
-                url(r'^show/profile/$', 'show_my_profile_view', name = 'show_my_profile')
+                path('show/profile/', 'show_my_profile_view', name = 'show_my_profile')
 
             - It can simply point to a URL '/whatever/blabla/'.
 
