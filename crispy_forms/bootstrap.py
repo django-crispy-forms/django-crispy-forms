@@ -20,10 +20,18 @@ class PrependedAppendedText(Field):
 
         self.input_size = None
         css_class = kwargs.get("css_class", "")
+
+        # Bootstrap 3
         if "input-lg" in css_class:
             self.input_size = "input-lg"
         if "input-sm" in css_class:
             self.input_size = "input-sm"
+
+        # Bootstrap 4
+        if "input-group-sm" in css_class:
+            self.input_size = "input-group-sm"
+        if "input-group-lg" in css_class:
+            self.input_size = "input-group-lg"
 
         super().__init__(field, *args, **kwargs)
 
