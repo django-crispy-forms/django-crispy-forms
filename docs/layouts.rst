@@ -288,7 +288,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 
 - **Alert**: ``Alert`` generates markup in the form of an alert dialog::
 
-    Alert(content='<strong>Warning!</strong> Best check yo self, you're not looking too good.')
+    Alert(content="<strong>Warning!</strong> Best check yo self, you're not looking too good.")
 
 .. image:: images/alert.png
    :align: center
