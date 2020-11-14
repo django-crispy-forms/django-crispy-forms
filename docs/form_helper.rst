@@ -44,7 +44,7 @@ Helper attributes you can set
     Specifies form method attribute. You can see it to ‘POST’ or ‘GET’. Defaults to ‘POST’
 
 **form_action**
-    Applied to the form action attribute. Can be a named url in your URLconf that can be executed via the {% url %} template tag. Example: ‘show_my_profile’. In your URLconf you could have something like::
+    Applied to the form action attribute. Can be a named URL in your URLconf that can be executed via the {% url %} template tag. Example: ‘show_my_profile’. In your URLconf you could have something like::
 
         url(r'^show/profile/$', 'show_my_profile_view', name='show_my_profile')
 

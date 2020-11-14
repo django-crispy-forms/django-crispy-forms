@@ -257,7 +257,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/field_with_buttons.png
    :align: center
 
-- **Tab & TabHolder**: ``Tab`` renders a tab, different tabs need to be wrapped in a ``TabHolder`` for automatic javascript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
+- **Tab & TabHolder**: ``Tab`` renders a tab, different tabs need to be wrapped in a ``TabHolder`` for automatic JavasSript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
 
     TabHolder(
         Tab('First Tab',
@@ -272,7 +272,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/tab_and_tabholder.jpg
    :align: center
 
-- **Accordion & AccordionGroup**: ``AccordionGroup`` renders an accordion pane, different groups need to be wrapped in an ``Accordion`` for automatic javascript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
+- **Accordion & AccordionGroup**: ``AccordionGroup`` renders an accordion pane, different groups need to be wrapped in an ``Accordion`` for automatic JavaScript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
 
     Accordion(
         AccordionGroup('First Group',

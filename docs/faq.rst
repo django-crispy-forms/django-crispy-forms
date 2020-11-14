@@ -44,7 +44,7 @@ How did this all get started?
 
 In December 2008, while `Daniel Greenfeld`_ was working for `NASA's Science Mission Directorate`_, his team began to use Django_ and Pinax_. There was a necessity to make all the forms in Pinax `Section 508`_ compatible, and the thought of going through all of forms and rewriting ``{{ form }}`` as a block of ``{% for field in form %}`` with all the template logic seemed like way too much work.
 
-So with the encouragement of `Katie Cunningham`_, `James Tauber`_ and `Jannis Leidel`_ Daniel took the Django docs on forms and combined it with Dragan Babic's excellent Uni-Form css/javascript library and created the ubiquitous ``as_uni_form`` filter. After that, fixing all the forms in Pinax to be section 508 compliant was trivial.
+So with the encouragement of `Katie Cunningham`_, `James Tauber`_ and `Jannis Leidel`_ Daniel took the Django docs on forms and combined it with Dragan Babic's excellent Uni-Form CSS/JavaScript library and created the ubiquitous ``as_uni_form`` filter. After that, fixing all the forms in Pinax to be section 508 compliant was trivial.
 
 Not long before PyCon 2009 James Tauber suggested the ``{% uni_form form helper %}`` API, where one could trivially create forms without writing any HTML.
 
