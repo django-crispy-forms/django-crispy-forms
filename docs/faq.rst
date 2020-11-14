@@ -42,7 +42,7 @@ Well, I'm obviously biased for answering this question. But I once `answered it 
 How did this all get started?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In December 2008, while `Daniel Greenfeld`_ was working for `NASA's Science Mission Directorate`_, his team began to use Django_ and Pinax_. There was a necessity to make all the forms in Pinax `Section 508`_ compatible, and the thought of going through all of forms and rewriting ``{{ form }}`` as a block of ``{% for field in form %}`` with all the template logic seemed like way too much work.
+In December 2008, while `Daniel Feldroy`_ was working for `NASA's Science Mission Directorate`_, his team began to use Django_ and Pinax_. There was a necessity to make all the forms in Pinax `Section 508`_ compatible, and the thought of going through all of forms and rewriting ``{{ form }}`` as a block of ``{% for field in form %}`` with all the template logic seemed like way too much work.
 
 So with the encouragement of `Katie Cunningham`_, `James Tauber`_ and `Jannis Leidel`_ Daniel took the Django docs on forms and combined it with Dragan Babic's excellent Uni-Form CSS/JavaScript library and created the ubiquitous ``as_uni_form`` filter. After that, fixing all the forms in Pinax to be section 508 compliant was trivial.
 
@@ -52,7 +52,7 @@ At PyCon 2009 Jannis Leidel helped Daniel through releasing the 0.3 release of d
 
 Around January 2011 the project wasn't very active, Github issues and forks were stacking up. At that time `Miguel Araujo`_ found django-uni-form and loved the concept behind its architecture. He started working in a fork of the project, trying to gather some old submitted patches. Around march of 2011, after conversations with Daniel, he got commit powers in the project's repository, reactivating dev branch. Releases 0.8.0, 0.9.0 followed and the project more than doubled its watchers in Github.
 
-By the end of 2011, Miguel and Daniel agreed on the necessity of renaming the project. As uni-form CSS framework was not anymore the only option available and the name was confusing the users. Thus django-crispy-forms was born, named by `Audrey Roy`_. The project is now actively maintained and leaded by `Miguel Araujo`_.
+By the end of 2011, Miguel and Daniel agreed on the necessity of renaming the project. As uni-form CSS framework was not anymore the only option available and the name was confusing the users. Thus django-crispy-forms was born, named by `Audrey Feldroy`_. The project is now actively maintained and leaded by `Miguel Araujo`_.
 
 .. _faq-how-fast:
 
@@ -87,9 +87,9 @@ Which versions of Django does this support?
 
 Versions supported include Django 1.3 or higher. Versions of django-crispy-forms below 1.3 support Django 1.2.x. If you need to support earlier versions you will need to use django-uni-form 0.7.0.
 
-.. _`Daniel Greenfeld`: https://twitter.com/pydanny
+.. _`Daniel Feldroy`: https://twitter.com/pydanny
 .. _`Miguel Araujo`: https://twitter.com/maraujop
-.. _`Audrey Roy`: http://twitter.com/audreyr
+.. _`Audrey Feldroy`: https://twitter.com/audreyfeldroy
 .. _`Katie Cunningham`: https://twitter.com/kcunning
 .. _Django: https://djangoproject.com
 .. _Pinax: https://pinaxproject.com
