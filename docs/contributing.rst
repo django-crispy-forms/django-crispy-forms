@@ -5,15 +5,15 @@ Contributing
 Setup
 =====
 
-Fork on github
+Fork on GitHub
 --------------
 
-Before you do anything else, login/signup on Github.com and fork django-crispy-forms from https://github.com/django-crispy-forms/django-crispy-forms.
+Before you do anything else, login/signup on GitHub.com and fork django-crispy-forms from https://github.com/django-crispy-forms/django-crispy-forms.
 
 Clone your fork locally
 -----------------------
 
-If you have git-scm installed, you now clone your git repo using the following command-line argument where <my-github-name> is your account name on github::
+If you have git-scm installed, you now clone your git repository using the following command-line argument where <my-github-name> is your account name on GitHub::
 
     git clone git@github.com/<my-github-name>/django-crispy-forms.git
 
@@ -35,7 +35,7 @@ Setting up topic branches and generating pull requests
 
 While it's handy to provide useful code snippets in an issue, it is better for
 you as a developer to submit pull requests. By submitting pull request your
-contribution to django-crispy-forms will be recorded by Github. 
+contribution to django-crispy-forms will be recorded by GitHub. 
 
 In git it is best to isolate each topic or feature into a "topic branch".  While
 individual commits allow you control over how small individual changes are made
@@ -47,7 +47,7 @@ While it takes some experience to get the right feel about how to break up
 commits, a topic branch **must** be limited in scope to a single ``issue`` as
 submitted to an issue tracker.
 
-Also since github pegs and syncs a pull request to a specific branch, it is the
+Also since GitHub pegs and syncs a pull request to a specific branch, it is the
 **ONLY** way that you can submit more than one fix at a time.  If you submit
 a pull from your master branch, you can't make any more commits to your master
 without those getting added to the pull.
@@ -64,11 +64,11 @@ master as described below.
 
 When you are ready to generate a pull request, either for preliminary review,
 or for consideration of merging into the project you must first push your local
-topic branch back up to github::
+topic branch back up to GitHub::
 
     git push origin fix-broken-thing
 
-Now when you go to your fork on github, you will see this branch listed under
+Now when you go to your fork on GitHub, you will see this branch listed under
 the "Source" tab where it says "Switch Branches".  Go ahead and select your
 topic branch from this list, and then click the "Pull request" button.
 
@@ -76,10 +76,10 @@ Here you can add a comment about your branch.  If this in response to
 a submitted issue, it is good to put a link to that issue in this initial
 comment.  The repo managers will be notified of your pull request and it will
 be reviewed (see below for best practices).  Note that you can continue to add
-commits to your topic branch (and push them up to github) either if you see
+commits to your topic branch (and push them up to GitHub) either if you see
 something that needs changing, or in response to a reviewer's comments.  If
 a reviewer asks for changes, you do not need to close the pull and reissue it
-after making changes. Just make the changes locally, push them to github, then
+after making changes. Just make the changes locally, push them to GitHub, then
 add a comment to the discussion section of the pull request.
 
 Pull upstream changes into your fork regularly
@@ -100,7 +100,7 @@ Then merge the changes that you fetched::
 
     git merge django-crispy-forms/master
 
-For more info, see http://help.github.com/fork-a-repo/
+For more info, see https://help.github.com/fork-a-repo/
 
 How to get your Pull Request accepted
 =====================================

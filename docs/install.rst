@@ -55,10 +55,10 @@ You can set your default template pack for your project using the ``CRISPY_TEMPL
 
 Please check the documentation of your template pack package for the correct value of the ``CRISPY_TEMPLATE_PACK`` setting (there are packages which provide more than one template pack).
 
-.. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
-.. _`Foundation`: http://foundation.zurb.com/
+.. _`Bootstrap`: https://getbootstrap.com
+.. _`Foundation`: https://get.foundation
 .. _`crispy-forms-foundation`: https://github.com/sveetch/crispy-forms-foundation
-.. _`Tailwind`: https://tailwindcss.com/
+.. _`Tailwind`: https://tailwindcss.com
 .. _`crispy-tailwind`: https://github.com/django-crispy-forms/crispy-tailwind
 
 Setting media files
@@ -67,5 +67,5 @@ Setting media files
 crispy-forms does not include static files. You will need to include the proper corresponding media files yourself depending on what CSS framework (Template pack) you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
  
 
-.. _Django: http://djangoproject.com
-.. _`Uni-form`: http://sprawsm.com/uni-form
+.. _Django: https://djangoproject.com
+.. _`Uni-form`: https://sprawsm.com/uni-form
