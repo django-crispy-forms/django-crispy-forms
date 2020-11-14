@@ -87,13 +87,13 @@ Which versions of Django does this support?
 
 Versions supported include Django 1.3 or higher. Versions of django-crispy-forms below 1.3 support Django 1.2.x. If you need to support earlier versions you will need to use django-uni-form 0.7.0.
 
-.. _`Daniel Greenfeld`: http://twitter.com/pydanny
-.. _`Miguel Araujo`: http://twitter.com/maraujop
+.. _`Daniel Greenfeld`: https://twitter.com/pydanny
+.. _`Miguel Araujo`: https://twitter.com/maraujop
 .. _`Audrey Roy`: http://twitter.com/audreyr
-.. _`Katie Cunningham`: http://twitter.com/kcunning
-.. _Django: http://djangoproject.com
-.. _Pinax: http://pinaxproject.com
-.. _`NASA's Science Mission Directorate`: http://science.nasa.gov
-.. _`Section 508`: http://en.wikipedia.org/wiki/Section_508
-.. _`James Tauber`: http://jtauber.com/
-.. _`Jannis Leidel`: http://twitter.com/jezdez
+.. _`Katie Cunningham`: https://twitter.com/kcunning
+.. _Django: https://djangoproject.com
+.. _Pinax: https://pinaxproject.com
+.. _`NASA's Science Mission Directorate`: https://science.nasa.gov
+.. _`Section 508`: https://en.wikipedia.org/wiki/Section_508
+.. _`James Tauber`: https://jtauber.com
+.. _`Jannis Leidel`: https://twitter.com/jezdez

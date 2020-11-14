@@ -19,4 +19,4 @@ Using {% crispy %} tag because it rocks
 
 As handy as the `|crispy` filter is, think of it as the built-in methods: ``as_table``, ``as_ul`` and ``as_p``. You cannot tune up the output. The best way to make your forms crisp is using the :ref:`crispy tag forms`. It will change how you do forms in Django.
 
-.. _`original implementation`: http://code.google.com/p/django-uni-form/source/browse/trunk/uni_form/templatetags/uni_form.py?spec=svn2&r=2
+.. _`original implementation`: https://code.google.com/p/django-uni-form/source/browse/trunk/uni_form/templatetags/uni_form.py?spec=svn2&r=2

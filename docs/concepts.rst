@@ -33,5 +33,5 @@ However, following Section 508 (and the World Wide Web Consortium's (W3C) `Web A
 
 In the meantime, django-crispy-forms provides a means to easily render Section 508 compliant forms. How awesome is that?
 
-.. _`Section 508`: http://en.wikipedia.org/wiki/Section_508
-.. _`Web Accessibility Initiative`: http://en.wikipedia.org/wiki/Web_Accessibility_Initiative
+.. _`Section 508`: https://en.wikipedia.org/wiki/Section_508
+.. _`Web Accessibility Initiative`: https://en.wikipedia.org/wiki/Web_Accessibility_Initiative

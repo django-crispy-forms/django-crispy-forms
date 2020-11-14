@@ -100,7 +100,7 @@ Then merge the changes that you fetched::
 
     git merge django-crispy-forms/master
 
-For more info, see http://help.github.com/fork-a-repo/
+For more info, see https://help.github.com/fork-a-repo/
 
 How to get your Pull Request accepted
 =====================================

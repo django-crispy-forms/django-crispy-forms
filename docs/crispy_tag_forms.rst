@@ -144,7 +144,7 @@ What you'll get is the form rendered as HTML with awesome bits. Specifically...
         <input type="submit" name="submit" value="Submit" class="submit submitButton" id="submit-id-submit" />
     </div>
 
-.. _`Be careful how you use static variables in forms`: http://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms
+.. _`Be careful how you use static variables in forms`: https://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms
 
 
 Manipulating a helper in a view
