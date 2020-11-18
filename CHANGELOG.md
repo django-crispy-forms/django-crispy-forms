@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.10.0 (tbc)
+## 1.10.0 (2020-11-18)
 * Fixed test causing `SystemCheckError` in some cases. (#1075)
 * Radio and Checkbox now respect the field's `disabled` attribute when using the Bootstrap4 template pack. (#1057)
 * A number of documentation improvements. 
