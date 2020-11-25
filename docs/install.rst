@@ -13,13 +13,13 @@ Install latest stable version into your python environment using pip::
 
 If you want to install development version (unstable), you can do so doing::
 
-    pip install git+git://github.com/django-crispy-forms/django-crispy-forms.git@dev#egg=django-crispy-forms
+    pip install git+git://github.com/django-crispy-forms/django-crispy-forms.git@master#egg=django-crispy-forms
 
 Or, if you'd like to install the development version as a git repository (so
 you can ``git pull`` updates), use the ``-e`` flag with ``pip install``, like
 so:: 
 
-    pip install -e git+git://github.com/django-crispy-forms/django-crispy-forms.git@dev#egg=django-crispy-forms
+    pip install -e git+git://github.com/django-crispy-forms/django-crispy-forms.git@master#egg=django-crispy-forms
 
 Once installed add ``crispy_forms`` to your ``INSTALLED_APPS`` in settings.py::
 
