@@ -257,6 +257,16 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/field_with_buttons.png
    :align: center
 
+- **Input group size**: Adjust the size of an input group (``FieldWithButton``, ``AppendedText``, ``PrependedText``, ``PrependedAppendedText``) with the appropriate CSS class, e.g.::
+
+    # Bootstrap 3
+    FieldWithButton('field_name', StrictButton("Go!"), input_size="input-sm")
+    FieldWithButton('field_name', StrictButton("Go!"), input_size="input-lg")
+
+    # Bootstrap 4
+    FieldWithButton('field_name', StrictButton("Go!"), input_size="input-group-sm")
+    FieldWithButton('field_name', StrictButton("Go!"), input_size="input-group-lg")
+
 - **Tab & TabHolder**: ``Tab`` renders a tab, different tabs need to be wrapped in a ``TabHolder`` for automatic javascript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
 
     TabHolder(
