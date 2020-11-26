@@ -59,4 +59,4 @@ Think this is awesome and want to make it better? Read our contribution page, ma
     contributing
 
 .. _contributors: https://github.com/django-crispy-forms/django-crispy-forms/blob/master/CONTRIBUTORS.txt
-.. _Django: http://djangoproject.com
+.. _Django: https://djangoproject.com

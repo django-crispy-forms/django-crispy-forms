@@ -13,13 +13,13 @@ Install latest stable version into your python environment using pip::
 
 If you want to install development version (unstable), you can do so doing::
 
-    pip install git+git://github.com/django-crispy-forms/django-crispy-forms.git@dev#egg=django-crispy-forms
+    pip install git+git://github.com/django-crispy-forms/django-crispy-forms.git@master#egg=django-crispy-forms
 
 Or, if you'd like to install the development version as a git repository (so
 you can ``git pull`` updates), use the ``-e`` flag with ``pip install``, like
 so:: 
 
-    pip install -e git+git://github.com/django-crispy-forms/django-crispy-forms.git@dev#egg=django-crispy-forms
+    pip install -e git+git://github.com/django-crispy-forms/django-crispy-forms.git@master#egg=django-crispy-forms
 
 Once installed add ``crispy_forms`` to your ``INSTALLED_APPS`` in settings.py::
 
@@ -55,10 +55,10 @@ You can set your default template pack for your project using the ``CRISPY_TEMPL
 
 Please check the documentation of your template pack package for the correct value of the ``CRISPY_TEMPLATE_PACK`` setting (there are packages which provide more than one template pack).
 
-.. _`Bootstrap`: http://twitter.github.com/bootstrap/index.html
-.. _`Foundation`: http://foundation.zurb.com/
+.. _`Bootstrap`: https://getbootstrap.com
+.. _`Foundation`: https://get.foundation
 .. _`crispy-forms-foundation`: https://github.com/sveetch/crispy-forms-foundation
-.. _`Tailwind`: https://tailwindcss.com/
+.. _`Tailwind`: https://tailwindcss.com
 .. _`crispy-tailwind`: https://github.com/django-crispy-forms/crispy-tailwind
 
 Setting media files
@@ -67,5 +67,5 @@ Setting media files
 crispy-forms does not include static files. You will need to include the proper corresponding media files yourself depending on what CSS framework (Template pack) you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
  
 
-.. _Django: http://djangoproject.com
-.. _`Uni-form`: http://sprawsm.com/uni-form
+.. _Django: https://djangoproject.com
+.. _`Uni-form`: https://sprawsm.com/uni-form

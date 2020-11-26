@@ -35,16 +35,16 @@ Helper attributes you can set
     Allows you to set what template pack you want to use at ``FormHelper`` level. This is useful for example when a website needs to render different styling forms for different use cases, like desktop website vs smartphone website.
 
 **template**
-    When set allows you to render a form/formset using a custom template. Default template is at ``{{ TEMPLATE_PACK }}/[whole_uni_form.html|whole_uni_formset.html]``
+    When set allows you to render a form/formset using a custom template. Default template is at ``{{ TEMPLATE_PACK }}/[whole_uni_form.html|whole_uni_formset.html]``.
 
 **field_template**
     When set allows you to render a form/formset using a custom field template. Default template is at ``{{ TEMPLATE_PACK }}/field.html``.
 
-**form_method = 'POST'**
-    Specifies form method attribute. You can see it to ‘POST’ or ‘GET’. Defaults to ‘POST’
+**form_method = ``POST``**
+    Specifies form method attribute. You can see it to ``POST`` or ``GET``. Defaults to ``POST``.
 
 **form_action**
-    Applied to the form action attribute. Can be a named url in your URLconf that can be executed via the {% url %} template tag. Example: ‘show_my_profile’. In your URLconf you could have something like::
+    Applied to the form action attribute. Can be a named URL in your URLconf that can be executed via the {% url %} template tag. Example: ‘show_my_profile’. In your URLconf you could have something like::
 
         url(r'^show/profile/$', 'show_my_profile_view', name='show_my_profile')
 

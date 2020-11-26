@@ -37,4 +37,5 @@ _build
 .pydevproject
 .settings/
 /.pytest_cache
-.vscode/settings.json
+.vscode
+/.python-version
