@@ -130,6 +130,10 @@ class CrispyFieldNode(template.Node):
                     css_class += " form-control-danger"
 
             if template_pack == "bootstrap4" and not is_multivalue(field):
+                if is_select(field):
+                    form_has_helper = hasattr(field.form, "helper")
+                    if not form_has_helper or field.form.helper.use_custom_control:
+                        css_class += " custom-control custom-select"
                 if not is_checkbox(field):
                     css_class += " form-control"
                     if is_file(field):

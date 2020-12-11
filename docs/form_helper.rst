@@ -135,7 +135,7 @@ Bootstrap 4 Helper attributes
 All previous, ``bootstrap`` (version 2 and 3) attributes are also settable in bootstrap 4 template pack ``FormHelpers``. Here are listed the ones, that are only available in ``bootstrap4`` template pack:
 
 **use_custom_control = True**
-    Enables the `optional UI customization <https://getbootstrap.com/docs/4.3/components/forms/#custom-forms>`_ of the template pack for radio, checkbox and file field (non clearable only). Useful when you already have customization based on the default interpretation of the template pack. Setting to ``False`` results in the `standard bootstrap <https://getbootstrap.com/docs/4.3/components/forms/#checkboxes-and-radios>`_ classes being applied for radio and checkbox, and Django rendering for file field. See table below for examples. 
+    Enables the `optional UI customization <https://getbootstrap.com/docs/4.3/components/forms/#custom-forms>`_ of the template pack for radio, checkbox, select and file field (non clearable only). Useful when you already have customization based on the default interpretation of the template pack. Setting to ``False`` results in the `standard bootstrap <https://getbootstrap.com/docs/4.3/components/forms/#checkboxes-and-radios>`_ classes being applied for radio and checkbox, and Django rendering for file field. See table below for examples.
     
     The file field requires `additional JS <https://www.w3schools.com/bootstrap4/bootstrap_forms_custom.asp#myFile>`_ to enable its functionality, it is provided within the template pack as vanilla JS. 
     

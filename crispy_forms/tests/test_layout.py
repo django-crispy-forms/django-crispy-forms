@@ -24,6 +24,7 @@ from .forms import (
     SampleForm3,
     SampleForm4,
     SampleForm6,
+    SelectSampleForm,
 )
 from .utils import contains_partial
 
@@ -580,7 +581,7 @@ def test_keepcontext_context_manager(settings):
 
 
 @only_bootstrap4
-def test_use_custom_control_is_used():
+def test_use_custom_control_is_used_in_checkboxes():
     form = CheckboxesSampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout("checkboxes", InlineCheckboxes("alphacheckboxes"), "numeric_multiple_checkboxes")
@@ -604,6 +605,34 @@ def test_use_custom_control_is_used():
     assert response.content.count(b"form-check-inline") == 3
     assert response.content.count(b"form-check") > 0
     assert response.content.count(b"custom-checkbox") == 0
+
+
+@only_bootstrap4
+def test_use_custom_control_in_select():
+    # By default: custom-control in select is enabled
+    form = SelectSampleForm()
+
+    form.helper = FormHelper()
+    form.helper.template_pack = "bootstrap4"
+    form.helper.layout = Layout("select")
+
+    html = render_crispy_form(form)
+
+    assert html.count("custom-control") == 1
+    assert html.count("custom-select") == 1
+
+    # Use of custom controls disabled
+    form = SelectSampleForm()
+
+    form.helper = FormHelper()
+    form.helper.template_pack = "bootstrap4"
+    form.helper.layout = Layout("select")
+    form.helper.use_custom_control = False
+
+    html = render_crispy_form(form)
+
+    assert html.count("custom-control") == 0
+    assert html.count("custom-select") == 0
 
 
 @only_bootstrap3
