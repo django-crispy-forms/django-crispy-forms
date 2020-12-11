@@ -135,22 +135,28 @@ Bootstrap 4 Helper attributes
 All previous, ``bootstrap`` (version 2 and 3) attributes are also settable in bootstrap 4 template pack ``FormHelpers``. Here are listed the ones, that are only available in ``bootstrap4`` template pack:
 
 **use_custom_control = True**
-    Enables the `optional UI customization <https://getbootstrap.com/docs/4.3/components/forms/#custom-forms>`_ of the template pack for radio, checkbox, select and file field (non clearable only). Useful when you already have customization based on the default interpretation of the template pack. Setting to ``False`` results in the `standard bootstrap <https://getbootstrap.com/docs/4.3/components/forms/#checkboxes-and-radios>`_ classes being applied for radio and checkbox, and Django rendering for file field. See table below for examples.
+    Enables the `optional UI customization <https://getbootstrap.com/docs/4.3/components/forms/#custom-forms>`_ of the template pack for radio, checkbox, select and file field. Useful when you already have customization based on the default interpretation of the template pack. Setting to ``False`` results in the `standard bootstrap <https://getbootstrap.com/docs/4.3/components/forms/#checkboxes-and-radios>`_ classes being applied for radio and checkbox, and Django rendering for file field. See table below for examples.
     
     The file field requires `additional JS <https://www.w3schools.com/bootstrap4/bootstrap_forms_custom.asp#myFile>`_ to enable its functionality, it is provided within the template pack as vanilla JS. 
     
     Defaults to ``True``.
 
+.. |radio| image:: images/radio.png
+   :width: 300px
+   :align: middle
+.. |customradio| image:: images/custom_radio.png
+   :width: 300px
+   :align: middle
 .. |checkbox| image:: images/checkbox.png
    :width: 300px
    :align: middle
 .. |customcheckbox| image:: images/custom_checkbox.png
    :width: 300px
    :align: middle
-.. |radio| image:: images/radio.png    
+.. |select| image:: images/select.png
    :width: 300px
    :align: middle
-.. |customradio| image:: images/custom_radio.png
+.. |customselect| image:: images/custom_select.png
    :width: 300px
    :align: middle
 .. |file| image:: images/file_field.png    
@@ -159,23 +165,17 @@ All previous, ``bootstrap`` (version 2 and 3) attributes are also settable in bo
 .. |customfile| image:: images/custom_file_field.png
    :width: 300px
    :align: middle
-.. |clearablefile| image:: images/clearable_file.png    
-   :height: 60px
-   :align: middle
-.. |clearablecustomfile| image:: images/clearable_file_custom.png
-   :width: 300px
-   :align: middle
 
 +-----------------------+-----------------------+
 |     Standard          |     Optional          |
 +-----------------------+-----------------------+
-| |checkbox|            | |customcheckbox|      |
-+-----------------------+-----------------------+
 |  |radio|              | |customradio|         |
 +-----------------------+-----------------------+
-|  |file|               | |customfile|          |
+|  |checkbox|           | |customcheckbox|      |
 +-----------------------+-----------------------+
-|  |clearablefile|      | |clearablecustomfile| |
+|  |select|             | |customselect|        |
++-----------------------+-----------------------+
+|  |file|               | |customfile|          |
 +-----------------------+-----------------------+
 
 Custom Helper attributes
