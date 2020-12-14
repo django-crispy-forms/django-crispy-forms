@@ -11,7 +11,7 @@
     {% endif %}
     <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" class="{% if not field|is_checkbox %}form-group{% if 'form-horizontal' in form_class %} row{% endif %}{% else %}{%if use_custom_control%}custom-control custom-checkbox{% else %}form-check{% endif %}{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
         {% if field.label and not field|is_checkbox and form_show_labels %}
-            <label for="{{ field.id_for_label }}" class="{% if 'form-horizontal' in form_class %}col-form-label {% endif %}{{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+            <label id="{{ field.auto_id }}_label" class="{% if 'form-horizontal' in form_class %}col-form-label {% endif %}{{ label_class }}{% if field.field.required %} requiredField{% endif %}">
                 {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
             </label>
         {% endif %}
@@ -31,7 +31,7 @@
                 {% else %}
                     {% crispy_field field 'class' 'form-check-input' %}
                 {% endif %}
-                <label for="{{ field.id_for_label }}" class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}{% if field.field.required %} requiredField{% endif %}">
+                <label id="{{ field.auto_id }}_label" class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}{% if field.field.required %} requiredField{% endif %}">
                     {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                 </label>
                 {% include 'bootstrap4/layout/help_text_and_errors.html' %}

@@ -139,6 +139,10 @@ class CrispyFieldNode(template.Node):
 
             widget.attrs["class"] = css_class
 
+            if template_pack == "bootstrap4":
+                if "aria-labelledby" not in widget.attrs: # if not already assigned
+                    widget.attrs["aria-labelledby"] = field.auto_id+"_label"
+
             # HTML5 required attribute
             if html5_required and field.field.required and "required" not in widget.attrs:
                 if field.field.widget.__class__.__name__ != "RadioSelect":
