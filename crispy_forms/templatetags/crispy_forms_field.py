@@ -28,11 +28,6 @@ def is_select(field):
 
 
 @register.filter
-def is_selectsingle(field):
-    return is_select(field) and not field.field.widget.allow_multiple_selected
-
-
-@register.filter
 def is_checkboxselectmultiple(field):
     return isinstance(field.field.widget, forms.CheckboxSelectMultiple)
 
