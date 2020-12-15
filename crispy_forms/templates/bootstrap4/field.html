@@ -39,7 +39,7 @@
                 {% include 'bootstrap4/layout/field_file.html' %}
             {% elif field|is_selectsingle and use_custom_control %}
                 <div class="{{ field_class }}">
-                     {% crispy_field field 'class' 'custom-control custom-select' %}
+                     {% crispy_field field 'class' 'custom-select' %}
                      {% include 'bootstrap4/layout/help_text_and_errors.html' %}
                 </div>
             {% else %}

@@ -618,7 +618,6 @@ def test_use_custom_control_in_select():
 
     html = render_crispy_form(form)
 
-    assert html.count("custom-control") == 1
     assert html.count("custom-select") == 1
 
     # Use of custom controls disabled
@@ -631,7 +630,6 @@ def test_use_custom_control_in_select():
 
     html = render_crispy_form(form)
 
-    assert html.count("custom-control") == 0
     assert html.count("custom-select") == 0
 
 
