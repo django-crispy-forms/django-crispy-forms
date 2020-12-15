@@ -37,14 +37,13 @@
                 {% include 'bootstrap4/layout/help_text_and_errors.html' %}
             {% elif field|is_file and use_custom_control  %}
                 {% include 'bootstrap4/layout/field_file.html' %}
-            {% elif field|is_select and use_custom_control %}
-                <div class="{{ field_class }}">
-                     {% crispy_field field 'class' 'custom-select' %}
-                     {% include 'bootstrap4/layout/help_text_and_errors.html' %}
-                </div>
             {% else %}
                 <div class="{{ field_class }}">
-                    {% crispy_field field %}
+                    {% if field|is_select and use_custom_control %}
+                         {% crispy_field field 'class' 'custom-select' %}
+                    {% else %}
+                        {% crispy_field field %}
+                    {% endif %}
                     {% include 'bootstrap4/layout/help_text_and_errors.html' %}
                 </div>
             {% endif %}
