@@ -608,29 +608,18 @@ def test_use_custom_control_is_used_in_checkboxes():
 
 
 @only_bootstrap4
-def test_use_custom_control_in_select():
-    # By default: custom-control in select is enabled
+@pytest.mark.parametrize("use_custom_control, custom_select_count", [(True, 1), (False, 0)])
+def test_use_custom_control_in_select(use_custom_control, custom_select_count):
     form = SelectSampleForm()
 
     form.helper = FormHelper()
     form.helper.template_pack = "bootstrap4"
     form.helper.layout = Layout("select")
+    form.helper.use_custom_control = use_custom_control
 
     html = render_crispy_form(form)
 
-    assert html.count("custom-select") == 1
-
-    # Use of custom controls disabled
-    form = SelectSampleForm()
-
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap4"
-    form.helper.layout = Layout("select")
-    form.helper.use_custom_control = False
-
-    html = render_crispy_form(form)
-
-    assert html.count("custom-select") == 0
+    assert html.count("custom-select") == custom_select_count
 
 
 @only_bootstrap3
