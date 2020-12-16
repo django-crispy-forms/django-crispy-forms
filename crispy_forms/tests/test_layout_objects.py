@@ -266,7 +266,7 @@ class TestBootstrapLayoutObjects:
             assert html.count('<div class="card mb-2"') == 2
             assert html.count('<div class="card-header"') == 2
 
-            assert html.count(f'data-parent="#{accordion_id}"') == 2
+            assert html.count('data-parent="#{}"'.format(accordion_id)) == 2
 
         assert html.count('<div id="one"') == 1
         assert html.count('<div id="two"') == 1
