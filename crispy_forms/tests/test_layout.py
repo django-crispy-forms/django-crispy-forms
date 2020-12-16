@@ -24,6 +24,7 @@ from .forms import (
     SampleForm3,
     SampleForm4,
     SampleForm6,
+    SelectSampleForm,
 )
 from .utils import contains_partial
 
@@ -580,7 +581,7 @@ def test_keepcontext_context_manager(settings):
 
 
 @only_bootstrap4
-def test_use_custom_control_is_used():
+def test_use_custom_control_is_used_in_checkboxes():
     form = CheckboxesSampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout("checkboxes", InlineCheckboxes("alphacheckboxes"), "numeric_multiple_checkboxes")
@@ -604,6 +605,21 @@ def test_use_custom_control_is_used():
     assert response.content.count(b"form-check-inline") == 3
     assert response.content.count(b"form-check") > 0
     assert response.content.count(b"custom-checkbox") == 0
+
+
+@only_bootstrap4
+@pytest.mark.parametrize("use_custom_control, custom_select_count", [(True, 1), (False, 0)])
+def test_use_custom_control_in_select(use_custom_control, custom_select_count):
+    form = SelectSampleForm()
+
+    form.helper = FormHelper()
+    form.helper.template_pack = "bootstrap4"
+    form.helper.layout = Layout("select")
+    form.helper.use_custom_control = use_custom_control
+
+    html = render_crispy_form(form)
+
+    assert html.count("custom-select") == custom_select_count
 
 
 @only_bootstrap3

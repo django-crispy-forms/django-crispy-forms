@@ -60,6 +60,12 @@ class CheckboxesSampleForm(forms.Form):
     )
 
 
+class SelectSampleForm(forms.Form):
+    select = forms.ChoiceField(
+        choices=((1, "Option one"), (2, "Option two"), (3, "Option three")), initial=(1,), widget=forms.Select
+    )
+
+
 class CrispyTestModel(models.Model):
     email = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
