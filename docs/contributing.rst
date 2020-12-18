@@ -30,6 +30,18 @@ Django-crispy-forms comes with git hook scripts. These can be installed by runni
     
 Pre-commit will now run automatically on git-commit and check adherence to the style guide (black, isort & flake8).
 
+Build the documentation locally
+===============================
+
+If you make documentation changes they can be seen locally.
+In the directory where you cloned ``django-crispy-forms``::
+
+    cd docs
+    pip install -r requirements.txt
+    make html
+
+You can open the file ``_build/html/index.html`` and verify the changes.
+
 Setting up topic branches and generating pull requests
 ======================================================
 
