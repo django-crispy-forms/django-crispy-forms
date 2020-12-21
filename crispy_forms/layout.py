@@ -440,6 +440,8 @@ class Field(LayoutObject):
             else:
                 self.attrs["class"] = kwargs.pop("css_class")
 
+        self.label_class = kwargs.pop("label_class", None)
+        self.field_class = kwargs.pop("field_class", None)
         self.wrapper_class = kwargs.pop("wrapper_class", None)
         self.template = kwargs.pop("template", self.template)
 
@@ -451,6 +453,11 @@ class Field(LayoutObject):
             extra_context = {}
         if hasattr(self, "wrapper_class"):
             extra_context["wrapper_class"] = self.wrapper_class
+        # Overwrite form-specified label and field class with field-specific
+        if hasattr(self, "label_class"):
+            extra_context["label_class"] = self.field_class
+        if hasattr(self, "field_class"):
+            extra_context["field_class"] = self.field_class
 
         template = self.get_template_name(template_pack)
 
