@@ -342,13 +342,19 @@ class Accordion(ContainerHolder):
 
     template = "%s/accordion.html"
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        content = ""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        # accordion group needs the parent div id to set `data-parent` (I don't
-        # know why). This needs to be a unique id
+        # Accordion needs to have a unique id
         if not self.css_id:
             self.css_id = "-".join(["accordion", str(randint(1000, 9999))])
+
+        # AccordionGroup need to have 'data-parent="#Accordion.id"'
+        for accordion_group in args:
+            accordion_group.data_parent = self.css_id
+
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+        content = ""
 
         # Open the group that should be open.
         self.open_target_group_for_form(form)

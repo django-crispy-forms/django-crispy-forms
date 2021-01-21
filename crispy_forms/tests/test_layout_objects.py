@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.template import Context, Template
 from django.test.html import parse_html
@@ -256,9 +258,15 @@ class TestBootstrapLayoutObjects:
             assert html.count('<div class="panel-group"') == 1
             assert html.count('<div class="panel-heading">') == 2
         elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert html.count('<div id="accordion"') == 1
+            match = re.search('div id="(accordion-\\d+)"', html)
+            assert match
+
+            accordion_id = match.group(1)
+
             assert html.count('<div class="card mb-2"') == 2
             assert html.count('<div class="card-header"') == 2
+
+            assert html.count('data-parent="#{}"'.format(accordion_id)) == 2
 
         assert html.count('<div id="one"') == 1
         assert html.count('<div id="two"') == 1

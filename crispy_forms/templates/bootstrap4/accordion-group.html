@@ -9,7 +9,7 @@
     </div>
 
     <div id="{{ div.css_id }}" class="collapse{% if div.active %} show{% endif %}" role="tabpanel"
-         aria-labelledby="{{ div.css_id }}" data-parent="#accordion">
+         aria-labelledby="{{ div.css_id }}" data-parent="#{{ div.data_parent }}">
         <div class="card-body">
             {{ fields|safe }}
         </div>
