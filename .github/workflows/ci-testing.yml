@@ -3,7 +3,7 @@ name: C/I Testing.
 on: [push, pull_request]
 
 jobs:
-  build:
+  tests:
 
     runs-on: ubuntu-latest
     strategy:
