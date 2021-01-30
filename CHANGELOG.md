@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.11.0 (TBC)
+## 1.11.0 (2020-01-30)
 * Implemeneted `custom-select` for Select widgets in the Bootstrap4 Template Pack (#1091)
 * Fixed `data-parent` in AccodrianGroup (#1091)
 * Documentation improvements
