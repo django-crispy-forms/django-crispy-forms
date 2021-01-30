@@ -3,7 +3,7 @@ name: C/I testing - Django master
 on: [push, pull_request]
 
 jobs:
-  build:
+  tests:
 
     runs-on: ubuntu-latest
     strategy:

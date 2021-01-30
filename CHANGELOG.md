@@ -1,9 +1,14 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.11.0 (2020-01-30)
+* Implemeneted `custom-select` for Select widgets in the Bootstrap4 Template Pack (#1091)
+* Fixed `data-parent` in AccodrianGroup (#1091)
+* Documentation improvements
+
 ## 1.10.0 (2020-11-18)
 * Fixed test causing `SystemCheckError` in some cases. (#1075)
 * Radio and Checkbox now respect the field's `disabled` attribute when using the Bootstrap4 template pack. (#1057)
-* A number of documentation improvements. 
+* A number of documentation improvements.
 
 See the [1.10.0 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/12?closed=1) for the full change list
 
