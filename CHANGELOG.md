@@ -5,6 +5,8 @@
 * Fixed `data-parent` in AccodrianGroup (#1091)
 * Documentation improvements
 
+See the [1.11.0 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/13?closed=1) for the full change list
+
 ## 1.10.0 (2020-11-18)
 * Fixed test causing `SystemCheckError` in some cases. (#1075)
 * Radio and Checkbox now respect the field's `disabled` attribute when using the Bootstrap4 template pack. (#1057)
