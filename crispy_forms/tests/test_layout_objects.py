@@ -5,7 +5,6 @@ from django.template import Context, Template
 from django.test.html import parse_html
 from django.utils.translation import activate, deactivate
 from django.utils.translation import gettext as _
-from .conftest import only_bootstrap4
 
 from crispy_forms.bootstrap import (
     Accordion,

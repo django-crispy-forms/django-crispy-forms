@@ -11,7 +11,7 @@ from .utils import TEMPLATE_PACK, flatatt, render_field
 class PrependedAppendedText(Field):
     template = "%s/layout/prepended_appended_text.html"
 
-    def __init__(self, field, prepended_text=None, appended_text=None, input_size=None,*args, **kwargs):
+    def __init__(self, field, prepended_text=None, appended_text=None, input_size=None, *args, **kwargs):
         self.field = field
         self.appended_text = appended_text
         self.prepended_text = prepended_text
