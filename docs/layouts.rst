@@ -205,7 +205,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/form_actions.png
    :align: center
 
-- **AppendedText**: It renders a bootstrap appended text input. The first parameter is the name of the field to add appended text to, then the appended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render appended text active. Accepts the `input_size`_ argument::
+- **AppendedText**: It renders a bootstrap appended text input. The first parameter is the name of the field to add appended text to, then the appended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render appended text active. See `input_size`_ to change the size of this input::
 
     AppendedText('field_name', 'appended text to show')
     AppendedText('field_name', '$', active=True)
@@ -213,7 +213,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/appended_text.png
    :align: center
 
-- **PrependedText**: It renders a bootstrap prepended text input. The first parameter is the name of the field to add prepended text to, then the prepended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render prepended text active. Accepts the `input_size`_ argument::
+- **PrependedText**: It renders a bootstrap prepended text input. The first parameter is the name of the field to add prepended text to, then the prepended text which can be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render prepended text active. See `input_size`_ to change the size of this input::
 
     PrependedText('field_name', '<b>Prepended text</b> to show')
     PrependedText('field_name', '@', placeholder="username")
@@ -221,7 +221,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/prepended_text.png
    :align: center
 
-- **PrependedAppendedText**: It renders a combined prepended and appended text. The first parameter is the name of the field, then the prepended text and finally the appended text. Accepts the `input_size`_ argument::
+- **PrependedAppendedText**: It renders a combined prepended and appended text. The first parameter is the name of the field, then the prepended text and finally the appended text. See `input_size`_ to change the size of this input::
 
     PrependedAppendedText('field_name', '$', '.00'),
 
@@ -256,16 +256,6 @@ These ones live under module ``crispy_forms.bootstrap``.
 
 .. image:: images/field_with_buttons.png
    :align: center
-
-- **Input group size**: Adjust the size of an input group (``FieldWithButton``, ``AppendedText``, ``PrependedText``, ``PrependedAppendedText``) with the appropriate CSS class, e.g.::
-
-    # Bootstrap 3
-    FieldWithButton('field_name', StrictButton("Go!"), input_size="input-sm")
-    FieldWithButton('field_name', StrictButton("Go!"), input_size="input-lg")
-
-    # Bootstrap 4
-    FieldWithButton('field_name', StrictButton("Go!"), input_size="input-group-sm")
-    FieldWithButton('field_name', StrictButton("Go!"), input_size="input-group-lg")
 
 - **Tab & TabHolder**: ``Tab`` renders a tab, different tabs need to be wrapped in a ``TabHolder`` for automatic javascript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
 
