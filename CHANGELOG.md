@@ -1,7 +1,7 @@
 # CHANGELOG for django-crispy-forms
 
 ## 1.11.1 (2021-02-20)
-* Added `custom-select` for select widgets within prepeneded and appaneded fields (#1116)
+* Added `custom-select` for select widgets within prepended and appended fields (#1116)
 
 See the [1.11.1 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/14?closed=1) for the full change list.
 
