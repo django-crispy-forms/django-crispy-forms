@@ -25,7 +25,7 @@ from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
 from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap
+from .conftest import only_bootstrap, only_bootstrap4
 from .forms import CheckboxesSampleForm, SampleForm
 
 
@@ -224,6 +224,22 @@ class TestBootstrapLayoutObjects:
 
             assert 'class="form-control-lg' in html
             assert contains_partial(html, '<span class="input-group-text"/>')
+
+    @only_bootstrap4
+    def test_prepended_appended_text_in_select(self, settings):
+        test_form = SampleForm()
+        test_form.fields["select"] = forms.ChoiceField(
+            label="Select field", choices=[(1, "Choice 1"), (2, "Choice 2")]
+        )
+
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            AppendedText("select", "USD"),
+        )
+        html = render_crispy_form(test_form)
+
+        assert html.count("custom-select") == 1
+        assert html.count("USD") == 1
 
     def test_inline_radios(self, settings):
         test_form = CheckboxesSampleForm()
