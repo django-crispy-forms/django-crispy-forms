@@ -1,5 +1,10 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.11.1 (2021-02-21)
+* Added `custom-select` for select widgets within prepended and appended fields (#1116)
+
+See the [1.11.1 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/14?closed=1) for the full change list.
+
 ## 1.11.0 (2021-01-30)
 * Implemeneted `custom-select` for Select widgets in the Bootstrap4 Template Pack (#1091)
 * Fixed `data-parent` in AccodrianGroup (#1091)
