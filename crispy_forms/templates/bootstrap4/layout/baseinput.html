@@ -1,4 +1,4 @@
-<input type="{{ input.input_type }}"
+<input aria-labelledby="{{ field.auto_id }}_label" type="{{ input.input_type }}"
     name="{% if input.name|wordcount > 1 %}{{ input.name|slugify }}{% else %}{{ input.name }}{% endif %}"
     value="{{ input.value }}"
     {% if input.input_type != "hidden" %}

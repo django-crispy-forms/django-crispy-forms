@@ -14,8 +14,8 @@
         {% if not widget.data.required %}
         <span class="align-self-center ml-2">
             <span class="custom-control custom-checkbox">
-                <input type="checkbox" name="{{ widget.data.checkbox_name }}" id="{{ widget.data.checkbox_id }}" class="custom-control-input"{% if field.field.disabled %} disabled{% endif %} >
-                <label class="custom-control-label mb-0" for="{{ widget.data.checkbox_id }}">{{ widget.data.clear_checkbox_label }}</label>
+                <input aria-labelledby="{{ widget.data.checkbox_id }}_label" type="checkbox" name="{{ widget.data.checkbox_name }}" id="{{ widget.data.checkbox_id }}" class="custom-control-input"{% if field.field.disabled %} disabled{% endif %} >
+                <label id="{{ widget.data.checkbox_id }}_label" class="custom-control-label mb-0" for="{{ widget.data.checkbox_id }}">{{ widget.data.clear_checkbox_label }}</label>
             </span>
         </span>
     {% endif %}
@@ -27,8 +27,8 @@
     </div>
 {% endif %}
     <div class="form-control custom-file{% if field.errors %} is-invalid{%endif%}" style="border:0">
-        <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input{% if field.errors %} is-invalid{%endif%}" {% if field.field.disabled %}disabled{% endif %} {% for name, value in field.field.widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
-        <label class="custom-file-label text-truncate" for="{{ field.id_for_label }}">---</label>
+        <input aria-labelledby="{{ field.id_for_label }}_inner_label" type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input{% if field.errors %} is-invalid{%endif%}" {% if field.field.disabled %}disabled{% endif %} {% for name, value in field.field.widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+        <label id="{{ field.id_for_label }}_inner_label" class="custom-file-label text-truncate" for="{{ field.id_for_label }}">---</label>
         <script type="text/javascript" id="script-{{ field.id_for_label }}">        
             document.getElementById("script-{{ field.id_for_label }}").parentNode.querySelector('.custom-file-input').onchange =  function (e){
                 var filenames = "";
