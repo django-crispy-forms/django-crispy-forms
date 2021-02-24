@@ -670,16 +670,16 @@ def test_file_field():
     html = render_crispy_form(form)
     assert '<span class="custom-control custom-checkbox">' in html
     assert (
-        '<input aria-labelledby="id_clearable_file_inner_label" type="file" name="clearable_file" class="custom-file-input"  >'
-        in html
+        '<input aria-labelledby="id_clearable_file_inner_label" type="file"'
+        ' name="clearable_file" class="custom-file-input"  >' in html
     )
 
     form.helper.use_custom_control = False
     html = render_crispy_form(form)
     assert '<input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id">' in html
     assert (
-        '<input aria-labelledby="id_clearable_file_inner_label" type="file" name="clearable_file" class="custom-file-input"  >'
-        not in html
+        '<input aria-labelledby="id_clearable_file_inner_label" type="file"'
+        ' name="clearable_file" class="custom-file-input"  >' not in html
     )
 
     form.helper.use_custom_control = True
