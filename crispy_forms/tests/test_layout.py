@@ -638,7 +638,7 @@ def test_bootstrap4_form_inline():
     html = render_crispy_form(form)
     assert html.count('class="form-inline"') == 1
     assert html.count('class="input-group"') == 3
-    assert html.count('<label for="id_email" class="sr-only') == 1
+    assert html.count('<label id="id_email_label" for="id_email" class="sr-only') == 1
     assert html.count('id="div_id_email" class="input-group"') == 1
     assert html.count('placeholder="email"') == 1
     assert html.count("</label> <input") == 3
@@ -669,19 +669,19 @@ def test_file_field():
     form.helper.layout = Layout("clearable_file")
     html = render_crispy_form(form)
     assert '<span class="custom-control custom-checkbox">' in html
-    assert '<input type="file" name="clearable_file" class="custom-file-input"  >' in html
+    assert '<input aria-labelledby="id_clearable_file_inner_label" type="file" name="clearable_file" class="custom-file-input"  >' in html
 
     form.helper.use_custom_control = False
     html = render_crispy_form(form)
     assert '<input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id">' in html
-    assert '<input type="file" name="clearable_file" class="custom-file-input"  >' not in html
+    assert '<input aria-labelledby="id_clearable_file_inner_label" type="file" name="clearable_file" class="custom-file-input"  >' not in html
 
     form.helper.use_custom_control = True
     form.helper.layout = Layout("file_field")
     html = render_crispy_form(form)
     assert '<div class="form-control custom-file"' in html
-    assert '<input type="file" name="file_field" class="custom-file-input"' in html
-    assert '<label class="custom-file-label' in html
+    assert '<input aria-labelledby="id_file_field_inner_label" type="file" name="file_field" class="custom-file-input"' in html
+    assert '<label id="id_file_field_inner_label" class="custom-file-label' in html
     assert 'for="id_file_field">---</label>' in html
 
     form.helper.use_custom_control = False
