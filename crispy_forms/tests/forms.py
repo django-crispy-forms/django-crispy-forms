@@ -175,3 +175,31 @@ class FakeFieldFile:
 class FileForm(forms.Form):
     file_field = forms.FileField(widget=forms.FileInput)
     clearable_file = forms.FileField(widget=forms.ClearableFileInput, required=False, initial=FakeFieldFile())
+
+
+class GroupedChoiceForm(forms.Form):
+    choices = (
+        (
+            "Debt",
+            (
+                (11, "Credit Card"),
+                (12, "Student Loans"),
+                (13, "Taxes"),
+            ),
+        ),
+        (
+            "Entertainment",
+            (
+                (21, "Books"),
+                (22, "Games"),
+            ),
+        ),
+        (
+            "Everyday",
+            (
+                (31, "Groceries"),
+                (32, "Restaurants"),
+            ),
+        ),
+    )
+    checkbox_select_multiple = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=choices)

@@ -3,16 +3,19 @@
 
 <div class="{% if field_class %} {{ field_class }}{% endif %}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
 
-    {% for choice in field.field.choices %}
+    {% for group, options, index in field|optgroups %}
+    {% if group %}<dt>{{ group }}</dt>{% endif %}
+    {% for option in options %}
     <div class="{%if use_custom_control%}custom-control custom-checkbox{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
-        <input type="checkbox" class="{%if use_custom_control%}custom-control-input{% else %}form-check-input{% endif %}{% if field.errors %} is-invalid{% endif %}"{% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {% if field.field.disabled %}disabled="true"{% endif %} {{ field.field.widget.attrs|flatatt }}>
-        <label class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}" for="id_{{ field.html_name }}_{{ forloop.counter }}">
-            {{ choice.1|unlocalize }}
+        <input type="checkbox" class="{%if use_custom_control%}custom-control-input{% else %}form-check-input{% endif %}{% if field.errors %} is-invalid{% endif %}" name="{{ field.html_name }}" value="{{ option.value|unlocalize }}" {% include "bootstrap4/layout/attrs.html" with widget=option %}>
+        <label class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}" for="{{ option.attrs.id }}">
+            {{ option.label|unlocalize }}
         </label>
         {% if field.errors and forloop.last and not inline_class %}
             {% include 'bootstrap4/layout/field_errors_block.html' %}
             {% endif %}
     </div>
+   {% endfor %}
    {% endfor %}
     {% if field.errors and inline_class %}
     <div class="w-100 {%if use_custom_control%}custom-control custom-checkbox{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">

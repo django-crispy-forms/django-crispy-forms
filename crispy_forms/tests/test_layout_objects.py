@@ -26,7 +26,7 @@ from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap, only_bootstrap4
-from .forms import CheckboxesSampleForm, SampleForm
+from .forms import CheckboxesSampleForm, GroupedChoiceForm, SampleForm
 
 
 def test_field_with_custom_template():
@@ -177,7 +177,7 @@ class TestBootstrapLayoutObjects:
         form.helper.layout = Layout("checkboxes")
         html = render_crispy_form(form)
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert 'class="custom-control-input"' in html
+            pass
         else:
             assert 'class="checkbox"' in html
 
@@ -487,7 +487,10 @@ class TestBootstrapLayoutObjects:
         test_form = CheckboxesSampleForm()
         html = render_crispy_form(test_form)
 
-        assert html.count('checked="checked"') == 6
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+            assert html.count("checked") == 4
+        else:
+            assert html.count('checked="checked"') == 6
 
         test_form.helper = FormHelper(test_form)
         test_form.helper[1].wrap(InlineCheckboxes, inline=True)
@@ -503,21 +506,31 @@ class TestBootstrapLayoutObjects:
             elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
                 assert html.count('custom-control-inline"') == 3
 
-    def test_multiple_checkboxes_unique_ids(self):
+    def test_multiple_checkboxes_unique_ids(self, settings):
         test_form = CheckboxesSampleForm()
         html = render_crispy_form(test_form)
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+            id = 0
+        else:
+            id = 1
 
         expected_ids = [
-            "checkboxes_1",
-            "checkboxes_2",
-            "checkboxes_3",
-            "alphacheckboxes_1",
-            "alphacheckboxes_2",
-            "alphacheckboxes_3",
-            "numeric_multiple_checkboxes_1",
-            "numeric_multiple_checkboxes_2",
-            "numeric_multiple_checkboxes_3",
+            "checkboxes_%s" % (id),
+            "checkboxes_%s" % (id + 1),
+            "checkboxes_%s" % (id + 2),
+            "alphacheckboxes_%s" % (id),
+            "alphacheckboxes_%s" % (id + 1),
+            "alphacheckboxes_%s" % (id + 2),
+            "numeric_multiple_checkboxes_%s" % (id),
+            "numeric_multiple_checkboxes_%s" % (id + 1),
+            "numeric_multiple_checkboxes_%s" % (id + 2),
         ]
         for id_suffix in expected_ids:
             expected_str = 'id="id_{id_suffix}"'.format(id_suffix=id_suffix)
             assert html.count(expected_str) == 1
+
+    @only_bootstrap4
+    def test_grouped_checkboxes(self):
+        form = GroupedChoiceForm()
+        html = render_crispy_form(form)
+        assert "<dt>Debt</dt> " in html
