@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from django import template
 from django.conf import settings
 from django.forms import boundfield
@@ -6,7 +8,6 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
-from crispy_forms.compatibility import lru_cache
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import TEMPLATE_PACK, flatatt
 
