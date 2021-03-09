@@ -1,4 +1,4 @@
-name: C/I testing - Django master
+name: C/I testing - Django main
 
 on: [push, pull_request]
 
@@ -21,7 +21,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install https://github.com/django/django/archive/master.tar.gz
+        pip install https://github.com/django/django/archive/main.tar.gz
     - name: Test with pytest
       run: |
         cd /home/runner/work/django-crispy-forms/django-crispy-forms/
