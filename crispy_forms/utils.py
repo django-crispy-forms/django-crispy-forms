@@ -1,5 +1,6 @@
 import logging
 import sys
+from functools import lru_cache
 
 from django.conf import settings
 from django.forms.utils import flatatt as _flatatt
@@ -8,7 +9,6 @@ from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
 
 from .base import KeepContext
-from .compatibility import lru_cache
 
 
 def get_template_pack():
