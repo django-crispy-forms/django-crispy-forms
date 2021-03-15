@@ -15,6 +15,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form
 from .forms import (
+    AdvancedFileForm,
     CheckboxesSampleForm,
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
@@ -685,18 +686,18 @@ def test_file_field():
     form.helper.layout = Layout("clearable_file")
     html = render_crispy_form(form)
     assert '<span class="custom-control custom-checkbox">' in html
-    assert '<input type="file" name="clearable_file" class="custom-file-input"  >' in html
+    assert '<input type="file" name="clearable_file" class="custom-file-input" id="id_clearable_file">' in html
 
     form.helper.use_custom_control = False
     html = render_crispy_form(form)
     assert '<input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id">' in html
-    assert '<input type="file" name="clearable_file" class="custom-file-input"  >' not in html
+    assert '<input type="file" name="clearable_file" class="custom-file-input" id="id_clearable_file">' not in html
 
     form.helper.use_custom_control = True
     form.helper.layout = Layout("file_field")
     html = render_crispy_form(form)
     assert '<div class="form-control custom-file"' in html
-    assert '<input type="file" name="file_field" class="custom-file-input"' in html
+    assert '<input type="file" name="file_field" class="custom-file-input" id="id_file_field"' in html
     assert '<label class="custom-file-label' in html
     assert 'for="id_file_field">---</label>' in html
 
@@ -705,3 +706,16 @@ def test_file_field():
     assert "custom-file" not in html
     assert "custom-file-input" not in html
     assert "custom-file-label" not in html
+
+
+@only_bootstrap4
+def test_file_field_with_custom_class():
+    form = AdvancedFileForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout("clearable_file")
+    html = render_crispy_form(form)
+    assert '<input type="file" name="clearable_file" class="custom-file-input my-custom-class"' in html
+
+    form.helper.layout = Layout("file_field")
+    html = render_crispy_form(form)
+    assert '<input type="file" name="file_field" class="custom-file-input my-custom-class"' in html
