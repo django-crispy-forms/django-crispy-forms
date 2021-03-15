@@ -31,7 +31,7 @@ def contains_partial(haystack, needle, ignore_needle_children=False):
 
 def parse_expected(expected_file):
     test_file = Path(TEST_DIR) / "results" / expected_file
-    with open(test_file) as f:
+    with test_file.open() as f:
         return parse_html(f.read())
 
 
