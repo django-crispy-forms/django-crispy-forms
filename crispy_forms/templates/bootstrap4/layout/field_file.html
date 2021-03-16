@@ -27,7 +27,7 @@
     </div>
 {% endif %}
     <div class="form-control custom-file{% if field.errors %} is-invalid{%endif%}" style="border:0">
-        <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input{% if field.errors %} is-invalid{%endif%}" {% if field.field.disabled %}disabled{% endif %} {% for name, value in field.field.widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
+        <input type="{{ widget.data.type }}" name="{{ widget.data.name }}" class="custom-file-input{% if widget.data.attrs.class %} {{ widget.data.attrs.class }}{% endif %}{% if field.errors %} is-invalid{%endif%}"{% if field.field.disabled %} disabled{% endif %}{% for name, value in widget.data.attrs.items %}{% if value is not False and name != 'class' %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}>
         <label class="custom-file-label text-truncate" for="{{ field.id_for_label }}">---</label>
         <script type="text/javascript" id="script-{{ field.id_for_label }}">        
             document.getElementById("script-{{ field.id_for_label }}").parentNode.querySelector('.custom-file-input').onchange =  function (e){

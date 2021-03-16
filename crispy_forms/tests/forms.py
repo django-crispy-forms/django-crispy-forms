@@ -175,3 +175,10 @@ class FakeFieldFile:
 class FileForm(forms.Form):
     file_field = forms.FileField(widget=forms.FileInput)
     clearable_file = forms.FileField(widget=forms.ClearableFileInput, required=False, initial=FakeFieldFile())
+
+
+class AdvancedFileForm(forms.Form):
+    file_field = forms.FileField(widget=forms.FileInput(attrs={"class": "my-custom-class"}))
+    clearable_file = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={"class": "my-custom-class"}), required=False, initial=FakeFieldFile()
+    )
