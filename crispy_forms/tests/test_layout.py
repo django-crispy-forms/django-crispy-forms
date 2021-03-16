@@ -27,7 +27,7 @@ from .forms import (
     SampleForm6,
     SelectSampleForm,
 )
-from .utils import contains_partial
+from .utils import contains_partial, parse_expected, parse_form
 
 
 def test_invalid_unicode_characters(settings):
@@ -684,28 +684,17 @@ def test_file_field():
     form = FileForm()
     form.helper = FormHelper()
     form.helper.layout = Layout("clearable_file")
-    html = render_crispy_form(form)
-    assert '<span class="custom-control custom-checkbox">' in html
-    assert '<input type="file" name="clearable_file" class="custom-file-input" id="id_clearable_file">' in html
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field_custom_control.html")
 
     form.helper.use_custom_control = False
-    html = render_crispy_form(form)
-    assert '<input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id">' in html
-    assert '<input type="file" name="clearable_file" class="custom-file-input" id="id_clearable_file">' not in html
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field.html")
 
     form.helper.use_custom_control = True
     form.helper.layout = Layout("file_field")
-    html = render_crispy_form(form)
-    assert '<div class="form-control custom-file"' in html
-    assert '<input type="file" name="file_field" class="custom-file-input" id="id_file_field"' in html
-    assert '<label class="custom-file-label' in html
-    assert 'for="id_file_field">---</label>' in html
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field_custom_control.html")
 
     form.helper.use_custom_control = False
-    html = render_crispy_form(form)
-    assert "custom-file" not in html
-    assert "custom-file-input" not in html
-    assert "custom-file-label" not in html
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field.html")
 
 
 @only_bootstrap4
@@ -713,9 +702,7 @@ def test_file_field_with_custom_class():
     form = AdvancedFileForm()
     form.helper = FormHelper()
     form.helper.layout = Layout("clearable_file")
-    html = render_crispy_form(form)
-    assert '<input type="file" name="clearable_file" class="custom-file-input my-custom-class"' in html
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field_custom_class.html")
 
     form.helper.layout = Layout("file_field")
-    html = render_crispy_form(form)
-    assert '<input type="file" name="file_field" class="custom-file-input my-custom-class"' in html
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field_custom_class.html")
