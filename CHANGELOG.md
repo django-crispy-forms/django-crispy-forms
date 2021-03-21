@@ -1,5 +1,11 @@
 # CHANGELOG for django-crispy-forms
 
+## 1.11.2 (2021-03-16)
+* Added HTML parsing tools to help testing of template packs (#1128)
+* Fixed rendering of all widget attributes for file fields (#1130)
+
+See the [1.11.2 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/15?closed=1) for the full change list.
+
 ## 1.11.1 (2021-02-21)
 * Added `custom-select` for select widgets within prepended and appended fields (#1116)
 
