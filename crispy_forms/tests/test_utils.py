@@ -8,6 +8,10 @@ from crispy_forms.layout import Layout
 from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import list_difference, list_intersection, render_field
 
+from .conftest import only_bootstrap4
+from .forms import SampleForm
+from .utils import parse_expected, parse_form
+
 
 def test_list_intersection():
     assert list_intersection([1, 3], [2, 3]) == [3]
@@ -79,3 +83,11 @@ def test_contains_partial():
     c.assertRaises(NotImplementedError, contains_partial, html, needle)
     # as we do not look at the children, needle is equivalent to <div id="r"></div> which IS in html
     c.assertTrue(contains_partial(html, needle, ignore_needle_children=True))
+
+
+@only_bootstrap4
+def test_parse_expected_and_form():
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout("is_company")
+    assert parse_form(form) == parse_expected("utils_test.html")

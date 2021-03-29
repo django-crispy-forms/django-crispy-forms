@@ -18,7 +18,11 @@
                     <span class="input-group-text">{{ crispy_prepended_text|safe }}</span>
                   </div>
                 {% endif %}
-                {% crispy_field field %}
+                {% if field|is_select and use_custom_control %}
+                    {% crispy_field field 'class' 'custom-select' %}
+                {% else %}
+                    {% crispy_field field %}
+                {% endif %}
                 {% if crispy_appended_text %}
                   <div class="input-group-append{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
                     <span class="input-group-text">{{ crispy_appended_text|safe }}</span>

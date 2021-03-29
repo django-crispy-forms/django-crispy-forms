@@ -60,6 +60,12 @@ class CheckboxesSampleForm(forms.Form):
     )
 
 
+class SelectSampleForm(forms.Form):
+    select = forms.ChoiceField(
+        choices=((1, "Option one"), (2, "Option two"), (3, "Option three")), initial=(1,), widget=forms.Select
+    )
+
+
 class CrispyTestModel(models.Model):
     email = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
@@ -169,3 +175,10 @@ class FakeFieldFile:
 class FileForm(forms.Form):
     file_field = forms.FileField(widget=forms.FileInput)
     clearable_file = forms.FileField(widget=forms.ClearableFileInput, required=False, initial=FakeFieldFile())
+
+
+class AdvancedFileForm(forms.Form):
+    file_field = forms.FileField(widget=forms.FileInput(attrs={"class": "my-custom-class"}))
+    clearable_file = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={"class": "my-custom-class"}), required=False, initial=FakeFieldFile()
+    )

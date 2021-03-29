@@ -15,6 +15,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form
 from .forms import (
+    AdvancedFileForm,
     CheckboxesSampleForm,
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
@@ -24,8 +25,9 @@ from .forms import (
     SampleForm3,
     SampleForm4,
     SampleForm6,
+    SelectSampleForm,
 )
-from .utils import contains_partial
+from .utils import contains_partial, parse_expected, parse_form
 
 
 def test_invalid_unicode_characters(settings):
@@ -580,7 +582,7 @@ def test_keepcontext_context_manager(settings):
 
 
 @only_bootstrap4
-def test_use_custom_control_is_used():
+def test_use_custom_control_is_used_in_checkboxes():
     form = CheckboxesSampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout("checkboxes", InlineCheckboxes("alphacheckboxes"), "numeric_multiple_checkboxes")
@@ -604,6 +606,21 @@ def test_use_custom_control_is_used():
     assert response.content.count(b"form-check-inline") == 3
     assert response.content.count(b"form-check") > 0
     assert response.content.count(b"custom-checkbox") == 0
+
+
+@only_bootstrap4
+@pytest.mark.parametrize("use_custom_control, custom_select_count", [(True, 1), (False, 0)])
+def test_use_custom_control_in_select(use_custom_control, custom_select_count):
+    form = SelectSampleForm()
+
+    form.helper = FormHelper()
+    form.helper.template_pack = "bootstrap4"
+    form.helper.layout = Layout("select")
+    form.helper.use_custom_control = use_custom_control
+
+    html = render_crispy_form(form)
+
+    assert html.count("custom-select") == custom_select_count
 
 
 @only_bootstrap3
@@ -667,34 +684,25 @@ def test_file_field():
     form = FileForm()
     form.helper = FormHelper()
     form.helper.layout = Layout("clearable_file")
-    html = render_crispy_form(form)
-    assert '<span class="custom-control custom-checkbox">' in html
-    assert (
-        '<input aria-labelledby="id_clearable_file_inner_label" type="file"'
-        ' name="clearable_file" class="custom-file-input"  >' in html
-    )
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field_custom_control.html")
 
     form.helper.use_custom_control = False
-    html = render_crispy_form(form)
-    assert '<input type="checkbox" name="clearable_file-clear" id="clearable_file-clear_id">' in html
-    assert (
-        '<input aria-labelledby="id_clearable_file_inner_label" type="file"'
-        ' name="clearable_file" class="custom-file-input"  >' not in html
-    )
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field.html")
 
     form.helper.use_custom_control = True
     form.helper.layout = Layout("file_field")
-    html = render_crispy_form(form)
-    assert '<div class="form-control custom-file"' in html
-    assert (
-        '<input aria-labelledby="id_file_field_inner_label" type="file" name="file_field" class="custom-file-input"'
-        in html
-    )
-    assert '<label id="id_file_field_inner_label" class="custom-file-label' in html
-    assert 'for="id_file_field">---</label>' in html
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field_custom_control.html")
 
     form.helper.use_custom_control = False
-    html = render_crispy_form(form)
-    assert "custom-file" not in html
-    assert "custom-file-input" not in html
-    assert "custom-file-label" not in html
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field.html")
+
+
+@only_bootstrap4
+def test_file_field_with_custom_class():
+    form = AdvancedFileForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout("clearable_file")
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field_custom_class.html")
+
+    form.helper.layout = Layout("file_field")
+    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field_custom_class.html")
