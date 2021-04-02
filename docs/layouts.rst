@@ -257,7 +257,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/field_with_buttons.png
    :align: center
 
-- **Tab & TabHolder**: ``Tab`` renders a tab, different tabs need to be wrapped in a ``TabHolder`` for automatic javascript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
+- **Tab & TabHolder**: ``Tab`` renders a tab, different tabs need to be wrapped in a ``TabHolder`` for automatic JavaScript functioning, also you will need ``bootstrap-tab.js`` included in your static files::
 
     TabHolder(
         Tab('First Tab',
@@ -306,7 +306,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 Input group size
 ----------------
 
-**Input group size**: Adjust the size of an input group (``AppendedText``, ``PrependedText``, ``PrependedAppendedText``) with the appropriate CSS class::
+**Input group size**: By default the standard Bootstrap input sizes are used. To adjust the size of an input group (``AppendedText``, ``PrependedText``, ``PrependedAppendedText``) add the appropriate CSS class::
 
     # Bootstrap 3 - Inputs and spans need size class. Use `css_class`.
     PrependedText('field_name', StrictButton("Go!"), css_class="input-sm")
