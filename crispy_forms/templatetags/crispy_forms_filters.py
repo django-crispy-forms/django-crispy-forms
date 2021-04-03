@@ -125,3 +125,12 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
 @register.filter(name="flatatt")
 def flatatt_filter(attrs):
     return mark_safe(flatatt(attrs))
+
+
+@register.filter
+def optgroups(field):
+    id_ = field.field.widget.attrs.get("id") or field.auto_id
+    attrs = {"id": id_} if id_ else {}
+    attrs = field.build_widget_attrs(attrs)
+    values = field.field.widget.format_value(field.value())
+    return field.field.widget.optgroups(field.html_name, values, attrs)
