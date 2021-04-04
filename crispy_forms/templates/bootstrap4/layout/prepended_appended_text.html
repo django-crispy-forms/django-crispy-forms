@@ -12,9 +12,9 @@
         {% endif %}
 
         <div class="{{ field_class }}">
-            <div class="input-group">
+            <div class="input-group{% if input_size %} {{ input_size }}{% endif %}">
                 {% if crispy_prepended_text %}
-                  <div class="input-group-prepend{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
+                  <div class="input-group-prepend{% if active %} active{% endif %}">
                     <span class="input-group-text">{{ crispy_prepended_text|safe }}</span>
                   </div>
                 {% endif %}
@@ -24,7 +24,7 @@
                     {% crispy_field field %}
                 {% endif %}
                 {% if crispy_appended_text %}
-                  <div class="input-group-append{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">
+                  <div class="input-group-append{% if active %} active{% endif %}">
                     <span class="input-group-text">{{ crispy_appended_text|safe }}</span>
                   </div>
                 {% endif %}

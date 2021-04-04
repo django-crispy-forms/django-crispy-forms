@@ -241,6 +241,19 @@ class TestBootstrapLayoutObjects:
         assert html.count("custom-select") == 1
         assert html.count("USD") == 1
 
+    @only_bootstrap4
+    def test_prepended_appended_text_input_size(self, settings):
+        test_form = SampleForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            PrependedAppendedText("email", "@", "gmail.com", input_size="input-group-lg"),
+            AppendedText("password1", "#", input_size="input-group-sm"),
+            PrependedText("password2", "$", input_size="input-group-lg"),
+        )
+        html = render_crispy_form(test_form)
+        assert html.count('<div class="input-group input-group-lg">') == 2
+        assert html.count('<div class="input-group input-group-sm">') == 1
+
     def test_inline_radios(self, settings):
         test_form = CheckboxesSampleForm()
         test_form.helper = FormHelper()

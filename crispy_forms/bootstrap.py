@@ -11,15 +11,17 @@ from .utils import TEMPLATE_PACK, flatatt, render_field
 class PrependedAppendedText(Field):
     template = "%s/layout/prepended_appended_text.html"
 
-    def __init__(self, field, prepended_text=None, appended_text=None, *args, **kwargs):
+    def __init__(self, field, prepended_text=None, appended_text=None, input_size=None, *args, **kwargs):
         self.field = field
         self.appended_text = appended_text
         self.prepended_text = prepended_text
         if "active" in kwargs:
             self.active = kwargs.pop("active")
 
-        self.input_size = None
+        self.input_size = input_size
         css_class = kwargs.get("css_class", "")
+
+        # Bootstrap 3
         if "input-lg" in css_class:
             self.input_size = "input-lg"
         if "input-sm" in css_class:
