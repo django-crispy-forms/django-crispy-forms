@@ -129,6 +129,28 @@ def flatatt_filter(attrs):
 
 @register.filter
 def optgroups(field):
+    """
+    A template filter to help rendering of fields with optgroups.
+
+    Returns:
+        A tuple of label, option, index
+
+        label: Group label for grouped optgroups (`None` if inputs are not
+               grouped).
+        option: A dict containing information to render the option::
+            {
+                "name": "checkbox_select_multiple",
+                "value": 1,
+                "label": 1,
+                "selected": False,
+                "index": "0",
+                "attrs": {"id": "id_checkbox_select_multiple_0"},
+                "type": "checkbox",
+                "template_name": "django/forms/widgets/checkbox_option.html",
+                "wrap_label": True,
+            }
+        index: Group index`
+    """
     id_ = field.field.widget.attrs.get("id") or field.auto_id
     attrs = {"id": id_} if id_ else {}
     attrs = field.build_widget_attrs(attrs)
