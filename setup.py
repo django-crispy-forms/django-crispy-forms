@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 import crispy_forms
 
-if sys.argv[-1] == 'publish':
+if sys.argv[-1] == "publish":
     if os.system("pip freeze | grep wheel"):
         print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
         sys.exit()
@@ -20,10 +20,10 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 setup(
-    name='django-crispy-forms',
+    name="django-crispy-forms",
     version=crispy_forms.__version__,
     description="Best way to have Django DRY forms",
-    long_description=open('README.rst').read(),
+    long_description=open("README.rst").read(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
@@ -31,6 +31,7 @@ setup(
         "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.0",
         "Framework :: Django :: 3.1",
+        "Framework :: Django :: 3.2",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: JavaScript",
@@ -43,13 +44,13 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    keywords=['forms', 'django', 'crispy', 'DRY'],
-    author='Miguel Araujo',
-    author_email='miguel.araujo.perez@gmail.com',
-    url='https://github.com/django-crispy-forms/django-crispy-forms',
-    license='MIT',
-    packages=find_packages(exclude=['docs']),
+    keywords=["forms", "django", "crispy", "DRY"],
+    author="Miguel Araujo",
+    author_email="miguel.araujo.perez@gmail.com",
+    url="https://github.com/django-crispy-forms/django-crispy-forms",
+    license="MIT",
+    packages=find_packages(exclude=["docs"]),
     include_package_data=True,
     zip_safe=False,
-    python_requires='>=3.5',
+    python_requires=">=3.5",
 )
