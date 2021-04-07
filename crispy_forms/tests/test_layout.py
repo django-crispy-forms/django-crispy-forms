@@ -585,32 +585,36 @@ def test_keepcontext_context_manager(settings):
 def test_use_custom_control_is_used_in_checkboxes():
     form = CheckboxesSampleForm()
     form.helper = FormHelper()
-    form.helper.layout = Layout("checkboxes", InlineCheckboxes("alphacheckboxes"), "numeric_multiple_checkboxes")
+    form.helper.layout = Layout(
+        "checkboxes",
+        InlineCheckboxes("alphacheckboxes"),
+        "numeric_multiple_checkboxes",
+    )
     # form.helper.use_custom_control take default value which is True
-
-    response = render(request=None, template_name="crispy_render_template.html", context={"form": form})
-    assert response.content.count(b"custom-control-inline") == 3
-    assert response.content.count(b"custom-checkbox") == 9
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_true.html"
+    )
 
     form.helper.use_custom_control = True
-
-    response = render(request=None, template_name="crispy_render_template.html", context={"form": form})
-    assert response.content.count(b"custom-control-inline") == 3
-    assert response.content.count(b"custom-checkbox") == 9
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_true.html"
+    )
 
     form.helper.use_custom_control = False
-
-    response = render(request=None, template_name="crispy_render_template.html", context={"form": form})
-
-    assert response.content.count(b"custom-control-inline") == 0
-    assert response.content.count(b"form-check-inline") == 3
-    assert response.content.count(b"form-check") > 0
-    assert response.content.count(b"custom-checkbox") == 0
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_false.html"
+    )
 
 
 @only_bootstrap4
-@pytest.mark.parametrize("use_custom_control, custom_select_count", [(True, 1), (False, 0)])
-def test_use_custom_control_in_select(use_custom_control, custom_select_count):
+@pytest.mark.parametrize(
+    "use_custom_control, expected_html",
+    [
+        (True, "bootstrap4/test_layout/test_use_custom_control_in_select_true.html"),
+        (False, "bootstrap4/test_layout/test_use_custom_control_in_select_false.html"),
+    ],
+)
+def test_use_custom_control_in_select(use_custom_control, expected_html):
     form = SelectSampleForm()
 
     form.helper = FormHelper()
@@ -618,9 +622,7 @@ def test_use_custom_control_in_select(use_custom_control, custom_select_count):
     form.helper.layout = Layout("select")
     form.helper.use_custom_control = use_custom_control
 
-    html = render_crispy_form(form)
-
-    assert html.count("custom-select") == custom_select_count
+    assert parse_form(form) == parse_expected(expected_html)
 
 
 @only_bootstrap3
