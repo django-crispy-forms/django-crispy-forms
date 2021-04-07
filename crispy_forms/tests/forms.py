@@ -182,3 +182,24 @@ class AdvancedFileForm(forms.Form):
     clearable_file = forms.FileField(
         widget=forms.ClearableFileInput(attrs={"class": "my-custom-class"}), required=False, initial=FakeFieldFile()
     )
+
+
+class GroupedChoiceForm(forms.Form):
+    choices = [
+        (
+            "Audio",
+            [
+                ("vinyl", "Vinyl"),
+                ("cd", "CD"),
+            ],
+        ),
+        (
+            "Video",
+            [
+                ("vhs", "VHS Tape"),
+                ("dvd", "DVD"),
+            ],
+        ),
+        ("unknown", "Unknown"),
+    ]
+    checkbox_select_multiple = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=choices)

@@ -5,6 +5,8 @@ from django.test import SimpleTestCase
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
+from crispy_forms.templatetags.crispy_forms_filters import optgroups
+from crispy_forms.tests.forms import GroupedChoiceForm, SampleForm5
 from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import list_difference, list_intersection, render_field
 
@@ -91,3 +93,162 @@ def test_parse_expected_and_form():
     form.helper = FormHelper()
     form.helper.layout = Layout("is_company")
     assert parse_form(form) == parse_expected("utils_test.html")
+
+
+def test_optgroup_filter_nested():
+    form = GroupedChoiceForm({"checkbox_select_multiple": ["cd", "vhs"]})
+    form.as_p()
+    groups = optgroups(form["checkbox_select_multiple"])
+    audio, video, unknown = groups
+    label, options, index = audio
+    assert label == "Audio"
+    assert options == [
+        {
+            "value": "vinyl",
+            "type": "checkbox",
+            "attrs": {"id": "id_checkbox_select_multiple_0_0"},
+            "index": "0_0",
+            "label": "Vinyl",
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "name": "checkbox_select_multiple",
+            "selected": False,
+            "wrap_label": True,
+        },
+        {
+            "value": "cd",
+            "type": "checkbox",
+            "attrs": {"checked": True, "id": "id_checkbox_select_multiple_0_1"},
+            "index": "0_1",
+            "label": "CD",
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "name": "checkbox_select_multiple",
+            "selected": True,
+            "wrap_label": True,
+        },
+    ]
+    assert index == 0
+    label, options, index = video
+    assert label == "Video"
+    assert options == [
+        {
+            "value": "vhs",
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "label": "VHS Tape",
+            "attrs": {"checked": True, "id": "id_checkbox_select_multiple_1_0"},
+            "index": "1_0",
+            "name": "checkbox_select_multiple",
+            "selected": True,
+            "type": "checkbox",
+            "wrap_label": True,
+        },
+        {
+            "value": "dvd",
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "label": "DVD",
+            "attrs": {"id": "id_checkbox_select_multiple_1_1"},
+            "index": "1_1",
+            "name": "checkbox_select_multiple",
+            "selected": False,
+            "type": "checkbox",
+            "wrap_label": True,
+        },
+    ]
+    assert index == 1
+    label, options, index = unknown
+    assert label is None
+    assert options == [
+        {
+            "value": "unknown",
+            "selected": False,
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "label": "Unknown",
+            "attrs": {"id": "id_checkbox_select_multiple_2"},
+            "index": "2",
+            "name": "checkbox_select_multiple",
+            "type": "checkbox",
+            "wrap_label": True,
+        }
+    ]
+    assert index == 2
+
+
+def test_optgroup_filter():
+    form = SampleForm5({"checkbox_select_multiple": "1"})
+    groups = optgroups(form["checkbox_select_multiple"])
+    group = groups[0]
+    label, option, index = group
+    assert label is None
+    assert option == [
+        {
+            "name": "checkbox_select_multiple",
+            "value": 1,
+            "label": 1,
+            "selected": True,
+            "index": "0",
+            "attrs": {"id": "id_checkbox_select_multiple_0", "checked": True},
+            "type": "checkbox",
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "wrap_label": True,
+        }
+    ]
+    assert index == 0
+
+    form = SampleForm5({"checkbox_select_multiple": 1})
+    groups = optgroups(form["checkbox_select_multiple"])
+    group = groups[0]
+    label, option, index = group
+    assert label is None
+    assert option == [
+        {
+            "name": "checkbox_select_multiple",
+            "value": 1,
+            "label": 1,
+            "selected": True,
+            "index": "0",
+            "attrs": {"id": "id_checkbox_select_multiple_0", "checked": True},
+            "type": "checkbox",
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "wrap_label": True,
+        }
+    ]
+    assert index == 0
+
+    form = SampleForm5({"checkbox_select_multiple": ""})
+    groups = optgroups(form["checkbox_select_multiple"])
+    group = groups[0]
+    label, option, index = group
+    assert label is None
+    assert option == [
+        {
+            "name": "checkbox_select_multiple",
+            "value": 1,
+            "label": 1,
+            "selected": False,
+            "index": "0",
+            "attrs": {"id": "id_checkbox_select_multiple_0"},
+            "type": "checkbox",
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "wrap_label": True,
+        }
+    ]
+    assert index == 0
+
+    form = SampleForm5({"checkbox_select_multiple": None})
+    groups = optgroups(form["checkbox_select_multiple"])
+    group = groups[0]
+    label, option, index = group
+    assert label is None
+    assert option == [
+        {
+            "name": "checkbox_select_multiple",
+            "value": 1,
+            "label": 1,
+            "selected": False,
+            "index": "0",
+            "attrs": {"id": "id_checkbox_select_multiple_0"},
+            "type": "checkbox",
+            "template_name": "django/forms/widgets/checkbox_option.html",
+            "wrap_label": True,
+        }
+    ]
+    assert index == 0
