@@ -1,7 +1,3 @@
-coverage
-twine
-wheel
-pytest
-pytest-cov
-pytest-django
-pre-commit
+-r requirements/dev.txt
+-r requirements/lint.txt
+-r requirements/testing.txt
