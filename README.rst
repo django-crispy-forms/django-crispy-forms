@@ -16,6 +16,8 @@ The best way to have Django_ DRY forms. Build programmatic reusable layouts out 
 
 Versions of `django-crispy-forms` prior to 1.9.0 also supported Python 2.7 and Django 1.11/2.1
 
+Looking for Bootstrap 5 support? See the [crispy-bootstrap5 package.](https://github.com/django-crispy-forms/crispy-bootstrap5)
+
 The application mainly provides:
 
 * A filter named ``|crispy`` that will render elegant div based forms. Think of it as the built-in methods: ``as_table``, ``as_ul`` and ``as_p``. You cannot tune up the output, but it is easy to start using it.
