@@ -4,6 +4,8 @@
 * Introduced new `input_size` argument to `AppendedText`, `PrependedText` and `PrependedAppendedText`. This allows
   the size of these grouped inputs to be changed in the Bootstrap 4 template pack. (#1114)
 * Confirmed support for Django 3.2
+* Dropped support for Python 3.5
+* Dropped support for Django 3.0
 
 ## 1.11.2 (2021-03-16)
 * Added HTML parsing tools to help testing of template packs (#1128)
