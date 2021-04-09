@@ -46,6 +46,7 @@ In addition the following template packs are available through separately mainta
 
 * ``foundation`` `Foundation`_ In the creator's words, "The most advanced responsive front-end framework in the world." This template pack is available through `crispy-forms-foundation`_
 * ``tailwind`` `Tailwind`_ A utility first framework. This template pack is available through `crispy-tailwind`_
+* ``Bootstrap 5`` Support for newer versions of Bootstrap will be in separate template packs. This starts with version 5 and is available through `crispy-bootstrap5`_
 
 If your form CSS framework is not supported and it's open source, you can create a ``crispy-forms-templatePackName`` project. Please let me know, so I can link to it. Documentation on :ref:`template_packs` is provided.
 
@@ -60,6 +61,7 @@ Please check the documentation of your template pack package for the correct val
 .. _`crispy-forms-foundation`: https://github.com/sveetch/crispy-forms-foundation
 .. _`Tailwind`: https://tailwindcss.com
 .. _`crispy-tailwind`: https://github.com/django-crispy-forms/crispy-tailwind
+.. _`crispy-bootstrap5`: https://github.com/django-crispy-forms/crispy-bootstrap5
 
 Setting media files
 ~~~~~~~~~~~~~~~~~~~
