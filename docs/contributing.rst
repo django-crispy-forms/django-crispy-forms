@@ -61,7 +61,7 @@ submitted to an issue tracker.
 
 Also since GitHub pegs and syncs a pull request to a specific branch, it is the
 **ONLY** way that you can submit more than one fix at a time.  If you submit
-a pull from your master branch, you can't make any more commits to your master
+a pull from your main branch, you can't make any more commits to your main branch
 without those getting added to the pull.
 
 To create a topic branch, its easiest to use the convenient ``-b`` argument to ``git
@@ -72,7 +72,7 @@ checkout``::
 
 You should use a verbose enough name for your branch so it is clear what it is
 about. Now you can commit your changes and regularly merge in the upstream
-master as described below.
+main branch as described below.
 
 When you are ready to generate a pull request, either for preliminary review,
 or for consideration of merging into the project you must first push your local
@@ -106,11 +106,11 @@ To pull in upstream changes::
 
 Check the log to be sure that you actually want the changes, before merging::
 
-    git log ..django-crispy-forms/master
+    git log ..django-crispy-forms/main
 
 Then merge the changes that you fetched::
 
-    git merge django-crispy-forms/master
+    git merge django-crispy-forms/main
 
 For more info, see https://help.github.com/fork-a-repo/
 
