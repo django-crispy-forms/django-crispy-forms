@@ -7,8 +7,8 @@ django-crispy-forms
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 
-.. image:: http://codecov.io/github/django-crispy-forms/django-crispy-forms/coverage.svg?branch=master
-   :target: http://codecov.io/github/django-crispy-forms/django-crispy-forms?branch=master
+.. image:: http://codecov.io/github/django-crispy-forms/django-crispy-forms/coverage.svg?branch=main
+   :target: http://codecov.io/github/django-crispy-forms/django-crispy-forms?branch=main
 
 The best way to have Django_ DRY forms. Build programmatic reusable layouts out of components, having full control of the rendered HTML without writing HTML in templates. All this without breaking the standard way of doing things in Django, so it plays nice with any other form application.
 
