@@ -299,7 +299,7 @@ class Fieldset(LayoutObject):
 
 
 class MultiField(LayoutObject):
-    """ MultiField container. Renders to a MultiField <div> """
+    """MultiField container. Renders to a MultiField <div>"""
 
     template = "%s/layout/multifield.html"
     field_template = "%s/multifield.html"
