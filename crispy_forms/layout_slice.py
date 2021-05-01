@@ -1,6 +1,7 @@
 from crispy_forms.bootstrap import Container
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.layout import Fieldset, MultiField
+from django.utils.html import conditional_escape
 
 
 class LayoutSlice:
@@ -151,6 +152,7 @@ class LayoutSlice:
                         layout_object.attrs["class"] += " %s" % kwargs.pop("css_class")
                     else:
                         layout_object.attrs["class"] = kwargs.pop("css_class")
-                layout_object.attrs.update(kwargs)
+                # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
+                layout_object.attrs.update({k.replace("_", "-"): conditional_escape(v) for k, v in kwargs.items()})
 
         self.map(update_attrs)
