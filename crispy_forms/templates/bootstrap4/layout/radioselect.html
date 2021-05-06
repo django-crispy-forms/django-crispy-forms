@@ -1,7 +1,7 @@
 {% load crispy_forms_filters %}
 {% load l10n %}
 
-<div class="{% if field_class %} {{ field_class }}{% endif %}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
+<div {% if field_class %}class="{{ field_class }}"{% endif %}{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
 
     {% for choice in field.field.choices %}
       <div class="{%if use_custom_control%}custom-control custom-radio{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
