@@ -24,6 +24,7 @@ from .forms import (
     SampleForm2,
     SampleForm3,
     SampleForm4,
+    SampleForm5,
     SampleForm6,
     SelectSampleForm,
 )
@@ -603,6 +604,28 @@ def test_use_custom_control_is_used_in_checkboxes():
     form.helper.use_custom_control = False
     assert parse_form(form) == parse_expected(
         "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_false.html"
+    )
+
+@only_bootstrap4
+def test_use_custom_control_is_used_in_radio():
+    form = SampleForm5()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        "radio_select",
+    )
+    # form.helper.use_custom_control take default value which is True
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_true.html"
+    )
+
+    form.helper.use_custom_control = True
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_true.html"
+    )
+
+    form.helper.use_custom_control = False
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_false.html"
     )
 
 
