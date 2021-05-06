@@ -606,6 +606,7 @@ def test_use_custom_control_is_used_in_checkboxes():
         "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_false.html"
     )
 
+
 @only_bootstrap4
 def test_use_custom_control_is_used_in_radio():
     form = SampleForm5()
