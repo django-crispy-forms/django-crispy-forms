@@ -684,17 +684,17 @@ def test_file_field():
     form = FileForm()
     form.helper = FormHelper()
     form.helper.layout = Layout("clearable_file")
-    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field_custom_control.html")
+    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_clearable_custom_control.html")
 
     form.helper.use_custom_control = False
-    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field.html")
+    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_clearable.html")
 
     form.helper.use_custom_control = True
     form.helper.layout = Layout("file_field")
-    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field_custom_control.html")
+    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_custom_control.html")
 
     form.helper.use_custom_control = False
-    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field.html")
+    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_default.html")
 
 
 @only_bootstrap4
@@ -702,7 +702,9 @@ def test_file_field_with_custom_class():
     form = AdvancedFileForm()
     form.helper = FormHelper()
     form.helper.layout = Layout("clearable_file")
-    assert parse_form(form) == parse_expected("bootstrap4/file_field/clearable_file_field_custom_class.html")
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_file_field_with_custom_class_clearable.html"
+    )
 
     form.helper.layout = Layout("file_field")
-    assert parse_form(form) == parse_expected("bootstrap4/file_field/file_field_custom_class.html")
+    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_with_custom_class.html")
