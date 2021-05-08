@@ -26,7 +26,13 @@ from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap, only_bootstrap4
-from .forms import CheckboxesSampleForm, SampleForm
+from .forms import (
+    CheckboxesSampleForm,
+    CustomCheckboxSelectMultiple,
+    CustomRadioSelect,
+    SampleForm,
+    SampleFormCustomWidgets,
+)
 
 
 def test_field_with_custom_template():
@@ -154,15 +160,10 @@ def test_remove_labels():
 @only_bootstrap
 class TestBootstrapLayoutObjects:
     def test_custom_django_widget(self, settings):
-        class CustomRadioSelect(forms.RadioSelect):
-            pass
-
-        class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
-            pass
 
         # Make sure an inherited RadioSelect gets rendered as it
-        form = CheckboxesSampleForm()
-        form.fields["inline_radios"].widget = CustomRadioSelect()
+        form = SampleFormCustomWidgets()
+        assert isinstance(form.fields["inline_radios"].widget, CustomRadioSelect)
         form.helper = FormHelper()
         form.helper.layout = Layout("inline_radios")
 
@@ -173,7 +174,7 @@ class TestBootstrapLayoutObjects:
             assert 'class="radio"' in html
 
         # Make sure an inherited CheckboxSelectMultiple gets rendered as it
-        form.fields["checkboxes"].widget = CustomCheckboxSelectMultiple()
+        assert isinstance(form.fields["checkboxes"].widget, CustomCheckboxSelectMultiple)
         form.helper.layout = Layout("checkboxes")
         html = render_crispy_form(form)
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
