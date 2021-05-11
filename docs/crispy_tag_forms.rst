@@ -98,7 +98,7 @@ This is exactly the html that you would get::
             <div id="div_id_like_website" class="ctrlHolder">
                 <label for="id_like_website" class="requiredField">¿Do you like this website?<span class="asteriskField">*</span></label>
                 <ul>
-                    <li><label for="id_like_website_0"><input checked="checked" name="like_website" value="1" id="id_like_website_0" type="radio" class="radioselect" /> Yes</label></li>
+                    <li><label for="id_like_website_0"><input checked name="like_website" value="1" id="id_like_website_0" type="radio" class="radioselect" /> Yes</label></li>
                     <li><label for="id_like_website_1"><input value="0" type="radio" class="radioselect" name="like_website" id="id_like_website_1" /> No</label></li>
                 </ul>
             </div>

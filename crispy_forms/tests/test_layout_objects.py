@@ -501,7 +501,7 @@ class TestBootstrapLayoutObjects:
         test_form = CheckboxesSampleForm()
         html = render_crispy_form(test_form)
 
-        assert html.count('checked="checked"') == 6
+        assert html.count("checked") == 6
 
         test_form.helper = FormHelper(test_form)
         test_form.helper[1].wrap(InlineCheckboxes, inline=True)
