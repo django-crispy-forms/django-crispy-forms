@@ -23,6 +23,11 @@ Of course you can display form fields within columns, the same way you would do 
 .. _`example`: http://stackoverflow.com/questions/12144475/displaying-multiple-rows-and-columns-in-django-crispy-forms
 
 
+Using a custom widget
+~~~~~~~~~~~~~~~~~~~~~
+
+If you are using a custom widget you may find that django-crispy-forms does not render it correctly. In this case please use a custom template for that field, see :ref:`override templates`.
+
 .. _faq-general:
 
 General
