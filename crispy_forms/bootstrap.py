@@ -136,6 +136,10 @@ class FieldWithButtons(Div):
     template = "%s/layout/field_with_buttons.html"
     field_template = "%s/field.html"
 
+    def __init__(self, *fields, input_size=None, **kwargs):
+        self.input_size = input_size
+        super().__init__(*fields, **kwargs)
+
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
         field_template = self.field_template % template_pack

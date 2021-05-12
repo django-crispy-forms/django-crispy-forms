@@ -35,7 +35,6 @@ from .forms import (
     SampleForm,
     SampleFormCustomWidgets,
 )
-from .utils import parse_expected, parse_form
 
 
 def test_field_with_custom_template():
@@ -465,6 +464,7 @@ class TestBootstrapLayoutObjects:
                 StrictButton("Test", type="submit", name="whatever", value="something"),
                 css_class="extra",
                 autocomplete="off",
+                input_size="input-group-sm",
             )
         )
         assert parse_form(form) == parse_expected(
