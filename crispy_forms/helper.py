@@ -335,7 +335,7 @@ class FormHelper(DynamicLayoutHandler):
             "use_custom_control": self.use_custom_control,
         }
 
-        if template_pack == "bootstrap4":
+        if template_pack == "bootstrap4" or "bootstrap5":
             if "form-horizontal" in self.form_class.split():
                 bootstrap_size_match = re.findall(r"col(-(xl|lg|md|sm))?-(\d+)", self.label_class)
                 if bootstrap_size_match:
