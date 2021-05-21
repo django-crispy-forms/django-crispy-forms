@@ -70,4 +70,4 @@ crispy-forms does not include static files. You will need to include the proper 
  
 
 .. _Django: https://djangoproject.com
-.. _`Uni-form`: https://sprawsm.com/uni-form
+.. _`Uni-form`: https://github.com/draganbabic/uni-form/tree/uni-form-v-1-5
