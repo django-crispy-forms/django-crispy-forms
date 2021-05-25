@@ -1,6 +1,7 @@
 # CHANGELOG for django-crispy-forms
 
 ## Next Release (TBC)
+* Fixed rendering of grouped checkboxes and radio inputs in the Bootstrap 4 template pack. (#1155)
 * Introduced new `input_size` argument to `AppendedText`, `PrependedText` and `PrependedAppendedText`. This allows
   the size of these grouped inputs to be changed in the Bootstrap 4 template pack. (#1114)
 * Confirmed support for Django 3.2

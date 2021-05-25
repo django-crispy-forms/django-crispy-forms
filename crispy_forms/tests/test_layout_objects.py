@@ -30,9 +30,11 @@ from .forms import (
     CheckboxesSampleForm,
     CustomCheckboxSelectMultiple,
     CustomRadioSelect,
+    GroupedChoiceForm,
     SampleForm,
     SampleFormCustomWidgets,
 )
+from .utils import parse_expected, parse_form
 
 
 def test_field_with_custom_template():
@@ -535,3 +537,12 @@ class TestBootstrapLayoutObjects:
         for id_suffix in expected_ids:
             expected_str = f'id="id_{id_suffix}"'
             assert html.count(expected_str) == 1
+
+    @only_bootstrap4
+    def test_grouped_checkboxes_radios(self):
+        form = GroupedChoiceForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout("checkbox_select_multiple")
+        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_checkboxes.html")
+        form.helper.layout = Layout("radio")
+        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_radios.html")
