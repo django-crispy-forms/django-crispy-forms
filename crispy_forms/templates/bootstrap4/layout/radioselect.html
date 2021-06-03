@@ -11,7 +11,7 @@
         <label class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}" for="{{ option.attrs.id }}">
             {{ option.label|unlocalize }}
         </label>
-        {% if field.errors and forloop.last and not inline_class %}
+        {% if field.errors and forloop.last and not inline_class and forloop.parentloop.last %}
             {% include 'bootstrap4/layout/field_errors_block.html' %}
         {% endif %}
      </div>
