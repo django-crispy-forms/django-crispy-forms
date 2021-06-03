@@ -546,3 +546,12 @@ class TestBootstrapLayoutObjects:
         assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_checkboxes.html")
         form.helper.layout = Layout("radio")
         assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_radios.html")
+
+        form = GroupedChoiceForm({})
+        form.helper = FormHelper()
+        form.helper.layout = Layout("checkbox_select_multiple")
+        assert parse_form(form) == parse_expected(
+            "bootstrap4/test_layout_objects/test_grouped_checkboxes_failing.html"
+        )
+        form.helper.layout = Layout("radio")
+        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_radios_failing.html")

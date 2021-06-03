@@ -606,6 +606,17 @@ def test_use_custom_control_is_used_in_checkboxes():
         "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_false.html"
     )
 
+    form = CheckboxesSampleForm({})
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        "checkboxes",
+        InlineCheckboxes("alphacheckboxes"),
+        "numeric_multiple_checkboxes",
+    )
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_true_failing.html"
+    )
+
 
 @only_bootstrap4
 def test_use_custom_control_is_used_in_radio():
@@ -627,6 +638,15 @@ def test_use_custom_control_is_used_in_radio():
     form.helper.use_custom_control = False
     assert parse_form(form) == parse_expected(
         "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_false.html"
+    )
+
+    form = SampleForm5({})
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        "radio_select",
+    )
+    assert parse_form(form) == parse_expected(
+        "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_true_failing.html"
     )
 
 
