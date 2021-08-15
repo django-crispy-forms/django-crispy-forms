@@ -1,8 +1,8 @@
 from random import randint
 
 from django.template import Template
-from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
+from django.utils.text import slugify
 
 from .layout import Div, Field, LayoutObject, TemplateNameMixin
 from .utils import TEMPLATE_PACK, flatatt, render_field
@@ -224,7 +224,7 @@ class Container(Div):
         self._active_originally_included = "active" in kwargs
         self.active = kwargs.pop("active", False)
         if not self.css_id:
-            self.css_id = slugify(self.name)
+            self.css_id = slugify(self.name, allow_unicode=True)
 
     def __contains__(self, field_name):
         """
