@@ -16,9 +16,9 @@
                 {% if crispy_prepended_text %}<span class="{% if not field|is_select %}add-on{% endif %}{% if active %} active{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
                 {% crispy_field field %}
                 {% if crispy_appended_text %}<span class="{% if not field|is_select %}add-on{% endif %}{% if active %} active{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
+                
+                {% include 'bootstrap/layout/help_text_and_errors.html' %}
             </div>
-
-            {% include 'bootstrap/layout/help_text_and_errors.html' %}
         </div>
     </div>
 {% endif %}
