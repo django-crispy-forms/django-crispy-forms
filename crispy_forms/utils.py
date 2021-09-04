@@ -4,7 +4,7 @@ from functools import lru_cache
 
 from django.conf import settings
 from django.forms.utils import flatatt as _flatatt
-from django.template import Context
+from django.template import Template, Context
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
 
@@ -115,6 +115,8 @@ def render_field(  # noqa: C901
                     template = default_field_template(template_pack)
                 else:  # FormHelper.field_template set
                     template = get_template(form.crispy_field_template)
+            elif isinstance(template, Template):
+                pass # use the template object
             else:
                 template = get_template(template)
 
