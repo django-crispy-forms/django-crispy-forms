@@ -11,6 +11,7 @@ from crispy_forms.bootstrap import (
     AccordionGroup,
     Alert,
     AppendedText,
+    Container,
     FieldWithButtons,
     InlineCheckboxes,
     InlineRadios,
@@ -555,3 +556,11 @@ class TestBootstrapLayoutObjects:
         )
         form.helper.layout = Layout("radio")
         assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_radios_failing.html")
+
+    def test_non_ascii_chars_in_container_name(self):
+        """
+        Test if non-ASCII characters are saved as css_id property.
+        """
+        name = "テスト"
+        test_container = Container(name, "val1", "val2")
+        assert test_container.css_id == name
