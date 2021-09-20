@@ -14,6 +14,8 @@ The best way to have Django_ DRY forms. Build programmatic reusable layouts out 
 
 `django-crispy-forms` supports Django 2.2, 3.1, 3.2 and 4.0 with Python 3.6+.
 
+**Note: Django 4.0 requires version 1.13+.**
+
 Looking for Bootstrap 5 support? See the `crispy-bootstrap5 package`_.
 
 .. _`crispy-bootstrap5 package`: https://github.com/django-crispy-forms/crispy-bootstrap5
