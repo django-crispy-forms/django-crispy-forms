@@ -21,7 +21,7 @@ ROOT_URLCONF = "crispy_forms.tests.urls"
 CRISPY_CLASS_CONVERTERS = {"textinput": "textinput textInput inputtext"}
 SECRET_KEY = "secretkey"
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
-
+USE_TZ = True
 
 TEMPLATE_DEBUG = True
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, "templates"),)

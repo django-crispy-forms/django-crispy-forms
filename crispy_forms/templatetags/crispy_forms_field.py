@@ -19,7 +19,9 @@ def is_password(field):
 
 @register.filter
 def is_radioselect(field):
-    return isinstance(field.field.widget, forms.RadioSelect)
+    return isinstance(field.field.widget, forms.RadioSelect) and not isinstance(
+        field.field.widget, forms.CheckboxSelectMultiple
+    )
 
 
 @register.filter
