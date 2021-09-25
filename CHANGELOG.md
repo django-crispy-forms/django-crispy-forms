@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.13.0 (2021-09-24)
+## 1.13.0 (2021-09-25)
 * Added support for Django 4.0
 
 ## 1.12.0 (2021-06-11)
