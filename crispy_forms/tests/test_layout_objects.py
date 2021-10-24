@@ -234,7 +234,7 @@ class TestBootstrapLayoutObjects:
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             PrependedAppendedText("email", "@", "gmail.com", wrapper_class="wrapper class"),
-            PrependedAppendedText("email", "@", "gmail.com")
+            PrependedAppendedText("email", "@", "gmail.com"),
         )
         html = render_crispy_form(test_form)
         assert html.count('<div id="div_id_email" class="form-group">') == 1
