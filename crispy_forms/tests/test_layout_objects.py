@@ -225,9 +225,20 @@ class TestBootstrapLayoutObjects:
                 PrependedAppendedText("email", "@", "gmail.com", css_class="form-control-lg")
             )
             html = render_crispy_form(test_form)
-
             assert 'class="form-control-lg' in html
             assert contains_partial(html, '<span class="input-group-text"/>')
+
+    @only_bootstrap4
+    def test_prepended_wrapper_class(self, settings):
+        test_form = SampleForm()
+        test_form.helper = FormHelper()
+        test_form.helper.layout = Layout(
+            PrependedAppendedText("email", "@", "gmail.com", wrapper_class="wrapper class"),
+            PrependedAppendedText("email", "@", "gmail.com"),
+        )
+        html = render_crispy_form(test_form)
+        assert html.count('<div id="div_id_email" class="form-group">') == 1
+        assert html.count('<div id="div_id_email" class="form-group wrapper class">') == 1
 
     @only_bootstrap4
     def test_prepended_appended_text_in_select(self, settings):
