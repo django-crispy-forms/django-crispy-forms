@@ -152,11 +152,11 @@ class ButtonHolder(LayoutObject):
 
     template = "%s/layout/buttonholder.html"
 
-    def __init__(self, *fields, **kwargs):
+    def __init__(self, *fields, css_class=None, css_id=None, template=None):
         self.fields = list(fields)
-        self.css_class = kwargs.get("css_class", None)
-        self.css_id = kwargs.get("css_id", None)
-        self.template = kwargs.get("template", self.template)
+        self.css_class = css_class
+        self.css_id = css_id
+        self.template = template or self.template
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
