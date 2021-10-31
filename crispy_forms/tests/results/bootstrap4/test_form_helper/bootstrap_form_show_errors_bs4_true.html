@@ -1,0 +1,68 @@
+<form method="post">
+    <div id="div_id_email" class="form-group">
+        <label for="id_email" class=" requiredField"> email<span class="asteriskField">*</span> </label>
+        <div class="">
+            <div class="input-group">
+                <input type="text" name="email" value="invalidemail" maxlength="30" class="textinput textInput inputtext form-control is-invalid" required id="id_email" />
+                <div class="input-group-append"><span class="input-group-text">whatever</span></div>
+                <span id="error_1_id_email" class="invalid-feedback"><strong>Enter a valid email address.</strong></span>
+            </div>
+            <small id="hint_id_email" class="form-text text-muted">Insert your email</small>
+        </div>
+    </div>
+    <div id="div_id_first_name" class="form-group">
+        <label
+            for="id_first_name"
+            class=" requiredField"
+        >
+            first name<span class="asteriskField">*</span>
+        </label>
+        <div class="">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text">blabla</span></div>
+                <input type="text" name="first_name" value="first_name_too_long" maxlength="5" class="textinput textInput inputtext form-control is-invalid" required id="id_first_name" />
+                <span id="error_1_id_first_name" class="invalid-feedback"><strong>Ensure this value has at most 5 characters (it has 19).</strong></span>
+            </div>
+        </div>
+    </div>
+    <div id="div_id_last_name" class="form-group">
+        <label for="id_last_name" class=" requiredField"> last name<span class="asteriskField">*</span> </label>
+        <div class="">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text">foo</span></div>
+                <input
+                    type="text"
+                    name="last_name"
+                    value="last_name_too_long"
+                    maxlength="5"
+                    class="textinput textInput inputtext form-control is-invalid"
+                    required
+                    id="id_last_name"
+                />
+                <div class="input-group-append"><span class="input-group-text">bar</span></div>
+                <span id="error_1_id_last_name" class="invalid-feedback"><strong>Ensure this value has at most 5 characters (it has 18).</strong></span>
+            </div>
+        </div>
+    </div>
+    <div
+        id="div_id_password1"
+        class="form-group"
+    >
+        <label for="id_password1" class=" requiredField"> password<span class="asteriskField">*</span> </label>
+        <div class="">
+            <div class="input-group">
+                <input type="password" name="password1" maxlength="30" class="textinput textInput form-control" required id="id_password1" />
+                <div class="input-group-append"><span class="input-group-text">whatever</span></div>
+            </div>
+        </div>
+    </div>
+    <div id="div_id_password2" class="form-group">
+        <label for="id_password2" class=" requiredField"> re-enter password<span class="asteriskField">*</span> </label>
+        <div class="">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text">blabla</span></div>
+                <input type="password" name="password2" maxlength="30" class="textinput textInput form-control" required id="id_password2" />
+            </div>
+        </div>
+    </div>
+</form>

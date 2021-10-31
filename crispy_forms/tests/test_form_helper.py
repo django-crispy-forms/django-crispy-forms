@@ -19,6 +19,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form
 from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia, SampleFormWithMultiValueField
+from .utils import parse_expected, parse_form
 
 
 def test_inputs(settings):
@@ -664,14 +665,10 @@ def test_bootstrap_form_show_errors_bs4():
         PrependedText("password2", "blabla"),
     )
     form.is_valid()
-
     form.helper.form_show_errors = True
-    html = render_crispy_form(form)
-    assert html.count("error") == 3
-
+    assert parse_form(form) == parse_expected("bootstrap4/test_form_helper/bootstrap_form_show_errors_bs4_true.html")
     form.helper.form_show_errors = False
-    html = render_crispy_form(form)
-    assert html.count("error") == 0
+    assert parse_form(form) == parse_expected("bootstrap4/test_form_helper/bootstrap_form_show_errors_bs4_false.html")
 
 
 @only_bootstrap
