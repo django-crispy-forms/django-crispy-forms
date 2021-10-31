@@ -1,0 +1,42 @@
+<form method="post">
+    <div id="div_id_email" class="form-group has-error">
+        <label for="id_email" class=" control-label requiredField"> email<span class="asteriskField">*</span> </label>
+        <div class=" controls">
+            <div class="input-group"><input type="text" name="email" value="invalidemail" maxlength="30" class="textinput textInput inputtext form-control" required id="id_email" /> <span class="input-group-addon">whatever</span></div>
+            <span id="error_1_id_email" class="help-block"><strong>Enter a valid email address.</strong></span>
+            <div id="hint_id_email" class="help-block">Insert your email</div>
+        </div>
+    </div>
+    <div id="div_id_first_name" class="form-group has-error">
+        <label for="id_first_name" class=" control-label requiredField"> first name<span class="asteriskField">*</span> </label>
+        <div class=" controls">
+            <div class="input-group">
+                <span class="input-group-addon">blabla</span> <input type="text" name="first_name" value="first_name_too_long" maxlength="5" class="textinput textInput inputtext form-control" required id="id_first_name" />
+            </div>
+
+            <span id="error_1_id_first_name" class="help-block"><strong>Ensure this value has at most 5 characters (it has 19).</strong></span>
+        </div>
+    </div>
+    <div id="div_id_last_name" class="form-group has-error">
+        <label for="id_last_name" class=" control-label requiredField"> last name<span class="asteriskField">*</span> </label>
+        <div class=" controls">
+            <div class="input-group">
+                <span class="input-group-addon">foo</span> <input type="text" name="last_name" value="last_name_too_long" maxlength="5" class="textinput textInput inputtext form-control" required id="id_last_name" />
+                <span class="input-group-addon">bar</span>
+            </div>
+            <span id="error_1_id_last_name" class="help-block"><strong>Ensure this value has at most 5 characters (it has 18).</strong></span>
+        </div>
+    </div>
+    <div id="div_id_password1" class="form-group">
+        <label for="id_password1" class=" control-label requiredField"> password<span class="asteriskField">*</span> </label>
+        <div class=" controls">
+            <div class="input-group"><input type="password" name="password1" maxlength="30" class="textinput textInput form-control" required id="id_password1" /> <span class="input-group-addon">whatever</span></div>
+        </div>
+    </div>
+    <div id="div_id_password2" class="form-group">
+        <label for="id_password2" class=" control-label requiredField"> re-enter password<span class="asteriskField">*</span> </label>
+        <div class=" controls">
+            <div class="input-group"><span class="input-group-addon">blabla</span> <input type="password" name="password2" maxlength="30" class="textinput textInput form-control" required id="id_password2" /></div>
+        </div>
+    </div>
+</form>

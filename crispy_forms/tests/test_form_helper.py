@@ -637,12 +637,10 @@ def test_bootstrap_form_show_errors_bs3():
     form.is_valid()
 
     form.helper.form_show_errors = True
-    html = render_crispy_form(form)
-    assert html.count("error") == 6
+    assert parse_form(form) == parse_expected("bootstrap3/test_form_helper/bootstrap_form_show_errors_bs3_true.html")
 
     form.helper.form_show_errors = False
-    html = render_crispy_form(form)
-    assert html.count("error") == 0
+    assert parse_form(form) == parse_expected("bootstrap3/test_form_helper/bootstrap_form_show_errors_bs3_false.html")
 
 
 @only_bootstrap4
