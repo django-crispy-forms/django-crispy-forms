@@ -15,7 +15,7 @@
             <label for="{{ field.id_for_label }}" class="sr-only{% if field.field.required %} requiredField{% endif %}">
                 {{ field.label|safe }}
             </label>
-            {% crispy_field field 'placeholder' field.label %}
+            {% crispy_field field 'placeholder' field.label 'class' 'form-control' %}
         </div>
     {% endif %}
 {% endif %}

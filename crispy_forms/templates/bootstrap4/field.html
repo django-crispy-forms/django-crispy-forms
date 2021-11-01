@@ -42,8 +42,10 @@
                 <div class="{{ field_class }}">
                     {% if field|is_select and use_custom_control %}
                          {% crispy_field field 'class' 'custom-select' %}
+                    {% elif field|is_file %}
+                        {% crispy_field field 'class' 'form-control-file' %}
                     {% else %}
-                        {% crispy_field field %}
+                        {% crispy_field field 'class' 'form-control' %}
                     {% endif %}
                     {% include 'bootstrap4/layout/help_text_and_errors.html' %}
                 </div>

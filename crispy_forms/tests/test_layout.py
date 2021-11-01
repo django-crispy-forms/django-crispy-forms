@@ -754,3 +754,12 @@ def test_file_field_with_custom_class():
 
     form.helper.layout = Layout("file_field")
     assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_with_custom_class.html")
+
+
+@only_bootstrap4
+def test_form_control_size():
+    "CSS classes form-control and form-control-lg are both required"
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(Field("first_name", css_class="form-control-lg"))
+    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_form_control_size.html")

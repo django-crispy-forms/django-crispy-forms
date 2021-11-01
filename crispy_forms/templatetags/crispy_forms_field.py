@@ -115,13 +115,8 @@ class CrispyFieldNode(template.Node):
             else:
                 css_class = class_name
 
-            if template_pack == "bootstrap4" and not is_multivalue(field):
-                if not is_checkbox(field):
-                    css_class += " form-control"
-                    if is_file(field):
-                        css_class += "-file"
-                if field.errors:
-                    css_class += " is-invalid"
+            if template_pack == "bootstrap4" and field.errors and not is_multivalue(field):
+                css_class += " is-invalid"
 
             widget.attrs["class"] = css_class
 
@@ -130,7 +125,7 @@ class CrispyFieldNode(template.Node):
                 attribute = template.Variable(attribute).resolve(context)
 
                 if attribute_name in widget.attrs:
-                    if attribute not in widget.attrs[attribute_name]:
+                    if attribute not in widget.attrs[attribute_name].split():
                         widget.attrs[attribute_name] += " " + attribute
                 else:
                     widget.attrs[attribute_name] = attribute
