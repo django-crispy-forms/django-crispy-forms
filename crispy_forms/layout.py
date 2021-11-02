@@ -139,15 +139,45 @@ class ButtonHolder(LayoutObject):
     """
     Layout object. It wraps fields in a <div class="buttonHolder">
 
-    This is where you should put Layout objects that render to form buttons like Submit.
-    It should only hold `HTML` and `BaseInput` inherited objects.
+    This is where you should put Layout objects that render to form buttons
+    like Submit. It should only hold `HTML` and `BaseInput` inherited objects.
+
+    Attributes:
+        template : str
+            The default template which this Layout Object will be rendered
+            with.
+
+    Args:
+        fields : HTML or BaseInput
+            The layout objects to render within the ButtonHolder.
+
+        css_class : str, optional
+            Additional CSS classes to be included in the
+            button holder `<div>`.
+
+        css_id : str, optional
+            Sets a DOM id for the button holder. .
+
+        template : str, optional
+            Over rides the default template, if provided.
 
     Example::
 
+        # Within a form's `Layout`.
+
         ButtonHolder(
-            HTML(<span style="display: hidden;">Information Saved</span>),
-            Submit('Save', 'Save')
+            HTML('<span style="display: hidden;">Information Saved</span>'),
+            Submit('Save', 'Save'),
+            css_class = "Custom Class",
+            css_id = "ButtonHolderID",
         )
+
+        # Given the above Layout the rendered HTML will be:
+
+        <div id="ButtonHolderID" class="buttonHolder Custom Class">
+            <span style="display: hidden;">Information Saved</span>
+            <input type="submit" name="Save" value="Save" class="btn btn-primary" id="submit-id-save"/>
+        </div>
     """
 
     template = "%s/layout/buttonholder.html"
