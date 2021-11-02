@@ -21,7 +21,7 @@
                 {% if field|is_select and use_custom_control %}
                     {% crispy_field field 'class' 'custom-select' %}
                 {% else %}
-                    {% crispy_field field %}
+                    {% crispy_field field 'class' 'form-control' %}
                 {% endif %}
                 {% if crispy_appended_text %}
                   <div class="input-group-append{% if active %} active{% endif %}">
