@@ -6,7 +6,11 @@
     {% if field|is_checkbox %}
         <div id="div_{{ field.auto_id }}" class="form-check form-check-inline{% if wrapper_class %} {{ wrapper_class }}{% endif %}">
             <label for="{{ field.id_for_label }}" class="form-check-label{% if field.field.required %} requiredField{% endif %}">
-                {% crispy_field field 'class' 'form-check-input' %}
+                {% if field.errors %}
+                    {% crispy_field field 'class' 'form-check-input is-invalid' %}
+                {% else %}
+                    {% crispy_field field 'class' 'form-check-input' %}
+                {% endif %}
                 {{ field.label|safe }}
             </label>
         </div>
@@ -15,7 +19,11 @@
             <label for="{{ field.id_for_label }}" class="sr-only{% if field.field.required %} requiredField{% endif %}">
                 {{ field.label|safe }}
             </label>
-            {% crispy_field field 'placeholder' field.label 'class' 'form-control' %}
+            {% if field.errors %}
+                {% crispy_field field 'placeholder' field.label 'class' 'form-control is-invalid' %}
+            {% else %}
+                {% crispy_field field 'placeholder' field.label 'class' 'form-control' %}
+            {% endif %}
         </div>
     {% endif %}
 {% endif %}

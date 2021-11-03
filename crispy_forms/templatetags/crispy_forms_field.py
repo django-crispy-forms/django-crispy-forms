@@ -2,7 +2,7 @@ from django import forms, template
 from django.conf import settings
 from django.template import Context, loader
 
-from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
+from crispy_forms.utils import get_template_pack
 
 register = template.Library()
 
@@ -88,9 +88,6 @@ class CrispyFieldNode(template.Node):
         field, attrs = context.render_context[self]
         field = field.resolve(context)
 
-        # If template pack has been overridden in FormHelper we can pick it from context
-        template_pack = context.get("template_pack", TEMPLATE_PACK)
-
         # There are special django widgets that wrap actual widgets,
         # such as forms.widgets.MultiWidget, admin.widgets.RelatedFieldWidgetWrapper
         widgets = getattr(field.field.widget, "widgets", [getattr(field.field.widget, "widget", field.field.widget)])
@@ -115,20 +112,20 @@ class CrispyFieldNode(template.Node):
             else:
                 css_class = class_name
 
-            if template_pack == "bootstrap4" and field.errors and not is_multivalue(field):
-                css_class += " is-invalid"
-
             widget.attrs["class"] = css_class
 
             for attribute_name, attribute in attr.items():
                 attribute_name = template.Variable(attribute_name).resolve(context)
-                attribute = template.Variable(attribute).resolve(context)
+                attributes = template.Variable(attribute).resolve(context)
 
                 if attribute_name in widget.attrs:
-                    if attribute not in widget.attrs[attribute_name].split():
-                        widget.attrs[attribute_name] += " " + attribute
+                    # multiple attribtes are in a single string, e.g.
+                    # "form-control is-invalid"
+                    for attr in attributes.split():
+                        if attr not in widget.attrs[attribute_name].split():
+                            widget.attrs[attribute_name] += " " + attr
                 else:
-                    widget.attrs[attribute_name] = attribute
+                    widget.attrs[attribute_name] = attributes
 
         return str(field)
 
