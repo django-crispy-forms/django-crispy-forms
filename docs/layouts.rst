@@ -252,7 +252,9 @@ These ones live under module ``crispy_forms.bootstrap``.
 
 - **FieldWithButtons**: You can create an input connected with buttons::
 
-    FieldWithButtons('field_name', StrictButton("Go!"))
+    The size of the field can be customised in the Bootstrap4 template pack by passing in the size modifier class to `input_size`. 
+
+    FieldWithButtons('field_name', StrictButton("Go!"), input_size="input-group-sm")
 
 .. image:: images/field_with_buttons.png
    :align: center

@@ -133,6 +133,29 @@ class InlineRadios(Field):
 
 
 class FieldWithButtons(Div):
+    """
+    A layout object for rendering a single field with any number of buttons.
+
+    Args:
+        fields : str or LayoutObject
+            The first positional argument is the field. This can be either the
+            name of the field as a string or an instance of `Field`. Following
+            arguments will be rendered as buttons.
+        input_size : str
+            Additional CSS class to change the size of the input. e.g.
+            "input-group-sm".
+        kwargs
+            Additional kwargs to be passed to the parent `Div` Layout Object.
+
+    Example::
+
+        FieldWithButtons(
+            Field("password1", css_class="span4"),
+            StrictButton("Go!", css_id="go-button"),
+            input_size="input-group-sm",
+        )
+    """
+
     template = "%s/layout/field_with_buttons.html"
     field_template = "%s/field.html"
 

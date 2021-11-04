@@ -4,6 +4,8 @@
 * Added support for Python 3.10
 * Dropped support for Django 3.1
 * Dropped support for Python 3.6
+* Added `input_size` argument to `FieldWithButtons` to allow customisation of the size of the input in the Bootstrap 4 
+  template pack. (#1159)
 
 ## 1.13.0 (2021-09-25)
 * Added support for Django 4.0
