@@ -18,7 +18,7 @@
                 </label>
             {% endif %}
             {% if field.help_text %}
-                <p id="help_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</span>
+                <span id="help_{{ field.auto_id }}" class="help-block">{{ field.help_text|safe }}</span>
             {% endif %}
         </div>
         {% if field.errors %}</div>{% endif %}
