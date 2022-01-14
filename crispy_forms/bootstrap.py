@@ -475,13 +475,16 @@ class Modal(LayoutObject):
         self.template = kwargs.pop("template", self.template)
 
         self.css_id = kwargs.pop("css_id", "modal_id")
-        self.css_class = "modal fade"
         self.title = kwargs.pop("title", "Modal Title")
         self.title_id = kwargs.pop("title_id", "modal_title_id")
-        self.title_class = kwargs.pop("title_class", "modal-title")
 
+        self.css_class = "modal fade"
         if "css_class" in kwargs:
             self.css_class += " %s" % kwargs.pop("css_class")
+
+        self.title_class = "modal-title"
+        if "title_class" in kwargs:
+            self.title_class += " %s" % kwargs.pop("title_class")
 
         kwargs = {**kwargs, "tabindex": "-1", "role": "dialog", "aria-labelledby": "%s-label" % self.css_id}
 
