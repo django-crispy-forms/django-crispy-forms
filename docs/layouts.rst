@@ -303,8 +303,30 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/field_disabled.png
    :align: center
 
-.. _`input_size`:
+- **Modal**: ``Modal`` displays it's fields inside a bootstrap modal that can be customized usign kwargs upon initialization. Only supports Bootstrap v3 or higher::
 
+    Layout(
+        BootstrapModal(
+            # email.help_text was set during the initalization of the django form field
+            Field('email', placeholder="Email", wrapper_class="mb-0"),
+            Button(
+                "submit",
+                "Send Reset Email",
+                id="email_reset",
+                css_class="btn-primary mt-3"
+            ),
+            css_id="my_modal_id",
+            title="This is my modal",
+            title_class="w-100 text-center"
+        )
+    )
+
+
+.. image:: images/modal.png
+    :align: center
+
+|
+.. _`input_size`:
 Input group size
 ----------------
 
