@@ -1,4 +1,4 @@
 [tool.black]
 line-length = 119
-target-version = ['py36']
+target-version = ['py37']
 include = '(crispy_forms)\/(.+)(py?$)'
