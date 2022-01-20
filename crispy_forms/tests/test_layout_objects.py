@@ -23,7 +23,7 @@ from crispy_forms.bootstrap import (
 )
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
-from crispy_forms.tests.utils import contains_partial
+from crispy_forms.tests.utils import contains_partial, parse_expected, parse_form
 from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap, only_bootstrap4
@@ -35,7 +35,6 @@ from .forms import (
     SampleForm,
     SampleFormCustomWidgets,
 )
-from .utils import parse_expected, parse_form
 
 
 def test_field_with_custom_template():
@@ -465,32 +464,12 @@ class TestBootstrapLayoutObjects:
                 StrictButton("Test", type="submit", name="whatever", value="something"),
                 css_class="extra",
                 autocomplete="off",
+                input_size="input-group-sm",
             )
         )
-        html = render_crispy_form(form)
-
-        form_group_class = "control-group"
-        if settings.CRISPY_TEMPLATE_PACK in ("bootstrap3", "bootstrap4"):
-            form_group_class = "form-group"
-
-        assert html.count('class="%s extra"' % form_group_class) == 1
-        assert html.count('autocomplete="off"') == 1
-        assert html.count('class="span4') == 1
-        assert html.count('id="go-button"') == 1
-        assert html.count("Go!") == 1
-        assert html.count("No!") == 1
-        assert html.count('class="btn"') == 2
-        assert html.count('class="btn extra"') == 1
-        assert html.count('type="submit"') == 1
-        assert html.count('name="whatever"') == 1
-        assert html.count('value="something"') == 1
-
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-            assert html.count('class="input-append"') == 1
-        elif settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            assert html.count('class="input-group-btn') == 1
-        elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert html.count('class="input-group-append') == 1
+        assert parse_form(form) == parse_expected(
+            f"{settings.CRISPY_TEMPLATE_PACK}/test_layout_objects/test_field_with_buttons.html"
+        )
 
     def test_hidden_fields(self):
         form = SampleForm()

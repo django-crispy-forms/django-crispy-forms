@@ -8,9 +8,9 @@
     {% endif %}
 
     <div class="{{ field_class }}">
-        <div class="input-group">
-            {% crispy_field field %}
-            <span class="input-group-append{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ buttons|safe }}</span>
+        <div class="input-group {% if div.input_size %} {{ div.input_size }}{% endif %}">
+            {% crispy_field field 'class' 'form-control' %}
+            <span class="input-group-append{% if active %} active{% endif %}">{{ buttons|safe }}</span>
         </div>
         {% include 'bootstrap4/layout/help_text_and_errors.html' %}
     </div>
