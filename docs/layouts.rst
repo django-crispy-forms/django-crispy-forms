@@ -317,7 +317,7 @@ These ones live under module ``crispy_forms.bootstrap``.
             ),
             css_id="my_modal_id",
             title="This is my modal",
-            title_class="w-100 text-center"
+            title_class="w-100 text-center",
         )
     )
 
