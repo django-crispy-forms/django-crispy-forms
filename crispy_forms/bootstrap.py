@@ -450,12 +450,15 @@ class Modal(LayoutObject):
     The following attributes can be set:
         - `css_id`: modal's DOM id
         - `css_class`: modal's DOM classes
-            - NOTE: "modal" and "fade" are applied by default
+            - NOTE: "modal" and "fade" are applied by default on the template
         - `title`: text to display in the modal's header
             - NOTE: text will be wrapped in a <h5> tag
         - `title_id`: title's DOM id
         - `title_class`: titles's DOM classes
-            - NOTE: "modal-title" is applied by default
+            - NOTE: "modal-title" is applied by default on the template
+        - template
+            The default template which this Layout Object will be rendered
+            with
 
     Example::
 
