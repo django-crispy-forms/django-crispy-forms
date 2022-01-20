@@ -493,7 +493,7 @@ class Modal(LayoutObject):
         self.title_id = title_id
         self.title_class = title_class
 
-        kwargs = {**kwargs, "tabindex": "-1", "role": "dialog", "aria-labelledby": "%s-label" % self.css_id}
+        kwargs = {**kwargs, "tabindex": "-1", "role": "dialog", "aria-labelledby": "%s-label" % self.title_id}
 
         self.flat_attrs = flatatt(kwargs)
 
