@@ -467,7 +467,7 @@ class Modal(LayoutObject):
             Div('field2'),
             css_id="modal-id-ex",
             css_class="modal-class-ex,
-            title="This is my modal"
+            title="This is my modal",
         )
     """
 
