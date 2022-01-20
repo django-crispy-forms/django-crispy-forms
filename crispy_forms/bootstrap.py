@@ -477,8 +477,8 @@ class Modal(LayoutObject):
         css_id="modal_id",
         title="Modal Title",
         title_id="modal_title_id",
-        css_class=None,
-        title_class=None,
+        css_class="",
+        title_class="",
         **kwargs,
     ):
 
