@@ -470,21 +470,25 @@ class Modal(LayoutObject):
 
     template = "%s/layout/modal.html"
 
-    def __init__(self, *fields, **kwargs):
+    def __init__(
+        self,
+        *fields,
+        template=None,
+        css_id="modal_id",
+        title="Modal Title",
+        title_id="modal_title_id",
+        css_class=None,
+        title_class=None,
+        **kwargs,
+    ):
+
         self.fields = list(fields)
-        self.template = kwargs.pop("template", self.template)
-
-        self.css_id = kwargs.pop("css_id", "modal_id")
-        self.title = kwargs.pop("title", "Modal Title")
-        self.title_id = kwargs.pop("title_id", "modal_title_id")
-
-        self.css_class = "modal fade"
-        if "css_class" in kwargs:
-            self.css_class += " %s" % kwargs.pop("css_class")
-
-        self.title_class = "modal-title"
-        if "title_class" in kwargs:
-            self.title_class += " %s" % kwargs.pop("title_class")
+        self.template = template or self.template
+        self.css_id = css_id
+        self.css_class = css_class
+        self.title = title
+        self.title_id = title_id
+        self.title_class = title_class
 
         kwargs = {**kwargs, "tabindex": "-1", "role": "dialog", "aria-labelledby": "%s-label" % self.css_id}
 
