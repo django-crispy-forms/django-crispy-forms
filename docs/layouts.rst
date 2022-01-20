@@ -306,7 +306,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 - **Modal**: ``Modal`` displays it's fields inside a bootstrap modal that can be customized using kwargs upon initialization. Only supports Bootstrap v3 or higher::
 
     Layout(
-        BootstrapModal(
+        Modal(
             # email.help_text was set during the initalization of the django form field
             Field('email', placeholder="Email", wrapper_class="mb-0"),
             Button(
