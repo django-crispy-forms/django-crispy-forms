@@ -313,7 +313,7 @@ These ones live under module ``crispy_forms.bootstrap``.
                 "submit",
                 "Send Reset Email",
                 id="email_reset",
-                css_class="btn-primary mt-3"
+                css_class="btn-primary mt-3",
             ),
             css_id="my_modal_id",
             title="This is my modal",
