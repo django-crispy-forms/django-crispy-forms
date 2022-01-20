@@ -19,9 +19,17 @@
                   </div>
                 {% endif %}
                 {% if field|is_select and use_custom_control %}
-                    {% crispy_field field 'class' 'custom-select' %}
+                    {% if field.errors %}
+                        {% crispy_field field 'class' 'custom-select is-invalid' %}
+                    {% else %}
+                        {% crispy_field field 'class' 'custom-select' %}
+                    {% endif %}
                 {% else %}
-                    {% crispy_field field 'class' 'form-control' %}
+                    {% if field.errors %}
+                        {% crispy_field field 'class' 'form-control is-invalid' %}
+                    {% else %}
+                        {% crispy_field field 'class' 'form-control' %}
+                    {% endif %}
                 {% endif %}
                 {% if crispy_appended_text %}
                   <div class="input-group-append{% if active %} active{% endif %}">
