@@ -2,6 +2,8 @@
 
 ## Next Release(tbc)
 * Added support for Python 3.10
+* Dropped support for Django 3.1
+* Dropped support for Python 3.6
 
 ## 1.13.0 (2021-09-25)
 * Added support for Django 4.0
