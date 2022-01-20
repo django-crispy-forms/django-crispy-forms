@@ -321,7 +321,6 @@ These ones live under module ``crispy_forms.bootstrap``.
         )
     )
 
-
 .. image:: images/modal.png
     :align: center
 
