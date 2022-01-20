@@ -303,7 +303,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/field_disabled.png
    :align: center
 
-- **Modal**: ``Modal`` displays it's fields inside a bootstrap modal that can be customized usign kwargs upon initialization. Only supports Bootstrap v3 or higher::
+- **Modal**: ``Modal`` displays it's fields inside a bootstrap modal that can be customized using kwargs upon initialization. Only supports Bootstrap v3 or higher::
 
     Layout(
         BootstrapModal(
