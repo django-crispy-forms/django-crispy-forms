@@ -580,3 +580,29 @@ class TestBootstrapLayoutObjects:
         )
 
         assert parse_form(form) == parse_expected("bootstrap3/test_layout_objects/bootstrap_modal_with_kwargs.html")
+
+    @only_bootstrap4
+    def test_bs4_modal_no_kwargs(self):
+        form = SampleForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(Modal(Field("first_name")))
+
+        print(parse_form(form))
+        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/bootstrap_modal_no_kwargs.html")
+
+    @only_bootstrap4
+    def test_bs4_modal_with_kwargs(self):
+        form = SampleForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(
+            Modal(
+                Field("first_name"),
+                css_id="id_test",
+                css_class="test-class",
+                title="This is my modal",
+                title_id="id_title_test",
+                title_class="text-center",
+            )
+        )
+
+        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/bootstrap_modal_with_kwargs.html")
