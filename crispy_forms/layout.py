@@ -156,7 +156,7 @@ class ButtonHolder(LayoutObject):
             button holder `<div>`.
 
         css_id : str, optional
-            Sets a DOM id for the button holder. .
+            Sets a DOM id for the button holder.
 
         template : str, optional
             Over rides the default template, if provided.
