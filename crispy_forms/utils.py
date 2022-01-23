@@ -135,8 +135,7 @@ def render_field(  # noqa: C901
             if extra_context is not None:
                 context.update(extra_context)
 
-            context = context.flatten()
-            html = template.render(context)
+            html = template.render(context.flatten())
 
         return html
 
