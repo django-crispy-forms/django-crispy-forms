@@ -149,11 +149,12 @@ class ButtonHolder(LayoutObject):
 
     Args:
         fields : HTML or BaseInput
-            The layout objects to render within the ButtonHolder.
+            Any number of positional arguments to render within the
+            ButtonHolder.
 
         css_class : str, optional
-            Additional CSS classes to be included in the
-            button holder `<div>`.
+            Additional CSS classes to be included in the button holder
+            `<div>`.
 
         css_id : str, optional
             Sets a DOM id for the button holder.
