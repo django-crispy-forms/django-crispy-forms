@@ -159,7 +159,7 @@ class ButtonHolder(LayoutObject):
             Sets a DOM id for the button holder.
 
         template : str, optional
-            Over rides the default template, if provided.
+            Overrides the default template, if provided.
 
     Example::
 
