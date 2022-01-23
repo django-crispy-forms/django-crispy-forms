@@ -269,14 +269,14 @@ class Submit(BaseInput):
     'class="btn btn-primary custom class" id="custom-id" data="my-data" my-attr/>'
 
     Usually you will not call the render method on the object directly. Instead
-    add it to your ``Layout`` manually or use the `add_input` method.
+    add it to your ``Layout`` manually or use the `add_input` method::
 
-    class ExampleForm(forms.Form):
-    [...]
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Submit'))
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Submit('submit', 'Submit'))
     """
 
     input_type = "submit"
@@ -333,6 +333,9 @@ class Button(BaseInput):
 
     Usually you will not call the render method on the object directly. Instead
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ab744e6 (Edits)
     add it to your ``Layout`` manually or use the `add_input` method::
 
         class ExampleForm(forms.Form):
@@ -341,6 +344,7 @@ class Button(BaseInput):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.add_input(Button('Button 1', 'Press Me!'))
+<<<<<<< HEAD
 =======
     add it to your ``Layout`` manually or use the `add_input` method.
 
@@ -351,6 +355,8 @@ class Button(BaseInput):
         self.helper = FormHelper()
         self.helper.add_input(Button('Button 1', 'Press Me!'))
 >>>>>>> bcf8f00 (Improved docstring and __init__ signatue of BaseInput and its subclasses)
+=======
+>>>>>>> ab744e6 (Edits)
     """
 
     input_type = "button"
@@ -400,6 +406,9 @@ class Hidden(BaseInput):
 
     Usually you will not call the render method on the object directly. Instead
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ab744e6 (Edits)
     add it to your ``Layout`` manually or use the `add_input` method::
 
         class ExampleForm(forms.Form):
@@ -408,6 +417,7 @@ class Hidden(BaseInput):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.add_input(Hidden("hidden", "hide-me"))
+<<<<<<< HEAD
 =======
     add it to your ``Layout`` manually or use the `add_input` method.
 
@@ -418,6 +428,8 @@ class Hidden(BaseInput):
         self.helper = FormHelper()
         self.helper.add_input(Hidden("hidden", "hide-me"))
 >>>>>>> bcf8f00 (Improved docstring and __init__ signatue of BaseInput and its subclasses)
+=======
+>>>>>>> ab744e6 (Edits)
     """
 
     input_type = "hidden"
@@ -471,6 +483,9 @@ class Reset(BaseInput):
 
     Usually you will not call the render method on the object directly. Instead
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ab744e6 (Edits)
     add it to your ``Layout`` manually manually or use the `add_input` method::
 
         class ExampleForm(forms.Form):
@@ -479,6 +494,7 @@ class Reset(BaseInput):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.add_input(Reset('Reset This Form', 'Revert Me!'))
+<<<<<<< HEAD
 =======
     add it to your ``Layout`` manually manually or use the `add_input` method.
 
@@ -489,6 +505,8 @@ class Reset(BaseInput):
         self.helper = FormHelper()
         self.helper.add_input(Reset('Reset This Form', 'Revert Me!'))
 >>>>>>> bcf8f00 (Improved docstring and __init__ signatue of BaseInput and its subclasses)
+=======
+>>>>>>> ab744e6 (Edits)
     """
 
     input_type = "reset"
