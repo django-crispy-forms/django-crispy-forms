@@ -269,14 +269,14 @@ class Submit(BaseInput):
     'class="btn btn-primary custom class" id="custom-id" data="my-data" my-attr/>'
 
     Usually you will not call the render method on the object directly. Instead
-    add it to your ``Layout`` manually or use the `add_input` method.
+    add it to your ``Layout`` manually or use the `add_input` method::
 
-    class ExampleForm(forms.Form):
-    [...]
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Submit'))
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Submit('submit', 'Submit'))
     """
 
     input_type = "submit"
@@ -332,14 +332,14 @@ class Button(BaseInput):
     'class="btn custom class" id="custom-id" data="my-data" my-attr/>'
 
     Usually you will not call the render method on the object directly. Instead
-    add it to your ``Layout`` manually or use the `add_input` method.
+    add it to your ``Layout`` manually or use the `add_input` method::
 
-    class ExampleForm(forms.Form):
-    [...]
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Button('Button 1', 'Press Me!'))
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Button('Button 1', 'Press Me!'))
     """
 
     input_type = "button"
@@ -388,14 +388,14 @@ class Hidden(BaseInput):
     '<input type="hidden" name="hidden" value="hide-me"/>'
 
     Usually you will not call the render method on the object directly. Instead
-    add it to your ``Layout`` manually or use the `add_input` method.
+    add it to your ``Layout`` manually or use the `add_input` method::
 
-    class ExampleForm(forms.Form):
-    [...]
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Hidden("hidden", "hide-me"))
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Hidden("hidden", "hide-me"))
     """
 
     input_type = "hidden"
@@ -448,14 +448,14 @@ class Reset(BaseInput):
     'class="btn btn-inverse custom class" id="custom-id" data="my-data" my-attr/>'
 
     Usually you will not call the render method on the object directly. Instead
-    add it to your ``Layout`` manually manually or use the `add_input` method.
+    add it to your ``Layout`` manually manually or use the `add_input` method::
 
-    class ExampleForm(forms.Form):
-    [...]
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Reset('Reset This Form', 'Revert Me!'))
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Reset('Reset This Form', 'Revert Me!'))
     """
 
     input_type = "reset"
