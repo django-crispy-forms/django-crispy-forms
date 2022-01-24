@@ -13,12 +13,10 @@ A ``Layout`` is constructed by layout objects, which can be thought of as form c
 
 All these components are explained later in :ref:`layout objects`, what you need to know now about them is that every component renders a different template and has a different purpose. Let’s write a couple of different layouts for our form, continuing with our form class example (note that the full form is not shown again).
 
-Some layout objects are specific to a template pack. For example ``ButtonHolder`` is for ``uni_form`` template_pack, while ``FormActions`` is for ``bootstrap`` template pack.
-
 Let's add a layout to our helper::
 
     from crispy_forms.helper import FormHelper
-    from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
+    from crispy_forms.layout import Layout, Fieldset, Submit
 
     class ExampleForm(forms.Form):
         [...]
@@ -34,9 +32,7 @@ Let's add a layout to our helper::
                     'favorite_food',
                     'notes'
                 ),
-                ButtonHolder(
-                    Submit('submit', 'Submit', css_class='button white')
-                )
+                Submit('submit', 'Submit', css_class='button white'),
             )
 
 When we render the form now using::
@@ -44,7 +40,7 @@ When we render the form now using::
     {% load crispy_forms_tags %}
     {% crispy example_form %}
 
-We will get the fields wrapped in a fieldset, whose legend will be set to 'first arg is the legend of the fieldset'. The fields' order will be: ``like_website``, ``favorite_number``, ``favorite_color``, ``favorite_food`` and ``notes``. We also get a submit button wrapped in a ``<div class="buttonHolder">`` which uni-form CSS positions in a nice way. That button has its CSS class set to ``button white``.
+We will get the fields wrapped in a fieldset, whose legend will be set to 'first arg is the legend of the fieldset'. The fields' order will be: ``like_website``, ``favorite_number``, ``favorite_color``, ``favorite_food`` and ``notes``. We also get a submit button which will be styled with Bootstrap's ``btn btn-primary`` classes.
 
 This is just the tip of the iceberg: now imagine you want to add an explanation for what notes are, you can use ``HTML`` layout object::
 
@@ -169,13 +165,7 @@ Renders to::
         'form_field_2'
     )
 
-
-Uni-form layout objects
-~~~~~~~~~~~~~~~~~~~~~~~
-
-These ones live in module ``crispy_forms.layout``. Probably in the future they will be moved out to a ``uni_form`` module:
-
-- **ButtonHolder**: It wraps fields in a ``<div class=”buttonHolder”>``, which uni-form positions in a nice way. This is where form's submit buttons go in uni-form::
+- **ButtonHolder**: It wraps fields in a ``<div class=”buttonHolder”>``, this is a legacy layout object from the ``uni-form`` template pack::
 
     ButtonHolder(
         HTML('<span class="hidden">✓ Saved data</span>'),
@@ -382,7 +372,6 @@ You need to differentiate between layout objects' templates and django-crispy-fo
 
 - **Creating a TEMPLATE PACK**: You maybe want to use crispy-forms with you favorite CSS framework or your Company's CSS. For doing so, you will need to be quite familiar with crispy-forms, layout objects and their templates. You will probably want to start off with one of the existing template packs, probably ``bootstrap``. Imagine your template pack is named ``chocolate``, that means you probably want your root directory named the same way. For using your template pack, you will have to set ``CRISPY_TEMPLATE_PACK = 'chocolate'`` variable in your settings file and also set ``CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'chocolate')``. This way crispy-forms will know you want to use your own template pack, which is an allowed one and where to look for it.
 
-.. _`django-uni-form-contrib`: https://github.com/kennethlove/django-uni-form-contrib
 .. _`Bootstrap`: https://github.com/twitter/bootstrap
 
 

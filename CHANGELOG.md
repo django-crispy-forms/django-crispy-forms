@@ -1,6 +1,15 @@
 # CHANGELOG for django-crispy-forms
 
 ## 2.0 (tbc)
+* Removed uni-form template pack. Uni-Form specific classes previously added to every template pack e.g. `textInput` and are now removed.
+  If you require these classes then the previous behaviour can be restored by adding the following to `CRISPY_CLASS_CONVERTERS` in your settings file.
+  ```
+    converters = {
+      "textinput": "textinput textInput",
+      "fileinput": "fileinput fileUpload",
+      "passwordinput": "textinput textInput",
+  }
+  ```
 * Removed Bootstrap 2 template pack. Bootstrap 3 and 4 support is provided by the core crispy-forms package.
   Support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
   [crispy-bootstrap5](https://github.com/django-crispy-forms/crispy-bootstrap5).

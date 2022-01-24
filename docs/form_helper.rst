@@ -66,7 +66,7 @@ Helper attributes you can set
     Specifies form DOM id attribute. If no id provided then no id attribute is created on the form.
 
 **form_class**
-    String containing separated CSS classes to be applied to form class attribute. The form will always have by default ‘uniForm’ class.
+    String containing separated CSS classes to be applied to form class attribute.
 
 **form_tag = True**
     It specifies if ``<form></form>`` tags should be rendered when using a Layout. If set to ``False`` it renders the form without the ``<form></form>`` tags. Defaults to ``True``.

@@ -95,12 +95,7 @@ class CrispyFieldNode(template.Node):
         if isinstance(attrs, dict):
             attrs = [attrs] * len(widgets)
 
-        converters = {
-            "textinput": "textinput textInput",
-            "fileinput": "fileinput fileUpload",
-            "passwordinput": "textinput textInput",
-        }
-        converters.update(getattr(settings, "CRISPY_CLASS_CONVERTERS", {}))
+        converters = getattr(settings, "CRISPY_CLASS_CONVERTERS", {})
 
         for widget, attr in zip(widgets, attrs):
             class_name = widget.__class__.__name__.lower()

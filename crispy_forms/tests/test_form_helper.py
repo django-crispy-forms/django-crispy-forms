@@ -13,11 +13,11 @@ from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import AppendedText, FieldWithButtons, PrependedAppendedText, PrependedText, StrictButton
 from crispy_forms.helper import FormHelper, FormHelpersException
-from crispy_forms.layout import Button, Field, Hidden, Layout, MultiField, Reset, Submit
+from crispy_forms.layout import Button, Hidden, Layout, Reset, Submit
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form
+from .conftest import only_bootstrap3, only_bootstrap4
 from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia, SampleFormWithMultiValueField
 from .utils import parse_expected, parse_form
 
@@ -92,9 +92,6 @@ def test_form_with_helper_without_layout(settings):
     assert 'id="this-form-rocks"' in html
     assert 'action="%s"' % reverse("simpleAction") in html
 
-    if settings.CRISPY_TEMPLATE_PACK == "uni_form":
-        assert 'class="uniForm' in html
-
     assert "ERRORS" in html
     assert "<li>Passwords dont match</li>" in html
 
@@ -158,15 +155,6 @@ def test_html5_required():
     html = render_crispy_form(form)
 
 
-def test_media_is_included_by_default_with_uniform():
-    form = SampleFormWithMedia()
-    form.helper = FormHelper()
-    form.helper.template_pack = "uni_form"
-    html = render_crispy_form(form)
-    assert "test.css" in html
-    assert "test.js" in html
-
-
 def test_media_is_included_by_default_with_bootstrap3():
     form = SampleFormWithMedia()
     form.helper = FormHelper()
@@ -183,16 +171,6 @@ def test_media_is_included_by_default_with_bootstrap4():
     html = render_crispy_form(form)
     assert "test.css" in html
     assert "test.js" in html
-
-
-def test_media_removed_when_include_media_is_false_with_uniform():
-    form = SampleFormWithMedia()
-    form.helper = FormHelper()
-    form.helper.template_pack = "uni_form"
-    form.helper.include_media = False
-    html = render_crispy_form(form)
-    assert "test.css" not in html
-    assert "test.js" not in html
 
 
 def test_media_removed_when_include_media_is_false_with_bootstrap3():
@@ -282,13 +260,14 @@ def test_without_helper(settings):
     assert "<form" in html
     assert 'method="post"' in html
     assert "action" not in html
-    if settings.CRISPY_TEMPLATE_PACK == "uni_form":
-        assert "uniForm" in html
 
 
 def test_template_pack_override_compact(settings):
     current_pack = settings.CRISPY_TEMPLATE_PACK
-    override_pack = current_pack == "uni_form" and "bootstrap4" or "uni_form"
+    if current_pack == "bootstrap4":
+        override_pack = "bootstrap3"
+    else:
+        override_pack = "bootstrap4"
 
     # {% crispy form 'template_pack_name' %}
     template = Template(
@@ -301,15 +280,18 @@ def test_template_pack_override_compact(settings):
     c = Context({"form": SampleForm()})
     html = template.render(c)
 
-    if current_pack == "uni_form":
-        assert "form-group" in html
+    if current_pack == "bootstrap4":
+        assert "controls" in html  # controls is a bootstrap3 only class
     else:
-        assert "uniForm" in html
+        assert "controls" not in html
 
 
 def test_template_pack_override_verbose(settings):
     current_pack = settings.CRISPY_TEMPLATE_PACK
-    override_pack = current_pack == "uni_form" and "bootstrap4" or "uni_form"
+    if current_pack == "bootstrap4":
+        override_pack = "bootstrap3"
+    else:
+        override_pack = "bootstrap4"
 
     # {% crispy form helper 'template_pack_name' %}
     template = Template(
@@ -322,10 +304,10 @@ def test_template_pack_override_verbose(settings):
     c = Context({"form": SampleForm(), "form_helper": FormHelper()})
     html = template.render(c)
 
-    if current_pack == "uni_form":
-        assert "form-group" in html
+    if current_pack == "bootstrap4":
+        assert "controls" in html  # controls is a bootstrap3 only class
     else:
-        assert "uniForm" in html
+        assert "controls" not in html
 
 
 def test_template_pack_override_wrong():
@@ -548,54 +530,6 @@ def test_helper_std_field_template_no_layout():
         assert html.count('id="div_id_%s"' % field) == 1
 
 
-@only_uni_form
-def test_form_show_errors():
-    form = SampleForm(
-        {
-            "email": "invalidemail",
-            "first_name": "first_name_too_long",
-            "last_name": "last_name_too_long",
-            "password1": "yes",
-            "password2": "yes",
-        }
-    )
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        Field("email"),
-        Field("first_name"),
-        Field("last_name"),
-        Field("password1"),
-        Field("password2"),
-    )
-    form.is_valid()
-
-    form.helper.form_show_errors = True
-    html = render_crispy_form(form)
-    assert html.count("error") == 9
-
-    form.helper.form_show_errors = False
-    html = render_crispy_form(form)
-    assert html.count("error") == 0
-
-
-@only_uni_form
-def test_multifield_errors():
-    form = SampleForm({"email": "invalidemail", "password1": "yes", "password2": "yes"})
-    form.helper = FormHelper()
-    form.helper.layout = Layout(MultiField("legend", "email"))
-    form.is_valid()
-
-    form.helper.form_show_errors = True
-    html = render_crispy_form(form)
-    assert html.count("error") == 3
-
-    # Reset layout for avoiding side effects
-    form.helper.layout = Layout(MultiField("legend", "email"))
-    form.helper.form_show_errors = False
-    html = render_crispy_form(form)
-    assert html.count("error") == 0
-
-
 @only_bootstrap3
 def test_bootstrap_form_show_errors_bs3():
     form = SampleForm(
@@ -650,7 +584,6 @@ def test_bootstrap_form_show_errors_bs4():
     assert parse_form(form) == parse_expected("bootstrap4/test_form_helper/bootstrap_form_show_errors_bs4_false.html")
 
 
-@only_bootstrap
 def test_error_text_inline(settings):
     form = SampleForm({"email": "invalidemail"})
     form.helper = FormHelper()
@@ -750,7 +683,6 @@ def test_error_and_help_inline():
     assert error_position < help_position
 
 
-@only_bootstrap
 def test_form_show_labels():
     form = SampleForm()
     form.helper = FormHelper()
@@ -802,10 +734,9 @@ def test_label_class_and_field_class():
 def test_template_pack():
     form = SampleForm()
     form.helper = FormHelper()
-    form.helper.template_pack = "uni_form"
+    form.helper.template_pack = "bootstrap4"
     html = render_crispy_form(form)
-    assert "form-control" not in html
-    assert "ctrlHolder" in html
+    assert "controls" not in html  # controls is bootstrap3 only
 
 
 @only_bootstrap4
@@ -879,10 +810,9 @@ def test_form_group_with_form_inline_bs4():
 def test_template_pack_bs4():
     form = SampleForm()
     form.helper = FormHelper()
-    form.helper.template_pack = "uni_form"
+    form.helper.template_pack = "bootstrap3"
     html = render_crispy_form(form)
-    assert "form-control" not in html
-    assert "ctrlHolder" in html
+    assert "controls" in html  # controls is bootstrap3 only
 
 
 def test_passthrough_context():

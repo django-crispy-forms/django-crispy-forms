@@ -5,14 +5,13 @@ Crispy filter lets you render a form or formset using django-crispy-forms elegan
 
     {% load crispy_forms_tags %}
     
-    <form method="post" class="uniForm">
+    <form method="post" class="my-class">
         {{ my_formset|crispy }}
     </form>
 
 1. Add ``{% load crispy_forms_tags %}`` to the template.
 2. Append the ``|crispy`` filter to your form or formset context variable.
-3. If you are using ``uni_form`` template pack, don't forget to add the class 'uniForm' to your form.
-4. Refresh and enjoy!
+3. Refresh and enjoy!
 
 Using {% crispy %} tag because it rocks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

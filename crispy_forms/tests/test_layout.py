@@ -14,7 +14,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4, only_uni_form
+from .conftest import only_bootstrap3, only_bootstrap4
 from .forms import (
     AdvancedFileForm,
     CheckboxesSampleForm,
@@ -450,8 +450,8 @@ def test_choice_with_none_is_selected():
     assert "checked" in html
 
 
-@only_uni_form
-def test_layout_composition():
+@only_bootstrap3
+def test_layout_composition(settings):
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
@@ -490,21 +490,12 @@ def test_layout_composition():
     c = Context({"form": SampleForm(), "form_helper": form_helper})
     html = template.render(c)
 
-    assert "multiField" in html
-    assert "formColumn" in html
-    assert 'id="multifield_info"' in html
-    assert 'id="column_name"' in html
-    assert 'class="formColumn columns"' in html
-    assert 'class="buttonHolder">' in html
-    assert 'input type="submit"' in html
-    assert 'name="Save"' in html
-    assert 'id="custom-div"' in html
-    assert 'class="customdivs"' in html
-    assert "last_name" not in html
+    # Bootstrap 4 does not contain a multifield template
+    assert parse_html(html) == parse_expected("bootstrap3/test_layout/test_layout_composition.html")
 
 
-@only_uni_form
-def test_second_layout_multifield_column_buttonholder_submit_div():
+@only_bootstrap3
+def test_second_layout_multifield_column_buttonholder_submit_div(settings):
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
@@ -541,28 +532,12 @@ def test_second_layout_multifield_column_buttonholder_submit_div():
     c = Context({"form": SampleForm(), "form_helper": form_helper, "value_var": "Save"})
     html = template.render(c)
 
-    assert "multiField" in html
-    assert "formColumn" in html
-    assert 'id="multifield_info"' in html
-    assert 'title="multifield_title"' in html
-    assert 'multifield-test="123"' in html
-    assert 'id="column_name"' in html
-    assert 'class="formColumn columns"' in html
-    assert 'class="buttonHolder">' in html
-    assert 'input type="submit"' in html
-    assert "button white" in html
-    assert 'data-id="test"' in html
-    assert 'data-name="test"' in html
-    assert 'name="save-the-world"' in html
-    assert 'value="Save"' in html
-    assert 'name="store"' in html
-    assert 'value="Store results"' in html
-    assert 'id="custom-div"' in html
-    assert 'class="customdivs"' in html
-    assert 'test-markup="123"' in html
+    # Bootstrap 4 does not contain a multifield template
+    assert parse_html(html) == parse_expected(
+        "bootstrap3/test_layout/test_second_layout_multifield_column_buttonholder_submit_div.html"
+    )
 
 
-@only_bootstrap
 def test_keepcontext_context_manager(settings):
     # Test case for issue #180
     # Apparently it only manifest when using render_to_response this exact way
@@ -712,7 +687,7 @@ def test_update_attributes_class():
     form.helper.layout = Layout("email", Field("password1"), "password2")
     form.helper["password1"].update_attributes(css_class="hello")
     html = render_crispy_form(form)
-    assert html.count(' class="hello textinput') == 1
+    assert html.count(' class="hello') == 1
     form.helper = FormHelper()
     form.helper.layout = Layout(
         "email",
@@ -721,7 +696,7 @@ def test_update_attributes_class():
     )
     form.helper["password1"].update_attributes(css_class="hello2")
     html = render_crispy_form(form)
-    assert html.count(' class="hello hello2 textinput') == 1
+    assert html.count(' class="hello hello2') == 1
 
 
 @only_bootstrap4
