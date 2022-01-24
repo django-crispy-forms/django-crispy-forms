@@ -1,9 +1,10 @@
 # CHANGELOG for django-crispy-forms
 
-## 1.14.0 (tbc)
+## 1.14.0 (2022-01-22)
 * Added support for Python 3.10
 * Dropped support for Django 3.1
 * Dropped support for Python 3.6
+* Added bootstrap modal layout object (#1204)
 * Added `input_size` argument to `FieldWithButtons` to allow customisation of the size of the input in the Bootstrap 4 
   template pack. (#1159)
 
