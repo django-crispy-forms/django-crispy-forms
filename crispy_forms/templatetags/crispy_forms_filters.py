@@ -39,7 +39,7 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
 
     or, if you want to explicitly set the template pack::
 
-        {{ myform|crispy:"bootstrap" }}
+        {{ myform|crispy:"bootstrap4" }}
 
     In ``bootstrap3`` or ``bootstrap4`` for horizontal forms you can do::
 
@@ -74,7 +74,7 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
 
     or::
 
-        {{ form|as_crispy_errors:"bootstrap" }}
+        {{ form|as_crispy_errors:"bootstrap4" }}
     """
     if isinstance(form, BaseFormSet):
         template = get_template("%s/errors_formset.html" % template_pack)
@@ -96,7 +96,7 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
 
     or::
 
-        {{ form.field|as_crispy_field:"bootstrap" }}
+        {{ form.field|as_crispy_field:"bootstrap4" }}
     """
     if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
         raise CrispyError("|as_crispy_field got passed an invalid or inexistent field")

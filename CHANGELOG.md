@@ -1,5 +1,11 @@
 # CHANGELOG for django-crispy-forms
 
+## 2.0 (tbc)
+* Removed Bootstrap 2 template pack. Bootstrap 3 and 4 support is provided by the core crispy-forms package.
+  Support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
+  [crispy-bootstrap5](https://github.com/django-crispy-forms/crispy-bootstrap5).
+* Default template pack is now `bootstrap4` if the `CRISPY_TEMPLATE_PACK` setting is not provided.
+
 ## 1.14.0 (2022-01-22)
 * Added support for Python 3.10
 * Dropped support for Django 3.1
