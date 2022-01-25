@@ -12,7 +12,7 @@ from .base import KeepContext
 
 
 def get_template_pack():
-    return getattr(settings, "CRISPY_TEMPLATE_PACK", "bootstrap")
+    return getattr(settings, "CRISPY_TEMPLATE_PACK", "bootstrap4")
 
 
 TEMPLATE_PACK = SimpleLazyObject(get_template_pack)

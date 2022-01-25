@@ -215,17 +215,7 @@ def test_crispy_addon(settings):
     field_instance = test_form.fields["email"]
     bound_field = BoundField(test_form, field_instance, "email")
 
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-        # prepend tests
-        assert "input-prepend" in crispy_addon(bound_field, prepend="Work")
-        assert "input-append" not in crispy_addon(bound_field, prepend="Work")
-        # append tests
-        assert "input-prepend" not in crispy_addon(bound_field, append="Primary")
-        assert "input-append" in crispy_addon(bound_field, append="Secondary")
-        # prepend and append tests
-        assert "input-append" in crispy_addon(bound_field, prepend="Work", append="Primary")
-        assert "input-prepend" in crispy_addon(bound_field, prepend="Work", append="Secondary")
-    elif settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
         assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Primary")
         assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Secondary")
     elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":

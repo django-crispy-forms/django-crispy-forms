@@ -167,15 +167,6 @@ def test_media_is_included_by_default_with_uniform():
     assert "test.js" in html
 
 
-def test_media_is_included_by_default_with_bootstrap():
-    form = SampleFormWithMedia()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap"
-    html = render_crispy_form(form)
-    assert "test.css" in html
-    assert "test.js" in html
-
-
 def test_media_is_included_by_default_with_bootstrap3():
     form = SampleFormWithMedia()
     form.helper = FormHelper()
@@ -198,16 +189,6 @@ def test_media_removed_when_include_media_is_false_with_uniform():
     form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = "uni_form"
-    form.helper.include_media = False
-    html = render_crispy_form(form)
-    assert "test.css" not in html
-    assert "test.js" not in html
-
-
-def test_media_removed_when_include_media_is_false_with_bootstrap():
-    form = SampleFormWithMedia()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap"
     form.helper.include_media = False
     html = render_crispy_form(form)
     assert "test.css" not in html
@@ -307,7 +288,7 @@ def test_without_helper(settings):
 
 def test_template_pack_override_compact(settings):
     current_pack = settings.CRISPY_TEMPLATE_PACK
-    override_pack = current_pack == "uni_form" and "bootstrap" or "uni_form"
+    override_pack = current_pack == "uni_form" and "bootstrap4" or "uni_form"
 
     # {% crispy form 'template_pack_name' %}
     template = Template(
@@ -321,14 +302,14 @@ def test_template_pack_override_compact(settings):
     html = template.render(c)
 
     if current_pack == "uni_form":
-        assert "control-group" in html
+        assert "form-group" in html
     else:
         assert "uniForm" in html
 
 
 def test_template_pack_override_verbose(settings):
     current_pack = settings.CRISPY_TEMPLATE_PACK
-    override_pack = current_pack == "uni_form" and "bootstrap" or "uni_form"
+    override_pack = current_pack == "uni_form" and "bootstrap4" or "uni_form"
 
     # {% crispy form helper 'template_pack_name' %}
     template = Template(
@@ -342,7 +323,7 @@ def test_template_pack_override_verbose(settings):
     html = template.render(c)
 
     if current_pack == "uni_form":
-        assert "control-group" in html
+        assert "form-group" in html
     else:
         assert "uniForm" in html
 
@@ -699,7 +680,7 @@ def test_error_text_inline(settings):
     form.helper.error_text_inline = False
     html = render_crispy_form(form)
 
-    if settings.CRISPY_TEMPLATE_PACK in ["bootstrap", "bootstrap3"]:
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
         help_class = "help-block"
     elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
         help_class = "invalid-feedback"

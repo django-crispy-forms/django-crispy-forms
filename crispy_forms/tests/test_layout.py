@@ -573,9 +573,7 @@ def test_keepcontext_context_manager(settings):
 
     response = render(request=None, template_name="crispy_render_template.html", context=context)
 
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-        assert response.content.count(b"checkbox inline") == 3
-    elif settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
         assert response.content.count(b"checkbox-inline") == 3
     elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
         assert response.content.count(b"custom-control-inline") == 3

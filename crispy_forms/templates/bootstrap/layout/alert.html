@@ -1,4 +1,0 @@
-<div{% if alert.css_id %} id="{{ alert.css_id }}"{% endif %}{% if alert.css_class %} class="{{ alert.css_class }}"{% endif %}>
-    {% if dismiss %}<button type="button" class="close" data-dismiss="alert">&times;</button>{% endif %}
-    {{ content|safe }}
-</div>

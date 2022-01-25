@@ -1,7 +1,0 @@
-<div id="div_{{ field.auto_id }}" class="control-group{% if form_show_errors and field.errors %} error{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
-    <div class="control-label{% if field.field.required %} requiredField{% endif %}">{{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}</div>
-    <div class="controls">
-        <span {{ flat_attrs|safe }}>{% if field.value %}{{ field.value }}{% endif %}</span>
-        {% include 'bootstrap/layout/help_text.html' %}
-    </div>
-</div>

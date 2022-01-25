@@ -2,7 +2,6 @@ import re
 
 from django import forms
 from django.template import Context, Template
-from django.test.html import parse_html
 from django.utils.translation import activate, deactivate
 from django.utils.translation import gettext as _
 
@@ -106,9 +105,7 @@ def test_field_wrapper_class(settings):
     form.helper.layout = Layout(Field("email", wrapper_class="testing"))
 
     html = render_crispy_form(form)
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-        assert html.count('class="control-group testing"') == 1
-    elif settings.CRISPY_TEMPLATE_PACK in ("bootstrap3", "bootstrap4"):
+    if settings.CRISPY_TEMPLATE_PACK in ("bootstrap3", "bootstrap4"):
         assert html.count('class="form-group testing"') == 1
 
 
@@ -130,8 +127,6 @@ def test_html_with_carriage_returns(settings):
 
     if settings.CRISPY_TEMPLATE_PACK == "uni_form":
         assert html.count("\n") == 23
-    elif settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-        assert html.count("\n") == 25
     else:
         assert html.count("\n") == 27
 
@@ -194,15 +189,8 @@ class TestBootstrapLayoutObjects:
             PrependedText("password2", "$"),
         )
         html = render_crispy_form(test_form)
-        dom = parse_html(html)
 
         # Check form parameters
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-            assert dom.count(parse_html('<span class="add-on">@</span>')) == 1
-            assert dom.count(parse_html('<span class="add-on">gmail.com</span>')) == 1
-            assert dom.count(parse_html('<span class="add-on">#</span>')) == 1
-            assert dom.count(parse_html('<span class="add-on">$</span>')) == 1
-
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
             assert html.count('<span class="input-group-addon">@</span>') == 1
             assert html.count('<span class="input-group-addon">gmail.com</span>') == 1
@@ -275,9 +263,7 @@ class TestBootstrapLayoutObjects:
         test_form.helper.layout = Layout(InlineRadios("inline_radios"))
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-            assert html.count('radio inline"') == 2
-        elif settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
             assert html.count('radio-inline"') == 2
         elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
             assert html.count('custom-control-inline"') == 2
@@ -293,11 +279,7 @@ class TestBootstrapLayoutObjects:
         )
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-            assert html.count('<div class="accordion"') == 1
-            assert html.count('<div class="accordion-group">') == 2
-            assert html.count('<div class="accordion-heading">') == 2
-        elif settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
             assert html.count('<div class="panel panel-default"') == 2
             assert html.count('<div class="panel-group"') == 1
             assert html.count('<div class="panel-heading">') == 2
@@ -331,9 +313,7 @@ class TestBootstrapLayoutObjects:
         # The first time, there should be one of them there.
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-            accordion_class = "accordion-body collapse in"
-        elif settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
+        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
             accordion_class = "panel-collapse collapse in"
         elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
             accordion_class = "collapse show"
@@ -501,10 +481,7 @@ class TestBootstrapLayoutObjects:
         test_form.helper[1].wrap(InlineCheckboxes, inline=True)
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap":
-            assert html.count('checkbox inline"') == 3
-            assert html.count('inline"') == 3
-        elif settings.CRISPY_TEMPLATE_PACK in ["bootstrap3", "bootstrap4"]:
+        if settings.CRISPY_TEMPLATE_PACK in ["bootstrap3", "bootstrap4"]:
             assert html.count('inline="True"') == 4
             if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
                 assert html.count('checkbox-inline"') == 3
