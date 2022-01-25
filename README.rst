@@ -27,7 +27,7 @@ The application mainly provides:
 
 Django-crispy-forms supports several frontend frameworks, such as Twitter `Bootstrap`_ (versions 2, 3, and 4), `tailwind`_ and Foundation. You can also easily adapt your custom company's one, creating your own, `see the docs`_ for more information. You can easily switch among them using ``CRISPY_TEMPLATE_PACK`` setting variable.
 
-.. _`tailwind``: https://github.com/django-crispy-forms/crispy-tailwind
+.. _`tailwind`: https://github.com/django-crispy-forms/crispy-tailwind
 .. _`Bootstrap`: https://getbootstrap.com
 .. _`see the docs`: https://django-crispy-forms.readthedocs.io
 
