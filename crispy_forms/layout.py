@@ -170,20 +170,45 @@ class ButtonHolder(LayoutObject):
 class BaseInput(TemplateNameMixin):
     """
     A base class to reduce the amount of code in the Input classes.
+
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
+
+    Parameters
+    ----------
+    name : str
+        The name attribute of the button.
+    value : str
+        The value attribute of the button.
+    css_id : str, optional
+        A custom DOM id for the layout object. If not provided the name
+        argument is slugified and turned into the id for the submit button.
+        By default "".
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<input>``. By default
+        None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to `flatatt` and converted into
+        key="value", pairs. These attributes are added to the ``<input>``.
     """
 
     template = "%s/layout/baseinput.html"
 
-    def __init__(self, name, value, **kwargs):
+    def __init__(self, name, value, *, css_id="", css_class=None, template=None, **kwargs):
         self.name = name
         self.value = value
-        self.id = kwargs.pop("css_id", "")
+        self.id = css_id
         self.attrs = {}
 
-        if "css_class" in kwargs:
-            self.field_classes += " %s" % kwargs.pop("css_class")
+        if css_class:
+            self.field_classes += f" {css_class}"
 
-        self.template = kwargs.pop("template", self.template)
+        self.template = template or self.template
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
@@ -200,27 +225,121 @@ class BaseInput(TemplateNameMixin):
 
 class Submit(BaseInput):
     """
-    Used to create a Submit button descriptor for the {% crispy %} template tag::
+    Used to create a Submit button descriptor for the {% crispy %} template tag.
 
-        submit = Submit('Search the Site', 'search this site')
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
 
-    .. note:: The first argument is also slugified and turned into the id for the submit button.
+    Parameters
+    ----------
+    name : str
+        The name attribute of the button.
+    value : str
+        The value attribute of the button.
+    css_id : str, optional
+        A custom DOM id for the layout object. If not provided the name
+        argument is slugified and turned into the id for the submit button.
+        By default "".
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<input>``. By default
+        None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to `flatatt` and converted into
+        key="value", pairs. These attributes are added to the ``<input>``.
+
+    Examples
+    --------
+    Note: ``form`` and ``form_style`` args to ``render()`` are not required
+    for ``BaseInput`` inherited objects.
+
+    >>> submit = Submit('Search the Site', 'search this site')
+    >>> submit.render("", "", Context())
+    '<input type="submit" name="search-the-site" value="search this site" '
+    'class="btn btn-primary" id="submit-id-search-the-site"/>'
+
+    >>> submit = Submit('Search the Site', 'search this site', css_id="custom-id",
+                         css_class="custom class", my_attr=True, data="my-data")
+    >>> submit.render("", "", Context())
+    '<input type="submit" name="search-the-site" value="search this site" '
+    'class="btn btn-primary custom class" id="custom-id" data="my-data" my-attr/>'
+
+    Usually you will not call the render method on the object directly. Instead
+    add it to your ``Layout`` manually or use the `add_input` method::
+
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Submit('submit', 'Submit'))
     """
 
     input_type = "submit"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, name, value, *, css_id="", css_class=None, template=None, **kwargs):
         self.field_classes = "submit submitButton" if get_template_pack() == "uni_form" else "btn btn-primary"
-        super().__init__(*args, **kwargs)
+        super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
 
 class Button(BaseInput):
     """
-    Used to create a Submit input descriptor for the {% crispy %} template tag::
+    Used to create a button descriptor for the {% crispy %} template tag.
 
-        button = Button('Button 1', 'Press Me!')
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
 
-    .. note:: The first argument is also slugified and turned into the id for the button.
+    Parameters
+    ----------
+    name : str
+        The name attribute of the button.
+    value : str
+        The value attribute of the button.
+    css_id : str, optional
+        A custom DOM id for the layout object. If not provided the name
+        argument is slugified and turned into the id for the submit button.
+        By default "".
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<input>``. By default
+        None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to `flatatt` and converted into
+        key="value", pairs. These attributes are added to the ``<input>``.
+
+    Examples
+    --------
+    Note: ``form`` and ``form_style`` args to ``render()`` are not required
+    for ``BaseInput`` inherited objects.
+
+    >>> button = Button('Button 1', 'Press Me!')
+    >>> button.render("", "", Context())
+    '<input type="button" name="button-1" value="Press Me!" '
+    'class="btn" id="button-id-button-1"/>'
+
+    >>> button = Button('Button 1', 'Press Me!', css_id="custom-id",
+                         css_class="custom class", my_attr=True, data="my-data")
+    >>> button.render("", "", Context())
+    '<input type="button" name="button-1" value="Press Me!" '
+    'class="btn custom class" id="custom-id" data="my-data" my-attr/>'
+
+    Usually you will not call the render method on the object directly. Instead
+    add it to your ``Layout`` manually or use the `add_input` method::
+
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Button('Button 1', 'Press Me!'))
     """
 
     input_type = "button"
@@ -233,6 +352,50 @@ class Button(BaseInput):
 class Hidden(BaseInput):
     """
     Used to create a Hidden input descriptor for the {% crispy %} template tag.
+
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
+
+    Parameters
+    ----------
+    name : str
+        The name attribute of the button.
+    value : str
+        The value attribute of the button.
+    css_id : str, optional
+        A custom DOM id for the layout object. If not provided the name
+        argument is slugified and turned into the id for the submit button.
+        By default "".
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<input>``. By default
+        None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to `flatatt` and converted into
+        key="value", pairs. These attributes are added to the ``<input>``.
+
+    Examples
+    --------
+    Note: ``form`` and ``form_style`` args to ``render()`` are not required
+    for ``BaseInput`` inherited objects.
+
+    >>> hidden = Hidden("hidden", "hide-me")
+    >>> hidden.render("", "", Context())
+    '<input type="hidden" name="hidden" value="hide-me"/>'
+
+    Usually you will not call the render method on the object directly. Instead
+    add it to your ``Layout`` manually or use the `add_input` method::
+
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Hidden("hidden", "hide-me"))
     """
 
     input_type = "hidden"
@@ -241,11 +404,58 @@ class Hidden(BaseInput):
 
 class Reset(BaseInput):
     """
-    Used to create a Reset button input descriptor for the {% crispy %} template tag::
+    Used to create a reset button descriptor for the {% crispy %} template tag.
 
-        reset = Reset('Reset This Form', 'Revert Me!')
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
 
-    .. note:: The first argument is also slugified and turned into the id for the reset.
+    Parameters
+    ----------
+    name : str
+        The name attribute of the button.
+    value : str
+        The value attribute of the button.
+    css_id : str, optional
+        A custom DOM id for the layout object. If not provided the name
+        argument is slugified and turned into the id for the submit button.
+        By default "".
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<input>``. By default
+        None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to `flatatt` and converted into
+        key="value", pairs. These attributes are added to the ``<input>``.
+
+    Examples
+    --------
+    Note: ``form`` and ``form_style`` args to ``render()`` are not required
+    for ``BaseInput`` inherited objects.
+
+    >>> reset = Reset('Reset This Form', 'Revert Me!')
+    >>> reset.render("", "", Context())
+    '<input type="reset" name="reset-this-form" value="Revert Me!" '
+    'class="btn btn-inverse" id="reset-id-reset-this-form"/>'
+
+    >>> reset = Reset('Reset This Form', 'Revert Me!', css_id="custom-id",
+                         css_class="custom class", my_attr=True, data="my-data")
+    >>> reset.render("", "", Context())
+    '<input type="reset" name="reset-this-form" value="Revert Me!" '
+    'class="btn btn-inverse custom class" id="custom-id" data="my-data" my-attr/>'
+
+    Usually you will not call the render method on the object directly. Instead
+    add it to your ``Layout`` manually manually or use the `add_input` method::
+
+        class ExampleForm(forms.Form):
+        [...]
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.add_input(Reset('Reset This Form', 'Revert Me!'))
     """
 
     input_type = "reset"
