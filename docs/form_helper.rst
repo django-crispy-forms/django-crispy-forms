@@ -197,7 +197,7 @@ When we find where labels get rendered, this chunk of code to be more precise::
         </label>
     {% endif %}
 
-The line that we would change wold end up like this::
+The line that we would change would end up like this::
 
     {% if not labels_uppercase %}{{ field.label|safe }}{% else %}{{ field.label|safe|upper }}{% endif %}{% if field.field.required %}
 
