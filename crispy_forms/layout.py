@@ -1,6 +1,7 @@
 from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
+from django.utils.text import slugify
 
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, get_template_pack, render_field
 
@@ -186,7 +187,7 @@ class BaseInput(TemplateNameMixin):
     css_id : str, optional
         A custom DOM id for the layout object. If not provided the name
         argument is slugified and turned into the id for the submit button.
-        By default "".
+        By default None.
     css_class : str, optional
         Additional CSS classes to be applied to the ``<input>``. By default
         None.
@@ -199,10 +200,14 @@ class BaseInput(TemplateNameMixin):
 
     template = "%s/layout/baseinput.html"
 
-    def __init__(self, name, value, *, css_id="", css_class=None, template=None, **kwargs):
+    def __init__(self, name, value, *, css_id=None, css_class=None, template=None, **kwargs):
         self.name = name
         self.value = value
-        self.id = css_id
+        if css_id:
+            self.id = css_id
+        else:
+            slug = slugify(self.name)
+            self.id = f"{self.input_type}-id-{slug}"
         self.attrs = {}
 
         if css_class:
@@ -242,7 +247,7 @@ class Submit(BaseInput):
     css_id : str, optional
         A custom DOM id for the layout object. If not provided the name
         argument is slugified and turned into the id for the submit button.
-        By default "".
+        By default None.
     css_class : str, optional
         Additional CSS classes to be applied to the ``<input>``. By default
         None.
@@ -281,7 +286,7 @@ class Submit(BaseInput):
 
     input_type = "submit"
 
-    def __init__(self, name, value, *, css_id="", css_class=None, template=None, **kwargs):
+    def __init__(self, name, value, *, css_id=None, css_class=None, template=None, **kwargs):
         self.field_classes = "submit submitButton" if get_template_pack() == "uni_form" else "btn btn-primary"
         super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
@@ -305,7 +310,7 @@ class Button(BaseInput):
     css_id : str, optional
         A custom DOM id for the layout object. If not provided the name
         argument is slugified and turned into the id for the submit button.
-        By default "".
+        By default None.
     css_class : str, optional
         Additional CSS classes to be applied to the ``<input>``. By default
         None.
@@ -344,7 +349,7 @@ class Button(BaseInput):
 
     input_type = "button"
 
-    def __init__(self, name, value, *, css_id="", css_class=None, template=None, **kwargs):
+    def __init__(self, name, value, *, css_id=None, css_class=None, template=None, **kwargs):
         self.field_classes = "button" if get_template_pack() == "uni_form" else "btn"
         super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
@@ -368,7 +373,7 @@ class Hidden(BaseInput):
     css_id : str, optional
         A custom DOM id for the layout object. If not provided the name
         argument is slugified and turned into the id for the submit button.
-        By default "".
+        By default None.
     css_class : str, optional
         Additional CSS classes to be applied to the ``<input>``. By default
         None.
@@ -421,7 +426,7 @@ class Reset(BaseInput):
     css_id : str, optional
         A custom DOM id for the layout object. If not provided the name
         argument is slugified and turned into the id for the submit button.
-        By default "".
+        By default None.
     css_class : str, optional
         Additional CSS classes to be applied to the ``<input>``. By default
         None.
@@ -460,7 +465,7 @@ class Reset(BaseInput):
 
     input_type = "reset"
 
-    def __init__(self, name, value, *, css_id="", css_class=None, template=None, **kwargs):
+    def __init__(self, name, value, *, css_id=None, css_class=None, template=None, **kwargs):
         self.field_classes = "reset resetButton" if get_template_pack() == "uni_form" else "btn btn-inverse"
         super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
