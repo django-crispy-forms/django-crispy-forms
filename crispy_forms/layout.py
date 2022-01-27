@@ -344,9 +344,9 @@ class Button(BaseInput):
 
     input_type = "button"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, name, value, *, css_id="", css_class=None, template=None, **kwargs):
         self.field_classes = "button" if get_template_pack() == "uni_form" else "btn"
-        super().__init__(*args, **kwargs)
+        super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
 
 class Hidden(BaseInput):
@@ -460,9 +460,9 @@ class Reset(BaseInput):
 
     input_type = "reset"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, name, value, *, css_id="", css_class=None, template=None, **kwargs):
         self.field_classes = "reset resetButton" if get_template_pack() == "uni_form" else "btn btn-inverse"
-        super().__init__(*args, **kwargs)
+        super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
 
 class Fieldset(LayoutObject):
