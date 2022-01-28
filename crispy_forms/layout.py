@@ -467,14 +467,50 @@ class Reset(BaseInput):
 
 class Fieldset(LayoutObject):
     """
-    Layout object. It wraps fields in a <fieldset>
+    A layout object which wraps fields in a ``<fieldset>``
 
-    Example::
+    Parameters
+    ----------
+    legend : str
+        The content of the fieldset's ``<legend>``. This text is context
+        aware, to bring this to life see the examples section.
+    *fields : str
+        Any number of fields as positional arguments to be rendered within
+        the ``<fieldset>``
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<input>``. By default
+        None.
+    css_id : str, optional
+        A custom DOM id for the layout object. If not provided the name
+        argument is slugified and turned into the id for the submit button.
+        By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<fieldset>``.
+
+    Examples
+    --------
+
+    The Fieldset Layout object is added to your ``Layout`` for example::
 
         Fieldset("Text for the legend",
-            'form_field_1',
-            'form_field_2'
+            "form_field_1",
+            "form_field_2",
+            css_id="my-fieldset-id",
+            css_class="my-fieldset-class",
+            data="my-data"
         )
+
+    The above layout will be rendered as::
+
+        '''
+        <fieldset id="fieldset-id" class="my-fieldset-class" data="my-data">
+           <legend>Text for the legend</legend>
+           # form fields render here
+        </fieldset>
+        '''
 
     The first parameter is the text for the fieldset legend. This text is context aware,
     so you can do things like::
@@ -487,12 +523,13 @@ class Fieldset(LayoutObject):
 
     template = "%s/layout/fieldset.html"
 
-    def __init__(self, legend, *fields, **kwargs):
+    def __init__(self, legend, *fields, css_class=None, css_id=None, template=None, **kwargs):
+
         self.fields = list(fields)
         self.legend = legend
-        self.css_class = kwargs.pop("css_class", "")
-        self.css_id = kwargs.pop("css_id", None)
-        self.template = kwargs.pop("template", self.template)
+        self.css_class = css_class
+        self.css_id = css_id
+        self.template = template or self.template
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
