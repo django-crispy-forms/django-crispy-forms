@@ -1,0 +1,33 @@
+<form action="submit_survey" class="blueForms" id="id-exampleForm" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="NotARealToken"> 
+    <div id="div_id_like_website" class="form-group">
+        <label class=" requiredField"> Do you like this website?<span class="asteriskField">*</span> </label>
+        <div action="submit_survey" class="blueForms" id="id-exampleForm">
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" name="like_website" value="1" id="id_like_website_0" required checked /> <label class="custom-control-label" for="id_like_website_0"> Yes </label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" name="like_website" value="0" id="id_like_website_1" required /> <label class="custom-control-label" for="id_like_website_1"> No </label>
+            </div>
+        </div>
+    </div>
+    <div id="div_id_favorite_food" class="form-group">
+        <label for="id_favorite_food" class=" requiredField"> What is your favorite food?<span class="asteriskField">*</span> </label>
+        <div><input type="text" name="favorite_food" maxlength="80" class="textinput textInput inputtext form-control" required id="id_favorite_food" /></div>
+    </div>
+    <div id="div_id_favorite_color" class="form-group">
+        <label for="id_favorite_color" class=" requiredField"> What is your favorite color?<span class="asteriskField">*</span> </label>
+        <div><input type="text" name="favorite_color" maxlength="80" class="textinput textInput inputtext form-control" required id="id_favorite_color" /></div>
+    </div>
+    <div id="div_id_favorite_number" class="form-group">
+        <label for="id_favorite_number" class=""> Favorite number </label>
+        <div><input type="number" name="favorite_number" class="numberinput form-control" id="id_favorite_number" /></div>
+    </div>
+    <div id="div_id_notes" class="form-group">
+        <label for="id_notes" class=""> Additional notes or feedback </label>
+        <div><input type="text" name="notes" class="textinput textInput inputtext form-control" id="id_notes" /></div>
+    </div>
+    <div class="form-group">
+        <div class=""><input type="submit" name="submit" value="Submit" class="btn btn-primary" id="submit-id-submit" /></div>
+    </div>
+</form>

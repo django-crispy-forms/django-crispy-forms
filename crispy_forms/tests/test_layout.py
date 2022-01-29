@@ -5,6 +5,7 @@ from django.forms.models import formset_factory, modelformset_factory
 from django.middleware.csrf import _get_new_csrf_string
 from django.shortcuts import render
 from django.template import Context, Template
+from django.test.html import parse_html
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -761,3 +762,57 @@ def test_form_control_size():
     form.helper = FormHelper()
     form.helper.layout = Layout(Field("first_name", css_class="form-control-lg"))
     assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_form_control_size.html")
+
+
+@only_bootstrap4
+def test_fundamentals():
+    """
+    This is the example that is in the `crispy_tag_forms` docs.
+    """
+
+    class ExampleForm(forms.Form):
+        like_website = forms.TypedChoiceField(
+            label="Do you like this website?",
+            choices=((1, "Yes"), (0, "No")),
+            coerce=lambda x: bool(int(x)),
+            widget=forms.RadioSelect,
+            initial="1",
+            required=True,
+        )
+
+        favorite_food = forms.CharField(
+            label="What is your favorite food?",
+            max_length=80,
+            required=True,
+        )
+
+        favorite_color = forms.CharField(
+            label="What is your favorite color?",
+            max_length=80,
+            required=True,
+        )
+
+        favorite_number = forms.IntegerField(
+            label="Favorite number",
+            required=False,
+        )
+
+        notes = forms.CharField(
+            label="Additional notes or feedback",
+            required=False,
+        )
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            self.helper.form_id = "id-exampleForm"
+            self.helper.form_class = "blueForms"
+            self.helper.form_method = "post"
+            self.helper.form_action = "submit_survey"
+
+            self.helper.add_input(Submit("submit", "Submit"))
+
+    form = ExampleForm()
+    context = {"csrf_token": "NotARealToken"}
+    html = render_crispy_form(form, context=context)
+    assert parse_html(html) == parse_expected("bootstrap4/test_layout/test_fundamentals_example.html")
