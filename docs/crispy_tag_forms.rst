@@ -87,61 +87,59 @@ Notice that the ``{% crispy %}`` tags expects two parameters: first the form var
 
     {% crispy form %}
 
-This is exactly the html that you would get::
+With the default Bootstrap 4 template pack, this is exactly the html that you would get::
 
-    <form action="/submit/survey/" class="uniForm blueForms" method="post" id="id-exampleForm">
-        <div style='display:none'>
-            <input type="hidden" name="csrfmiddlewaretoken" value="a643fab735d5ce6377ff456e73c4b1af" />
+    <form action="submit_survey" class="blueForms" id="id-exampleForm" method="post">
+        <input name="csrfmiddlewaretoken" type="hidden" value="evU93ufHyzX5dP5h5hgOaq96zIj8c02X">
+        <div id="div_id_like_website" class="form-group">
+            <label class="requiredField"> Do you like this website?<span class="asteriskField">*</span> </label>
+            <div action="submit_survey" class="blueForms" id="id-exampleForm">
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" name="like_website" value="1" id="id_like_website_0" required checked /> <label class="custom-control-label" for="id_like_website_0"> Yes </label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" class="custom-control-input" name="like_website" value="0" id="id_like_website_1" required /> <label class="custom-control-label" for="id_like_website_1"> No </label>
+                </div>
+            </div>
         </div>
-        <fieldset>
-            <legend></legend>
-            <div id="div_id_like_website" class="ctrlHolder">
-                <label for="id_like_website" class="requiredField">¿Do you like this website?<span class="asteriskField">*</span></label>
-                <ul>
-                    <li><label for="id_like_website_0"><input checked name="like_website" value="1" id="id_like_website_0" type="radio" class="radioselect" /> Yes</label></li>
-                    <li><label for="id_like_website_1"><input value="0" type="radio" class="radioselect" name="like_website" id="id_like_website_1" /> No</label></li>
-                </ul>
-            </div>
-            <div id="div_id_favorite_food" class="ctrlHolder">
-                <label for="id_favorite_food" class="requiredField">What is you favorite food?<span class="asteriskField">*</span></label>
-                <input id="id_favorite_food" class="textinput textInput" type="text" name="favorite_food" maxlength="80" required="required" />
-            </div>
-            <div id="div_id_favorite_color" class="ctrlHolder">
-                <label for="id_favorite_color" class="requiredField">What is you favorite color?<span class="asteriskField">*</span></label>
-                <input id="id_favorite_color" class="textinput textInput" type="text" name="favorite_color" maxlength="80" required="required" />
-            </div>
-            <div id="div_id_favorite_number" class="ctrlHolder">
-                <label for="id_favorite_number">Favorite number</label>
-                <input id="id_favorite_number" type="text" name="favorite_number" class="textinput textInput" />
-            </div>
-            <div id="div_id_notes" class="ctrlHolder">
-                <label for="id_notes">Additional notes or feedback</label>
-                <input id="id_notes" type="text" name="notes" class="textinput textInput" />
-            </div>
-        </fieldset>
-        <div class="buttonHolder">
-            <input type="submit" name="submit" value="Submit" class="submit submitButton" id="submit-id-submit" />
+        <div id="div_id_favorite_food" class="form-group">
+            <label for="id_favorite_food" class="requiredField"> What is your favorite food?<span class="asteriskField">*</span> </label>
+            <div><input type="text" name="favorite_food" maxlength="80" class="textinput inputtext form-control" required id="id_favorite_food" /></div>
+        </div>
+        <div id="div_id_favorite_color" class="form-group">
+            <label for="id_favorite_color" class="requiredField"> What is your favorite color?<span class="asteriskField">*</span> </label>
+            <div><input type="text" name="favorite_color" maxlength="80" class="textinput inputtext form-control" required id="id_favorite_color" /></div>
+        </div>
+        <div id="div_id_favorite_number" class="form-group">
+            <label for="id_favorite_number" class=""> Favorite number </label>
+            <div><input type="number" name="favorite_number" class="numberinput form-control" id="id_favorite_number" /></div>
+        </div>
+        <div id="div_id_notes" class="form-group">
+            <label for="id_notes" class=""> Additional notes or feedback </label>
+            <div><input type="text" name="notes" class="textinput inputtext form-control" id="id_notes" /></div>
+        </div>
+        <div class="form-group">
+            <div class=""><input type="submit" name="submit" value="Submit" class="btn btn-primary" id="submit-id-submit" /></div>
         </div>
     </form>
+
 
 What you'll get is the form rendered as HTML with awesome bits. Specifically...
 
  * Opening and closing form tags, with id, class, action and method set as in the helper::
 
-    <form action="/submit/survey/" class="uniForm blueForms" method="post" id="id-exampleForm">
+    <form action="submit_survey" class="blueForms" id="id-exampleForm" method="post">
         [...]
     </form>
 
  * Django's CSRF controls::
 
-    <div style='display:none'>
-        <input type="hidden" name="csrfmiddlewaretoken" value="a643fab735d5ce6377ff456e73c4b1af" />
-    </div>
+    <input name="csrfmiddlewaretoken" type="hidden" value="evU93ufHyzX5dP5h5hgOaq96zIj8c02X">
 
  * Submit button::
 
-    <div class="buttonHolder">
-        <input type="submit" name="submit" value="Submit" class="submit submitButton" id="submit-id-submit" />
+    <div class="form-group">
+        <div class=""><input type="submit" name="submit" value="Submit" class="btn btn-primary" id="submit-id-submit" /></div>
     </div>
 
 .. _`Be careful how you use static variables in forms`: https://tothinkornottothink.com/post/7157151391/be-careful-how-you-use-static-variables-in-forms
