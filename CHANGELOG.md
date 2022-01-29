@@ -2,7 +2,8 @@
 
 ## 2.0 (tbc)
 * Removed uni-form template pack. Uni-Form specific classes previously added to every template pack e.g. `textInput` and are now removed.
-  If you require these classes then the previous behaviour can be restored by adding the following to `CRISPY_CLASS_CONVERTERS` in your settings file.
+  If you require these classes then the previous behaviour can be restored by adding the following to [CRISPY_CLASS_CONVERTERS](https://django-crispy-forms.readthedocs.io/en/latest/crispy_tag_forms.html#change-crispy-forms-input-default-classes) in your settings file.
+
   ```
     converters = {
       "textinput": "textinput textInput",
