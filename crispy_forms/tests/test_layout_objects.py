@@ -26,7 +26,7 @@ from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
 from crispy_forms.tests.utils import contains_partial, parse_expected, parse_form
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap, only_bootstrap3, only_bootstrap4
+from .conftest import only_bootstrap3, only_bootstrap4
 from .forms import (
     CheckboxesSampleForm,
     CustomCheckboxSelectMultiple,
@@ -155,7 +155,6 @@ def test_remove_labels():
     assert "<label" not in html
 
 
-@only_bootstrap
 class TestBootstrapLayoutObjects:
     def test_custom_django_widget(self, settings):
 

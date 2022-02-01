@@ -1,0 +1,40 @@
+<form method="post">
+    <div id="multifield_info" class="ctrlHolder" multifield-test="123" title="multifield_title">
+        <div class="alert alert-danger" role="alert"> </div>
+        <p class="blockLabel">Some company data</p>
+        <div class="multiField">
+            <div class="checkbox"> <label for="id_is_company" class="blockLabel"> <input type="checkbox"
+                        name="is_company" class="checkboxinput" id="id_is_company"> company </label> </div>
+            <div class="form-group "> <label class="control-label" for="id_email" class="blockLabel"> email </label>
+                <input type="text" name="email" maxlength="30" class="textinput textInput inputtext" required
+                    id="id_email"> <span id="help_id_email" class="help-block">Insert your email</span> </div>
+        </div>
+    </div>
+    <div id="column_name" class="formColumn columns">
+        <div id="div_id_first_name" class="form-group"> <label for="id_first_name" class="control-label  requiredField">
+                first name<span class="asteriskField">*</span> </label>
+            <div class="controls "> <input type="text" name="first_name" maxlength="5"
+                    class="textinput textInput inputtext form-control" required id="id_first_name"> </div>
+        </div>
+        <div id="div_id_last_name" class="form-group"> <label for="id_last_name" class="control-label  requiredField">
+                last name<span class="asteriskField">*</span> </label>
+            <div class="controls "> <input type="text" name="last_name" maxlength="5"
+                    class="textinput textInput inputtext form-control" required id="id_last_name"> </div>
+        </div>
+    </div>
+    <div class="buttonHolder"> <input type="submit" name="save-the-world" value="Save"
+            class="btn btn-primary button white" id="submit-id-save-the-world" data-id="test" data-name="test" /><input
+            type="submit" name="store" value="Store results" class="btn btn-primary" id="submit-id-store" /></div>
+    <div id="custom-div" class="customdivs" test-markup="123">
+        <div id="div_id_password1" class="form-group"> <label for="id_password1" class="control-label  requiredField">
+                password<span class="asteriskField">*</span> </label>
+            <div class="controls "> <input type="password" name="password1" maxlength="30"
+                    class="passwordinput form-control" required id="id_password1"> </div>
+        </div>
+        <div id="div_id_password2" class="form-group"> <label for="id_password2" class="control-label  requiredField">
+                re-enter password<span class="asteriskField">*</span> </label>
+            <div class="controls "> <input type="password" name="password2" maxlength="30"
+                    class="passwordinput form-control" required id="id_password2"> </div>
+        </div>
+    </div>
+</form>

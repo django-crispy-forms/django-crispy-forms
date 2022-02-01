@@ -130,8 +130,7 @@ class FormHelper(DynamicLayoutHandler):
             If no id provided then no id attribute is created on the form.
 
         **form_class**: String containing separated CSS classes to be applied
-            to form class attribute. The form will always have by default
-            'uniForm' class.
+            to form class attribute.
 
         **form_group_wrapper_class**: String containing separated CSS classes to be applied
             to each row of inputs.
@@ -357,14 +356,7 @@ class FormHelper(DynamicLayoutHandler):
         if self.form_id:
             items["attrs"]["id"] = self.form_id.strip()
         if self.form_class:
-            # uni_form TEMPLATE PACK has a uniForm class by default
-            if template_pack == "uni_form":
-                items["attrs"]["class"] = "uniForm %s" % self.form_class.strip()
-            else:
-                items["attrs"]["class"] = self.form_class.strip()
-        else:
-            if template_pack == "uni_form":
-                items["attrs"]["class"] = self.attrs.get("class", "") + " uniForm"
+            items["attrs"]["class"] = self.form_class.strip()
         if self.form_group_wrapper_class:
             items["attrs"]["form_group_wrapper_class"] = self.form_group_wrapper_class
 

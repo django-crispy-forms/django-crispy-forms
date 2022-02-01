@@ -8,7 +8,6 @@ from django.template import Context, Template
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
-from .conftest import only_bootstrap
 from .forms import SampleForm
 
 
@@ -209,7 +208,6 @@ def test_crispy_field_and_class_converters():
     assert "inputtext" in html
 
 
-@only_bootstrap
 def test_crispy_addon(settings):
     test_form = SampleForm()
     field_instance = test_form.fields["email"]

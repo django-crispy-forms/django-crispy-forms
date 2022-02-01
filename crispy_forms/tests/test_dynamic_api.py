@@ -8,8 +8,6 @@ from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, MultiField
 from crispy_forms.tests.forms import SampleForm
 
-from .conftest import only_uni_form
-
 
 def test_wrap_all_fields():
     helper = FormHelper()
@@ -393,7 +391,6 @@ def test__setitem__layout_object():
     assert layout[0][0] == "password1"
 
 
-@only_uni_form
 def test_filter():
     helper = FormHelper()
     helper.layout = Layout(
