@@ -9,7 +9,7 @@ from django.test.html import parse_html
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from crispy_forms.bootstrap import Field, InlineCheckboxes
+from crispy_forms.bootstrap import Field, InlineCheckboxes, UneditableField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit
 from crispy_forms.utils import render_crispy_form
@@ -737,6 +737,35 @@ def test_form_control_size():
     form.helper = FormHelper()
     form.helper.layout = Layout(Field("first_name", css_class="form-control-lg"))
     assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_form_control_size.html")
+
+
+@only_bootstrap4
+def test_uneditable_field():
+    form = SampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        UneditableField("first_name"),
+    )
+
+    print(parse_form(form))
+    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_uneditable_field.html")
+
+
+@only_bootstrap4
+@pytest.mark.parametrize(
+    "use_custom_control, expected_html",
+    [
+        (True, "bootstrap4/test_layout/test_use_custom_control_in_uneditable_select_true.html"),
+        (False, "bootstrap4/test_layout/test_use_custom_control_in_uneditable_select_false.html"),
+    ],
+)
+def test_use_custom_control_in_uneditable_select(use_custom_control, expected_html):
+    form = SelectSampleForm()
+    form.helper = FormHelper()
+    form.helper.template_pack = "bootstrap4"
+    form.helper.layout = Layout("select")
+    form.helper.use_custom_control = use_custom_control
+    assert parse_form(form) == parse_expected(expected_html)
 
 
 @only_bootstrap4
