@@ -746,8 +746,6 @@ def test_uneditable_field():
     form.helper.layout = Layout(
         UneditableField("first_name"),
     )
-
-    print(parse_form(form))
     assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_uneditable_field.html")
 
 
