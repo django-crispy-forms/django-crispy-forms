@@ -761,7 +761,7 @@ def test_use_custom_control_in_uneditable_select(use_custom_control, expected_ht
     form = SelectSampleForm()
     form.helper = FormHelper()
     form.helper.template_pack = "bootstrap4"
-    form.helper.layout = Layout("select")
+    form.helper.layout = Layout(UneditableField("select"))
     form.helper.use_custom_control = use_custom_control
     assert parse_form(form) == parse_expected(expected_html)
 
