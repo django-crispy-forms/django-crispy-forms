@@ -821,24 +821,21 @@ class Field(LayoutObject):
     """
 
     template = "%s/field.html"
+    attrs = {}
 
-    def __init__(self, *args, **kwargs):
-        self.fields = list(args)
+    def __init__(self, *fields, css_class=None, wrapper_class=None, template=None, **kwargs):
+        self.fields = list(fields)
+        # Make sure shared state is not edited.
+        self.attrs = self.attrs.copy()
 
-        if not hasattr(self, "attrs"):
-            self.attrs = {}
-        else:
-            # Make sure shared state is not edited.
-            self.attrs = self.attrs.copy()
-
-        if "css_class" in kwargs:
+        if css_class:
             if "class" in self.attrs:
-                self.attrs["class"] += " %s" % kwargs.pop("css_class")
+                self.attrs["class"] += f" {css_class}"
             else:
-                self.attrs["class"] = kwargs.pop("css_class")
+                self.attrs["class"] = css_class
 
-        self.wrapper_class = kwargs.pop("wrapper_class", None)
-        self.template = kwargs.pop("template", self.template)
+        self.wrapper_class = wrapper_class
+        self.template = template or self.template
 
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update({k.replace("_", "-"): conditional_escape(v) for k, v in kwargs.items()})
@@ -846,7 +843,7 @@ class Field(LayoutObject):
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         if extra_context is None:
             extra_context = {}
-        if hasattr(self, "wrapper_class"):
+        if self.wrapper_class:
             extra_context["wrapper_class"] = self.wrapper_class
 
         template = self.get_template_name(template_pack)
