@@ -201,7 +201,6 @@ class FormHelper(DynamicLayoutHandler):
     render_required_fields = False
     _help_text_inline = False
     _error_text_inline = True
-    html5_required = False
     form_show_labels = True
     template = None
     field_template = None
@@ -328,7 +327,6 @@ class FormHelper(DynamicLayoutHandler):
             "form_style": self.form_style.strip(),
             "form_tag": self.form_tag,
             "help_text_inline": self.help_text_inline,
-            "html5_required": self.html5_required,
             "include_media": self.include_media,
             "label_class": self.label_class,
             "use_custom_control": self.use_custom_control,

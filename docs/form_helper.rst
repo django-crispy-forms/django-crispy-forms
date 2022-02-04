@@ -110,9 +110,6 @@ There are currently some helper attributes that only have functionality for a sp
 **error_text_inline = True**
     Sets whether to render error messages inline or block. If set to ``True`` errors will be rendered using ``help-inline`` class, otherwise using ``help-block``. By default error messages are rendered in inline mode.
 
-**html5_required = False**
-    When set to ``True`` all required fields inputs will be rendered with HTML5 ``required=required`` attribute.
-
 **form_show_labels = True**
     Default set to ``True``. Determines whether or not to render the form's field labels.
 
