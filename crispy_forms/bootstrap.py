@@ -115,7 +115,7 @@ class FormActions(LayoutObject):
         self.id = css_id
         self.css_class = css_class
         self.template = template or self.template
-        self.attrs = kwargs
+        self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
@@ -123,9 +123,6 @@ class FormActions(LayoutObject):
         context.update({"formactions": self, "fields_output": html})
 
         return render_to_string(template, context.flatten())
-
-    def flat_attrs(self):
-        return flatatt(self.attrs)
 
 
 class InlineCheckboxes(Field):

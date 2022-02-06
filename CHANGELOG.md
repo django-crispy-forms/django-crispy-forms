@@ -17,6 +17,7 @@
 * Default template pack is now `bootstrap4` if the `CRISPY_TEMPLATE_PACK` setting is not provided.
 * The `html5_required` attribute of `FormHelper` is removed. In all supported versions of Django the `required` attribute is provided by the core `forms` module. 
 * The `FormActions` layout object learnt a `css_id` kwarg to add an `id` to the rendered `<div>`
+* The `flat_attrs()` method of `FormActions` is removed. Attributes provided by `**kwargs` are now passed via the `flat_attrs` function during `__init__()` instead of with each call of `render()`.
 
 ## 1.14.0 (2022-01-22)
 * Added support for Python 3.10
