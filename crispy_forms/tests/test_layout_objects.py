@@ -12,6 +12,7 @@ from crispy_forms.bootstrap import (
     AppendedText,
     Container,
     FieldWithButtons,
+    FormActions,
     InlineCheckboxes,
     InlineRadios,
     Modal,
@@ -22,7 +23,7 @@ from crispy_forms.bootstrap import (
     TabHolder,
 )
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
+from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField, Submit
 from crispy_forms.tests.utils import contains_partial, parse_expected, parse_form
 from crispy_forms.utils import render_crispy_form
 
@@ -582,3 +583,20 @@ class TestBootstrapLayoutObjects:
         )
 
         assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/bootstrap_modal_with_kwargs.html")
+
+    def test_FormActions(self, settings):
+        form = SampleForm()
+        form.helper = FormHelper()
+        form.helper.field_class = "field-class"
+        form.helper.layout = Layout(
+            FormActions(
+                HTML('<span style="display: hidden;">Information Saved</span>'),
+                Submit("Save", "Save", css_class="btn-primary"),
+                css_class="custom-class",
+                css_id="css-id",
+                data="safe <>& data",
+            ),
+        )
+
+        template_pack = settings.CRISPY_TEMPLATE_PACK
+        assert parse_form(form) == parse_expected(f"{template_pack}/test_layout_objects/test_FormActions.html")
