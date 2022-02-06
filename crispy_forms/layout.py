@@ -140,10 +140,33 @@ class ButtonHolder(LayoutObject):
     """
     Layout object. It wraps fields in a <div class="buttonHolder">
 
-    This is where you should put Layout objects that render to form buttons like Submit.
-    It should only hold `HTML` and `BaseInput` inherited objects.
+    This is where you should put Layout objects that render to form buttons
 
-    Example::
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
+
+    Parameters
+    ----------
+    *fields : HTML or BaseInput
+        The layout objects to render within the ``ButtonHolder``. It should
+        only hold `HTML` and `BaseInput` inherited objects.
+    css_id : str, optional
+        A custom DOM id for the layout object. If not provided the name
+        argument is slugified and turned into the id for the submit button.
+        By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<input>``. By default
+        None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+
+    Examples
+    --------
+
+    An example using ``ButtonHolder`` in your layout::
 
         ButtonHolder(
             HTML(<span style="display: hidden;">Information Saved</span>),
@@ -153,11 +176,11 @@ class ButtonHolder(LayoutObject):
 
     template = "%s/layout/buttonholder.html"
 
-    def __init__(self, *fields, **kwargs):
+    def __init__(self, *fields, css_id=None, css_class=None, template=None):
         self.fields = list(fields)
-        self.css_class = kwargs.get("css_class", None)
-        self.css_id = kwargs.get("css_id", None)
-        self.template = kwargs.get("template", self.template)
+        self.css_id = css_id
+        self.css_class = css_class
+        self.template = template or self.template
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
