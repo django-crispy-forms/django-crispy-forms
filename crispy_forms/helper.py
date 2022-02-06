@@ -145,9 +145,6 @@ class FormHelper(DynamicLayoutHandler):
         **formset_error_title**: If a formset has `non_form_errors` to display, they
             are rendered in a div. You can set title's div with this attribute.
 
-        **form_style**: Uni-form has two built in different form styles. You can choose
-            your favorite. This can be set to "default" or "inline". Defaults to "default".
-
         **include_media**: Whether to automatically include form media. Set to False if
             you want to manually include form media outside the form. Defaults to True.
 
@@ -186,7 +183,7 @@ class FormHelper(DynamicLayoutHandler):
 
     _form_method = "post"
     _form_action = ""
-    _form_style = "default"
+
     form = None
     form_id = ""
     form_class = ""
@@ -248,24 +245,6 @@ class FormHelper(DynamicLayoutHandler):
         self._form_action = action
 
     @property
-    def form_style(self):
-        if self._form_style == "default":
-            return ""
-
-        if self._form_style == "inline":
-            return "inlineLabels"
-
-    @form_style.setter
-    def form_style(self, style):
-        if style.lower() not in ("default", "inline"):
-            raise FormHelpersException(
-                "Only default and inline are valid in the \
-                    form_style helper attribute"
-            )
-
-        self._form_style = style.lower()
-
-    @property
     def help_text_inline(self):
         return self._help_text_inline
 
@@ -297,7 +276,7 @@ class FormHelper(DynamicLayoutHandler):
         form.crispy_field_template = self.field_template
 
         # This renders the specified Layout strictly
-        html = self.layout.render(form, self.form_style, context, template_pack=template_pack)
+        html = self.layout.render(form, context, template_pack=template_pack)
 
         # Rendering some extra fields if specified
         if self.render_unmentioned_fields or self.render_hidden_fields or self.render_required_fields:
@@ -309,7 +288,7 @@ class FormHelper(DynamicLayoutHandler):
                     or (self.render_hidden_fields and form.fields[field].widget.is_hidden)
                     or (self.render_required_fields and form.fields[field].widget.is_required)
                 ):
-                    html += render_field(field, form, self.form_style, context, template_pack=template_pack)
+                    html += render_field(field, form, context, template_pack=template_pack)
 
         return mark_safe(html)
 
@@ -325,7 +304,6 @@ class FormHelper(DynamicLayoutHandler):
             "form_method": self.form_method.strip(),
             "form_show_errors": self.form_show_errors,
             "form_show_labels": self.form_show_labels,
-            "form_style": self.form_style.strip(),
             "form_tag": self.form_tag,
             "help_text_inline": self.help_text_inline,
             "html5_required": self.html5_required,

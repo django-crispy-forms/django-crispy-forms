@@ -24,7 +24,7 @@ def test_list_difference():
 
 
 def test_render_field_with_none_field():
-    rendered = render_field(field=None, form=None, form_style=None, context=None)
+    rendered = render_field(field=None, form=None, context=None)
     assert rendered == ""
 
 

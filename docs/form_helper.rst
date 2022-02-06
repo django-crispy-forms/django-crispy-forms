@@ -80,9 +80,6 @@ Helper attributes you can set
 **formset_error_title**
     If you are rendering a formset using ``{% crispy %}`` tag and it has ``non_form_errors`` to display, they are rendered in a div. You can set the title of the div with this attribute. Example: “Formset Errors”.
 
-**form_style = 'default'**
-    Helper attribute for uni_form template pack. Uni-form has two different form styles built-in. You can choose which one to use, setting this variable to ``default`` or ``inline``.
-
 **form_show_errors = True**
     Default set to ``True``. It decides whether to render or not form errors. If set to ``False``, form.errors will not be visible even if they happen. You have to manually render them customizing your template. This allows you to customize error output.
 

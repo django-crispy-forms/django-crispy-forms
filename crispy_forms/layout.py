@@ -93,10 +93,9 @@ class LayoutObject(TemplateNameMixin):
 
         return pointers
 
-    def get_rendered_fields(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def get_rendered_fields(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         return "".join(
-            render_field(field, form, form_style, context, template_pack=template_pack, **kwargs)
-            for field in self.fields
+            render_field(field, form, context, template_pack=template_pack, **kwargs) for field in self.fields
         )
 
 
@@ -132,8 +131,8 @@ class Layout(LayoutObject):
     def __init__(self, *fields):
         self.fields = list(fields)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+        return self.get_rendered_fields(form, context, template_pack, **kwargs)
 
 
 class ButtonHolder(LayoutObject):
@@ -159,8 +158,8 @@ class ButtonHolder(LayoutObject):
         self.css_id = kwargs.get("css_id", None)
         self.template = kwargs.get("template", self.template)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+        html = self.get_rendered_fields(form, context, template_pack, **kwargs)
 
         template = self.get_template_name(template_pack)
         context.update({"buttonholder": self, "fields_output": html})
@@ -216,7 +215,7 @@ class BaseInput(TemplateNameMixin):
         self.template = template or self.template
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         """
         Renders an `<input />` if container is used as a Layout object.
         Input button value can be a variable in context.
@@ -259,8 +258,8 @@ class Submit(BaseInput):
 
     Examples
     --------
-    Note: ``form`` and ``form_style`` args to ``render()`` are not required
-    for ``BaseInput`` inherited objects.
+    Note: ``form`` arg to ``render()`` is not required for ``BaseInput``
+    inherited objects.
 
     >>> submit = Submit('Search the Site', 'search this site')
     >>> submit.render("", "", Context())
@@ -322,8 +321,8 @@ class Button(BaseInput):
 
     Examples
     --------
-    Note: ``form`` and ``form_style`` args to ``render()`` are not required
-    for ``BaseInput`` inherited objects.
+    Note: ``form`` arg to ``render()`` is not required for ``BaseInput``
+    inherited objects.
 
     >>> button = Button('Button 1', 'Press Me!')
     >>> button.render("", "", Context())
@@ -385,8 +384,8 @@ class Hidden(BaseInput):
 
     Examples
     --------
-    Note: ``form`` and ``form_style`` args to ``render()`` are not required
-    for ``BaseInput`` inherited objects.
+    Note: ``form`` arg to ``render()`` is not required for ``BaseInput``
+    inherited objects.
 
     >>> hidden = Hidden("hidden", "hide-me")
     >>> hidden.render("", "", Context())
@@ -438,8 +437,8 @@ class Reset(BaseInput):
 
     Examples
     --------
-    Note: ``form`` and ``form_style`` args to ``render()`` are not required
-    for ``BaseInput`` inherited objects.
+    Note: ``form`` arg to ``render()`` is not required for ``BaseInput``
+    inherited objects.
 
     >>> reset = Reset('Reset This Form', 'Revert Me!')
     >>> reset.render("", "", Context())
@@ -537,17 +536,15 @@ class Fieldset(LayoutObject):
         self.template = template or self.template
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        fields = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+        fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
 
         legend = ""
         if self.legend:
             legend = "%s" % Template(str(self.legend)).render(context)
 
         template = self.get_template_name(template_pack)
-        return render_to_string(
-            template, {"fieldset": self, "legend": legend, "fields": fields, "form_style": form_style}
-        )
+        return render_to_string(template, {"fieldset": self, "legend": legend, "fields": fields})
 
 
 class MultiField(LayoutObject):
@@ -567,7 +564,7 @@ class MultiField(LayoutObject):
         self.field_template = kwargs.pop("field_template", self.field_template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         # If a field within MultiField contains errors
         if context["form_show_errors"]:
             for field in map(lambda pointer: pointer[1], self.get_field_names()):
@@ -577,7 +574,6 @@ class MultiField(LayoutObject):
         field_template = self.field_template % template_pack
         fields_output = self.get_rendered_fields(
             form,
-            form_style,
             context,
             template_pack,
             template=field_template,
@@ -615,8 +611,8 @@ class Div(LayoutObject):
         self.template = kwargs.pop("template", self.template)
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        fields = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+        fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
 
         template = self.get_template_name(template_pack)
         return render_to_string(template, {"div": self, "fields": fields})
@@ -661,7 +657,7 @@ class HTML:
     def __init__(self, html):
         self.html = html
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         return Template(str(self.html)).render(context)
 
 
@@ -698,7 +694,7 @@ class Field(LayoutObject):
         # We use kwargs as HTML attributes, turning data_id='test' into data-id='test'
         self.attrs.update({k.replace("_", "-"): conditional_escape(v) for k, v in kwargs.items()})
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         if extra_context is None:
             extra_context = {}
         if hasattr(self, "wrapper_class"):
@@ -708,7 +704,6 @@ class Field(LayoutObject):
 
         return self.get_rendered_fields(
             form,
-            form_style,
             context,
             template_pack,
             template=template,

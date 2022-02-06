@@ -158,7 +158,6 @@ class BasicNode(template.Node):
             "%s_class" % form_type: attrs["attrs"].get("class", ""),
             "%s_id" % form_type: attrs["attrs"].get("id", ""),
             "%s_method" % form_type: attrs.get("form_method", "post"),
-            "%s_style" % form_type: attrs.get("form_style", None),
             "%s_tag" % form_type: attrs.get("form_tag", True),
             "disable_csrf": attrs.get("disable_csrf", False),
             "error_text_inline": attrs.get("error_text_inline", True),

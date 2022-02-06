@@ -28,7 +28,6 @@ def default_field_template(template_pack=TEMPLATE_PACK):
 def render_field(  # noqa: C901
     field,
     form,
-    form_style,
     context,
     template=None,
     labelclass=None,
@@ -47,7 +46,6 @@ def render_field(  # noqa: C901
         The field is added to a list that the form holds called `rendered_fields`
         to avoid double rendering fields.
     :param form: The form/formset to which that field belongs to.
-    :param form_style: A way to pass style name to the CSS framework used.
     :template: Template used for rendering the field.
     :layout_object: If passed, it points to the Layout object that is being rendered.
         We use it to store its bound fields in a list called `layout_object.bound_fields`
@@ -63,7 +61,7 @@ def render_field(  # noqa: C901
         FAIL_SILENTLY = getattr(settings, "CRISPY_FAIL_SILENTLY", True)
 
         if hasattr(field, "render"):
-            return field.render(form, form_style, context, template_pack=template_pack)
+            return field.render(form, context, template_pack=template_pack)
 
         try:
             # Injecting HTML attributes into field's widget, Django handles rendering these
