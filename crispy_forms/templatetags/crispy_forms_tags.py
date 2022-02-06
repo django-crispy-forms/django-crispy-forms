@@ -170,7 +170,6 @@ class BasicNode(template.Node):
             "form_show_labels": attrs.get("form_show_labels", True),
             "formset_error_title": attrs.get("formset_error_title", None),
             "help_text_inline": attrs.get("help_text_inline", False),
-            "html5_required": attrs.get("html5_required", False),
             "include_media": attrs.get("include_media", True),
             "inputs": attrs.get("inputs", []),
             "is_formset": is_formset,
