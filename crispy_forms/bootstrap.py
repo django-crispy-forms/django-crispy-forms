@@ -205,26 +205,61 @@ class FieldWithButtons(Div):
 
 class StrictButton(TemplateNameMixin):
     """
-    Layout object for rendering an HTML button::
+    Layout object for rendering an HTML button in a ``<button>`` tag.
 
-        Button("button content", css_class="extra")
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
+    field_classes : str
+        The CSS classes to be applied to the button. By defult "btn".
+
+    Parameters
+    ----------
+    content : str
+        The content of the button. This content is context aware, to bring
+        this to life see the examples section.
+    css_id : str, optional
+        A custom DOM id for the layout object which will be added to the
+        ``<button>`` if provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<button>``. By default
+        None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to `flatatt` and converted into
+        key="value", pairs. These attributes are added to the ``<button>``.
+
+    Examples
+    --------
+
+    In your ``Layout``::
+
+        StrictButton("button content", css_class="extra")
+
+    The content of the button is context aware, so you can do things like::
+
+        StrictButton("Button for {{ user.username }}")
     """
 
     template = "%s/layout/button.html"
     field_classes = "btn"
 
-    def __init__(self, content, **kwargs):
+    def __init__(self, content, css_id=None, css_class=None, template=None, **kwargs):
         self.content = content
-        self.template = kwargs.pop("template", self.template)
+        self.template = template or self.template
 
         kwargs.setdefault("type", "button")
 
         # We turn css_id and css_class into id and class
-        if "css_id" in kwargs:
-            kwargs["id"] = kwargs.pop("css_id")
+        if css_id:
+            kwargs["id"] = css_id
+
         kwargs["class"] = self.field_classes
-        if "css_class" in kwargs:
-            kwargs["class"] += " %s" % kwargs.pop("css_class")
+        if css_class:
+            kwargs["class"] += f" {css_class}"
 
         self.flat_attrs = flatatt(kwargs)
 
