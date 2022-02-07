@@ -243,12 +243,12 @@ class Container(Div):
 
     css_class = ""
 
-    def __init__(self, name, *fields, **kwargs):
-        super().__init__(*fields, **kwargs)
-        self.template = kwargs.pop("template", self.template)
+    def __init__(self, name, *fields, css_id=None, css_class=None, active=None, template=None, **kwargs):
+        super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
         self.name = name
-        self._active_originally_included = "active" in kwargs
-        self.active = kwargs.pop("active", False)
+        if active is not None:
+            self._active_originally_included = True
+        self.active = active or False
         if not self.css_id:
             self.css_id = slugify(self.name, allow_unicode=True)
 
