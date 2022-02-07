@@ -617,25 +617,69 @@ class MultiField(LayoutObject):
 
 class Div(LayoutObject):
     """
-    Layout object. It wraps fields in a <div>
+    Layout object. It wraps fields in a ``<div>``.
 
-    You can set `css_id` for a DOM id and `css_class` for a DOM class. Example::
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
 
-        Div('form_field_1', 'form_field_2', css_id='div-example', css_class='divs')
+    Parameters
+    ----------
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    In your ``Layout`` you can::
+
+        Div(
+            'form_field_1',
+            'form_field_2',
+            css_id='div-example',
+            css_class='divs',
+        )
+
+    It is also possible to nest Layout Objects within a Div::
+
+        Div(
+            Div(
+                Field('form_field', css_class='field-class'),
+                css_class='div-class',
+            ),
+            Div('form_field_2', css_class='div-class'),
+        )
     """
 
     template = "%s/layout/div.html"
+    css_class = None
 
-    def __init__(self, *fields, **kwargs):
+    def __init__(self, *fields, css_id=None, css_class=None, template=None, **kwargs):
         self.fields = list(fields)
 
-        if hasattr(self, "css_class") and "css_class" in kwargs:
-            self.css_class += " %s" % kwargs.pop("css_class")
-        if not hasattr(self, "css_class"):
-            self.css_class = kwargs.pop("css_class", None)
+        if self.css_class and css_class:
+            self.css_class += f" {css_class}"
+        elif css_class:
+            self.css_class = css_class
 
-        self.css_id = kwargs.pop("css_id", "")
-        self.template = kwargs.pop("template", self.template)
+        self.css_id = css_id
+        self.template = template or self.template
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
@@ -647,9 +691,51 @@ class Div(LayoutObject):
 
 class Row(Div):
     """
-    Layout object. It wraps fields in a div whose default class is "formRow". Example::
+    Layout object. It wraps fields in a ``<div>`` and the template adds the
+    appropriate class to render the contents in a row. e.g. ``form-row`` when
+    using the Bootstrap4 template pack.
 
-        Row('form_field_1', 'form_field_2', 'form_field_3')
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
+
+    Parameters
+    ----------
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    In your ``Layout`` you can::
+
+        Row('form_field_1', 'form_field_2', css_id='row-example')
+
+    It is also possible to nest Layout Objects within a Row::
+
+        Row(
+            Div(
+                Field('form_field', css_class='field-class'),
+                css_class='div-class',
+            ),
+            Div('form_field_2', css_class='div-class'),
+        )
     """
 
     template = "%s/layout/row.html"
@@ -657,14 +743,53 @@ class Row(Div):
 
 class Column(Div):
     """
-    Layout object. It wraps fields in a div so the wrapper can be used as a column. Example::
+    Layout object. It wraps fields in a ``<div>`` and the template adds the
+    appropriate class to render the contents in a column. e.g. ``col-md`` when
+    using the Bootstrap4 template pack.
 
-        Column('form_field_1', 'form_field_2')
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
 
-    Depending on the template, css class associated to the div is formColumn, row, or nothing. For this last case, you
-     must provide css classes. Example::
+    Parameters
+    ----------
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. If using the Bootstrap4 template pack the default
+        ``col-md`` is removed if this string contins another ``col-`` class.
+        By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
 
-        Column('form_field_1', 'form_field_2', css_class='col-xs-6',)
+    Examples
+    --------
+
+    In your ``Layout`` you can::
+
+        Column('form_field_1', 'form_field_2', css_id='col-example')
+
+    It is also possible to nest Layout Objects within a Row::
+
+        Div(
+            Column(
+                Field('form_field', css_class='field-class'),
+                css_class='col-sm,
+            ),
+            Column('form_field_2', css_class='col-sm'),
+        )
     """
 
     template = "%s/layout/column.html"
