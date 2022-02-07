@@ -631,7 +631,7 @@ class Div(LayoutObject):
     ----------
     *fields : str, LayoutObject
         Any number of fields as positional arguments to be rendered within
-        the ``<div>``
+        the ``<div>``.
     css_id : str, optional
         A DOM id for the layout object which will be added to the ``<div>`` if
         provided. By default None.
