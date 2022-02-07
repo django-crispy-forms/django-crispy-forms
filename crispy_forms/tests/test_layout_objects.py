@@ -442,7 +442,7 @@ class TestBootstrapLayoutObjects:
                 Field("password1", css_class="span4"),
                 StrictButton("Go!", css_id="go-button"),
                 StrictButton("No!", css_class="extra"),
-                StrictButton("Test", type="submit", name="whatever", value="something"),
+                StrictButton("Test <>&", type="submit", name="whatever <>&", value="something"),
                 css_class="extra",
                 autocomplete="off",
                 input_size="input-group-sm",
