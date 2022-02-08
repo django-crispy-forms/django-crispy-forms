@@ -74,7 +74,33 @@ class FormActions(LayoutObject):
     """
     Bootstrap layout object. It wraps fields in a <div class="form-actions">
 
-    Example::
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered with.
+
+    Parameters
+    ----------
+
+    *fields : HTML or BaseInput
+        The layout objects to render within the ``ButtonHolder``. It should
+        only hold `HTML` and `BaseInput` inherited objects.
+    css_id : str, optional
+        A custom DOM id for the layout object which will be added to the
+        ``<div>`` if provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<div>``. By default
+        None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    An example using ``FormActions`` in your layout::
 
         FormActions(
             HTML(<span style="display: hidden;">Information Saved</span>),
@@ -84,12 +110,12 @@ class FormActions(LayoutObject):
 
     template = "%s/layout/formactions.html"
 
-    def __init__(self, *fields, **kwargs):
+    def __init__(self, *fields, css_id=None, css_class=None, template=None, **kwargs):
         self.fields = list(fields)
-        self.template = kwargs.pop("template", self.template)
-        self.attrs = kwargs
-        if "css_class" in self.attrs:
-            self.attrs["class"] = self.attrs.pop("css_class")
+        self.id = css_id
+        self.css_class = css_class
+        self.template = template or self.template
+        self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
         html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
@@ -97,9 +123,6 @@ class FormActions(LayoutObject):
         context.update({"formactions": self, "fields_output": html})
 
         return render_to_string(template, context.flatten())
-
-    def flat_attrs(self):
-        return flatatt(self.attrs)
 
 
 class InlineCheckboxes(Field):
