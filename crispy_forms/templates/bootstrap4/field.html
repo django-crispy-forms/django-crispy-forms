@@ -17,59 +17,53 @@
             </label>
         {% endif %}
 
-        {% if field|is_checkboxselectmultiple %}
-            {% include 'bootstrap4/layout/checkboxselectmultiple.html' %}
-        {% endif %}
+        {% if field|is_checkboxselectmultiple or field|is_radioselect %}
+            {% include 'bootstrap4/layout/radio_checkbox_select.html' %}
 
-        {% if field|is_radioselect %}
-            {% include 'bootstrap4/layout/radioselect.html' %}
-        {% endif %}
+        {% elif field|is_checkbox and form_show_labels %}
+            {%if use_custom_control%}
+                {% if field.errors %}
+                    {% crispy_field field 'class' 'custom-control-input is-invalid' %}
+                {% else %}
+                    {% crispy_field field 'class' 'custom-control-input' %}
+                {% endif %}
+            {% else %}
+                {% if field.errors %}
+                    {% crispy_field field 'class' 'form-check-input is-invalid' %}
+                {% else %}
+                    {% crispy_field field 'class' 'form-check-input' %}
+                {% endif %}
+            {% endif %}
+            <label for="{{ field.id_for_label }}" class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}{% if field.field.required %} requiredField{% endif %}">
+                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+            </label>
+            {% include 'bootstrap4/layout/help_text_and_errors.html' %}
 
-        {% if not field|is_checkboxselectmultiple and not field|is_radioselect %}
-            {% if field|is_checkbox and form_show_labels %}
-                {%if use_custom_control%}
+        {% elif field|is_file and use_custom_control  %}
+            {% include 'bootstrap4/layout/field_file.html' %}
+        {% else %}
+            <div{% if field_class %} class="{{ field_class }}"{% endif %}>
+                {% if field|is_select and use_custom_control %}
                     {% if field.errors %}
-                        {% crispy_field field 'class' 'custom-control-input is-invalid' %}
+                        {% crispy_field field 'class' 'custom-select is-invalid' %}
                     {% else %}
-                        {% crispy_field field 'class' 'custom-control-input' %}
+                        {% crispy_field field 'class' 'custom-select' %}
+                    {% endif %}
+                {% elif field|is_file %}
+                    {% if field.errors %}
+                        {% crispy_field field 'class' 'form-control-file is-invalid' %}
+                    {% else %}
+                        {% crispy_field field 'class' 'form-control-file' %}
                     {% endif %}
                 {% else %}
                     {% if field.errors %}
-                        {% crispy_field field 'class' 'form-check-input is-invalid' %}
+                        {% crispy_field field 'class' 'form-control is-invalid' %}
                     {% else %}
-                        {% crispy_field field 'class' 'form-check-input' %}
+                        {% crispy_field field 'class' 'form-control' %}
                     {% endif %}
                 {% endif %}
-                <label for="{{ field.id_for_label }}" class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}{% if field.field.required %} requiredField{% endif %}">
-                    {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
-                </label>
                 {% include 'bootstrap4/layout/help_text_and_errors.html' %}
-            {% elif field|is_file and use_custom_control  %}
-                {% include 'bootstrap4/layout/field_file.html' %}
-            {% else %}
-                <div{% if field_class %} class="{{ field_class }}"{% endif %}>
-                    {% if field|is_select and use_custom_control %}
-                        {% if field.errors %}
-                            {% crispy_field field 'class' 'custom-select is-invalid' %}
-                        {% else %}
-                            {% crispy_field field 'class' 'custom-select' %}
-                        {% endif %}
-                    {% elif field|is_file %}
-                        {% if field.errors %}                 
-                            {% crispy_field field 'class' 'form-control-file is-invalid' %}
-                        {% else %}
-                            {% crispy_field field 'class' 'form-control-file' %}
-                        {% endif %}
-                    {% else %}
-                        {% if field.errors %}                      
-                            {% crispy_field field 'class' 'form-control is-invalid' %}
-                        {% else %}
-                            {% crispy_field field 'class' 'form-control' %}
-                        {% endif %}
-                    {% endif %}
-                    {% include 'bootstrap4/layout/help_text_and_errors.html' %}
-                </div>
-            {% endif %}
+            </div>
         {% endif %}
     </{% if tag %}{{ tag }}{% else %}div{% endif %}>
     {% if field|is_checkbox %}

@@ -6,19 +6,19 @@
     {% for group, options, index in field|optgroups %}
     {% if group %}<strong>{{ group }}</strong>{% endif %}
     {% for option in options %}
-    <div class="{%if use_custom_control%}custom-control custom-checkbox{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
-        <input type="checkbox" class="{%if use_custom_control%}custom-control-input{% else %}form-check-input{% endif %}{% if field.errors %} is-invalid{% endif %}" name="{{ field.html_name }}" value="{{ option.value|unlocalize }}" {% include "bootstrap4/layout/attrs.html" with widget=option %}>
+      <div class="{%if use_custom_control%}custom-control custom-{{option.type}}{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
+        <input type="{{option.type}}" class="{%if use_custom_control%}custom-control-input{% else %}form-check-input{% endif %}{% if field.errors %} is-invalid{% endif %}" name="{{ field.html_name }}" value="{{ option.value|unlocalize }}" {% include "bootstrap4/layout/attrs.html" with widget=option %}>
         <label class="{%if use_custom_control%}custom-control-label{% else %}form-check-label{% endif %}" for="{{ option.attrs.id }}">
             {{ option.label|unlocalize }}
         </label>
         {% if field.errors and forloop.last and not inline_class and forloop.parentloop.last %}
             {% include 'bootstrap4/layout/field_errors_block.html' %}
-            {% endif %}
-    </div>
-   {% endfor %}
-   {% endfor %}
+        {% endif %}
+     </div>
+    {% endfor %}
+    {% endfor %}
     {% if field.errors and inline_class %}
-    <div class="w-100 {%if use_custom_control%}custom-control custom-checkbox{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
+    <div class="w-100 {%if use_custom_control%}custom-control custom-radio{% if inline_class %} custom-control-inline{% endif %}{% else %}form-check{% if inline_class %} form-check-inline{% endif %}{% endif %}">
         {# the following input is only meant to allow boostrap to render the error message as it has to be after an invalid input. As the input has no name, no data will be sent. #}
         <input type="checkbox" class="custom-control-input {% if field.errors %}is-invalid{%endif%}">
         {% include 'bootstrap4/layout/field_errors_block.html' %}
