@@ -43,7 +43,7 @@ For the rest of this document we will use the following example form for showing
             required = False,
         )
 
-Let's see how helpers works step by step, with some examples explained. First you will need to import ``FormHelper``::
+Let's see how helpers work step by step, with some examples explained. First you will need to import ``FormHelper``::
 
     from crispy_forms.helper import FormHelper
 
