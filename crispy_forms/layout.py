@@ -78,9 +78,10 @@ class LayoutObject(TemplateNameMixin):
         elif index is None:
             index = []
 
+        str_class = len(LayoutClasses) == 1 and LayoutClasses[0] == str
         for i, layout_object in enumerate(self.fields):
             if isinstance(layout_object, LayoutClasses):
-                if len(LayoutClasses) == 1 and LayoutClasses[0] == str:
+                if str_class:
                     pointers.append([index + [i], layout_object])
                 else:
                     pointers.append([index + [i], layout_object.__class__.__name__.lower()])
