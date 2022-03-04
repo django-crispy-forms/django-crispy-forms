@@ -29,7 +29,7 @@ class PrependedAppendedText(Field):
 
         super().__init__(field, *args, **kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         extra_context = extra_context.copy() if extra_context is not None else {}
         extra_context.update(
             {
@@ -44,7 +44,6 @@ class PrependedAppendedText(Field):
         return render_field(
             self.field,
             form,
-            form_style,
             context,
             template=template,
             attrs=self.attrs,
@@ -117,8 +116,8 @@ class FormActions(LayoutObject):
         self.template = template or self.template
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        html = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+        html = self.get_rendered_fields(form, context, template_pack, **kwargs)
         template = self.get_template_name(template_pack)
         context.update({"formactions": self, "fields_output": html})
 
@@ -134,10 +133,8 @@ class InlineCheckboxes(Field):
 
     template = "%s/layout/checkboxselectmultiple_inline.html"
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return super().render(
-            form, form_style, context, template_pack=template_pack, extra_context={"inline_class": "inline"}
-        )
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+        return super().render(form, context, template_pack=template_pack, extra_context={"inline_class": "inline"})
 
 
 class InlineRadios(Field):
@@ -149,10 +146,8 @@ class InlineRadios(Field):
 
     template = "%s/layout/radioselect_inline.html"
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return super().render(
-            form, form_style, context, template_pack=template_pack, extra_context={"inline_class": "inline"}
-        )
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+        return super().render(form, context, template_pack=template_pack, extra_context={"inline_class": "inline"})
 
 
 class FieldWithButtons(Div):
@@ -186,14 +181,13 @@ class FieldWithButtons(Div):
         self.input_size = input_size
         super().__init__(*fields, **kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
         field_template = self.field_template % template_pack
         buttons = "".join(
             render_field(
                 field,
                 form,
-                form_style,
                 context,
                 field_template,
                 layout_object=self,
@@ -212,7 +206,6 @@ class FieldWithButtons(Div):
             return render_field(
                 self.fields[0][0],
                 form,
-                form_style,
                 context,
                 template,
                 attrs=self.fields[0].attrs,
@@ -221,9 +214,7 @@ class FieldWithButtons(Div):
                 **kwargs,
             )
         else:
-            return render_field(
-                self.fields[0], form, form_style, context, template, extra_context=extra_context, **kwargs
-            )
+            return render_field(self.fields[0], form, context, template, extra_context=extra_context, **kwargs)
 
 
 class StrictButton(TemplateNameMixin):
@@ -286,7 +277,7 @@ class StrictButton(TemplateNameMixin):
 
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         self.content = Template(str(self.content)).render(context)
         template = self.get_template_name(template_pack)
         context.update({"button": self})
@@ -316,13 +307,13 @@ class Container(Div):
         """
         return field_name in map(lambda pointer: pointer[1], self.get_field_names())
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         if self.active:
             if "active" not in self.css_class:
                 self.css_class += " active"
         else:
             self.css_class = self.css_class.replace("active", "")
-        return super().render(form, form_style, context, template_pack)
+        return super().render(form, context, template_pack)
 
 
 class ContainerHolder(Div):
@@ -390,13 +381,13 @@ class TabHolder(ContainerHolder):
 
     template = "%s/layout/tab.html"
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         for tab in self.fields:
             tab.active = False
 
         # Open the group that should be open.
         self.open_target_group_for_form(form)
-        content = self.get_rendered_fields(form, form_style, context, template_pack)
+        content = self.get_rendered_fields(form, context, template_pack)
         links = "".join(tab.render_link(template_pack) for tab in self.fields)
 
         context.update({"tabs": self, "links": links, "content": content})
@@ -439,7 +430,7 @@ class Accordion(ContainerHolder):
         for accordion_group in args:
             accordion_group.data_parent = self.css_id
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         content = ""
 
         # Open the group that should be open.
@@ -447,7 +438,7 @@ class Accordion(ContainerHolder):
 
         for group in self.fields:
             group.data_parent = self.css_id
-            content += render_field(group, form, form_style, context, template_pack=template_pack, **kwargs)
+            content += render_field(group, form, context, template_pack=template_pack, **kwargs)
 
         template = self.get_template_name(template_pack)
         context.update({"accordion": self, "content": content})
@@ -474,7 +465,7 @@ class Alert(Div):
         self.content = content
         self.dismiss = dismiss
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         template = self.get_template_name(template_pack)
         context.update({"alert": self, "content": self.content, "dismiss": self.dismiss})
 
@@ -555,8 +546,8 @@ class Modal(LayoutObject):
 
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):
-        fields = self.get_rendered_fields(form, form_style, context, template_pack, **kwargs)
+    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+        fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
         template = self.get_template_name(template_pack)
 
         return render_to_string(template, {"modal": self, "fields": fields})

@@ -11,6 +11,13 @@
       "passwordinput": "textinput textInput",
   }
   ```
+* The `uni-form` template pack allowed for rendering of templates using a `default` or `inline` layout. As the `uni-form` template
+  pack has been removed support for this has also been removed. This has resulted in the following **BREAKING** changes.
+
+    * The `form_style` attribute of `FormHelper` is removed.
+    * The `form_style` positional argument to `render_field` is removed.
+    * The `form_style` positional argument to the `render` method of all `LayoutObjects` is removed.
+
 * Removed Bootstrap 2 template pack. Bootstrap 3 and 4 support is provided by the core crispy-forms package.
   Support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
   [crispy-bootstrap5](https://github.com/django-crispy-forms/crispy-bootstrap5).
