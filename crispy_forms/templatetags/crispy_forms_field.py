@@ -1,6 +1,6 @@
 from django import forms, template
 from django.conf import settings
-from django.template import Context, loader
+from django.template import Context, Variable, loader
 
 from crispy_forms.utils import get_template_pack
 
@@ -81,7 +81,7 @@ class CrispyFieldNode(template.Node):
         # variables in the current rendering context first
         if self not in context.render_context:
             context.render_context[self] = (
-                template.Variable(self.field),
+                Variable(self.field),
                 self.attrs,
             )
 
@@ -110,8 +110,8 @@ class CrispyFieldNode(template.Node):
             widget.attrs["class"] = css_class
 
             for attribute_name, attribute in attr.items():
-                attribute_name = template.Variable(attribute_name).resolve(context)
-                attributes = template.Variable(attribute).resolve(context)
+                attribute_name = Variable(attribute_name).resolve(context)
+                attributes = Variable(attribute).resolve(context)
 
                 if attribute_name in widget.attrs:
                     # multiple attribtes are in a single string, e.g.
