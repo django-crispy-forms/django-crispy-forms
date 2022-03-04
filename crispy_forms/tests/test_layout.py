@@ -766,12 +766,13 @@ def test_use_custom_control_in_uneditable_select(use_custom_control, expected_ht
     assert parse_form(form) == parse_expected(expected_html)
 
 
-def test_multiple_fields():
+def test_multiple_fields(settings):
     "Field can accept any number of fields and apply the kwargs to all fields"
     form = SampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout(Field("first_name", "last_name", css_class="form-control-lg"))
-    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_multiple_fields.html")
+    template_pack = settings.CRISPY_TEMPLATE_PACK
+    assert parse_form(form) == parse_expected(f"{template_pack}/test_layout/test_multiple_fields.html")
 
 
 @only_bootstrap4
