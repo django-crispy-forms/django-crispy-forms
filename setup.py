@@ -28,7 +28,6 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Django",
-        "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.2",
         "Framework :: Django :: 4.0",
         "License :: OSI Approved :: MIT License",
@@ -52,4 +51,5 @@ setup(
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.7",
+    install_requires="django>=3.2",
 )
