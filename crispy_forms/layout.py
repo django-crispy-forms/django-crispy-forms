@@ -813,8 +813,7 @@ class HTML:
 class Field(LayoutObject):
     """
     A Layout object, usually containing one field name, where you can add
-    attributes to it easily. For setting class attributes, you need to use
-    `css_class`, as `class` is a Python keyword.
+    attributes to it easily.
 
     Attributes
     ----------
@@ -832,19 +831,17 @@ class Field(LayoutObject):
         Usually a single field, but can be any number of fields, to be rendered
         with the same attributes applied.
     css_class : str, optional
-        Additional CSS classes to be applied in addition to those declared by
-        the class itself. If using the Bootstrap4 template pack the default
-        ``col-md`` is removed if this string contins another ``col-`` class.
-        By default None.
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default ``None``.
     wrapper_class: str, optional
         CSS classes to be used when rendering the Field. This class is usually
-        applied to the ``<div>`` which wraps the Fields ``<label>`` and ``<input>``.
-        tags.
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
     template : str, optional
         Overrides the default template, if provided. By default ``None``.
     **kwargs : dict, optional
-        Additional attributes are passed to ``flatatt`` and converted into
-        key="value", pairs. These attributes are added to the ``<div>``.
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
 
     Examples
     --------
