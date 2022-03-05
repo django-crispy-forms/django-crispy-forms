@@ -43,19 +43,13 @@ def test_inputs(settings):
     assert 'id="reset-id-my-reset"' in html
     assert 'name="my-hidden"' in html
     assert 'id="button-id-my-button"' in html
-
-    if settings.CRISPY_TEMPLATE_PACK == "uni_form":
-        assert "submit submitButton" in html
-        assert "reset resetButton" in html
-        assert 'class="button"' in html
+    assert 'class="btn"' in html
+    assert "btn btn-primary" in html
+    assert "btn btn-inverse" in html
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+        assert len(re.findall(r"<input[^>]+> <", html)) == 9
     else:
-        assert 'class="btn"' in html
-        assert "btn btn-primary" in html
-        assert "btn btn-inverse" in html
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert len(re.findall(r"<input[^>]+> <", html)) == 9
-        else:
-            assert len(re.findall(r"<input[^>]+> <", html)) == 8
+        assert len(re.findall(r"<input[^>]+> <", html)) == 8
 
 
 def test_invalid_form_method():
@@ -366,8 +360,6 @@ def test_formset_with_helper_without_layout(settings):
     assert 'method="post"' in html
     assert 'id="thisFormsetRocks"' in html
     assert 'action="%s"' % reverse("simpleAction") in html
-    if settings.CRISPY_TEMPLATE_PACK == "uni_form":
-        assert 'class="uniForm' in html
 
 
 def test_CSRF_token_POST_form():
@@ -600,7 +592,7 @@ def test_error_text_inline(settings):
     help_tag_name = "p"
     if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
         help_class = "help-block"
-    elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
         help_class = "invalid-feedback"
         help_tag_name = "div"
 
@@ -615,7 +607,7 @@ def test_error_text_inline(settings):
 
     if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
         help_class = "help-block"
-    elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
         help_class = "invalid-feedback"
         help_tag_name = "p"
 
