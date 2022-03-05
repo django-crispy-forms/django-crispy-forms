@@ -812,9 +812,9 @@ class HTML:
 
 class Field(LayoutObject):
     """
-    Layout object, It contains one field name, and you can add attributes to it
-    easily. For setting class attributes, you need to use `css_class`, as
-    `class` is a Python keyword.
+    A Layout object, usually containing one field name, where you can add
+    attributes to it easily. For setting class attributes, you need to use
+    `css_class`, as `class` is a Python keyword.
 
     Attributes
     ----------
