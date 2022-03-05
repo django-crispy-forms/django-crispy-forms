@@ -188,11 +188,9 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
     assert 'id="row_passwords"' in html
     assert html.count("<label") == 6
 
-    if settings.CRISPY_TEMPLATE_PACK == "uni_form":
-        assert 'class="formRow rows"' in html
-    elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
         assert 'class="form-row rows"' in html
-    else:
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
         assert 'class="row rows"' in html
     assert "Hello!" in html
     assert "testLink" in html
@@ -236,7 +234,8 @@ def test_change_layout_dynamically_delete_field():
     assert "email" not in html
 
 
-def test_column_has_css_classes(settings):
+@only_bootstrap4
+def test_column_has_css_classes():
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -262,13 +261,7 @@ def test_column_has_css_classes(settings):
 
     c = Context({"form": form, "form_helper": form_helper})
     html = template.render(c)
-
-    if settings.CRISPY_TEMPLATE_PACK == "uni_form":
-        assert html.count("formColumn") == 1
-        assert html.count("col") == 0
-    elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-        assert html.count("formColumn") == 0
-        assert html.count("col-md") == 1
+    assert html.count("col-md") == 1
 
 
 @only_bootstrap4
@@ -344,10 +337,7 @@ def test_formset_layout(settings):
     assert "Item 2" in html
     assert "Item 3" in html
     assert html.count("Note for first form only") == 1
-    if settings.CRISPY_TEMPLATE_PACK == "uni_form":
-        assert html.count("formRow") == 3
-    elif settings.CRISPY_TEMPLATE_PACK in ("bootstrap3", "bootstrap4"):
-        assert html.count("row") == 3
+    assert html.count("row") == 3
 
     if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
         assert html.count("form-group") == 18
@@ -551,7 +541,7 @@ def test_keepcontext_context_manager(settings):
 
     if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
         assert response.content.count(b"checkbox-inline") == 3
-    elif settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
+    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
         assert response.content.count(b"custom-control-inline") == 3
         assert response.content.count(b"custom-checkbox") > 0
 
