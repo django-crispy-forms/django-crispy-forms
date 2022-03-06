@@ -179,32 +179,12 @@ class TestBootstrapLayoutObjects:
         test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
-            PrependedAppendedText("email", "@", "gmail.com"),
+            PrependedAppendedText("email", "@", "gmail.com", css_class="custom-size-class", active=True),
             AppendedText("password1", "#"),
             PrependedText("password2", "$"),
         )
-        html = render_crispy_form(test_form)
-
         pack = settings.CRISPY_TEMPLATE_PACK
         assert parse_form(test_form) == parse_expected(f"{pack}/test_layout_objects/test_prepended_appended_text.html")
-
-        # Check form parameters
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            test_form.helper.layout = Layout(
-                PrependedAppendedText("email", "@", "gmail.com", css_class="input-lg"),
-            )
-            html = render_crispy_form(test_form)
-
-            assert 'class="input-lg' in html
-            assert contains_partial(html, '<span class="input-group-addon input-lg"/>')
-
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            test_form.helper.layout = Layout(
-                PrependedAppendedText("email", "@", "gmail.com", css_class="form-control-lg")
-            )
-            html = render_crispy_form(test_form)
-            assert 'class="form-control-lg' in html
-            assert contains_partial(html, '<span class="input-group-text"/>')
 
     @only_bootstrap4
     def test_prepended_wrapper_class(self, settings):
