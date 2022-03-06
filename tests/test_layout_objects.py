@@ -185,12 +185,11 @@ class TestBootstrapLayoutObjects:
         )
         html = render_crispy_form(test_form)
 
+        pack = settings.CRISPY_TEMPLATE_PACK
+        assert parse_form(test_form) == parse_expected(f"{pack}/test_layout_objects/test_prepended_appended_text.html")
+
         # Check form parameters
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            assert html.count('<span class="input-group-addon">@</span>') == 1
-            assert html.count('<span class="input-group-addon">gmail.com</span>') == 1
-            assert html.count('<span class="input-group-addon">#</span>') == 1
-            assert html.count('<span class="input-group-addon">$</span>') == 1
             test_form.helper.layout = Layout(
                 PrependedAppendedText("email", "@", "gmail.com", css_class="input-lg"),
             )
@@ -200,10 +199,6 @@ class TestBootstrapLayoutObjects:
             assert contains_partial(html, '<span class="input-group-addon input-lg"/>')
 
         if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert html.count('<span class="input-group-text">@</span>') == 1
-            assert html.count('<span class="input-group-text">gmail.com</span>') == 1
-            assert html.count('<span class="input-group-text">#</span>') == 1
-            assert html.count('<span class="input-group-text">$</span>') == 1
             test_form.helper.layout = Layout(
                 PrependedAppendedText("email", "@", "gmail.com", css_class="form-control-lg")
             )

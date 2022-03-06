@@ -1,0 +1,32 @@
+<form method="post">
+    <div id="div_id_email" class="form-group">
+        <label for="id_email" class=" requiredField"> email<span class="asteriskField">*</span> </label>
+        <div class="">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text">@</span></div>
+                <input type="text" name="email" maxlength="30" class="textinput textInput inputtext form-control" required id="id_email">
+                <div class="input-group-append">
+                    <span class="input-group-text">gmail.com</span>
+                </div>
+            </div> <small id="hint_id_email" class="form-text text-muted">Insert your email</small>
+        </div>
+    </div>
+    <div id="div_id_password1" class="form-group">
+        <label for="id_password1" class=" requiredField"> password<span class="asteriskField">*</span> </label>
+        <div class="">
+            <div class="input-group">
+                <input type="password" name="password1" maxlength="30" class="passwordinput form-control" required id="id_password1">
+                <div class="input-group-append"> <span class="input-group-text">#</span> </div>
+            </div>
+        </div>
+    </div>
+    <div id="div_id_password2" class="form-group">
+        <label for="id_password2" class=" requiredField">re-enter password<span class="asteriskField">*</span></label>
+        <div class="">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text">$</span></div> 
+                <input type="password" name="password2" maxlength="30" class="passwordinput form-control" required id="id_password2">
+            </div>
+        </div>
+    </div>
+</form>
