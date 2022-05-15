@@ -358,12 +358,11 @@ class Container(Div):
 
     css_class = ""
 
-    def __init__(self, name, *fields, **kwargs):
-        super().__init__(*fields, **kwargs)
-        self.template = kwargs.pop("template", self.template)
+    def __init__(self, name, *fields, css_id=None, css_class=None, template=None, active=None, **kwargs):
+        super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
         self.name = name
-        self._active_originally_included = "active" in kwargs
-        self.active = kwargs.pop("active", False)
+        self._active_originally_included = active is not None
+        self.active = active or False
         if not self.css_id:
             self.css_id = slugify(self.name, allow_unicode=True)
 
@@ -485,15 +484,15 @@ class Accordion(ContainerHolder):
 
     template = "%s/accordion.html"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, *accordion_groups, css_id=None, css_class=None, template=None, **kwargs):
+        super().__init__(*accordion_groups, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
         # Accordion needs to have a unique id
         if not self.css_id:
             self.css_id = "-".join(["accordion", str(randint(1000, 9999))])
 
         # AccordionGroup need to have 'data-parent="#Accordion.id"'
-        for accordion_group in args:
+        for accordion_group in accordion_groups:
             accordion_group.data_parent = self.css_id
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
