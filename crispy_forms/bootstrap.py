@@ -220,16 +220,39 @@ class FieldWithButtons(Div):
     """
     A layout object for rendering a single field with any number of buttons.
 
-    Args:
-        fields : str or LayoutObject
-            The first positional argument is the field. This can be either the
-            name of the field as a string or an instance of `Field`. Following
-            arguments will be rendered as buttons.
-        input_size : str
-            Additional CSS class to change the size of the input. e.g.
-            "input-group-sm".
-        kwargs
-            Additional kwargs to be passed to the parent `Div` Layout Object.
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the wrapping ``<div>``. By default None.
+
+    Parameters
+    ----------
+
+    *fields : str or LayoutObject
+        The first positional argument is the field. This can be either the
+        name of the field as a string or an instance of `Field`. Following
+        arguments will be rendered as buttons.
+    input_size : str
+        Additional CSS class to change the size of the input. e.g.
+        "input-group-sm".
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the wrapping 
+        ``<div>`` if provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the wrapping 
+        ``<div>``.
+
+    Example
+    -------
 
     Example::
 
@@ -243,9 +266,9 @@ class FieldWithButtons(Div):
     template = "%s/layout/field_with_buttons.html"
     field_template = "%s/field.html"
 
-    def __init__(self, *fields, input_size=None, **kwargs):
+    def __init__(self, *fields, input_size=None, css_id=None, css_class=None, template=None, **kwargs):
         self.input_size = input_size
-        super().__init__(*fields, **kwargs)
+        super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
