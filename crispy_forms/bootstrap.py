@@ -513,20 +513,56 @@ class Accordion(ContainerHolder):
 
 class Alert(Div):
     """
-    `Alert` generates markup in the form of an alert dialog
+    Generates markup in the form of an alert dialog.
+
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str
+        The CSS classes to be applied to the alert. By defult "alert".
+
+    Parameters
+    ----------
+    content : str
+        The content of the alert.
+    dismiss : bool
+        If true the alert contains a button to dismiss the alert. By default
+        True.
+    block : str, optional
+        Additional CSS classes to be applied to the ``<button>``. By default
+        None.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the alert if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are then available in the template
+        context.
+
+    Example
+    -------
+
+    Example::
 
         Alert(content='<strong>Warning!</strong> Best check yo self, you're not looking too good.')
+
     """
 
     template = "%s/layout/alert.html"
     css_class = "alert"
 
-    def __init__(self, content, dismiss=True, block=False, **kwargs):
+    def __init__(self, content, dismiss=True, block=False, css_id=None, css_class=None, template=None, **kwargs):
         fields = []
         if block:
             self.css_class += " alert-block"
-        Div.__init__(self, *fields, **kwargs)
-        self.template = kwargs.pop("template", self.template)
+        super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
         self.content = content
         self.dismiss = dismiss
 
