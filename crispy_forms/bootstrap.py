@@ -239,7 +239,7 @@ class FieldWithButtons(Div):
         Additional CSS class to change the size of the input. e.g.
         "input-group-sm".
     css_id : str, optional
-        A DOM id for the layout object which will be added to the wrapping 
+        A DOM id for the layout object which will be added to the wrapping
         ``<div>`` if provided. By default None.
     css_class : str, optional
         Additional CSS classes to be applied in addition to those declared by
@@ -248,7 +248,7 @@ class FieldWithButtons(Div):
         Overrides the default template, if provided. By default None.
     **kwargs : dict, optional
         Additional attributes are passed to ``flatatt`` and converted into
-        key="value", pairs. These attributes are added to the wrapping 
+        key="value", pairs. These attributes are added to the wrapping
         ``<div>``.
 
     Example
@@ -688,20 +688,39 @@ class InlineField(Field):
 
 class Modal(LayoutObject):
     """
-    Boostrap layout object for rendering crispy forms objects inside a bootstrap modal.
+    Boostrap layout object for rendering crispy forms objects inside a
+    bootstrap modal.
 
-    The following attributes can be set:
-        - `css_id`: modal's DOM id
-        - `css_class`: modal's DOM classes
-            - NOTE: "modal" and "fade" are applied by default on the template
-        - `title`: text to display in the modal's header
-            - NOTE: text will be wrapped in a <h5> tag
-        - `title_id`: title's DOM id
-        - `title_class`: titles's DOM classes
-            - NOTE: "modal-title" is applied by default on the template
-        - template
-            The default template which this Layout Object will be rendered
-            with
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+
+    Parameters
+    ----------
+    *fields : str
+        The fields to be rendered within the modal.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+    css_id: str, optional
+        The modal's DOM id. By default ``modal_id``.
+    title: str, optional
+        Text to display in the modal's header which will be wrapped in an
+        ``<H5>`` tag. By default ``Modal Title``.
+    title_id: str, optional
+        The title's DOM id. By default ``modal_title_id``.
+    css_class : str, optional
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default None.
+    title_class: str, optional
+        Additional CSS classes to be applied to the title. By default None.
+    **kwargs : dict, optional
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
+
+    Examples
+    --------
 
     Example::
 
@@ -723,18 +742,18 @@ class Modal(LayoutObject):
         css_id="modal_id",
         title="Modal Title",
         title_id="modal_title_id",
-        css_class="",
-        title_class="",
+        css_class=None,
+        title_class=None,
         **kwargs,
     ):
 
         self.fields = list(fields)
         self.template = template or self.template
         self.css_id = css_id
-        self.css_class = css_class
+        self.css_class = css_class or ""
         self.title = title
         self.title_id = title_id
-        self.title_class = title_class
+        self.title_class = title_class or ""
 
         kwargs = {**kwargs, "tabindex": "-1", "role": "dialog", "aria-labelledby": "%s-label" % self.title_id}
 
