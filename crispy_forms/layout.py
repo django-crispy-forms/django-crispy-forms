@@ -940,8 +940,32 @@ class Field(LayoutObject):
 
 class MultiWidgetField(Field):
     """
-    Layout object. For fields with :class:`~django.forms.MultiWidget` as `widget`, you can pass
-    additional attributes to each widget.
+    Layout object. For fields with :class:`~django.forms.MultiWidget` as
+    ``widget``, you can pass additional attributes to each widget.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+
+    Parameters
+    ----------
+    *fields : str
+        Usually a single field, but can be any number of fields, to be rendered
+        with the same attributes applied.
+    attrs : str, optional
+        Additional attrs to be added to each widget. These are added to any
+        classes included in the ``attrs`` dict. By default ``None``.
+    wrapper_class: str, optional
+        CSS classes to be used when rendering the Field. This class is usually
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+
+    Examples
+    --------
 
     Example::
 
@@ -952,12 +976,10 @@ class MultiWidgetField(Field):
                 {'class': 'second_widget_class'}
             ),
         )
-
-    .. note:: To override widget's css class use ``class`` not ``css_class``.
     """
 
-    def __init__(self, *args, **kwargs):
-        self.fields = list(args)
-        self.attrs = kwargs.pop("attrs", {})
-        self.template = kwargs.pop("template", self.template)
-        self.wrapper_class = kwargs.pop("wrapper_class", None)
+    def __init__(self, *fields, attrs=None, template=None, wrapper_class=None):
+        self.fields = list(fields)
+        self.attrs = attrs or {}
+        self.template = template or self.template
+        self.wrapper_class = wrapper_class
