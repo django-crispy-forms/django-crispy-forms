@@ -9,25 +9,83 @@ from .utils import TEMPLATE_PACK, flatatt, render_field
 
 
 class PrependedAppendedText(Field):
+    """
+    Layout object for rendering a field with prepended and appended text.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    attrs : dict
+        Attributes to be applied to the field. These are converted into html
+        attributes. e.g. ``data_id: 'test'`` in the attrs dict will become
+        ``data-id='test'`` on the field's ``<input>``.
+
+    Parameters
+    ----------
+    field : str
+        The name of the field to be rendered.
+    prepended_text : str, optional
+        The prepended text, can be HTML like, by default None
+    appended_text : str, optional
+        The appended text, can be HTML like, by default None
+    input_size : str, optional
+        For Bootstrap4+ additional classes to customise the input-group size
+        e.g. ``input-group-sm``. By default None
+    active : bool
+        For Bootstrap3, a boolean to render the text active. By default
+        ``False``.
+    css_class : str, optional
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default ``None``.
+    wrapper_class: str, optional
+        CSS classes to be used when rendering the Field. This class is usually
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+    **kwargs : dict, optional
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
+
+         PrependedAppendedText('amount', '$', '.00')
+    """
+
     template = "%s/layout/prepended_appended_text.html"
 
-    def __init__(self, field, prepended_text=None, appended_text=None, input_size=None, *args, **kwargs):
+    def __init__(
+        self,
+        field,
+        prepended_text=None,
+        appended_text=None,
+        input_size=None,
+        *,
+        active=False,
+        css_class=None,
+        wrapper_class=None,
+        template=None,
+        **kwargs,
+    ):
         self.field = field
         self.appended_text = appended_text
         self.prepended_text = prepended_text
-        if "active" in kwargs:
-            self.active = kwargs.pop("active")
+        self.active = active
 
         self.input_size = input_size
-        css_class = kwargs.get("css_class", "")
 
-        # Bootstrap 3
-        if "input-lg" in css_class:
-            self.input_size = "input-lg"
-        if "input-sm" in css_class:
-            self.input_size = "input-sm"
+        if css_class:  # Bootstrap 3
+            if "input-lg" in css_class:
+                self.input_size = "input-lg"
+            if "input-sm" in css_class:
+                self.input_size = "input-sm"
 
-        super().__init__(field, *args, **kwargs)
+        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -54,19 +112,147 @@ class PrependedAppendedText(Field):
 
 
 class AppendedText(PrependedAppendedText):
-    def __init__(self, field, text, *args, **kwargs):
-        kwargs.pop("appended_text", None)
-        kwargs.pop("prepended_text", None)
+    """
+    Layout object for rendering a field with appended text.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    attrs : dict
+        Attributes to be applied to the field. These are converted into html
+        attributes. e.g. ``data_id: 'test'`` in the attrs dict will become
+        ``data-id='test'`` on the field's ``<input>``.
+
+    Parameters
+    ----------
+    field : str
+        The name of the field to be rendered.
+    text : str, optional
+        The appended text, can be HTML like, by default None
+    input_size : str, optional
+        For Bootstrap4+ additional classes to customise the input-group size
+        e.g. ``input-group-sm``. By default None
+    active : bool
+        For Bootstrap3, a boolean to render the text active. By default
+        ``False``.
+    css_class : str, optional
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default ``None``.
+    wrapper_class: str, optional
+        CSS classes to be used when rendering the Field. This class is usually
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+    **kwargs : dict, optional
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
+
+         AppendedText('amount', '.00')
+    """
+
+    def __init__(
+        self,
+        field,
+        text,
+        *,
+        input_size=None,
+        active=False,
+        css_class=None,
+        wrapper_class=None,
+        template=None,
+        **kwargs,
+    ):
         self.text = text
-        super().__init__(field, appended_text=text, **kwargs)
+        super().__init__(
+            field,
+            appended_text=text,
+            input_size=input_size,
+            active=active,
+            css_class=css_class,
+            wrapper_class=wrapper_class,
+            template=template,
+            **kwargs,
+        )
 
 
 class PrependedText(PrependedAppendedText):
-    def __init__(self, field, text, *args, **kwargs):
-        kwargs.pop("appended_text", None)
-        kwargs.pop("prepended_text", None)
+    """
+    Layout object for rendering a field with prepended text.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    attrs : dict
+        Attributes to be applied to the field. These are converted into html
+        attributes. e.g. ``data_id: 'test'`` in the attrs dict will become
+        ``data-id='test'`` on the field's ``<input>``.
+
+    Parameters
+    ----------
+    field : str
+        The name of the field to be rendered.
+    text : str, optional
+        The prepended text, can be HTML like, by default None
+    input_size : str, optional
+        For Bootstrap4+ additional classes to customise the input-group size
+        e.g. ``input-group-sm``. By default None
+    active : bool
+        For Bootstrap3, a boolean to render the text active. By default
+        ``False``.
+    css_class : str, optional
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default ``None``.
+    wrapper_class: str, optional
+        CSS classes to be used when rendering the Field. This class is usually
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+    **kwargs : dict, optional
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
+
+         PrependedText('amount', '$')
+    """
+
+    def __init__(
+        self,
+        field,
+        text,
+        *,
+        input_size=None,
+        active=False,
+        css_class=None,
+        wrapper_class=None,
+        template=None,
+        **kwargs,
+    ):
         self.text = text
-        super().__init__(field, prepended_text=text, **kwargs)
+        super().__init__(
+            field,
+            prepended_text=text,
+            input_size=input_size,
+            active=active,
+            css_class=css_class,
+            wrapper_class=wrapper_class,
+            template=template,
+            **kwargs,
+        )
 
 
 class FormActions(LayoutObject):
