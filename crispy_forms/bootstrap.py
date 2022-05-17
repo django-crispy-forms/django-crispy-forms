@@ -562,7 +562,35 @@ class StrictButton(TemplateNameMixin):
 
 class Container(Div):
     """
-    Base class used for `Tab` and `AccordionGroup`, represents a basic container concept
+    Base class used for `Tab` and `AccordionGroup`, represents a basic
+    container concept.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default "".
+
+    Parameters
+    ----------
+    name : str
+        The name of the container.
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the container.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
     """
 
     css_class = ""
@@ -592,7 +620,32 @@ class Container(Div):
 
 class ContainerHolder(Div):
     """
-    Base class used for `TabHolder` and `Accordion`, groups containers
+    Base class used for `TabHolder` and `Accordion`, groups containers.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
+
+    Parameters
+    ----------
+    *fields : str, LayoutObject
+        Any number of fields or layout objects as positional arguments to be
+        rendered within the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
     """
 
     def first_container_with_errors(self, errors):
@@ -626,7 +679,39 @@ class ContainerHolder(Div):
 class Tab(Container):
     """
     Tab object. It wraps fields in a div whose default class is "tab-pane" and
-    takes a name as first argument. Example::
+    takes a name as first argument.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default "".
+
+    Parameters
+    ----------
+    name : str
+        The name of the container.
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the container.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
 
         Tab('tab_name', 'form_field_1', 'form_field_2', 'form_field_3')
     """
@@ -645,7 +730,36 @@ class Tab(Container):
 
 class TabHolder(ContainerHolder):
     """
-    TabHolder object. It wraps Tab objects in a container. Requires bootstrap-tab.js::
+    TabHolder object. It wraps Tab objects in a container.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
+
+    Parameters
+    ----------
+    *fields : str, LayoutObject
+        Any number of fields or layout objects as positional arguments to be
+        rendered within the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+    Example::
 
         TabHolder(
             Tab('form_field_1', 'form_field_2'),
@@ -672,7 +786,41 @@ class TabHolder(ContainerHolder):
 class AccordionGroup(Container):
     """
     Accordion Group (pane) object. It wraps given fields inside an accordion
-    tab. It takes accordion tab name as first argument::
+    tab. It takes accordion tab name as first argument.
+
+    Tab object. It wraps fields in a div whose default class is "tab-pane" and
+    takes a name as first argument.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default "".
+
+    Parameters
+    ----------
+    name : str
+        The name of the container.
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the container.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+    Example::
 
         AccordionGroup("group name", "form_field_1", "form_field_2")
     """
@@ -683,7 +831,37 @@ class AccordionGroup(Container):
 
 class Accordion(ContainerHolder):
     """
-    Accordion menu object. It wraps `AccordionGroup` objects in a container::
+    Accordion menu object. It wraps `AccordionGroup` objects in a container
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
+
+    Parameters
+    ----------
+    *accordion_groups : str, LayoutObject
+        Any number of layout objects as positional arguments to be rendered
+        within the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
 
         Accordion(
             AccordionGroup("group name", "form_field_1", "form_field_2"),
