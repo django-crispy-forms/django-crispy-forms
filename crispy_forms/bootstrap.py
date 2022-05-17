@@ -437,8 +437,8 @@ class FieldWithButtons(Div):
         key="value", pairs. These attributes are added to the wrapping
         ``<div>``.
 
-    Example
-    -------
+    Examples
+    --------
 
     Example::
 
@@ -933,8 +933,8 @@ class Alert(Div):
         key="value", pairs. These attributes are then available in the template
         context.
 
-    Example
-    -------
+    Examples
+    --------
 
     Example::
 

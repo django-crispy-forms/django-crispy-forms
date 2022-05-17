@@ -137,7 +137,9 @@ def optgroups(field):
 
         label: Group label for grouped optgroups (`None` if inputs are not
                grouped).
+
         option: A dict containing information to render the option::
+
             {
                 "name": "checkbox_select_multiple",
                 "value": 1,
@@ -149,7 +151,9 @@ def optgroups(field):
                 "template_name": "django/forms/widgets/checkbox_option.html",
                 "wrap_label": True,
             }
-        index: Group index`
+
+        index: Group index
+
     """
     id_ = field.field.widget.attrs.get("id") or field.auto_id
     attrs = {"id": id_} if id_ else {}

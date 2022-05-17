@@ -320,6 +320,7 @@ These ones live under module ``crispy_forms.bootstrap``.
     :align: center
 
 .. _`input_size`:
+
 Input group size
 ----------------
 
