@@ -65,8 +65,18 @@ Extra context
 
 Rendering any kind of formset with crispy injects some extra context in the layout rendering so that you can do things like::
 
-    HTML("{% if forloop.first %}Message displayed only in the first form of a formset forms list{% endif %}",
-    Fieldset("Item {{ forloop.counter }}", 'field-1', [...])
+    class ExampleFormSetHelper(FormHelper): 
+        def __init__(self, *args, **kwargs): 
+            super(FormHelper, self).__init__(*args, **kwargs)
+            self.form_method = 'post'
+            self.layout = Layout(
+                HTML('{% if forloop.first %} Only display text on the first iteration... {% endif %}'),
+                Fieldset('Item: {{forloop.counter}}', 'field'),
+                'favorite_color', 
+                'favorite_food',
+            )
+            self.render_requried_fields = False
+            self.add_input(Submit('submit', 'Save'))
 
 Basically you can access a ``forloop`` Django node, as if you were rendering your formsets forms using a for loop.
 
