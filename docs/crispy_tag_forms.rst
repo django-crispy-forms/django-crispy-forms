@@ -282,8 +282,8 @@ In our client side using jQuery would look like::
 
 .. _`django-jsonview`: https://github.com/jsocol/django-jsonview
 
-Bootstrap3 horizontal forms
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Bootstrap horizontal forms
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/bootstrap3_horizontal_form.jpg
    :align: center
@@ -302,8 +302,8 @@ The way you do horizontal forms in Bootstrap version 3 is setting some ``col-lg-
 
 Of course you can set your widths as you like, it doesn't have to be exactly like this.
 
-Bootstrap3 inline forms
-~~~~~~~~~~~~~~~~~~~~~~~
+Bootstrap inline forms
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/bootstrap3_inline_form.jpg
    :align: center
