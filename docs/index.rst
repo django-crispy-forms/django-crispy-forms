@@ -47,6 +47,7 @@ If you are looking for information on a specific function, class or method, this
     api_helpers
     api_layout
     api_templatetags
+    api_bootstrap
 
 Developer Guide
 ~~~~~~~~~~~~~~~

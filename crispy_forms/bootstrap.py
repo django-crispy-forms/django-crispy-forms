@@ -9,25 +9,83 @@ from .utils import TEMPLATE_PACK, flatatt, render_field
 
 
 class PrependedAppendedText(Field):
+    """
+    Layout object for rendering a field with prepended and appended text.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    attrs : dict
+        Attributes to be applied to the field. These are converted into html
+        attributes. e.g. ``data_id: 'test'`` in the attrs dict will become
+        ``data-id='test'`` on the field's ``<input>``.
+
+    Parameters
+    ----------
+    field : str
+        The name of the field to be rendered.
+    prepended_text : str, optional
+        The prepended text, can be HTML like, by default None
+    appended_text : str, optional
+        The appended text, can be HTML like, by default None
+    input_size : str, optional
+        For Bootstrap4+ additional classes to customise the input-group size
+        e.g. ``input-group-sm``. By default None
+    active : bool
+        For Bootstrap3, a boolean to render the text active. By default
+        ``False``.
+    css_class : str, optional
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default ``None``.
+    wrapper_class: str, optional
+        CSS classes to be used when rendering the Field. This class is usually
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+    **kwargs : dict, optional
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
+
+         PrependedAppendedText('amount', '$', '.00')
+    """
+
     template = "%s/layout/prepended_appended_text.html"
 
-    def __init__(self, field, prepended_text=None, appended_text=None, input_size=None, *args, **kwargs):
+    def __init__(
+        self,
+        field,
+        prepended_text=None,
+        appended_text=None,
+        input_size=None,
+        *,
+        active=False,
+        css_class=None,
+        wrapper_class=None,
+        template=None,
+        **kwargs,
+    ):
         self.field = field
         self.appended_text = appended_text
         self.prepended_text = prepended_text
-        if "active" in kwargs:
-            self.active = kwargs.pop("active")
+        self.active = active
 
         self.input_size = input_size
-        css_class = kwargs.get("css_class", "")
 
-        # Bootstrap 3
-        if "input-lg" in css_class:
-            self.input_size = "input-lg"
-        if "input-sm" in css_class:
-            self.input_size = "input-sm"
+        if css_class:  # Bootstrap 3
+            if "input-lg" in css_class:
+                self.input_size = "input-lg"
+            if "input-sm" in css_class:
+                self.input_size = "input-sm"
 
-        super().__init__(field, *args, **kwargs)
+        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -54,19 +112,147 @@ class PrependedAppendedText(Field):
 
 
 class AppendedText(PrependedAppendedText):
-    def __init__(self, field, text, *args, **kwargs):
-        kwargs.pop("appended_text", None)
-        kwargs.pop("prepended_text", None)
+    """
+    Layout object for rendering a field with appended text.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    attrs : dict
+        Attributes to be applied to the field. These are converted into html
+        attributes. e.g. ``data_id: 'test'`` in the attrs dict will become
+        ``data-id='test'`` on the field's ``<input>``.
+
+    Parameters
+    ----------
+    field : str
+        The name of the field to be rendered.
+    text : str, optional
+        The appended text, can be HTML like, by default None
+    input_size : str, optional
+        For Bootstrap4+ additional classes to customise the input-group size
+        e.g. ``input-group-sm``. By default None
+    active : bool
+        For Bootstrap3, a boolean to render the text active. By default
+        ``False``.
+    css_class : str, optional
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default ``None``.
+    wrapper_class: str, optional
+        CSS classes to be used when rendering the Field. This class is usually
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+    **kwargs : dict, optional
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
+
+         AppendedText('amount', '.00')
+    """
+
+    def __init__(
+        self,
+        field,
+        text,
+        *,
+        input_size=None,
+        active=False,
+        css_class=None,
+        wrapper_class=None,
+        template=None,
+        **kwargs,
+    ):
         self.text = text
-        super().__init__(field, appended_text=text, **kwargs)
+        super().__init__(
+            field,
+            appended_text=text,
+            input_size=input_size,
+            active=active,
+            css_class=css_class,
+            wrapper_class=wrapper_class,
+            template=template,
+            **kwargs,
+        )
 
 
 class PrependedText(PrependedAppendedText):
-    def __init__(self, field, text, *args, **kwargs):
-        kwargs.pop("appended_text", None)
-        kwargs.pop("prepended_text", None)
+    """
+    Layout object for rendering a field with prepended text.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    attrs : dict
+        Attributes to be applied to the field. These are converted into html
+        attributes. e.g. ``data_id: 'test'`` in the attrs dict will become
+        ``data-id='test'`` on the field's ``<input>``.
+
+    Parameters
+    ----------
+    field : str
+        The name of the field to be rendered.
+    text : str, optional
+        The prepended text, can be HTML like, by default None
+    input_size : str, optional
+        For Bootstrap4+ additional classes to customise the input-group size
+        e.g. ``input-group-sm``. By default None
+    active : bool
+        For Bootstrap3, a boolean to render the text active. By default
+        ``False``.
+    css_class : str, optional
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default ``None``.
+    wrapper_class: str, optional
+        CSS classes to be used when rendering the Field. This class is usually
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+    **kwargs : dict, optional
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
+
+         PrependedText('amount', '$')
+    """
+
+    def __init__(
+        self,
+        field,
+        text,
+        *,
+        input_size=None,
+        active=False,
+        css_class=None,
+        wrapper_class=None,
+        template=None,
+        **kwargs,
+    ):
         self.text = text
-        super().__init__(field, prepended_text=text, **kwargs)
+        super().__init__(
+            field,
+            prepended_text=text,
+            input_size=input_size,
+            active=active,
+            css_class=css_class,
+            wrapper_class=wrapper_class,
+            template=template,
+            **kwargs,
+        )
 
 
 class FormActions(LayoutObject):
@@ -220,16 +406,39 @@ class FieldWithButtons(Div):
     """
     A layout object for rendering a single field with any number of buttons.
 
-    Args:
-        fields : str or LayoutObject
-            The first positional argument is the field. This can be either the
-            name of the field as a string or an instance of `Field`. Following
-            arguments will be rendered as buttons.
-        input_size : str
-            Additional CSS class to change the size of the input. e.g.
-            "input-group-sm".
-        kwargs
-            Additional kwargs to be passed to the parent `Div` Layout Object.
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the wrapping ``<div>``. By default None.
+
+    Parameters
+    ----------
+
+    *fields : str or LayoutObject
+        The first positional argument is the field. This can be either the
+        name of the field as a string or an instance of `Field`. Following
+        arguments will be rendered as buttons.
+    input_size : str
+        Additional CSS class to change the size of the input. e.g.
+        "input-group-sm".
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the wrapping
+        ``<div>`` if provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the wrapping
+        ``<div>``.
+
+    Examples
+    --------
 
     Example::
 
@@ -243,9 +452,9 @@ class FieldWithButtons(Div):
     template = "%s/layout/field_with_buttons.html"
     field_template = "%s/field.html"
 
-    def __init__(self, *fields, input_size=None, **kwargs):
+    def __init__(self, *fields, input_size=None, css_id=None, css_class=None, template=None, **kwargs):
         self.input_size = input_size
-        super().__init__(*fields, **kwargs)
+        super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
@@ -353,7 +562,35 @@ class StrictButton(TemplateNameMixin):
 
 class Container(Div):
     """
-    Base class used for `Tab` and `AccordionGroup`, represents a basic container concept
+    Base class used for `Tab` and `AccordionGroup`, represents a basic
+    container concept.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default "".
+
+    Parameters
+    ----------
+    name : str
+        The name of the container.
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the container.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
     """
 
     css_class = ""
@@ -383,7 +620,32 @@ class Container(Div):
 
 class ContainerHolder(Div):
     """
-    Base class used for `TabHolder` and `Accordion`, groups containers
+    Base class used for `TabHolder` and `Accordion`, groups containers.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
+
+    Parameters
+    ----------
+    *fields : str, LayoutObject
+        Any number of fields or layout objects as positional arguments to be
+        rendered within the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
     """
 
     def first_container_with_errors(self, errors):
@@ -417,7 +679,39 @@ class ContainerHolder(Div):
 class Tab(Container):
     """
     Tab object. It wraps fields in a div whose default class is "tab-pane" and
-    takes a name as first argument. Example::
+    takes a name as first argument.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default "".
+
+    Parameters
+    ----------
+    name : str
+        The name of the container.
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the container.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
 
         Tab('tab_name', 'form_field_1', 'form_field_2', 'form_field_3')
     """
@@ -436,7 +730,36 @@ class Tab(Container):
 
 class TabHolder(ContainerHolder):
     """
-    TabHolder object. It wraps Tab objects in a container. Requires bootstrap-tab.js::
+    TabHolder object. It wraps Tab objects in a container.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
+
+    Parameters
+    ----------
+    *fields : str, LayoutObject
+        Any number of fields or layout objects as positional arguments to be
+        rendered within the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+    Example::
 
         TabHolder(
             Tab('form_field_1', 'form_field_2'),
@@ -463,7 +786,41 @@ class TabHolder(ContainerHolder):
 class AccordionGroup(Container):
     """
     Accordion Group (pane) object. It wraps given fields inside an accordion
-    tab. It takes accordion tab name as first argument::
+    tab. It takes accordion tab name as first argument.
+
+    Tab object. It wraps fields in a div whose default class is "tab-pane" and
+    takes a name as first argument.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default "".
+
+    Parameters
+    ----------
+    name : str
+        The name of the container.
+    *fields : str, LayoutObject
+        Any number of fields as positional arguments to be rendered within
+        the container.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+    Example::
 
         AccordionGroup("group name", "form_field_1", "form_field_2")
     """
@@ -474,7 +831,37 @@ class AccordionGroup(Container):
 
 class Accordion(ContainerHolder):
     """
-    Accordion menu object. It wraps `AccordionGroup` objects in a container::
+    Accordion menu object. It wraps `AccordionGroup` objects in a container
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str, optional
+        CSS classes to be applied to the ``<div>``. By default None.
+
+    Parameters
+    ----------
+    *accordion_groups : str, LayoutObject
+        Any number of layout objects as positional arguments to be rendered
+        within the ``<div>``.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the ``<div>`` if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the ``<div>``.
+
+    Examples
+    --------
+
+    Example::
 
         Accordion(
             AccordionGroup("group name", "form_field_1", "form_field_2"),
@@ -513,20 +900,56 @@ class Accordion(ContainerHolder):
 
 class Alert(Div):
     """
-    `Alert` generates markup in the form of an alert dialog
+    Generates markup in the form of an alert dialog.
+
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
+    css_class : str
+        The CSS classes to be applied to the alert. By defult "alert".
+
+    Parameters
+    ----------
+    content : str
+        The content of the alert.
+    dismiss : bool
+        If true the alert contains a button to dismiss the alert. By default
+        True.
+    block : str, optional
+        Additional CSS classes to be applied to the ``<button>``. By default
+        None.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the alert if
+        provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied in addition to those declared by
+        the class itself. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are then available in the template
+        context.
+
+    Examples
+    --------
+
+    Example::
 
         Alert(content='<strong>Warning!</strong> Best check yo self, you're not looking too good.')
+
     """
 
     template = "%s/layout/alert.html"
     css_class = "alert"
 
-    def __init__(self, content, dismiss=True, block=False, **kwargs):
+    def __init__(self, content, dismiss=True, block=False, css_id=None, css_class=None, template=None, **kwargs):
         fields = []
         if block:
             self.css_class += " alert-block"
-        Div.__init__(self, *fields, **kwargs)
-        self.template = kwargs.pop("template", self.template)
+        super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
         self.content = content
         self.dismiss = dismiss
 
@@ -629,20 +1052,39 @@ class InlineField(Field):
 
 class Modal(LayoutObject):
     """
-    Boostrap layout object for rendering crispy forms objects inside a bootstrap modal.
+    Boostrap layout object for rendering crispy forms objects inside a
+    bootstrap modal.
 
-    The following attributes can be set:
-        - `css_id`: modal's DOM id
-        - `css_class`: modal's DOM classes
-            - NOTE: "modal" and "fade" are applied by default on the template
-        - `title`: text to display in the modal's header
-            - NOTE: text will be wrapped in a <h5> tag
-        - `title_id`: title's DOM id
-        - `title_class`: titles's DOM classes
-            - NOTE: "modal-title" is applied by default on the template
-        - template
-            The default template which this Layout Object will be rendered
-            with
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+
+    Parameters
+    ----------
+    *fields : str
+        The fields to be rendered within the modal.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+    css_id: str, optional
+        The modal's DOM id. By default ``modal_id``.
+    title: str, optional
+        Text to display in the modal's header which will be wrapped in an
+        ``<H5>`` tag. By default ``Modal Title``.
+    title_id: str, optional
+        The title's DOM id. By default ``modal_title_id``.
+    css_class : str, optional
+        CSS classes to be applied to the field. These are added to any classes
+        included in the ``attrs`` dict. By default None.
+    title_class: str, optional
+        Additional CSS classes to be applied to the title. By default None.
+    **kwargs : dict, optional
+        Additional attributes are converted into key="value", pairs. These
+        attributes are added to the ``<div>``.
+
+    Examples
+    --------
 
     Example::
 
@@ -664,18 +1106,18 @@ class Modal(LayoutObject):
         css_id="modal_id",
         title="Modal Title",
         title_id="modal_title_id",
-        css_class="",
-        title_class="",
+        css_class=None,
+        title_class=None,
         **kwargs,
     ):
 
         self.fields = list(fields)
         self.template = template or self.template
         self.css_id = css_id
-        self.css_class = css_class
+        self.css_class = css_class or ""
         self.title = title
         self.title_id = title_id
-        self.title_class = title_class
+        self.title_class = title_class or ""
 
         kwargs = {**kwargs, "tabindex": "-1", "role": "dialog", "aria-labelledby": "%s-label" % self.title_id}
 

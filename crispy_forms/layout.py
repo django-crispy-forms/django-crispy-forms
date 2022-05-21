@@ -572,20 +572,68 @@ class Fieldset(LayoutObject):
 
 
 class MultiField(LayoutObject):
-    """MultiField container. Renders to a MultiField <div>"""
+    """
+    MultiField container for Bootstrap3. Renders to a MultiField <div>.
+
+    Attributes
+    ----------
+    template: str
+        The default template which this Layout Object will be rendered
+        with.
+    field_template: str
+        The template which fields will be rendered with.
+
+    Parameters
+    ----------
+    label: str
+        The label for the multifield.
+    *fields: str
+        The fields to be rendered within the multifield.
+    label_class: str, optional
+        CSS classes to be added to the multifield label. By default None.
+    help_text: str, optional
+        Help text will be available in the context of the multifield template.
+        This is unused in the bootstrap3 template provided. By default None.
+    css_class : str, optional
+        Additional CSS classes to be applied to the ``<input>``. By default
+        None.
+    css_id : str, optional
+        A DOM id for the layout object which will be added to the wrapping
+        ``<div>`` if provided. By default None.
+    template : str, optional
+        Overrides the default template, if provided. By default None.
+    field_template : str, optional
+        Overrides the default template, if provided. By default None.
+    **kwargs : dict, optional
+        Additional attributes are passed to ``flatatt`` and converted into
+        key="value", pairs. These attributes are added to the wrapping
+        ``<div>``.
+
+    """
 
     template = "%s/layout/multifield.html"
     field_template = "%s/multifield.html"
 
-    def __init__(self, label, *fields, **kwargs):
+    def __init__(
+        self,
+        label,
+        *fields,
+        label_class=None,
+        help_text=None,
+        css_class=None,
+        css_id=None,
+        template=None,
+        field_template=None,
+        **kwargs,
+    ):
         self.fields = list(fields)
         self.label_html = label
-        self.label_class = kwargs.pop("label_class", "blockLabel")
-        self.css_class = kwargs.pop("css_class", "ctrlHolder")
-        self.css_id = kwargs.pop("css_id", None)
-        self.help_text = kwargs.pop("help_text", None)
-        self.template = kwargs.pop("template", self.template)
-        self.field_template = kwargs.pop("field_template", self.field_template)
+        self.label_class = label_class or "blockLabel"
+        self.css_class = css_class or "ctrlHolder"
+        self.css_id = css_id
+        self.help_text = help_text
+        self.template = template or self.template
+        self.field_template = field_template or self.field_template
         self.flat_attrs = flatatt(kwargs)
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
@@ -892,8 +940,32 @@ class Field(LayoutObject):
 
 class MultiWidgetField(Field):
     """
-    Layout object. For fields with :class:`~django.forms.MultiWidget` as `widget`, you can pass
-    additional attributes to each widget.
+    Layout object. For fields with :class:`~django.forms.MultiWidget` as
+    ``widget``, you can pass additional attributes to each widget.
+
+    Attributes
+    ----------
+    template : str
+        The default template which this Layout Object will be rendered
+        with.
+
+    Parameters
+    ----------
+    *fields : str
+        Usually a single field, but can be any number of fields, to be rendered
+        with the same attributes applied.
+    attrs : str, optional
+        Additional attrs to be added to each widget. These are added to any
+        classes included in the ``attrs`` dict. By default ``None``.
+    wrapper_class: str, optional
+        CSS classes to be used when rendering the Field. This class is usually
+        applied to the ``<div>`` which wraps the Field's ``<label>`` and
+        ``<input>`` tags. By default ``None``.
+    template : str, optional
+        Overrides the default template, if provided. By default ``None``.
+
+    Examples
+    --------
 
     Example::
 
@@ -904,12 +976,10 @@ class MultiWidgetField(Field):
                 {'class': 'second_widget_class'}
             ),
         )
-
-    .. note:: To override widget's css class use ``class`` not ``css_class``.
     """
 
-    def __init__(self, *args, **kwargs):
-        self.fields = list(args)
-        self.attrs = kwargs.pop("attrs", {})
-        self.template = kwargs.pop("template", self.template)
-        self.wrapper_class = kwargs.pop("wrapper_class", None)
+    def __init__(self, *fields, attrs=None, template=None, wrapper_class=None):
+        self.fields = list(fields)
+        self.attrs = attrs or {}
+        self.template = template or self.template
+        self.wrapper_class = wrapper_class
