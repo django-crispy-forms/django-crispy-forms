@@ -6,6 +6,7 @@ from django.middleware.csrf import _get_new_csrf_string
 from django.shortcuts import render
 from django.template import Context, Template
 from django.test.html import parse_html
+from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -29,6 +30,7 @@ from .forms import (
     SampleForm6,
     SelectSampleForm,
 )
+from .test_settings import TEMPLATE_DIRS
 from .utils import contains_partial, parse_expected, parse_form
 
 
@@ -528,6 +530,20 @@ def test_second_layout_multifield_column_buttonholder_submit_div(settings):
     )
 
 
+@override_settings(
+    TEMPLATES=[
+        {
+            "BACKEND": "django.template.backends.django.DjangoTemplates",
+            "DIRS": TEMPLATE_DIRS,
+            "OPTIONS": {
+                "loaders": [
+                    "django.template.loaders.filesystem.Loader",
+                    "django.template.loaders.app_directories.Loader",
+                ],
+            },
+        }
+    ]
+)
 def test_keepcontext_context_manager(settings):
     # Test case for issue #180
     # Apparently it only manifest when using render_to_response this exact way
