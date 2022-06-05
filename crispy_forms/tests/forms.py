@@ -229,3 +229,7 @@ class SampleFormCustomWidgets(forms.Form):
         initial=(1,),
         widget=CustomCheckboxSelectMultiple,
     )
+
+
+class NumberForm(forms.Form):
+    number = forms.IntegerField()

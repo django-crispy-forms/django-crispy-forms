@@ -22,6 +22,7 @@ from .forms import (
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
     FileForm,
+    NumberForm,
     SampleForm,
     SampleForm2,
     SampleForm3,
@@ -833,3 +834,10 @@ def test_fundamentals():
     context = {"csrf_token": "NotARealToken"}
     html = render_crispy_form(form, context=context)
     assert parse_html(html) == parse_expected("bootstrap4/test_layout/test_fundamentals_example.html")
+
+
+def test_number_input(settings):
+    form = NumberForm()
+    html = render_crispy_form(form)
+    template_pack = settings.CRISPY_TEMPLATE_PACK
+    assert parse_html(html) == parse_expected(f"{template_pack}/test_layout/test_number_input.html")
