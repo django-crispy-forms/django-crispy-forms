@@ -817,3 +817,15 @@ def test_fundamentals():
     context = {"csrf_token": "NotARealToken"}
     html = render_crispy_form(form, context=context)
     assert parse_html(html) == parse_expected("bootstrap4/test_layout/test_fundamentals_example.html")
+
+
+@only_bootstrap4
+def test_table_inline_formset_checkbox(settings):
+    class TestForm(forms.Form):
+        box_one = forms.CharField(label="box one", widget=forms.CheckboxInput())
+        box_two = forms.CharField(label="box two", widget=forms.CheckboxInput())
+
+    formset = formset_factory(TestForm)
+    formset.helper = FormHelper()
+    formset.helper.template = "bootstrap4/table_inline_formset.html"
+    assert parse_form(formset) == parse_expected("bootstrap4/test_layout/test_inline_formset_checkbox.html")
