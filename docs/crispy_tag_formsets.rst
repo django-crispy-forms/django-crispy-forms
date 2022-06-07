@@ -75,7 +75,6 @@ Rendering any kind of formset with crispy injects some extra context in the layo
                 'favorite_color', 
                 'favorite_food',
             )
-            self.render_requried_fields = False
             self.add_input(Submit('submit', 'Save'))
 
 Basically you can access a ``forloop`` Django node, as if you were rendering your formsets forms using a for loop.
