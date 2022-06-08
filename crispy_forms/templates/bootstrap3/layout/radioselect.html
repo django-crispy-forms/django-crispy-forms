@@ -4,13 +4,18 @@
 <div class="controls {{ field_class }}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
     {% include 'bootstrap3/layout/field_errors_block.html' %}
 
-    {% for choice in field.field.choices %}
+    {% for group, options, index in field|optgroups %}
+    {% if group %}<strong>{{ group }}</strong>{% endif %}
+    {% for option in options %}
+
       {% if not inline_class %}<div class="radio">{% endif %}
-        <label for="id_{{ field.html_name }}_{{ forloop.counter0 }}" class="{% if inline_class %}radio-{{ inline_class }}{% endif %}">
-            <input type="radio"{% if choice.0|stringformat:"s" == field.value|default_if_none:""|stringformat:"s" %} checked{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter0 }}" value="{{ choice.0|unlocalize }}" {% if field.field.disabled %}disabled="true"{% endif %} {{ field.field.widget.attrs|flatatt }}>{{ choice.1|unlocalize }}
+        <label for="{{ option.attrs.id }}" class="{% if inline_class %}radio-{{ inline_class }}{% endif %}">
+            <input type="radio" name="{{ field.html_name }}" value="{{ option.value|unlocalize }}" {% include "bootstrap3/layout/attrs.html" with widget=option %}>
+            {{ option.label|unlocalize }}
         </label>
       {% if not inline_class %}</div>{% endif %}
     {% endfor %}
+    {% endfor %} 
 
     {% include 'bootstrap3/layout/help_text.html' %}
 </div>
