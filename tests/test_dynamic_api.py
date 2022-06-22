@@ -9,7 +9,7 @@ from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, MultiField, 
 from .forms import SampleForm
 
 
-def test_wrap_all_fields():
+def test_wrap_all_fields() -> None:
     helper = FormHelper()
     layout = Layout("email", "password1", "password2")
     helper.layout = layout
@@ -24,7 +24,7 @@ def test_wrap_all_fields():
     assert layout[2][0] == "password2"
 
 
-def test_wrap_selected_fields():
+def test_wrap_selected_fields() -> None:
     helper = FormHelper()
     layout = Layout("email", "password1", "password2")
     helper.layout = layout
@@ -40,7 +40,7 @@ def test_wrap_selected_fields():
     assert layout[0][0] == "email"
 
 
-def test_wrap_together_with_slices():
+def test_wrap_together_with_slices() -> None:
     helper = FormHelper()
     layout = Layout("email", "password1", "password2")
     helper.layout = layout
@@ -79,7 +79,7 @@ def test_wrap_together_with_slices():
     assert layout.fields[2] == "password2"
 
 
-def test_wrap_together_partial_slices():
+def test_wrap_together_partial_slices() -> None:
     helper = FormHelper()
     layout = Layout("email", "password1", "password2")
     helper.layout = layout
@@ -101,14 +101,14 @@ def test_wrap_together_partial_slices():
     assert layout.fields[1][1] == "password2"
 
 
-def test_update_attributes():
+def test_update_attributes() -> None:
     helper = FormHelper()
     helper.layout = Layout("email", Field("password1"), "password2")
     helper["password1"].update_attributes(readonly=True)
     assert "readonly" in helper.layout[1].attrs
 
 
-def test_update_attributes_and_wrap_once():
+def test_update_attributes_and_wrap_once() -> None:
     helper = FormHelper()
     layout = Layout("email", Field("password1"), "password2")
     helper.layout = layout
@@ -145,7 +145,7 @@ def test_update_attributes_and_wrap_once():
     assert layout[2].attrs == {"readonly": True}
 
 
-def test_get_layout_objects():
+def test_get_layout_objects() -> None:
     layout_1 = Layout(Div())
     assert layout_1.get_layout_objects(Div) == [Pointer([0], "div")]
 
@@ -190,7 +190,7 @@ def test_get_layout_objects():
     ]
 
 
-def test_filter_and_wrap():
+def test_filter_and_wrap() -> None:
     helper = FormHelper()
     layout = Layout(
         "email",
@@ -212,7 +212,7 @@ def test_filter_and_wrap():
     assert layout[1][0][0] == "password1"
 
 
-def test_filter_and_wrap_side_effects():
+def test_filter_and_wrap_side_effects() -> None:
     helper = FormHelper()
     layout = Layout(
         Div(
@@ -225,7 +225,7 @@ def test_filter_and_wrap_side_effects():
         helper.filter(Div, max_level=2).wrap(Div, css_class="test-class")
 
 
-def test_get_field_names():
+def test_get_field_names() -> None:
     layout_1 = Div("field_name")
     assert layout_1.get_field_names() == [Pointer([0], "field_name")]
 
@@ -264,7 +264,7 @@ def test_get_field_names():
     ]
 
 
-def test_layout_get_field_names():
+def test_layout_get_field_names() -> None:
     layout_1 = Layout(Div("field_name"), "password")
     assert layout_1.get_field_names() == [
         Pointer([0, 0], "field_name"),
@@ -286,7 +286,7 @@ def test_layout_get_field_names():
     ]
 
 
-def test_filter_by_widget(advanced_layout):
+def test_filter_by_widget(advanced_layout: Layout) -> None:
     form = SampleForm()
     form.helper.layout = advanced_layout
     assert form.helper.filter_by_widget(forms.PasswordInput).slice == [
@@ -295,7 +295,7 @@ def test_filter_by_widget(advanced_layout):
     ]
 
 
-def test_exclude_by_widget(advanced_layout):
+def test_exclude_by_widget(advanced_layout: Layout) -> None:
     form = SampleForm()
     form.helper.layout = advanced_layout
     assert form.helper.exclude_by_widget(forms.PasswordInput).slice == [
@@ -305,7 +305,7 @@ def test_exclude_by_widget(advanced_layout):
     ]
 
 
-def test_exclude_by_widget_and_wrap(advanced_layout):
+def test_exclude_by_widget_and_wrap(advanced_layout: Layout) -> None:
     form = SampleForm()
     form.helper.layout = advanced_layout
     form.helper.exclude_by_widget(forms.PasswordInput).wrap(Field, css_class="hero")
@@ -319,14 +319,14 @@ def test_exclude_by_widget_and_wrap(advanced_layout):
     assert isinstance(form.helper.layout[0][4][0], str)
 
 
-def test_all_without_layout():
+def test_all_without_layout() -> None:
     form = SampleForm()
     form.helper = FormHelper()  # reset helper to remove default layout
     with pytest.raises(FormHelpersException):
         form.helper.all().wrap(Div)
 
 
-def test_filter_by_widget_without_form(advanced_layout):
+def test_filter_by_widget_without_form(advanced_layout: Layout) -> None:
     form = SampleForm()
     form.helper = FormHelper()  # reset helper to remove default layout
     form.helper.layout = advanced_layout
@@ -334,7 +334,7 @@ def test_filter_by_widget_without_form(advanced_layout):
         form.helper.filter_by_widget(forms.PasswordInput)
 
 
-def test_formhelper__getitem__():
+def test_formhelper__getitem__() -> None:
     helper = FormHelper()
     layout = Layout(
         Div("email"),
@@ -353,7 +353,7 @@ def test_formhelper__getitem__():
     assert helper.layout[0].text == "extra"
 
 
-def test_formhelper__setitem__():
+def test_formhelper__setitem__() -> None:
     helper = FormHelper()
     layout = Layout("first_field", Div("email"))
     helper.layout = layout
@@ -361,7 +361,7 @@ def test_formhelper__setitem__():
     assert layout[0] == "replaced"
 
 
-def test_formhelper__delitem__and__len__():
+def test_formhelper__delitem__and__len__() -> None:
     helper = FormHelper()
     layout = Layout("first_field", Div("email"))
     helper.layout = layout
@@ -369,13 +369,13 @@ def test_formhelper__delitem__and__len__():
     assert len(helper) == 1
 
 
-def test__delitem__and__len__layout_object():
+def test__delitem__and__len__layout_object() -> None:
     layout = Layout("first_field", Div("email"))
     del layout[0]
     assert len(layout) == 1
 
 
-def test__getitem__layout_object():
+def test__getitem__layout_object() -> None:
     layout = Layout(Div(Div(Div("email")), Div("password1"), "password2"))
     assert isinstance(layout[0], Div)
     assert isinstance(layout[0][0], Div)
@@ -385,7 +385,7 @@ def test__getitem__layout_object():
     assert isinstance(layout[0][2], str)
 
 
-def test__getattr__append_layout_object():
+def test__getattr__append_layout_object() -> None:
     layout = Layout(Div("email"))
     layout.append("password1")
     assert isinstance(layout[0], Div)
@@ -393,14 +393,14 @@ def test__getattr__append_layout_object():
     assert isinstance(layout[1], str)
 
 
-def test__setitem__layout_object():
+def test__setitem__layout_object() -> None:
     layout = Layout(Div("email"))
     layout[0][0] = "password1"
     assert isinstance(layout[0], Div)
     assert layout[0][0] == "password1"
 
 
-def test_filter():
+def test_filter() -> None:
     helper = FormHelper()
     helper.layout = Layout(
         Div(

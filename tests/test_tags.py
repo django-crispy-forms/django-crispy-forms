@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
 from django.forms.boundfield import BoundField
 from django.forms.formsets import formset_factory
@@ -8,8 +12,11 @@ from crispy_forms.templatetags.crispy_forms_field import crispy_addon
 
 from .forms import SampleForm
 
+if TYPE_CHECKING:
+    from pytest_django.fixtures import SettingsWrapper
 
-def test_crispy_field():
+
+def test_crispy_field() -> None:
     template = Template(
         """
         {% load crispy_forms_field %}
@@ -22,7 +29,7 @@ def test_crispy_field():
     assert html.count("<input") == 8
 
 
-def test_as_crispy_errors_form_without_non_field_errors():
+def test_as_crispy_errors_form_without_non_field_errors() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -37,7 +44,7 @@ def test_as_crispy_errors_form_without_non_field_errors():
     assert not ("errorMsg" in html or "alert" in html)
 
 
-def test_as_crispy_errors_form_with_non_field_errors():
+def test_as_crispy_errors_form_with_non_field_errors() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -54,7 +61,7 @@ def test_as_crispy_errors_form_with_non_field_errors():
     assert "<h3>" not in html
 
 
-def test_as_crispy_errors_formset_without_non_form_errors():
+def test_as_crispy_errors_formset_without_non_form_errors() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -71,7 +78,7 @@ def test_as_crispy_errors_formset_without_non_form_errors():
     assert not ("errorMsg" in html or "alert" in html)
 
 
-def test_as_crispy_errors_formset_with_non_form_errors():
+def test_as_crispy_errors_formset_with_non_form_errors() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -98,7 +105,7 @@ def test_as_crispy_errors_formset_with_non_form_errors():
     assert "<h3>" not in html
 
 
-def test_as_crispy_field_non_field(settings):
+def test_as_crispy_field_non_field(settings: SettingsWrapper) -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -116,7 +123,7 @@ def test_as_crispy_field_non_field(settings):
         template.render(c)
 
 
-def test_as_crispy_field_bound_field():
+def test_as_crispy_field_bound_field() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -135,7 +142,7 @@ def test_as_crispy_field_bound_field():
     assert "id_password2" not in html
 
 
-def test_crispy_filter_with_form():
+def test_crispy_filter_with_form() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -150,7 +157,7 @@ def test_crispy_filter_with_form():
     assert html.count("<label") == 7
 
 
-def test_crispy_filter_with_formset():
+def test_crispy_filter_with_formset() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -171,7 +178,7 @@ def test_crispy_filter_with_formset():
     assert "form-MAX_NUM_FORMS" in html
 
 
-def test_classes_filter():
+def test_classes_filter() -> None:
     template = Template(
         """
         {% load crispy_forms_field %}
@@ -186,7 +193,7 @@ def test_classes_filter():
     assert "email-fields" in html
 
 
-def test_crispy_field_and_class_converters():
+def test_crispy_field_and_class_converters() -> None:
     template = Template(
         """
         {% load crispy_forms_field %}
@@ -203,13 +210,17 @@ def test_crispy_field_and_class_converters():
     assert "inputtext" in html
 
 
-def test_crispy_addon():
+def test_crispy_addon() -> None:
     test_form = SampleForm()
     field_instance = test_form.fields["email"]
     bound_field = BoundField(test_form, field_instance, "email")
 
-    assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Primary")
-    assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Secondary")
+    html = crispy_addon(bound_field, prepend="Work", append="Primary")
+    assert html is not None
+    assert "input-group-addon" in html
+    html = crispy_addon(bound_field, prepend="Work", append="Secondary")
+    assert html is not None
+    assert "input-group-addon" in html
 
     # errors
     with pytest.raises(TypeError):

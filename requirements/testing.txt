@@ -4,3 +4,5 @@ pytest-cov
 pytest-django
 git+https://github.com/django-crispy-forms/crispy-bootstrap4
 git+https://github.com/django-crispy-forms/crispy-bootstrap3
+mypy
+git+https://github.com/typeddjango/django-stubs/

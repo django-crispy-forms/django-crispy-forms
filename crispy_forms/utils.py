@@ -1,18 +1,30 @@
+from __future__ import annotations
+
 import logging
 import sys
 from functools import lru_cache
+from typing import TYPE_CHECKING, Any, Iterable, Sequence, TypeVar
 
 from django.conf import settings
 from django.forms.utils import flatatt as _flatatt
-from django.template import Context
+from django.template import Context, Node
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString
 
 from .base import KeepContext
 
+if TYPE_CHECKING:
+    from django.forms import BaseForm, BaseFormSet
+    from django.template.backends.base import _EngineTemplate
 
-def get_template_pack():
+    from crispy_forms.helper import FormHelper
+    from crispy_forms.layout import HTML, BaseInput, LayoutObject
+
+    ContextDict = dict[int | str | Node, Any]
+
+
+def get_template_pack() -> str:
     return getattr(settings, "CRISPY_TEMPLATE_PACK")
 
 
@@ -22,22 +34,21 @@ TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
 # By caching we avoid loading the template every time render_field
 # is called without a template
 @lru_cache()
-def default_field_template(template_pack=TEMPLATE_PACK):
+def default_field_template(template_pack: SimpleLazyObject | str = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/field.html" % template_pack)
 
 
-def render_field(
-    field,
-    form,
-    context,
-    template=None,
-    labelclass=None,
-    layout_object=None,
-    attrs=None,
-    template_pack=TEMPLATE_PACK,
-    extra_context=None,
-    **kwargs,
-):
+def render_field(  # noqa: C901
+    field: LayoutObject | HTML | BaseInput | str | None,
+    form: BaseForm,
+    context: Context,
+    template: str | None = None,
+    labelclass: str | None = None,
+    layout_object: LayoutObject | None = None,
+    attrs: dict[str, str] | Sequence[dict[str, str]] | None = None,
+    template_pack: SimpleLazyObject | str = TEMPLATE_PACK,
+    extra_context: dict[str, Any] | None = None,
+) -> SafeString:
     """
     Renders a django-crispy-forms field
 
@@ -61,7 +72,7 @@ def render_field(
 
         FAIL_SILENTLY = getattr(settings, "CRISPY_FAIL_SILENTLY", True)
 
-        if hasattr(field, "render"):
+        if not isinstance(field, str):
             return field.render(form, context, template_pack=template_pack)
 
         try:
@@ -72,9 +83,11 @@ def render_field(
                 widgets = getattr(field_instance.widget, "widgets", [field_instance.widget])
 
                 # We use attrs as a dictionary later, so here we make a copy
-                list_attrs = attrs
                 if isinstance(attrs, dict):
-                    list_attrs = [attrs] * len(widgets)
+                    # TODO why type required here?
+                    list_attrs: Sequence[dict[str, str]] = [attrs] * len(widgets)
+                else:
+                    list_attrs = attrs
 
                 for index, (widget, attr) in enumerate(zip(widgets, list_attrs)):
                     if hasattr(field_instance.widget, "widgets"):
@@ -110,12 +123,12 @@ def render_field(
             html = SafeString("")
         else:
             if template is None:
-                if form.crispy_field_template is None:
-                    template = default_field_template(template_pack)
+                if form.crispy_field_template is None:  # type:ignore [attr-defined]
+                    _template = default_field_template(template_pack)
                 else:  # FormHelper.field_template set
-                    template = get_template(form.crispy_field_template)
+                    _template = get_template(form.crispy_field_template)  # type:ignore [attr-defined]
             else:
-                template = get_template(template)
+                _template = get_template(template)
 
             # We save the Layout object's bound fields in the layout object's `bound_fields` list
             if layout_object is not None:
@@ -133,13 +146,12 @@ def render_field(
             )
             if extra_context is not None:
                 context.update(extra_context)
-
-            html = template.render(context.flatten())
+            html = _template.render(context.flatten())  # type: ignore [arg-type]
 
         return html
 
 
-def flatatt(attrs):
+def flatatt(attrs: dict[str, str]) -> SafeString:
     """
     Convert a dictionary of attributes to a single string.
 
@@ -149,7 +161,11 @@ def flatatt(attrs):
     return _flatatt({k.replace("_", "-"): v for k, v in attrs.items()})
 
 
-def render_crispy_form(form, helper=None, context=None):
+def render_crispy_form(
+    form: BaseForm | BaseFormSet[BaseForm],
+    helper: FormHelper | None = None,
+    context: ContextDict | None = None,
+) -> SafeString:
     """
     Renders a form and returns its HTML output.
 
@@ -168,7 +184,7 @@ def render_crispy_form(form, helper=None, context=None):
     return node.render(node_context)
 
 
-def list_intersection(list1, list2):
+def list_intersection(list1: list[Any], list2: list[Any]) -> list[Any]:
     """
     Take the not-in-place intersection of two lists, similar to sets but preserving order.
     Does not check unicity of list1.
@@ -176,12 +192,16 @@ def list_intersection(list1, list2):
     return [item for item in list1 if item in list2]
 
 
-def list_difference(left, right):
+T1 = TypeVar("T1")
+T2 = TypeVar("T2")
+
+
+def list_difference(left: Iterable[T1], right: Iterable[T2]) -> list[T1 | T2]:
     """
     Take the not-in-place difference of two lists (left - right), similar to sets but preserving order.
     """
-    blocked = set(right)
-    difference = []
+    blocked: set[T1 | T2] = set(right)
+    difference: list[T1 | T2] = []
     for item in left:
         if item not in blocked:
             blocked.add(item)
