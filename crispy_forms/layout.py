@@ -52,7 +52,7 @@ class LayoutObject(TemplateNameMixin):
         """
         return self.get_layout_objects(str, index=None, greedy=True)
 
-    def get_layout_objects(self, *LayoutClasses, **kwargs):
+    def get_layout_objects(self, *LayoutClasses, index=None, max_level=0, greedy=False):
         """
         Returns a list of lists pointing to layout objects of any type matching
         `LayoutClasses`::
@@ -67,10 +67,6 @@ class LayoutObject(TemplateNameMixin):
         :param greedy: Boolean that indicates whether to be greedy. If set, max_level
         is skipped.
         """
-        index = kwargs.pop("index", None)
-        max_level = kwargs.pop("max_level", 0)
-        greedy = kwargs.pop("greedy", False)
-
         pointers = []
 
         if index is not None and not isinstance(index, list):
