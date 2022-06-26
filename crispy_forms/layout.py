@@ -1,6 +1,7 @@
 from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
+from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, get_template_pack, render_field
@@ -91,8 +92,8 @@ class LayoutObject(TemplateNameMixin):
         return pointers
 
     def get_rendered_fields(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return "".join(
-            render_field(field, form, context, template_pack=template_pack, **kwargs) for field in self.fields
+        return SafeString(
+            "".join(render_field(field, form, context, template_pack=template_pack, **kwargs) for field in self.fields)
         )
 
 
