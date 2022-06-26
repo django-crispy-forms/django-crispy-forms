@@ -26,13 +26,11 @@ class DynamicLayoutHandler:
         self._check_layout()
         return LayoutSlice(self.layout, slice(0, len(self.layout.fields), 1))
 
-    def filter(self, *LayoutClasses, **kwargs):
+    def filter(self, *LayoutClasses, max_level=0, greedy=False):
         """
         Returns a LayoutSlice pointing to layout objects of type `LayoutClass`
         """
         self._check_layout()
-        max_level = kwargs.pop("max_level", 0)
-        greedy = kwargs.pop("greedy", False)
         filtered_layout_objects = self.layout.get_layout_objects(LayoutClasses, max_level=max_level, greedy=greedy)
 
         return LayoutSlice(self.layout, filtered_layout_objects)
