@@ -11,13 +11,13 @@
                 {% else %}
                     {% crispy_field field 'class' 'form-check-input' %}
                 {% endif %}
-                {{ field.label|safe }}
+                {{ field.label }}
             </label>
         </div>
     {% else %}
         <div id="div_{{ field.auto_id }}" class="input-group{% if wrapper_class %} {{ wrapper_class }}{% endif %}">
             <label for="{{ field.id_for_label }}" class="sr-only{% if field.field.required %} requiredField{% endif %}">
-                {{ field.label|safe }}
+                {{ field.label }}
             </label>
             {% if field.errors %}
                 {% crispy_field field 'placeholder' field.label 'class' 'form-control is-invalid' %}

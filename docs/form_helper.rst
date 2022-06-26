@@ -187,13 +187,13 @@ When we find where labels get rendered, this chunk of code to be more precise::
 
     {% if field.label and not field|is_checkbox and form_show_labels %}
         <label for="{{ field.id_for_label }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
-            {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+            {{ field.label }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
         </label>
     {% endif %}
 
 The line that we would change would end up like this::
 
-    {% if not labels_uppercase %}{{ field.label|safe }}{% else %}{{ field.label|safe|upper }}{% endif %}{% if field.field.required %}
+    {% if not labels_uppercase %}{{ field.label }}{% else %}{{ field.label|upper }}{% endif %}{% if field.field.required %}
 
 Now we only need to override field template, for that you may want to check section :ref:`override templates`.
 
