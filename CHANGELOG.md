@@ -1,10 +1,9 @@
 # CHANGELOG for django-crispy-forms
 
 ## 2.0 (tbc)
-* Removed `|safe` filter from field labels. If you with to retain rendering html in your 
-  `<label>` mark it as safe using 
-  [`mark_safe()`](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.safestring.mark_safe) 
-  in your project. Refs #296. 
+* Removed `|safe` filter from field and prepended/appended text. To retain the previous 
+  behaviour use [`mark_safe()`](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.safestring.mark_safe) 
+  to mark the text as safe in your project. Refs #296. 
 
 * Removed uni-form template pack. Uni-Form specific classes previously added to every template pack e.g. `textInput` and are now removed.
   If you require these classes then the previous behaviour can be restored by adding the following to [CRISPY_CLASS_CONVERTERS](https://django-crispy-forms.readthedocs.io/en/latest/crispy_tag_forms.html#change-crispy-forms-input-default-classes) in your settings file.
