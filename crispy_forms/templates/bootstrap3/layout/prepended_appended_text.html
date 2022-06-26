@@ -7,7 +7,7 @@
 
         {% if field.label and form_show_labels %}
             <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
-                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                {{ field.label }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
             </label>
         {% endif %}
 

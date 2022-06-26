@@ -5,7 +5,7 @@
 
         {% if field.label %}
             <label {% if field.id_for_label %}for="{{ field.id_for_label }}" {% endif %}class="{{ label_class }}{% if not inline_class %} col-form-label{% endif %}{% if field.field.required %} requiredField{% endif %}">
-                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                {{ field.label }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
             </label>
         {% endif %}
 
