@@ -562,6 +562,28 @@ def test_keepcontext_context_manager(settings):
         assert response.content.count(b"custom-checkbox") > 0
 
 
+@only_bootstrap3
+def test_multiple_checkboxes_bs3():
+    form = CheckboxesSampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        "checkboxes",
+        InlineCheckboxes("alphacheckboxes"),
+        "numeric_multiple_checkboxes",
+    )
+    assert parse_form(form) == parse_expected("bootstrap3/test_layout/test_multiple_checkboxes.html")
+
+
+@only_bootstrap3
+def test_radio_bs3():
+    form = SampleForm5()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        "radio_select",
+    )
+    assert parse_form(form) == parse_expected("bootstrap3/test_layout/test_radio.html")
+
+
 @only_bootstrap4
 def test_use_custom_control_is_used_in_checkboxes():
     form = CheckboxesSampleForm()
