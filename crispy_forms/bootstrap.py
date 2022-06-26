@@ -129,8 +129,8 @@ class AppendedText(PrependedAppendedText):
     ----------
     field : str
         The name of the field to be rendered.
-    text : str, optional
-        The appended text, can be HTML like, by default None
+    text : str
+        The appended text, can be HTML like.
     input_size : str, optional
         For Bootstrap4+ additional classes to customise the input-group size
         e.g. ``input-group-sm``. By default None
@@ -201,8 +201,8 @@ class PrependedText(PrependedAppendedText):
     ----------
     field : str
         The name of the field to be rendered.
-    text : str, optional
-        The prepended text, can be HTML like, by default None
+    text : str
+        The prepended text, can be HTML like.
     input_size : str, optional
         For Bootstrap4+ additional classes to customise the input-group size
         e.g. ``input-group-sm``. By default None
