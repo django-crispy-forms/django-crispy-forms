@@ -1,6 +1,6 @@
 <div {% if multifield.css_id or errors %}id="{{ multifield.css_id }}"{% endif %}
     {% if multifield.css_class %}class="{{ multifield.css_class }}"{% endif %}
-    {{ multifield.flat_attrs|safe }}>
+    {{ multifield.flat_attrs }}>
 
     {% if form_show_errors %}
         <div class="alert alert-danger" role="alert">
