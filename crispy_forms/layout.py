@@ -560,9 +560,10 @@ class Fieldset(LayoutObject):
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
 
-        legend = ""
         if self.legend:
-            legend = "%s" % Template(str(self.legend)).render(context)
+            legend = Template(str(self.legend)).render(context)
+        else:
+            legend = SafeString("")
 
         template = self.get_template_name(template_pack)
         return render_to_string(template, {"fieldset": self, "legend": legend, "fields": fields})
