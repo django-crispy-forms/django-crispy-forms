@@ -15,11 +15,11 @@
     {% endif %}
 
     {% if multifield.label_html %}
-        <p {% if multifield.label_class %}class="{{ multifield.label_class }}"{% endif %}>{{ multifield.label_html|safe }}</p>
+        <p {% if multifield.label_class %}class="{{ multifield.label_class }}"{% endif %}>{{ multifield.label_html }}</p>
     {% endif %}
 
     <div class="multiField">
-        {{ fields_output|safe }}
+        {{ fields_output }}
     </div>
 
 </div>
