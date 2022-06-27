@@ -779,7 +779,7 @@ class TabHolder(ContainerHolder):
         # Open the group that should be open.
         self.open_target_group_for_form(form)
         content = self.get_rendered_fields(form, context, template_pack)
-        links = "".join(tab.render_link(template_pack) for tab in self.fields)
+        links = SafeString("".join(tab.render_link(template_pack) for tab in self.fields))
 
         context.update({"tabs": self, "links": links, "content": content})
         template = self.get_template_name(template_pack)
