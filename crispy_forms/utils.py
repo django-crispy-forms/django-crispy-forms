@@ -7,6 +7,7 @@ from django.forms.utils import flatatt as _flatatt
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.functional import SimpleLazyObject
+from django.utils.safestring import SafeString
 
 from .base import KeepContext
 
@@ -56,7 +57,7 @@ def render_field(  # noqa: C901
     added_keys = [] if extra_context is None else extra_context.keys()
     with KeepContext(context, added_keys):
         if field is None:
-            return ""
+            return SafeString("")
 
         FAIL_SILENTLY = getattr(settings, "CRISPY_FAIL_SILENTLY", True)
 
