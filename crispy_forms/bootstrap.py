@@ -2,6 +2,7 @@ from random import randint
 
 from django.template import Template
 from django.template.loader import render_to_string
+from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
 from .layout import Div, Field, LayoutObject, TemplateNameMixin
@@ -883,7 +884,7 @@ class Accordion(ContainerHolder):
             accordion_group.data_parent = self.css_id
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
-        content = ""
+        content = SafeString("")
 
         # Open the group that should be open.
         self.open_target_group_for_form(form)
