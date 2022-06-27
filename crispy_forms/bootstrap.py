@@ -460,17 +460,19 @@ class FieldWithButtons(Div):
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
         field_template = self.field_template % template_pack
-        buttons = "".join(
-            render_field(
-                field,
-                form,
-                context,
-                field_template,
-                layout_object=self,
-                template_pack=template_pack,
-                **kwargs,
+        buttons = SafeString(
+            "".join(
+                render_field(
+                    field,
+                    form,
+                    context,
+                    field_template,
+                    layout_object=self,
+                    template_pack=template_pack,
+                    **kwargs,
+                )
+                for field in self.fields[1:]
             )
-            for field in self.fields[1:]
         )
 
         extra_context = {"div": self, "buttons": buttons}
