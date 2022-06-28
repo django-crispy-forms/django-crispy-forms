@@ -107,7 +107,7 @@ def render_field(  # noqa: C901
                     logging.warning("A field should only be rendered once: %s" % field, exc_info=sys.exc_info())
 
         if field_instance is None:
-            html = ""
+            html = SafeString("")
         else:
             if template is None:
                 if form.crispy_field_template is None:
