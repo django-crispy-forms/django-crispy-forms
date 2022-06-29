@@ -1006,7 +1006,7 @@ class UneditableField(Field):
 
     def __init__(self, field, css_class=None, wrapper_class=None, template=None, **kwargs):
         self.attrs = {"class": "uneditable-input"}
-        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template)
+        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
 
 
 class InlineField(Field):
