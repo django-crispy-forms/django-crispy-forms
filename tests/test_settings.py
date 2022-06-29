@@ -8,6 +8,7 @@ INSTALLED_APPS = (
     "django.contrib.contenttypes",
     "django.contrib.admin",
     "crispy_forms",
+    "tests",
 )
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
@@ -17,7 +18,7 @@ MIDDLEWARE_CLASSES = (
     "django.middleware.csrf.CsrfViewMiddleware",
 )
 
-ROOT_URLCONF = "crispy_forms.tests.urls"
+ROOT_URLCONF = "tests.urls"
 CRISPY_CLASS_CONVERTERS = {"textinput": "textinput textInput inputtext"}
 SECRET_KEY = "secretkey"
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
