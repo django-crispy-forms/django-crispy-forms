@@ -563,6 +563,28 @@ def test_keepcontext_context_manager(settings):
         assert response.content.count(b"custom-checkbox") > 0
 
 
+@only_bootstrap3
+def test_multiple_checkboxes_bs3():
+    form = CheckboxesSampleForm()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        "checkboxes",
+        InlineCheckboxes("alphacheckboxes"),
+        "numeric_multiple_checkboxes",
+    )
+    assert parse_form(form) == parse_expected("bootstrap3/test_layout/test_multiple_checkboxes.html")
+
+
+@only_bootstrap3
+def test_radio_bs3():
+    form = SampleForm5()
+    form.helper = FormHelper()
+    form.helper.layout = Layout(
+        "radio_select",
+    )
+    assert parse_form(form) == parse_expected("bootstrap3/test_layout/test_radio.html")
+
+
 @only_bootstrap4
 def test_use_custom_control_is_used_in_checkboxes():
     form = CheckboxesSampleForm()
@@ -841,3 +863,15 @@ def test_number_input(settings):
     html = render_crispy_form(form)
     template_pack = settings.CRISPY_TEMPLATE_PACK
     assert parse_html(html) == parse_expected(f"{template_pack}/test_layout/test_number_input.html")
+
+    
+@only_bootstrap4
+def test_table_inline_formset_checkbox(settings):
+    class TestForm(forms.Form):
+        box_one = forms.CharField(label="box one", widget=forms.CheckboxInput())
+        box_two = forms.CharField(label="box two", widget=forms.CheckboxInput())
+
+    formset = formset_factory(TestForm)
+    formset.helper = FormHelper()
+    formset.helper.template = "bootstrap4/table_inline_formset.html"
+    assert parse_form(formset) == parse_expected("bootstrap4/test_layout/test_inline_formset_checkbox.html")

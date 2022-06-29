@@ -7,15 +7,15 @@
 
         {% if field.label and form_show_labels %}
             <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
-                {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                {{ field.label }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
             </label>
         {% endif %}
 
         <div class="controls {{ field_class }}">
             <div class="input-group">
-                {% if crispy_prepended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_prepended_text|safe }}</span>{% endif %}
+                {% if crispy_prepended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_prepended_text }}</span>{% endif %}
                 {% crispy_field field 'class' 'form-control' %}
-                {% if crispy_appended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_appended_text|safe }}</span>{% endif %}
+                {% if crispy_appended_text %}<span class="input-group-addon{% if active %} active{% endif %}{% if input_size %} {{ input_size }}{% endif %}">{{ crispy_appended_text }}</span>{% endif %}
             </div>
 
             {% include 'bootstrap3/layout/help_text_and_errors.html' %}

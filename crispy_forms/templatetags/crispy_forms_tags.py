@@ -63,10 +63,7 @@ class BasicNode(template.Node):
 
     def __init__(self, form, helper, template_pack=None):
         self.form = form
-        if helper is not None:
-            self.helper = helper
-        else:
-            self.helper = None
+        self.helper = helper
         self.template_pack = template_pack or get_template_pack()
 
     def get_render(self, context):

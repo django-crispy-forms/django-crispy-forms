@@ -2,6 +2,7 @@ from random import randint
 
 from django.template import Template
 from django.template.loader import render_to_string
+from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
 from .layout import Div, Field, LayoutObject, TemplateNameMixin
@@ -129,8 +130,8 @@ class AppendedText(PrependedAppendedText):
     ----------
     field : str
         The name of the field to be rendered.
-    text : str, optional
-        The appended text, can be HTML like, by default None
+    text : str
+        The appended text, can be HTML like.
     input_size : str, optional
         For Bootstrap4+ additional classes to customise the input-group size
         e.g. ``input-group-sm``. By default None
@@ -201,8 +202,8 @@ class PrependedText(PrependedAppendedText):
     ----------
     field : str
         The name of the field to be rendered.
-    text : str, optional
-        The prepended text, can be HTML like, by default None
+    text : str
+        The prepended text, can be HTML like.
     input_size : str, optional
         For Bootstrap4+ additional classes to customise the input-group size
         e.g. ``input-group-sm``. By default None
@@ -459,17 +460,19 @@ class FieldWithButtons(Div):
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         # We first render the buttons
         field_template = self.field_template % template_pack
-        buttons = "".join(
-            render_field(
-                field,
-                form,
-                context,
-                field_template,
-                layout_object=self,
-                template_pack=template_pack,
-                **kwargs,
+        buttons = SafeString(
+            "".join(
+                render_field(
+                    field,
+                    form,
+                    context,
+                    field_template,
+                    layout_object=self,
+                    template_pack=template_pack,
+                    **kwargs,
+                )
+                for field in self.fields[1:]
             )
-            for field in self.fields[1:]
         )
 
         extra_context = {"div": self, "buttons": buttons}
@@ -776,7 +779,7 @@ class TabHolder(ContainerHolder):
         # Open the group that should be open.
         self.open_target_group_for_form(form)
         content = self.get_rendered_fields(form, context, template_pack)
-        links = "".join(tab.render_link(template_pack) for tab in self.fields)
+        links = SafeString("".join(tab.render_link(template_pack) for tab in self.fields))
 
         context.update({"tabs": self, "links": links, "content": content})
         template = self.get_template_name(template_pack)
@@ -883,7 +886,7 @@ class Accordion(ContainerHolder):
             accordion_group.data_parent = self.css_id
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
-        content = ""
+        content = SafeString("")
 
         # Open the group that should be open.
         self.open_target_group_for_form(form)
@@ -976,9 +979,8 @@ class UneditableField(Field):
 
     Parameters
     ----------
-    *fields : str
-        Usually a single field, but can be any number of fields, to be rendered
-        with the same attributes applied.
+    fields : str
+        The name of the field.
     css_class : str, optional
         CSS classes to be applied to the field. These are added to any classes
         included in the ``attrs`` dict. By default ``None``.
@@ -1002,9 +1004,9 @@ class UneditableField(Field):
 
     template = "%s/layout/uneditable_input.html"
 
-    def __init__(self, field, *args, **kwargs):
+    def __init__(self, field, css_class=None, wrapper_class=None, template=None, **kwargs):
         self.attrs = {"class": "uneditable-input"}
-        super().__init__(field, *args, **kwargs)
+        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
 
 
 class InlineField(Field):

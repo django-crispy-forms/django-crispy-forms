@@ -4,7 +4,7 @@
 
 {% specialspaceless %}
 {% if formset_tag %}
-<form {{ flat_attrs|safe }} method="{{ form_method }}" {% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
+<form {{ flat_attrs }} method="{{ form_method }}" {% if formset.is_multipart %} enctype="multipart/form-data"{% endif %}>
 {% endif %}
     {% if formset_method|lower == 'post' and not disable_csrf %}
         {% csrf_token %}
@@ -22,7 +22,7 @@
                     {% for field in formset.forms.0 %}
                         {% if field.label and not field.is_hidden %}
                             <th for="{{ field.auto_id }}" class="col-form-label {% if field.field.required %}requiredField{% endif %}">
-                                {{ field.label|safe }}{% if field.field.required and not field|is_checkbox %}<span class="asteriskField">*</span>{% endif %}
+                                {{ field.label }}{% if field.field.required and not field|is_checkbox %}<span class="asteriskField">*</span>{% endif %}
                             </th>
                         {% endif %}
                     {% endfor %}

@@ -1,6 +1,7 @@
 from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
+from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, get_template_pack, render_field
@@ -52,7 +53,7 @@ class LayoutObject(TemplateNameMixin):
         """
         return self.get_layout_objects(str, index=None, greedy=True)
 
-    def get_layout_objects(self, *LayoutClasses, **kwargs):
+    def get_layout_objects(self, *LayoutClasses, index=None, max_level=0, greedy=False):
         """
         Returns a list of lists pointing to layout objects of any type matching
         `LayoutClasses`::
@@ -67,10 +68,6 @@ class LayoutObject(TemplateNameMixin):
         :param greedy: Boolean that indicates whether to be greedy. If set, max_level
         is skipped.
         """
-        index = kwargs.pop("index", None)
-        max_level = kwargs.pop("max_level", 0)
-        greedy = kwargs.pop("greedy", False)
-
         pointers = []
 
         if index is not None and not isinstance(index, list):
@@ -95,8 +92,8 @@ class LayoutObject(TemplateNameMixin):
         return pointers
 
     def get_rendered_fields(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return "".join(
-            render_field(field, form, context, template_pack=template_pack, **kwargs) for field in self.fields
+        return SafeString(
+            "".join(render_field(field, form, context, template_pack=template_pack, **kwargs) for field in self.fields)
         )
 
 
@@ -563,9 +560,10 @@ class Fieldset(LayoutObject):
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
 
-        legend = ""
         if self.legend:
-            legend = "%s" % Template(str(self.legend)).render(context)
+            legend = Template(str(self.legend)).render(context)
+        else:
+            legend = SafeString("")
 
         template = self.get_template_name(template_pack)
         return render_to_string(template, {"fieldset": self, "legend": legend, "fields": fields})
