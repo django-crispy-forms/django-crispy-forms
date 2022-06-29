@@ -6,7 +6,8 @@ from crispy_forms.bootstrap import AppendedText
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, MultiField
-from crispy_forms.tests.forms import SampleForm
+
+from .forms import SampleForm
 
 
 def test_wrap_all_fields():

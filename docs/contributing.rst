@@ -128,7 +128,7 @@ Before you submit a pull request, please run the entire django-crispy-forms test
 
 If you don't have ``make`` installed the test suite can also be run via::
 
-    pytest --ds=crispy_forms.tests.test_settings --cov=crispy_forms
+    pytest --ds=tests.test_settings --cov=crispy_forms
 
 The first thing the core committers will do is run this command. Any pull request that fails this test suite will be **rejected**.
 

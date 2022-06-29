@@ -6,13 +6,11 @@ from django.test import SimpleTestCase
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from crispy_forms.templatetags.crispy_forms_filters import optgroups
-from crispy_forms.tests.forms import GroupedChoiceForm, SampleForm5
-from crispy_forms.tests.utils import contains_partial
 from crispy_forms.utils import list_difference, list_intersection, render_field
 
 from .conftest import only_bootstrap4
-from .forms import SampleForm
-from .utils import parse_expected, parse_form
+from .forms import GroupedChoiceForm, SampleForm, SampleForm5
+from .utils import contains_partial, parse_expected, parse_form
 
 
 def test_list_intersection():

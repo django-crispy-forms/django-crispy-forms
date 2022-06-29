@@ -24,7 +24,6 @@ from crispy_forms.bootstrap import (
 )
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField, Submit
-from crispy_forms.tests.utils import contains_partial, parse_expected, parse_form
 from crispy_forms.utils import render_crispy_form
 
 from .conftest import only_bootstrap3, only_bootstrap4
@@ -36,6 +35,7 @@ from .forms import (
     SampleForm,
     SampleFormCustomWidgets,
 )
+from .utils import contains_partial, parse_expected, parse_form
 
 
 def test_field_with_custom_template():
