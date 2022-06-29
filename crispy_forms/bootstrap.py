@@ -979,9 +979,8 @@ class UneditableField(Field):
 
     Parameters
     ----------
-    *fields : str
-        Usually a single field, but can be any number of fields, to be rendered
-        with the same attributes applied.
+    fields : str
+        The name of the field.
     css_class : str, optional
         CSS classes to be applied to the field. These are added to any classes
         included in the ``attrs`` dict. By default ``None``.
@@ -1005,9 +1004,9 @@ class UneditableField(Field):
 
     template = "%s/layout/uneditable_input.html"
 
-    def __init__(self, field, *args, **kwargs):
+    def __init__(self, field, css_class=None, wrapper_class=None, template=None, **kwargs):
         self.attrs = {"class": "uneditable-input"}
-        super().__init__(field, *args, **kwargs)
+        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
 
 
 class InlineField(Field):
