@@ -610,7 +610,7 @@ class Container(Div):
         """
         check if field_name is contained within tab.
         """
-        return field_name in (pointer[1] for pointer in self.get_field_names())
+        return field_name in (pointer.name for pointer in self.get_field_names())
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         if self.active:

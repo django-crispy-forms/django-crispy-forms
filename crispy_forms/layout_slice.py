@@ -49,18 +49,18 @@ class LayoutSlice:
         elif isinstance(self.slice, list):
             # A list of pointers  Ex: [[[0, 0], 'div'], [[0, 2, 3], 'field_name']]
             for pointer in self.slice:
-                position = pointer[0]
+                positions = pointer.positions
 
                 # If it's pointing first level
-                if len(position) == 1:
-                    function(self.layout, position[-1])
+                if len(positions) == 1:
+                    function(self.layout, positions[-1])
                 else:
-                    layout_object = self.layout.fields[position[0]]
-                    for i in position[1:-1]:
+                    layout_object = self.layout.fields[positions[0]]
+                    for i in positions[1:-1]:
                         layout_object = layout_object.fields[i]
 
                     try:
-                        function(layout_object, position[-1])
+                        function(layout_object, positions[-1])
                     except IndexError:
                         # We could avoid this exception, recalculating pointers.
                         # However this case is most of the time an undesired behavior
@@ -125,10 +125,10 @@ class LayoutSlice:
         elif isinstance(self.slice, list):
             # A list of pointers  Ex: [[[0, 0], 'div'], [[0, 2, 3], 'field_name']]
             for pointer in self.slice:
-                position = pointer[0]
+                positions = pointer.positions
 
-                layout_object = self.layout.fields[position[0]]
-                for i in position[1:]:
+                layout_object = self.layout.fields[positions[0]]
+                for i in positions[1:]:
                     previous_layout_object = layout_object
                     layout_object = layout_object.fields[i]
 
