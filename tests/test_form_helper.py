@@ -114,17 +114,25 @@ def test_form_show_errors_non_field_errors(settings):
     # First we render with errors
     c = Context({"testForm": form})
     # Ensure those errors were rendered
-    assert parse_html(template.render(c)) == parse_expected(
+    expected = parse_expected(
         f"{settings.CRISPY_TEMPLATE_PACK}/test_form_helper/test_form_show_errors_non_field_errors_true.html"
     )
+    if django.VERSION < (4, 1):
+        # Removed "for = ..." from MultiWidget's <label>.
+        # https://github.com/django/django/commit/c6c6cd3c5ad9c36795bb120e521590424f034ae4
+        expected.replace('<label class="requiredField">', '<label class="requiredField" for="id_datetime_field_0">')
+    assert parse_html(template.render(c)) == expected
 
     # Now we render without errors
     form.helper.form_show_errors = False
     c = Context({"testForm": form})
     # Ensure errors were not rendered
-    assert parse_html(template.render(c)) == parse_expected(
+    expected = parse_expected(
         f"{settings.CRISPY_TEMPLATE_PACK}/test_form_helper/test_form_show_errors_non_field_errors_false.html"
     )
+    if django.VERSION < (4, 1):
+        expected.replace('<label class="requiredField">', '<label class="requiredField" for="id_datetime_field_0">')
+    assert parse_html(template.render(c)) == expected
 
 
 def test_html5_required():
