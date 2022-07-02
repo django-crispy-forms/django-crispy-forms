@@ -1,0 +1,51 @@
+<form method="post">
+    <div class="alert alert-block alert-danger">
+        <ul class="m-0">
+            <li>Passwords dont match</li>
+        </ul>
+    </div>
+    <div class="form-group">
+        <div id="div_id_is_company" class="custom-control  custom-checkbox"> <input type="checkbox" name="is_company"
+                class="checkboxinput custom-control-input" id="id_is_company"> <label for="id_is_company"
+                class="custom-control-label"> company </label> </div>
+    </div>
+    <div id="div_id_email" class="form-group"> <label for="id_email" class=" requiredField"> email<span
+                class="asteriskField">*</span> </label>
+        <div> <input type="text" name="email" maxlength="30"
+                class="textinput textInput inputtext form-control is-invalid" required id="id_email"> <span
+                id="error_1_id_email" class="invalid-feedback"><strong>This field is required.</strong></span> <small
+                id="hint_id_email" class="form-text text-muted">Insert your email</small> </div>
+    </div>
+    <div id="div_id_password1" class="form-group"> <label for="id_password1" class=" requiredField"> password<span
+                class="asteriskField">*</span> </label>
+        <div> <input type="password" name="password1" maxlength="30" class="passwordinput form-control" required
+                id="id_password1"> </div>
+    </div>
+    <div id="div_id_password2" class="form-group"> <label for="id_password2" class=" requiredField"> re-enter
+            password<span class="asteriskField">*</span> </label>
+        <div> <input type="password" name="password2" maxlength="30" class="passwordinput form-control" required
+                id="id_password2"> </div>
+    </div>
+    <div id="div_id_first_name" class="form-group"> <label for="id_first_name" class=" requiredField"> first name<span
+                class="asteriskField">*</span> </label>
+        <div> <input type="text" name="first_name" maxlength="5"
+                class="textinput textInput inputtext form-control is-invalid" required id="id_first_name"> <span
+                id="error_1_id_first_name" class="invalid-feedback"><strong>This field is required.</strong></span>
+        </div>
+    </div>
+    <div id="div_id_last_name" class="form-group"> <label for="id_last_name" class=" requiredField"> last name<span
+                class="asteriskField">*</span> </label>
+        <div> <input type="text" name="last_name" maxlength="5"
+                class="textinput textInput inputtext form-control is-invalid" required id="id_last_name"> <span
+                id="error_1_id_last_name" class="invalid-feedback"><strong>This field is required.</strong></span>
+        </div>
+    </div>
+    <div id="div_id_datetime_field" class="form-group"> 
+        <label class=" requiredField" for="id_datetime_field_0">date time<span class="asteriskField">*</span> </label>
+        <div> <input type="text" name="datetime_field_0" class="dateinput form-control is-invalid" required
+                id="id_datetime_field_0"><input type="text" name="datetime_field_1"
+                class="timeinput form-control is-invalid" required id="id_datetime_field_1"> <span
+                id="error_1_id_datetime_field" class="invalid-feedback"><strong>This field is required.</strong></span>
+        </div>
+    </div>
+</form>
