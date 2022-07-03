@@ -731,6 +731,7 @@ def test_update_attributes_class():
 def test_file_field():
     form = FileForm()
     form.helper = FormHelper()
+    form.helper.field_class = "col-lg-9 mb-2"
     form.helper.layout = Layout("clearable_file")
     assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_clearable_custom_control.html")
 
