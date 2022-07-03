@@ -4,7 +4,7 @@ from django.utils.html import conditional_escape
 from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
-from crispy_forms.utils import TEMPLATE_PACK, flatatt, get_template_pack, render_field
+from crispy_forms.utils import TEMPLATE_PACK, flatatt, render_field
 
 
 class TemplateNameMixin:
@@ -197,6 +197,8 @@ class BaseInput(TemplateNameMixin):
     template: str
         The default template which this Layout Object will be rendered
         with.
+    field_classes: str
+        CSS classes to be applied to the ``<input>``.
 
     Parameters
     ----------
@@ -219,6 +221,7 @@ class BaseInput(TemplateNameMixin):
     """
 
     template = "%s/layout/baseinput.html"
+    field_classes = ""
 
     def __init__(self, name, value, *, css_id=None, css_class=None, template=None, **kwargs):
         self.name = name
@@ -257,6 +260,10 @@ class Submit(BaseInput):
     template: str
         The default template which this Layout Object will be rendered
         with.
+    field_classes: str
+        CSS classes to be applied to the ``<input>``.
+    input_type: str
+        The ``type`` attribute of the ``<input>``.
 
     Parameters
     ----------
@@ -305,10 +312,7 @@ class Submit(BaseInput):
     """
 
     input_type = "submit"
-
-    def __init__(self, name, value, *, css_id=None, css_class=None, template=None, **kwargs):
-        self.field_classes = "submit submitButton" if get_template_pack() == "uni_form" else "btn btn-primary"
-        super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
+    field_classes = "btn btn-primary"
 
 
 class Button(BaseInput):
@@ -320,6 +324,10 @@ class Button(BaseInput):
     template: str
         The default template which this Layout Object will be rendered
         with.
+    field_classes: str
+        CSS classes to be applied to the ``<input>``.
+    input_type: str
+        The ``type`` attribute of the ``<input>``.
 
     Parameters
     ----------
@@ -368,10 +376,7 @@ class Button(BaseInput):
     """
 
     input_type = "button"
-
-    def __init__(self, name, value, *, css_id=None, css_class=None, template=None, **kwargs):
-        self.field_classes = "button" if get_template_pack() == "uni_form" else "btn"
-        super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
+    field_classes = "btn"
 
 
 class Hidden(BaseInput):
@@ -383,6 +388,10 @@ class Hidden(BaseInput):
     template: str
         The default template which this Layout Object will be rendered
         with.
+    field_classes: str
+        CSS classes to be applied to the ``<input>``.
+    input_type: str
+        The ``type`` attribute of the ``<input>``.
 
     Parameters
     ----------
@@ -436,6 +445,10 @@ class Reset(BaseInput):
     template: str
         The default template which this Layout Object will be rendered
         with.
+    field_classes: str
+        CSS classes to be applied to the ``<input>``.
+    input_type: str
+        The ``type`` attribute of the ``<input>``.
 
     Parameters
     ----------
@@ -484,10 +497,7 @@ class Reset(BaseInput):
     """
 
     input_type = "reset"
-
-    def __init__(self, name, value, *, css_id=None, css_class=None, template=None, **kwargs):
-        self.field_classes = "reset resetButton" if get_template_pack() == "uni_form" else "btn btn-inverse"
-        super().__init__(name=name, value=value, css_id=css_id, css_class=css_class, template=template, **kwargs)
+    field_classes = "btn btn-inverse"
 
 
 class Fieldset(LayoutObject):
