@@ -867,3 +867,22 @@ def test_table_inline_formset_checkbox(settings):
     formset.helper = FormHelper()
     formset.helper.template = "bootstrap4/table_inline_formset.html"
     assert parse_form(formset) == parse_expected("bootstrap4/test_layout/test_inline_formset_checkbox.html")
+
+
+def test_radio_attrs(settings):
+    class TestForm(forms.Form):
+        radios = forms.ChoiceField(
+            choices=(
+                ("option_one", "Option one"),
+                ("option_two", "Option two"),
+            ),
+            widget=forms.RadioSelect(
+                attrs={
+                    "class": "sr-only sr-only-focusable",
+                }
+            ),
+        )
+
+    form = TestForm()
+    form.helper = FormHelper()
+    assert parse_form(form) == parse_expected(f"{settings.CRISPY_TEMPLATE_PACK}/test_layout/test_radio_attrs.html")
