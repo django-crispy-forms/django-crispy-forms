@@ -231,21 +231,21 @@ def do_uni_form(parser, token):
         {% crispy form %}
         {% crispy form 'bootstrap' %}
     """
-    token = token.split_contents()
-    form = token.pop(1)
+    tokens = token.split_contents()
+    form = tokens.pop(1)
 
     helper = None
     template_pack = "'%s'" % get_template_pack()
 
     # {% crispy form helper %}
     try:
-        helper = token.pop(1)
+        helper = tokens.pop(1)
     except IndexError:
         pass
 
     # {% crispy form helper 'bootstrap' %}
     try:
-        template_pack = token.pop(1)
+        template_pack = tokens.pop(1)
     except IndexError:
         pass
 
