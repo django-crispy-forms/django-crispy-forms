@@ -188,8 +188,8 @@ class FormHelper(DynamicLayoutHandler):
     form_group_wrapper_class = ""
     layout = None
     form_tag = True
-    form_error_title = None
-    formset_error_title = None
+    form_error_title = ""
+    formset_error_title = ""
     form_show_errors = True
     render_unmentioned_fields = False
     render_hidden_fields = False
@@ -298,10 +298,12 @@ class FormHelper(DynamicLayoutHandler):
             "error_text_inline": self.error_text_inline,
             "field_class": self.field_class,
             "field_template": self.field_template or "%s/field.html" % template_pack,
+            "form_error_title": self.form_error_title.strip(),
             "form_method": self.form_method.strip(),
             "form_show_errors": self.form_show_errors,
             "form_show_labels": self.form_show_labels,
             "form_tag": self.form_tag,
+            "formset_error_title": self.formset_error_title.strip(),
             "help_text_inline": self.help_text_inline,
             "include_media": self.include_media,
             "label_class": self.label_class,
@@ -338,10 +340,6 @@ class FormHelper(DynamicLayoutHandler):
 
         if self.inputs:
             items["inputs"] = self.inputs
-        if self.form_error_title:
-            items["form_error_title"] = self.form_error_title.strip()
-        if self.formset_error_title:
-            items["formset_error_title"] = self.formset_error_title.strip()
 
         for attribute_name, value in self.__dict__.items():
             if (

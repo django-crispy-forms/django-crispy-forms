@@ -29,6 +29,7 @@
 * The `html5_required` attribute of `FormHelper` is removed. In all supported versions of Django the `required` attribute is provided by the core `forms` module. 
 * The `FormActions` layout object learnt a `css_id` kwarg to add an `id` to the rendered `<div>`
 * The `flat_attrs()` method of `FormActions` is removed. Attributes provided by `**kwargs` are now passed via the `flat_attrs` function during `__init__()` instead of with each call of `render()`.
+* The default values of "form_error_title" and "formset_error_title" of FormHelper changed from `None` to `""`.
 * Dropped support for Django 2.2.
 * Added support for Django 4.1.
 
