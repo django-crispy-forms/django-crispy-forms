@@ -35,7 +35,7 @@ from .forms import (
     SampleForm,
     SampleFormCustomWidgets,
 )
-from .utils import contains_partial, parse_expected, parse_form
+from .utils import parse_expected, parse_form
 
 
 def test_field_with_custom_template():
@@ -179,37 +179,12 @@ class TestBootstrapLayoutObjects:
         test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
-            PrependedAppendedText("email", "@", "gmail.com"),
-            AppendedText("password1", "#"),
-            PrependedText("password2", "$"),
+            PrependedAppendedText("email", "@", "gmail.com", css_class="custom-size-class", active=True),
+            AppendedText("password1", "#", css_class="input-lg"),
+            PrependedText("password2", "$", css_class="input-sm"),
         )
-        html = render_crispy_form(test_form)
-
-        # Check form parameters
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            assert html.count('<span class="input-group-addon">@</span>') == 1
-            assert html.count('<span class="input-group-addon">gmail.com</span>') == 1
-            assert html.count('<span class="input-group-addon">#</span>') == 1
-            assert html.count('<span class="input-group-addon">$</span>') == 1
-            test_form.helper.layout = Layout(
-                PrependedAppendedText("email", "@", "gmail.com", css_class="input-lg"),
-            )
-            html = render_crispy_form(test_form)
-
-            assert 'class="input-lg' in html
-            assert contains_partial(html, '<span class="input-group-addon input-lg"/>')
-
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert html.count('<span class="input-group-text">@</span>') == 1
-            assert html.count('<span class="input-group-text">gmail.com</span>') == 1
-            assert html.count('<span class="input-group-text">#</span>') == 1
-            assert html.count('<span class="input-group-text">$</span>') == 1
-            test_form.helper.layout = Layout(
-                PrependedAppendedText("email", "@", "gmail.com", css_class="form-control-lg")
-            )
-            html = render_crispy_form(test_form)
-            assert 'class="form-control-lg' in html
-            assert contains_partial(html, '<span class="input-group-text"/>')
+        pack = settings.CRISPY_TEMPLATE_PACK
+        assert parse_form(test_form) == parse_expected(f"{pack}/test_layout_objects/test_prepended_appended_text.html")
 
     @only_bootstrap4
     def test_prepended_wrapper_class(self, settings):
