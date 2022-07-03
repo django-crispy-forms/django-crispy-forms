@@ -35,7 +35,7 @@ from .forms import (
     SampleForm,
     SampleFormCustomWidgets,
 )
-from .utils import contains_partial, parse_expected, parse_form
+from .utils import parse_expected, parse_form
 
 
 def test_field_with_custom_template():
@@ -180,8 +180,8 @@ class TestBootstrapLayoutObjects:
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             PrependedAppendedText("email", "@", "gmail.com", css_class="custom-size-class", active=True),
-            AppendedText("password1", "#"),
-            PrependedText("password2", "$"),
+            AppendedText("password1", "#", css_class="input-lg"),
+            PrependedText("password2", "$", css_class="input-sm"),
         )
         pack = settings.CRISPY_TEMPLATE_PACK
         assert parse_form(test_form) == parse_expected(f"{pack}/test_layout_objects/test_prepended_appended_text.html")
