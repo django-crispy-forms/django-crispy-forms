@@ -24,6 +24,10 @@ Install dependencies for development by **cd**-ing into the crispy-forms folder 
 
     pip install -r requirements.txt
 
+In addition to these requirements you will also need to install Django itself. To install the current version of Django::
+    
+    pip install django
+
 Django-crispy-forms comes with git hook scripts. These can be installed by running::
 
     pre-commit install
