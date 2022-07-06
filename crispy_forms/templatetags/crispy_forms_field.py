@@ -76,7 +76,7 @@ class CrispyFieldNode(template.Node):
         self.field = field
         self.attrs = attrs
 
-    def render(self, context):  # noqa: C901
+    def render(self, context):
         # Nodes are not threadsafe so we must store and look up our instance
         # variables in the current rendering context first
         if self not in context.render_context:
