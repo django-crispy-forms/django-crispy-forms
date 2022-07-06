@@ -293,11 +293,23 @@ class FormHelper(DynamicLayoutHandler):
         """
         Used by crispy_forms_tags to get helper attributes
         """
+        attrs = self.attrs.copy() if self.attrs else {}
+        if self.form_action:
+            attrs["action"] = self.form_action.strip()
+        if self.form_id:
+            attrs["id"] = self.form_id.strip()
+        if self.form_class:
+            attrs["class"] = self.form_class.strip()
+        if self.form_group_wrapper_class:
+            attrs["form_group_wrapper_class"] = self.form_group_wrapper_class
+
         items = {
+            "attrs": attrs,
             "disable_csrf": self.disable_csrf,
             "error_text_inline": self.error_text_inline,
             "field_class": self.field_class,
             "field_template": self.field_template or "%s/field.html" % template_pack,
+            "flat_attrs": flatatt(attrs),
             "form_error_title": self.form_error_title.strip(),
             "form_method": self.form_method.strip(),
             "form_show_errors": self.form_show_errors,
@@ -323,20 +335,6 @@ class FormHelper(DynamicLayoutHandler):
             if bootstrap_size_match:
                 offset_pattern = "col-%s-offset-%s"
                 items["bootstrap_checkbox_offsets"] = [offset_pattern % m for m in bootstrap_size_match]
-
-        items["attrs"] = {}
-        if self.attrs:
-            items["attrs"] = self.attrs.copy()
-        if self.form_action:
-            items["attrs"]["action"] = self.form_action.strip()
-        if self.form_id:
-            items["attrs"]["id"] = self.form_id.strip()
-        if self.form_class:
-            items["attrs"]["class"] = self.form_class.strip()
-        if self.form_group_wrapper_class:
-            items["attrs"]["form_group_wrapper_class"] = self.form_group_wrapper_class
-
-        items["flat_attrs"] = flatatt(items["attrs"])
 
         if self.inputs:
             items["inputs"] = self.inputs
