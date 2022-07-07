@@ -83,7 +83,7 @@ class DynamicLayoutHandler:
             filtered_field = []
             for pointer in layout_field_names:
                 # There can be an empty pointer
-                if len(pointer) == 2 and pointer.name == key:
+                if pointer.name == key:
                     filtered_field.append(pointer)
 
             return LayoutSlice(self.layout, filtered_field)

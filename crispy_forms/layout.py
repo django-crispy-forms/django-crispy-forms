@@ -15,9 +15,6 @@ class Pointer:
     positions: List[int]
     name: str
 
-    def __len__(self):
-        return 2
-
 
 class TemplateNameMixin:
     def get_template_name(self, template_pack):
