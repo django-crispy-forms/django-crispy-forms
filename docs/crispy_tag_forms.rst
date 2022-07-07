@@ -52,10 +52,12 @@ Your helper can be a class level variable or an instance level variable, if you 
     from crispy_forms.helper import FormHelper
 
     class ExampleForm(forms.Form):
-        [...]
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.helper = FormHelper()
+        ...
+        
+        @property
+        def helper(self):
+            helper = FormHelper()
+            return helper
 
 As you can see you need to call the base class constructor using ``super`` and override the constructor. This helper doesn't set any form attributes, so it's useless. Let's see how to set up some basic `FormHelper` attributes::
 
@@ -63,16 +65,18 @@ As you can see you need to call the base class constructor using ``super`` and o
     from crispy_forms.layout import Submit
 
     class ExampleForm(forms.Form):
-        [...]
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.helper = FormHelper()
-            self.helper.form_id = 'id-exampleForm'
-            self.helper.form_class = 'blueForms'
-            self.helper.form_method = 'post'
-            self.helper.form_action = 'submit_survey'
-
-            self.helper.add_input(Submit('submit', 'Submit'))
+        ...
+        
+        @property
+        def helper(self):
+            helper = FormHelper()
+            helper.form_id = 'id-exampleForm'
+            helper.form_class = 'blueForms'
+            helper.form_method = 'post'
+            helper.form_action = 'submit_survey'
+            helper.add_input(Submit('submit', 'Submit'))
+            
+            return helper
 
 Note that we are importing a class called ``Submit`` that is a layout object. We will see what layout objects are in detail later on, for now on let's just say that this adds a submit button to our form, so people can send their survey.
 
