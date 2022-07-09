@@ -45,7 +45,7 @@ class DynamicLayoutHandler:
         # Let's filter all fields with widgets like widget_type
         filtered_fields = []
         for pointer in layout_field_names:
-            if isinstance(self.form.fields[pointer[1]].widget, widget_type):
+            if isinstance(self.form.fields[pointer.name].widget, widget_type):
                 filtered_fields.append(pointer)
 
         return LayoutSlice(self.layout, filtered_fields)
@@ -60,7 +60,7 @@ class DynamicLayoutHandler:
         # Let's exclude all fields with widgets like widget_type
         filtered_fields = []
         for pointer in layout_field_names:
-            if not isinstance(self.form.fields[pointer[1]].widget, widget_type):
+            if not isinstance(self.form.fields[pointer.name].widget, widget_type):
                 filtered_fields.append(pointer)
 
         return LayoutSlice(self.layout, filtered_fields)
@@ -83,7 +83,7 @@ class DynamicLayoutHandler:
             filtered_field = []
             for pointer in layout_field_names:
                 # There can be an empty pointer
-                if len(pointer) == 2 and pointer[1] == key:
+                if pointer.name == key:
                     filtered_field.append(pointer)
 
             return LayoutSlice(self.layout, filtered_field)

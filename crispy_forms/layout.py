@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from typing import List
+
 from django.template import Template
 from django.template.loader import render_to_string
 from django.utils.html import conditional_escape
@@ -5,6 +8,12 @@ from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, render_field
+
+
+@dataclass
+class Pointer:
+    positions: List[int]
+    name: str
 
 
 class TemplateNameMixin:
@@ -43,24 +52,24 @@ class LayoutObject(TemplateNameMixin):
 
     def get_field_names(self, index=None):
         """
-        Returns a list of lists, those lists are named pointers. First parameter
-        is the location of the field, second one the name of the field. Example::
+        Returns a list of Pointers. First parameter is the location of the
+        field, second one the name of the field. Example::
 
             [
-                [[0,1,2], 'field_name1'],
-                [[0,3], 'field_name2']
+                Pointer([0,1,2], 'field_name1'),
+                Pointer([0,3], 'field_name2'),
             ]
         """
         return self.get_layout_objects(str, index=None, greedy=True)
 
     def get_layout_objects(self, *LayoutClasses, index=None, max_level=0, greedy=False):
         """
-        Returns a list of lists pointing to layout objects of any type matching
+        Returns a list of Pointers pointing to layout objects of any type matching
         `LayoutClasses`::
 
             [
-                [[0,1,2], 'div'],
-                [[0,3], 'field_name']
+                Pointer([0,1,2], 'div']),
+                Pointer([0,3], 'field_name'),
             ]
 
         :param max_level: An integer that indicates max level depth to reach when
@@ -79,9 +88,9 @@ class LayoutObject(TemplateNameMixin):
         for i, layout_object in enumerate(self.fields):
             if isinstance(layout_object, LayoutClasses):
                 if str_class:
-                    pointers.append([index + [i], layout_object])
+                    pointers.append(Pointer(index + [i], layout_object))
                 else:
-                    pointers.append([index + [i], layout_object.__class__.__name__.lower()])
+                    pointers.append(Pointer(index + [i], layout_object.__class__.__name__.lower()))
 
             # If it's a layout object and we haven't reached the max depth limit or greedy
             # we recursive call
@@ -647,7 +656,7 @@ class MultiField(LayoutObject):
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         # If a field within MultiField contains errors
         if context["form_show_errors"]:
-            for field in (pointer[1] for pointer in self.get_field_names()):
+            for field in (pointer.name for pointer in self.get_field_names()):
                 if field in form.errors:
                     self.css_class += " error"
 

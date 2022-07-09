@@ -26,6 +26,8 @@
   Support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
   [crispy-bootstrap5](https://github.com/django-crispy-forms/crispy-bootstrap5).
 * Default template pack is now `bootstrap4` if the `CRISPY_TEMPLATE_PACK` setting is not provided.
+* The `get_layout_objects()` and `get_field_names()` functions of `LayoutObject` now return a list of `Pointers` rather than a list 
+  of lists. Pointers are a `dataclass` containing a list of `posistions` and the `name` of object/field. 
 * The `html5_required` attribute of `FormHelper` is removed. In all supported versions of Django the `required` attribute is provided by the core `forms` module. 
 * The `FormActions` layout object learnt a `css_id` kwarg to add an `id` to the rendered `<div>`
 * The `flat_attrs()` method of `FormActions` is removed. Attributes provided by `**kwargs` are now passed via the `flat_attrs` function during `__init__()` instead of with each call of `render()`.

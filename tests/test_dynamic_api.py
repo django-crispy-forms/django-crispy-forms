@@ -5,7 +5,7 @@ from django import forms
 from crispy_forms.bootstrap import AppendedText
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
-from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, MultiField
+from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, MultiField, Pointer
 
 from .forms import SampleForm
 
@@ -148,16 +148,20 @@ def test_update_attributes_and_wrap_once():
 
 def test_get_layout_objects():
     layout_1 = Layout(Div())
-    assert layout_1.get_layout_objects(Div) == [[[0], "div"]]
+    assert layout_1.get_layout_objects(Div) == [Pointer([0], "div")]
 
     layout_2 = Layout(Div(Div(Div("email")), Div("password1"), "password2"))
-    assert layout_2.get_layout_objects(Div) == [[[0], "div"]]
-    assert layout_2.get_layout_objects(Div, max_level=1) == [[[0], "div"], [[0, 0], "div"], [[0, 1], "div"]]
+    assert layout_2.get_layout_objects(Div) == [Pointer([0], "div")]
+    assert layout_2.get_layout_objects(Div, max_level=1) == [
+        Pointer([0], "div"),
+        Pointer([0, 0], "div"),
+        Pointer([0, 1], "div"),
+    ]
     assert layout_2.get_layout_objects(Div, max_level=2) == [
-        [[0], "div"],
-        [[0, 0], "div"],
-        [[0, 0, 0], "div"],
-        [[0, 1], "div"],
+        Pointer([0], "div"),
+        Pointer([0, 0], "div"),
+        Pointer([0, 0, 0], "div"),
+        Pointer([0, 1], "div"),
     ]
 
     layout_3 = Layout(
@@ -165,7 +169,11 @@ def test_get_layout_objects():
         Div("password1"),
         "password2",
     )
-    assert layout_3.get_layout_objects(str, max_level=2) == [[[0], "email"], [[1, 0], "password1"], [[2], "password2"]]
+    assert layout_3.get_layout_objects(str, max_level=2) == [
+        Pointer([0], "email"),
+        Pointer([1, 0], "password1"),
+        Pointer([2], "password2"),
+    ]
 
     layout_4 = Layout(
         Div(
@@ -175,8 +183,12 @@ def test_get_layout_objects():
         Div("password"),
         "extra_field",
     )
-    assert layout_4.get_layout_objects(Div) == [[[0], "div"], [[1], "div"]]
-    assert layout_4.get_layout_objects(Div, max_level=1) == [[[0], "div"], [[0, 0], "div"], [[1], "div"]]
+    assert layout_4.get_layout_objects(Div) == [Pointer([0], "div"), Pointer([1], "div")]
+    assert layout_4.get_layout_objects(Div, max_level=1) == [
+        Pointer([0], "div"),
+        Pointer([0, 0], "div"),
+        Pointer([1], "div"),
+    ]
 
 
 def test_filter_and_wrap():
@@ -216,13 +228,13 @@ def test_filter_and_wrap_side_effects():
 
 def test_get_field_names():
     layout_1 = Div("field_name")
-    assert layout_1.get_field_names() == [[[0], "field_name"]]
+    assert layout_1.get_field_names() == [Pointer([0], "field_name")]
 
     layout_2 = Div(Div("field_name"))
-    assert layout_2.get_field_names() == [[[0, 0], "field_name"]]
+    assert layout_2.get_field_names() == [Pointer([0, 0], "field_name")]
 
     layout_3 = Div(Div("field_name"), "password")
-    assert layout_3.get_field_names() == [[[0, 0], "field_name"], [[1], "password"]]
+    assert layout_3.get_field_names() == [Pointer([0, 0], "field_name"), Pointer([1], "password")]
 
     layout_4 = Div(
         Div(
@@ -233,10 +245,10 @@ def test_get_field_names():
         "extra_field",
     )
     assert layout_4.get_field_names() == [
-        [[0, 0, 0], "field_name"],
-        [[0, 1], "field_name2"],
-        [[1, 0], "password"],
-        [[2], "extra_field"],
+        Pointer([0, 0, 0], "field_name"),
+        Pointer([0, 1], "field_name2"),
+        Pointer([1, 0], "password"),
+        Pointer([2], "extra_field"),
     ]
 
     layout_5 = Div(
@@ -247,31 +259,31 @@ def test_get_field_names():
         "extra_field",
     )
     assert layout_5.get_field_names() == [
-        [[0, 0], "field_name"],
-        [[0, 1], "field_name2"],
-        [[1], "extra_field"],
+        Pointer([0, 0], "field_name"),
+        Pointer([0, 1], "field_name2"),
+        Pointer([1], "extra_field"),
     ]
 
 
 def test_layout_get_field_names():
     layout_1 = Layout(Div("field_name"), "password")
     assert layout_1.get_field_names() == [
-        [[0, 0], "field_name"],
-        [[1], "password"],
+        Pointer([0, 0], "field_name"),
+        Pointer([1], "password"),
     ]
 
     layout_2 = Layout(Div("field_name"), "password", Fieldset("legend", "extra_field"))
     assert layout_2.get_field_names() == [
-        [[0, 0], "field_name"],
-        [[1], "password"],
-        [[2, 0], "extra_field"],
+        Pointer([0, 0], "field_name"),
+        Pointer([1], "password"),
+        Pointer([2, 0], "extra_field"),
     ]
 
     layout_3 = Layout(Div(Div(Div("email")), Div("password1"), "password2"))
     assert layout_3.get_field_names() == [
-        [[0, 0, 0, 0], "email"],
-        [[0, 1, 0], "password1"],
-        [[0, 2], "password2"],
+        Pointer([0, 0, 0, 0], "email"),
+        Pointer([0, 1, 0], "password1"),
+        Pointer([0, 2], "password2"),
     ]
 
 
@@ -280,8 +292,8 @@ def test_filter_by_widget(advanced_layout):
     form.helper = FormHelper(form)
     form.helper.layout = advanced_layout
     assert form.helper.filter_by_widget(forms.PasswordInput).slice == [
-        [[0, 1, 0, 0], "password1"],
-        [[0, 4, 0], "password2"],
+        Pointer([0, 1, 0, 0], "password1"),
+        Pointer([0, 4, 0], "password2"),
     ]
 
 
@@ -290,9 +302,9 @@ def test_exclude_by_widget(advanced_layout):
     form.helper = FormHelper(form)
     form.helper.layout = advanced_layout
     assert form.helper.exclude_by_widget(forms.PasswordInput).slice == [
-        [[0, 0, 0, 0], "email"],
-        [[0, 3, 0], "first_name"],
-        [[1], "last_name"],
+        Pointer([0, 0, 0, 0], "email"),
+        Pointer([0, 3, 0], "first_name"),
+        Pointer([1], "last_name"),
     ]
 
 
@@ -402,6 +414,10 @@ def test_filter():
         Div("password"),
         "extra_field",
     )
-    assert helper.filter(Div, MultiField).slice == [[[0], "div"], [[1], "div"]]
-    assert helper.filter(Div, MultiField, max_level=1).slice == [[[0], "div"], [[0, 0], "multifield"], [[1], "div"]]
-    assert helper.filter(MultiField, max_level=1).slice == [[[0, 0], "multifield"]]
+    assert helper.filter(Div, MultiField).slice == [Pointer([0], "div"), Pointer([1], "div")]
+    assert helper.filter(Div, MultiField, max_level=1).slice == [
+        Pointer([0], "div"),
+        Pointer([0, 0], "multifield"),
+        Pointer([1], "div"),
+    ]
+    assert helper.filter(MultiField, max_level=1).slice == [Pointer([0, 0], "multifield")]
