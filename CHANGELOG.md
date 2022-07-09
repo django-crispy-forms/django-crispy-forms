@@ -1,27 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
-## 2.0 (tbc)
-* Removed `|safe` filter from field and prepended/appended text. To retain the previous 
-  behaviour use [`mark_safe()`](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.safestring.mark_safe) 
-  to mark the text as safe in your project. Refs #296. 
+## 2.0a1 (2023-01-18)
 
-* Removed uni-form template pack. Uni-Form specific classes previously added to every template pack e.g. `textInput` and are now removed.
-  If you require these classes then the previous behaviour can be restored by adding the following to [CRISPY_CLASS_CONVERTERS](https://django-crispy-forms.readthedocs.io/en/latest/crispy_tag_forms.html#change-crispy-forms-input-default-classes) in your settings file.
-
-  ```
-    converters = {
-      "textinput": "textinput textInput",
-      "fileinput": "fileinput fileUpload",
-      "passwordinput": "textinput textInput",
-  }
-  ```
-* The `uni-form` template pack allowed for rendering of templates using a `default` or `inline` layout. As the `uni-form` template
-  pack has been removed support for this has also been removed. This has resulted in the following **BREAKING** changes.
-
-    * The `form_style` attribute of `FormHelper` is removed.
-    * The `form_style` positional argument to `render_field` is removed.
-    * The `form_style` positional argument to the `render` method of all `LayoutObjects` is removed.
-
+# Major Changes and Migration Guide
 * Removed all Bootstrap template packs. These template packs are now available as standalone packages. 
   To upgrade, install the required template pack and add it to your 
   [`INSTALLED_APPS`](https://docs.djangoproject.com/en/stable/ref/settings/#std-setting-INSTALLED_APPS) setting.
@@ -32,17 +13,52 @@
 
   Also, support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
   [crispy-bootstrap5](https://github.com/django-crispy-forms/crispy-bootstrap5).
-* An attribute error is now raised if the `CRISPY_TEMPLATE_PACK` setting is not provided.
-* The `get_layout_objects()` and `get_field_names()` functions of `LayoutObject` now return a list of `Pointers` rather than a list 
-  of lists. Pointers are a `dataclass` containing a list of `posistions` and the `name` of object/field. 
-* The `html5_required` attribute of `FormHelper` is removed. In all supported versions of Django the `required` attribute is provided by the core `forms` module. 
-* The `FormActions` layout object learnt a `css_id` kwarg to add an `id` to the rendered `<div>`
-* The `flat_attrs()` method of `FormActions` is removed. Attributes provided by `**kwargs` are now passed via the `flat_attrs` function during `__init__()` instead of with each call of `render()`.
-* The default values of "form_error_title" and "formset_error_title" of FormHelper changed from `None` to `""`.
+
+* Removed uni-form template pack. Uni-Form specific classes previously added to every template pack e.g. `textInput` are now removed.
+  If you require these classes, the previous behaviour can be restored by adding the following to [CRISPY_CLASS_CONVERTERS](https://django-crispy-forms.readthedocs.io/en/latest/crispy_tag_forms.html#change-crispy-forms-input-default-classes) in your settings file.
+
+  ```
+    converters = {
+      "textinput": "textinput textInput",
+      "fileinput": "fileinput fileUpload",
+      "passwordinput": "textinput textInput",
+  }
+  ```
+
+* The `uni-form` template pack allowed for rendering of templates using a `default` or `inline` layout. As the `uni-form` template
+  pack has been removed support for this has also been removed. This has resulted in the following **BREAKING** changes.
+
+    * The `form_style` attribute of `FormHelper` is removed.
+    * The `form_style` positional argument to `render_field()` is removed.
+    * The `form_style` positional argument to the `render()` method of all `LayoutObjects` is removed.
+
+  Audit for use of `render()` and `render_field()` due to the removal of the `form_style` positional argument is therefore
+  required. For example:
+
+  ``` 
+  # django-crispy-forms 1.x
+  html = my_layout_object.render(form, form_style, context)
+  # django-crispy-forms 2.x
+  html = my_layout_object.render(form, context)
+  ```
+
+* Widespread use of the `|safe` in crispy-form templates is removed. Audit for html input in your forms 
+  especially for Field and Prepended/Appended text. To retain the previous behaviour mark text as safe 
+  in your project code using 
+  [`mark_safe()`](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.safestring.mark_safe). Refs #296. 
+
+# Other Changes
 * Dropped support for Django 2.2.
 * Added support for Django 4.1 and 4.2.
 * Added support for Python 3.11.
-
+* The `flat_attrs()` method of `FormActions` is removed. Attributes provided by `**kwargs` are now passed via the `flat_attrs` function during `__init__()` instead of with each call of `render()`
+* The `html5_required` attribute of `FormHelper` is removed. In all supported versions of Django the `required` attribute is provided by the core `forms` module. 
+* The `FormActions` layout object learnt a `css_id` kwarg to add an `id` to the rendered `<div>`
+* The default values of "form_error_title" and "formset_error_title" of FormHelper changed from `None` to `""`.
+* An attribute error is now raised if the `CRISPY_TEMPLATE_PACK` setting is not provided.
+* The `get_layout_objects()` and `get_field_names()` functions of `LayoutObject` now return a list of `Pointers` rather than a list 
+  of lists. Pointers are a `dataclass` containing a list of `posistions` and the `name` of object/field. 
+  
 ## 1.14.0 (2022-01-22)
 * Added support for Python 3.10
 * Dropped support for Django 3.1
