@@ -33,7 +33,7 @@ Of course, you can still use a helper, otherwise there would be nothing crispy i
 
 This helper is quite easy to follow. We want our form to use ``POST`` method, and we want ``favorite_color`` to be the first field, then ``favorite_food`` and finally we tell crispy to render all required fields after. Let's go and use it, when using ``{% crispy %}`` tag in a template there is one main difference when rendering formsets vs forms, in this case you need to specify the helper explicitly.
 
-This would be part of an hypothetic function view::
+This would be part of an hypothetical function view::
 
     formset = ExampleFormSet()
     helper = ExampleFormSetHelper()
