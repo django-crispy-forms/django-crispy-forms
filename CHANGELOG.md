@@ -387,7 +387,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
  * `|crispy` and `|as_crispy_field` filters were not rendering errors. Thanks to @ximi for reporting it and submitting a patch. See issue #GH-28.
  * Fixing a test that was breaking when language was not English. Thanks to @gaftech, see #GH-30.
  * Fixing `radioselect.html` and `checkboxselectmultiple.html` templates. Thanks to Christopher Petrilli for submitting a patch for `radioselect`. See issue #GH-35.
- * HTML attributes can now be set in `BaseInput` subclasses like `Button` by @jamesmfriedman. See #GH-32.
+ * [HTML attributes](https://www.scaler.com/topics/attributes-in-html/) can now be set in `BaseInput` subclasses like `Button` by @jamesmfriedman. See #GH-32.
  * Fix for dynamic crispy-forms with Meta classes by Jeroen Vloothuis. See #GH-37.
  * Labels now use `id_for_label` instead of `auto_id` to avoid ids breaking on multiwidgets. by Daniel Izquierdo. See #GH-38.
  * Adding a flatatt custom function in `utils.py` for flatting extra HTML attributes.
