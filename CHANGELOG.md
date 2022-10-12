@@ -293,7 +293,7 @@ Special thanks in this release to **Charlie Denton <a href="https://github.com/m
 ## 1.2.4 (2013/4/13)
 
  * Added `wrapper_class` kwarg to `Field` layout object, see #163.
- * Added `Accordion` and `AccordionGroup` bootstrap layout objects, see #162.
+ * Added `Accordion` and `AccordionGroup` [bootstrap](https://www.interviewbit.com/bootstrap-cheat-sheet/) layout objects, see #162.
  * Bug fix in `render_crispy_form` to avoid override existing context, see #153.
  * Use formset iterator instead of `forms` list attribute, see #152.
  * Don't display fieldset legend if empty, see #147 and #155.
