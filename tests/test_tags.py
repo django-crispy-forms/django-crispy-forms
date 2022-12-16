@@ -209,12 +209,8 @@ def test_crispy_addon(settings):
     field_instance = test_form.fields["email"]
     bound_field = BoundField(test_form, field_instance, "email")
 
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-        assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Primary")
-        assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Secondary")
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-        assert "input-group-text" in crispy_addon(bound_field, prepend="Work", append="Primary")
-        assert "input-group-text" in crispy_addon(bound_field, prepend="Work", append="Secondary")
+    assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Primary")
+    assert "input-group-addon" in crispy_addon(bound_field, prepend="Work", append="Secondary")
 
     # errors
     with pytest.raises(TypeError):

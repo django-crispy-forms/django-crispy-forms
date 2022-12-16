@@ -10,25 +10,22 @@ from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from crispy_forms.bootstrap import Field, InlineCheckboxes, UneditableField
+from crispy_forms.bootstrap import Field, InlineCheckboxes
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap3, only_bootstrap4
+from .conftest import only_bootstrap3
 from .forms import (
-    AdvancedFileForm,
     CheckboxesSampleForm,
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
-    FileForm,
     SampleForm,
     SampleForm2,
     SampleForm3,
     SampleForm4,
     SampleForm5,
     SampleForm6,
-    SelectSampleForm,
 )
 from .test_settings import TEMPLATE_DIRS
 from .utils import contains_partial, parse_expected, parse_form
@@ -189,11 +186,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
     assert 'test-fieldset="123"' in html
     assert 'id="row_passwords"' in html
     assert html.count("<label") == 6
-
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-        assert 'class="form-row rows"' in html
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-        assert 'class="row rows"' in html
+    assert 'class="row rows"' in html
     assert "Hello!" in html
     assert "testLink" in html
 
@@ -234,62 +227,6 @@ def test_change_layout_dynamically_delete_field():
     c = Context({"form": form, "form_helper": form_helper})
     html = template.render(c)
     assert "email" not in html
-
-
-@only_bootstrap4
-def test_column_has_css_classes():
-    template = Template(
-        """
-        {% load crispy_forms_tags %}
-        {% crispy form form_helper %}
-    """
-    )
-
-    form = SampleForm()
-    form_helper = FormHelper()
-    form_helper.add_layout(
-        Layout(
-            Fieldset(
-                "Company Data",
-                "is_company",
-                "email",
-                "password1",
-                "password2",
-                css_id="multifield_info",
-            ),
-            Column("first_name", "last_name"),
-        )
-    )
-
-    c = Context({"form": form, "form_helper": form_helper})
-    html = template.render(c)
-    assert html.count("col-md") == 1
-
-
-@only_bootstrap4
-def test_bs4_column_css_classes(settings):
-    template = Template(
-        """
-        {% load crispy_forms_tags %}
-        {% crispy form form_helper %}
-    """
-    )
-
-    form = SampleForm()
-    form_helper = FormHelper()
-    form_helper.add_layout(
-        Layout(
-            Column("first_name", "last_name"),
-            Column("first_name", "last_name", css_class="col-sm"),
-            Column("first_name", "last_name", css_class="mb-4"),
-        )
-    )
-
-    c = Context({"form": form, "form_helper": form_helper})
-    html = template.render(c)
-
-    assert html.count("col-md") == 2
-    assert html.count("col-sm") == 1
 
 
 def test_formset_layout(settings):
@@ -340,9 +277,6 @@ def test_formset_layout(settings):
     assert "Item 3" in html
     assert html.count("Note for first form only") == 1
     assert html.count("row") == 3
-
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-        assert html.count("form-group") == 18
 
 
 def test_modelformset_layout():
@@ -555,11 +489,7 @@ def test_keepcontext_context_manager(settings):
 
     response = render(request=None, template_name="crispy_render_template.html", context=context)
 
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-        assert response.content.count(b"checkbox-inline") == 3
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-        assert response.content.count(b"custom-control-inline") == 3
-        assert response.content.count(b"custom-checkbox") > 0
+    assert response.content.count(b"checkbox-inline") == 3
 
 
 @only_bootstrap3
@@ -584,93 +514,6 @@ def test_radio_bs3():
     assert parse_form(form) == parse_expected("bootstrap3/test_layout/test_radio.html")
 
 
-@only_bootstrap4
-def test_use_custom_control_is_used_in_checkboxes():
-    form = CheckboxesSampleForm()
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        "checkboxes",
-        InlineCheckboxes("alphacheckboxes"),
-        "numeric_multiple_checkboxes",
-    )
-    # form.helper.use_custom_control take default value which is True
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_true.html"
-    )
-
-    form.helper.use_custom_control = True
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_true.html"
-    )
-
-    form.helper.use_custom_control = False
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_false.html"
-    )
-
-    form = CheckboxesSampleForm({})
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        "checkboxes",
-        InlineCheckboxes("alphacheckboxes"),
-        "numeric_multiple_checkboxes",
-    )
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_use_custom_control_is_used_in_checkboxes_true_failing.html"
-    )
-
-
-@only_bootstrap4
-def test_use_custom_control_is_used_in_radio():
-    form = SampleForm5()
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        "radio_select",
-    )
-    # form.helper.use_custom_control take default value which is True
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_true.html"
-    )
-
-    form.helper.use_custom_control = True
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_true.html"
-    )
-
-    form.helper.use_custom_control = False
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_false.html"
-    )
-
-    form = SampleForm5({})
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        "radio_select",
-    )
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_use_custom_control_is_used_in_radio_true_failing.html"
-    )
-
-
-@only_bootstrap4
-@pytest.mark.parametrize(
-    "use_custom_control, expected_html",
-    [
-        (True, "bootstrap4/test_layout/test_use_custom_control_in_select_true.html"),
-        (False, "bootstrap4/test_layout/test_use_custom_control_in_select_false.html"),
-    ],
-)
-def test_use_custom_control_in_select(use_custom_control, expected_html):
-    form = SelectSampleForm()
-
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap4"
-    form.helper.layout = Layout("select")
-    form.helper.use_custom_control = use_custom_control
-
-    assert parse_form(form) == parse_expected(expected_html)
-
-
 @only_bootstrap3
 def test_form_inline():
     form = SampleForm()
@@ -688,23 +531,6 @@ def test_form_inline():
     assert html.count('class="form-group"') == 3
     assert html.count('<label for="id_email" class="sr-only') == 1
     assert html.count('id="div_id_email" class="form-group"') == 1
-    assert html.count('placeholder="email"') == 1
-    assert html.count("</label> <input") == 3
-
-
-@only_bootstrap4
-def test_bootstrap4_form_inline():
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.form_class = "form-inline"
-    form.helper.field_template = "bootstrap4/layout/inline_field.html"
-    form.helper.layout = Layout("email", "password1", "last_name")
-
-    html = render_crispy_form(form)
-    assert html.count('class="form-inline"') == 1
-    assert html.count('class="input-group"') == 3
-    assert html.count('<label for="id_email" class="sr-only') == 1
-    assert html.count('id="div_id_email" class="input-group"') == 1
     assert html.count('placeholder="email"') == 1
     assert html.count("</label> <input") == 3
 
@@ -727,74 +553,6 @@ def test_update_attributes_class():
     assert html.count(' class="hello hello2') == 1
 
 
-@only_bootstrap4
-def test_file_field():
-    form = FileForm()
-    form.helper = FormHelper()
-    form.helper.field_class = "col-lg-9 mb-2"
-    form.helper.layout = Layout("clearable_file")
-    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_clearable_custom_control.html")
-
-    form.helper.use_custom_control = False
-    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_clearable.html")
-
-    form.helper.use_custom_control = True
-    form.helper.layout = Layout("file_field")
-    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_custom_control.html")
-
-    form.helper.use_custom_control = False
-    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_default.html")
-
-
-@only_bootstrap4
-def test_file_field_with_custom_class():
-    form = AdvancedFileForm()
-    form.helper = FormHelper()
-    form.helper.layout = Layout("clearable_file")
-    assert parse_form(form) == parse_expected(
-        "bootstrap4/test_layout/test_file_field_with_custom_class_clearable.html"
-    )
-
-    form.helper.layout = Layout("file_field")
-    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_file_field_with_custom_class.html")
-
-
-@only_bootstrap4
-def test_form_control_size():
-    "CSS classes form-control and form-control-lg are both required"
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.layout = Layout(Field("first_name", css_class="form-control-lg"))
-    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_form_control_size.html")
-
-
-@only_bootstrap4
-def test_uneditable_field():
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        UneditableField("first_name"),
-    )
-    assert parse_form(form) == parse_expected("bootstrap4/test_layout/test_uneditable_field.html")
-
-
-@only_bootstrap4
-@pytest.mark.parametrize(
-    "use_custom_control, expected_html",
-    [
-        (True, "bootstrap4/test_layout/test_use_custom_control_in_uneditable_select_true.html"),
-        (False, "bootstrap4/test_layout/test_use_custom_control_in_uneditable_select_false.html"),
-    ],
-)
-def test_use_custom_control_in_uneditable_select(use_custom_control, expected_html):
-    form = SelectSampleForm()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap4"
-    form.helper.layout = Layout(UneditableField("select"))
-    form.helper.use_custom_control = use_custom_control
-    assert parse_form(form) == parse_expected(expected_html)
-
-
 def test_multiple_fields(settings):
     "Field can accept any number of fields and apply the kwargs to all fields"
     form = SampleForm()
@@ -802,72 +560,6 @@ def test_multiple_fields(settings):
     form.helper.layout = Layout(Field("first_name", "last_name", css_class="form-control-lg"))
     template_pack = settings.CRISPY_TEMPLATE_PACK
     assert parse_form(form) == parse_expected(f"{template_pack}/test_layout/test_multiple_fields.html")
-
-
-@only_bootstrap4
-def test_fundamentals():
-    """
-    This is the example that is in the `crispy_tag_forms` docs.
-    """
-
-    class ExampleForm(forms.Form):
-        like_website = forms.TypedChoiceField(
-            label="Do you like this website?",
-            choices=((1, "Yes"), (0, "No")),
-            coerce=lambda x: bool(int(x)),
-            widget=forms.RadioSelect,
-            initial="1",
-            required=True,
-        )
-
-        favorite_food = forms.CharField(
-            label="What is your favorite food?",
-            max_length=80,
-            required=True,
-        )
-
-        favorite_color = forms.CharField(
-            label="What is your favorite color?",
-            max_length=80,
-            required=True,
-        )
-
-        favorite_number = forms.IntegerField(
-            label="Favorite number",
-            required=False,
-        )
-
-        notes = forms.CharField(
-            label="Additional notes or feedback",
-            required=False,
-        )
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.helper = FormHelper()
-            self.helper.form_id = "id-exampleForm"
-            self.helper.form_class = "blueForms"
-            self.helper.form_method = "post"
-            self.helper.form_action = "submit_survey"
-
-            self.helper.add_input(Submit("submit", "Submit"))
-
-    form = ExampleForm()
-    context = {"csrf_token": "NotARealToken"}
-    html = render_crispy_form(form, context=context)
-    assert parse_html(html) == parse_expected("bootstrap4/test_layout/test_fundamentals_example.html")
-
-
-@only_bootstrap4
-def test_table_inline_formset_checkbox(settings):
-    class TestForm(forms.Form):
-        box_one = forms.CharField(label="box one", widget=forms.CheckboxInput())
-        box_two = forms.CharField(label="box two", widget=forms.CheckboxInput())
-
-    formset = formset_factory(TestForm)
-    formset.helper = FormHelper()
-    formset.helper.template = "bootstrap4/table_inline_formset.html"
-    assert parse_form(formset) == parse_expected("bootstrap4/test_layout/test_inline_formset_checkbox.html")
 
 
 def test_radio_attrs(settings):

@@ -1,9 +1,0 @@
-<div{% if formactions.flat_attrs %} {{ formactions.flat_attrs }}{% endif %} class="form-group{% if 'form-horizontal' in form_class %} row{% endif %} {{ formactions.css_class }}" {% if formactions.id %} id="{{ formactions.id }}"{% endif %}>
-    {% if label_class %}
-        <div class="aab {{ label_class }}"></div>
-    {% endif %}
-
-    <div class="{{ field_class }}">
-        {{ fields_output }}
-    </div>
-</div>

@@ -1,6 +1,0 @@
-<div {% if div.css_id %}id="{{ div.css_id }}"{% endif %}
-     class="{% if 'col' in div.css_class %}{{ div.css_class|default:'' }}{% else %}col-md {{ div.css_class|default:'' }}{% endif %}" {{ div.flat_attrs }}>
-        {{ fields }}
-</div>
-
-

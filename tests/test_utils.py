@@ -11,7 +11,6 @@ from crispy_forms.layout import Layout
 from crispy_forms.templatetags.crispy_forms_filters import optgroups
 from crispy_forms.utils import get_template_pack, list_difference, list_intersection, render_field
 
-from .conftest import only_bootstrap4
 from .forms import GroupedChoiceForm, SampleForm, SampleForm5
 from .utils import contains_partial, parse_expected, parse_form
 
@@ -88,7 +87,6 @@ def test_contains_partial():
     c.assertTrue(contains_partial(html, needle, ignore_needle_children=True))
 
 
-@only_bootstrap4
 def test_parse_expected_and_form():
     form = SampleForm()
     form.helper = FormHelper()
