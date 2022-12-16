@@ -34,6 +34,7 @@
 * The default values of "form_error_title" and "formset_error_title" of FormHelper changed from `None` to `""`.
 * Dropped support for Django 2.2.
 * Added support for Django 4.1.
+* Added support for Python 3.11.
 
 ## 1.14.0 (2022-01-22)
 * Added support for Python 3.10
