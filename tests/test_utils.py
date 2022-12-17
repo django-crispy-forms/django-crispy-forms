@@ -1,12 +1,15 @@
+import pytest
+
 from django import forms
+from django.conf import settings
 from django.template.base import Template
 from django.template.context import Context
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, override_settings
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from crispy_forms.templatetags.crispy_forms_filters import optgroups
-from crispy_forms.utils import list_difference, list_intersection, render_field
+from crispy_forms.utils import get_template_pack, list_difference, list_intersection, render_field
 
 from .conftest import only_bootstrap4
 from .forms import GroupedChoiceForm, SampleForm, SampleForm5
@@ -250,3 +253,11 @@ def test_optgroup_filter():
         }
     ]
     assert index == 0
+
+
+@override_settings()
+def test_get_template_pack():
+    del settings.CRISPY_TEMPLATE_PACK
+    assert get_template_pack() == "bootstrap4"
+    with pytest.raises(AttributeError):
+        settings.CRISPY_TEMPLATE_PACK
