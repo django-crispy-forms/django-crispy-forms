@@ -25,7 +25,7 @@
 * Removed Bootstrap 2 template pack. Bootstrap 3 and 4 support is provided by the core crispy-forms package.
   Support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
   [crispy-bootstrap5](https://github.com/django-crispy-forms/crispy-bootstrap5).
-* Default template pack is now `bootstrap4` if the `CRISPY_TEMPLATE_PACK` setting is not provided.
+* An attribute error is now raised if the `CRISPY_TEMPLATE_PACK` setting is not provided.
 * The `get_layout_objects()` and `get_field_names()` functions of `LayoutObject` now return a list of `Pointers` rather than a list 
   of lists. Pointers are a `dataclass` containing a list of `posistions` and the `name` of object/field. 
 * The `html5_required` attribute of `FormHelper` is removed. In all supported versions of Django the `required` attribute is provided by the core `forms` module. 

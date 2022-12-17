@@ -258,6 +258,7 @@ def test_optgroup_filter():
 @override_settings()
 def test_get_template_pack():
     del settings.CRISPY_TEMPLATE_PACK
-    assert get_template_pack() == "bootstrap4"
+    with pytest.raises(AttributeError):
+        get_template_pack()
     with pytest.raises(AttributeError):
         settings.CRISPY_TEMPLATE_PACK
