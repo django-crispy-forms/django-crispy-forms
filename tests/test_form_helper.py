@@ -18,7 +18,7 @@ from crispy_forms.utils import render_crispy_form
 from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia
 
 
-def test_inputs(settings):
+def test_inputs():
     form_helper = FormHelper()
     form_helper.add_input(Submit("my-submit", "Submit", css_class="button white"))
     form_helper.add_input(Reset("my-reset", "Reset"))
@@ -51,7 +51,7 @@ def test_invalid_form_method():
         form_helper.form_method = "superPost"
 
 
-def test_form_with_helper_without_layout(settings):
+def test_form_with_helper_without_layout():
     form_helper = FormHelper()
     form_helper.form_id = "this-form-rocks"
     form_helper.form_class = "forms-that-rock"
@@ -181,7 +181,7 @@ def test_template_helper_access():
     assert helper["form_id"] == "test-form"
 
 
-def test_without_helper(settings):
+def test_without_helper():
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -265,7 +265,7 @@ def test_invalid_helper(settings):
         template.render(c)
 
 
-def test_formset_with_helper_without_layout(settings):
+def test_formset_with_helper_without_layout():
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -451,7 +451,7 @@ def test_helper_std_field_template_no_layout():
         assert html.count('id="div_id_%s"' % field) == 1
 
 
-def test_error_text_inline(settings):
+def test_error_text_inline():
     form = SampleForm({"email": "invalidemail"})
     form.helper = FormHelper()
     layout = Layout(

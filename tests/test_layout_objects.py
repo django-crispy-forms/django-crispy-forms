@@ -91,7 +91,7 @@ def test_field_type_hidden():
     assert html.count('class="timeinput') == 1
 
 
-def test_field_wrapper_class(settings):
+def test_field_wrapper_class():
     form = SampleForm()
     form.helper = FormHelper()
     form.helper.layout = Layout(Field("email", wrapper_class="testing"))
@@ -100,7 +100,7 @@ def test_field_wrapper_class(settings):
     assert html.count('class="form-group testing"') == 1
 
 
-def test_html_with_carriage_returns(settings):
+def test_html_with_carriage_returns():
     test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
@@ -143,7 +143,7 @@ def test_remove_labels():
 
 
 class TestBootstrapLayoutObjects:
-    def test_custom_django_widget(self, settings):
+    def test_custom_django_widget(self):
 
         # Make sure an inherited RadioSelect gets rendered as it
         form = SampleFormCustomWidgets()
@@ -160,14 +160,14 @@ class TestBootstrapLayoutObjects:
         html = render_crispy_form(form)
         assert 'class="checkbox"' in html
 
-    def test_inline_radios(self, settings):
+    def test_inline_radios(self):
         test_form = CheckboxesSampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(InlineRadios("inline_radios"))
         html = render_crispy_form(test_form)
         assert html.count('radio-inline"') == 2
 
-    def test_accordion_and_accordiongroup(self, settings):
+    def test_accordion_and_accordiongroup(self):
         test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -187,7 +187,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('name="password1"') == 1
         assert html.count('name="password2"') == 1
 
-    def test_accordion_active_false_not_rendered(self, settings):
+    def test_accordion_active_false_not_rendered(self):
         test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -233,7 +233,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('<div class="alert alert-block"') == 1
         assert html.count("Testing...") == 1
 
-    def test_tab_and_tab_holder(self, settings):
+    def test_tab_and_tab_holder(self):
         test_form = SampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
@@ -327,7 +327,7 @@ class TestBootstrapLayoutObjects:
         assert html.count('type="hidden"') == 5
         assert html.count("<label") == 0
 
-    def test_multiplecheckboxes(self, settings):
+    def test_multiplecheckboxes(self):
         test_form = CheckboxesSampleForm()
         html = render_crispy_form(test_form)
 

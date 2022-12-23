@@ -133,7 +133,7 @@ def test_context_pollution():
     assert html.count('name="is_company"') == 1
 
 
-def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
+def test_layout_fieldset_row_html_with_unicode_fieldnames():
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
@@ -339,7 +339,7 @@ def test_choice_with_none_is_selected():
         }
     ]
 )
-def test_keepcontext_context_manager(settings):
+def test_keepcontext_context_manager():
     # Test case for issue #180
     # Apparently it only manifest when using render_to_response this exact way
     form = CheckboxesSampleForm()
