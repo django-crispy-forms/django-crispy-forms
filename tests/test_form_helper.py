@@ -16,7 +16,7 @@ from crispy_forms.layout import Button, Hidden, Layout, Reset, Submit
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap3, only_bootstrap4
+from .conftest import only_bootstrap3
 from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia, SampleFormWithMultiValueField
 from .utils import parse_expected, parse_form
 
@@ -45,10 +45,7 @@ def test_inputs(settings):
     assert 'class="btn"' in html
     assert "btn btn-primary" in html
     assert "btn btn-inverse" in html
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-        assert len(re.findall(r"<input[^>]+> <", html)) == 9
-    else:
-        assert len(re.findall(r"<input[^>]+> <", html)) == 8
+    assert len(re.findall(r"<input[^>]+> <", html)) == 8
 
 
 def test_invalid_form_method():
@@ -167,29 +164,10 @@ def test_media_is_included_by_default_with_bootstrap3():
     assert "test.js" in html
 
 
-def test_media_is_included_by_default_with_bootstrap4():
-    form = SampleFormWithMedia()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap4"
-    html = render_crispy_form(form)
-    assert "test.css" in html
-    assert "test.js" in html
-
-
 def test_media_removed_when_include_media_is_false_with_bootstrap3():
     form = SampleFormWithMedia()
     form.helper = FormHelper()
     form.helper.template_pack = "bootstrap3"
-    form.helper.include_media = False
-    html = render_crispy_form(form)
-    assert "test.css" not in html
-    assert "test.js" not in html
-
-
-def test_media_removed_when_include_media_is_false_with_bootstrap4():
-    form = SampleFormWithMedia()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap4"
     form.helper.include_media = False
     html = render_crispy_form(form)
     assert "test.css" not in html
@@ -306,11 +284,7 @@ def test_template_pack_override_verbose(settings):
     )
     c = Context({"form": SampleForm(), "form_helper": FormHelper()})
     html = template.render(c)
-
-    if current_pack == "bootstrap4":
-        assert "controls" in html  # controls is a bootstrap3 only class
-    else:
-        assert "controls" not in html
+    assert "controls" not in html
 
 
 def test_template_pack_override_wrong():
@@ -559,32 +533,6 @@ def test_bootstrap_form_show_errors_bs3():
     assert parse_form(form) == parse_expected("bootstrap3/test_form_helper/bootstrap_form_show_errors_bs3_false.html")
 
 
-@only_bootstrap4
-def test_bootstrap_form_show_errors_bs4():
-    form = SampleForm(
-        {
-            "email": "invalidemail",
-            "first_name": "first_name_too_long",
-            "last_name": "last_name_too_long",
-            "password1": "yes",
-            "password2": "yes",
-        }
-    )
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        AppendedText("email", "whatever"),
-        PrependedText("first_name", "blabla"),
-        PrependedAppendedText("last_name", "foo", "bar"),
-        AppendedText("password1", "whatever"),
-        PrependedText("password2", "blabla"),
-    )
-    form.is_valid()
-    form.helper.form_show_errors = True
-    assert parse_form(form) == parse_expected("bootstrap4/test_form_helper/bootstrap_form_show_errors_bs4_true.html")
-    form.helper.form_show_errors = False
-    assert parse_form(form) == parse_expected("bootstrap4/test_form_helper/bootstrap_form_show_errors_bs4_false.html")
-
-
 def test_error_text_inline(settings):
     form = SampleForm({"email": "invalidemail"})
     form.helper = FormHelper()
@@ -599,11 +547,7 @@ def test_error_text_inline(settings):
 
     help_class = "help-inline"
     help_tag_name = "p"
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-        help_class = "help-block"
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-        help_class = "invalid-feedback"
-        help_tag_name = "div"
+    help_class = "help-block"
 
     matches = re.findall(r'<span id="error_\d_\w*" class="%s"' % help_class, html, re.MULTILINE)
     assert len(matches) == 3
@@ -614,11 +558,7 @@ def test_error_text_inline(settings):
     form.helper.error_text_inline = False
     html = render_crispy_form(form)
 
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-        help_class = "help-block"
-    if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-        help_class = "invalid-feedback"
-        help_tag_name = "p"
+    help_class = "help-block"
 
     matches = re.findall(r'<{} id="error_\d_\w*" class="{}"'.format(help_tag_name, help_class), html, re.MULTILINE)
     assert len(matches) == 3
@@ -651,36 +591,6 @@ def test_error_and_help_inline_bootstrap3():
     # Check that error goes before help, otherwise CSS won't work
     error_position = html.find('<span id="error_1_id_email" class="help-inline">')
     help_position = html.find('<div id="hint_id_email" class="help-block">')
-    assert error_position < help_position
-
-
-@only_bootstrap4
-def test_error_and_help_inline():
-    form = SampleForm({"email": "invalidemail"})
-    form.helper = FormHelper()
-    form.helper.error_text_inline = False
-    form.helper.help_text_inline = True
-    form.helper.layout = Layout("email")
-    form.is_valid()
-    html = render_crispy_form(form)
-
-    # Check that help goes before error, otherwise CSS won't work
-    help_position = html.find('<span id="hint_id_email" class="help-inline">')
-    error_position = html.find('<p id="error_1_id_email" class="invalid-feedback">')
-    assert help_position < error_position
-
-    # Viceversa
-    form = SampleForm({"email": "invalidemail"})
-    form.helper = FormHelper()
-    form.helper.error_text_inline = True
-    form.helper.help_text_inline = False
-    form.helper.layout = Layout("email")
-    form.is_valid()
-    html = render_crispy_form(form)
-
-    # Check that error goes before help, otherwise CSS won't work
-    error_position = html.find('<span id="error_1_id_email" class="help-inline">')
-    help_position = html.find('<small id="hint_id_email" class="form-text text-muted">')
     assert error_position < help_position
 
 
@@ -738,82 +648,6 @@ def test_template_pack():
     form.helper.template_pack = "bootstrap4"
     html = render_crispy_form(form)
     assert "controls" not in html  # controls is bootstrap3 only
-
-
-@only_bootstrap4
-def test_label_class_and_field_class_bs4():
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.label_class = "col-lg-2"
-    form.helper.field_class = "col-lg-8"
-    html = render_crispy_form(form)
-
-    assert '<div class="form-group">' in html
-    assert '<div class="col-lg-8">' in html
-    assert html.count("col-lg-8") == 7
-    assert "offset" not in html
-
-    form.helper.label_class = "col-sm-3 col-md-4"
-    form.helper.field_class = "col-sm-8 col-md-6"
-    html = render_crispy_form(form)
-
-    assert '<div class="form-group">' in html
-    assert '<div class="col-sm-8 col-md-6">' in html
-    assert html.count("col-sm-8") == 7
-    assert "offset" not in html
-
-
-@only_bootstrap4
-def test_label_class_and_field_class_bs4_offset_when_horizontal():
-    # Test col-XX-YY pattern
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.label_class = "col-lg-2"
-    form.helper.field_class = "col-lg-8"
-    form.helper.form_class = "form-horizontal"
-    html = render_crispy_form(form)
-
-    assert '<div class="form-group row">' in html
-    assert '<div class="offset-lg-2 col-lg-8">' in html
-    assert html.count("col-lg-8") == 7
-
-    # Test multi col-XX-YY pattern and col-X pattern
-
-    form.helper.label_class = "col-sm-3 col-md-4 col-5 col-lg-4"
-    form.helper.field_class = "col-sm-8 col-md-6 col-7 col-lg-8"
-    html = render_crispy_form(form)
-
-    assert '<div class="form-group row">' in html
-    assert '<div class="offset-sm-3 offset-md-4 offset-5 offset-lg-4 col-sm-8 col-md-6 col-7 col-lg-8">' in html
-    assert html.count("col-sm-8") == 7
-    assert html.count("col-md-6") == 7
-    assert html.count("col-7") == 7
-    assert html.count("col-lg-8") == 7
-
-
-@only_bootstrap4
-def test_form_group_with_form_inline_bs4():
-    form = SampleForm()
-    form.helper = FormHelper()
-    html = render_crispy_form(form)
-    assert '<div class="form-group">' in html
-
-    # .row class shouldn't be together with .form-group in inline forms
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.form_class = "form-inline"
-    form.helper.field_template = "bootstrap4/layout/inline_field.html"
-    html = render_crispy_form(form)
-    assert '<div class="form-group row">' not in html
-
-
-@only_bootstrap4
-def test_template_pack_bs4():
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap3"
-    html = render_crispy_form(form)
-    assert "controls" in html  # controls is bootstrap3 only
 
 
 def test_passthrough_context():

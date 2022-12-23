@@ -22,8 +22,15 @@
     * The `form_style` positional argument to `render_field` is removed.
     * The `form_style` positional argument to the `render` method of all `LayoutObjects` is removed.
 
-* Removed Bootstrap 2 template pack. Bootstrap 3 and 4 support is provided by the core crispy-forms package.
-  Support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
+* Removed Bootstrap 2 and Bootstrap4 template pack. Bootstrap 3 support is currently provided by the core crispy-forms package.
+  
+  These template packs are now available as standalone packages. To upgrade, install the required template pack and add it to 
+  your [`INSTALLED_APPS`](https://docs.djangoproject.com/en/stable/ref/settings/#std-setting-INSTALLED_APPS) setting.
+
+    * Boostrap 2: [PyPI](https://pypi.org/project/crispy-forms-bootstrap2/) -- [GitHub](https://github.com/django-crispy-forms/crispy-forms-bootstrap2)
+    * Boostrap 4: [PyPI](https://pypi.org/project/crispy-bootstrap4/) -- [GitHub](https://github.com/django-crispy-forms/crispy-bootstrap4)
+
+  Also, support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
   [crispy-bootstrap5](https://github.com/django-crispy-forms/crispy-bootstrap5).
 * An attribute error is now raised if the `CRISPY_TEMPLATE_PACK` setting is not provided.
 * The `get_layout_objects()` and `get_field_names()` functions of `LayoutObject` now return a list of `Pointers` rather than a list 

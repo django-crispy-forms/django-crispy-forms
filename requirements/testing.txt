@@ -2,3 +2,4 @@ coverage
 pytest
 pytest-cov
 pytest-django
+git+https://github.com/django-crispy-forms/crispy-bootstrap4

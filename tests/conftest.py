@@ -3,7 +3,6 @@ import pytest
 from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, Submit
 
 only_bootstrap3 = pytest.mark.only("bootstrap3")
-only_bootstrap4 = pytest.mark.only("bootstrap4")
 
 
 @pytest.fixture
@@ -24,7 +23,7 @@ def advanced_layout():
     )
 
 
-@pytest.fixture(autouse=True, params=("bootstrap3", "bootstrap4"))
+@pytest.fixture(autouse=True, params=(["bootstrap3"]))
 def template_packs(request, settings):
     check_template_pack(request.node, request.param)
     settings.CRISPY_TEMPLATE_PACK = request.param

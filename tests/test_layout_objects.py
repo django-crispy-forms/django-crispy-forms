@@ -1,5 +1,3 @@
-import re
-
 from django import forms
 from django.template import Context, Template
 from django.utils.translation import activate, deactivate
@@ -26,12 +24,11 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField, Submit
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap3, only_bootstrap4
+from .conftest import only_bootstrap3
 from .forms import (
     CheckboxesSampleForm,
     CustomCheckboxSelectMultiple,
     CustomRadioSelect,
-    GroupedChoiceForm,
     SampleForm,
     SampleFormCustomWidgets,
 )
@@ -161,19 +158,13 @@ class TestBootstrapLayoutObjects:
         form.helper.layout = Layout("inline_radios")
 
         html = render_crispy_form(form)
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert 'class="custom-control-input"' in html
-        else:
-            assert 'class="radio"' in html
+        assert 'class="radio"' in html
 
         # Make sure an inherited CheckboxSelectMultiple gets rendered as it
         assert isinstance(form.fields["checkboxes"].widget, CustomCheckboxSelectMultiple)
         form.helper.layout = Layout("checkboxes")
         html = render_crispy_form(form)
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert 'class="custom-control-input"' in html
-        else:
-            assert 'class="checkbox"' in html
+        assert 'class="checkbox"' in html
 
     def test_prepended_appended_text(self, settings):
         test_form = SampleForm()
@@ -186,57 +177,12 @@ class TestBootstrapLayoutObjects:
         pack = settings.CRISPY_TEMPLATE_PACK
         assert parse_form(test_form) == parse_expected(f"{pack}/test_layout_objects/test_prepended_appended_text.html")
 
-    @only_bootstrap4
-    def test_prepended_wrapper_class(self, settings):
-        test_form = SampleForm()
-        test_form.helper = FormHelper()
-        test_form.helper.layout = Layout(
-            PrependedAppendedText("email", "@", "gmail.com", wrapper_class="wrapper class"),
-            PrependedAppendedText("email", "@", "gmail.com"),
-        )
-        html = render_crispy_form(test_form)
-        assert html.count('<div id="div_id_email" class="form-group">') == 1
-        assert html.count('<div id="div_id_email" class="form-group wrapper class">') == 1
-
-    @only_bootstrap4
-    def test_prepended_appended_text_in_select(self, settings):
-        test_form = SampleForm()
-        test_form.fields["select"] = forms.ChoiceField(
-            label="Select field", choices=[(1, "Choice 1"), (2, "Choice 2")]
-        )
-
-        test_form.helper = FormHelper()
-        test_form.helper.layout = Layout(
-            AppendedText("select", "USD"),
-        )
-        html = render_crispy_form(test_form)
-
-        assert html.count("custom-select") == 1
-        assert html.count("USD") == 1
-
-    @only_bootstrap4
-    def test_prepended_appended_text_input_size(self, settings):
-        test_form = SampleForm()
-        test_form.helper = FormHelper()
-        test_form.helper.layout = Layout(
-            PrependedAppendedText("email", "@", "gmail.com", input_size="input-group-lg"),
-            AppendedText("password1", "#", input_size="input-group-sm"),
-            PrependedText("password2", "$", input_size="input-group-lg"),
-        )
-        html = render_crispy_form(test_form)
-        assert html.count('<div class="input-group input-group-lg">') == 2
-        assert html.count('<div class="input-group input-group-sm">') == 1
-
     def test_inline_radios(self, settings):
         test_form = CheckboxesSampleForm()
         test_form.helper = FormHelper()
         test_form.helper.layout = Layout(InlineRadios("inline_radios"))
         html = render_crispy_form(test_form)
-
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            assert html.count('radio-inline"') == 2
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert html.count('custom-control-inline"') == 2
+        assert html.count('radio-inline"') == 2
 
     def test_accordion_and_accordiongroup(self, settings):
         test_form = SampleForm()
@@ -249,21 +195,9 @@ class TestBootstrapLayoutObjects:
         )
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            assert html.count('<div class="panel panel-default"') == 2
-            assert html.count('<div class="panel-group"') == 1
-            assert html.count('<div class="panel-heading">') == 2
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            match = re.search('div id="(accordion-\\d+)"', html)
-            assert match
-
-            accordion_id = match.group(1)
-
-            assert html.count('<div class="card mb-2"') == 2
-            assert html.count('<div class="card-header"') == 2
-
-            assert html.count('data-parent="#{}"'.format(accordion_id)) == 2
-
+        assert html.count('<div class="panel panel-default"') == 2
+        assert html.count('<div class="panel-group"') == 1
+        assert html.count('<div class="panel-heading">') == 2
         assert html.count('<div id="one"') == 1
         assert html.count('<div id="two"') == 1
         assert html.count('name="first_name"') == 1
@@ -283,10 +217,7 @@ class TestBootstrapLayoutObjects:
         # The first time, there should be one of them there.
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            accordion_class = "panel-collapse collapse in"
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            accordion_class = "collapse show"
+        accordion_class = "panel-collapse collapse in"
 
         assert html.count('<div id="one" class="%s"' % accordion_class) == 1
 
@@ -330,25 +261,15 @@ class TestBootstrapLayoutObjects:
         )
         html = render_crispy_form(test_form)
 
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert (
-                html.count(
-                    '<ul class="nav nav-tabs"> <li class="nav-item">'
-                    '<a class="nav-link active" href="#custom-name" data-toggle="tab">One</a></li>'
-                )
-                == 1
+        assert (
+            html.count(
+                '<ul class="nav nav-tabs"> <li class="tab-pane active">'
+                '<a href="#custom-name" data-toggle="tab">One</a></li>'
             )
-            assert html.count("tab-pane") == 2
-        else:
-            assert (
-                html.count(
-                    '<ul class="nav nav-tabs"> <li class="tab-pane active">'
-                    '<a href="#custom-name" data-toggle="tab">One</a></li>'
-                )
-                == 1
-            )
-            assert html.count('<li class="tab-pane') == 2
-            assert html.count("tab-pane") == 4
+            == 1
+        )
+        assert html.count('<li class="tab-pane') == 2
+        assert html.count("tab-pane") == 4
 
         assert html.count('class="tab-pane first-tab-class active"') == 1
 
@@ -452,10 +373,7 @@ class TestBootstrapLayoutObjects:
         html = render_crispy_form(test_form)
 
         assert html.count('inline="True"') == 4
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap3":
-            assert html.count('checkbox-inline"') == 3
-        if settings.CRISPY_TEMPLATE_PACK == "bootstrap4":
-            assert html.count('custom-control-inline"') == 3
+        assert html.count('checkbox-inline"') == 3
 
     def test_multiple_checkboxes_unique_ids(self):
         test_form = CheckboxesSampleForm()
@@ -475,24 +393,6 @@ class TestBootstrapLayoutObjects:
         for id_suffix in expected_ids:
             expected_str = f'id="id_{id_suffix}"'
             assert html.count(expected_str) == 1
-
-    @only_bootstrap4
-    def test_grouped_checkboxes_radios(self):
-        form = GroupedChoiceForm()
-        form.helper = FormHelper()
-        form.helper.layout = Layout("checkbox_select_multiple")
-        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_checkboxes.html")
-        form.helper.layout = Layout("radio")
-        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_radios.html")
-
-        form = GroupedChoiceForm({})
-        form.helper = FormHelper()
-        form.helper.layout = Layout("checkbox_select_multiple")
-        assert parse_form(form) == parse_expected(
-            "bootstrap4/test_layout_objects/test_grouped_checkboxes_failing.html"
-        )
-        form.helper.layout = Layout("radio")
-        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/test_grouped_radios_failing.html")
 
     def test_non_ascii_chars_in_container_name(self):
         """
@@ -526,32 +426,6 @@ class TestBootstrapLayoutObjects:
         )
 
         assert parse_form(form) == parse_expected("bootstrap3/test_layout_objects/bootstrap_modal_with_kwargs.html")
-
-    @only_bootstrap4
-    def test_bs4_modal_no_kwargs(self):
-        form = SampleForm()
-        form.helper = FormHelper()
-        form.helper.layout = Layout(Modal(Field("first_name")))
-
-        print(parse_form(form))
-        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/bootstrap_modal_no_kwargs.html")
-
-    @only_bootstrap4
-    def test_bs4_modal_with_kwargs(self):
-        form = SampleForm()
-        form.helper = FormHelper()
-        form.helper.layout = Layout(
-            Modal(
-                Field("first_name"),
-                css_id="id_test",
-                css_class="test-class",
-                title="This is my modal",
-                title_id="id_title_test",
-                title_class="text-center",
-            )
-        )
-
-        assert parse_form(form) == parse_expected("bootstrap4/test_layout_objects/bootstrap_modal_with_kwargs.html")
 
     def test_FormActions(self, settings):
         form = SampleForm()
