@@ -13,7 +13,6 @@ from crispy_forms.bootstrap import (
     FormActions,
     InlineCheckboxes,
     InlineRadios,
-    Modal,
     PrependedAppendedText,
     PrependedText,
     StrictButton,
@@ -24,7 +23,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField, Submit
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap3
 from .forms import (
     CheckboxesSampleForm,
     CustomCheckboxSelectMultiple,
@@ -401,31 +399,6 @@ class TestBootstrapLayoutObjects:
         name = "テスト"
         test_container = Container(name, "val1", "val2")
         assert test_container.css_id == name
-
-    @only_bootstrap3
-    def test_modal_no_kwargs(self):
-        form = SampleForm()
-        form.helper = FormHelper()
-        form.helper.layout = Layout(Modal(Field("first_name")))
-
-        assert parse_form(form) == parse_expected("bootstrap3/test_layout_objects/bootstrap_modal_no_kwargs.html")
-
-    @only_bootstrap3
-    def test_modal_with_kwargs(self):
-        form = SampleForm()
-        form.helper = FormHelper()
-        form.helper.layout = Layout(
-            Modal(
-                Field("first_name"),
-                css_id="id_test",
-                css_class="test-class",
-                title="This is my modal",
-                title_id="id_title_test",
-                title_class="text-center",
-            )
-        )
-
-        assert parse_form(form) == parse_expected("bootstrap3/test_layout_objects/bootstrap_modal_with_kwargs.html")
 
     def test_FormActions(self, settings):
         form = SampleForm()

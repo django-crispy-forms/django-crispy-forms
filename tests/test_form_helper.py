@@ -16,9 +16,8 @@ from crispy_forms.layout import Button, Hidden, Layout, Reset, Submit
 from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap3
-from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia, SampleFormWithMultiValueField
-from .utils import parse_expected, parse_form
+from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia
+from .utils import parse_expected
 
 
 def test_inputs(settings):
@@ -497,34 +496,6 @@ def test_helper_std_field_template_no_layout():
         assert html.count('id="div_id_%s"' % field) == 1
 
 
-@only_bootstrap3
-def test_bootstrap_form_show_errors_bs3():
-    form = SampleForm(
-        {
-            "email": "invalidemail",
-            "first_name": "first_name_too_long",
-            "last_name": "last_name_too_long",
-            "password1": "yes",
-            "password2": "yes",
-        }
-    )
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        AppendedText("email", "whatever"),
-        PrependedText("first_name", "blabla"),
-        PrependedAppendedText("last_name", "foo", "bar"),
-        AppendedText("password1", "whatever"),
-        PrependedText("password2", "blabla"),
-    )
-    form.is_valid()
-
-    form.helper.form_show_errors = True
-    assert parse_form(form) == parse_expected("bootstrap3/test_form_helper/bootstrap_form_show_errors_bs3_true.html")
-
-    form.helper.form_show_errors = False
-    assert parse_form(form) == parse_expected("bootstrap3/test_form_helper/bootstrap_form_show_errors_bs3_false.html")
-
-
 def test_error_text_inline(settings):
     form = SampleForm({"email": "invalidemail"})
     form.helper = FormHelper()
@@ -556,36 +527,6 @@ def test_error_text_inline(settings):
     assert len(matches) == 3
 
 
-@only_bootstrap3
-def test_error_and_help_inline_bootstrap3():
-    form = SampleForm({"email": "invalidemail"})
-    form.helper = FormHelper()
-    form.helper.error_text_inline = False
-    form.helper.help_text_inline = True
-    form.helper.layout = Layout("email")
-    form.is_valid()
-    html = render_crispy_form(form)
-
-    # Check that help goes before error, otherwise CSS won't work
-    help_position = html.find('<span id="hint_id_email" class="help-inline">')
-    error_position = html.find('<p id="error_1_id_email" class="help-block">')
-    assert help_position < error_position
-
-    # Viceversa
-    form = SampleForm({"email": "invalidemail"})
-    form.helper = FormHelper()
-    form.helper.error_text_inline = True
-    form.helper.help_text_inline = False
-    form.helper.layout = Layout("email")
-    form.is_valid()
-    html = render_crispy_form(form)
-
-    # Check that error goes before help, otherwise CSS won't work
-    error_position = html.find('<span id="error_1_id_email" class="help-inline">')
-    help_position = html.find('<div id="hint_id_email" class="help-block">')
-    assert error_position < help_position
-
-
 def test_form_show_labels():
     form = SampleForm()
     form.helper = FormHelper()
@@ -602,46 +543,6 @@ def test_form_show_labels():
     assert html.count("<label") == 0
 
 
-@only_bootstrap3
-def test_label_class_and_field_class():
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.label_class = "col-lg-2"
-    form.helper.field_class = "col-lg-8"
-    html = render_crispy_form(form)
-    dom = parse_html(html)
-
-    snippet = parse_html(
-        '<div class="form-group"> <div class="controls col-lg-offset-2 col-lg-8"> '
-        '<div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> '
-        '<input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company'
-    )
-    assert dom.count(snippet)
-    assert html.count("col-lg-8") == 7
-
-    form.helper.label_class = "col-sm-3 col-md-4"
-    form.helper.field_class = "col-sm-8 col-md-6"
-    html = render_crispy_form(form)
-    dom = parse_html(html)
-
-    snippet = parse_html(
-        '<div class="form-group"> <div class="controls col-sm-offset-3 col-md-offset-4 col-sm-8 col-md-6"> '
-        '<div id="div_id_is_company" class="checkbox"> <label for="id_is_company" class=""> '
-        '<input class="checkboxinput" id="id_is_company" name="is_company" type="checkbox" />company'
-    )
-    assert dom.count(snippet)
-    assert html.count("col-sm-8") == 7
-
-
-@only_bootstrap3
-def test_template_pack():
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap4"
-    html = render_crispy_form(form)
-    assert "controls" not in html  # controls is bootstrap3 only
-
-
 def test_passthrough_context():
     """
     Test to ensure that context is passed through implicitly from outside of
@@ -656,21 +557,3 @@ def test_passthrough_context():
     html = render_crispy_form(form, helper=form.helper, context=c)
     assert "Got prefix: foo" in html
     assert "Got suffix: bar" in html
-
-
-@only_bootstrap3
-def test_bootstrap3_does_add_form_control_class_to_non_multivaluefield():
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap3"
-    html = render_crispy_form(form)
-    assert "form-control" in html
-
-
-@only_bootstrap3
-def test_bootstrap3_does_not_add_form_control_class_to_multivaluefield():
-    form = SampleFormWithMultiValueField()
-    form.helper = FormHelper()
-    form.helper.template_pack = "bootstrap3"
-    html = render_crispy_form(form)
-    assert "form-control" not in html

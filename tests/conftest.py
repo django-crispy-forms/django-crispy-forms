@@ -2,8 +2,6 @@ import pytest
 
 from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, Submit
 
-only_bootstrap3 = pytest.mark.only("bootstrap3")
-
 
 @pytest.fixture
 def advanced_layout():
