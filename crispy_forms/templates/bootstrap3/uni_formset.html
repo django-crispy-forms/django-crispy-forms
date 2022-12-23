@@ -1,8 +1,0 @@
-{% with formset.management_form as form %}
-    {% include 'bootstrap3/uni_form.html' %}
-{% endwith %}
-{% for form in formset %}
-    <div class="multiField">
-        {% include 'bootstrap3/uni_form.html' %}
-    </div>
-{% endfor %}
