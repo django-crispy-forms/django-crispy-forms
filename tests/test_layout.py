@@ -369,31 +369,3 @@ def test_update_attributes_class():
     form.helper["password1"].update_attributes(css_class="hello2")
     html = render_crispy_form(form)
     assert html.count(' class="hello hello2') == 1
-
-
-def test_multiple_fields(settings):
-    "Field can accept any number of fields and apply the kwargs to all fields"
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.layout = Layout(Field("first_name", "last_name", css_class="form-control-lg"))
-    template_pack = settings.CRISPY_TEMPLATE_PACK
-    assert parse_form(form) == parse_expected(f"{template_pack}/test_layout/test_multiple_fields.html")
-
-
-def test_radio_attrs(settings):
-    class TestForm(forms.Form):
-        radios = forms.ChoiceField(
-            choices=(
-                ("option_one", "Option one"),
-                ("option_two", "Option two"),
-            ),
-            widget=forms.RadioSelect(
-                attrs={
-                    "class": "sr-only sr-only-focusable",
-                }
-            ),
-        )
-
-    form = TestForm()
-    form.helper = FormHelper()
-    assert parse_form(form) == parse_expected(f"{settings.CRISPY_TEMPLATE_PACK}/test_layout/test_radio_attrs.html")

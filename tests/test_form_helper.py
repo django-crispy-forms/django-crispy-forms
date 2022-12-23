@@ -7,7 +7,6 @@ from django import forms
 from django.forms.models import formset_factory
 from django.middleware.csrf import _get_new_csrf_string
 from django.template import Context, Template, TemplateSyntaxError
-from django.test.html import parse_html
 from django.urls import reverse
 
 from crispy_forms.bootstrap import AppendedText, FieldWithButtons, PrependedAppendedText, PrependedText, StrictButton
@@ -17,7 +16,6 @@ from crispy_forms.templatetags.crispy_forms_tags import CrispyFormNode
 from crispy_forms.utils import render_crispy_form
 
 from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia
-from .utils import parse_expected
 
 
 def test_inputs(settings):
@@ -92,49 +90,6 @@ def test_form_with_helper_without_layout(settings):
     assert "forms-that-rock" not in html
     assert 'method="get"' not in html
     assert 'id="this-form-rocks"' not in html
-
-
-def test_form_show_errors_non_field_errors(settings):
-    form = SampleForm({"password1": "wargame", "password2": "god"})
-    form.helper = FormHelper()
-    form.helper.form_show_errors = True
-    form.is_valid()
-
-    template = Template(
-        """
-        {% load crispy_forms_tags %}
-        {% crispy testForm %}
-    """
-    )
-
-    # First we render with errors
-    c = Context({"testForm": form})
-    # Ensure those errors were rendered
-    if django.VERSION < (4, 1):
-        # Removed "for = ..." from MultiWidget's <label>.
-        # https://github.com/django/django/commit/c6c6cd3c5ad9c36795bb120e521590424f034ae4
-        expected = parse_expected(
-            f"{settings.CRISPY_TEMPLATE_PACK}/test_form_helper/test_form_show_errors_non_field_errors_true_lte40.html"
-        )
-    else:
-        expected = parse_expected(
-            f"{settings.CRISPY_TEMPLATE_PACK}/test_form_helper/test_form_show_errors_non_field_errors_true.html"
-        )
-    assert parse_html(template.render(c)) == expected
-
-    # Now we render without errors
-    form.helper.form_show_errors = False
-    c = Context({"testForm": form})
-    # Ensure errors were not rendered
-    if django.VERSION < (4, 1):
-        expected = parse_expected(
-            f"{settings.CRISPY_TEMPLATE_PACK}/test_form_helper/test_form_show_errors_non_field_errors_false_lte40.html"
-        )
-    else:
-        expected = parse_expected(
-            f"{settings.CRISPY_TEMPLATE_PACK}/test_form_helper/test_form_show_errors_non_field_errors_false.html"
-        )
-    assert parse_html(template.render(c)) == expected
 
 
 def test_html5_required():

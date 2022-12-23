@@ -9,18 +9,15 @@ from crispy_forms.bootstrap import (
     Alert,
     AppendedText,
     Container,
-    FieldWithButtons,
-    FormActions,
     InlineCheckboxes,
     InlineRadios,
     PrependedAppendedText,
     PrependedText,
-    StrictButton,
     Tab,
     TabHolder,
 )
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField, Submit
+from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
 from crispy_forms.utils import render_crispy_form
 
 from .forms import (
@@ -30,7 +27,6 @@ from .forms import (
     SampleForm,
     SampleFormCustomWidgets,
 )
-from .utils import parse_expected, parse_form
 
 
 def test_field_with_custom_template():
@@ -163,17 +159,6 @@ class TestBootstrapLayoutObjects:
         form.helper.layout = Layout("checkboxes")
         html = render_crispy_form(form)
         assert 'class="checkbox"' in html
-
-    def test_prepended_appended_text(self, settings):
-        test_form = SampleForm()
-        test_form.helper = FormHelper()
-        test_form.helper.layout = Layout(
-            PrependedAppendedText("email", "@", "gmail.com", css_class="custom-size-class", active=True),
-            AppendedText("password1", "#", css_class="input-lg"),
-            PrependedText("password2", "$", css_class="input-sm"),
-        )
-        pack = settings.CRISPY_TEMPLATE_PACK
-        assert parse_form(test_form) == parse_expected(f"{pack}/test_layout_objects/test_prepended_appended_text.html")
 
     def test_inline_radios(self, settings):
         test_form = CheckboxesSampleForm()
@@ -323,24 +308,6 @@ class TestBootstrapLayoutObjects:
         assert 'class="first"' in html
         assert 'class="second"' in html
 
-    def test_field_with_buttons(self, settings):
-        form = SampleForm()
-        form.helper = FormHelper()
-        form.helper.layout = Layout(
-            FieldWithButtons(
-                Field("password1", css_class="span4"),
-                StrictButton("Go!", css_id="go-button"),
-                StrictButton("No!", css_class="extra"),
-                StrictButton("Test <>&", type="submit", name="whatever <>&", value="something"),
-                css_class="extra",
-                autocomplete="off",
-                input_size="input-group-sm",
-            )
-        )
-        assert parse_form(form) == parse_expected(
-            f"{settings.CRISPY_TEMPLATE_PACK}/test_layout_objects/test_field_with_buttons.html"
-        )
-
     def test_hidden_fields(self):
         form = SampleForm()
         # All fields hidden
@@ -399,20 +366,3 @@ class TestBootstrapLayoutObjects:
         name = "テスト"
         test_container = Container(name, "val1", "val2")
         assert test_container.css_id == name
-
-    def test_FormActions(self, settings):
-        form = SampleForm()
-        form.helper = FormHelper()
-        form.helper.field_class = "field-class"
-        form.helper.layout = Layout(
-            FormActions(
-                HTML('<span style="display: hidden;">Information Saved</span>'),
-                Submit("Save", "Save", css_class="btn-primary"),
-                css_class="custom-class",
-                css_id="css-id",
-                data="safe <>& data",
-            ),
-        )
-
-        template_pack = settings.CRISPY_TEMPLATE_PACK
-        assert parse_form(form) == parse_expected(f"{template_pack}/test_layout_objects/test_FormActions.html")
