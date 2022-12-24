@@ -4,7 +4,6 @@ from django import template
 from django.conf import settings
 from django.forms import boundfield
 from django.forms.formsets import BaseFormSet
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
@@ -45,15 +44,13 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
 
         {{ myform|label_class:"col-lg-2",field_class:"col-lg-8" }}
     """
-    c = Context(
-        {
-            "field_class": field_class,
-            "field_template": "%s/field.html" % template_pack,
-            "form_show_errors": True,
-            "form_show_labels": True,
-            "label_class": label_class,
-        }
-    ).flatten()
+    c = {
+        "field_class": field_class,
+        "field_template": "%s/field.html" % template_pack,
+        "form_show_errors": True,
+        "form_show_labels": True,
+        "label_class": label_class,
+    }
     if isinstance(form, BaseFormSet):
         template = uni_formset_template(template_pack)
         c["formset"] = form
@@ -78,10 +75,10 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
     """
     if isinstance(form, BaseFormSet):
         template = get_template("%s/errors_formset.html" % template_pack)
-        c = Context({"formset": form}).flatten()
+        c = {"formset": form}
     else:
         template = get_template("%s/errors.html" % template_pack)
-        c = Context({"form": form}).flatten()
+        c = {"form": form}
 
     return template.render(c)
 
@@ -118,8 +115,7 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
         template_path = "%s/field.html" % template_pack
     template = get_template(template_path)
 
-    c = Context(attributes).flatten()
-    return template.render(c)
+    return template.render(attributes)
 
 
 @register.filter(name="flatatt")
