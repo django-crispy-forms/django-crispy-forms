@@ -95,7 +95,6 @@ def test_form_with_helper_without_layout():
 
 def test_html5_required():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.html5_required = True
     html = render_crispy_form(form)
     # 6 out of 7 fields are required and an extra one for the SplitDateTimeWidget makes 7.
@@ -105,14 +104,12 @@ def test_html5_required():
         assert len(re.findall(r"\brequired\b", html)) == 7
 
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.html5_required = False
     html = render_crispy_form(form)
 
 
 def test_media_is_included_by_default_with_bootstrap3():
     form = SampleFormWithMedia()
-    form.helper = FormHelper()
     form.helper.template_pack = "bootstrap3"
     html = render_crispy_form(form)
     assert "test.css" in html
@@ -121,7 +118,6 @@ def test_media_is_included_by_default_with_bootstrap3():
 
 def test_media_removed_when_include_media_is_false_with_bootstrap3():
     form = SampleFormWithMedia()
-    form.helper = FormHelper()
     form.helper.template_pack = "bootstrap3"
     form.helper.include_media = False
     html = render_crispy_form(form)
@@ -131,7 +127,6 @@ def test_media_removed_when_include_media_is_false_with_bootstrap3():
 
 def test_attrs():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.attrs = {"id": "TestIdForm", "autocomplete": "off"}
     html = render_crispy_form(form)
 
@@ -336,15 +331,13 @@ def test_CSRF_token_GET_form():
 
 def test_disable_csrf():
     form = SampleForm()
-    helper = FormHelper()
-    helper.disable_csrf = True
-    html = render_crispy_form(form, helper, {"csrf_token": _get_new_csrf_string()})
+    form.helper.disable_csrf = True
+    html = render_crispy_form(form, form.helper, {"csrf_token": _get_new_csrf_string()})
     assert "csrf" not in html
 
 
 def test_render_unmentioned_fields():
     test_form = SampleForm()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_unmentioned_fields = True
 
@@ -354,7 +347,6 @@ def test_render_unmentioned_fields():
 
 def test_render_unmentioned_fields_order():
     test_form = SampleForm7()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_unmentioned_fields = True
 
@@ -371,7 +363,6 @@ def test_render_unmentioned_fields_order():
     )
 
     test_form = SampleForm8()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_unmentioned_fields = True
 
@@ -390,7 +381,6 @@ def test_render_unmentioned_fields_order():
 
 def test_render_hidden_fields():
     test_form = SampleForm()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_hidden_fields = True
 
@@ -405,7 +395,6 @@ def test_render_hidden_fields():
 
 def test_render_required_fields():
     test_form = SampleForm()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_required_fields = True
 
@@ -415,7 +404,6 @@ def test_render_required_fields():
 
 def test_helper_custom_template():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.template = "custom_form_template.html"
 
     html = render_crispy_form(form)
@@ -424,7 +412,6 @@ def test_helper_custom_template():
 
 def test_helper_custom_field_template():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.layout = Layout("password1", "password2")
     form.helper.field_template = "custom_field_template.html"
 
@@ -434,7 +421,6 @@ def test_helper_custom_field_template():
 
 def test_helper_custom_field_template_no_layout():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.field_template = "custom_field_template.html"
 
     html = render_crispy_form(form)
@@ -445,7 +431,6 @@ def test_helper_custom_field_template_no_layout():
 
 def test_helper_std_field_template_no_layout():
     form = SampleForm()
-    form.helper = FormHelper()
 
     html = render_crispy_form(form)
     for field in form.fields:
@@ -454,7 +439,6 @@ def test_helper_std_field_template_no_layout():
 
 def test_error_text_inline():
     form = SampleForm({"email": "invalidemail"})
-    form.helper = FormHelper()
     layout = Layout(
         AppendedText("first_name", "wat"),
         PrependedText("email", "@"),
@@ -472,7 +456,6 @@ def test_error_text_inline():
     assert len(matches) == 3
 
     form = SampleForm({"email": "invalidemail"})
-    form.helper = FormHelper()
     form.helper.layout = layout
     form.helper.error_text_inline = False
     html = render_crispy_form(form)
@@ -485,7 +468,6 @@ def test_error_text_inline():
 
 def test_form_show_labels():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.layout = Layout(
         "password1",
         FieldWithButtons("password2", StrictButton("Confirm")),
@@ -505,7 +487,6 @@ def test_passthrough_context():
     the crispy form into the crispy form templates.
     """
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.template = "custom_form_template_with_context.html"
 
     c = {"prefix": "foo", "suffix": "bar"}

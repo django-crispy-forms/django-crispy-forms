@@ -4,7 +4,19 @@ from django.db import models
 from crispy_forms.helper import FormHelper
 
 
-class SampleForm(forms.Form):
+class BaseForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+
+
+class BaseModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+
+
+class SampleForm(BaseForm):
     is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
     email = forms.EmailField(
         label="email", max_length=30, required=True, widget=forms.TextInput(), help_text="Insert your email"
@@ -26,12 +38,10 @@ class SampleForm(forms.Form):
 
 
 class SampleForm2(SampleForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
+    pass
 
 
-class CheckboxesSampleForm(forms.Form):
+class CheckboxesSampleForm(BaseForm):
     checkboxes = forms.MultipleChoiceField(
         choices=((1, "Option one"), (2, "Option two"), (3, "Option three")),
         initial=(1,),
@@ -60,7 +70,7 @@ class CheckboxesSampleForm(forms.Form):
     )
 
 
-class SelectSampleForm(forms.Form):
+class SelectSampleForm(BaseForm):
     select = forms.ChoiceField(
         choices=((1, "Option one"), (2, "Option two"), (3, "Option three")), initial=(1,), widget=forms.Select
     )
@@ -71,7 +81,7 @@ class CrispyTestModel(models.Model):
     password = models.CharField(max_length=20)
 
 
-class SampleForm3(forms.ModelForm):
+class SampleForm3(BaseModelForm):
     class Meta:
         model = CrispyTestModel
         fields = ["email", "password"]
@@ -82,7 +92,7 @@ class SampleForm3(forms.ModelForm):
         self.helper = FormHelper(self)
 
 
-class SampleForm4(forms.ModelForm):
+class SampleForm4(BaseModelForm):
     class Meta:
         """
         before Django1.6, one cannot use __all__ shortcut for fields
@@ -95,7 +105,7 @@ class SampleForm4(forms.ModelForm):
         fields = "__all__"  # eliminate RemovedInDjango18Warning
 
 
-class SampleForm5(forms.Form):
+class SampleForm5(BaseForm):
     choices = [
         (1, 1),
         (2, 2),
@@ -106,13 +116,13 @@ class SampleForm5(forms.Form):
     pk = forms.IntegerField()
 
 
-class SampleFormWithMedia(forms.Form):
+class SampleFormWithMedia(BaseForm):
     class Media:
         css = {"all": ("test.css",)}
         js = ("test.js",)
 
 
-class SampleFormWithMultiValueField(forms.Form):
+class SampleFormWithMultiValueField(BaseForm):
     multi = forms.SplitDateTimeField()
 
 
@@ -125,7 +135,7 @@ class CrispyEmptyChoiceTestModel(models.Model):
     )
 
 
-class SampleForm6(forms.ModelForm):
+class SampleForm6(BaseModelForm):
     class Meta:
         """
         When allowing null=True in a model field,
@@ -142,7 +152,7 @@ class SampleForm6(forms.ModelForm):
         widgets = {"fruit": forms.RadioSelect()}
 
 
-class SampleForm7(forms.ModelForm):
+class SampleForm7(BaseModelForm):
     is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
 
@@ -151,7 +161,7 @@ class SampleForm7(forms.ModelForm):
         fields = ("email", "password", "password2")
 
 
-class SampleForm8(forms.ModelForm):
+class SampleForm8(BaseModelForm):
     is_company = forms.CharField(label="company", required=False, widget=forms.CheckboxInput())
     password2 = forms.CharField(label="re-enter password", max_length=30, required=True, widget=forms.PasswordInput())
 
@@ -172,19 +182,19 @@ class FakeFieldFile:
         return self.url
 
 
-class FileForm(forms.Form):
+class FileForm(BaseForm):
     file_field = forms.FileField(widget=forms.FileInput)
     clearable_file = forms.FileField(widget=forms.ClearableFileInput, required=False, initial=FakeFieldFile())
 
 
-class AdvancedFileForm(forms.Form):
+class AdvancedFileForm(BaseForm):
     file_field = forms.FileField(widget=forms.FileInput(attrs={"class": "my-custom-class"}))
     clearable_file = forms.FileField(
         widget=forms.ClearableFileInput(attrs={"class": "my-custom-class"}), required=False, initial=FakeFieldFile()
     )
 
 
-class GroupedChoiceForm(forms.Form):
+class GroupedChoiceForm(BaseForm):
     choices = [
         (
             "Audio",
@@ -214,7 +224,7 @@ class CustomCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
     pass
 
 
-class SampleFormCustomWidgets(forms.Form):
+class SampleFormCustomWidgets(BaseForm):
     inline_radios = forms.ChoiceField(
         choices=(
             ("option_one", "Option one"),
