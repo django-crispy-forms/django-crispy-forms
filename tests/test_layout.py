@@ -2,12 +2,10 @@ import pytest
 
 from django import forms
 from django.forms.models import formset_factory, modelformset_factory
-from django.middleware.csrf import _get_new_csrf_string
 from django.shortcuts import render
 from django.template import Context, Template
 from django.test.html import parse_html
 from django.test.utils import override_settings
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import Field, InlineCheckboxes
@@ -28,7 +26,7 @@ from .forms import (
     SampleForm6,
 )
 from .test_settings import TEMPLATE_DIRS
-from .utils import contains_partial, parse_expected, parse_form
+from .utils import parse_expected, parse_form
 
 
 def test_invalid_unicode_characters(settings):
@@ -229,7 +227,7 @@ def test_change_layout_dynamically_delete_field():
     assert "email" not in html
 
 
-def test_formset_layout(settings):
+def test_formset_layout():
     SampleFormSet = formset_factory(SampleForm, extra=3)
     formset = SampleFormSet()
     helper = FormHelper()
@@ -248,62 +246,16 @@ def test_formset_layout(settings):
         Fieldset("", "first_name", "last_name"),
     )
 
-    html = render_crispy_form(form=formset, helper=helper, context={"csrf_token": _get_new_csrf_string()})
-
-    # Check formset fields
-    assert contains_partial(html, '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>')
-    assert contains_partial(
-        html, '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
-    )
-    assert contains_partial(
-        html, '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
-    )
-    assert contains_partial(
-        html, '<input id="id_form-MIN_NUM_FORMS" name="form-MIN_NUM_FORMS" type="hidden" value="0"/>'
-    )
-    assert html.count("hidden") == 5
-
-    # Check form structure
-    assert html.count("<form") == 1
-    assert html.count("csrfmiddlewaretoken") == 1
-    assert "formsets-that-rock" in html
-    assert 'method="post"' in html
-    assert 'id="thisFormsetRocks"' in html
-    assert 'action="%s"' % reverse("simpleAction") in html
-
-    # Check form layout
-    assert "Item 1" in html
-    assert "Item 2" in html
-    assert "Item 3" in html
-    assert html.count("Note for first form only") == 1
-    assert html.count("row") == 3
+    html = render_crispy_form(form=formset, helper=helper, context={"csrf_token": "aTestToken"})
+    assert parse_expected("test_formset_layout.html") == parse_html(html)
 
 
 def test_modelformset_layout():
     CrispyModelFormSet = modelformset_factory(CrispyTestModel, form=SampleForm4, extra=3)
     formset = CrispyModelFormSet(queryset=CrispyTestModel.objects.none())
-    helper = FormHelper()
-    helper.layout = Layout("email")
-
-    html = render_crispy_form(form=formset, helper=helper)
-
-    assert html.count("id_form-0-id") == 1
-    assert html.count("id_form-1-id") == 1
-    assert html.count("id_form-2-id") == 1
-
-    assert contains_partial(html, '<input id="id_form-TOTAL_FORMS" name="form-TOTAL_FORMS" type="hidden" value="3"/>')
-    assert contains_partial(
-        html, '<input id="id_form-INITIAL_FORMS" name="form-INITIAL_FORMS" type="hidden" value="0"/>'
-    )
-    assert contains_partial(
-        html, '<input id="id_form-MAX_NUM_FORMS" name="form-MAX_NUM_FORMS" type="hidden" value="1000"/>'
-    )
-
-    assert html.count('name="form-0-email"') == 1
-    assert html.count('name="form-1-email"') == 1
-    assert html.count('name="form-2-email"') == 1
-    assert html.count('name="form-3-email"') == 0
-    assert html.count("password") == 0
+    formset.helper = FormHelper()
+    formset.helper.layout = Layout("email")
+    assert parse_expected("test_modelformset_layout.html") == parse_form(formset)
 
 
 def test_i18n():

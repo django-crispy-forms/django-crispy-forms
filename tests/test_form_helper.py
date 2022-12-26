@@ -434,8 +434,6 @@ def test_render_unmentioned_fields_order():
 
 
 def test_render_hidden_fields():
-    from .utils import contains_partial
-
     test_form = SampleForm()
     test_form.helper = FormHelper()
     test_form.helper.layout = Layout("email")
@@ -447,13 +445,7 @@ def test_render_hidden_fields():
     # Now hide a couple of fields
     for field in ("password1", "password2"):
         test_form.fields[field].widget = forms.HiddenInput()
-
-    html = render_crispy_form(test_form)
-    assert html.count("<input") == 3
-    assert html.count("hidden") == 2
-
-    assert contains_partial(html, '<input name="password1" type="hidden"/>')
-    assert contains_partial(html, '<input name="password2" type="hidden"/>')
+    assert parse_expected("test_render_hidden_fields.html") == parse_form(test_form)
 
 
 def test_render_required_fields():
