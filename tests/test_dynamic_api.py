@@ -289,7 +289,6 @@ def test_layout_get_field_names():
 
 def test_filter_by_widget(advanced_layout):
     form = SampleForm()
-    form.helper = FormHelper(form)
     form.helper.layout = advanced_layout
     assert form.helper.filter_by_widget(forms.PasswordInput).slice == [
         Pointer([0, 1, 0, 0], "password1"),
@@ -299,7 +298,6 @@ def test_filter_by_widget(advanced_layout):
 
 def test_exclude_by_widget(advanced_layout):
     form = SampleForm()
-    form.helper = FormHelper(form)
     form.helper.layout = advanced_layout
     assert form.helper.exclude_by_widget(forms.PasswordInput).slice == [
         Pointer([0, 0, 0, 0], "email"),
@@ -310,7 +308,6 @@ def test_exclude_by_widget(advanced_layout):
 
 def test_exclude_by_widget_and_wrap(advanced_layout):
     form = SampleForm()
-    form.helper = FormHelper(form)
     form.helper.layout = advanced_layout
     form.helper.exclude_by_widget(forms.PasswordInput).wrap(Field, css_class="hero")
     # Check wrapped fields
@@ -325,14 +322,12 @@ def test_exclude_by_widget_and_wrap(advanced_layout):
 
 def test_all_without_layout():
     form = SampleForm()
-    form.helper = FormHelper()
     with pytest.raises(FormHelpersException):
         form.helper.all().wrap(Div)
 
 
 def test_filter_by_widget_without_form(advanced_layout):
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.layout = advanced_layout
     with pytest.raises(FormHelpersException):
         form.helper.filter_by_widget(forms.PasswordInput)

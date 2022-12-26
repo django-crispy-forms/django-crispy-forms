@@ -89,7 +89,6 @@ def test_contains_partial():
 
 def test_parse_expected_and_form():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.layout = Layout("is_company")
     assert parse_form(form) == parse_expected("utils_test.html")
 

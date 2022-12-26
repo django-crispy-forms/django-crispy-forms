@@ -37,10 +37,6 @@ class SampleForm(BaseForm):
         return self.cleaned_data
 
 
-class SampleForm2(SampleForm):
-    pass
-
-
 class CheckboxesSampleForm(BaseForm):
     checkboxes = forms.MultipleChoiceField(
         choices=((1, "Option one"), (2, "Option two"), (3, "Option three")),
@@ -86,10 +82,6 @@ class SampleForm3(BaseModelForm):
         model = CrispyTestModel
         fields = ["email", "password"]
         exclude = ["password"]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
 
 
 class SampleForm4(BaseModelForm):

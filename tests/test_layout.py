@@ -18,7 +18,6 @@ from .forms import (
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
     SampleForm,
-    SampleForm2,
     SampleForm3,
     SampleForm4,
     SampleForm6,
@@ -276,7 +275,7 @@ def test_i18n():
 
 
 def test_default_layout():
-    test_form = SampleForm2()
+    test_form = SampleForm()
     assert test_form.helper.layout.fields == [
         "is_company",
         "email",
