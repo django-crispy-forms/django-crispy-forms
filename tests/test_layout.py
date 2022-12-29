@@ -4,6 +4,7 @@ from django import forms
 from django.forms.models import formset_factory, modelformset_factory
 from django.shortcuts import render
 from django.template import Context, Template
+from django.test.html import parse_html
 from django.test.utils import override_settings
 from django.utils.translation import gettext_lazy as _
 
