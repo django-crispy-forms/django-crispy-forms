@@ -10,10 +10,9 @@ from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import Field, InlineCheckboxes
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, ButtonHolder, Column, Div, Fieldset, Layout, MultiField, Row, Submit
+from crispy_forms.layout import HTML, Column, Fieldset, Layout, Row
 from crispy_forms.utils import render_crispy_form
 
-from .conftest import only_bootstrap3
 from .forms import (
     CheckboxesSampleForm,
     CrispyEmptyChoiceTestModel,
@@ -22,7 +21,6 @@ from .forms import (
     SampleForm2,
     SampleForm3,
     SampleForm4,
-    SampleForm5,
     SampleForm6,
 )
 from .test_settings import TEMPLATE_DIRS
@@ -136,7 +134,7 @@ def test_context_pollution():
     assert html.count('name="is_company"') == 1
 
 
-def test_layout_fieldset_row_html_with_unicode_fieldnames(settings):
+def test_layout_fieldset_row_html_with_unicode_fieldnames():
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
@@ -328,94 +326,6 @@ def test_choice_with_none_is_selected():
     assert "checked" in html
 
 
-@only_bootstrap3
-def test_layout_composition(settings):
-    form_helper = FormHelper()
-    form_helper.add_layout(
-        Layout(
-            Layout(
-                MultiField(
-                    "Some company data",
-                    "is_company",
-                    "email",
-                    css_id="multifield_info",
-                ),
-            ),
-            Column(
-                "first_name",
-                # 'last_name', Missing a field on purpose
-                css_id="column_name",
-                css_class="columns",
-            ),
-            ButtonHolder(
-                Submit("Save", "Save", css_class="button white"),
-            ),
-            Div(
-                "password1",
-                "password2",
-                css_id="custom-div",
-                css_class="customdivs",
-            ),
-        )
-    )
-
-    template = Template(
-        """
-            {% load crispy_forms_tags %}
-            {% crispy form form_helper %}
-        """
-    )
-    c = Context({"form": SampleForm(), "form_helper": form_helper})
-    html = template.render(c)
-
-    # Bootstrap 4 does not contain a multifield template
-    assert parse_html(html) == parse_expected("bootstrap3/test_layout/test_layout_composition.html")
-
-
-@only_bootstrap3
-def test_second_layout_multifield_column_buttonholder_submit_div(settings):
-    form_helper = FormHelper()
-    form_helper.add_layout(
-        Layout(
-            MultiField(
-                "Some company data",
-                "is_company",
-                "email",
-                css_id="multifield_info",
-                title="multifield_title",
-                multifield_test="123",
-            ),
-            Column(
-                "first_name",
-                "last_name",
-                css_id="column_name",
-                css_class="columns",
-            ),
-            ButtonHolder(
-                Submit(
-                    "Save the world", "{{ value_var }}", css_class="button white", data_id="test", data_name="test"
-                ),
-                Submit("store", "Store results"),
-            ),
-            Div("password1", "password2", css_id="custom-div", css_class="customdivs", test_markup="123"),
-        )
-    )
-
-    template = Template(
-        """
-            {% load crispy_forms_tags %}
-            {% crispy form form_helper %}
-        """
-    )
-    c = Context({"form": SampleForm(), "form_helper": form_helper, "value_var": "Save"})
-    html = template.render(c)
-
-    # Bootstrap 4 does not contain a multifield template
-    assert parse_html(html) == parse_expected(
-        "bootstrap3/test_layout/test_second_layout_multifield_column_buttonholder_submit_div.html"
-    )
-
-
 @override_settings(
     TEMPLATES=[
         {
@@ -430,7 +340,7 @@ def test_second_layout_multifield_column_buttonholder_submit_div(settings):
         }
     ]
 )
-def test_keepcontext_context_manager(settings):
+def test_keepcontext_context_manager():
     # Test case for issue #180
     # Apparently it only manifest when using render_to_response this exact way
     form = CheckboxesSampleForm()
@@ -442,49 +352,6 @@ def test_keepcontext_context_manager(settings):
     response = render(request=None, template_name="crispy_render_template.html", context=context)
 
     assert response.content.count(b"checkbox-inline") == 3
-
-
-@only_bootstrap3
-def test_multiple_checkboxes_bs3():
-    form = CheckboxesSampleForm()
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        "checkboxes",
-        InlineCheckboxes("alphacheckboxes"),
-        "numeric_multiple_checkboxes",
-    )
-    assert parse_form(form) == parse_expected("bootstrap3/test_layout/test_multiple_checkboxes.html")
-
-
-@only_bootstrap3
-def test_radio_bs3():
-    form = SampleForm5()
-    form.helper = FormHelper()
-    form.helper.layout = Layout(
-        "radio_select",
-    )
-    assert parse_form(form) == parse_expected("bootstrap3/test_layout/test_radio.html")
-
-
-@only_bootstrap3
-def test_form_inline():
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.form_class = "form-inline"
-    form.helper.field_template = "bootstrap3/layout/inline_field.html"
-    form.helper.layout = Layout(
-        "email",
-        "password1",
-        "last_name",
-    )
-
-    html = render_crispy_form(form)
-    assert html.count('class="form-inline"') == 1
-    assert html.count('class="form-group"') == 3
-    assert html.count('<label for="id_email" class="sr-only') == 1
-    assert html.count('id="div_id_email" class="form-group"') == 1
-    assert html.count('placeholder="email"') == 1
-    assert html.count("</label> <input") == 3
 
 
 def test_update_attributes_class():
@@ -503,31 +370,3 @@ def test_update_attributes_class():
     form.helper["password1"].update_attributes(css_class="hello2")
     html = render_crispy_form(form)
     assert html.count(' class="hello hello2') == 1
-
-
-def test_multiple_fields(settings):
-    "Field can accept any number of fields and apply the kwargs to all fields"
-    form = SampleForm()
-    form.helper = FormHelper()
-    form.helper.layout = Layout(Field("first_name", "last_name", css_class="form-control-lg"))
-    template_pack = settings.CRISPY_TEMPLATE_PACK
-    assert parse_form(form) == parse_expected(f"{template_pack}/test_layout/test_multiple_fields.html")
-
-
-def test_radio_attrs(settings):
-    class TestForm(forms.Form):
-        radios = forms.ChoiceField(
-            choices=(
-                ("option_one", "Option one"),
-                ("option_two", "Option two"),
-            ),
-            widget=forms.RadioSelect(
-                attrs={
-                    "class": "sr-only sr-only-focusable",
-                }
-            ),
-        )
-
-    form = TestForm()
-    form.helper = FormHelper()
-    assert parse_form(form) == parse_expected(f"{settings.CRISPY_TEMPLATE_PACK}/test_layout/test_radio_attrs.html")

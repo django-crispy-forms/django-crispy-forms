@@ -204,7 +204,7 @@ def test_crispy_field_and_class_converters():
     assert "inputtext" in html
 
 
-def test_crispy_addon(settings):
+def test_crispy_addon():
     test_form = SampleForm()
     field_instance = test_form.fields["email"]
     bound_field = BoundField(test_form, field_instance, "email")

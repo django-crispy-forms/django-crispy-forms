@@ -9,6 +9,7 @@ INSTALLED_APPS = (
     "django.contrib.admin",
     "crispy_forms",
     "tests",
+    "crispy_bootstrap3",
     "crispy_bootstrap4",
 )
 

@@ -1,9 +1,0 @@
-<div{% if formactions.flat_attrs %} {{ formactions.flat_attrs }}{% endif %} class="form-group {{ formactions.css_class }}"{% if formactions.id %} id="{{ formactions.id }}"{% endif %}>
-    {% if label_class %}
-        <div class="aab controls {{ label_class }}"></div>
-    {% endif %}
-
-    <div class="controls {{ field_class }}">
-        {{ fields_output }}
-    </div>
-</div>
