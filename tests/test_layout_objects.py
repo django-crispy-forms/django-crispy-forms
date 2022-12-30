@@ -31,7 +31,6 @@ from .forms import (
 
 def test_field_with_custom_template():
     test_form = SampleForm()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout(Field("email", template="custom_field_template.html"))
 
     html = render_crispy_form(test_form)
@@ -47,7 +46,6 @@ def test_multiwidget_field():
     )
 
     test_form = SampleForm()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         MultiWidgetField(
             "datetime_field",
@@ -75,7 +73,6 @@ def test_field_type_hidden():
     )
 
     test_form = SampleForm()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         Field("email", type="hidden", data_test=12),
         Field("datetime_field"),
@@ -93,7 +90,6 @@ def test_field_type_hidden():
 
 def test_field_wrapper_class():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.layout = Layout(Field("email", wrapper_class="testing"))
 
     html = render_crispy_form(form)
@@ -102,7 +98,6 @@ def test_field_wrapper_class():
 
 def test_html_with_carriage_returns():
     test_form = SampleForm()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout(
         HTML(
             """
@@ -121,7 +116,6 @@ def test_html_with_carriage_returns():
 def test_i18n():
     activate("es")
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.layout = Layout(HTML(_("Enter a valid value.")))
     html = render_crispy_form(form)
     assert "Introduzca un valor válido" in html
@@ -148,7 +142,6 @@ class TestBootstrapLayoutObjects:
         # Make sure an inherited RadioSelect gets rendered as it
         form = SampleFormCustomWidgets()
         assert isinstance(form.fields["inline_radios"].widget, CustomRadioSelect)
-        form.helper = FormHelper()
         form.helper.layout = Layout("inline_radios")
 
         html = render_crispy_form(form)
@@ -162,14 +155,12 @@ class TestBootstrapLayoutObjects:
 
     def test_inline_radios(self):
         test_form = CheckboxesSampleForm()
-        test_form.helper = FormHelper()
         test_form.helper.layout = Layout(InlineRadios("inline_radios"))
         html = render_crispy_form(test_form)
         assert html.count('radio-inline"') == 2
 
     def test_accordion_and_accordiongroup(self):
         test_form = SampleForm()
-        test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Accordion(
                 AccordionGroup("one", "first_name"),
@@ -189,7 +180,6 @@ class TestBootstrapLayoutObjects:
 
     def test_accordion_active_false_not_rendered(self):
         test_form = SampleForm()
-        test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             Accordion(
                 AccordionGroup("one", "first_name"),
@@ -216,7 +206,6 @@ class TestBootstrapLayoutObjects:
 
     def test_alert(self):
         test_form = SampleForm()
-        test_form.helper = FormHelper()
         test_form.helper.layout = Layout(Alert(content="Testing..."))
         html = render_crispy_form(test_form)
 
@@ -226,7 +215,6 @@ class TestBootstrapLayoutObjects:
 
     def test_alert_block(self):
         test_form = SampleForm()
-        test_form.helper = FormHelper()
         test_form.helper.layout = Layout(Alert(content="Testing...", block=True))
         html = render_crispy_form(test_form)
 
@@ -235,7 +223,6 @@ class TestBootstrapLayoutObjects:
 
     def test_tab_and_tab_holder(self):
         test_form = SampleForm()
-        test_form.helper = FormHelper()
         test_form.helper.layout = Layout(
             TabHolder(
                 Tab("one", "first_name", css_id="custom-name", css_class="first-tab-class active"),
@@ -314,7 +301,6 @@ class TestBootstrapLayoutObjects:
         for field in form.fields:
             form.fields[field].widget = forms.HiddenInput()
 
-        form.helper = FormHelper()
         form.helper.layout = Layout(
             AppendedText("password1", "foo"),
             PrependedText("password2", "bar"),
@@ -333,7 +319,6 @@ class TestBootstrapLayoutObjects:
 
         assert html.count("checked") == 6
 
-        test_form.helper = FormHelper(test_form)
         test_form.helper[1].wrap(InlineCheckboxes, inline=True)
         html = render_crispy_form(test_form)
 

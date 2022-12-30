@@ -18,7 +18,6 @@ from .forms import (
     CrispyEmptyChoiceTestModel,
     CrispyTestModel,
     SampleForm,
-    SampleForm2,
     SampleForm3,
     SampleForm4,
     SampleForm6,
@@ -196,8 +195,7 @@ def test_change_layout_dynamically_delete_field():
     )
 
     form = SampleForm()
-    form_helper = FormHelper()
-    form_helper.add_layout(
+    form.helper.add_layout(
         Layout(
             Fieldset(
                 "Company Data",
@@ -218,9 +216,9 @@ def test_change_layout_dynamically_delete_field():
     # We remove email field on the go
     # Layout needs to be adapted for the new form fields
     del form.fields["email"]
-    del form_helper.layout.fields[0].fields[1]
+    del form.helper.layout.fields[0].fields[1]
 
-    c = Context({"form": form, "form_helper": form_helper})
+    c = Context({"form": form, "form_helper": form.helper})
     html = template.render(c)
     assert "email" not in html
 
@@ -264,8 +262,7 @@ def test_i18n():
     """
     )
     form = SampleForm()
-    form_helper = FormHelper()
-    form_helper.layout = Layout(
+    form.helper.layout = Layout(
         HTML(_("i18n text")),
         Fieldset(
             _("i18n legend"),
@@ -273,14 +270,12 @@ def test_i18n():
             "last_name",
         ),
     )
-    form.helper = form_helper
-
     html = template.render(Context({"form": form}))
     assert html.count("i18n legend") == 1
 
 
 def test_default_layout():
-    test_form = SampleForm2()
+    test_form = SampleForm()
     assert test_form.helper.layout.fields == [
         "is_company",
         "email",
@@ -299,7 +294,6 @@ def test_default_layout_two():
 
 def test_modelform_layout_without_meta():
     test_form = SampleForm4()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout("email")
     html = render_crispy_form(test_form)
 
@@ -311,7 +305,6 @@ def test_specialspaceless_not_screwing_intended_spaces():
     # see issue #250
     test_form = SampleForm()
     test_form.fields["email"].widget = forms.Textarea()
-    test_form.helper = FormHelper()
     test_form.helper.layout = Layout("email", HTML("<span>first span</span> <span>second span</span>"))
     html = render_crispy_form(test_form)
     assert "<span>first span</span> <span>second span</span>" in html
@@ -344,7 +337,6 @@ def test_keepcontext_context_manager():
     # Test case for issue #180
     # Apparently it only manifest when using render_to_response this exact way
     form = CheckboxesSampleForm()
-    form.helper = FormHelper()
     # We use here InlineCheckboxes as it updates context in an unsafe way
     form.helper.layout = Layout("checkboxes", InlineCheckboxes("alphacheckboxes"), "numeric_multiple_checkboxes")
     context = {"form": form}
@@ -356,12 +348,10 @@ def test_keepcontext_context_manager():
 
 def test_update_attributes_class():
     form = SampleForm()
-    form.helper = FormHelper()
     form.helper.layout = Layout("email", Field("password1"), "password2")
     form.helper["password1"].update_attributes(css_class="hello")
     html = render_crispy_form(form)
     assert html.count(' class="hello') == 1
-    form.helper = FormHelper()
     form.helper.layout = Layout(
         "email",
         Field("password1", css_class="hello"),
