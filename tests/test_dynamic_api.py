@@ -322,12 +322,14 @@ def test_exclude_by_widget_and_wrap(advanced_layout):
 
 def test_all_without_layout():
     form = SampleForm()
+    form.helper = FormHelper()  # reset helper to remove default layout
     with pytest.raises(FormHelpersException):
         form.helper.all().wrap(Div)
 
 
 def test_filter_by_widget_without_form(advanced_layout):
     form = SampleForm()
+    form.helper = FormHelper()  # reset helper to remove default layout
     form.helper.layout = advanced_layout
     with pytest.raises(FormHelpersException):
         form.helper.filter_by_widget(forms.PasswordInput)
