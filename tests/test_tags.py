@@ -1,5 +1,4 @@
 import pytest
-
 from django.forms.boundfield import BoundField
 from django.forms.formsets import formset_factory
 from django.template import Context, Template

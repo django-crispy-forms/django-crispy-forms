@@ -1,5 +1,4 @@
 import pytest
-
 from django import forms
 
 from crispy_forms.bootstrap import AppendedText

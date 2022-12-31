@@ -1,8 +1,7 @@
 import re
 
-import pytest
-
 import django
+import pytest
 from django import forms
 from django.forms.models import formset_factory
 from django.middleware.csrf import _get_new_csrf_string
