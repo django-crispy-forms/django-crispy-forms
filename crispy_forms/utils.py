@@ -26,7 +26,7 @@ def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
 
 
-def render_field(  # noqa: C901
+def render_field(
     field,
     form,
     context,
