@@ -19,16 +19,3 @@ def advanced_layout():
         ),
         "last_name",
     )
-
-
-@pytest.fixture(autouse=True, params=(["bootstrap3"]))
-def template_packs(request, settings):
-    check_template_pack(request.node, request.param)
-    settings.CRISPY_TEMPLATE_PACK = request.param
-
-
-def check_template_pack(node, template_pack):
-    mark = node.get_closest_marker("only")
-    if mark:
-        if template_pack not in mark.args:
-            pytest.skip("Requires %s template pack" % " or ".join(mark.args))
