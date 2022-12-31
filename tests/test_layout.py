@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 import pytest
 
 from django import forms
@@ -25,8 +29,13 @@ from .forms import (
 from .test_settings import TEMPLATE_DIRS
 from .utils import parse_expected, parse_form
 
+if TYPE_CHECKING:
+    from pytest_django.fixtures import SettingsWrapper
 
-def test_invalid_unicode_characters(settings):
+    from crispy_forms.utils import ContextDict
+
+
+def test_invalid_unicode_characters(settings: SettingsWrapper) -> None:
     # Adds a BooleanField that uses non valid unicode characters "ñ"
     form_helper = FormHelper()
     form_helper.add_layout(Layout("españa"))
@@ -43,9 +52,9 @@ def test_invalid_unicode_characters(settings):
         template.render(c)
 
 
-def test_unicode_form_field():
+def test_unicode_form_field() -> None:
     class UnicodeForm(forms.Form):
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args: Any, **kwargs: Any):
             super().__init__(*args, **kwargs)
             self.fields["contraseña"] = forms.CharField()
 
@@ -56,7 +65,7 @@ def test_unicode_form_field():
     assert 'id="id_contraseña"' in html
 
 
-def test_meta_extra_fields_with_missing_fields():
+def test_meta_extra_fields_with_missing_fields() -> None:
     class FormWithMeta(SampleForm):
         class Meta:
             fields = ("email", "first_name", "last_name")
@@ -79,7 +88,7 @@ def test_meta_extra_fields_with_missing_fields():
     assert "email" not in html
 
 
-def test_layout_unresolved_field(settings):
+def test_layout_unresolved_field(settings: SettingsWrapper) -> None:
     form_helper = FormHelper()
     form_helper.add_layout(Layout("typo"))
 
@@ -95,7 +104,7 @@ def test_layout_unresolved_field(settings):
         template.render(c)
 
 
-def test_double_rendered_field(settings):
+def test_double_rendered_field(settings: SettingsWrapper) -> None:
     form_helper = FormHelper()
     form_helper.add_layout(Layout("is_company", "is_company"))
 
@@ -111,7 +120,7 @@ def test_double_rendered_field(settings):
         template.render(c)
 
 
-def test_context_pollution():
+def test_context_pollution() -> None:
     class ExampleForm(forms.Form):
         comment = forms.CharField()
 
@@ -133,7 +142,7 @@ def test_context_pollution():
     assert html.count('name="is_company"') == 1
 
 
-def test_layout_fieldset_row_html_with_unicode_fieldnames():
+def test_layout_fieldset_row_html_with_unicode_fieldnames() -> None:
     form_helper = FormHelper()
     form_helper.add_layout(
         Layout(
@@ -186,7 +195,7 @@ def test_layout_fieldset_row_html_with_unicode_fieldnames():
     assert "testLink" in html
 
 
-def test_change_layout_dynamically_delete_field():
+def test_change_layout_dynamically_delete_field() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -223,7 +232,7 @@ def test_change_layout_dynamically_delete_field():
     assert "email" not in html
 
 
-def test_formset_layout():
+def test_formset_layout() -> None:
     SampleFormSet = formset_factory(SampleForm, extra=3)
     formset = SampleFormSet()
     helper = FormHelper()
@@ -246,7 +255,7 @@ def test_formset_layout():
     assert parse_expected("test_formset_layout.html") == parse_html(html)
 
 
-def test_modelformset_layout():
+def test_modelformset_layout() -> None:
     CrispyModelFormSet = modelformset_factory(CrispyTestModel, form=SampleForm4, extra=3)
     formset = CrispyModelFormSet(queryset=CrispyTestModel.objects.none())
     formset.helper = FormHelper()
@@ -254,7 +263,7 @@ def test_modelformset_layout():
     assert parse_expected("test_modelformset_layout.html") == parse_form(formset)
 
 
-def test_i18n():
+def test_i18n() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -274,8 +283,9 @@ def test_i18n():
     assert html.count("i18n legend") == 1
 
 
-def test_default_layout():
+def test_default_layout() -> None:
     test_form = SampleForm()
+    assert test_form.helper.layout is not None
     assert test_form.helper.layout.fields == [
         "is_company",
         "email",
@@ -287,12 +297,13 @@ def test_default_layout():
     ]
 
 
-def test_default_layout_two():
+def test_default_layout_two() -> None:
     test_form = SampleForm3()
+    assert test_form.helper.layout is not None
     assert test_form.helper.layout.fields == ["email"]
 
 
-def test_modelform_layout_without_meta():
+def test_modelform_layout_without_meta() -> None:
     test_form = SampleForm4()
     test_form.helper.layout = Layout("email")
     html = render_crispy_form(test_form)
@@ -301,7 +312,7 @@ def test_modelform_layout_without_meta():
     assert "password" not in html
 
 
-def test_specialspaceless_not_screwing_intended_spaces():
+def test_specialspaceless_not_screwing_intended_spaces() -> None:
     # see issue #250
     test_form = SampleForm()
     test_form.fields["email"].widget = forms.Textarea()
@@ -310,7 +321,7 @@ def test_specialspaceless_not_screwing_intended_spaces():
     assert "<span>first span</span> <span>second span</span>" in html
 
 
-def test_choice_with_none_is_selected():
+def test_choice_with_none_is_selected() -> None:
     # see issue #701
     model_instance = CrispyEmptyChoiceTestModel()
     model_instance.fruit = None
@@ -333,20 +344,20 @@ def test_choice_with_none_is_selected():
         }
     ]
 )
-def test_keepcontext_context_manager():
+def test_keepcontext_context_manager() -> None:
     # Test case for issue #180
     # Apparently it only manifest when using render_to_response this exact way
     form = CheckboxesSampleForm()
     # We use here InlineCheckboxes as it updates context in an unsafe way
     form.helper.layout = Layout("checkboxes", InlineCheckboxes("alphacheckboxes"), "numeric_multiple_checkboxes")
-    context = {"form": form}
+    context: ContextDict = {"form": form}
 
     response = render(request=None, template_name="crispy_render_template.html", context=context)
 
     assert response.content.count(b"checkbox-inline") == 3
 
 
-def test_update_attributes_class():
+def test_update_attributes_class() -> None:
     form = SampleForm()
     form.helper.layout = Layout("email", Field("password1"), "password2")
     form.helper["password1"].update_attributes(css_class="hello")

@@ -1,23 +1,34 @@
+from __future__ import annotations
+
+from collections.abc import Mapping
 from functools import lru_cache
+from typing import TYPE_CHECKING, Any, Tuple, cast
 
 from django import template
 from django.conf import settings
-from django.forms import boundfield
+from django.forms import BaseForm, BoundField
 from django.forms.formsets import BaseFormSet
 from django.template.loader import get_template
-from django.utils.safestring import mark_safe
+from django.utils.safestring import SafeString, mark_safe
 
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.utils import TEMPLATE_PACK, flatatt
 
+if TYPE_CHECKING:
+    from django.template import Node, TemplateDoesNotExist
+    from django.template.backends.base import _EngineTemplate
+    from django.utils.functional import SimpleLazyObject
+
+    from crispy_forms.utils import ContextDict
+
 
 @lru_cache()
-def uni_formset_template(template_pack=TEMPLATE_PACK):
+def uni_formset_template(template_pack: str | SimpleLazyObject = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/uni_formset.html" % template_pack)
 
 
 @lru_cache()
-def uni_form_template(template_pack=TEMPLATE_PACK):
+def uni_form_template(template_pack: str | SimpleLazyObject = TEMPLATE_PACK) -> _EngineTemplate:
     return get_template("%s/uni_form.html" % template_pack)
 
 
@@ -25,7 +36,12 @@ register = template.Library()
 
 
 @register.filter(name="crispy")
-def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_class=""):
+def as_crispy_form(
+    form: BaseForm | BaseFormSet[BaseForm],
+    template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+    label_class: str = "",
+    field_class: str = "",
+) -> SafeString:
     """
     The original and still very useful way to generate a div elegant form/formset::
 
@@ -57,12 +73,15 @@ def as_crispy_form(form, template_pack=TEMPLATE_PACK, label_class="", field_clas
     else:
         template = uni_form_template(template_pack)
         c["form"] = form
-
-    return template.render(c)
+    ctx = cast("Mapping[int | str | Node, Any]", c)
+    return template.render(ctx)
 
 
 @register.filter(name="as_crispy_errors")
-def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
+def as_crispy_errors(
+    form: BaseForm | BaseFormSet[BaseForm],
+    template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+) -> SafeString | TemplateDoesNotExist:
     """
     Renders only form errors the same way as django-crispy-forms::
 
@@ -75,7 +94,7 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
     """
     if isinstance(form, BaseFormSet):
         template = get_template("%s/errors_formset.html" % template_pack)
-        c = {"formset": form}
+        c: ContextDict = {"formset": form}
     else:
         template = get_template("%s/errors.html" % template_pack)
         c = {"form": form}
@@ -84,7 +103,12 @@ def as_crispy_errors(form, template_pack=TEMPLATE_PACK):
 
 
 @register.filter(name="as_crispy_field")
-def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_class=""):
+def as_crispy_field(
+    field: BoundField,
+    template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+    label_class: str = "",
+    field_class: str = "",
+) -> SafeString | TemplateDoesNotExist:
     """
     Renders a form field like a django-crispy-forms field::
 
@@ -95,10 +119,12 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
 
         {{ form.field|as_crispy_field:"bootstrap4" }}
     """
-    if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
+    # Type of field arg is BoundField, which is what we expect. The check below
+    # raises an exception if that's not the case.
+    if not isinstance(field, BoundField) and settings.DEBUG:  # type: ignore [unreachable]
         raise CrispyError("|as_crispy_field got passed an invalid or inexistent field")
 
-    attributes = {
+    attributes: ContextDict = {
         "field": field,
         "form_show_errors": True,
         "form_show_labels": True,
@@ -119,12 +145,12 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
 
 
 @register.filter(name="flatatt")
-def flatatt_filter(attrs):
+def flatatt_filter(attrs: dict[str, str]) -> SafeString:
     return mark_safe(flatatt(attrs))
 
 
 @register.filter
-def optgroups(field):
+def optgroups(field: BoundField) -> Tuple[str | None, dict[str, str | bool | int | dict[str, str]], int]:
     """
     A template filter to help rendering of fields with optgroups.
 
