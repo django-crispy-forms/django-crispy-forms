@@ -1,5 +1,4 @@
 import pytest
-
 from django import forms
 from django.forms.models import formset_factory, modelformset_factory
 from django.shortcuts import render
