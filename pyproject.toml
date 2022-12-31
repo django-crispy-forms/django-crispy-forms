@@ -1,7 +1,6 @@
 [tool.black]
 line-length = 119
 target-version = ['py37']
-include = '(crispy_forms)\/(.+)(py?$)'
 
 [tool.isort]
 profile = "black"

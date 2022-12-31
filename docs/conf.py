@@ -26,7 +26,7 @@ from django.conf import settings
 
 settings.configure()
 
-numpydoc_show_class_members = False 
+numpydoc_show_class_members = False
 
 # -- General configuration -----------------------------------------------------
 
