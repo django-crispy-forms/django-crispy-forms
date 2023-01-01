@@ -1,3 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-crispy-forms"
+requires-python = ">=3.7"
+description = "Best way to have Django DRY forms"
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: JavaScript",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+license = {text = "MIT"}
+dependencies = ["django>=3.2"]
+authors = [{name = "Miguel Araujo", email = "miguel.araujo.perez@gmail.com"}]
+dynamic = ['version']
+readme = "README.rst"
+keywords = ["forms", "django", "crispy", "DRY"]
+
+[project.urls]
+"Homepage" = "https://github.com/django-crispy-forms/django-crispy-forms"
+"Issues" = "https://github.com/django-crispy-forms/django-crispy-forms/issues"
+"Changelog" = "https://github.com/django-crispy-forms/django-crispy-forms/releases"
+
+[tool.setuptools.dynamic]
+version = {attr = "crispy_forms.__version__"}
+
 [tool.black]
 line-length = 119
 target-version = ['py37']
