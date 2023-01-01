@@ -8,3 +8,6 @@ line_length = 119
 
 [tool.coverage.run]
 branch = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE= "tests.test_settings"
