@@ -40,7 +40,7 @@
 * The `flat_attrs()` method of `FormActions` is removed. Attributes provided by `**kwargs` are now passed via the `flat_attrs` function during `__init__()` instead of with each call of `render()`.
 * The default values of "form_error_title" and "formset_error_title" of FormHelper changed from `None` to `""`.
 * Dropped support for Django 2.2.
-* Added support for Django 4.1.
+* Added support for Django 4.1 and 4.2.
 * Added support for Python 3.11.
 
 ## 1.14.0 (2022-01-22)
