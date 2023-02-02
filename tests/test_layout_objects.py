@@ -138,7 +138,6 @@ def test_remove_labels():
 
 class TestBootstrapLayoutObjects:
     def test_custom_django_widget(self):
-
         # Make sure an inherited RadioSelect gets rendered as it
         form = SampleFormCustomWidgets()
         assert isinstance(form.fields["inline_radios"].widget, CustomRadioSelect)
