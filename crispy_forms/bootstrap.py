@@ -1112,7 +1112,6 @@ class Modal(LayoutObject):
         title_class=None,
         **kwargs,
     ):
-
         self.fields = list(fields)
         self.template = template or self.template
         self.css_id = css_id

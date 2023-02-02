@@ -568,7 +568,6 @@ class Fieldset(LayoutObject):
     template = "%s/layout/fieldset.html"
 
     def __init__(self, legend, *fields, css_class=None, css_id=None, template=None, **kwargs):
-
         self.fields = list(fields)
         self.legend = legend
         self.css_class = css_class
