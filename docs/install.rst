@@ -34,14 +34,19 @@ In production environments, always activate Django template cache loader. This i
 
 Template packs
 ~~~~~~~~~~~~~~
-Since version 2.0, django-crispy-forms has built-in support for version 3 and 4 of the Bootstrap CSS framework
+Since version 2.0 (February 2023), ``django-crispy-forms`` has built-in support for version 3 and 4 of the Bootstrap CSS framework. Template packs are now available as standalone packages, which means that you have to install them manually, e.g., for ``bootstrap4``::
+
+    pip install crispy-bootstrap4
+    
+
+More information on the changes introduced in the version 2.0, as well as a list of the supported template packs can be found in `the changelog`_.
 
 Version v1.x also provided template packs for:
 
 * ``bootstrap`` `Bootstrap`_ is crispy-forms's default template pack, version 2 of the popular simple and flexible HTML, CSS, and Javascript for user interfaces from Twitter.
 * ``uni-form`` `Uni-form`_ is a nice looking, well structured, highly customizable, accessible and usable forms.
 
-In addition the following template packs are available through separately maintained projects.
+In addition, the following template packs are available through separately maintained projects.
 
 * ``foundation`` `Foundation`_ In the creator's words, "The most advanced responsive front-end framework in the world." This template pack is available through `crispy-forms-foundation`_
 * ``tailwind`` `Tailwind`_ A utility first framework. This template pack is available through `crispy-tailwind`_
@@ -56,6 +61,7 @@ You can set your default template pack for your project using the ``CRISPY_TEMPL
 
 Please check the documentation of your template pack package for the correct value of the ``CRISPY_TEMPLATE_PACK`` setting (there are packages which provide more than one template pack).
 
+.. _`the changelog`: https://github.com/django-crispy-forms/django-crispy-forms/releases/tag/2.0
 .. _`Bootstrap`: https://getbootstrap.com
 .. _`Bulma`: https://bulma.io
 .. _`Foundation`: https://get.foundation
@@ -68,7 +74,7 @@ Please check the documentation of your template pack package for the correct val
 Setting media files
 ~~~~~~~~~~~~~~~~~~~
 
-crispy-forms does not include static files. You will need to include the proper corresponding media files yourself depending on what CSS framework (Template pack) you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
+``crispy-forms`` does not include static files. You will need to include the proper corresponding media files yourself depending on what CSS framework (Template pack) you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
  
 
 .. _Django: https://djangoproject.com
