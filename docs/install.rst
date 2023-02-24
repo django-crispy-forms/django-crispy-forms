@@ -65,10 +65,10 @@ Please check the documentation of your template pack package for the correct val
 .. _`crispy-bootstrap5`: https://github.com/django-crispy-forms/crispy-bootstrap5
 .. _`crispy-bulma`: https://github.com/ckrybus/crispy-bulma
 
-Setting media files
+Setting static files
 ~~~~~~~~~~~~~~~~~~~
 
-crispy-forms does not include static files. You will need to include the proper corresponding media files yourself depending on what CSS framework (Template pack) you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
+crispy-forms does not include static files. You will need to include the proper corresponding static files yourself depending on what CSS framework (Template pack) you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
  
 
 .. _Django: https://djangoproject.com
