@@ -321,7 +321,7 @@ class Submit(BaseInput):
     """
 
     input_type = "submit"
-    field_classes = "btn btn-primary"
+    field_classes = "btn"
 
 
 class Button(BaseInput):
@@ -506,7 +506,7 @@ class Reset(BaseInput):
     """
 
     input_type = "reset"
-    field_classes = "btn btn-inverse"
+    field_classes = "btn"
 
 
 class Fieldset(LayoutObject):
