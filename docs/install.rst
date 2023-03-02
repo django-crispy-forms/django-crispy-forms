@@ -36,6 +36,10 @@ Template packs
 ~~~~~~~~~~~~~~
 Since version 2.0, django-crispy-forms has built-in support for version 3 and 4 of the Bootstrap CSS framework
 
+As of django-crispy-forms 2.0 the template packs are now in separate packages.
+
+You will need to pip install crispy-bootstrap4 and add crispy_bootstrap4 to your list of INSTALLED_APPS.
+
 Version v1.x also provided template packs for:
 
 * ``bootstrap`` `Bootstrap`_ is crispy-forms's default template pack, version 2 of the popular simple and flexible HTML, CSS, and Javascript for user interfaces from Twitter.
