@@ -34,15 +34,16 @@ In production environments, always activate Django template cache loader. This i
 
 Template packs
 ~~~~~~~~~~~~~~
-Since version 2.0, django-crispy-forms has built-in support for version 3 and 4 of the Bootstrap CSS framework
+Since version 2.0, django-crispy-forms template packs are now in separate packages.
 
-As of django-crispy-forms 2.0 the template packs are now in separate packages.
+You will need to install the appropriate template pack for your CSS framework and add it to your list of ``INSTALLED_APPS``. The the following template packs have been extracted from crispy-forms core are now available on PyPI.
 
-You will need to pip install crispy-bootstrap4 and add crispy_bootstrap4 to your list of INSTALLED_APPS.
+* ``Bootstrap2`` `crispy-forms-bootstrap2`_.
+* ``Bootstrap3`` `crispy-bootstrap3`_.
+* ``Bootstrap4`` `crispy-bootstrap4`_.
 
 Version v1.x also provided template packs for:
 
-* ``bootstrap`` `Bootstrap`_ is crispy-forms's default template pack, version 2 of the popular simple and flexible HTML, CSS, and Javascript for user interfaces from Twitter.
 * ``uni-form`` `Uni-form`_ is a nice looking, well structured, highly customizable, accessible and usable forms.
 
 In addition the following template packs are available through separately maintained projects.
@@ -66,11 +67,14 @@ Please check the documentation of your template pack package for the correct val
 .. _`crispy-forms-foundation`: https://github.com/sveetch/crispy-forms-foundation
 .. _`Tailwind`: https://tailwindcss.com
 .. _`crispy-tailwind`: https://github.com/django-crispy-forms/crispy-tailwind
+.. _`crispy-forms-bootstrap2`: https://pypi.org/project/crispy-forms-bootstrap2/
+.. _`crispy-bootstrap3`: https://pypi.org/project/crispy-bootstrap3/
+.. _`crispy-bootstrap4`: https://pypi.org/project/crispy-bootstrap4/
 .. _`crispy-bootstrap5`: https://github.com/django-crispy-forms/crispy-bootstrap5
 .. _`crispy-bulma`: https://github.com/ckrybus/crispy-bulma
 
 Setting static files
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 crispy-forms does not include static files. You will need to include the proper corresponding static files yourself depending on what CSS framework (Template pack) you are using. This might involve one or more CSS and JS files. Read CSS framework's docs for help on how to set it up.
  
