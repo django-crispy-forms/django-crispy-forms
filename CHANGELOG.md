@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 2.0 (2023-03-13)
+## 2.0 (2023-02-13)
 Release of django-crispy-forms 2.0. No changes introduced since 2.0a1.
 
 ## 2.0a1 (2023-01-18)
