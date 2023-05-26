@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-crispy-forms"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 description = "Best way to have Django DRY forms"
 classifiers=[
     "Development Status :: 5 - Production/Stable",
@@ -17,7 +17,6 @@ classifiers=[
     "Operating System :: OS Independent",
     "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -43,7 +42,7 @@ version = {attr = "crispy_forms.__version__"}
 
 [tool.black]
 line-length = 119
-target-version = ['py37']
+target-version = ['py38']
 
 [tool.isort]
 profile = "black"
