@@ -1,6 +1,7 @@
 # CHANGELOG for django-crispy-forms
 
 ## Next Release (TBC)
+* Add support for Python 3.12.
 * Dropped support for Python 3.7.
 
 ## 2.0 (2023-02-13)
@@ -9,15 +10,15 @@ Release of django-crispy-forms 2.0. No changes introduced since 2.0a1.
 ## 2.0a1 (2023-01-18)
 
 # Major Changes and Migration Guide
-* Removed all Bootstrap template packs. These template packs are now available as standalone packages. 
-  To upgrade, install the required template pack and add it to your 
+* Removed all Bootstrap template packs. These template packs are now available as standalone packages.
+  To upgrade, install the required template pack and add it to your
   [`INSTALLED_APPS`](https://docs.djangoproject.com/en/stable/ref/settings/#std-setting-INSTALLED_APPS) setting.
 
     * Boostrap 2: [PyPI](https://pypi.org/project/crispy-forms-bootstrap2/) -- [GitHub](https://github.com/django-crispy-forms/crispy-forms-bootstrap2)
     * Boostrap 3: [PyPI](https://pypi.org/project/crispy-bootstrap3/) -- [GitHub](https://github.com/django-crispy-forms/crispy-bootstrap3)
     * Boostrap 4: [PyPI](https://pypi.org/project/crispy-bootstrap4/) -- [GitHub](https://github.com/django-crispy-forms/crispy-bootstrap4)
 
-  Also, support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at 
+  Also, support for Bootstrap 5 is provided by a 3rd party package under the `django-crispy-forms` organisation at
   [crispy-bootstrap5](https://github.com/django-crispy-forms/crispy-bootstrap5).
 
 * Removed uni-form template pack. Uni-Form specific classes previously added to every template pack e.g. `textInput` are now removed.
@@ -41,36 +42,36 @@ Release of django-crispy-forms 2.0. No changes introduced since 2.0a1.
   Audit for use of `render()` and `render_field()` due to the removal of the `form_style` positional argument is therefore
   required. For example:
 
-  ``` 
+  ```
   # django-crispy-forms 1.x
   html = my_layout_object.render(form, form_style, context)
   # django-crispy-forms 2.x
   html = my_layout_object.render(form, context)
   ```
 
-* Widespread use of the `|safe` in crispy-form templates is removed. Audit for html input in your forms 
-  especially for Field and Prepended/Appended text. To retain the previous behaviour mark text as safe 
-  in your project code using 
-  [`mark_safe()`](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.safestring.mark_safe). Refs #296. 
+* Widespread use of the `|safe` in crispy-form templates is removed. Audit for html input in your forms
+  especially for Field and Prepended/Appended text. To retain the previous behaviour mark text as safe
+  in your project code using
+  [`mark_safe()`](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.safestring.mark_safe). Refs #296.
 
 # Other Changes
 * Dropped support for Django 2.2.
 * Added support for Django 4.1 and 4.2.
 * Added support for Python 3.11.
 * The `flat_attrs()` method of `FormActions` is removed. Attributes provided by `**kwargs` are now passed via the `flat_attrs` function during `__init__()` instead of with each call of `render()`
-* The `html5_required` attribute of `FormHelper` is removed. In all supported versions of Django the `required` attribute is provided by the core `forms` module. 
+* The `html5_required` attribute of `FormHelper` is removed. In all supported versions of Django the `required` attribute is provided by the core `forms` module.
 * The `FormActions` layout object learnt a `css_id` kwarg to add an `id` to the rendered `<div>`
 * The default values of "form_error_title" and "formset_error_title" of FormHelper changed from `None` to `""`.
 * An attribute error is now raised if the `CRISPY_TEMPLATE_PACK` setting is not provided.
-* The `get_layout_objects()` and `get_field_names()` functions of `LayoutObject` now return a list of `Pointers` rather than a list 
-  of lists. Pointers are a `dataclass` containing a list of `posistions` and the `name` of object/field. 
-  
+* The `get_layout_objects()` and `get_field_names()` functions of `LayoutObject` now return a list of `Pointers` rather than a list
+  of lists. Pointers are a `dataclass` containing a list of `posistions` and the `name` of object/field.
+
 ## 1.14.0 (2022-01-22)
 * Added support for Python 3.10
 * Dropped support for Django 3.1
 * Dropped support for Python 3.6
 * Added bootstrap modal layout object (#1204)
-* Added `input_size` argument to `FieldWithButtons` to allow customisation of the size of the input in the Bootstrap 4 
+* Added `input_size` argument to `FieldWithButtons` to allow customisation of the size of the input in the Bootstrap 4
   template pack. (#1159)
 
 See the [1.14.0 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/18?closed=1) for the full change list.
