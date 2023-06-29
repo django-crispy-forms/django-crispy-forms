@@ -1,4 +1,4 @@
 Django
-Sphinx>=5
+Sphinx>=5,<7.0
 sphinx_rtd_theme
 numpydoc
