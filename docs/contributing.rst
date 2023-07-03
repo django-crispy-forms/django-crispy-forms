@@ -101,12 +101,12 @@ add a comment to the discussion section of the pull request.
 Pull upstream changes into your fork regularly
 ==================================================
 
-django-crispy-forms is worked on by a lot of people. It is therefore critical that you pull upstream changes from trunk into your fork on a regular basis. Nothing is worse than putting in days of hard work into a pull request only to have it rejected because it has diverged too far from trunk.
+django-crispy-forms is worked on by a lot of people. It is therefore critical that you pull upstream changes from the main branch into your fork on a regular basis. Nothing is worse than putting in days of hard work into a pull request only to have it rejected because it has diverged too far from main.
 
 To pull in upstream changes::
 
-    git remote add trunk git://github.com/django-crispy-forms/django-crispy-forms.git
-    git fetch trunk
+    git remote add upstream git://github.com/django-crispy-forms/django-crispy-forms.git
+    git fetch upstream
 
 Check the log to be sure that you actually want the changes, before merging::
 
@@ -116,7 +116,7 @@ Then merge the changes that you fetched::
 
     git merge django-crispy-forms/main
 
-For more info, see https://help.github.com/fork-a-repo/
+For more info, see https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks
 
 How to get your Pull Request accepted
 =====================================
