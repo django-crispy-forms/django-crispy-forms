@@ -251,7 +251,6 @@ class BaseInput(TemplateNameMixin):
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
         """
         Renders an `<input />` if container is used as a Layout object.
-        Input button value can be a variable in context.
         """
         template = self.get_template_name(template_pack)
         context.update({"input": self})
