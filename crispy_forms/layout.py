@@ -518,7 +518,7 @@ class Fieldset(LayoutObject):
     legend : str
         The content of the fieldset's ``<legend>``. This text is context
         aware, to bring this to life see the examples section.
-    *fields : str
+    *fields : str | LayoutObject | HTML
         Any number of fields as positional arguments to be rendered within
         the ``<fieldset>``
     css_class : str, optional
