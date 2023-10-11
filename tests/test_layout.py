@@ -1,3 +1,4 @@
+import django
 import pytest
 from django import forms
 from django.forms.models import formset_factory, modelformset_factory
@@ -242,7 +243,11 @@ def test_formset_layout():
     )
 
     html = render_crispy_form(form=formset, helper=helper, context={"csrf_token": "aTestToken"})
-    assert parse_expected("test_formset_layout.html") == parse_html(html)
+    if django.VERSION < (5, 0):
+        result = "test_formset_layout lt50.html"
+    else:
+        result = "test_formset_layout.html"
+    assert parse_expected(result) == parse_html(html)
 
 
 def test_modelformset_layout():
