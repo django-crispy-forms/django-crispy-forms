@@ -2,6 +2,7 @@
 
 ## Next Release (TBC)
 * Added support for Django 5.0.
+* Dropped support for Django 4.0 and 4.1.
 * Add support for Python 3.12.
 * Dropped support for Python 3.7.
 
