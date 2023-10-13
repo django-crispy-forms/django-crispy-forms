@@ -10,7 +10,6 @@ classifiers=[
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Framework :: Django",
-    "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.0",
     "License :: OSI Approved :: MIT License",
@@ -27,7 +26,7 @@ classifiers=[
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 license = {text = "MIT"}
-dependencies = ["django>=3.2"]
+dependencies = ["django>=4.2"]
 authors = [{name = "Miguel Araujo", email = "miguel.araujo.perez@gmail.com"}]
 dynamic = ['version']
 readme = "README.rst"
