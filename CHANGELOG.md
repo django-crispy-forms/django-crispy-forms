@@ -1,10 +1,13 @@
 # CHANGELOG for django-crispy-forms
 
-## Next Release (TBC)
+## 2.1 (2023-10-15)
 * Added support for Django 5.0.
 * Dropped support for Django 3.2, 4.0 and 4.1.
-* Add support for Python 3.12.
+* Added support for Python 3.12.
 * Dropped support for Python 3.7.
+
+See the [2.1 Milestone](https://github.com/django-crispy-forms/django-crispy-forms/milestone/20?closed=1) for the full change
+list.
 
 ## 2.0 (2023-02-13)
 Release of django-crispy-forms 2.0. No changes introduced since 2.0a1.
