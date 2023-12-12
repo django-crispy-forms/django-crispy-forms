@@ -29,8 +29,12 @@ class PrependedAppendedText(Field):
         The name of the field to be rendered.
     prepended_text : str, optional
         The prepended text, can be HTML like, by default None
+    prepended_class : str, optional
+        The prepended class defines the css classes for the prepended text
     appended_text : str, optional
         The appended text, can be HTML like, by default None
+    appended_class : str, optional
+        The appended class defines the css classes for the appended text
     input_size : str, optional
         For Bootstrap4+ additional classes to customise the input-group size
         e.g. ``input-group-sm``. By default None
@@ -65,6 +69,8 @@ class PrependedAppendedText(Field):
         field,
         prepended_text=None,
         appended_text=None,
+        prepended_class=None,
+        appended_class=None,
         input_size=None,
         *,
         active=False,
@@ -74,8 +80,10 @@ class PrependedAppendedText(Field):
         **kwargs,
     ):
         self.field = field
-        self.appended_text = appended_text
         self.prepended_text = prepended_text
+        self.appended_text = appended_text
+        self.prepended_class = prepended_class
+        self.appended_class = appended_class
         self.active = active
 
         self.input_size = input_size
@@ -86,7 +94,7 @@ class PrependedAppendedText(Field):
             if "input-sm" in css_class:
                 self.input_size = "input-sm"
 
-        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
+        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, prepended_class=prepended_class, appended_class=appended_class, template=template, **kwargs)
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -97,6 +105,8 @@ class PrependedAppendedText(Field):
                 "input_size": self.input_size,
                 "active": getattr(self, "active", False),
                 "wrapper_class": self.wrapper_class,
+                "prepended_class": self.prepended_class,
+                "appended_class" : self.appended_class,
             }
         )
         template = self.get_template_name(template_pack)
@@ -132,6 +142,8 @@ class AppendedText(PrependedAppendedText):
         The name of the field to be rendered.
     text : str
         The appended text, can be HTML like.
+    appended_class : str, optional
+        The appended class defines the css classes for the appended text
     input_size : str, optional
         For Bootstrap4+ additional classes to customise the input-group size
         e.g. ``input-group-sm``. By default None
@@ -168,10 +180,12 @@ class AppendedText(PrependedAppendedText):
         active=False,
         css_class=None,
         wrapper_class=None,
+        appended_class=None,
         template=None,
         **kwargs,
     ):
         self.text = text
+        self.appended_class = appended_class
         super().__init__(
             field,
             appended_text=text,
@@ -179,6 +193,7 @@ class AppendedText(PrependedAppendedText):
             active=active,
             css_class=css_class,
             wrapper_class=wrapper_class,
+            appended_class=appended_class,
             template=template,
             **kwargs,
         )
@@ -217,6 +232,8 @@ class PrependedText(PrependedAppendedText):
         CSS classes to be used when rendering the Field. This class is usually
         applied to the ``<div>`` which wraps the Field's ``<label>`` and
         ``<input>`` tags. By default ``None``.
+    prepended_class : str, optional
+        The prepended class defines the css classes for the prepended text
     template : str, optional
         Overrides the default template, if provided. By default ``None``.
     **kwargs : dict, optional
@@ -240,6 +257,7 @@ class PrependedText(PrependedAppendedText):
         active=False,
         css_class=None,
         wrapper_class=None,
+        prepended_class=None,
         template=None,
         **kwargs,
     ):
@@ -251,6 +269,7 @@ class PrependedText(PrependedAppendedText):
             active=active,
             css_class=css_class,
             wrapper_class=wrapper_class,
+            prepended_class = prepended_class
             template=template,
             **kwargs,
         )
