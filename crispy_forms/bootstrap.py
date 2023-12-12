@@ -269,7 +269,7 @@ class PrependedText(PrependedAppendedText):
             active=active,
             css_class=css_class,
             wrapper_class=wrapper_class,
-            prepended_class = prepended_class
+            prepended_class = prepended_class,
             template=template,
             **kwargs,
         )
