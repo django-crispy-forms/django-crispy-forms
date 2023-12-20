@@ -69,21 +69,19 @@ class PrependedAppendedText(Field):
         field,
         prepended_text=None,
         appended_text=None,
-        prepended_class=None,
-        appended_class=None,
         input_size=None,
         *,
         active=False,
         css_class=None,
         wrapper_class=None,
         template=None,
+        prepended_class=None,
+        appended_class=None,
         **kwargs,
     ):
         self.field = field
         self.prepended_text = prepended_text
         self.appended_text = appended_text
-        self.prepended_class = prepended_class
-        self.appended_class = appended_class
         self.active = active
 
         self.input_size = input_size
@@ -94,7 +92,11 @@ class PrependedAppendedText(Field):
             if "input-sm" in css_class:
                 self.input_size = "input-sm"
 
-        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, prepended_class=prepended_class, appended_class=appended_class, template=template, **kwargs)
+
+        self.prepended_class = prepended_class
+        self.appended_class = appended_class
+
+        super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
         extra_context = extra_context.copy() if extra_context is not None else {}
@@ -105,8 +107,8 @@ class PrependedAppendedText(Field):
                 "input_size": self.input_size,
                 "active": getattr(self, "active", False),
                 "wrapper_class": self.wrapper_class,
-                "prepended_class": self.prepended_class,
-                "appended_class" : self.appended_class,
+                "crispy_prepended_class": self.prepended_class,
+                "crispy_appended_class" : self.appended_class,
             }
         )
         template = self.get_template_name(template_pack)
@@ -193,8 +195,9 @@ class AppendedText(PrependedAppendedText):
             active=active,
             css_class=css_class,
             wrapper_class=wrapper_class,
-            appended_class=appended_class,
             template=template,
+            prepended_class=None,
+            appended_class=appended_class,
             **kwargs,
         )
 
@@ -257,8 +260,8 @@ class PrependedText(PrependedAppendedText):
         active=False,
         css_class=None,
         wrapper_class=None,
-        prepended_class=None,
         template=None,
+        prepended_class=None,
         **kwargs,
     ):
         self.text = text
@@ -269,8 +272,9 @@ class PrependedText(PrependedAppendedText):
             active=active,
             css_class=css_class,
             wrapper_class=wrapper_class,
-            prepended_class = prepended_class,
             template=template,
+            prepended_class=prepended_class,
+            appended_class=None,
             **kwargs,
         )
 
