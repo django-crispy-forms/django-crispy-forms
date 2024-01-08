@@ -905,7 +905,7 @@ class Field(LayoutObject):
         Overrides the default template, if provided. By default ``None``.
     **kwargs : dict, optional
         Additional attributes are converted into key="value", pairs. These
-        attributes are added to the ``<div>``.
+        attributes are added to the field's ``<input>``.
 
     Examples
     --------
