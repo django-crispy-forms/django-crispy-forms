@@ -1,5 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
+## 2.2 (TBC)
+* Added support for Django 5.1.
+
 ## 2.1 (2023-10-15)
 * Added support for Django 5.0.
 * Dropped support for Django 3.2, 4.0 and 4.1.
