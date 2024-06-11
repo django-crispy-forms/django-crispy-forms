@@ -584,7 +584,8 @@ class Fieldset(LayoutObject):
             legend = SafeString("")
 
         template = self.get_template_name(template_pack)
-        return render_to_string(template, {"fieldset": self, "legend": legend, "fields": fields})
+        context.update({"fieldset": self, "legend": legend, "fields": fields})
+        return render_to_string(template, context.flatten())
 
 
 class MultiField(LayoutObject):

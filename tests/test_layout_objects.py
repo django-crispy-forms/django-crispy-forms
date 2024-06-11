@@ -17,7 +17,7 @@ from crispy_forms.bootstrap import (
     TabHolder,
 )
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Field, Layout, MultiWidgetField
+from crispy_forms.layout import HTML, Field, Fieldset, Layout, MultiWidgetField
 from crispy_forms.utils import render_crispy_form
 
 from .forms import (
@@ -134,6 +134,22 @@ def test_remove_labels():
     html = render_crispy_form(form)
 
     assert "<label" not in html
+
+
+def test_passthrough_context():
+    """
+    Test to ensure that context is passed through implicitly from outside of
+    the crispy form into the crispy form templates.
+    """
+    form = SampleForm()
+    form.helper.layout = Layout(
+        Fieldset("", template="custom_fieldset_template_with_context.html"),
+    )
+
+    c = {"fieldset_context_var": "fieldset_context_value"}
+
+    html = render_crispy_form(form, helper=form.helper, context=c)
+    assert "Got context var: fieldset_context_value" in html
 
 
 class TestBootstrapLayoutObjects:
