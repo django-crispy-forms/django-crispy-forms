@@ -2,6 +2,7 @@
 
 ## 2.2 (TBC)
 * Added support for Django 5.1.
+* Allowed pass through of context when rendering a ``Fieldset`` layout object.
 
 ## 2.1 (2023-10-15)
 * Added support for Django 5.0.
