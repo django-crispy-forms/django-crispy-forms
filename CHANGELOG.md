@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 2.2 (TBC)
+## 2.2 (2024-06-15)
 * Added support for Django 5.1.
 * Allowed pass through of context when rendering a ``Fieldset`` layout object.
 
