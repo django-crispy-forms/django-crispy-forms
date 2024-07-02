@@ -195,25 +195,28 @@ These ones live under module ``crispy_forms.bootstrap``.
 .. image:: images/form_actions.png
    :align: center
 
-- **AppendedText**: It renders a bootstrap appended text input. The first parameter is the name of the field to add appended text to. The second is the appended text which can be wrapped in Django's `mark_safe`_ to allow it to be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render appended text active. See `input_size`_ to change the size of this input::
+- **AppendedText**: It renders a bootstrap appended text input. The first parameter is the name of the field to add appended text to. The second is the appended text which can be wrapped in Django's `mark_safe`_ to allow it to be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render appended text active. The optional parameter ``appended_class`` gives you the option of customizing the span element with css tags. See `input_size`_ to change the size of this input::
 
     AppendedText('field_name', 'appended text to show')
     AppendedText('field_name', '$', active=True)
+    AppendedText('field_name', '$', active=True, appended_class='bg-success')
 
 .. image:: images/appended_text.png
    :align: center
 
-- **PrependedText**: It renders a bootstrap prepended text input. The first parameter is the name of the field to add prepended text to. The second is the prepended text which can be wrapped in Django's `mark_safe`_ to allow it to be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render prepended text active. See `input_size`_ to change the size of this input::
+- **PrependedText**: It renders a bootstrap prepended text input. The first parameter is the name of the field to add prepended text to. The second is the prepended text which can be wrapped in Django's `mark_safe`_ to allow it to be HTML like. There is an optional parameter ``active``, by default set to ``False``, that you can set to a boolean to render prepended text active. The optional parameter ``prepended_class`` gives you the option of customizing the span element with css tags. See `input_size`_ to change the size of this input::
 
     PrependedText('field_name', mark_safe('<b>Prepended text</b> to show'))
     PrependedText('field_name', '@', placeholder="username")
+    AppendedText('field_name', '$', active=True, prepended_class='bg-success')
 
 .. image:: images/prepended_text.png
    :align: center
 
-- **PrependedAppendedText**: It renders a combined prepended and appended text. The first parameter is the name of the field, then the prepended text and finally the appended text. The text can be wrapped in Django's `mark_safe`_ to allow it to be HTML like. See `input_size`_ to change the size of this input::
+- **PrependedAppendedText**: It renders a combined prepended and appended text. The first parameter is the name of the field, then the prepended text and finally the appended text. The text can be wrapped in Django's `mark_safe`_ to allow it to be HTML like. The optional parameters ``prepended_class`` and ``appended_class`` gives you the option of customizing the span elements with css tags. See `input_size`_ to change the size of this input::
 
     PrependedAppendedText('field_name', '$', '.00'),
+    PrependedAppendedText('field_name', '$', '.00', prepended_class='bg-danger', appended_class='bg-success'),
 
 .. image:: images/appended_prepended_text.png
    :align: center
