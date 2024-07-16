@@ -27,7 +27,6 @@ from .forms import (
     SampleForm,
     SampleFormCustomWidgets,
 )
-from .utils import parse_form
 
 
 def test_field_with_custom_template():
@@ -193,34 +192,6 @@ class TestBootstrapLayoutObjects:
         assert html.count('name="first_name"') == 1
         assert html.count('name="password1"') == 1
         assert html.count('name="password2"') == 1
-
-    def test_accordion_and_accordiongroup_css_classes_are_applied(self):
-        # TODO: this test uses temporary templates which fix ignoring css_class issue in crispy-bootstrap3,
-        #       and must be deleted after fix that.
-        test_form = SampleForm()
-        test_form.helper.layout = Layout(
-            Accordion(
-                AccordionGroup("one", "first_name", css_class="one two", template="temporary/accordion-group.html"),
-                AccordionGroup("two", "password1", "password2"),
-                css_class="three four",
-                template="temporary/accordion.html",
-            )
-        )
-        html = render_crispy_form(test_form)
-        parsed_form = parse_form(test_form)
-
-        first_accordiongroup_attributes = dict(parsed_form[0][0].attributes)
-        assert "one" in first_accordiongroup_attributes["class"]
-        assert "two" in first_accordiongroup_attributes["class"]
-        assert html.count("one two") == 1
-
-        accordion_attributes = dict(parsed_form[0].attributes)
-        assert "three" in accordion_attributes["class"]
-        assert "four" in accordion_attributes["class"]
-        assert html.count("three four") == 1
-
-        # Check 'active' class isn't applied to accordion and accordion-group
-        assert html.count("active") == 0
 
     def test_accordion_active_false_not_rendered(self):
         test_form = SampleForm()
