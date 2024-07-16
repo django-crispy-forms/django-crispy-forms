@@ -1,5 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
+## 2.3 (TBC)
+* Fixed a bug in `AccordionGroup` rendering then it gets an unexpected css class `active`.
+
 ## 2.2 (2024-06-15)
 * Added support for Django 5.1.
 * Allowed pass through of context when rendering a ``Fieldset`` layout object.
