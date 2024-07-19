@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## 2.3 (TBC)
+## 2.3 (2024-07-19)
 * Fixed a bug in `AccordionGroup` rendering then it gets an unexpected css class `active`.
 
 ## 2.2 (2024-06-15)
