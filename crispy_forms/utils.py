@@ -66,6 +66,9 @@ def render_field(
 
         try:
             # Injecting HTML attributes into field's widget, Django handles rendering these
+            if hasattr(form, "forms"):  # if form is formset
+                form = form.forms[0]
+                form.crispy_field_template = None
             bound_field = form[field]
             field_instance = bound_field.field
             if attrs is not None:
