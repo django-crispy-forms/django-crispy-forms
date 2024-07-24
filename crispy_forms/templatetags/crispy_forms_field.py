@@ -1,56 +1,66 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Iterable, Tuple
+
 from django import forms, template
 from django.conf import settings
-from django.template import Variable, loader
+from django.template import Context, Variable, loader
 
 from crispy_forms.utils import get_template_pack
+
+if TYPE_CHECKING:
+    from django.forms import BoundField, Field
+    from django.template.base import Parser, Token
+    from django.utils.safestring import SafeString
+
 
 register = template.Library()
 
 
 @register.filter
-def is_checkbox(field):
+def is_checkbox(field: BoundField) -> bool:
     return isinstance(field.field.widget, forms.CheckboxInput)
 
 
 @register.filter
-def is_password(field):
+def is_password(field: BoundField) -> bool:
     return isinstance(field.field.widget, forms.PasswordInput)
 
 
 @register.filter
-def is_radioselect(field):
+def is_radioselect(field: BoundField) -> bool:
     return isinstance(field.field.widget, forms.RadioSelect) and not isinstance(
         field.field.widget, forms.CheckboxSelectMultiple
     )
 
 
 @register.filter
-def is_select(field):
+def is_select(field: BoundField) -> bool:
     return isinstance(field.field.widget, forms.Select)
 
 
 @register.filter
-def is_checkboxselectmultiple(field):
+def is_checkboxselectmultiple(field: BoundField) -> bool:
     return isinstance(field.field.widget, forms.CheckboxSelectMultiple)
 
 
 @register.filter
-def is_file(field):
+def is_file(field: BoundField) -> bool:
     return isinstance(field.field.widget, forms.FileInput)
 
 
 @register.filter
-def is_clearable_file(field):
+def is_clearable_file(field: BoundField) -> bool:
     return isinstance(field.field.widget, forms.ClearableFileInput)
 
 
 @register.filter
-def is_multivalue(field):
+def is_multivalue(field: BoundField) -> bool:
     return isinstance(field.field.widget, forms.MultiWidget)
 
 
 @register.filter
-def classes(field):
+def classes(field: Field) -> str | None:
     """
     Returns CSS classes of a field
     """
@@ -58,25 +68,25 @@ def classes(field):
 
 
 @register.filter
-def css_class(field):
+def css_class(field: BoundField) -> str:
     """
     Returns widgets class name in lowercase
     """
     return field.field.widget.__class__.__name__.lower()
 
 
-def pairwise(iterable):
+def pairwise(iterable: Iterable[str]) -> zip[Tuple[str, str]]:
     """s -> (s0,s1), (s2,s3), (s4, s5), ..."""
     a = iter(iterable)
     return zip(a, a)
 
 
 class CrispyFieldNode(template.Node):
-    def __init__(self, field, attrs):
+    def __init__(self, field: str, attrs: dict[str, str]):
         self.field = field
         self.attrs = attrs
 
-    def render(self, context):
+    def render(self, context: Context) -> str:
         # Nodes are not threadsafe so we must store and look up our instance
         # variables in the current rendering context first
         if self not in context.render_context:
@@ -126,24 +136,26 @@ class CrispyFieldNode(template.Node):
 
 
 @register.tag(name="crispy_field")
-def crispy_field(parser, token):
+def crispy_field(parser: Parser, token: Token) -> CrispyFieldNode:
     """
     {% crispy_field field attrs %}
     """
-    token = token.split_contents()
-    field = token.pop(1)
+    tokens = token.split_contents()
+    field = tokens.pop(1)
     attrs = {}
 
     # We need to pop tag name, or pairwise would fail
-    token.pop(0)
-    for attribute_name, value in pairwise(token):
+    tokens.pop(0)
+    for attribute_name, value in pairwise(tokens):
         attrs[attribute_name] = value
 
     return CrispyFieldNode(field, attrs)
 
 
 @register.simple_tag()
-def crispy_addon(field, append="", prepend="", form_show_labels=True):
+def crispy_addon(
+    field: BoundField, append: str = "", prepend: str = "", form_show_labels: bool = True
+) -> SafeString | None:
     """
     Renders a form field using bootstrap's prepended or appended text::
 

@@ -2,3 +2,7 @@ black
 flake8
 isort
 flake8-comprehensions
+flake8-typing-imports
+flake8-type-checking
+mypy
+django-stubs

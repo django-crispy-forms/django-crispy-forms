@@ -15,37 +15,37 @@ from .forms import GroupedChoiceForm, SampleForm, SampleForm5
 from .utils import parse_expected, parse_form
 
 
-def test_list_intersection():
+def test_list_intersection() -> None:
     assert list_intersection([1, 3], [2, 3]) == [3]
 
 
-def test_list_difference():
+def test_list_difference() -> None:
     assert list_difference([3, 1, 2, 3], [4, 1]) == [3, 2]
 
 
-def test_render_field_with_none_field():
+def test_render_field_with_none_field() -> None:
     rendered = render_field(field=None, form=None, context=None)
     assert rendered == ""
 
 
-def test_custom_bound_field():
+def test_custom_bound_field() -> None:
     from django.forms.boundfield import BoundField
 
     extra = "xyxyxyxyxyx"
 
     class CustomBoundField(BoundField):
         @property
-        def auto_id(self):
+        def auto_id(self) -> str:
             return extra
 
     class MyCharField(forms.CharField):
-        def get_bound_field(self, form, field_name):
+        def get_bound_field(self, form: forms.BaseForm, field_name: str) -> CustomBoundField:
             return CustomBoundField(form, self, field_name)
 
     class MyForm(forms.Form):
         f = MyCharField()
 
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args, **kwargs) -> None:
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
             self.helper.layout = Layout("f")
@@ -56,13 +56,13 @@ def test_custom_bound_field():
     assert extra in rendered
 
 
-def test_parse_expected_and_form():
+def test_parse_expected_and_form() -> None:
     form = SampleForm()
     form.helper.layout = Layout("is_company")
     assert parse_form(form) == parse_expected("utils_test.html")
 
 
-def test_optgroup_filter_nested():
+def test_optgroup_filter_nested() -> None:
     form = GroupedChoiceForm({"checkbox_select_multiple": ["cd", "vhs"]})
     form.as_p()
     groups = optgroups(form["checkbox_select_multiple"])
@@ -139,7 +139,7 @@ def test_optgroup_filter_nested():
     assert index == 2
 
 
-def test_optgroup_filter():
+def test_optgroup_filter() -> None:
     form = SampleForm5({"checkbox_select_multiple": "1"})
     groups = optgroups(form["checkbox_select_multiple"])
     group = groups[0]
@@ -230,7 +230,7 @@ def test_optgroup_filter():
 
 
 @override_settings()
-def test_get_template_pack():
+def test_get_template_pack() -> None:
     del settings.CRISPY_TEMPLATE_PACK
     with pytest.raises(AttributeError):
         get_template_pack()
