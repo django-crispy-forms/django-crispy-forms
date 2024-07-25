@@ -687,20 +687,6 @@ class Container(Div):
         """
         return field_name in (pointer.name for pointer in self.get_field_names())
 
-    def render(
-        self,
-        form: BaseForm,
-        context: Context,
-        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
-        **kwargs: Any,
-    ) -> SafeString:
-        if self.active:
-            if "active" not in self.css_class:
-                self.css_class += " active"
-        else:
-            self.css_class = self.css_class.replace("active", "")
-        return super().render(form, context, template_pack)
-
 
 class ContainerHolder(Div):
     """
