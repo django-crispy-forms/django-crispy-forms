@@ -799,7 +799,13 @@ class Tab(Container):
         link_template = self.link_template % template_pack
         return render_to_string(link_template, {"link": self})
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
         if self.active:
             if "active" not in self.css_class:
                 self.css_class += " active"
