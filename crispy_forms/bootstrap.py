@@ -15,6 +15,8 @@ if TYPE_CHECKING:
     from django.forms import BaseForm
     from django.utils.functional import SimpleLazyObject
 
+    from .layout import LayoutObjectFields
+
 
 class PrependedAppendedText(Field):
     """
@@ -492,7 +494,7 @@ class FieldWithButtons(Div):
 
     def __init__(
         self,
-        *fields: str | LayoutObject | StrictButton,
+        *fields: LayoutObjectFields,
         input_size: str | None = None,
         css_id: str | None = None,
         css_class: str | None = None,
