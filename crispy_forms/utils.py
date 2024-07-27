@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import sys
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Iterable, Sequence, TypeVar
+from typing import TYPE_CHECKING, Any, Iterable, Sequence, TypeVar, Union
 
 from django.conf import settings
 from django.forms.utils import flatatt as _flatatt
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from crispy_forms.helper import FormHelper
     from crispy_forms.layout import HTML, BaseInput, LayoutObject
 
-    ContextDict = dict[int | str | Node, Any]
+    ContextDict = dict[Union[int, str, Node], Any]
 
 
 def get_template_pack() -> str:
