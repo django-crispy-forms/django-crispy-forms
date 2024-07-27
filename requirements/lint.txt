@@ -4,7 +4,3 @@ isort
 flake8-comprehensions
 flake8-typing-imports
 flake8-type-checking
-git+https://github.com/django-crispy-forms/crispy-bootstrap3
-git+https://github.com/django-crispy-forms/crispy-bootstrap4
-mypy
-django-stubs
