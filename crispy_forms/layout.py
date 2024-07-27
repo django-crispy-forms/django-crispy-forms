@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Type, Union, cast
+from typing import TYPE_CHECKING, Any, Sequence, Type, Union, cast
 
 from django.template import Context, Template
 from django.template.loader import render_to_string
@@ -1066,13 +1066,16 @@ class Field(LayoutObject):
             extra_context["wrapper_class"] = self.wrapper_class
 
         template = self.get_template_name(template_pack)
+
+        attrs = self.multi_widget_attrs if hasattr(self, "multi_widget_attrs") else self.attrs
+
         # breakpoint()
         return self.get_rendered_fields(
             form,
             context,
             template_pack,
             template=template,
-            attrs=self.attrs,
+            attrs=attrs,
             extra_context=extra_context,
             **kwargs,
         )
@@ -1094,7 +1097,7 @@ class MultiWidgetField(Field):
     *fields : str
         Usually a single field, but can be any number of fields, to be rendered
         with the same attributes applied.
-    attrs : str, optional
+    attrs : Sequence[dict[str, str]], optional
         Additional attrs to be added to each widget. These are added to any
         classes included in the ``attrs`` dict. By default ``None``.
     wrapper_class: str, optional
@@ -1121,11 +1124,11 @@ class MultiWidgetField(Field):
     def __init__(
         self,
         *fields: str,
-        attrs: tuple[dict[str, str]] | dict[str, str] | None = None,
+        attrs: Sequence[dict[str, str]] | None = None,
         template: str | None = None,
         wrapper_class: str | None = None,
     ) -> None:
         self.fields = list(fields)
-        self.attrs = attrs or {}
+        self.multi_widget_attrs = attrs if attrs else ({})
         self.template = template or self.template
         self.wrapper_class = wrapper_class
