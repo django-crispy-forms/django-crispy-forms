@@ -43,6 +43,9 @@ jobs:
       if: ${{ matrix.python-version == '3.9' }}
       run: |
         tox -e lint
+    - name: Run type checking
+      run: |
+        tox -e typechecking
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:

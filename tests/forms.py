@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 
 from django import forms
 from django.db import models
@@ -29,7 +29,7 @@ class SampleForm(BaseForm):
     last_name = forms.CharField(label="last name", max_length=5, required=True, widget=forms.TextInput())
     datetime_field = forms.SplitDateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
 
-    def clean(self) -> dict[str, str]:
+    def clean(self) -> Dict[str, str]:
         super().clean()
         password1 = self.cleaned_data.get("password1", None)
         password2 = self.cleaned_data.get("password2", None)

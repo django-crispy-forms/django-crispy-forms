@@ -15,6 +15,8 @@ if TYPE_CHECKING:
     from django.forms import BaseForm
     from django.utils.functional import SimpleLazyObject
 
+    from .layout import LayoutObjectFields
+
 
 class PrependedAppendedText(Field):
     """
@@ -492,7 +494,7 @@ class FieldWithButtons(Div):
 
     def __init__(
         self,
-        *fields: str | LayoutObject | StrictButton,
+        *fields: LayoutObjectFields,
         input_size: str | None = None,
         css_id: str | None = None,
         css_class: str | None = None,
@@ -687,20 +689,6 @@ class Container(Div):
         """
         return field_name in (pointer.name for pointer in self.get_field_names())
 
-    def render(
-        self,
-        form: BaseForm,
-        context: Context,
-        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
-        **kwargs: Any,
-    ) -> SafeString:
-        if self.active:
-            if "active" not in self.css_class:
-                self.css_class += " active"
-        else:
-            self.css_class = self.css_class.replace("active", "")
-        return super().render(form, context, template_pack)
-
 
 class ContainerHolder(Div):
     """
@@ -813,7 +801,13 @@ class Tab(Container):
         link_template = self.link_template % template_pack
         return render_to_string(link_template, {"link": self})
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
         if self.active:
             if "active" not in self.css_class:
                 self.css_class += " active"

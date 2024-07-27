@@ -1,0 +1,4 @@
+git+https://github.com/django-crispy-forms/crispy-bootstrap3
+git+https://github.com/django-crispy-forms/crispy-bootstrap4
+mypy
+django-stubs
