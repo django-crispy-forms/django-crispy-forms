@@ -1,5 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
+## Next Release
+* Added support for Python 3.13.
+
 ## 2.3 (2024-07-19)
 * Fixed a bug in `AccordionGroup` rendering then it gets an unexpected css class `active`.
 
