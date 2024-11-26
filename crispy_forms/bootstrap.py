@@ -773,9 +773,6 @@ class TabHolder(ContainerHolder):
     template = "%s/layout/tab.html"
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
-        for tab in self.fields:
-            tab.active = False
-
         # Open the group that should be open.
         self.open_target_group_for_form(form)
         content = self.get_rendered_fields(form, context, template_pack)
