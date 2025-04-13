@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## Next Release
+## 2.4 (2025-04-13)
 * Added support for Python 3.13.
 * Confirmed support for Django 5.2.
 
