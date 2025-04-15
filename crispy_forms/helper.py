@@ -1,71 +1,87 @@
+from __future__ import annotations
+
 import re
+from typing import TYPE_CHECKING, Any, Type, cast
 
 from django.urls import NoReverseMatch, reverse
-from django.utils.safestring import mark_safe
+from django.utils.safestring import SafeString, mark_safe
 
 from crispy_forms.exceptions import FormHelpersException
-from crispy_forms.layout import Layout
+from crispy_forms.layout import BaseInput, Layout, LayoutObject
 from crispy_forms.layout_slice import LayoutSlice
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, list_difference, render_field
 
+if TYPE_CHECKING:
+    from django.forms import BaseForm, Widget
+    from django.template import Context
+    from django.utils.functional import SimpleLazyObject
+
 
 class DynamicLayoutHandler:
-    def _check_layout(self):
+    layout: Layout | None
+    form: BaseForm | None
+
+    def _check_layout(self) -> None:
         if self.layout is None:
             raise FormHelpersException("You need to set a layout in your FormHelper")
 
-    def _check_layout_and_form(self):
+    def _check_layout_and_form(self) -> None:
         self._check_layout()
         if self.form is None:
             raise FormHelpersException("You need to pass a form instance to your FormHelper")
 
-    def all(self):
+    def all(self) -> LayoutSlice:
         """
         Returns all layout objects of first level of depth
         """
         self._check_layout()
-        return LayoutSlice(self.layout, slice(0, len(self.layout.fields), 1))
+        layout = cast("Layout", self.layout)
+        return LayoutSlice(layout, slice(0, len(layout.fields), 1))
 
-    def filter(self, *LayoutClasses, max_level=0, greedy=False):
+    def filter(self, *LayoutClasses: Type[LayoutObject], max_level: int = 0, greedy: bool = False) -> LayoutSlice:
         """
         Returns a LayoutSlice pointing to layout objects of type `LayoutClass`
         """
         self._check_layout()
-        filtered_layout_objects = self.layout.get_layout_objects(LayoutClasses, max_level=max_level, greedy=greedy)
+        layout = cast("Layout", self.layout)
+        filtered_layout_objects = layout.get_layout_objects(*LayoutClasses, max_level=max_level, greedy=greedy)
 
-        return LayoutSlice(self.layout, filtered_layout_objects)
+        return LayoutSlice(layout, filtered_layout_objects)
 
-    def filter_by_widget(self, widget_type):
+    def filter_by_widget(self, widget_type: Type[Widget]) -> LayoutSlice:
         """
         Returns a LayoutSlice pointing to fields with widgets of `widget_type`
         """
         self._check_layout_and_form()
-        layout_field_names = self.layout.get_field_names()
+        layout = cast("Layout", self.layout)
+        form = cast("BaseForm", self.form)
+        layout_field_names = layout.get_field_names()
 
         # Let's filter all fields with widgets like widget_type
         filtered_fields = []
         for pointer in layout_field_names:
-            if isinstance(self.form.fields[pointer.name].widget, widget_type):
+            if isinstance(form.fields[pointer.name].widget, widget_type):
                 filtered_fields.append(pointer)
 
-        return LayoutSlice(self.layout, filtered_fields)
+        return LayoutSlice(layout, filtered_fields)
 
-    def exclude_by_widget(self, widget_type):
+    def exclude_by_widget(self, widget_type: Type[Widget]) -> LayoutSlice:
         """
         Returns a LayoutSlice pointing to fields with widgets NOT matching `widget_type`
         """
         self._check_layout_and_form()
-        layout_field_names = self.layout.get_field_names()
-
+        layout = cast("Layout", self.layout)
+        form = cast("BaseForm", self.form)
+        layout_field_names = layout.get_field_names()
         # Let's exclude all fields with widgets like widget_type
         filtered_fields = []
         for pointer in layout_field_names:
-            if not isinstance(self.form.fields[pointer.name].widget, widget_type):
+            if not isinstance(form.fields[pointer.name].widget, widget_type):
                 filtered_fields.append(pointer)
 
-        return LayoutSlice(self.layout, filtered_fields)
+        return LayoutSlice(layout, filtered_fields)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str | int) -> LayoutSlice:
         """
         Return a LayoutSlice that makes changes affect the current instance of the layout
         and not a copy.
@@ -78,7 +94,8 @@ class DynamicLayoutHandler:
                 return getattr(self, key)
 
             self._check_layout()
-            layout_field_names = self.layout.get_field_names()
+            layout = cast("Layout", self.layout)
+            layout_field_names = layout.get_field_names()
 
             filtered_field = []
             for pointer in layout_field_names:
@@ -86,17 +103,23 @@ class DynamicLayoutHandler:
                 if pointer.name == key:
                     filtered_field.append(pointer)
 
-            return LayoutSlice(self.layout, filtered_field)
+            return LayoutSlice(layout, filtered_field)
 
-        return LayoutSlice(self.layout, key)
+        self._check_layout()
+        layout = cast("Layout", self.layout)
+        return LayoutSlice(layout, key)
 
-    def __setitem__(self, key, value):
-        self.layout[key] = value
+    def __setitem__(self, key: int, value: str | LayoutObject) -> None:
+        self._check_layout()
+        layout = cast("Layout", self.layout)
+        layout[key] = value
 
-    def __delitem__(self, key):
-        del self.layout.fields[key]
+    def __delitem__(self, key: int) -> None:
+        self._check_layout()
+        layout = cast("Layout", self.layout)
+        del layout.fields[key]
 
-    def __len__(self):
+    def __len__(self) -> int:
         if self.layout is not None:
             return len(self.layout.fields)
         else:
@@ -197,31 +220,31 @@ class FormHelper(DynamicLayoutHandler):
     _help_text_inline = False
     _error_text_inline = True
     form_show_labels = True
-    template = None
-    field_template = None
+    template: str | None = None
+    field_template: str | None = None
     disable_csrf = False
     use_custom_control = True
     label_class = ""
     field_class = ""
     include_media = True
 
-    def __init__(self, form=None):
-        self.attrs = {}
-        self.inputs = []
+    def __init__(self, form: BaseForm | None = None) -> None:
+        self.attrs: dict[str, str] = {}
+        self.inputs: list[BaseInput] = []
 
         if form is not None:
             self.form = form
             self.layout = self.build_default_layout(form)
 
-    def build_default_layout(self, form):
+    def build_default_layout(self, form: BaseForm) -> Layout:
         return Layout(*form.fields.keys())
 
     @property
-    def form_method(self):
+    def form_method(self) -> str:
         return self._form_method
 
     @form_method.setter
-    def form_method(self, method):
+    def form_method(self, method: str) -> None:
         if method.lower() not in ("get", "post"):
             raise FormHelpersException(
                 "Only GET and POST are valid in the \
@@ -231,54 +254,58 @@ class FormHelper(DynamicLayoutHandler):
         self._form_method = method.lower()
 
     @property
-    def form_action(self):
+    def form_action(self) -> Any:
         try:
             return reverse(self._form_action)
         except NoReverseMatch:
             return self._form_action
 
     @form_action.setter
-    def form_action(self, action):
+    def form_action(self, action: str) -> None:
         self._form_action = action
 
     @property
-    def help_text_inline(self):
+    def help_text_inline(self) -> bool:
         return self._help_text_inline
 
     @help_text_inline.setter
-    def help_text_inline(self, flag):
+    def help_text_inline(self, flag: bool) -> None:
         self._help_text_inline = flag
         self._error_text_inline = not flag
 
     @property
-    def error_text_inline(self):
+    def error_text_inline(self) -> bool:
         return self._error_text_inline
 
     @error_text_inline.setter
-    def error_text_inline(self, flag):
+    def error_text_inline(self, flag: bool) -> None:
         self._error_text_inline = flag
         self._help_text_inline = not flag
 
-    def add_input(self, input_object):
+    def add_input(self, input_object: BaseInput) -> None:
         self.inputs.append(input_object)
 
-    def add_layout(self, layout):
+    def add_layout(self, layout: Layout) -> None:
         self.layout = layout
 
-    def render_layout(self, form, context, template_pack=TEMPLATE_PACK):
+    def render_layout(
+        self, form: BaseForm, context: Context, template_pack: SimpleLazyObject | str = TEMPLATE_PACK
+    ) -> SafeString:
         """
         Returns safe html of the rendering of the layout
         """
-        form.rendered_fields = set()
-        form.crispy_field_template = self.field_template
+        form.rendered_fields = set()  # type:ignore [attr-defined]
+        form.crispy_field_template = self.field_template  # type:ignore [attr-defined]
 
         # This renders the specified Layout strictly
-        html = self.layout.render(form, context, template_pack=template_pack)
+        self._check_layout()
+        layout = cast("Layout", self.layout)
+        html = layout.render(form, context, template_pack=template_pack)
 
         # Rendering some extra fields if specified
         if self.render_unmentioned_fields or self.render_hidden_fields or self.render_required_fields:
             fields = tuple(form.fields.keys())
-            left_fields_to_render = list_difference(fields, form.rendered_fields)
+            left_fields_to_render = list_difference(fields, form.rendered_fields)  # type:ignore [attr-defined]
             for field in left_fields_to_render:
                 if (
                     self.render_unmentioned_fields
@@ -289,7 +316,7 @@ class FormHelper(DynamicLayoutHandler):
 
         return mark_safe(html)
 
-    def get_attributes(self, template_pack=TEMPLATE_PACK):
+    def get_attributes(self, template_pack: SimpleLazyObject | str = TEMPLATE_PACK) -> dict[str, Any]:  # noqa: C901
         """
         Used by crispy_forms_tags to get helper attributes
         """
