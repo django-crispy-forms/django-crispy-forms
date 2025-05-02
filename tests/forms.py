@@ -1,3 +1,5 @@
+from typing import Any
+
 from django import forms
 from django.db import models
 
@@ -5,13 +7,13 @@ from crispy_forms.helper import FormHelper
 
 
 class BaseForm(forms.Form):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
 
 class BaseModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
@@ -27,13 +29,12 @@ class SampleForm(BaseForm):
     last_name = forms.CharField(label="last name", max_length=5, required=True, widget=forms.TextInput())
     datetime_field = forms.SplitDateTimeField(label="date time", widget=forms.SplitDateTimeWidget())
 
-    def clean(self):
+    def clean(self) -> dict[str, str]:
         super().clean()
         password1 = self.cleaned_data.get("password1", None)
         password2 = self.cleaned_data.get("password2", None)
         if not password1 and not password2 or password1 != password2:
             raise forms.ValidationError("Passwords dont match")
-
         return self.cleaned_data
 
 
@@ -170,7 +171,7 @@ class FakeFieldFile:
 
     url = "something"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.url
 
 
