@@ -3,6 +3,7 @@ from functools import lru_cache
 from django import template
 from django.conf import settings
 from django.forms.formsets import BaseFormSet
+from django.template import VariableDoesNotExist
 from django.template.loader import get_template
 
 from crispy_forms.helper import FormHelper
@@ -196,7 +197,10 @@ def whole_uni_form_template(template_pack=TEMPLATE_PACK):
 
 class CrispyFormNode(BasicNode):
     def render(self, context):
-        c = self.get_render(context).flatten()
+        try:
+            c = self.get_render(context).flatten()
+        except VariableDoesNotExist:
+            return context.template.engine.string_if_invalid
 
         if self.actual_helper is not None and getattr(self.actual_helper, "template", False):
             template = get_template(self.actual_helper.template)
