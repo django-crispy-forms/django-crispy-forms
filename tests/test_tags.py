@@ -216,3 +216,15 @@ def test_crispy_addon():
         crispy_addon()
     with pytest.raises(TypeError):
         crispy_addon(bound_field)
+
+
+def test_crispy_missing_variable():
+    template = Template("{% load crispy_forms_tags %}{% crispy form %}")
+    html = template.render(Context({}))
+    assert html == ""
+
+
+def test_crispy_missing_variable_deep():
+    template = Template("{% load crispy_forms_tags %}{% crispy d.form %}")
+    html = template.render(Context({"d": None}))
+    assert html == ""
