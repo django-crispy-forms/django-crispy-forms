@@ -62,8 +62,8 @@ For extensive documentation see the ``docs`` folder or `read it on readthedocs`_
 Special thanks
 ==============
 
-* To Daniel Feldroy (`@pydanny`_) for his support, time and the opportunity given to me to do this.
-* The name of the project was suggested by the fantastic Audrey Feldroy (`@audreyfeldroy`_)
+* To Daniel Roy Greenfeld (`@pydanny`_) for his support, time and the opportunity given to me to do this.
+* The name of the project was suggested by the fantastic Audrey Roy Greenfeld (`@audreyfeldroy`_)
 * To Kenneth Love (`@kennethlove`_) for creating django-uni-form-contrib from which bootstrap template pack was started.
 * To Adam Johnson (`@adamchainz`_) for the project's logo.
 
