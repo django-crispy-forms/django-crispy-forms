@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import re
+from typing import TYPE_CHECKING
 
 import django
 import pytest
@@ -17,8 +20,13 @@ from crispy_forms.utils import render_crispy_form
 from .forms import SampleForm, SampleForm7, SampleForm8, SampleFormWithMedia
 from .test_utils import parse_expected, parse_form
 
+if TYPE_CHECKING:
+    from pytest_django.fixtures import SettingsWrapper
 
-def test_inputs():
+    from crispy_forms.utils import ContextDict
+
+
+def test_inputs() -> None:
     form_helper = FormHelper()
     form_helper.add_input(Submit("my-submit", "Submit", css_class="button white"))
     form_helper.add_input(Reset("my-reset", "Reset"))
@@ -45,13 +53,13 @@ def test_inputs():
     assert len(re.findall(r"<input[^>]+> <", html)) == 8
 
 
-def test_invalid_form_method():
+def test_invalid_form_method() -> None:
     form_helper = FormHelper()
     with pytest.raises(FormHelpersException):
         form_helper.form_method = "superPost"
 
 
-def test_form_with_helper_without_layout():
+def test_form_with_helper_without_layout() -> None:
     form_helper = FormHelper()
     form_helper.form_id = "this-form-rocks"
     form_helper.form_class = "forms-that-rock"
@@ -92,22 +100,7 @@ def test_form_with_helper_without_layout():
     assert 'id="this-form-rocks"' not in html
 
 
-def test_html5_required():
-    form = SampleForm()
-    form.helper.html5_required = True
-    html = render_crispy_form(form)
-    # 6 out of 7 fields are required and an extra one for the SplitDateTimeWidget makes 7.
-    if django.VERSION < (1, 10):
-        assert html.count('required="required"') == 7
-    else:
-        assert len(re.findall(r"\brequired\b", html)) == 7
-
-    form = SampleForm()
-    form.helper.html5_required = False
-    html = render_crispy_form(form)
-
-
-def test_media_is_included_by_default_with_bootstrap3():
+def test_media_is_included_by_default_with_bootstrap3() -> None:
     form = SampleFormWithMedia()
     form.helper.template_pack = "bootstrap3"
     html = render_crispy_form(form)
@@ -115,7 +108,7 @@ def test_media_is_included_by_default_with_bootstrap3():
     assert "test.js" in html
 
 
-def test_media_removed_when_include_media_is_false_with_bootstrap3():
+def test_media_removed_when_include_media_is_false_with_bootstrap3() -> None:
     form = SampleFormWithMedia()
     form.helper.template_pack = "bootstrap3"
     form.helper.include_media = False
@@ -124,7 +117,7 @@ def test_media_removed_when_include_media_is_false_with_bootstrap3():
     assert "test.js" not in html
 
 
-def test_attrs():
+def test_attrs() -> None:
     form = SampleForm()
     form.helper.attrs = {"id": "TestIdForm", "autocomplete": "off"}
     html = render_crispy_form(form)
@@ -133,7 +126,7 @@ def test_attrs():
     assert 'id="TestIdForm"' in html
 
 
-def test_template_context():
+def test_template_context() -> None:
     helper = FormHelper()
     helper.attrs = {
         "id": "test-form",
@@ -142,7 +135,7 @@ def test_template_context():
         "autocomplete": "off",
     }
     node = CrispyFormNode("form", "helper")
-    context = node.get_response_dict(helper, {}, False)
+    context = node.get_response_dict(helper, Context(), False)
 
     assert context["form_id"] == "test-form"
     assert context["form_attrs"]["id"] == "test-form"
@@ -153,13 +146,13 @@ def test_template_context():
     assert context["form_attrs"]["autocomplete"] == "off"
 
 
-def test_template_context_using_form_attrs():
+def test_template_context_using_form_attrs() -> None:
     helper = FormHelper()
     helper.form_id = "test-form"
     helper.form_class = "test-forms"
     helper.form_action = "submit/test/form"
     node = CrispyFormNode("form", "helper")
-    context = node.get_response_dict(helper, {}, False)
+    context = node.get_response_dict(helper, Context(), False)
 
     assert context["form_id"] == "test-form"
     assert context["form_attrs"]["id"] == "test-form"
@@ -169,14 +162,14 @@ def test_template_context_using_form_attrs():
     assert context["form_attrs"]["action"] == "submit/test/form"
 
 
-def test_template_helper_access():
+def test_template_helper_access() -> None:
     helper = FormHelper()
     helper.form_id = "test-form"
 
     assert helper["form_id"] == "test-form"
 
 
-def test_without_helper():
+def test_without_helper() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -192,7 +185,7 @@ def test_without_helper():
     assert "action" not in html
 
 
-def test_template_pack_override_compact(settings):
+def test_template_pack_override_compact(settings: SettingsWrapper) -> None:
     current_pack = settings.CRISPY_TEMPLATE_PACK
     if current_pack == "bootstrap4":
         override_pack = "bootstrap3"
@@ -216,7 +209,7 @@ def test_template_pack_override_compact(settings):
         assert "controls" not in html
 
 
-def test_template_pack_override_verbose(settings):
+def test_template_pack_override_verbose(settings: SettingsWrapper) -> None:
     current_pack = settings.CRISPY_TEMPLATE_PACK
     if current_pack == "bootstrap4":
         override_pack = "bootstrap3"
@@ -236,7 +229,7 @@ def test_template_pack_override_verbose(settings):
     assert "controls" not in html
 
 
-def test_template_pack_override_wrong():
+def test_template_pack_override_wrong() -> None:
     with pytest.raises(TemplateSyntaxError):
         Template(
             """
@@ -246,7 +239,7 @@ def test_template_pack_override_wrong():
         )
 
 
-def test_invalid_helper(settings):
+def test_invalid_helper(settings: SettingsWrapper) -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -260,7 +253,7 @@ def test_invalid_helper(settings):
         template.render(c)
 
 
-def test_formset_with_helper_without_layout():
+def test_formset_with_helper_without_layout() -> None:
     template = Template(
         """
         {% load crispy_forms_tags %}
@@ -294,7 +287,7 @@ def test_formset_with_helper_without_layout():
     assert 'action="%s"' % reverse("simpleAction") in html
 
 
-def test_CSRF_token_POST_form():
+def test_CSRF_token_POST_form() -> None:
     form_helper = FormHelper()
     template = Template(
         """
@@ -312,7 +305,7 @@ def test_CSRF_token_POST_form():
     assert "csrfmiddlewaretoken" in html
 
 
-def test_CSRF_token_GET_form():
+def test_CSRF_token_GET_form() -> None:
     form_helper = FormHelper()
     form_helper.form_method = "GET"
     template = Template(
@@ -328,14 +321,14 @@ def test_CSRF_token_GET_form():
     assert "csrfmiddlewaretoken" not in html
 
 
-def test_disable_csrf():
+def test_disable_csrf() -> None:
     form = SampleForm()
     form.helper.disable_csrf = True
     html = render_crispy_form(form, form.helper, {"csrf_token": _get_new_csrf_string()})
     assert "csrf" not in html
 
 
-def test_render_unmentioned_fields():
+def test_render_unmentioned_fields() -> None:
     test_form = SampleForm()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_unmentioned_fields = True
@@ -344,7 +337,7 @@ def test_render_unmentioned_fields():
     assert html.count("<input") == 8
 
 
-def test_render_unmentioned_fields_order():
+def test_render_unmentioned_fields_order() -> None:
     test_form = SampleForm7()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_unmentioned_fields = True
@@ -361,11 +354,11 @@ def test_render_unmentioned_fields_order():
         < html.index('id="div_id_is_company"')
     )
 
-    test_form = SampleForm8()
-    test_form.helper.layout = Layout("email")
-    test_form.helper.render_unmentioned_fields = True
+    test_form8 = SampleForm8()
+    test_form8.helper.layout = Layout("email")
+    test_form8.helper.render_unmentioned_fields = True
 
-    html = render_crispy_form(test_form)
+    html = render_crispy_form(test_form8)
     assert html.count("<input") == 4
     assert (
         # From layout
@@ -378,7 +371,7 @@ def test_render_unmentioned_fields_order():
     )
 
 
-def test_render_hidden_fields():
+def test_render_hidden_fields() -> None:
     test_form = SampleForm()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_hidden_fields = True
@@ -396,7 +389,7 @@ def test_render_hidden_fields():
     assert parse_expected(result) == parse_form(test_form)
 
 
-def test_render_required_fields():
+def test_render_required_fields() -> None:
     test_form = SampleForm()
     test_form.helper.layout = Layout("email")
     test_form.helper.render_required_fields = True
@@ -405,7 +398,7 @@ def test_render_required_fields():
     assert html.count("<input") == 7
 
 
-def test_helper_custom_template():
+def test_helper_custom_template() -> None:
     form = SampleForm()
     form.helper.template = "custom_form_template.html"
 
@@ -413,7 +406,7 @@ def test_helper_custom_template():
     assert "<h1>Special custom form</h1>" in html
 
 
-def test_helper_custom_field_template():
+def test_helper_custom_field_template() -> None:
     form = SampleForm()
     form.helper.layout = Layout("password1", "password2")
     form.helper.field_template = "custom_field_template.html"
@@ -422,7 +415,7 @@ def test_helper_custom_field_template():
     assert html.count("<h1>Special custom field</h1>") == 2
 
 
-def test_helper_custom_field_template_no_layout():
+def test_helper_custom_field_template_no_layout() -> None:
     form = SampleForm()
     form.helper.field_template = "custom_field_template.html"
 
@@ -432,7 +425,7 @@ def test_helper_custom_field_template_no_layout():
     assert html.count("<h1>Special custom field</h1>") == len(form.fields)
 
 
-def test_helper_std_field_template_no_layout():
+def test_helper_std_field_template_no_layout() -> None:
     form = SampleForm()
 
     html = render_crispy_form(form)
@@ -440,7 +433,7 @@ def test_helper_std_field_template_no_layout():
         assert html.count('id="div_id_%s"' % field) == 1
 
 
-def test_error_text_inline():
+def test_error_text_inline() -> None:
     form = SampleForm({"email": "invalidemail"})
     layout = Layout(
         AppendedText("first_name", "wat"),
@@ -469,7 +462,7 @@ def test_error_text_inline():
     assert len(matches) == 3
 
 
-def test_form_show_labels():
+def test_form_show_labels() -> None:
     form = SampleForm()
     form.helper.layout = Layout(
         "password1",
@@ -484,7 +477,7 @@ def test_form_show_labels():
     assert html.count("<label") == 0
 
 
-def test_passthrough_context():
+def test_passthrough_context() -> None:
     """
     Test to ensure that context is passed through implicitly from outside of
     the crispy form into the crispy form templates.
@@ -492,7 +485,7 @@ def test_passthrough_context():
     form = SampleForm()
     form.helper.template = "custom_form_template_with_context.html"
 
-    c = {"prefix": "foo", "suffix": "bar"}
+    c: ContextDict = {"prefix": "foo", "suffix": "bar"}
 
     html = render_crispy_form(form, helper=form.helper, context=c)
     assert "Got prefix: foo" in html

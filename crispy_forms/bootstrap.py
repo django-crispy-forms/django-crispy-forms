@@ -1,12 +1,19 @@
-from random import randint
+from __future__ import annotations
 
-from django.template import Template
+from random import randint
+from typing import TYPE_CHECKING, Any, KeysView, Sequence
+
+from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.utils.safestring import SafeString
 from django.utils.text import slugify
 
-from .layout import Div, Field, LayoutObject, TemplateNameMixin
+from .layout import HTML, BaseInput, Div, Field, LayoutObject, TemplateNameMixin
 from .utils import TEMPLATE_PACK, flatatt, render_field
+
+if TYPE_CHECKING:
+    from django.forms import BaseForm
+    from django.utils.functional import SimpleLazyObject
 
 
 class PrependedAppendedText(Field):
@@ -62,17 +69,17 @@ class PrependedAppendedText(Field):
 
     def __init__(
         self,
-        field,
-        prepended_text=None,
-        appended_text=None,
-        input_size=None,
+        field: str,
+        prepended_text: str | None = None,
+        appended_text: str | None = None,
+        input_size: str | None = None,
         *,
-        active=False,
-        css_class=None,
-        wrapper_class=None,
-        template=None,
-        **kwargs,
-    ):
+        active: bool = False,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
+    ) -> None:
         self.field = field
         self.appended_text = appended_text
         self.prepended_text = prepended_text
@@ -88,7 +95,14 @@ class PrependedAppendedText(Field):
 
         super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        extra_context: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> SafeString:
         extra_context = extra_context.copy() if extra_context is not None else {}
         extra_context.update(
             {
@@ -161,15 +175,15 @@ class AppendedText(PrependedAppendedText):
 
     def __init__(
         self,
-        field,
-        text,
+        field: str,
+        text: str,
         *,
-        input_size=None,
-        active=False,
-        css_class=None,
-        wrapper_class=None,
-        template=None,
-        **kwargs,
+        input_size: str | None = None,
+        active: bool = False,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
     ):
         self.text = text
         super().__init__(
@@ -233,15 +247,15 @@ class PrependedText(PrependedAppendedText):
 
     def __init__(
         self,
-        field,
-        text,
+        field: str,
+        text: str,
         *,
-        input_size=None,
-        active=False,
-        css_class=None,
-        wrapper_class=None,
-        template=None,
-        **kwargs,
+        input_size: str | None = None,
+        active: bool = False,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
     ):
         self.text = text
         super().__init__(
@@ -296,19 +310,31 @@ class FormActions(LayoutObject):
 
     template = "%s/layout/formactions.html"
 
-    def __init__(self, *fields, css_id=None, css_class=None, template=None, **kwargs):
+    def __init__(
+        self,
+        *fields: HTML | BaseInput,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
+    ) -> None:
         self.fields = list(fields)
         self.id = css_id
         self.css_class = css_class
         self.template = template or self.template
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
         html = self.get_rendered_fields(form, context, template_pack, **kwargs)
         template = self.get_template_name(template_pack)
         context.update({"formactions": self, "fields_output": html})
-
-        return render_to_string(template, context.flatten())
+        return render_to_string(template, context.flatten())  # type: ignore [arg-type]
 
 
 class InlineCheckboxes(Field):
@@ -353,11 +379,25 @@ class InlineCheckboxes(Field):
 
     template = "%s/layout/checkboxselectmultiple_inline.html"
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return super().render(form, context, template_pack=template_pack, extra_context={"inline_class": "inline"})
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        extra_context: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> SafeString:
+        extra_context = extra_context or {}
+        extra_context["inline_class"] = "inline"
+        return super().render(
+            form,
+            context,
+            template_pack=template_pack,
+            extra_context=extra_context,
+        )
 
 
-class InlineRadios(Field):
+class InlineRadios(InlineCheckboxes):
     """
     Layout object for rendering radiobuttons inline.
 
@@ -399,9 +439,6 @@ class InlineRadios(Field):
 
     template = "%s/layout/radioselect_inline.html"
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
-        return super().render(form, context, template_pack=template_pack, extra_context={"inline_class": "inline"})
-
 
 class FieldWithButtons(Div):
     """
@@ -418,7 +455,7 @@ class FieldWithButtons(Div):
     Parameters
     ----------
 
-    *fields : str or LayoutObject
+    *fields : str or LayoutObject or StrictButton
         The first positional argument is the field. This can be either the
         name of the field as a string or an instance of `Field`. Following
         arguments will be rendered as buttons.
@@ -453,11 +490,26 @@ class FieldWithButtons(Div):
     template = "%s/layout/field_with_buttons.html"
     field_template = "%s/field.html"
 
-    def __init__(self, *fields, input_size=None, css_id=None, css_class=None, template=None, **kwargs):
+    def __init__(
+        self,
+        *fields: str | LayoutObject | StrictButton,
+        input_size: str | None = None,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
+    ) -> None:
         self.input_size = input_size
         super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        extra_context: dict[str, Any] | None = None,
+        **kwargs: Any,
+    ) -> SafeString:
         # We first render the buttons
         field_template = self.field_template % template_pack
         buttons = SafeString(
@@ -539,7 +591,14 @@ class StrictButton(TemplateNameMixin):
     template = "%s/layout/button.html"
     field_classes = "btn"
 
-    def __init__(self, content, css_id=None, css_class=None, template=None, **kwargs):
+    def __init__(
+        self,
+        content: str,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
+    ) -> None:
         self.content = content
         self.template = template or self.template
 
@@ -555,12 +614,17 @@ class StrictButton(TemplateNameMixin):
 
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
         self.content = Template(str(self.content)).render(context)
         template = self.get_template_name(template_pack)
         context.update({"button": self})
-
-        return render_to_string(template, context.flatten())
+        return render_to_string(template, context.flatten())  # type: ignore [arg-type]
 
 
 class Container(Div):
@@ -591,6 +655,8 @@ class Container(Div):
         the class itself. By default None.
     template : str, optional
         Overrides the default template, if provided. By default None.
+    active : bool, optional
+        Determines if this container is "Active".
     **kwargs : dict, optional
         Additional attributes are passed to ``flatatt`` and converted into
         key="value", pairs. These attributes are added to the ``<div>``.
@@ -598,7 +664,16 @@ class Container(Div):
 
     css_class = ""
 
-    def __init__(self, name, *fields, css_id=None, css_class=None, template=None, active=None, **kwargs):
+    def __init__(
+        self,
+        name: str,
+        *fields: str | LayoutObject,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
+        active: bool | None = None,
+        **kwargs: str,
+    ):
         super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
         self.name = name
         self._active_originally_included = active is not None
@@ -606,11 +681,25 @@ class Container(Div):
         if not self.css_id:
             self.css_id = slugify(self.name, allow_unicode=True)
 
-    def __contains__(self, field_name):
+    def __contains__(self, field_name: str) -> bool:
         """
         check if field_name is contained within tab.
         """
         return field_name in (pointer.name for pointer in self.get_field_names())
+
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
+        if self.active:
+            if "active" not in self.css_class:
+                self.css_class += " active"
+        else:
+            self.css_class = self.css_class.replace("active", "")
+        return super().render(form, context, template_pack)
 
 
 class ContainerHolder(Div):
@@ -643,7 +732,9 @@ class ContainerHolder(Div):
         key="value", pairs. These attributes are added to the ``<div>``.
     """
 
-    def first_container_with_errors(self, errors):
+    fields: Sequence[Container]  # type: ignore [assignment]
+
+    def first_container_with_errors(self, errors: KeysView[str]) -> Container | None:
         """
         Returns the first container with errors, otherwise returns None.
         """
@@ -653,7 +744,7 @@ class ContainerHolder(Div):
                 return tab
         return None
 
-    def open_target_group_for_form(self, form):
+    def open_target_group_for_form(self, form: BaseForm) -> Container:
         """
         Makes sure that the first group that should be open is open.
         This is either the first group with errors or the first group
@@ -714,7 +805,7 @@ class Tab(Container):
     css_class = "tab-pane"
     link_template = "%s/layout/tab-link.html"
 
-    def render_link(self, template_pack=TEMPLATE_PACK, **kwargs):
+    def render_link(self, template_pack: str | SimpleLazyObject = TEMPLATE_PACK, **kwargs: Any) -> SafeString:
         """
         Render the link for the tab-pane. It must be called after render so css_class is updated
         with active if needed.
@@ -771,8 +862,15 @@ class TabHolder(ContainerHolder):
     """
 
     template = "%s/layout/tab.html"
+    fields: Sequence[Tab]
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
         for tab in self.fields:
             tab.active = False
 
@@ -783,7 +881,7 @@ class TabHolder(ContainerHolder):
 
         context.update({"tabs": self, "links": links, "content": content})
         template = self.get_template_name(template_pack)
-        return render_to_string(template, context.flatten())
+        return render_to_string(template, context.flatten())  # type: ignore [arg-type]
 
 
 class AccordionGroup(Container):
@@ -873,8 +971,17 @@ class Accordion(ContainerHolder):
     """
 
     template = "%s/accordion.html"
+    css_id: str
+    fields: Sequence[AccordionGroup]
 
-    def __init__(self, *accordion_groups, css_id=None, css_class=None, template=None, **kwargs):
+    def __init__(
+        self,
+        *accordion_groups: AccordionGroup,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
+    ) -> None:
         super().__init__(*accordion_groups, css_id=css_id, css_class=css_class, template=template, **kwargs)
 
         # Accordion needs to have a unique id
@@ -885,7 +992,13 @@ class Accordion(ContainerHolder):
         for accordion_group in accordion_groups:
             accordion_group.data_parent = self.css_id
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
         content = SafeString("")
 
         # Open the group that should be open.
@@ -898,7 +1011,7 @@ class Accordion(ContainerHolder):
         template = self.get_template_name(template_pack)
         context.update({"accordion": self, "content": content})
 
-        return render_to_string(template, context.flatten())
+        return render_to_string(template, context.flatten())  # type: ignore [arg-type]
 
 
 class Alert(Div):
@@ -948,19 +1061,33 @@ class Alert(Div):
     template = "%s/layout/alert.html"
     css_class = "alert"
 
-    def __init__(self, content, dismiss=True, block=False, css_id=None, css_class=None, template=None, **kwargs):
-        fields = []
+    def __init__(
+        self,
+        content: str,
+        dismiss: bool = True,
+        block: bool = False,
+        css_id: str | None = None,
+        css_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
+    ) -> None:
+        fields: list[str] = []
         if block:
             self.css_class += " alert-block"
         super().__init__(*fields, css_id=css_id, css_class=css_class, template=template, **kwargs)
         self.content = content
         self.dismiss = dismiss
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
         template = self.get_template_name(template_pack)
         context.update({"alert": self, "content": self.content, "dismiss": self.dismiss})
-
-        return render_to_string(template, context.flatten())
+        return render_to_string(template, context.flatten())  # type: ignore [arg-type]
 
 
 class UneditableField(Field):
@@ -1004,7 +1131,14 @@ class UneditableField(Field):
 
     template = "%s/layout/uneditable_input.html"
 
-    def __init__(self, field, css_class=None, wrapper_class=None, template=None, **kwargs):
+    def __init__(
+        self,
+        field: str,
+        css_class: str | None = None,
+        wrapper_class: str | None = None,
+        template: str | None = None,
+        **kwargs: str,
+    ) -> None:
         self.attrs = {"class": "uneditable-input"}
         super().__init__(field, css_class=css_class, wrapper_class=wrapper_class, template=template, **kwargs)
 
@@ -1103,15 +1237,15 @@ class Modal(LayoutObject):
 
     def __init__(
         self,
-        *fields,
-        template=None,
-        css_id="modal_id",
-        title="Modal Title",
-        title_id="modal_title_id",
-        css_class=None,
-        title_class=None,
-        **kwargs,
-    ):
+        *fields: str,
+        template: str | None = None,
+        css_id: str = "modal_id",
+        title: str = "Modal Title",
+        title_id: str = "modal_title_id",
+        css_class: str | None = None,
+        title_class: str | None = None,
+        **kwargs: str,
+    ) -> None:
         self.fields = list(fields)
         self.template = template or self.template
         self.css_id = css_id
@@ -1124,8 +1258,13 @@ class Modal(LayoutObject):
 
         self.flat_attrs = flatatt(kwargs)
 
-    def render(self, form, context, template_pack=TEMPLATE_PACK, **kwargs):
+    def render(
+        self,
+        form: BaseForm,
+        context: Context,
+        template_pack: str | SimpleLazyObject = TEMPLATE_PACK,
+        **kwargs: Any,
+    ) -> SafeString:
         fields = self.get_rendered_fields(form, context, template_pack, **kwargs)
         template = self.get_template_name(template_pack)
-
         return render_to_string(template, {"modal": self, "fields": fields})
