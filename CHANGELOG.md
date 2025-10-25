@@ -1,5 +1,10 @@
 # CHANGELOG for django-crispy-forms
 
+## 2.5 (TBC)
+* Confirmed support for Python 3.14.
+* Confirmed support for Django 6.0.
+* Dropped support for Python 3.8.
+
 ## 2.4 (2025-04-13)
 * Added support for Python 3.13.
 * Confirmed support for Django 5.2.
