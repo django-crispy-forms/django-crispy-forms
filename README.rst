@@ -12,7 +12,7 @@ django-crispy-forms
 
 The best way to have Django_ DRY forms. Build programmatic reusable layouts out of components, having full control of the rendered HTML without writing HTML in templates. All this without breaking the standard way of doing things in Django, so it plays nice with any other form application.
 
-`django-crispy-forms` supports Django 4.2+ with Python 3.8+.
+`django-crispy-forms` supports Django 4.2+ with Python 3.9+.
 
 Looking for Bootstrap 5 support? See the `crispy-bootstrap5 package`_.
 
