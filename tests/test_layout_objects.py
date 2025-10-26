@@ -298,9 +298,9 @@ class TestBootstrapLayoutObjects:
         # else:
         # tab_class = 'tab-pane'
         # tab 1 should not be active
-        assert html.count('<div id="one" \n    class="{} active'.format(tab_class)) == 0
+        assert html.count(f'<div id="one" \n    class="{tab_class} active') == 0
         # tab 2 should be active
-        assert html.count('<div id="two" \n    class="{} active'.format(tab_class)) == 1
+        assert html.count(f'<div id="two" \n    class="{tab_class} active') == 1
 
     def test_radio_attrs(self):
         form = CheckboxesSampleForm()

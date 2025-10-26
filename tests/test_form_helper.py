@@ -465,7 +465,7 @@ def test_error_text_inline():
 
     help_class = "help-block"
 
-    matches = re.findall(r'<{} id="error_\d_\w*" class="{}"'.format(help_tag_name, help_class), html, re.MULTILINE)
+    matches = re.findall(rf'<{help_tag_name} id="error_\d_\w*" class="{help_class}"', html, re.MULTILINE)
     assert len(matches) == 3
 
 

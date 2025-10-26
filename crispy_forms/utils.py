@@ -21,7 +21,7 @@ TEMPLATE_PACK = SimpleLazyObject(get_template_pack)
 
 # By caching we avoid loading the template every time render_field
 # is called without a template
-@lru_cache()
+@lru_cache
 def default_field_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/field.html" % template_pack)
 

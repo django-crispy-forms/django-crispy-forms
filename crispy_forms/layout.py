@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import List
 
 from django.template import Template
 from django.template.loader import render_to_string
@@ -12,7 +11,7 @@ from crispy_forms.utils import TEMPLATE_PACK, flatatt, render_field
 
 @dataclass
 class Pointer:
-    positions: List[int]
+    positions: list[int]
     name: str
 
 
