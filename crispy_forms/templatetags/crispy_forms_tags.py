@@ -184,12 +184,12 @@ class BasicNode(template.Node):
         return response_dict
 
 
-@lru_cache()
+@lru_cache
 def whole_uni_formset_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/whole_uni_formset.html" % template_pack)
 
 
-@lru_cache()
+@lru_cache
 def whole_uni_form_template(template_pack=TEMPLATE_PACK):
     return get_template("%s/whole_uni_form.html" % template_pack)
 
