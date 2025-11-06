@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -15,7 +15,6 @@ classifiers=[
     "Framework :: Django :: 5.1",
     "Framework :: Django :: 5.2",
     "Framework :: Django :: 6.0",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3",
@@ -28,7 +27,8 @@ classifiers=[
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE.txt"]
 dependencies = ["django>=4.2"]
 authors = [{name = "Miguel Araujo", email = "miguel.araujo.perez@gmail.com"}]
 dynamic = ['version']
