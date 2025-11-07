@@ -301,7 +301,7 @@ These ones live under module ``crispy_forms.bootstrap``.
 
     Layout(
         Modal(
-            # email.help_text was set during the initalization of the django form field
+            # email.help_text was set during the initialization of the django form field
             Field('email', placeholder="Email", wrapper_class="mb-0"),
             Button(
                 "submit",
