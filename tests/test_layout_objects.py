@@ -125,7 +125,7 @@ def test_i18n():
 
 def test_remove_labels():
     form = SampleForm()
-    # remove boolean field as label is still printed in boostrap
+    # remove boolean field as label is still printed in bootstrap
     del form.fields["is_company"]
 
     for fields in form:

@@ -505,7 +505,7 @@ class StrictButton(TemplateNameMixin):
         The default template which this Layout Object will be rendered
         with.
     field_classes : str
-        The CSS classes to be applied to the button. By defult "btn".
+        The CSS classes to be applied to the button. By default "btn".
 
     Parameters
     ----------
@@ -911,7 +911,7 @@ class Alert(Div):
         The default template which this Layout Object will be rendered
         with.
     css_class : str
-        The CSS classes to be applied to the alert. By defult "alert".
+        The CSS classes to be applied to the alert. By default "alert".
 
     Parameters
     ----------
@@ -1054,7 +1054,7 @@ class InlineField(Field):
 
 class Modal(LayoutObject):
     """
-    Boostrap layout object for rendering crispy forms objects inside a
+    Bootstrap layout object for rendering crispy forms objects inside a
     bootstrap modal.
 
     Attributes

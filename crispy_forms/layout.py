@@ -827,7 +827,7 @@ class Column(Div):
     css_class : str, optional
         Additional CSS classes to be applied in addition to those declared by
         the class itself. If using the Bootstrap4 template pack the default
-        ``col-md`` is removed if this string contins another ``col-`` class.
+        ``col-md`` is removed if this string contains another ``col-`` class.
         By default None.
     template : str, optional
         Overrides the default template, if provided. By default None.
