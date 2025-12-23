@@ -2,6 +2,8 @@ import pytest
 from django.forms.boundfield import BoundField
 from django.forms.formsets import formset_factory
 from django.template import Context, Template
+from django.test import override_settings
+from pytest_django.asserts import assertRaisesMessage
 
 from crispy_forms.exceptions import CrispyError
 from crispy_forms.templatetags.crispy_forms_field import crispy_addon
@@ -110,10 +112,15 @@ def test_as_crispy_field_non_field(settings):
 
     # Raises an AttributeError when trying to figure out how to render it
     # Not sure if this is expected behavior -- @kavdev
-    error_class = CrispyError if settings.DEBUG else AttributeError
+    with override_settings(DEBUG=True):
+        msg = "|as_crispy_field received invalid field: 'notafield'."
+        with assertRaisesMessage(CrispyError, msg):
+            template.render(c)
 
-    with pytest.raises(error_class):
-        template.render(c)
+    with override_settings(DEBUG=False):
+        msg = "'str' object has no attribute 'form'"
+        with assertRaisesMessage(AttributeError, msg):
+            template.render(c)
 
 
 def test_as_crispy_field_bound_field():

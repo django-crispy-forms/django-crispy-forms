@@ -96,7 +96,7 @@ def as_crispy_field(field, template_pack=TEMPLATE_PACK, label_class="", field_cl
         {{ form.field|as_crispy_field:"bootstrap4" }}
     """
     if not isinstance(field, boundfield.BoundField) and settings.DEBUG:
-        raise CrispyError("|as_crispy_field got passed an invalid or inexistent field")
+        raise CrispyError(f"|as_crispy_field received invalid field: '{field}'.")
 
     attributes = {
         "field": field,
