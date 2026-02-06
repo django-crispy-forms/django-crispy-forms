@@ -52,7 +52,7 @@ This is a teaser of what you can do with latest django-crispy-forms. `Find here 
 
 .. _`Find here the gist`: https://gist.github.com/1838193
 
-Documentation
+Documentations
 =============
 
 For extensive documentation see the ``docs`` folder or `read it on readthedocs`_
