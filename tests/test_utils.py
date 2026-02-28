@@ -1,4 +1,3 @@
-import django
 import pytest
 from django import forms
 from django.conf import settings
@@ -144,10 +143,7 @@ def test_optgroup_filter():
     groups = optgroups(form["checkbox_select_multiple"])
     group = groups[0]
     label, option, index = group
-    if django.VERSION < (5, 0):
-        attrs = {"id": "id_checkbox_select_multiple_0", "checked": True}
-    else:
-        attrs = {"aria-invalid": "true", "checked": True, "id": "id_checkbox_select_multiple_0"}
+    attrs = {"aria-invalid": "true", "checked": True, "id": "id_checkbox_select_multiple_0"}
     assert label is None
     assert option == [
         {
@@ -189,10 +185,7 @@ def test_optgroup_filter():
     group = groups[0]
     label, option, index = group
     assert label is None
-    if django.VERSION < (5, 0):
-        attrs = {"id": "id_checkbox_select_multiple_0"}
-    else:
-        attrs = {"id": "id_checkbox_select_multiple_0", "aria-invalid": "true"}
+    attrs = {"id": "id_checkbox_select_multiple_0", "aria-invalid": "true"}
     assert option == [
         {
             "name": "checkbox_select_multiple",

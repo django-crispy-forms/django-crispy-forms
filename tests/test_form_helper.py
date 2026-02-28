@@ -389,10 +389,7 @@ def test_render_hidden_fields():
     # Now hide a couple of fields
     for field in ("password1", "password2"):
         test_form.fields[field].widget = forms.HiddenInput()
-    if django.VERSION < (5, 0):
-        result = "test_render_hidden_fields lt50.html"
-    else:
-        result = "test_render_hidden_fields.html"
+    result = "test_render_hidden_fields.html"
     assert parse_expected(result) == parse_form(test_form)
 
 
