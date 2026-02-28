@@ -223,10 +223,8 @@ class FormHelper(DynamicLayoutHandler):
     @form_method.setter
     def form_method(self, method):
         if method.lower() not in ("get", "post"):
-            raise FormHelpersException(
-                "Only GET and POST are valid in the \
-                    form_method helper attribute"
-            )
+            raise FormHelpersException("Only GET and POST are valid in the \
+                    form_method helper attribute")
 
         self._form_method = method.lower()
 

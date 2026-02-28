@@ -38,12 +38,10 @@ def test_field_with_custom_template():
 
 
 def test_multiwidget_field():
-    template = Template(
-        """
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy form %}
-    """
-    )
+    """)
 
     test_form = SampleForm()
     test_form.helper.layout = Layout(
@@ -65,12 +63,10 @@ def test_multiwidget_field():
 
 
 def test_field_type_hidden():
-    template = Template(
-        """
+    template = Template("""
         {% load crispy_forms_tags %}
         {% crispy test_form %}
-    """
-    )
+    """)
 
     test_form = SampleForm()
     test_form.helper.layout = Layout(
@@ -98,17 +94,13 @@ def test_field_wrapper_class():
 
 def test_html_with_carriage_returns():
     test_form = SampleForm()
-    test_form.helper.layout = Layout(
-        HTML(
-            """
+    test_form.helper.layout = Layout(HTML("""
             if (a==b){
                 // some comment
                 a+1;
                 foo();
             }
-        """
-        )
-    )
+        """))
     html = render_crispy_form(test_form)
     assert html.count("\n") == 27
 

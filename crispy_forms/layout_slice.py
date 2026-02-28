@@ -64,10 +64,8 @@ class LayoutSlice:
                     except IndexError:
                         # We could avoid this exception, recalculating pointers.
                         # However this case is most of the time an undesired behavior
-                        raise DynamicError(
-                            "Trying to wrap a field within an already wrapped field, \
-                            recheck your filter or layout"
-                        )
+                        raise DynamicError("Trying to wrap a field within an already wrapped field, \
+                            recheck your filter or layout")
 
     def wrap(self, LayoutClass, *args, **kwargs):
         """
