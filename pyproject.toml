@@ -4,32 +4,29 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-crispy-forms"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 description = "Best way to have Django DRY forms"
 classifiers=[
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Framework :: Django",
-    "Framework :: Django :: 4.2",
-    "Framework :: Django :: 5.0",
-    "Framework :: Django :: 5.1",
     "Framework :: Django :: 5.2",
     "Framework :: Django :: 6.0",
     "Operating System :: OS Independent",
     "Programming Language :: JavaScript",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Internet :: WWW/HTTP",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 license = "MIT"
 license-files = ["LICENSE.txt"]
-dependencies = ["django>=4.2"]
+dependencies = ["django>=5.2"]
 authors = [{name = "Miguel Araujo", email = "miguel.araujo.perez@gmail.com"}]
 dynamic = ['version']
 readme = "README.rst"
