@@ -184,12 +184,12 @@ filter
 
 This method will allow you to filter layout objects by its class type, applying actions to them::
 
-    form.helper.filter(basestring).wrap(Field, css_class="hello")
+    form.helper.filter(str).wrap(Field, css_class="hello")
     form.helper.filter(Div).wrap(Field, css_class="hello")
 
 You can filter several layout objects types at the same time::
 
-    form.helper.filter(basestring, Div).wrap(Div, css_class="hello")
+    form.helper.filter(str, Div).wrap(Div, css_class="hello")
 
 By default ``filter`` is not greedy, so it only searches first depth level. But you can tune it to search in different levels of depth with a kwarg ``max_level`` (By default set to 0). Let' see some examples, to clarify it. Imagine we have this layout::
 
@@ -203,7 +203,7 @@ By default ``filter`` is not greedy, so it only searches first depth level. But 
 
 If we did::
 
-    form.helper.filter(basestring).wrap(Field, css_class="hello")
+    form.helper.filter(str).wrap(Field, css_class="hello")
 
 Only ``field_1`` and ``field_3`` would be wrapped, resulting into::
 
@@ -217,13 +217,13 @@ Only ``field_1`` and ``field_3`` would be wrapped, resulting into::
 
 If we wanted to search deeper, wrapping ``password``, we would need to set ``max_level`` to 2 or more::
 
-    form.helper.filter(basestring, max_level=2).wrap(Field, css_class="hello")
+    form.helper.filter(str, max_level=2).wrap(Field, css_class="hello")
 
 In other words ``max_level`` indicates the number of jumps crispy-forms can do within a layout object for matching. In this case getting into the first ``Div`` would be one jump, and getting into the next ``Div`` would be the second jump, thus ``max_level=2``.
 
 We can turn filter greedy, making it search as deep as possible, setting ``greedy`` to ``True``::
 
-    form.helper.filter(basestring, greedy=True).wrap(Div, css_class="hello")
+    form.helper.filter(str, greedy=True).wrap(Div, css_class="hello")
 
 **Parameters:**
 
