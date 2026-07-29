@@ -1,6 +1,6 @@
 # CHANGELOG for django-crispy-forms
 
-## Next Release (TBC)
+## 2.7 (2026-07-29)
 * Confirmed support for Django 6.1.
 
 ## 2.6 (2026-03-01)
