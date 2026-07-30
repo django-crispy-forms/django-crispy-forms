@@ -71,6 +71,7 @@ Rendering any kind of formset with crispy injects some extra context in the layo
             self.form_method = 'post'
             self.layout = Layout(
                 HTML('{% if forloop.first %} Only display text on the first iteration... {% endif %}'),
+                HTML('Access the individual form and instance via {{ formset_form.instance.attribute }}'),
                 Fieldset('Item: {{forloop.counter}}', 'field'),
                 'favorite_color', 
                 'favorite_food',
