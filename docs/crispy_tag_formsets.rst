@@ -101,6 +101,7 @@ Formset forms with different layouts
 
 By default crispy-forms formset rendering shares the same layout among all formset's forms. This is the case 99% of the times. But maybe you want to render your formset's forms using different layouts that you cannot achieve using the extra context injected, for that you will have to create and use a custom template. Most likely you will want to do::
 
+    {{ formset.non_form_errors }}
     {{ formset.management_form|crispy }}
     {% for form in formset %}
         {% crispy form %}
