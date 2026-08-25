@@ -108,6 +108,17 @@ def test_update_attributes():
     assert "readonly" in helper.layout[1].attrs
 
 
+def test_update_attributes_translates_underscores():
+    """Regression test for #1238: update_attributes() should translate
+    underscores to hyphens the same way Field(data_foo=...) does at
+    construction time, so data-* attrs set after the fact aren't left
+    as invalid, literal `data_foo` HTML attributes."""
+    helper = FormHelper()
+    helper.layout = Layout("email", Field("password1"), "password2")
+    helper["password1"].update_attributes(data_toggle="colorpicker")
+    assert helper.layout[1].attrs == {"data-toggle": "colorpicker"}
+
+
 def test_update_attributes_and_wrap_once():
     helper = FormHelper()
     layout = Layout("email", Field("password1"), "password2")

@@ -149,6 +149,7 @@ class LayoutSlice:
                         layout_object.attrs["class"] += " %s" % kwargs.pop("css_class")
                     else:
                         layout_object.attrs["class"] = kwargs.pop("css_class")
-                layout_object.attrs.update(kwargs)
+                # Match Field.__init__: turn data_foo='bar' into data-foo='bar'
+                layout_object.attrs.update({k.replace("_", "-"): v for k, v in kwargs.items()})
 
         self.map(update_attrs)
