@@ -110,8 +110,8 @@ class CrispyFieldNode(template.Node):
             widget.attrs["class"] = css_class
 
             for attribute_name, attribute in attr.items():
-                attribute_name = Variable(attribute_name).resolve(context)
-                attributes = Variable(attribute).resolve(context)
+                attribute_name = attribute_name.resolve(context)
+                attributes = attribute.resolve(context)
 
                 if attribute_name in widget.attrs:
                     # multiple attribtes are in a single string, e.g.
@@ -137,7 +137,9 @@ def crispy_field(parser, token):
     # We need to pop tag name, or pairwise would fail
     token.pop(0)
     for attribute_name, value in pairwise(token):
-        attrs[attribute_name] = value
+        # Compile as FilterExpressions (not Variables) so template filters
+        # are allowed in attribute values, e.g. `var_q|default_if_none:"?"`.
+        attrs[parser.compile_filter(attribute_name)] = parser.compile_filter(value)
 
     return CrispyFieldNode(field, attrs)
 

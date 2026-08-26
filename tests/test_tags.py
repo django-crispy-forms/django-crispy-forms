@@ -188,6 +188,25 @@ def test_crispy_field_and_class_converters():
     assert "inputtext" in html
 
 
+def test_crispy_field_attribute_value_accepts_filters():
+    # Regression test for #1203: attribute values passed to crispy_field
+    # are resolved with Variable, which doesn't support template filters,
+    # so `var_q|default_if_none:"?"` raised VariableDoesNotExist instead
+    # of resolving.
+    template = Template("""
+        {% load crispy_forms_field %}
+        {% crispy_field testField "data-question" var_q|default_if_none:"?" %}
+    """)
+
+    def render(var_q):
+        test_form = SampleForm()
+        bound_field = BoundField(test_form, test_form.fields["email"], "email")
+        return template.render(Context({"testField": bound_field, "var_q": var_q}))
+
+    assert 'data-question="?"' in render(None)
+    assert 'data-question="how?"' in render("how?")
+
+
 def test_crispy_addon():
     test_form = SampleForm()
     field_instance = test_form.fields["email"]
