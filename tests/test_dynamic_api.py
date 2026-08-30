@@ -5,6 +5,7 @@ from crispy_forms.bootstrap import AppendedText
 from crispy_forms.exceptions import DynamicError
 from crispy_forms.helper import FormHelper, FormHelpersException
 from crispy_forms.layout import HTML, Div, Field, Fieldset, Layout, MultiField, Pointer
+from crispy_forms.utils import render_crispy_form
 
 from .forms import SampleForm
 
@@ -106,6 +107,20 @@ def test_update_attributes():
     helper.layout = Layout("email", Field("password1"), "password2")
     helper["password1"].update_attributes(readonly=True)
     assert "readonly" in helper.layout[1].attrs
+
+
+def test_update_attributes_translates_underscores():
+    """Regression test for #1238: update_attributes() should translate
+    underscores to hyphens the same way Field(data_foo=...) does at
+    construction time, so data-* attrs set after the fact aren't left
+    as invalid, literal `data_foo` HTML attributes."""
+    helper = FormHelper()
+    helper.layout = Layout("email", Field("password1"), "password2")
+    helper["password1"].update_attributes(data_toggle="colorpicker")
+
+    html = render_crispy_form(SampleForm(), helper)
+    assert 'data-toggle="colorpicker"' in html
+    assert "data_toggle" not in html
 
 
 def test_update_attributes_and_wrap_once():
