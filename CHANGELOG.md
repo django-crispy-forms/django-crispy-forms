@@ -1,5 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
+## Next Release (TBC)
+* Fixed `update_attributes()` not translating underscores to hyphens in HTML5 `data-*` attribute names, unlike `Field.__init__`.
+
 ## 2.7 (2026-07-29)
 * Confirmed support for Django 6.1.
 
