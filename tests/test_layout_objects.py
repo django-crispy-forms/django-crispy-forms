@@ -37,6 +37,21 @@ def test_field_with_custom_template():
     assert "<h1>Special custom field</h1>" in html
 
 
+def test_field_disabled_sets_form_field_disabled():
+    class AccountForm(forms.Form):
+        plan = forms.CharField()
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.helper = FormHelper(self)
+            self.helper.layout = Layout(Field("plan", disabled=True))
+
+    form = AccountForm({}, initial={"plan": "starter"})
+    assert form.fields["plan"].disabled
+    assert form.is_valid()
+    assert form.cleaned_data["plan"] == "starter"
+
+
 def test_multiwidget_field():
     template = Template("""
         {% load crispy_forms_tags %}

@@ -4,7 +4,7 @@ from django.urls import NoReverseMatch, reverse
 from django.utils.safestring import mark_safe
 
 from crispy_forms.exceptions import FormHelpersException
-from crispy_forms.layout import Layout
+from crispy_forms.layout import Layout, apply_disabled_fields
 from crispy_forms.layout_slice import LayoutSlice
 from crispy_forms.utils import TEMPLATE_PACK, flatatt, list_difference, render_field
 
@@ -263,10 +263,16 @@ class FormHelper(DynamicLayoutHandler):
     def add_layout(self, layout):
         self.layout = layout
 
+    def __setattr__(self, name, value):
+        super().__setattr__(name, value)
+        if name == "layout" and value is not None and getattr(self, "form", None) is not None:
+            apply_disabled_fields(self.form, value)
+
     def render_layout(self, form, context, template_pack=TEMPLATE_PACK):
         """
         Returns safe html of the rendering of the layout
         """
+        apply_disabled_fields(form, self.layout)
         form.rendered_fields = set()
         form.crispy_field_template = self.field_template
 

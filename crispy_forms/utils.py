@@ -68,6 +68,8 @@ def render_field(
             # Injecting HTML attributes into field's widget, Django handles rendering these
             bound_field = form[field]
             field_instance = bound_field.field
+            if attrs is not None and attrs.get("disabled") not in (None, False, "", "false", "False", "0"):
+                field_instance.disabled = True
             if attrs is not None:
                 widgets = getattr(field_instance.widget, "widgets", [field_instance.widget])
 

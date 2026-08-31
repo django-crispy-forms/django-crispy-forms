@@ -874,6 +874,35 @@ class HTML:
         return Template(str(self.html)).render(context)
 
 
+def _attr_means_disabled(value):
+    if value is None or value is False:
+        return False
+    return str(value).lower() not in ("false", "0", "")
+
+
+def apply_disabled_fields(form, layout):
+    """Copy layout `disabled=True` onto the Django field before validation."""
+    if form is None or layout is None:
+        return
+    for layout_object in _walk_layout_objects(layout):
+        attrs = getattr(layout_object, "attrs", None)
+        fields = getattr(layout_object, "fields", None)
+        if not attrs or not fields:
+            continue
+        if not _attr_means_disabled(attrs.get("disabled")):
+            continue
+        for name in fields:
+            if isinstance(name, str) and name in form.fields:
+                form.fields[name].disabled = True
+
+
+def _walk_layout_objects(layout_object):
+    yield layout_object
+    for child in getattr(layout_object, "fields", []):
+        if not isinstance(child, str):
+            yield from _walk_layout_objects(child)
+
+
 class Field(LayoutObject):
     """
     A Layout object, usually containing one field name, where you can add
@@ -936,6 +965,7 @@ class Field(LayoutObject):
         self.attrs.update({k.replace("_", "-"): conditional_escape(v) for k, v in kwargs.items()})
 
     def render(self, form, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):
+        apply_disabled_fields(form, self)
         if extra_context is None:
             extra_context = {}
         if self.wrapper_class:
