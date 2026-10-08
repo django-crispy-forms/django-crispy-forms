@@ -91,11 +91,8 @@ def render_field(
                             field_instance.widget.attrs.update(attr)
 
         except KeyError:
-            if not FAIL_SILENTLY:
-                raise Exception("Could not resolve form field '%s'." % field)
-            else:
-                field_instance = None
-                logging.warning("Could not resolve form field '%s'." % field, exc_info=sys.exc_info())
+            # An unknown field name is ignored, matching Django's own Form.field_order.
+            field_instance = None
 
         if hasattr(form, "rendered_fields"):
             if field not in form.rendered_fields:

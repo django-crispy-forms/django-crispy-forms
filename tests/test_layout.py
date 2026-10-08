@@ -26,7 +26,7 @@ from .utils import parse_expected, parse_form
 
 
 def test_invalid_unicode_characters(settings):
-    # Adds a BooleanField that uses non valid unicode characters "ñ"
+    # A non-ASCII unknown field name shouldn't crash any differently than any other.
     form_helper = FormHelper()
     form_helper.add_layout(Layout("españa"))
 
@@ -36,8 +36,9 @@ def test_invalid_unicode_characters(settings):
     """)
     c = Context({"form": SampleForm(), "form_helper": form_helper})
     settings.CRISPY_FAIL_SILENTLY = False
-    with pytest.raises(Exception):
-        template.render(c)
+    html = template.render(c)
+
+    assert "españa" not in html
 
 
 def test_unicode_form_field():
@@ -74,7 +75,14 @@ def test_meta_extra_fields_with_missing_fields():
     assert "email" not in html
 
 
-def test_layout_unresolved_field(settings):
+def test_layout_unresolved_field_is_ignored(settings, caplog):
+    """
+    https://github.com/django-crispy-forms/django-crispy-forms/issues/1440
+
+    An unknown field name is ignored, matching Django's own Form.field_order -
+    not an error, and not controlled by CRISPY_FAIL_SILENTLY, which still only
+    governs the "rendered more than once" case.
+    """
     form_helper = FormHelper()
     form_helper.add_layout(Layout("typo"))
 
@@ -84,8 +92,10 @@ def test_layout_unresolved_field(settings):
     """)
     c = Context({"form": SampleForm(), "form_helper": form_helper})
     settings.CRISPY_FAIL_SILENTLY = False
-    with pytest.raises(Exception):
-        template.render(c)
+    html = template.render(c)
+
+    assert "typo" not in html
+    assert caplog.records == []
 
 
 def test_double_rendered_field(settings):

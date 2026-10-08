@@ -1,5 +1,8 @@
 # CHANGELOG for django-crispy-forms
 
+## Next Release (TBC)
+* An unknown field name in a `Layout`/`Fieldset` is now always ignored, matching Django's own `Form.field_order` - no longer gated by `CRISPY_FAIL_SILENTLY`.
+
 ## 2.7 (2026-07-29)
 * Confirmed support for Django 6.1.
 
