@@ -224,6 +224,66 @@ def test_template_pack_override_verbose(settings):
     assert "controls" not in html
 
 
+@pytest.mark.parametrize("template_pack", ["bootstrap3", "bootstrap4"])
+@pytest.mark.parametrize(
+    "tag",
+    [
+        '{%% crispy form "%s" %%}',
+        '{%% crispy form form.helper "%s" %%}',
+    ],
+)
+def test_explicit_template_pack_without_setting(settings, template_pack, tag):
+    del settings.CRISPY_TEMPLATE_PACK
+    template = Template("{% load crispy_forms_tags %}" + tag % template_pack)
+    html = template.render(Context({"form": SampleForm()}))
+
+    assert "<form" in html
+    assert ("controls" in html) == (template_pack == "bootstrap3")
+
+
+@pytest.mark.parametrize("template_pack", ["bootstrap3", "bootstrap4"])
+@pytest.mark.parametrize("tag", ["{% crispy form %}", "{% crispy form form.helper %}"])
+def test_helper_template_pack_without_setting(settings, template_pack, tag):
+    del settings.CRISPY_TEMPLATE_PACK
+    form = SampleForm()
+    form.helper.template_pack = template_pack
+    template = Template("{% load crispy_forms_tags %}" + tag)
+    html = template.render(Context({"form": form}))
+
+    assert "<form" in html
+    assert ("controls" in html) == (template_pack == "bootstrap3")
+
+
+@pytest.mark.parametrize("template_pack", ["bootstrap3", "bootstrap4"])
+@pytest.mark.parametrize("pass_helper", [False, True])
+def test_render_crispy_form_without_template_pack_setting(settings, template_pack, pass_helper):
+    del settings.CRISPY_TEMPLATE_PACK
+    form = SampleForm()
+    form.helper.template_pack = template_pack
+    if pass_helper:
+        html = render_crispy_form(form, helper=form.helper)
+    else:
+        html = render_crispy_form(form)
+
+    assert "<form" in html
+    assert ("controls" in html) == (template_pack == "bootstrap3")
+
+
+def test_template_pack_setting_still_required_without_override(settings):
+    del settings.CRISPY_TEMPLATE_PACK
+    template = Template("{% load crispy_forms_tags %}{% crispy form %}")
+
+    with pytest.raises(AttributeError):
+        template.render(Context({"form": SampleForm()}))
+
+
+def test_invalid_template_pack_setting(settings):
+    settings.CRISPY_TEMPLATE_PACK = "foo"
+
+    with pytest.raises(TemplateSyntaxError):
+        Template("{% load crispy_forms_tags %}{% crispy form %}")
+
+
 def test_template_pack_override_wrong():
     with pytest.raises(TemplateSyntaxError):
         Template("""

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.forms.formsets import BaseFormSet
 from django.template import VariableDoesNotExist
 from django.template.loader import get_template
+from django.utils.functional import SimpleLazyObject
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.utils import TEMPLATE_PACK, get_template_pack
@@ -65,7 +66,7 @@ class BasicNode(template.Node):
     def __init__(self, form, helper, template_pack=None):
         self.form = form
         self.helper = helper
-        self.template_pack = template_pack or get_template_pack()
+        self.template_pack = template_pack or SimpleLazyObject(get_template_pack)
 
     def get_render(self, context):
         """
@@ -239,7 +240,7 @@ def do_uni_form(parser, token):
     form = tokens.pop(1)
 
     helper = None
-    template_pack = "'%s'" % get_template_pack()
+    template_pack = None
 
     # {% crispy form helper %}
     try:
@@ -260,6 +261,10 @@ def do_uni_form(parser, token):
 
     if template_pack is not None:
         template_pack = template_pack[1:-1]
+    else:
+        template_pack = getattr(settings, "CRISPY_TEMPLATE_PACK", None)
+
+    if template_pack is not None:
         ALLOWED_TEMPLATE_PACKS = getattr(
             settings, "CRISPY_ALLOWED_TEMPLATE_PACKS", ("uni_form", "bootstrap3", "bootstrap4")
         )
