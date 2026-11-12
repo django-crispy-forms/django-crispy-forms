@@ -56,7 +56,7 @@ If we are planning on using formsets + ``{% crispy %}`` we will need a ``whole_u
 
 All of these templates use a tag named ``{% crispy_field %}`` that is loaded doing ``{% load crispy_forms_field %}``, that generates the html for ``<input>`` using ``field.html`` template, but previously doing Python preparation beforehand. In case you wonder the code for this tag lives in ``crispy_forms.templatetags.crispy_forms_field``, together with some other stuff.
 
-So a template pack for a very basic example covering only forms and the usage of ``{% crispy %}`` tag, would need 2 templates: ``whole_uni_form.html``, ``field.html``. Well, that's not completely true, because every layout object has a template attached. So if we wanted to use ``Div``, we would need ``div.html``. Some are not that obvious, if you need ``Submit``, you will need ``baseinput.html``. Some layout objects, don't really have a template attached, like ``HTML``.
+So a template pack for a very basic example covering only forms and the usage of ``{% crispy %}`` tag, would need 2 templates: ``whole_uni_form.html``, ``field.html``. Well, that's not completely true, because every layout object has a template attached. So if we wanted to use ``Div``, we would need ``div.html``. Some are not that obvious, if you need ``Submit``, you will need ``baseinput.html``. Similarly, if you plan to use ``MultiField``, you will need ``layout/multifield.html``. Some layout objects, don't really have a template attached, like ``HTML``.
 
 In the previous template tree, there are some templates that are there for DRY purposes, they are not really compulsory or part of a layout object, so don't worry too much.
 
